@@ -2,6 +2,7 @@
 class Item < ActiveRecord::Base
   scope :on_shelf, where('shelf_id != 1')
   scope :on_web, where(:shelf_id => 1)
+  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
   has_one :exemplify
   has_one :manifestation, :through => :exemplify
   has_many :owns
@@ -69,7 +70,6 @@ class Item < ActiveRecord::Base
     scope :removed, includes(:circulation_status).where('circulation_statuses.name' => 'Removed')
     has_many :checkouts
     has_many :reserves
-    has_many :reserved_patrons, :through => :reserves, :class_name => 'Patron'
     has_many :checked_items, :dependent => :destroy
     has_many :baskets, :through => :checked_items
     belongs_to :circulation_status, :validate => true
