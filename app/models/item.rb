@@ -2,6 +2,7 @@
 class Item < ActiveRecord::Base
   scope :on_shelf, where('shelf_id != 1')
   scope :on_web, where(:shelf_id => 1)
+  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', from, to)}
   has_one :exemplify
   has_one :manifestation, :through => :exemplify
   has_many :owns
