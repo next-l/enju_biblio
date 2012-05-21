@@ -47,6 +47,8 @@ class ResourceImportFile < ActiveRecord::Base
       modify
     when 'destroy'
       remove
+    when 'update_relationship'
+      update_relationship
     else
       import
     end
@@ -285,6 +287,37 @@ class ResourceImportFile < ActiveRecord::Base
     self.error_message = "line #{row_num}: #{e.message}"
     sm_fail!
     raise e
+  end
+
+  def update_relationship
+    sm_start!
+    rows = open_import_file
+    row_num = 2
+
+    rows.each do |row|
+      item_identifier = row['item_identifier'].to_s.strip
+      item = Item.where(:item_identifier => item_identifier).first
+      unless item
+        item = Item.where(:id => row['item_id'].to_s.strip).first
+      end
+
+      manifestation_identifier = row['manifestation_identifier'].to_s.strip
+      manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first
+      unless manifestation
+        manifestation = Manifestation.where(:id => row['manifestation_id'].to_s.strip).first
+      end
+
+      if item and manifestation
+        item.manifestation = manifestation
+        item.save!
+      end
+
+      import_result = ResourceImportResult.create!(:resource_import_file => self, :body => row.fields.join("\t"))
+      import_result.item = item
+      import_result.manifestation = manifestation
+      import_result.save!
+      row_num += 1
+    end
   end
 
   private
