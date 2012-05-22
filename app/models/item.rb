@@ -79,23 +79,13 @@ class Item < ActiveRecord::Base
     has_one :use_restriction, :through => :item_has_use_restriction
     validates_associated :circulation_status, :checkout_type
     validates_presence_of :circulation_status, :checkout_type
-    before_save :set_use_restriction
     searchable do
       integer :circulation_status_id
     end
-    attr_accessor :use_restriction_id
+    accepts_nested_attributes_for :item_has_use_restriction
 
     def set_circulation_status
       self.circulation_status = CirculationStatus.where(:name => 'In Process').first if self.circulation_status.nil?
-    end
-
-    def set_use_restriction
-      if self.use_restriction_id
-        self.use_restriction = UseRestriction.where(:id => self.use_restriction_id).first
-      else
-        return if use_restriction
-        self.use_restriction = UseRestriction.where(:name => 'Limited Circulation, Normal Loan Period').first
-      end
     end
 
     def checkout_status(user)
