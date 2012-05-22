@@ -375,9 +375,8 @@ class ResourceImportFile < ActiveRecord::Base
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(:name => row['circulation_status'].to_s.strip).first || CirculationStatus.where(:name => 'In Process').first
       use_restriction = UseRestriction.where(:name => row['use_restriction'].to_s.strip).first
-      use_restriction_id = use_restriction.id if use_restriction
       item.circulation_status = circulation_status
-      item.use_restriction_id = use_restriction_id
+      item.use_restriction = use_restriction
     end
     item
   end
