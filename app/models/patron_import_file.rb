@@ -189,7 +189,7 @@ class PatronImportFile < ActiveRecord::Base
     file = CSV.open(tempfile, :col_sep => "\t")
     header = file.first
     rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
-    PatronImportResult.create(:patron_import_file => self, :body => header.join("\t"))
+    PatronImportResult.create!(:patron_import_file_id => self.id, :body => header.join("\t"))
     tempfile.close(true)
     file.close
     rows

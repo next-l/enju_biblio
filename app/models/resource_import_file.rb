@@ -310,7 +310,7 @@ class ResourceImportFile < ActiveRecord::Base
         item.save!
       end
 
-      import_result = ResourceImportResult.create!(:resource_import_file => self, :body => row.fields.join("\t"))
+      import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, :body => row.fields.join("\t"))
       import_result.item = item
       import_result.manifestation = manifestation
       import_result.save!
@@ -336,7 +336,7 @@ class ResourceImportFile < ActiveRecord::Base
     file = CSV.open(tempfile.path, 'r:utf-8', :col_sep => "\t")
     header = file.first
     rows = CSV.open(tempfile.path, 'r:utf-8', :headers => header, :col_sep => "\t")
-    ResourceImportResult.create(:resource_import_file => self, :body => header.join("\t"))
+    ResourceImportResult.create!(:resource_import_file_id => self.id, :body => header.join("\t"))
     tempfile.close(true)
     file.close
     rows
