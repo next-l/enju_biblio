@@ -365,10 +365,7 @@ class ResourceImportFile < ActiveRecord::Base
       :item_identifier => row['item_identifier'],
       :price => row['item_price'],
       :call_number => row['call_number'].to_s.strip,
-      :shelf => shelf,
       :acquired_at => acquired_at,
-      :bookstore => bookstore,
-      :budget_type => budget_type
     })
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(:name => row['circulation_status'].to_s.strip).first || CirculationStatus.where(:name => 'In Process').first
@@ -376,6 +373,9 @@ class ResourceImportFile < ActiveRecord::Base
       item.circulation_status = circulation_status
       item.use_restriction = use_restriction
     end
+    item.bookstore = bookstore
+    item.budget_type = budget_type
+    item.shelf = shelf
     item
   end
 
