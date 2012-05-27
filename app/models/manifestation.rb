@@ -318,7 +318,7 @@ class Manifestation < ActiveRecord::Base
 
   def set_series_statement(series_statement)
     if series_statement
-      if periodical?
+      if series_statement.periodical?
         set_serial_information(series_statement)
       else
         self.original_title = series_statement.original_title
@@ -539,9 +539,13 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
+  if defined?(EnjuScribd)
+    attr_accessible :post_to_scribd
+  end
+
   private
-  def set_serial_information(series_statement = nil)
-    return nil unless series_statement.try(:periodical?)
+  def set_serial_information(series_statement)
+    return nil unless series_statement.periodical?
     manifestation = series_statement.last_issue
 
     if manifestation
@@ -570,10 +574,6 @@ class Manifestation < ActiveRecord::Base
       end
     end
     self
-  end
-
-  if defined?(EnjuScribd)
-    attr_accessible :post_to_scribd
   end
 end
 
