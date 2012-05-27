@@ -10,7 +10,7 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :online_isbn, :attachment,
-    :series_has_manifestation_attribute
+    :series_has_manifestation_attributes
 
   scope :periodical_master, where(:periodical => false)
   scope :periodical_children, where(:periodical => true)
