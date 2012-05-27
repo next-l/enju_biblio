@@ -167,7 +167,8 @@ class ResourceImportFile < ActiveRecord::Base
 
   def self.import_manifestation(expression, patrons, options = {}, edit_options = {:edit_mode => 'create'})
     manifestation = expression
-    manifestation.update_attributes!(options.merge(:during_import => true))
+    manifestation.during_import = true
+    manifestation.update_attributes!(options)
     manifestation.publishers = patrons.uniq unless patrons.empty?
     manifestation
   end
@@ -485,7 +486,6 @@ class ResourceImportFile < ActiveRecord::Base
         :description => row['description'],
         #:description_transcription => row['description_transcription'],
         :note => row['note'],
-        :series_statement => series_statement,
         :start_page => start_page,
         :end_page => end_page,
         :access_address => row['access_addres'],
@@ -497,6 +497,7 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.volume_number = volume_number
       manifestation.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Guest')
       manifestation.language = language
+      manifestation.series_statement = series_statement
       manifestation.save!
 
       manifestation.set_patron_role_type(creators_list)
