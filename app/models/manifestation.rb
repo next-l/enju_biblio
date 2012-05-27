@@ -1,4 +1,17 @@
 class Manifestation < ActiveRecord::Base
+  attr_accessible :original_title, :title_alternative, :title_transcription,
+    :classification_number, :manifestation_identifier, :date_copyrighted,
+    :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
+    :end_page, :height, :width, :depth, :isbn, :wrong_isbn, :nbn, :lccn,
+    :oclc_number, :issn, :price, :fulltext, :volume_number_string,
+    :issue_number_string, :serial_number_string, :edition, :note,
+    :repository_content, :required_role_id, :frequency_id,
+    :title_alternative_transcription, :description, :abstract, :available_at,
+    :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
+    :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
+    :ndc, :content_type_id, :online_isbn, :attachment,
+    :series_has_manifestation_attributes
+
   scope :periodical_master, where(:periodical => false)
   scope :periodical_children, where(:periodical => true)
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
@@ -22,6 +35,7 @@ class Manifestation < ActiveRecord::Base
   belongs_to :frequency
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
+  accepts_nested_attributes_for :series_has_manifestation
 
   searchable do
     text :title, :default_boost => 2 do
@@ -180,11 +194,10 @@ class Manifestation < ActiveRecord::Base
   before_validation :convert_isbn, :if => :isbn_changed?
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication
-  before_save :set_periodical
   after_save :index_series_statement
   after_destroy :index_series_statement
   normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
-  attr_accessor :during_import, :series_statement_id
+  attr_accessor :during_import
 
   def self.per_page
     10
@@ -305,7 +318,6 @@ class Manifestation < ActiveRecord::Base
 
   def set_series_statement(series_statement)
     if series_statement
-      self.series_statement_id = series_statement.id
       if periodical?
         set_serial_information(series_statement)
       else
@@ -395,12 +407,6 @@ class Manifestation < ActiveRecord::Base
     items.order(:acquired_at).first.try(:acquired_at)
   end
 
-  def set_periodical
-    unless series_statement
-      series_statement = SeriesStatement.where(:id => series_statement_id).first
-    end
-  end
-
   def root_of_series?
     return true if series_statement.try(:root_manifestation) == self
     false
@@ -414,12 +420,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def periodical?
-    if new_record?
-      series = SeriesStatement.where(:id => series_statement_id).first
-    else
-      series = series_statement
-    end
-    if series.try(:periodical)
+    if series_statement.try(:periodical)
       return true unless root_of_series?
     end
     false
@@ -570,6 +571,10 @@ class Manifestation < ActiveRecord::Base
     end
     self
   end
+
+  if defined?(EnjuScribd)
+    attr_accessible :post_to_scribd
+  end
 end
 
 # == Schema Information
@@ -617,8 +622,6 @@ end
 #  required_score                  :integer         default(0), not null
 #  frequency_id                    :integer         default(1), not null
 #  subscription_master             :boolean         default(FALSE), not null
-#  ipaper_id                       :integer
-#  ipaper_access_key               :string(255)
 #  attachment_file_name            :string(255)
 #  attachment_content_type         :string(255)
 #  attachment_file_size            :integer
@@ -643,5 +646,6 @@ end
 #  attachment_fingerprint          :string(255)
 #  attachment_meta                 :text
 #  month_of_publication            :integer
+#  online_isbn                     :string(255)
 #
 
