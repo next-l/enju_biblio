@@ -1,4 +1,5 @@
 class PatronImportFile < ActiveRecord::Base
+  attr_accessible :patron_import, :edit_mode
   include ImportFile
   default_scope :order => 'id DESC'
   scope :not_imported, where(:state => 'pending')
@@ -65,7 +66,7 @@ class PatronImportFile < ActiveRecord::Base
 
     rows.each do |row|
       next if row['dummy'].to_s.strip.present?
-      import_result = PatronImportResult.create!(:patron_import_file => self, :body => row.fields.join("\t"))
+      import_result = PatronImportResult.create!(:patron_import_file_id => self.id, :body => row.fields.join("\t"))
 
       patron = Patron.new
       patron = set_patron_value(patron, row)
@@ -188,7 +189,7 @@ class PatronImportFile < ActiveRecord::Base
     file = CSV.open(tempfile, :col_sep => "\t")
     header = file.first
     rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
-    PatronImportResult.create(:patron_import_file => self, :body => header.join("\t"))
+    PatronImportResult.create!(:patron_import_file_id => self.id, :body => header.join("\t"))
     tempfile.close(true)
     file.close
     rows

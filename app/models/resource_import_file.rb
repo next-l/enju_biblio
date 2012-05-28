@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
+  attr_accessible :resource_import, :edit_mode
   include ImportFile
   default_scope :order => 'id DESC'
   scope :not_imported, where(:state => 'pending')
@@ -68,7 +69,7 @@ class ResourceImportFile < ActiveRecord::Base
 
     rows.each do |row|
       next if row['dummy'].to_s.strip.present?
-      import_result = ResourceImportResult.create!(:resource_import_file => self, :body => row.fields.join("\t"))
+      import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, :body => row.fields.join("\t"))
 
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(:item_identifier => item_identifier).first
@@ -166,14 +167,15 @@ class ResourceImportFile < ActiveRecord::Base
 
   def self.import_manifestation(expression, patrons, options = {}, edit_options = {:edit_mode => 'create'})
     manifestation = expression
-    manifestation.update_attributes!(options.merge(:during_import => true))
+    manifestation.during_import = true
+    manifestation.update_attributes!(options)
     manifestation.publishers = patrons.uniq unless patrons.empty?
     manifestation
   end
 
   def self.import_item(manifestation, options)
-    options = {:shelf => Shelf.web}.merge(options)
     item = Item.new(options)
+    item.shelf = Shelf.web unless item.shelf
     item.manifestation = manifestation
     item
   end
@@ -309,7 +311,7 @@ class ResourceImportFile < ActiveRecord::Base
         item.save!
       end
 
-      import_result = ResourceImportResult.create!(:resource_import_file => self, :body => row.fields.join("\t"))
+      import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, :body => row.fields.join("\t"))
       import_result.item = item
       import_result.manifestation = manifestation
       import_result.save!
@@ -335,7 +337,7 @@ class ResourceImportFile < ActiveRecord::Base
     file = CSV.open(tempfile.path, 'r:utf-8', :col_sep => "\t")
     header = file.first
     rows = CSV.open(tempfile.path, 'r:utf-8', :headers => header, :col_sep => "\t")
-    ResourceImportResult.create(:resource_import_file => self, :body => header.join("\t"))
+    ResourceImportResult.create!(:resource_import_file_id => self.id, :body => header.join("\t"))
     tempfile.close(true)
     file.close
     rows
@@ -364,10 +366,7 @@ class ResourceImportFile < ActiveRecord::Base
       :item_identifier => row['item_identifier'],
       :price => row['item_price'],
       :call_number => row['call_number'].to_s.strip,
-      :shelf => shelf,
       :acquired_at => acquired_at,
-      :bookstore => bookstore,
-      :budget_type => budget_type
     })
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(:name => row['circulation_status'].to_s.strip).first || CirculationStatus.where(:name => 'In Process').first
@@ -375,6 +374,9 @@ class ResourceImportFile < ActiveRecord::Base
       item.circulation_status = circulation_status
       item.use_restriction = use_restriction
     end
+    item.bookstore = bookstore
+    item.budget_type = budget_type
+    item.shelf = shelf
     item
   end
 
@@ -484,7 +486,6 @@ class ResourceImportFile < ActiveRecord::Base
         :description => row['description'],
         #:description_transcription => row['description_transcription'],
         :note => row['note'],
-        :series_statement => series_statement,
         :start_page => start_page,
         :end_page => end_page,
         :access_address => row['access_addres'],
@@ -496,6 +497,7 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.volume_number = volume_number
       manifestation.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Guest')
       manifestation.language = language
+      manifestation.series_statement = series_statement
       manifestation.save!
 
       manifestation.set_patron_role_type(creators_list)
