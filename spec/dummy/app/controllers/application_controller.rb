@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied, :with => :render_403
 
+  enju_biblio
+
   private
   def render_403
     return if performed?
@@ -17,6 +19,20 @@ class ApplicationController < ActionController::Base
         format.html {redirect_to new_user_session_url}
         format.xml {render :template => 'page/403', :status => 403}
         format.json
+      end
+    end
+  end
+
+  def solr_commit
+    Sunspot.commit
+  end
+
+  def move_position(resource, direction, redirect = true)
+    if ['higher', 'lower'].include?(direction)
+      resource.send("move_#{direction}")
+      if redirect
+        redirect_to url_for(:controller => resource.class.to_s.pluralize.underscore)
+        return
       end
     end
   end

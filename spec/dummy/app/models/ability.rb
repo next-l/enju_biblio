@@ -4,25 +4,19 @@ class Ability
   def initialize(user)
     case user.try(:role).try(:name)
     when 'Administrator'
-      can :read, Create
-      can :read, CreateType
-      can :read, Realize
-      can :read, RealizeType
+      can :manage, Create
+      can [:read, :update], CreateType
+      can :manage, Realize
+      can [:read, :update], RealizeType
     when 'Librarian'
-      can :read, Create
-      can :read, CreateType
-      can :read, Realize
-      can :read, RealizeType
+      can :manage, Create
+      can :manage, Realize
     when 'User'
       can :read, Create
-      can :read, CreateType
       can :read, Realize
-      can :read, RealizeType
     else
       can :read, Create
-      can :read, CreateType
       can :read, Realize
-      can :read, RealizeType
     end
   end
 end

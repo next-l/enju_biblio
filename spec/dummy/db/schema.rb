@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "required_role_id",            :default => 1,     :null => false
     t.string   "state"
     t.integer  "required_score",              :default => 0,     :null => false
+    t.datetime "acquired_at"
   end
 
   add_index "items", ["checkout_type_id"], :name => "index_items_on_checkout_type_id"
@@ -205,20 +206,20 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "manifestation_relationships", ["parent_id"], :name => "index_manifestation_relationships_on_parent_id"
 
   create_table "manifestations", :force => true do |t|
-    t.text     "original_title",                              :null => false
+    t.text     "original_title",                                     :null => false
     t.text     "title_alternative"
     t.text     "title_transcription"
     t.string   "classification_number"
     t.string   "manifestation_identifier"
     t.datetime "date_of_publication"
-    t.datetime "copyright_date"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "date_copyrighted"
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.datetime "deleted_at"
     t.string   "access_address"
-    t.integer  "language_id",              :default => 1,     :null => false
-    t.integer  "carrier_type_id",          :default => 1,     :null => false
-    t.integer  "extent_id",                :default => 1,     :null => false
+    t.integer  "language_id",                     :default => 1,     :null => false
+    t.integer  "carrier_type_id",                 :default => 1,     :null => false
+    t.integer  "extent_id",                       :default => 1,     :null => false
     t.integer  "start_page"
     t.integer  "end_page"
     t.integer  "height"
@@ -238,21 +239,30 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.string   "serial_number_string"
     t.integer  "edition"
     t.text     "note"
-    t.integer  "produces_count",           :default => 0,     :null => false
-    t.integer  "exemplifies_count",        :default => 0,     :null => false
-    t.integer  "embodies_count",           :default => 0,     :null => false
-    t.integer  "work_has_subjects_count",  :default => 0,     :null => false
-    t.boolean  "repository_content",       :default => false, :null => false
-    t.integer  "lock_version",             :default => 0,     :null => false
-    t.integer  "required_role_id",         :default => 1,     :null => false
+    t.integer  "produces_count",                  :default => 0,     :null => false
+    t.integer  "exemplifies_count",               :default => 0,     :null => false
+    t.integer  "embodies_count",                  :default => 0,     :null => false
+    t.integer  "work_has_subjects_count",         :default => 0,     :null => false
+    t.boolean  "repository_content",              :default => false, :null => false
+    t.integer  "lock_version",                    :default => 0,     :null => false
+    t.integer  "required_role_id",                :default => 1,     :null => false
     t.string   "state"
-    t.integer  "required_score",           :default => 0,     :null => false
-    t.integer  "frequency_id",             :default => 1,     :null => false
-    t.boolean  "subscription_master",      :default => false, :null => false
+    t.integer  "required_score",                  :default => 0,     :null => false
+    t.integer  "frequency_id",                    :default => 1,     :null => false
+    t.boolean  "subscription_master",             :default => false, :null => false
     t.string   "pub_date"
     t.integer  "volume_number"
     t.integer  "issue_number"
     t.integer  "serial_number"
+    t.string   "edition_string"
+    t.text     "title_alternative_transcription"
+    t.text     "description"
+    t.text     "abstract"
+    t.datetime "available_at"
+    t.datetime "valid_until"
+    t.datetime "date_submitted"
+    t.datetime "date_accepted"
+    t.datetime "date_caputured"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
@@ -310,8 +320,8 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.string   "full_name"
     t.text     "full_name_transcription"
     t.text     "full_name_alternative"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.datetime "deleted_at"
     t.string   "zip_code_1"
     t.string   "zip_code_2"
@@ -331,22 +341,23 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.text     "region"
     t.datetime "date_of_birth"
     t.datetime "date_of_death"
-    t.integer  "language_id",                  :default => 1, :null => false
-    t.integer  "country_id",                   :default => 1, :null => false
-    t.integer  "patron_type_id",               :default => 1, :null => false
-    t.integer  "lock_version",                 :default => 0, :null => false
+    t.integer  "language_id",                         :default => 1, :null => false
+    t.integer  "country_id",                          :default => 1, :null => false
+    t.integer  "patron_type_id",                      :default => 1, :null => false
+    t.integer  "lock_version",                        :default => 0, :null => false
     t.text     "note"
-    t.integer  "creates_count",                :default => 0, :null => false
-    t.integer  "realizes_count",               :default => 0, :null => false
-    t.integer  "produces_count",               :default => 0, :null => false
-    t.integer  "owns_count",                   :default => 0, :null => false
-    t.integer  "required_role_id",             :default => 1, :null => false
-    t.integer  "required_score",               :default => 0, :null => false
+    t.integer  "creates_count",                       :default => 0, :null => false
+    t.integer  "realizes_count",                      :default => 0, :null => false
+    t.integer  "produces_count",                      :default => 0, :null => false
+    t.integer  "owns_count",                          :default => 0, :null => false
+    t.integer  "required_role_id",                    :default => 1, :null => false
+    t.integer  "required_score",                      :default => 0, :null => false
     t.string   "state"
     t.text     "email"
     t.text     "url"
     t.string   "birth_date"
     t.string   "death_date"
+    t.text     "full_name_alternative_transcription"
   end
 
   add_index "patrons", ["country_id"], :name => "index_patrons_on_country_id"
