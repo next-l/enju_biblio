@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency "sunspot_rails"
   s.add_dependency "will_paginate"
   s.add_dependency "configatron"
-  s.add_dependency "enju_ndl"
   s.add_dependency "state_machine"
   s.add_dependency "addressable"
   s.add_dependency "validates_timeliness"

@@ -254,7 +254,6 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "volume_number"
     t.integer  "issue_number"
     t.integer  "serial_number"
-    t.string   "edition_string"
     t.text     "title_alternative_transcription"
     t.text     "description"
     t.text     "abstract"
@@ -263,6 +262,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "date_submitted"
     t.datetime "date_accepted"
     t.datetime "date_caputured"
+    t.string   "edition_string"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
@@ -276,6 +276,17 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "manifestations", ["oclc_number"], :name => "index_manifestations_on_oclc_number"
   add_index "manifestations", ["required_role_id"], :name => "index_manifestations_on_required_role_id"
   add_index "manifestations", ["updated_at"], :name => "index_manifestations_on_updated_at"
+
+  create_table "owns", :force => true do |t|
+    t.integer  "patron_id",  :null => false
+    t.integer  "item_id",    :null => false
+    t.integer  "position"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "owns", ["item_id"], :name => "index_owns_on_item_id"
+  add_index "owns", ["patron_id"], :name => "index_owns_on_patron_id"
 
   create_table "patron_relationship_types", :force => true do |t|
     t.string   "name",         :null => false
