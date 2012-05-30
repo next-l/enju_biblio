@@ -13,6 +13,7 @@ require 'addressable/uri'
 require 'validates_timeliness'
 require 'enju_oai'
 require 'has_scope'
+require 'enju_ndl'
 
 module EnjuBiblio
   class Engine < ::Rails::Engine

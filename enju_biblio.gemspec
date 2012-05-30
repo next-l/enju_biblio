@@ -36,6 +36,7 @@ Gem::Specification.new do |s|
   s.add_dependency "validates_timeliness"
   s.add_dependency "enju_oai"
   s.add_dependency "has_scope"
+  s.add_dependency "enju_ndl"
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"
@@ -45,5 +46,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency "fakeweb"
   s.add_development_dependency "sunspot-rails-tester"
   s.add_development_dependency "sunspot_solr"
-  s.add_development_dependency "enju_ndl"
 end
