@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   resources :manifestations do
     resources :patrons
     resources :produces
+    resources :exemplifies
     resources :series_statements
     resources :series_has_manifestations
   end
@@ -22,6 +23,8 @@ Rails.application.routes.draw do
   resources :realize_types
   resources :produces
   resources :produce_types
+  resources :owns
+  resources :exemplifies
 
   resources :countries
   resources :languages
