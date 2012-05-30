@@ -272,7 +272,6 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "volume_number"
     t.integer  "issue_number"
     t.integer  "serial_number"
-    t.string   "edition_string"
     t.text     "title_alternative_transcription"
     t.text     "description"
     t.text     "abstract"
@@ -281,6 +280,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "date_submitted"
     t.datetime "date_accepted"
     t.datetime "date_caputured"
+    t.string   "edition_string"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
