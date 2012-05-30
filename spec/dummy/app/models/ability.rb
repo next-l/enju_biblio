@@ -13,6 +13,8 @@ class Ability
       can :manage, Produce
       can :manage, ProduceType
       can :manage, Manifestation
+      can :manage, SeriesHasManifestation
+      can :manage, SeriesStatement
     when 'Librarian'
       can :read, Country
       can :manage, Create
@@ -20,6 +22,8 @@ class Ability
       can :manage, Realize
       can :manage, Produce
       can :manage, Manifestation
+      can :manage, SeriesHasManifestation
+      can :manage, SeriesStatement
     when 'User'
       can :read, Country
       can :read, Create
@@ -29,6 +33,8 @@ class Ability
       can :read, Manifestation do |manifestation|
         manifestation.required_role_id <= 2
       end
+      can :read, SeriesHasManifestation
+      can :read, SeriesStatement
     else
       can :read, Country
       can :read, Create
@@ -38,6 +44,8 @@ class Ability
       can :read, Manifestation do |manifestation|
         manifestation.required_role_id <= 1
       end
+      can :read, SeriesHasManifestation
+      can :read, SeriesStatement
     end
   end
 end

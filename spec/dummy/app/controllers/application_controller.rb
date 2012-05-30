@@ -23,6 +23,12 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def store_location
+    if request.get? and request.format.try(:html?) and !request.xhr?
+      session[:user_return_to] = request.fullpath
+    end
+  end
+
   def solr_commit
     Sunspot.commit
   end

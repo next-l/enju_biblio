@@ -12,6 +12,8 @@ Rails.application.routes.draw do
   resources :manifestations do
     resources :patrons
     resources :produces
+    resources :series_statements
+    resources :series_has_manifestations
   end
 
   resources :creates
@@ -23,4 +25,11 @@ Rails.application.routes.draw do
 
   resources :countries
   resources :languages
+
+  resources :series_has_manifestations
+
+  resources :series_statements do
+    resources :manifestations
+    resources :series_has_manifestations
+  end
 end
