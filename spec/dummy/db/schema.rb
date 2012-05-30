@@ -93,6 +93,24 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "exemplifies", ["item_id"], :name => "index_exemplifies_on_item_id", :unique => true
   add_index "exemplifies", ["manifestation_id"], :name => "index_exemplifies_on_manifestation_id"
 
+  create_table "form_of_works", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "frequencies", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "items", :force => true do |t|
     t.string   "call_number"
     t.string   "item_identifier"
@@ -254,6 +272,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "volume_number"
     t.integer  "issue_number"
     t.integer  "serial_number"
+    t.string   "edition_string"
     t.text     "title_alternative_transcription"
     t.text     "description"
     t.text     "abstract"
@@ -262,7 +281,6 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "date_submitted"
     t.datetime "date_accepted"
     t.datetime "date_caputured"
-    t.string   "edition_string"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

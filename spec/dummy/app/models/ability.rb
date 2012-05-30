@@ -7,6 +7,8 @@ class Ability
       can [:index, :update], Country
       can :manage, Create
       can :manage, CreateType
+      can [:read, :update], Frequency
+      can [:read, :update], FormOfWork
       can [:index, :update], Language
       can :manage, Realize
       can :manage, RealizeType
@@ -18,6 +20,8 @@ class Ability
     when 'Librarian'
       can :read, Country
       can :manage, Create
+      can :read, Frequency
+      can :read, FormOfWork
       can :read, Language
       can :manage, Realize
       can :manage, Produce
@@ -27,6 +31,8 @@ class Ability
     when 'User'
       can :read, Country
       can :read, Create
+      can :read, Frequency
+      can :read, FormOfWork
       can :read, Language
       can :read, Realize
       can :read, Produce
@@ -38,6 +44,8 @@ class Ability
     else
       can :read, Country
       can :read, Create
+      can :read, Frequency
+      can :read, FormOfWork
       can :read, Language
       can :read, Realize
       can :read, Produce

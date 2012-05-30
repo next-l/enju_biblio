@@ -26,13 +26,15 @@ Rails.application.routes.draw do
   resources :owns
   resources :exemplifies
 
-  resources :countries
-  resources :languages
-
   resources :series_has_manifestations
 
   resources :series_statements do
     resources :manifestations
     resources :series_has_manifestations
   end
+
+  resources :countries
+  resources :languages
+  resources :form_of_works
+  resources :frequencies
 end
