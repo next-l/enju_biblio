@@ -20,4 +20,7 @@ Rails.application.routes.draw do
   resources :realize_types
   resources :produces
   resources :produce_types
+
+  resources :countries
+  resources :languages
 end
