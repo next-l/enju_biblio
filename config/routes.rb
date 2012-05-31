@@ -40,6 +40,7 @@ Rails.application.routes.draw do
   resources :form_of_works
   resources :frequencies
   resources :licenses
+  resources :medium_of_performances
 
   resources :patron_relationship_types
   resources :patron_relationships
