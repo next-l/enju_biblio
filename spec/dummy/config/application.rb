@@ -55,3 +55,5 @@ module Dummy
 end
 
 require 'enju_library'
+require 'enju_circulation'
+require 'calculate_stat'

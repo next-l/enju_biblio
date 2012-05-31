@@ -17,6 +17,13 @@ Rails.application.routes.draw do
     resources :series_has_manifestations
   end
 
+  resources :items do
+    resources :patrons
+    resources :owns
+    resource :exemplify
+    resources :manifestations, :only => [:index]
+  end
+
   resources :patrons
 
   resources :creates
@@ -43,6 +50,8 @@ Rails.application.routes.draw do
   resources :medium_of_performances
   resources :carrier_types
   resources :content_types
+  resources :extents
+  resources :patron_types
 
   resources :patron_relationship_types
   resources :patron_relationships

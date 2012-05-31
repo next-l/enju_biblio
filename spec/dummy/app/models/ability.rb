@@ -8,6 +8,8 @@ class Ability
       can [:read, :update], Country
       can :manage, Create
       can :manage, CreateType
+      can :manage, Exemplify
+      can [:read, :update], Extent
       can [:read, :update], Frequency
       can [:read, :update], FormOfWork
       can [:read, :create, :update], Item
@@ -24,6 +26,7 @@ class Ability
       can :manage, CarrierType
       can :manage, PatronRelationship
       can :manage, PatronRelationshipType
+      can [:read, :update], PatronType
       can :manage, Produce
       can :manage, ProduceType
       can :manage, Manifestation
@@ -38,6 +41,8 @@ class Ability
       can :read, ContentType
       can :read, Country
       can :manage, Create
+      can :manage, Exemplify
+      can :read, Extent
       can :read, Frequency
       can :read, FormOfWork
       can [:read, :create, :update], Item
@@ -57,6 +62,7 @@ class Ability
       end
       can :manage, PatronRelationship
       can :read, PatronRelationshipType
+      can :read, PatronType
       can :manage, Produce
       can :manage, Manifestation
       can :manage, ManifestationRelationship
@@ -69,6 +75,8 @@ class Ability
       can :read, ContentType
       can :read, Country
       can :read, Create
+      can :read, Exemplify
+      can :read, Extent
       can :read, Frequency
       can :read, FormOfWork
       can :index, Item
@@ -98,6 +106,8 @@ class Ability
       can :read, ContentType
       can :read, Country
       can :read, Create
+      can :read, Exemplify
+      can :read, Extent
       can :read, Frequency
       can :read, FormOfWork
       can :read, Item
