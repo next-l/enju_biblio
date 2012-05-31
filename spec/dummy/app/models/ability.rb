@@ -4,6 +4,7 @@ class Ability
   def initialize(user, ip_addess = nil)
     case user.try(:role).try(:name)
     when 'Administrator'
+      can [:read, :update], ContentType
       can [:read, :update], Country
       can :manage, Create
       can :manage, CreateType
@@ -20,6 +21,7 @@ class Ability
       can :destroy, Patron do |patron|
         true
       end
+      can :manage, CarrierType
       can :manage, PatronRelationship
       can :manage, PatronRelationshipType
       can :manage, Produce
@@ -32,6 +34,8 @@ class Ability
       can :manage, SeriesHasManifestation
       can :manage, SeriesStatement
     when 'Librarian'
+      can [:read, :update], CarrierType
+      can :read, ContentType
       can :read, Country
       can :manage, Create
       can :read, Frequency
@@ -61,6 +65,8 @@ class Ability
       can :manage, SeriesHasManifestation
       can :manage, SeriesStatement
     when 'User'
+      can :read, CarrierType
+      can :read, ContentType
       can :read, Country
       can :read, Create
       can :read, Frequency
@@ -88,6 +94,8 @@ class Ability
       can :read, SeriesHasManifestation
       can :read, SeriesStatement
     else
+      can :read, CarrierType
+      can :read, ContentType
       can :read, Country
       can :read, Create
       can :read, Frequency

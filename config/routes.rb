@@ -41,6 +41,8 @@ Rails.application.routes.draw do
   resources :frequencies
   resources :licenses
   resources :medium_of_performances
+  resources :carrier_types
+  resources :content_types
 
   resources :patron_relationship_types
   resources :patron_relationships

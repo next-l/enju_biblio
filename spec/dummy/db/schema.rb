@@ -36,6 +36,15 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "updated_at",   :null => false
   end
 
+  create_table "content_types", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "countries", :force => true do |t|
     t.string  "name",         :null => false
     t.text    "display_name"
@@ -290,6 +299,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "date_submitted"
     t.datetime "date_accepted"
     t.datetime "date_caputured"
+    t.integer  "content_type_id",                 :default => 1
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
