@@ -9,8 +9,16 @@ class Ability
       can :manage, CreateType
       can [:read, :update], Frequency
       can [:read, :update], FormOfWork
+      can [:read, :create, :update], Item
+      can :destroy, Item do |item|
+        item.deletable?
+      end
       can [:read, :update], Language
       can [:read, :update], License
+      can [:read, :create, :update], Patron
+      can :destroy, Patron do |patron|
+        true
+      end
       can :manage, PatronRelationship
       can :manage, PatronRelationshipType
       can :manage, Produce
@@ -27,8 +35,20 @@ class Ability
       can :manage, Create
       can :read, Frequency
       can :read, FormOfWork
+      can [:read, :create, :update], Item
+      can :destroy, Item do |item|
+        if defined?(EnjuCirculation)
+          item.checkouts.not_returned.empty?
+        else
+          true
+        end
+      end
       can :read, Language
       can :read, License
+      can [:index, :create], Patron
+      can [:show, :update, :destroy], Patron do |patron|
+        patron.required_role_id <= 3
+      end
       can :manage, PatronRelationship
       can :read, PatronRelationshipType
       can :manage, Produce
@@ -43,8 +63,16 @@ class Ability
       can :read, Create
       can :read, Frequency
       can :read, FormOfWork
+      can :index, Item
+      can :show, Item do |item|
+        item.required_role_id <= 2
+      end
       can :read, Language
       can :read, License
+      can :index, Patron
+      can :show, Patron do |patron|
+        true if patron.required_role_id <= 2
+      end
       can :read, PatronRelationship
       can :read, PatronRelationshipType
       can :read, Produce
@@ -61,8 +89,13 @@ class Ability
       can :read, Create
       can :read, Frequency
       can :read, FormOfWork
+      can :read, Item
       can :read, Language
       can :read, License
+      can :index, Patron
+      can :show, Patron do |patron|
+        true if patron.required_role_id <= 1
+      end
       can :read, PatronRelationship
       can :read, PatronRelationshipType
       can :read, Produce

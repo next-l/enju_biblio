@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery
 
   rescue_from CanCan::AccessDenied, :with => :render_403
+  rescue_from ActiveRecord::RecordNotFound, :with => :render_404
 
   enju_biblio
 
@@ -20,6 +21,16 @@ class ApplicationController < ActionController::Base
         format.xml {render :template => 'page/403', :status => 403}
         format.json
       end
+    end
+  end
+
+  def render_404
+    return if performed?
+    respond_to do |format|
+      format.html {render :template => 'page/404', :status => 404}
+      format.mobile {render :template => 'page/404', :status => 404}
+      format.xml {render :template => 'page/404', :status => 404}
+      format.json
     end
   end
 
@@ -45,5 +56,17 @@ class ApplicationController < ActionController::Base
         return
       end
     end
+  end
+
+  def set_role_query(user, search)
+    role = user.try(:role) || Role.default_role
+    search.build do
+      with(:required_role_id).less_than role.id
+    end
+  end
+
+  def get_version
+    @version = params[:version_id].to_i if params[:version_id]
+    @version = nil if @version == 0
   end
 end

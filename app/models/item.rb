@@ -11,7 +11,6 @@ class Item < ActiveRecord::Base
   has_one :manifestation, :through => :exemplify
   has_many :owns
   has_many :patrons, :through => :owns
-  belongs_to :shelf, :counter_cache => true, :validate => true
   delegate :display_name, :to => :shelf, :prefix => true
   belongs_to :bookstore, :validate => true
   has_many :donates
@@ -22,7 +21,7 @@ class Item < ActiveRecord::Base
   has_one :accept
   #accepts_nested_attributes_for :exemplify
 
-  validates_associated :shelf, :bookstore
+  validates_associated :bookstore
   validates :manifestation_id, :presence => true, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
@@ -35,9 +34,6 @@ class Item < ActiveRecord::Base
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher
     string :item_identifier
-    string :library do
-      shelf.library.name if shelf
-    end
     integer :required_role_id
     integer :manifestation_id do
       manifestation.id if manifestation
@@ -209,8 +205,19 @@ class Item < ActiveRecord::Base
     manifestation.try(:publisher)
   end
 
-  def shelf_name
-    shelf.name
+  if defined?(EnjuLibrary)
+    belongs_to :shelf, :counter_cache => true, :validate => true
+    validates_associated :shelf
+
+    searchable do
+      string :library do
+        shelf.library.name if shelf
+      end
+    end
+
+    def shelf_name
+      shelf.name
+    end
   end
 
   def hold?(library)

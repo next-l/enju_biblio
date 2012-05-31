@@ -2,7 +2,6 @@
 class PatronsController < ApplicationController
   load_and_authorize_resource :except => :index
   authorize_resource :only => :index
-  before_filter :get_user
   before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_patron, :except => [:update, :destroy]
   if defined?(EnjuResourceMerge)
     before_filter :get_patron_merge_list, :except => [:create, :update, :destroy]
@@ -59,14 +58,12 @@ class PatronsController < ApplicationController
     end
 
     unless params[:mode] == 'add'
-      user = @user
       work = @work
       expression = @expression
       manifestation = @manifestation
       patron = @patron
       patron_merge_list = @patron_merge_list
       search.build do
-        with(:user).equal_to user.username if user
         with(:work_ids).equal_to work.id if work
         with(:expression_ids).equal_to expression.id if expression
         with(:manifestation_ids).equal_to manifestation.id if manifestation
@@ -130,7 +127,7 @@ class PatronsController < ApplicationController
     @patron = Patron.new
     @patron.required_role = Role.where(:name => 'Guest').first
     @patron.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
-    @patron.country = current_user.library.country
+    @patron.country = LibraryGroup.site_config.country
     prepare_options
 
     respond_to do |format|

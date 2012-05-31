@@ -17,6 +17,8 @@ Rails.application.routes.draw do
     resources :series_has_manifestations
   end
 
+  resources :patrons
+
   resources :creates
   resources :create_types
   resources :realizes
