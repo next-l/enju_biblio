@@ -37,4 +37,10 @@ Rails.application.routes.draw do
   resources :languages
   resources :form_of_works
   resources :frequencies
+  resources :licenses
+
+  resources :patron_relationship_types
+  resources :patron_relationships
+  resources :manifestation_relationship_types
+  resources :manifestation_relationships
 end

@@ -202,6 +202,15 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
 
   add_index "library_groups", ["short_name"], :name => "index_library_groups_on_short_name"
 
+  create_table "licenses", :force => true do |t|
+    t.string   "name",         :null => false
+    t.string   "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "manifestation_relationship_types", :force => true do |t|
     t.string   "name",         :null => false
     t.text     "display_name"
