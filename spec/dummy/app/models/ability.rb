@@ -19,6 +19,7 @@ class Ability
       can [:read, :update], Language
       can [:read, :update], License
       can [:read, :update], MediumOfPerformance
+      can :manage, Own
       can [:read, :create, :update], Patron
       can :destroy, Patron do |patron|
         true
@@ -56,6 +57,7 @@ class Ability
       can :read, Language
       can :read, License
       can :read, MediumOfPerformance
+      can :manage, Own
       can [:index, :create], Patron
       can [:show, :update, :destroy], Patron do |patron|
         patron.required_role_id <= 3
@@ -86,6 +88,7 @@ class Ability
       can :read, Language
       can :read, License
       can :read, MediumOfPerformance
+      can :read, Own
       can :index, Patron
       can :show, Patron do |patron|
         true if patron.required_role_id <= 2
@@ -114,6 +117,7 @@ class Ability
       can :read, Language
       can :read, License
       can :read, MediumOfPerformance
+      can :read, Own
       can :index, Patron
       can :show, Patron do |patron|
         true if patron.required_role_id <= 1
