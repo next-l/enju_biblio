@@ -48,6 +48,15 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "updated_at",       :null => false
   end
 
+  create_table "budget_types", :force => true do |t|
+    t.string   "name"
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
   create_table "carrier_type_has_checkout_types", :force => true do |t|
     t.integer  "carrier_type_id",  :null => false
     t.integer  "checkout_type_id", :null => false
@@ -200,6 +209,22 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "creates", ["patron_id"], :name => "index_creates_on_patron_id"
   add_index "creates", ["work_id"], :name => "index_creates_on_work_id"
 
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.string   "queue"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
   create_table "donates", :force => true do |t|
     t.integer  "patron_id",  :null => false
     t.integer  "item_id",    :null => false
@@ -209,6 +234,63 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
 
   add_index "donates", ["item_id"], :name => "index_donates_on_item_id"
   add_index "donates", ["patron_id"], :name => "index_donates_on_patron_id"
+
+  create_table "event_categories", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "event_import_files", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "content_type"
+    t.integer  "size"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "executed_at"
+    t.string   "state"
+    t.string   "event_import_file_name"
+    t.string   "event_import_content_type"
+    t.integer  "event_import_file_size"
+    t.datetime "event_import_updated_at"
+    t.string   "edit_mode"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+    t.string   "event_import_fingerprint"
+    t.text     "error_message"
+  end
+
+  add_index "event_import_files", ["parent_id"], :name => "index_event_import_files_on_parent_id"
+  add_index "event_import_files", ["state"], :name => "index_event_import_files_on_state"
+  add_index "event_import_files", ["user_id"], :name => "index_event_import_files_on_user_id"
+
+  create_table "event_import_results", :force => true do |t|
+    t.integer  "event_import_file_id"
+    t.integer  "event_id"
+    t.text     "body"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+  end
+
+  create_table "events", :force => true do |t|
+    t.integer  "library_id",        :default => 1,     :null => false
+    t.integer  "event_category_id", :default => 1,     :null => false
+    t.string   "name"
+    t.text     "note"
+    t.datetime "start_at"
+    t.datetime "end_at"
+    t.boolean  "all_day",           :default => false, :null => false
+    t.datetime "deleted_at"
+    t.text     "display_name"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  add_index "events", ["event_category_id"], :name => "index_events_on_event_category_id"
+  add_index "events", ["library_id"], :name => "index_events_on_library_id"
 
   create_table "exemplifies", :force => true do |t|
     t.integer  "manifestation_id", :null => false
@@ -247,6 +329,34 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  create_table "inventories", :force => true do |t|
+    t.integer  "item_id"
+    t.integer  "inventory_file_id"
+    t.text     "note"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+  end
+
+  add_index "inventories", ["inventory_file_id"], :name => "index_inventories_on_inventory_file_id"
+  add_index "inventories", ["item_id"], :name => "index_inventories_on_item_id"
+
+  create_table "inventory_files", :force => true do |t|
+    t.string   "filename"
+    t.string   "content_type"
+    t.integer  "size"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.string   "inventory_file_name"
+    t.string   "inventory_content_type"
+    t.integer  "inventory_file_size"
+    t.datetime "inventory_updated_at"
+    t.string   "inventory_fingerprint"
+  end
+
+  add_index "inventory_files", ["user_id"], :name => "index_inventory_files_on_user_id"
 
   create_table "item_has_use_restrictions", :force => true do |t|
     t.integer  "item_id",            :null => false
@@ -469,7 +579,6 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "volume_number"
     t.integer  "issue_number"
     t.integer  "serial_number"
-    t.string   "edition_string"
     t.text     "title_alternative_transcription"
     t.text     "description"
     t.text     "abstract"
@@ -478,6 +587,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "date_submitted"
     t.datetime "date_accepted"
     t.datetime "date_caputured"
+    t.string   "edition_string"
     t.integer  "content_type_id",                 :default => 1
   end
 
@@ -502,6 +612,53 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "updated_at",   :null => false
   end
 
+  create_table "message_requests", :force => true do |t|
+    t.integer  "sender_id"
+    t.integer  "receiver_id"
+    t.integer  "message_template_id"
+    t.datetime "sent_at"
+    t.datetime "deleted_at"
+    t.text     "body"
+    t.string   "state"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "message_requests", ["state"], :name => "index_message_requests_on_state"
+
+  create_table "message_templates", :force => true do |t|
+    t.string   "status",                       :null => false
+    t.text     "title",                        :null => false
+    t.text     "body",                         :null => false
+    t.integer  "position"
+    t.string   "locale",     :default => "en"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+  end
+
+  add_index "message_templates", ["status"], :name => "index_message_templates_on_status", :unique => true
+
+  create_table "messages", :force => true do |t|
+    t.datetime "read_at"
+    t.integer  "receiver_id"
+    t.integer  "sender_id"
+    t.string   "subject",            :null => false
+    t.text     "body"
+    t.integer  "message_request_id"
+    t.string   "state"
+    t.integer  "parent_id"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "depth"
+  end
+
+  add_index "messages", ["message_request_id"], :name => "index_messages_on_message_request_id"
+  add_index "messages", ["parent_id"], :name => "index_messages_on_parent_id"
+  add_index "messages", ["receiver_id"], :name => "index_messages_on_receiver_id"
+  add_index "messages", ["sender_id"], :name => "index_messages_on_sender_id"
+
   create_table "owns", :force => true do |t|
     t.integer  "patron_id",  :null => false
     t.integer  "item_id",    :null => false
@@ -512,6 +669,17 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
 
   add_index "owns", ["item_id"], :name => "index_owns_on_item_id"
   add_index "owns", ["patron_id"], :name => "index_owns_on_patron_id"
+
+  create_table "participates", :force => true do |t|
+    t.integer  "patron_id",  :null => false
+    t.integer  "event_id",   :null => false
+    t.integer  "position"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "participates", ["event_id"], :name => "index_participates_on_event_id"
+  add_index "participates", ["patron_id"], :name => "index_participates_on_patron_id"
 
   create_table "patron_relationship_types", :force => true do |t|
     t.string   "name",         :null => false
@@ -663,6 +831,24 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
 
   add_index "realizes", ["expression_id"], :name => "index_realizes_on_expression_id"
   add_index "realizes", ["patron_id"], :name => "index_realizes_on_patron_id"
+
+  create_table "request_status_types", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "request_types", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
 
   create_table "reserve_stat_has_manifestations", :force => true do |t|
     t.integer  "manifestation_reserve_stat_id", :null => false

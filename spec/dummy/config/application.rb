@@ -56,4 +56,5 @@ end
 
 require 'enju_library'
 require 'enju_circulation'
+require 'enju_inventory'
 require 'calculate_stat'

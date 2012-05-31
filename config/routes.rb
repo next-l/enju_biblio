@@ -15,6 +15,7 @@ Rails.application.routes.draw do
     resources :exemplifies
     resources :series_statements
     resources :series_has_manifestations
+    resources :items
   end
 
   resources :items do

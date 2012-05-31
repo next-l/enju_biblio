@@ -5,6 +5,8 @@ class ApplicationController < ActionController::Base
   rescue_from ActiveRecord::RecordNotFound, :with => :render_404
 
   enju_biblio
+  enju_library
+  enju_inventory
 
   private
   def render_403
@@ -32,6 +34,10 @@ class ApplicationController < ActionController::Base
       format.xml {render :template => 'page/404', :status => 404}
       format.json
     end
+  end
+
+  def access_denied
+    raise CanCan::AccessDenied
   end
 
   def store_location
@@ -68,5 +74,22 @@ class ApplicationController < ActionController::Base
   def get_version
     @version = params[:version_id].to_i if params[:version_id]
     @version = nil if @version == 0
+  end
+
+  def convert_charset
+    case params[:format]
+    when 'csv'
+      return unless configatron.csv_charset_conversion
+      # TODO: 他の言語
+      if @locale.to_sym == :ja
+        headers["Content-Type"] = "text/csv; charset=Shift_JIS"
+        response.body = NKF::nkf('-Ws', response.body)
+      end
+    when 'xml'
+      if @locale.to_sym == :ja
+        headers["Content-Type"] = "application/xml; charset=Shift_JIS"
+        response.body = NKF::nkf('-Ws', response.body)
+      end
+    end
   end
 end
