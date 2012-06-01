@@ -36,6 +36,8 @@ Rails.application.routes.draw do
   resources :owns
   resources :exemplifies
 
+  resources :donates
+
   resources :series_has_manifestations
 
   resources :series_statements do

@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 3.2"
-  s.add_dependency "sunspot_rails"
+  s.add_dependency "sunspot_rails", "~> 2.0.0.pre.120417"
   s.add_dependency "acts_as_list"
   s.add_dependency "paperclip"
   s.add_dependency "paperclip-meta"
@@ -44,8 +44,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
-  s.add_development_dependency "sunspot-rails-tester"
-  s.add_development_dependency "sunspot_solr"
+  s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120417"
   s.add_development_dependency "enju_circulation"
   s.add_development_dependency "enju_inventory"
+  s.add_development_dependency "enju_bookmark"
 end

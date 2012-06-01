@@ -123,21 +123,22 @@ class Manifestation < ActiveRecord::Base
     text :au do
       creator
     end
+    text :pub do
+      publisher
+    end
     text :atitle do
-      title if original_manifestations.present? # 親がいることが条件
+      title if series_statement.try(:periodical)
     end
     text :btitle do
-      title if frequency_id == 1  # 発行頻度1が単行本
+      title unless series_statement.try(:periodical)
     end
     text :jtitle do
-      if frequency_id != 1  # 雑誌の場合
-        title
+      if series_statement.try(:periodical)  # 雑誌の場合
+        series_statement.titles
       else                  # 雑誌以外（雑誌の記事も含む）
         titles = []
         original_manifestations.each do |m|
-          if m.frequency_id != 1
-            titles << m.title
-          end
+          titles << m.title
         end
         titles.flatten
       end

@@ -8,6 +8,7 @@ class Ability
       can [:read, :update], Country
       can :manage, Create
       can :manage, CreateType
+      can :manage, Donate
       can :manage, Exemplify
       can [:read, :update], Extent
       can [:read, :update], Frequency
@@ -18,6 +19,14 @@ class Ability
       end
       can [:read, :update], Language
       can [:read, :update], License
+      can [:read, :create, :update], Manifestation
+      can :destroy, Manifestation do |manifestation|
+        if defined?(EnjuCirculation)
+          manifestation.items.empty? and !manifestation.periodical_master? and !manifestation.is_reserved?
+        else
+          manifestation.items.empty? and !manifestation.periodical_master?
+        end
+      end
       can [:read, :update], MediumOfPerformance
       can :manage, Own
       can [:read, :create, :update], Patron
@@ -30,7 +39,6 @@ class Ability
       can [:read, :update], PatronType
       can :manage, Produce
       can :manage, ProduceType
-      can :manage, Manifestation
       can :manage, ManifestationRelationship
       can :manage, ManifestationRelationshipType
       can :manage, Realize
@@ -42,6 +50,7 @@ class Ability
       can :read, ContentType
       can :read, Country
       can :manage, Create
+      can :manage, Donate
       can :manage, Exemplify
       can :read, Extent
       can :read, Frequency
@@ -56,6 +65,14 @@ class Ability
       end
       can :read, Language
       can :read, License
+      can [:read, :create, :update], Manifestation
+      can :destroy, Manifestation do |manifestation|
+        if defined?(EnjuCirculation)
+          manifestation.items.empty? and !manifestation.periodical_master? and !manifestation.is_reserved?
+        else
+          manifestation.items.empty? and !manifestation.periodical_master?
+        end
+      end
       can :read, MediumOfPerformance
       can :manage, Own
       can [:index, :create], Patron
@@ -66,7 +83,6 @@ class Ability
       can :read, PatronRelationshipType
       can :read, PatronType
       can :manage, Produce
-      can :manage, Manifestation
       can :manage, ManifestationRelationship
       can :read, ManifestationRelationshipType
       can :manage, Realize
@@ -87,6 +103,11 @@ class Ability
       end
       can :read, Language
       can :read, License
+      can [:read, :edit], Manifestation do |manifestation|
+        manifestation.required_role_id <= 2
+      end
+      can :read, ManifestationRelationship
+      can :read, ManifestationRelationshipType
       can :read, MediumOfPerformance
       can :read, Own
       can :index, Patron
@@ -96,11 +117,6 @@ class Ability
       can :read, PatronRelationship
       can :read, PatronRelationshipType
       can :read, Produce
-      can :read, Manifestation do |manifestation|
-        manifestation.required_role_id <= 2
-      end
-      can :read, ManifestationRelationship
-      can :read, ManifestationRelationshipType
       can :read, Realize
       can :read, SeriesHasManifestation
       can :read, SeriesStatement
@@ -116,6 +132,11 @@ class Ability
       can :read, Item
       can :read, Language
       can :read, License
+      can :read, Manifestation do |manifestation|
+        manifestation.required_role_id <= 1
+      end
+      can :read, ManifestationRelationship
+      can :read, ManifestationRelationshipType
       can :read, MediumOfPerformance
       can :read, Own
       can :index, Patron
@@ -125,11 +146,6 @@ class Ability
       can :read, PatronRelationship
       can :read, PatronRelationshipType
       can :read, Produce
-      can :read, Manifestation do |manifestation|
-        manifestation.required_role_id <= 1
-      end
-      can :read, ManifestationRelationship
-      can :read, ManifestationRelationshipType
       can :read, Realize
       can :read, SeriesHasManifestation
       can :read, SeriesStatement

@@ -34,6 +34,45 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
 
   add_index "baskets", ["user_id"], :name => "index_baskets_on_user_id"
 
+  create_table "bookmark_stat_has_manifestations", :force => true do |t|
+    t.integer  "bookmark_stat_id", :null => false
+    t.integer  "manifestation_id", :null => false
+    t.integer  "bookmarks_count"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "bookmark_stat_has_manifestations", ["bookmark_stat_id"], :name => "index_bookmark_stat_has_manifestations_on_bookmark_stat_id"
+  add_index "bookmark_stat_has_manifestations", ["manifestation_id"], :name => "index_bookmark_stat_has_manifestations_on_manifestation_id"
+
+  create_table "bookmark_stats", :force => true do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.text     "note"
+    t.string   "state"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "bookmark_stats", ["state"], :name => "index_bookmark_stats_on_state"
+
+  create_table "bookmarks", :force => true do |t|
+    t.integer  "user_id",          :null => false
+    t.integer  "manifestation_id"
+    t.text     "title"
+    t.string   "url"
+    t.text     "note"
+    t.boolean  "shared"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "bookmarks", ["manifestation_id"], :name => "index_bookmarks_on_manifestation_id"
+  add_index "bookmarks", ["url"], :name => "index_bookmarks_on_url"
+  add_index "bookmarks", ["user_id"], :name => "index_bookmarks_on_user_id"
+
   create_table "bookstores", :force => true do |t|
     t.text     "name",             :null => false
     t.string   "zip_code"
@@ -371,23 +410,22 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   create_table "items", :force => true do |t|
     t.string   "call_number"
     t.string   "item_identifier"
-    t.integer  "circulation_status_id",       :default => 5,     :null => false
-    t.integer  "checkout_type_id",            :default => 1,     :null => false
-    t.datetime "created_at",                                     :null => false
-    t.datetime "updated_at",                                     :null => false
+    t.integer  "circulation_status_id", :default => 5,     :null => false
+    t.integer  "checkout_type_id",      :default => 1,     :null => false
+    t.datetime "created_at",                               :null => false
+    t.datetime "updated_at",                               :null => false
     t.datetime "deleted_at"
-    t.integer  "shelf_id",                    :default => 1,     :null => false
-    t.boolean  "include_supplements",         :default => false, :null => false
-    t.integer  "checkouts_count",             :default => 0,     :null => false
-    t.integer  "owns_count",                  :default => 0,     :null => false
-    t.integer  "resource_has_subjects_count", :default => 0,     :null => false
+    t.integer  "shelf_id",              :default => 1,     :null => false
+    t.boolean  "include_supplements",   :default => false, :null => false
+    t.integer  "checkouts_count",       :default => 0,     :null => false
+    t.integer  "owns_count",            :default => 0,     :null => false
     t.text     "note"
     t.string   "url"
     t.integer  "price"
-    t.integer  "lock_version",                :default => 0,     :null => false
-    t.integer  "required_role_id",            :default => 1,     :null => false
+    t.integer  "lock_version",          :default => 0,     :null => false
+    t.integer  "required_role_id",      :default => 1,     :null => false
     t.string   "state"
-    t.integer  "required_score",              :default => 0,     :null => false
+    t.integer  "required_score",        :default => 0,     :null => false
     t.datetime "acquired_at"
   end
 
@@ -456,20 +494,20 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "libraries", ["name"], :name => "index_libraries_on_name", :unique => true
 
   create_table "library_groups", :force => true do |t|
-    t.string   "name",                                                            :null => false
+    t.string   "name",                                                              :null => false
     t.text     "display_name"
-    t.string   "short_name",                                                      :null => false
+    t.string   "short_name",                                                        :null => false
     t.string   "email"
     t.text     "my_networks"
-    t.boolean  "use_dsbl",                  :default => false,                    :null => false
+    t.boolean  "use_dsbl",                    :default => false,                    :null => false
     t.text     "dsbl_list"
     t.text     "login_banner"
     t.text     "note"
-    t.integer  "valid_period_for_new_user", :default => 365,                      :null => false
     t.integer  "country_id"
-    t.datetime "created_at",                                                      :null => false
-    t.datetime "updated_at",                                                      :null => false
-    t.string   "url",                       :default => "http://localhost:3000/"
+    t.datetime "created_at",                                                        :null => false
+    t.datetime "updated_at",                                                        :null => false
+    t.boolean  "allow_bookmark_external_url", :default => false,                    :null => false
+    t.string   "url",                         :default => "http://localhost:3000/"
   end
 
   add_index "library_groups", ["short_name"], :name => "index_library_groups_on_short_name"
@@ -564,10 +602,6 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.string   "serial_number_string"
     t.integer  "edition"
     t.text     "note"
-    t.integer  "produces_count",                  :default => 0,     :null => false
-    t.integer  "exemplifies_count",               :default => 0,     :null => false
-    t.integer  "embodies_count",                  :default => 0,     :null => false
-    t.integer  "work_has_subjects_count",         :default => 0,     :null => false
     t.boolean  "repository_content",              :default => false, :null => false
     t.integer  "lock_version",                    :default => 0,     :null => false
     t.integer  "required_role_id",                :default => 1,     :null => false
@@ -575,10 +609,10 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "required_score",                  :default => 0,     :null => false
     t.integer  "frequency_id",                    :default => 1,     :null => false
     t.boolean  "subscription_master",             :default => false, :null => false
-    t.string   "pub_date"
-    t.integer  "volume_number"
-    t.integer  "issue_number"
-    t.integer  "serial_number"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
     t.text     "title_alternative_transcription"
     t.text     "description"
     t.text     "abstract"
@@ -587,8 +621,16 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "date_submitted"
     t.datetime "date_accepted"
     t.datetime "date_caputured"
+    t.string   "pub_date"
     t.string   "edition_string"
+    t.integer  "volume_number"
+    t.integer  "issue_number"
+    t.integer  "serial_number"
+    t.string   "ndc"
     t.integer  "content_type_id",                 :default => 1
+    t.integer  "year_of_publication"
+    t.text     "attachment_meta"
+    t.integer  "month_of_publication"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
@@ -750,18 +792,14 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.integer  "patron_type_id",                      :default => 1, :null => false
     t.integer  "lock_version",                        :default => 0, :null => false
     t.text     "note"
-    t.integer  "creates_count",                       :default => 0, :null => false
-    t.integer  "realizes_count",                      :default => 0, :null => false
-    t.integer  "produces_count",                      :default => 0, :null => false
-    t.integer  "owns_count",                          :default => 0, :null => false
     t.integer  "required_role_id",                    :default => 1, :null => false
     t.integer  "required_score",                      :default => 0, :null => false
     t.string   "state"
     t.text     "email"
     t.text     "url"
+    t.text     "full_name_alternative_transcription"
     t.string   "birth_date"
     t.string   "death_date"
-    t.text     "full_name_alternative_transcription"
   end
 
   add_index "patrons", ["country_id"], :name => "index_patrons_on_country_id"
@@ -902,6 +940,20 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "updated_at",   :null => false
   end
 
+  create_table "search_engines", :force => true do |t|
+    t.string   "name",             :null => false
+    t.text     "display_name"
+    t.string   "url",              :null => false
+    t.text     "base_url",         :null => false
+    t.text     "http_method",      :null => false
+    t.text     "query_param",      :null => false
+    t.text     "additional_param"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
   create_table "series_has_manifestations", :force => true do |t|
     t.integer  "series_statement_id"
     t.integer  "manifestation_id"
@@ -964,6 +1016,26 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   end
 
   add_index "shelves", ["library_id"], :name => "index_shelves_on_library_id"
+
+  create_table "taggings", :force => true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context"
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id"], :name => "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], :name => "index_taggings_on_taggable_id_and_taggable_type_and_context"
+
+  create_table "tags", :force => true do |t|
+    t.string   "name"
+    t.string   "name_transcription"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
 
   create_table "use_restrictions", :force => true do |t|
     t.string   "name",         :null => false
@@ -1066,6 +1138,7 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.string   "last_sign_in_ip"
     t.boolean  "save_checkout_history",    :default => false, :null => false
     t.string   "checkout_icalendar_token"
+    t.boolean  "share_bookmarks"
   end
 
   add_index "users", ["checkout_icalendar_token"], :name => "index_users_on_checkout_icalendar_token", :unique => true

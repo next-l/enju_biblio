@@ -33,11 +33,6 @@ class CreateManifestations < ActiveRecord::Migration
       t.string :serial_number_list
       t.integer :edition
       t.text :note
-      t.integer :produces_count, :default => 0, :null => false
-      t.integer :exemplifies_count, :default => 0, :null => false
-      t.integer :embodies_count, :default => 0, :null => false
-      t.integer :exemplifies_count, :default => 0, :null => false
-      t.integer :work_has_subjects_count, :default => 0, :null => false
       t.boolean :repository_content, :default => false, :null => false
       t.integer :lock_version, :default => 0, :null => false
       t.integer :required_role_id, :default => 1, :null => false

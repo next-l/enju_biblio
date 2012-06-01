@@ -15,6 +15,7 @@ gem "jquery-rails"
 gem 'isbn-tools', :git => 'git://github.com/nabeta/isbn-tools.git', :require => 'isbn/tools'
 gem 'enju_library', :git => 'git://github.com/next-l/enju_library.git'
 gem 'enju_manifestation_viewer', :git => 'git://github.com/nabeta/enju_manifestation_viewer.git'
+  gem 'sunspot-rails-tester', :git => 'git://github.com/nabeta/sunspot-rails-tester.git'
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
