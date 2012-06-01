@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency "devise"
   s.add_dependency "cancan"
   s.add_dependency "paper_trail"
-  s.add_dependency "sunspot_rails"
   s.add_dependency "will_paginate"
   s.add_dependency "configatron"
   s.add_dependency "state_machine"
