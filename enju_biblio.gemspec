@@ -47,4 +47,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_circulation"
   s.add_development_dependency "enju_inventory"
   s.add_development_dependency "enju_bookmark"
+  s.add_development_dependency "enju_event"
 end

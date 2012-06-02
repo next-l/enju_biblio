@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     resources :series_statements
     resources :series_has_manifestations
     resources :items
+    resources :picture_files
   end
 
   resources :items do
@@ -25,7 +26,18 @@ Rails.application.routes.draw do
     resources :manifestations, :only => [:index]
   end
 
-  resources :patrons
+  resources :patrons do
+    resources :works, :controller => 'manifestations'
+    resources :expressions, :controller => 'manifestations'
+    resources :manifestations
+    resources :items
+    resources :picture_files
+    resources :patrons
+    resources :patron_relationships
+    resources :creates
+    resources :realizes
+    resources :produces
+  end
 
   resources :creates
   resources :create_types
@@ -65,4 +77,8 @@ Rails.application.routes.draw do
   resources :resource_import_results
   resources :patron_import_files
   resources :patron_import_results
+
+  resources :import_requests
+
+  resources :picture_files
 end

@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   enju_biblio
   enju_library
   enju_inventory
+  enju_event
 
   private
   def render_403

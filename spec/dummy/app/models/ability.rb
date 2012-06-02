@@ -17,6 +17,7 @@ class Ability
       can :destroy, Item do |item|
         item.deletable?
       end
+      can :manage, ImportRequest
       can [:read, :update], Language
       can [:read, :update], License
       can [:read, :create, :update], Manifestation
@@ -39,6 +40,7 @@ class Ability
       can :manage, PatronRelationship
       can :manage, PatronRelationshipType
       can [:read, :update], PatronType
+      can :manage, PictureFile
       can :manage, Produce
       can :manage, ProduceType
       can :manage, ManifestationRelationship
@@ -59,6 +61,7 @@ class Ability
       can :read, Extent
       can :read, Frequency
       can :read, FormOfWork
+      can :manage, ImportRequest
       can [:read, :create, :update], Item
       can :destroy, Item do |item|
         if defined?(EnjuCirculation)
@@ -88,6 +91,7 @@ class Ability
       can :manage, PatronRelationship
       can :read, PatronRelationshipType
       can :read, PatronType
+      can :manage, PictureFile
       can :manage, Produce
       can :manage, ManifestationRelationship
       can :read, ManifestationRelationshipType
@@ -124,6 +128,15 @@ class Ability
       end
       can :read, PatronRelationship
       can :read, PatronRelationshipType
+      can :index, PictureFile
+      can :show, PictureFile do |picture_file|
+        begin
+          true if picture_file.picture_attachable.required_role_id <= 2
+        rescue NoMethodError
+          true
+        end
+      end
+      can :show, User
       can :read, Produce
       can :read, Realize
       can :read, SeriesHasManifestation
@@ -153,6 +166,15 @@ class Ability
       end
       can :read, PatronRelationship
       can :read, PatronRelationshipType
+      can :index, PictureFile
+      can :show, PictureFile do |picture_file|
+        begin
+          true if picture_file.picture_attachable.required_role_id <= 2
+        rescue NoMethodError
+          true
+        end
+      end
+      can :show, User
       can :read, Produce
       can :read, Realize
       can :read, SeriesHasManifestation
