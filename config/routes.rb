@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :series_has_manifestations
     resources :items
     resources :picture_files
+    resources :manifestations
   end
 
   resources :items do
@@ -37,6 +38,18 @@ Rails.application.routes.draw do
     resources :creates
     resources :realizes
     resources :produces
+  end
+
+  resources :creators, :controller => 'patrons' do
+    resources :manifestations
+  end
+
+  resources :contributors, :controller => 'patrons' do
+    resources :manifestations
+  end
+
+  resources :publishers, :controller => 'patrons' do
+    resources :manifestations
   end
 
   resources :creates
@@ -81,4 +94,7 @@ Rails.application.routes.draw do
   resources :import_requests
 
   resources :picture_files
+
+  match '/isbn/:isbn' => 'manifestations#show'
+  match '/page/advanced_search' => 'page#advanced_search'
 end

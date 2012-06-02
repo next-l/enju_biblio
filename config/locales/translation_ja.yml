@@ -1,0 +1,5 @@
+ja:
+  activerecord:
+    models:
+      manifestation: 資料
+      series_statement: シリーズ情報

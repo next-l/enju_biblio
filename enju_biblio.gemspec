@@ -36,6 +36,8 @@ Gem::Specification.new do |s|
   s.add_dependency "enju_oai"
   s.add_dependency "has_scope"
   s.add_dependency "enju_ndl"
+  s.add_dependency "simple_form"
+  s.add_dependency "dynamic_form"
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"
