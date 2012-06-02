@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120510140958) do
+ActiveRecord::Schema.define(:version => 20120602141129) do
 
   create_table "accepts", :force => true do |t|
     t.integer  "basket_id"
@@ -417,8 +417,6 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.datetime "deleted_at"
     t.integer  "shelf_id",              :default => 1,     :null => false
     t.boolean  "include_supplements",   :default => false, :null => false
-    t.integer  "checkouts_count",       :default => 0,     :null => false
-    t.integer  "owns_count",            :default => 0,     :null => false
     t.text     "note"
     t.string   "url"
     t.integer  "price"
@@ -427,8 +425,11 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
     t.string   "state"
     t.integer  "required_score",        :default => 0,     :null => false
     t.datetime "acquired_at"
+    t.integer  "bookstore_id"
+    t.integer  "budget_type_id"
   end
 
+  add_index "items", ["bookstore_id"], :name => "index_items_on_bookstore_id"
   add_index "items", ["checkout_type_id"], :name => "index_items_on_checkout_type_id"
   add_index "items", ["circulation_status_id"], :name => "index_items_on_circulation_status_id"
   add_index "items", ["item_identifier"], :name => "index_items_on_item_identifier"
@@ -723,6 +724,39 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "participates", ["event_id"], :name => "index_participates_on_event_id"
   add_index "participates", ["patron_id"], :name => "index_participates_on_patron_id"
 
+  create_table "patron_import_files", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "filename"
+    t.string   "content_type"
+    t.integer  "size"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "executed_at"
+    t.string   "state"
+    t.string   "patron_import_file_name"
+    t.string   "patron_import_content_type"
+    t.integer  "patron_import_file_size"
+    t.datetime "patron_import_updated_at"
+    t.datetime "created_at",                 :null => false
+    t.datetime "updated_at",                 :null => false
+    t.string   "patron_import_fingerprint"
+    t.text     "error_message"
+    t.string   "edit_mode"
+  end
+
+  add_index "patron_import_files", ["parent_id"], :name => "index_patron_import_files_on_parent_id"
+  add_index "patron_import_files", ["state"], :name => "index_patron_import_files_on_state"
+  add_index "patron_import_files", ["user_id"], :name => "index_patron_import_files_on_user_id"
+
+  create_table "patron_import_results", :force => true do |t|
+    t.integer  "patron_import_file_id"
+    t.integer  "patron_id"
+    t.integer  "user_id"
+    t.text     "body"
+    t.datetime "created_at",            :null => false
+    t.datetime "updated_at",            :null => false
+  end
+
   create_table "patron_relationship_types", :force => true do |t|
     t.string   "name",         :null => false
     t.text     "display_name"
@@ -930,6 +964,43 @@ ActiveRecord::Schema.define(:version => 20120510140958) do
   add_index "reserves", ["manifestation_id"], :name => "index_reserves_on_manifestation_id"
   add_index "reserves", ["request_status_type_id"], :name => "index_reserves_on_request_status_type_id"
   add_index "reserves", ["user_id"], :name => "index_reserves_on_user_id"
+
+  create_table "resource_import_files", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "filename"
+    t.string   "content_type"
+    t.integer  "size"
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "executed_at"
+    t.string   "state"
+    t.string   "resource_import_file_name"
+    t.string   "resource_import_content_type"
+    t.integer  "resource_import_file_size"
+    t.datetime "resource_import_updated_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+    t.string   "edit_mode"
+    t.string   "resource_import_fingerprint"
+    t.text     "error_message"
+  end
+
+  add_index "resource_import_files", ["parent_id"], :name => "index_resource_import_files_on_parent_id"
+  add_index "resource_import_files", ["state"], :name => "index_resource_import_files_on_state"
+  add_index "resource_import_files", ["user_id"], :name => "index_resource_import_files_on_user_id"
+
+  create_table "resource_import_results", :force => true do |t|
+    t.integer  "resource_import_file_id"
+    t.integer  "manifestation_id"
+    t.integer  "item_id"
+    t.text     "body"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "resource_import_results", ["item_id"], :name => "index_resource_import_results_on_item_id"
+  add_index "resource_import_results", ["manifestation_id"], :name => "index_resource_import_results_on_manifestation_id"
+  add_index "resource_import_results", ["resource_import_file_id"], :name => "index_resource_import_results_on_resource_import_file_id"
 
   create_table "roles", :force => true do |t|
     t.string   "name"

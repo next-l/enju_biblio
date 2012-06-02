@@ -34,6 +34,8 @@ class Ability
         true
       end
       can :manage, CarrierType
+      can :manage, PatronImportFile
+      can :read, PatronImportResult
       can :manage, PatronRelationship
       can :manage, PatronRelationshipType
       can [:read, :update], PatronType
@@ -43,6 +45,8 @@ class Ability
       can :manage, ManifestationRelationshipType
       can :manage, Realize
       can :manage, RealizeType
+      can :manage, ResourceImportFile
+      can :read, ResourceImportResult
       can :manage, SeriesHasManifestation
       can :manage, SeriesStatement
     when 'Librarian'
@@ -79,6 +83,8 @@ class Ability
       can [:show, :update, :destroy], Patron do |patron|
         patron.required_role_id <= 3
       end
+      can :manage, PatronImportFile
+      can :read, PatronImportResult
       can :manage, PatronRelationship
       can :read, PatronRelationshipType
       can :read, PatronType
@@ -86,6 +92,8 @@ class Ability
       can :manage, ManifestationRelationship
       can :read, ManifestationRelationshipType
       can :manage, Realize
+      can :manage, ResourceImportFile
+      can :read, ResourceImportResult
       can :manage, SeriesHasManifestation
       can :manage, SeriesStatement
     when 'User'

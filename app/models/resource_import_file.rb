@@ -91,7 +91,7 @@ class ResourceImportFile < ActiveRecord::Base
 
       unless manifestation
         if row['isbn'].present?
-          isbn = ISBN_Tools.cleanup(row['isbn'])
+          isbn = StdNum::ISBN.normalize(row['isbn'])
           m = Manifestation.find_by_isbn(isbn)
           if m
             unless m.series_statement
@@ -107,14 +107,16 @@ class ResourceImportFile < ActiveRecord::Base
           series_statement = find_series_statement(row)
           begin
             manifestation = Manifestation.import_isbn(isbn)
-            manifestation.series_statement = series_statement
-            manifestation.save
+            if manifestation
+              manifestation.series_statement = series_statement
+              manifestation.save
+              num[:manifestation_imported] += 1 if manifestation
+            end
           rescue EnjuNdl::InvalidIsbn
             manifestation = nil
           rescue EnjuNdl::RecordNotFound
             manifestation = nil
           end
-          num[:manifestation_imported] += 1 if manifestation
         end
       end
 
@@ -405,8 +407,9 @@ class ResourceImportFile < ActiveRecord::Base
       return nil
     end
 
-    if ISBN_Tools.is_valid?(row['isbn'].to_s.strip)
-      isbn = ISBN_Tools.cleanup(row['isbn'])
+    lisbn = Lisbn.new(row['isbn'].to_s.strip)
+    if lisbn.isbn.valid?
+      isbn = lisbn.isbn
     end
     # TODO: 小数点以下の表現
     width = NKF.nkf('-eZ1', row['width'].to_s).gsub(/\D/, '').to_i
@@ -508,7 +511,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def import_series_statement(row)
-    issn = ISBN_Tools.cleanup(row['issn'].to_s)
+    issn = StdNum::ISSN.normalize(row['issn'].to_s)
     series_statement = find_series_statement(row)
     unless series_statement
       if row['series_title'].to_s.strip.present?
@@ -547,7 +550,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def find_series_statement(row)
-    issn = ISBN_Tools.cleanup(row['issn'].to_s)
+    issn = StdNum::ISSN.normalize(row['issn'].to_s)
     series_statement_identifier = row['series_statement_identifier'].to_s.strip
     series_statement = SeriesStatement.where(:issn => issn).first if issn.present?
     unless series_statement
