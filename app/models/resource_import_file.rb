@@ -109,7 +109,6 @@ class ResourceImportFile < ActiveRecord::Base
             manifestation = Manifestation.import_isbn(isbn)
             if manifestation
               manifestation.series_statement = series_statement
-              manifestation.save
               num[:manifestation_imported] += 1 if manifestation
             end
           rescue EnjuNdl::InvalidIsbn

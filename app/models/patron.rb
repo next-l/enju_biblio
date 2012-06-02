@@ -270,8 +270,8 @@ end
 #  full_name                           :string(255)
 #  full_name_transcription             :text
 #  full_name_alternative               :text
-#  created_at                          :datetime
-#  updated_at                          :datetime
+#  created_at                          :datetime        not null
+#  updated_at                          :datetime        not null
 #  deleted_at                          :datetime
 #  zip_code_1                          :string(255)
 #  zip_code_2                          :string(255)
@@ -285,6 +285,7 @@ end
 #  fax_number_2                        :string(255)
 #  other_designation                   :text
 #  place                               :text
+#  postal_code                         :string(255)
 #  street                              :text
 #  locality                            :text
 #  region                              :text
@@ -301,7 +302,6 @@ end
 #  email                               :text
 #  url                                 :text
 #  full_name_alternative_transcription :text
-#  title                               :string(255)
 #  birth_date                          :string(255)
 #  death_date                          :string(255)
 #

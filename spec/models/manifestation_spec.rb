@@ -278,7 +278,6 @@ end
 #  date_submitted                  :datetime
 #  date_accepted                   :datetime
 #  date_caputured                  :datetime
-#  ndl_bib_id                      :string(255)
 #  pub_date                        :string(255)
 #  edition_string                  :string(255)
 #  volume_number                   :integer
@@ -287,7 +286,6 @@ end
 #  ndc                             :string(255)
 #  content_type_id                 :integer         default(1)
 #  year_of_publication             :integer
-#  attachment_fingerprint          :string(255)
 #  attachment_meta                 :text
 #  month_of_publication            :integer
 #

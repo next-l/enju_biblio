@@ -1,7 +1,7 @@
 class PatronImportFile < ActiveRecord::Base
   attr_accessible :patron_import, :edit_mode
   include ImportFile
-  default_scope :order => 'id DESC'
+  default_scope :order => 'patron_import_files.id DESC'
   scope :not_imported, where(:state => 'pending')
   scope :stucked, where('created_at < ? AND state = ?', 1.hour.ago, 'pending')
 
@@ -278,8 +278,8 @@ end
 #  patron_import_updated_at   :datetime
 #  created_at                 :datetime        not null
 #  updated_at                 :datetime        not null
-#  edit_mode                  :string(255)
 #  patron_import_fingerprint  :string(255)
 #  error_message              :text
+#  edit_mode                  :string(255)
 #
 

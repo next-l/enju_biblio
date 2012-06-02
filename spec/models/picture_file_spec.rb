@@ -15,7 +15,6 @@ end
 #  picture_attachable_type :string(255)
 #  content_type            :string(255)
 #  title                   :text
-#  filename                :text
 #  thumbnail               :string(255)
 #  position                :integer
 #  created_at              :datetime        not null
@@ -24,7 +23,7 @@ end
 #  picture_content_type    :string(255)
 #  picture_file_size       :integer
 #  picture_updated_at      :datetime
-#  picture_fingerprint     :string(255)
 #  picture_meta            :text
+#  picture_fingerprint     :string(255)
 #
 

@@ -127,7 +127,7 @@ class PatronsController < ApplicationController
     @patron = Patron.new
     @patron.required_role = Role.where(:name => 'Guest').first
     @patron.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
-    @patron.country = LibraryGroup.site_config.country
+    @patron.country = current_user.library.country
     prepare_options
 
     respond_to do |format|

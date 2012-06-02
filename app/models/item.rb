@@ -249,8 +249,6 @@ class Item < ActiveRecord::Base
     end
   end
 end
-
-
 # == Schema Information
 #
 # Table name: items
@@ -265,8 +263,6 @@ end
 #  deleted_at            :datetime
 #  shelf_id              :integer         default(1), not null
 #  include_supplements   :boolean         default(FALSE), not null
-#  checkouts_count       :integer         default(0), not null
-#  owns_count            :integer         default(0), not null
 #  note                  :text
 #  url                   :string(255)
 #  price                 :integer
@@ -276,7 +272,6 @@ end
 #  required_score        :integer         default(0), not null
 #  acquired_at           :datetime
 #  bookstore_id          :integer
-#  missing_since         :datetime
 #  budget_type_id        :integer
 #
 

@@ -2,7 +2,6 @@ class CreatePatronImportFiles < ActiveRecord::Migration
   def change
     create_table :patron_import_files do |t|
       t.integer :parent_id
-      t.string :filename
       t.string :content_type
       t.integer :size
       t.integer :user_id
