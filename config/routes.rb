@@ -86,9 +86,13 @@ Rails.application.routes.draw do
   resources :manifestation_relationship_types
   resources :manifestation_relationships
 
-  resources :resource_import_files
+  resources :resource_import_files do
+    resources :resource_import_results
+  end
   resources :resource_import_results
-  resources :patron_import_files
+  resources :patron_import_files do
+    resources :patron_import_results
+  end
   resources :patron_import_results
 
   resources :import_requests
