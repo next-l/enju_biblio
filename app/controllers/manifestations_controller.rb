@@ -12,7 +12,7 @@ class ManifestationsController < ApplicationController
   before_filter :get_item, :get_libraries, :only => :index
   before_filter :prepare_options, :only => [:new, :edit]
   before_filter :get_version, :only => [:show]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
+  after_filter :solr_commit, :only => :destroy
   after_filter :convert_charset, :only => :index
   cache_sweeper :manifestation_sweeper, :only => [:create, :update, :destroy]
   include EnjuOai::OaiController if defined?(EnjuOai)
@@ -416,6 +416,7 @@ class ManifestationsController < ApplicationController
       end
     end
     @original_manifestation = Manifestation.where(:id => params[:manifestation_id]).first
+    @series_statement = @manifestation.series_statement unless @series_statement
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
         @bookmark = current_user.bookmarks.where(:manifestation_id => @manifestation.id).first if @manifestation rescue nil
@@ -436,6 +437,8 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       if @manifestation.save
+        Sunspot.commit
+        #@manifestation.reload; @manifestation.index!
         Manifestation.transaction do
           if @original_manifestation
             @manifestation.derived_manifestations << @original_manifestation
@@ -457,6 +460,7 @@ class ManifestationsController < ApplicationController
   def update
     respond_to do |format|
       if @manifestation.update_attributes(params[:manifestation])
+        Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
@@ -470,7 +474,9 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1
   # DELETE /manifestations/1.json
   def destroy
+    series_statement = @manifestation.series_statement
     @manifestation.destroy
+    series_statement.try(:index!)
 
     respond_to do |format|
       format.html { redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation')) }

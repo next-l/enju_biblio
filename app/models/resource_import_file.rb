@@ -11,7 +11,9 @@ class ResourceImportFile < ActiveRecord::Base
       :path => "resource_import_files/:id/:filename",
       :s3_permissions => :private
   else
-    has_attached_file :resource_import, :path => ":rails_root/private:url"
+    has_attached_file :resource_import,
+      :path => ":rails_root/private/system/:attachment/:id/:style/:filename",
+      :url => "/system/:attachment/:id/:style/:filename"
   end
   validates_attachment_content_type :resource_import, :content_type => ['text/csv', 'text/plain', 'text/tab-separated-values', 'application/octet-stream']
   validates_attachment_presence :resource_import
@@ -259,6 +261,15 @@ class ResourceImportFile < ActiveRecord::Base
         item.note = row['note'] if row['note']
         item.save!
         ExpireFragmentCache.expire_fragment_cache(item.manifestation)
+      else
+        manifestation_identifier = row['manifestation_identifier'].to_s.strip
+        manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier.present?
+        unless manifestation
+          manifestation = Manifestation.where(:id => row['manifestation_id']).first
+        end
+        if manifestation
+          fetch(row, :edit_mode => 'update')
+        end
       end
       row_num += 1
     end
@@ -388,6 +399,11 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation = nil
     when 'update'
       manifestation = Item.where(:item_identifier => row['item_identifier'].to_s.strip).first.try(:manifestation)
+      unless manifestation
+        manifestation_identifier = row['manifestation_identifier'].to_s.strip
+        manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier
+        manifestation = Manifestation.where(:id => row['manifestation_id']).first unless manifestation
+      end
     end
 
     title = {}
@@ -418,7 +434,6 @@ class ResourceImportFile < ActiveRecord::Base
     language = Language.where(:name => row['language'].to_s.strip.camelize).first
     language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
     language = Language.where(:iso_639_1 => row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(:name => 'unknown').first unless language
 
     if end_page >= 1
       start_page = 1
@@ -454,7 +469,7 @@ class ResourceImportFile < ActiveRecord::Base
       when 'update'
         expression = manifestation
         work = expression
-        work.series_statement = series_statement
+        work.series_statement = series_statement if series_statement
         work.creators = creator_patrons.uniq unless creator_patrons.empty?
         expression.contributors = contributor_patrons.uniq unless contributor_patrons.empty?
         if defined?(EnjuSubject)
@@ -465,7 +480,7 @@ class ResourceImportFile < ActiveRecord::Base
         volume_number = row['volume_number'].to_s.tr('０-９', '0-9').to_i
       end
 
-      manifestation = self.class.import_manifestation(expression, publisher_patrons, {
+      attributes = {
         :original_title => title[:original_title],
         :title_transcription => title[:title_transcription],
         :title_alternative => title[:title_alternative],
@@ -492,19 +507,34 @@ class ResourceImportFile < ActiveRecord::Base
         :end_page => end_page,
         :access_address => row['access_addres'],
         :manifestation_identifier => row['manifestation_identifier']
-      },
+      }.delete_if{|key, value| value.nil?}
+      manifestation = self.class.import_manifestation(expression, publisher_patrons, attributes,
       {
         :edit_mode => options[:edit_mode]
       })
-      manifestation.volume_number = volume_number
-      manifestation.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Guest')
-      manifestation.language = language
-      manifestation.series_statement = series_statement
+      manifestation.volume_number = volume_number if volume_number
+
+      required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first
+      if required_role and row['required_role_name'].present?
+        manifestation.required_role = required_role
+      else
+        manifestation.required_role = Role.where(:name => 'Guest').first unless manifestation.required_role
+      end
+
+      if language and row['language'].present?
+        manifestation.language = language
+      else
+        manifestation.language = Language.where(:name => 'unknown').first unless manifestation.language
+      end
+
+      manifestation.series_statement = series_statement if series_statement
       manifestation.save!
 
-      manifestation.set_patron_role_type(creators_list)
-      manifestation.set_patron_role_type(contributors_list, :scope => :contributor)
-      manifestation.set_patron_role_type(publishers_list, :scope => :publisher)
+      if options[:edit_mode] == 'create'
+        manifestation.set_patron_role_type(creators_list)
+        manifestation.set_patron_role_type(contributors_list, :scope => :contributor)
+        manifestation.set_patron_role_type(publishers_list, :scope => :publisher)
+      end
     end
     manifestation
   end
@@ -557,7 +587,7 @@ class ResourceImportFile < ActiveRecord::Base
       series_statement = SeriesStatement.where(:series_statement_identifier => series_statement_identifier).first if series_statement_identifier.present?
     end
     unless series_statement
-      series_statement = SeriesStatement.where(:id => series_statement_id).first unless series_statement_id
+      series_statement = SeriesStatement.where(:id => series_statement_id).first if series_statement_id
     end
     series_statement = SeriesStatement.where(:original_title => row['series_statement_original_title'].to_s.strip).first unless series_statement
     series_statement
