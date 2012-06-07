@@ -438,7 +438,6 @@ class ManifestationsController < ApplicationController
     respond_to do |format|
       if @manifestation.save
         Sunspot.commit
-        #@manifestation.reload; @manifestation.index!
         Manifestation.transaction do
           if @original_manifestation
             @manifestation.derived_manifestations << @original_manifestation
@@ -532,7 +531,7 @@ class ManifestationsController < ApplicationController
     end
 
     unless options[:issn].blank?
-      query = "#{query} issn_s:#{options[:issn].gsub('-', '')}"
+      query = "#{query} issn_sm:#{options[:issn].gsub('-', '')}"
     end
 
     unless options[:lccn].blank?
@@ -637,7 +636,7 @@ class ManifestationsController < ApplicationController
     @roles = Role.all
     @languages = Language.all_cache
     @frequencies = Frequency.all
-    @nii_types = NiiType.all if defined?(NiiType)
+    @nii_types = NiiType.all if defined?(EnjuNii)
   end
 
   def get_index_patron
