@@ -129,6 +129,14 @@ describe ResourceImportFile do
       Item.where(:item_identifier => '00003').first.manifestation.original_title.should eq 'テスト3'
       Item.where(:item_identifier => '00003').first.acquired_at.should eq Time.zone.parse('2012-01-01')
     end
+
+    it "should update series_statement" do
+      manifestation = Manifestation.find(10)
+      file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), :edit_mode => 'update'
+      file.modify
+      manifestation.reload
+      manifestation.series_statement.should eq SeriesStatement.find(2)
+    end
   end
 
   describe "when its mode is 'destroy'" do

@@ -2,7 +2,7 @@
             <td style="width: 30px"><%= itemnum = @manifestations.offset + 1 + manifestation_counter -%></td>
             <td style="480px">
               <% if manifestation.root_of_series? %>
-                  <%= render 'manifestations/show_series_index', :manifestation => manifestation -%>
+                <%= render 'manifestations/show_series_index', :manifestation => manifestation -%>
               <% else %>
                 <% cache([:manifestation => manifestation.id, :fragment => 'manifestation_html', :role => current_user_role_name, :locale => @locale]) do %>
                   <%= render 'manifestations/show_index', :manifestation => manifestation -%>
