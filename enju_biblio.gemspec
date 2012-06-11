@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120417"
-  s.add_development_dependency "enju_circulation"
+  s.add_development_dependency "enju_circulation", "~> 0.0.56"
   s.add_development_dependency "enju_inventory"
   s.add_development_dependency "enju_bookmark"
   s.add_development_dependency "enju_event"
