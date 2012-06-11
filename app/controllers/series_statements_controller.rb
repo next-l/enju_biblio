@@ -47,9 +47,6 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/1.json
   def show
     @manifestations = @series_statement.manifestations.order('date_of_publication DESC').page(params[:manifestation_page]).per_page(Manifestation.per_page)
-    if session[:manifestation_ids]
-      @manifestation_ids = session[:manifestation_ids]
-    end
     store_location
 
     respond_to do |format|

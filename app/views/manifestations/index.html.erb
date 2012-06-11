@@ -99,3 +99,8 @@
     }
   </script>
 <% end %>
+
+<script>
+  var ids = <%= session[:manifestation_ids] %>;
+  sessionStorage.setItem("manifestation_ids", JSON.stringify(ids));
+</script>

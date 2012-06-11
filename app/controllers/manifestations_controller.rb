@@ -187,20 +187,20 @@ class ManifestationsController < ApplicationController
         session[:query] = @query
       end
 
-      unless session[:manifestation_ids]
+      flash.keep(:manifestation_ids)
+      unless flash[:manifestation_ids]
         manifestation_ids = search.build do
           paginate :page => 1, :per_page => configatron.max_number_of_results
         end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
-        session[:manifestation_ids] = manifestation_ids
+        flash[:manifestation_ids] = manifestation_ids
       end
 
       if defined?(EnjuBookmark)
-        if session[:manifestation_ids]
+        if flash[:manifestation_ids]
           if params[:view] == 'tag_cloud'
-            bookmark_ids = Bookmark.where(:manifestation_id => session[:manifestation_ids]).limit(1000).select(:id).collect(&:id)
+            bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).select(:id).collect(&:id)
             @tags = Tag.bookmarked(bookmark_ids)
             render :partial => 'manifestations/tag_cloud'
-            #session[:manifestation_ids] = nil
             return
           end
         end
@@ -334,6 +334,7 @@ class ManifestationsController < ApplicationController
 
     if @manifestation.periodical_master?
       flash.keep(:notice) if flash[:notice]
+      flash[:manifestation_id] = @manifestation.id
       redirect_to series_statement_url(@manifestation.series_statement, :manifestation_id => @manifestation.id)
       return
     end
@@ -353,10 +354,6 @@ class ManifestationsController < ApplicationController
       else
         file = @manifestation.attachment.path
       end
-    end
-
-    if session[:manifestation_ids]
-      @manifestation_ids = session[:manifestation_ids]
     end
 
     respond_to do |format|
