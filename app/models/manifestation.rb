@@ -256,7 +256,7 @@ class Manifestation < ActiveRecord::Base
 
     while date.nil? do
       pub_date_string += '-01'
-      break if date =~ /-01-01-01$/
+      break if pub_date_string =~ /-01-01-01$/
       begin
         date = Time.zone.parse(pub_date_string)
       rescue ArgumentError
