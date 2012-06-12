@@ -65,7 +65,7 @@ describe ItemsController do
         get :index, :manifestation_id => 1
         response.should be_success
         assigns(:manifestation).should eq Manifestation.find(1)
-        assigns(:items).should eq assigns(:manifestation).items.order('created_at DESC').page(1)
+        assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
       it "should get index with shelf_id" do

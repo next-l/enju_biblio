@@ -329,6 +329,7 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.save!
       row_num += 1
     end
+    sm_complete!
   end
 
   private
