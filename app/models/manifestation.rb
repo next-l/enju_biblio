@@ -15,13 +15,13 @@ class Manifestation < ActiveRecord::Base
   scope :periodical_master, where(:periodical => false)
   scope :periodical_children, where(:periodical => true)
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
-  has_many :creators, :through => :creates, :source => :patron
+  has_many :creators, :through => :creates, :source => :patron, :order => 'creates.position'
   has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, :through => :realizes, :source => :patron
+  has_many :contributors, :through => :realizes, :source => :patron, :order => 'realizes.position'
   has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, :through => :produces, :source => :patron
+  has_many :publishers, :through => :produces, :source => :patron, :order => 'produces.position'
   has_many :exemplifies, :dependent => :destroy
-  has_many :items, :through => :exemplifies
+  has_many :items, :through => :exemplifies, :order => 'exemplifies.position'
   has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
   has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
   has_many :derived_manifestations, :through => :children, :source => :child
