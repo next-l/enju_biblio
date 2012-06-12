@@ -35,6 +35,7 @@ class Manifestation < ActiveRecord::Base
   belongs_to :frequency
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
+  belongs_to :nii_type if defined?(EnjuNii)
   accepts_nested_attributes_for :series_has_manifestation
 
   searchable do
@@ -43,7 +44,11 @@ class Manifestation < ActiveRecord::Base
     end
     text :fulltext, :note, :creator, :contributor, :publisher, :description
     text :item_identifier do
-      items.collect(&:item_identifier)
+      if periodical_master?
+        series_statement.manifestations.collect{|m| m.items.collect(&:item_identifier)}.flatten
+      else
+        items.collect(&:item_identifier)
+      end
     end
     string :title, :multiple => true
     # text フィールドだと区切りのない文字列の index が上手く作成
@@ -74,13 +79,21 @@ class Manifestation < ActiveRecord::Base
       carrier_type.name
     end
     string :library, :multiple => true do
-      items.map{|i| i.shelf.library.name}
+      if periodical_master?
+        series_statement.manifestations.map{|m| m.items.map{|i| i.shelf.library.name}}.flatten.uniq
+      else
+        items.map{|i| i.shelf.library.name}
+      end
     end
     string :language do
       language.try(:name)
     end
     string :item_identifier, :multiple => true do
-      items.collect(&:item_identifier)
+      if periodical_master?
+        series_statement.manifestations.collect{|m| m.items.collect(&:item_identifier)}.flatten
+      else
+        items.collect(&:item_identifier)
+      end
     end
     string :shelf, :multiple => true do
       items.collect{|i| "#{i.shelf.library.name}_#{i.shelf.name}"}
@@ -143,14 +156,13 @@ class Manifestation < ActiveRecord::Base
     text :isbn do  # 前方一致検索のためtext指定を追加
       [isbn, isbn10, wrong_isbn]
     end
-    text :issn  # 前方一致検索のためtext指定を追加
-    #text :ndl_jpno do
-      # TODO 詳細不明
-    #end
-    #string :ndl_dpid do
-      # TODO 詳細不明
-    #end
-    # OTC end
+    text :issn do # 前方一致検索のためtext指定を追加
+      if periodical_master?
+        series_statement.issn
+      else
+        issn
+      end
+    end
     string :sort_title
     boolean :periodical do
       periodical?
