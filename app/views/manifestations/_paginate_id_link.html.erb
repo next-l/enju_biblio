@@ -1,12 +1,16 @@
 <script>
   $(function(){
-    var ids = JSON.parse(sessionStorage.getItem("manifestation_ids"));
-    var index = $.inArray(<%= manifestation.id %>, ids);
-    if(ids[index - 1] > 0){
-      $("#prev_link").html('<a href="<%= root_url %>manifestations/' + ids[index - 1] + '"><%= t('page.previous') %></a>');
-    };
-    if(ids[index + 1] > 0){
-      $("#next_link").html('<a href="<%= root_url %>manifestations/' + ids[index + 1] + '"><%= t('page.next') %></a>');
+    if(typeof sessionStorage === "undefined"){
+      return;
+    }else{
+      var ids = JSON.parse(sessionStorage.getItem("manifestation_ids"));
+      var index = $.inArray(<%= manifestation.id %>, ids);
+      if(ids[index - 1] > 0){
+        $("#prev_link").html('<a href="<%= root_url %>manifestations/' + ids[index - 1] + '"><%= t('page.previous') %></a>');
+      };
+      if(ids[index + 1] > 0){
+        $("#next_link").html('<a href="<%= root_url %>manifestations/' + ids[index + 1] + '"><%= t('page.next') %></a>');
+      };
     };
   });
 </script>

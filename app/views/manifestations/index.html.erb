@@ -108,6 +108,12 @@
 <% end %>
 
 <script>
-  var ids = <%= flash[:manifestation_ids] %>;
-  sessionStorage.setItem("manifestation_ids", JSON.stringify(ids));
+  $(function(){
+    if(typeof sessionStorage === "undefined"){
+      return;
+    }else{
+      var ids = <%= flash[:manifestation_ids] %>;
+      sessionStorage.setItem("manifestation_ids", JSON.stringify(ids));
+    };
+  });
 </script>
