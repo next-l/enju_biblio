@@ -191,18 +191,27 @@ class ManifestationsController < ApplicationController
         session[:query] = @query
       end
 
-      flash.keep(:manifestation_ids)
-      unless flash[:manifestation_ids]
-        manifestation_ids = search.build do
-          paginate :page => 1, :per_page => configatron.max_number_of_results
-        end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
-        flash[:manifestation_ids] = manifestation_ids
-      end
+      if params[:format] == 'html' or params[:format].nil?
+        @search_query = Digest::SHA1.hexdigest(Marshal.dump(search.query.to_params).force_encoding('UTF-8'))
+        if flash[:search_query] == @search_query
+          flash.keep(:search_query)
+        else
+          #raise flash[:search_query].to_s
+          flash[:search_query] = @search_query
+          @manifestation_ids = search.build do
+            paginate :page => 1, :per_page => configatron.max_number_of_results
+          end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
+        end
 
-      if defined?(EnjuBookmark)
-        if flash[:manifestation_ids]
+        if defined?(EnjuBookmark)
           if params[:view] == 'tag_cloud'
-            bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).select(:id).collect(&:id)
+            unless @manifestation_ids
+              @manifestation_ids = search.build do
+                paginate :page => 1, :per_page => configatron.max_number_of_results
+              end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
+            end
+            #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).select(:id).collect(&:id)
+            bookmark_ids = Bookmark.where(:manifestation_id => @manifestation_ids).limit(1000).select(:id).collect(&:id)
             @tags = Tag.bookmarked(bookmark_ids)
             render :partial => 'manifestations/tag_cloud'
             return
@@ -244,7 +253,7 @@ class ManifestationsController < ApplicationController
 
       if defined?(EnjuBookmark)
         # TODO: 検索結果が少ない場合にも表示させる
-        if manifestation_ids.blank?
+        if @manifestation_ids.blank?
           if query.respond_to?(:suggest_tags)
             @suggested_tag = query.suggest_tags.first
           end
@@ -334,6 +343,7 @@ class ManifestationsController < ApplicationController
 
     return if render_mode(params[:mode])
 
+    flash.keep(:search_query)
     store_location
 
     if @manifestation.periodical_master?

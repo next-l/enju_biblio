@@ -3,7 +3,7 @@
     if(typeof sessionStorage === "undefined"){
       return;
     }else{
-      var ids = JSON.parse(sessionStorage.getItem("manifestation_ids"));
+      var ids = JSON.parse(sessionStorage.getItem("<%= flash[:search_query] %>"));
       var index = $.inArray(<%= manifestation.id %>, ids);
       if(ids[index - 1] > 0){
         $("#prev_link").html('<a href="<%= root_url %>manifestations/' + ids[index - 1] + '"><%= t('page.previous') %></a>');

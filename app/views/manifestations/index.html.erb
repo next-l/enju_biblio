@@ -107,13 +107,6 @@
   </script>
 <% end %>
 
-<script>
-  $(function(){
-    if(typeof sessionStorage === "undefined"){
-      return;
-    }else{
-      var ids = <%= flash[:manifestation_ids] %>;
-      sessionStorage.setItem("manifestation_ids", JSON.stringify(ids));
-    };
-  });
-</script>
+<% if @manifestation_ids and @search_query %>
+  <%= render 'session_ids' %>
+<% end %>
