@@ -3,3 +3,6 @@ en:
     models:
       manifestation: Manifestation
       series_statement: Series statement
+
+  resource_import_file:
+    update_relationship: Update relationship

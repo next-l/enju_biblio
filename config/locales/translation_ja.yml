@@ -3,3 +3,6 @@ ja:
     models:
       manifestation: 資料
       series_statement: シリーズ情報
+
+  resource_import_file:
+    update_relationship: 関連を更新
