@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     resources :items
     resources :picture_files
     resources :manifestations
+    resources :manifestation_relationships
   end
 
   resources :items do
