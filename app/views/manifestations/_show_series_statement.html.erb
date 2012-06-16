@@ -23,12 +23,6 @@
           <td><%= t('activerecord.attributes.series_statement.series_statement_identifier') -%></td>
           <td><%= @series_statement.series_statement_identifier %></td>
         </tr>
-        <% if current_user.try(:has_role?, 'Librarian') %>
-          <tr>
-            <td><%= t('activerecord.attributes.series_statement.donation_information') -%></td>
-            <td><%= @series_statement.donation_information %></td>
-          </tr>
-        <% end %>
         <tr>
           <td><%= t('activerecord.attributes.series_statement.note') -%></td>
           <td><%= @series_statement.note %></td>
