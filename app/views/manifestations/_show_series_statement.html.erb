@@ -23,10 +23,6 @@
           <td><%= t('activerecord.attributes.series_statement.series_statement_identifier') -%></td>
           <td><%= @series_statement.series_statement_identifier %></td>
         </tr>
-        <tr>
-          <td><%= t('activerecord.attributes.series_statement.url') -%></td>
-          <td><%= link_to @series_statement.url, @series_statement.url if @series_statement.url? %></td>
-        </tr>
         <% if current_user.try(:has_role?, 'Librarian') %>
           <tr>
             <td><%= t('activerecord.attributes.series_statement.donation_information') -%></td>
