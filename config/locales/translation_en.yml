@@ -1,7 +1,38 @@
 en:
   activerecord:
     models:
+      carrier_type: Carrier Type
+      content_type: Content type
+      create: Create
+      create_type: Create type
+      embody: Embody
+      exemplify: Exemplify
+      extent: Extent
+      form_of_work: Form of works
+      frequency: Frequency of issue
+      import_request: Import request
+      item: Item
+      language: Language
+      license: License
       manifestation: Manifestation
+      manifestation_relationship: Resource relationship
+      manifestation_relationship_type: Resource relationship type
+      medium_of_performance: Medium of performance
+      own: Own
+      patron: Patron
+      patron_import_file: Patron import file
+      patron_import_result: Patron Import Result
+      patron_relationship: Patron relationship
+      patron_relationship_type: Patron relationship type
+      patron_type: Patron type
+      picture_file: Picture file
+      produce: Produce
+      produce_type: Produce type
+      realize: Realize
+      realize_type: Realize type
+      resource_import_file: Resource import file
+      resource_import_result: Resource Import Result
+      series_has_manifestation: Series statement to manifestation
       series_statement: Series statement
 
   resource_import_file:

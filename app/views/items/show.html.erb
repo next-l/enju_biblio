@@ -151,6 +151,7 @@
     <% end %>
     <% if defined?(EnjuCirculation) %>
       <li><%= link_to t('page.listing', :model => t('activerecord.models.lending_policy')), item_lending_policies_path(@item) -%></li>
+      <li><%= link_to t('page.checkout_history'), item_checkouts_path(@item) -%></li>
     <% end %>
   </ul>
 </div>

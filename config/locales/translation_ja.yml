@@ -1,7 +1,38 @@
 ja:
   activerecord:
     models:
+      carrier_type: 資料の形態
+      content_type: 協力した資料の形態
+      create: 著作関係
+      create_type: 著作の関係
+      embody: 具体化
+      exemplify: 書誌と所蔵の関係
+      extent: 大きさ
+      form_of_work: 書いた資料の形態
+      frequency: 発行頻度
+      item: 所蔵情報
+      language: 言語
       manifestation: 資料
+      manifestation_relationship: 資料の関係
+      manifestation_relationship_type: 資料の関係の種類
+      medium_of_performance: 演奏手段
+      license: ライセンス
+      import_request: ISBNインポートのリクエスト
+      own: 所有関係
+      patron: 人物・団体
+      patron_import_file: 人物・団体のインポート用ファイル
+      patron_import_result: 人物・団体インポートの結果
+      patron_relationship: 著者・編者・出版社の関係
+      patron_relationship_type: 人物・団体の関係の種類
+      patron_type: 人物・団体の種類
+      picture_file: 画像ファイル
+      produce: 出版関係
+      produce_type: 体現の関係
+      realize: 表現関係
+      realize_type: 表現の関係
+      resource_import_file: 資料のインポート用ファイル
+      resource_import_result: 資料インポートの結果
+      series_has_manifestation: シリーズ情報と資料の関係
       series_statement: シリーズ情報
 
   resource_import_file:
