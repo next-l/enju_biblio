@@ -17,7 +17,6 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 3.2"
-  s.add_dependency "sunspot_rails", "~> 2.0.0.pre.120417"
   s.add_dependency "paperclip"
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"

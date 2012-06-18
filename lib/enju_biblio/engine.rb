@@ -1,6 +1,5 @@
 require 'inherited_resources'
 require 'paper_trail'
-require 'sunspot_rails'
 require 'configatron'
 require 'paperclip'
 require 'state_machine'
