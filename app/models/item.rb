@@ -31,6 +31,8 @@ class Item < ActiveRecord::Base
   has_paper_trail
   normalize_attributes :item_identifier
 
+  enju_export
+
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher
     string :item_identifier

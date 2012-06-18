@@ -77,6 +77,8 @@ class Patron < ActiveRecord::Base
     integer :patron_type_id
   end
 
+  enju_export
+
   def self.per_page
     10
   end

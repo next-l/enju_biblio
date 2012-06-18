@@ -179,6 +179,8 @@ class Manifestation < ActiveRecord::Base
   enju_oai
   #enju_calil_check
   #enju_cinii
+  enju_export
+
   has_paper_trail
   if configatron.uploaded_file.storage == :s3
     has_attached_file :attachment, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml"
