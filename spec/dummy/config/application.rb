@@ -54,4 +54,5 @@ module Dummy
   end
 end
 
+require 'enju_core'
 require 'enju_leaf'
