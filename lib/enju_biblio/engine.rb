@@ -1,3 +1,5 @@
+require 'enju_core'
+require 'enju_export'
 require 'inherited_resources'
 require 'paper_trail'
 require 'configatron'

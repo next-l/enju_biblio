@@ -31,7 +31,8 @@ Gem::Specification.new do |s|
   s.add_dependency "enju_ndl"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
-  s.add_development_dependency "enju_export"
+  s.add_dependency "enju_core"
+  s.add_dependency "enju_export"
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"
