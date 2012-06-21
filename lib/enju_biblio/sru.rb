@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'enju_leaf/porta_cql'
+require 'enju_biblio/porta_cql'
 
 class QueryArgumentError < QueryError; end
 
