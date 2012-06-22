@@ -44,5 +44,16 @@ module EnjuBiblio
         image_tag('icons/help.png', :size => '16x16', :alt => t('page.unknown'))
       end
     end
+
+    def patrons_list(patrons = [], options = {})
+      return nil if patrons.blank?
+      patrons_list = []
+      if options[:nolink]
+        patrons_list = patrons.map{|patron| patron.full_name}
+      else
+        patrons_list = patrons.map{|patron| link_to(patron.full_name, patron, options)}
+      end
+      patrons_list.join(" ").html_safe
+    end
   end
 end
