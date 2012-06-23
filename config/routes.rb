@@ -1,14 +1,4 @@
 Rails.application.routes.draw do
-  resources :works, :controller => 'manifestations' do
-    resources :patrons
-    resources :creates
-  end
-
-  resources :expressions, :controller => 'manifestations' do
-    resources :patrons
-    resources :realizes
-  end
-
   resources :manifestations do
     resources :patrons
     resources :produces
@@ -39,6 +29,16 @@ Rails.application.routes.draw do
     resources :creates
     resources :realizes
     resources :produces
+  end
+
+  resources :works, :controller => 'manifestations' do
+    resources :patrons
+    resources :creates
+  end
+
+  resources :expressions, :controller => 'manifestations' do
+    resources :patrons
+    resources :realizes
   end
 
   resources :creators, :controller => 'patrons' do
