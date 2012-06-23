@@ -205,7 +205,7 @@ class Manifestation < ActiveRecord::Base
   before_validation :set_wrong_isbn, :check_issn, :check_lccn, :if => :during_import
   before_validation :convert_isbn, :if => :isbn_changed?
   after_create :clear_cached_numdocs
-  before_save :set_date_of_publication
+  before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
   after_destroy :index_series_statement
   normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
@@ -545,6 +545,12 @@ class Manifestation < ActiveRecord::Base
         raise "#{options[:scope]} is not supported!"
       end
     end
+  end
+
+  def set_number
+    self.volume_number = volume_number_string.scan(/\d*/).map{|s| s if s =~ /\d/}.compact if volume_number_string and !volume_number?
+    self.issue_number = issue_number_string.scan(/\d*/).map{|s| s if s =~ /\d/}.compact.first if issue_number_string and !issue_number?
+    self.edition = edition_string.scan(/\d*/).map{|s| s if s =~ /\d/}.compact.first if edition_string and !edition?
   end
 
   if defined?(EnjuScribd)

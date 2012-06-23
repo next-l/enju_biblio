@@ -18,6 +18,13 @@ describe Manifestation, :solr => true do
     manifestation.date_of_publication.should eq Time.zone.parse('2000-01-01')
   end
 
+  it "should set volume_number" do
+    manifestation = FactoryGirl.create(:manifestation, :volume_number_string => '第1巻', :issue_number_string => '20号分冊1', :edition_string => '第3版')
+    manifestation.volume_number.should eq 1
+    manifestation.issue_number.should eq 20
+    manifestation.edition.should eq 3
+  end
+
   it "should search title in openurl" do
     openurl = Openurl.new({:title => "プログラミング"})
     results = openurl.search
