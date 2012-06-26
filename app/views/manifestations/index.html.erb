@@ -49,7 +49,7 @@
       <%- if params[:sort_by] == 'title' -%>
         <strong><%= t('page.title') -%></strong>
       <%- else -%>
-        <%= link_to t('page.title'), url_for(params.merge(:sort_by => 'sort_title', :only_path => true)) -%>
+        <%= link_to t('page.title'), url_for(params.merge(:sort_by => 'title', :only_path => true)) -%>
       <%- end -%>
     </p>
 

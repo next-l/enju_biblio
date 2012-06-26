@@ -1,6 +1,6 @@
 class PageSweeper < ActionController::Caching::Sweeper
   include ExpireEditableFragment
-  observe Create, Realize, Produce, Own, Exemplify, Patron,
+  observe Create, Realize, Produce, Own, Exemplify,
     SeriesStatement, SeriesHasManifestation, PictureFile
 
   def after_save(record)
