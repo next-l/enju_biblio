@@ -12,6 +12,7 @@ require 'enju_ndl'
 require 'dynamic_form'
 require 'simple_form'
 require 'will_paginate/array'
+require 'resque_mailer'
 
 module EnjuBiblio
   class Engine < ::Rails::Engine
