@@ -11,7 +11,7 @@
   <div id="tabs">
     <%= render 'tab_menu', :series_statement => @series_statement %>
     <div id="detail">
-      <table id="resource_detail">
+      <table class="table table-striped" id="resource_detail">
         <tr>
           <td style="width: 200px"><%= t('activerecord.attributes.series_statement.title_transcription') -%></td>
           <td style="width: 490px"><%= @series_statement.title_transcription %></td>
