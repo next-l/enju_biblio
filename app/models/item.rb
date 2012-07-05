@@ -20,6 +20,7 @@ class Item < ActiveRecord::Base
   belongs_to :budget_type
   has_one :accept
   #accepts_nested_attributes_for :exemplify
+  before_save :create_manifestation
 
   validates_associated :bookstore
   validates :manifestation_id, :presence => true, :on => :create
@@ -144,6 +145,12 @@ class Item < ActiveRecord::Base
       else
         true
       end
+    end
+  end
+
+  def create_manifestation
+    if manifestation_id
+      self.manifestation = Manifestation.find(manifestation_id)
     end
   end
 end

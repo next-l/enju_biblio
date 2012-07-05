@@ -168,8 +168,6 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(params[:item])
-    manifestation = Manifestation.find(@item.manifestation_id)
-    @item.manifestation = manifestation
 
     respond_to do |format|
       if @item.save
