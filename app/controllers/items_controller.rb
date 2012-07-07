@@ -168,9 +168,11 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(params[:item])
+    manifestation = Manifestation.find(@item.manifestation_id)
 
     respond_to do |format|
       if @item.save
+        @item.manifestation = manifestation
         Item.transaction do
           if defined?(EnjuCirculation)
             if @item.reserved?

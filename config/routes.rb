@@ -31,25 +31,25 @@ Rails.application.routes.draw do
     resources :produces
   end
 
-  resources :works, :controller => 'manifestations' do
+  resources :works, :controller => 'manifestations', :except => [:index, :new, :create] do
     resources :patrons
     resources :creates
   end
 
-  resources :expressions, :controller => 'manifestations' do
+  resources :expressions, :controller => 'manifestations', :except => [:index, :new, :create] do
     resources :patrons
     resources :realizes
   end
 
-  resources :creators, :controller => 'patrons' do
+  resources :creators, :controller => 'patrons', :except => [:index, :new, :create] do
     resources :manifestations
   end
 
-  resources :contributors, :controller => 'patrons' do
+  resources :contributors, :controller => 'patrons', :except => [:index, :new, :create] do
     resources :manifestations
   end
 
-  resources :publishers, :controller => 'patrons' do
+  resources :publishers, :controller => 'patrons', :except => [:index, :new, :create] do
     resources :manifestations
   end
 

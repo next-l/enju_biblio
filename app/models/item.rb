@@ -20,7 +20,7 @@ class Item < ActiveRecord::Base
   belongs_to :budget_type
   has_one :accept
   #accepts_nested_attributes_for :exemplify
-  before_save :create_manifestation
+  #before_save :create_manifestation
 
   validates_associated :bookstore
   validates :manifestation_id, :presence => true, :on => :create
@@ -47,7 +47,7 @@ class Item < ActiveRecord::Base
     time :updated_at
   end
 
-  enju_circulation_item_model
+  enju_circulation_item_model if defined?(EnjuCirculation)
 
   attr_accessor :library_id, :manifestation_id
 
