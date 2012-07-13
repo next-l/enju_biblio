@@ -101,7 +101,12 @@ class Manifestation < ActiveRecord::Base
     time :created_at
     time :updated_at
     time :deleted_at
-    time :date_of_publication
+    time :date_of_publication, :multiple => true do
+      pub_dates
+    end
+    time :sort_date_of_publication do
+      date_of_publication
+    end
     integer :creator_ids, :multiple => true
     integer :contributor_ids, :multiple => true
     integer :publisher_ids, :multiple => true
@@ -396,10 +401,18 @@ class Manifestation < ActiveRecord::Base
   end
 
   def sort_title
-    if title_transcription
-      NKF.nkf('-w --katakana', title_transcription)
+    if periodical_master?
+      if series_statement.title_transcription?
+        NKF.nkf('-w --katakana', series_statement.title_transcription)
+      else
+        series_statement.original_title
+      end
     else
-      original_title
+      if title_transcription?
+        NKF.nkf('-w --katakana', title_transcription)
+      else
+        original_title
+      end
     end
   end
 
@@ -551,6 +564,24 @@ class Manifestation < ActiveRecord::Base
     self.volume_number = volume_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if volume_number_string and !volume_number?
     self.issue_number = issue_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if issue_number_string and !issue_number?
     self.edition = edition_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if edition_string and !edition?
+  end
+
+  def pub_dates
+    return [] unless pub_date
+    pub_date_array = pub_date.split(';')
+    pub_date_array.map{|pub_date_string|
+      date = nil
+      while date.nil? do
+        pub_date_string += '-01'
+        break if pub_date_string =~ /-01-01-01$/
+        begin
+          date = Time.zone.parse(pub_date_string)
+        rescue ArgumentError
+        rescue TZInfo::AmbiguousTime
+        end
+      end
+      date
+    }.compact
   end
 
   if defined?(EnjuScribd)
