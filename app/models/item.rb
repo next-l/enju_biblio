@@ -59,8 +59,8 @@ class Item < ActiveRecord::Base
     end
 
     def self.inventory_items(inventory_file, mode = 'not_on_shelf')
-      item_ids = Item.select(:id).collect(&:id)
-      inventory_item_ids = inventory_file.items.select('items.id').collect(&:id)
+      item_ids = Item.pluck(:id)
+      inventory_item_ids = inventory_file.items.pluck('items.id')
       case mode
       when 'not_on_shelf'
         Item.where(:id => (item_ids - inventory_item_ids))

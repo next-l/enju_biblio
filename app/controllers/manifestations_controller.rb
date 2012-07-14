@@ -213,8 +213,8 @@ class ManifestationsController < ApplicationController
                 paginate :page => 1, :per_page => configatron.max_number_of_results
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
-            #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).select(:id).collect(&:id)
-            bookmark_ids = Bookmark.where(:manifestation_id => @manifestation_ids).limit(1000).select(:id).collect(&:id)
+            #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).pluck(:id)
+            bookmark_ids = Bookmark.where(:manifestation_id => @manifestation_ids).limit(1000).pluck(:id)
             @tags = Tag.bookmarked(bookmark_ids)
             render :partial => 'manifestations/tag_cloud'
             return
@@ -595,7 +595,7 @@ class ManifestationsController < ApplicationController
       sort[:sort_by] = 'sort_title'
       sort[:order] = 'asc'
     when 'pub_date'
-      sort[:sort_by] = 'date_of_publication'
+      sort[:sort_by] = 'sort_date_of_publication'
       sort[:order] = 'desc'
     else
       # デフォルトの並び方

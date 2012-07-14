@@ -18,7 +18,7 @@ class SeriesStatement < ActiveRecord::Base
     end
     text :numbering, :title_subseries, :numbering_subseries
     integer :manifestation_ids, :multiple => true do
-      series_has_manifestations.collect(&:manifestation_id)
+      series_has_manifestations.pluck(:manifestation_id)
     end
     integer :position
     boolean :periodical
