@@ -32,7 +32,7 @@ class PictureFilesController < ApplicationController
 
     if @picture_file.picture.path
       if configatron.uploaded_file.storage == :s3
-        data = open(@picture_file.picture.url(size)).read.force_encoding('UTF-8')
+        file = open(@picture_file.picture.expiring_url).read.force_encoding('UTF-8')
       else
         file = @picture_file.picture.path(size)
       end
@@ -167,7 +167,7 @@ class PictureFilesController < ApplicationController
 
     if @picture_file.picture.path
       if configatron.uploaded_file.storage == :s3
-        send_data data, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition
+        send_data file, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition
       else
         if File.exist?(file) and File.file?(file)
           send_file file, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition

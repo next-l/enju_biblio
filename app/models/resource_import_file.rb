@@ -8,7 +8,6 @@ class ResourceImportFile < ActiveRecord::Base
 
   if configatron.uploaded_file.storage == :s3
     has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
-      :path => "resource_import_files/:id/:filename",
       :s3_permissions => :private
   else
     has_attached_file :resource_import,
