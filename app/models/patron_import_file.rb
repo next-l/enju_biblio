@@ -10,7 +10,8 @@ class PatronImportFile < ActiveRecord::Base
       :path => "patron_import_files/:id/:filename",
       :s3_permissions => :private
   else
-    has_attached_file :patron_import, :path => ":rails_root/private:url"
+    has_attached_file :patron_import,
+      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_content_type :patron_import, :content_type => ['text/csv', 'text/plain', 'text/tab-separated-values', 'application/octet-stream']
   validates_attachment_presence :patron_import

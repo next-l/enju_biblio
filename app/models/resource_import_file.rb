@@ -12,8 +12,7 @@ class ResourceImportFile < ActiveRecord::Base
       :s3_permissions => :private
   else
     has_attached_file :resource_import,
-      :path => ":rails_root/private/system/:attachment/:id/:style/:filename",
-      :url => "/system/:attachment/:id/:style/:filename"
+      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_content_type :resource_import, :content_type => ['text/csv', 'text/plain', 'text/tab-separated-values', 'application/octet-stream']
   validates_attachment_presence :resource_import
