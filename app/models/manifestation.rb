@@ -45,9 +45,9 @@ class Manifestation < ActiveRecord::Base
     text :fulltext, :note, :creator, :contributor, :publisher, :description
     text :item_identifier do
       if periodical_master?
-        series_statement.manifestations.collect{|m| m.items.collect(&:item_identifier)}.flatten
+        series_statement.manifestations.map{|m| m.items.pluck(:item_identifier)}.flatten
       else
-        items.collect(&:item_identifier)
+        items.pluck(:item_identifier)
       end
     end
     string :title, :multiple => true
@@ -68,7 +68,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :issn, :multiple => true do
       if series_statement
-        ([series_statement.issn] + series_statement.manifestations.collect(&:issn)).uniq.compact
+        ([series_statement.issn] + series_statement.manifestations.pluck(:issn)).uniq.compact
       else
         [issn, series_statement.try(:issn)].compact
       end
@@ -90,7 +90,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :item_identifier, :multiple => true do
       if periodical_master?
-        series_statement.manifestations.collect{|m| m.items.collect(&:item_identifier)}.flatten
+        series_statement.manifestations.collect{|m| m.items.pluck(:item_identifier)}.flatten
       else
         items.collect(&:item_identifier)
       end
@@ -151,11 +151,7 @@ class Manifestation < ActiveRecord::Base
       if series_statement.try(:periodical)  # 雑誌の場合
         series_statement.titles
       else                  # 雑誌以外（雑誌の記事も含む）
-        titles = []
-        original_manifestations.each do |m|
-          titles << m.title
-        end
-        titles.flatten
+        original_manifestations.map{|m| m.title}.flatten
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
@@ -163,7 +159,7 @@ class Manifestation < ActiveRecord::Base
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statement
-        ([series_statement.issn] + series_statement.manifestations.collect(&:issn)).uniq.compact
+        ([series_statement.issn] + series_statement.manifestations.pluck(:issn)).uniq.compact
       else
         issn
       end
@@ -468,10 +464,10 @@ class Manifestation < ActiveRecord::Base
 
     searchable do
       text :subject do
-        (subjects.collect(&:term) + subjects.collect(&:term_transcription)).compact
+        subjects.map{|s| [:term, :term_transcription]}.compact
       end
       string :subject, :multiple => true do
-        (subjects.collect(&:term) + subjects.collect(&:term_transcription)).compact
+        subjects.map{|s| [:term, :term_transcription]}.compact
       end
       string :classification, :multiple => true do
         classifications.collect(&:category)
