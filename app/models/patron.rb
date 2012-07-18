@@ -236,6 +236,7 @@ class Patron < ActiveRecord::Base
         patron = Patron.new(
           :full_name => name_and_role[0],
           :full_name_transcription => patron_list[:full_name_transcription],
+          :patron_identifier => patron_list[:patron_identifier],
           :language_id => 1
         )
         patron.required_role = Role.where(:name => 'Guest').first
