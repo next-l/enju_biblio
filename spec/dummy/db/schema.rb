@@ -687,7 +687,7 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
     t.text     "title",                        :null => false
     t.text     "body",                         :null => false
     t.integer  "position"
-    t.string   "locale",     :default => "ja"
+    t.string   "locale",     :default => "en"
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
   end
@@ -739,6 +739,7 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
 
   create_table "patron_import_files", :force => true do |t|
     t.integer  "parent_id"
+    t.string   "filename"
     t.string   "content_type"
     t.integer  "size"
     t.integer  "user_id"
@@ -846,11 +847,13 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
     t.text     "full_name_alternative_transcription"
     t.string   "birth_date"
     t.string   "death_date"
+    t.string   "patron_identifier"
   end
 
   add_index "patrons", ["country_id"], :name => "index_patrons_on_country_id"
   add_index "patrons", ["full_name"], :name => "index_patrons_on_full_name"
   add_index "patrons", ["language_id"], :name => "index_patrons_on_language_id"
+  add_index "patrons", ["patron_identifier"], :name => "index_patrons_on_patron_identifier"
   add_index "patrons", ["required_role_id"], :name => "index_patrons_on_required_role_id"
   add_index "patrons", ["user_id"], :name => "index_patrons_on_user_id", :unique => true
 
@@ -859,6 +862,7 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
     t.string   "picture_attachable_type"
     t.string   "content_type"
     t.text     "title"
+    t.text     "filename"
     t.string   "thumbnail"
     t.integer  "position"
     t.datetime "created_at",              :null => false
@@ -978,6 +982,7 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
 
   create_table "resource_import_files", :force => true do |t|
     t.integer  "parent_id"
+    t.string   "filename"
     t.string   "content_type"
     t.integer  "size"
     t.integer  "user_id"
