@@ -101,12 +101,10 @@ class Manifestation < ActiveRecord::Base
     time :created_at
     time :updated_at
     time :deleted_at
-    time :date_of_publication, :multiple => true do
+    time :pub_date, :multiple => true do
       pub_dates
     end
-    time :sort_date_of_publication do
-      date_of_publication
-    end
+    time :date_of_publication
     integer :creator_ids, :multiple => true
     integer :contributor_ids, :multiple => true
     integer :publisher_ids, :multiple => true
