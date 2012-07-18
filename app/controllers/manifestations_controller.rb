@@ -595,7 +595,7 @@ class ManifestationsController < ApplicationController
       sort[:sort_by] = 'sort_title'
       sort[:order] = 'asc'
     when 'pub_date'
-      sort[:sort_by] = 'sort_date_of_publication'
+      sort[:sort_by] = 'date_of_publication'
       sort[:order] = 'desc'
     else
       # デフォルトの並び方
