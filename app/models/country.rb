@@ -21,7 +21,7 @@ class Country < ActiveRecord::Base
   after_destroy :clear_all_cache
 
   def self.all_cache
-    Rails.cache.fetch('country_all'){Country.all}
+    Rails.cache.fetch('country_all'){Country.all.to_a}
   end
 
   def clear_all_cache

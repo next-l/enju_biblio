@@ -687,7 +687,7 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
     t.text     "title",                        :null => false
     t.text     "body",                         :null => false
     t.integer  "position"
-    t.string   "locale",     :default => "en"
+    t.string   "locale",     :default => "ja"
     t.datetime "created_at",                   :null => false
     t.datetime "updated_at",                   :null => false
   end
@@ -739,7 +739,6 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
 
   create_table "patron_import_files", :force => true do |t|
     t.integer  "parent_id"
-    t.string   "filename"
     t.string   "content_type"
     t.integer  "size"
     t.integer  "user_id"
@@ -862,7 +861,6 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
     t.string   "picture_attachable_type"
     t.string   "content_type"
     t.text     "title"
-    t.text     "filename"
     t.string   "thumbnail"
     t.integer  "position"
     t.datetime "created_at",              :null => false
@@ -982,7 +980,6 @@ ActiveRecord::Schema.define(:version => 20120602141129) do
 
   create_table "resource_import_files", :force => true do |t|
     t.integer  "parent_id"
-    t.string   "filename"
     t.string   "content_type"
     t.integer  "size"
     t.integer  "user_id"

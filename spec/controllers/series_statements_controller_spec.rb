@@ -8,6 +8,10 @@ describe SeriesStatementsController do
   end
 
   describe "GET index", :solr => true do
+    before do
+      SeriesStatement.reindex
+    end
+
     describe "When logged in as Administrator" do
       login_fixture_admin
 

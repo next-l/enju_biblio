@@ -15,7 +15,7 @@ class Language < ActiveRecord::Base
 
   def self.all_cache
     if Rails.env == 'production'
-      Rails.cache.fetch('language_all'){Language.all}
+      Rails.cache.fetch('language_all'){Language.all.to_a}
     else
       Language.all
     end
