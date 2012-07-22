@@ -9,8 +9,8 @@ class PictureFile < ActiveRecord::Base
       :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
       :s3_permissions => :private
   else
-    has_attached_file :picture, :styles => { :medium => "600x600>", :thumb => "100x100>" } #,
-#      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+    has_attached_file :picture, :styles => { :medium => "600x600>", :thumb => "100x100>" },
+      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_presence :picture
   validates_attachment_content_type :picture, :content_type => ["image/jpeg", "image/pjpeg", "image/png", "image/gif", "image/svg+xml"], :on => :create
