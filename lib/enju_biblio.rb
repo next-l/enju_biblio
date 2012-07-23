@@ -50,6 +50,10 @@ module EnjuBiblio
     def get_series_statement
       @series_statement = SeriesStatement.find(params[:series_statement_id]) if params[:series_statement_id]
     end
+
+    def get_basket
+      @basket = Basket.find(params[:basket_id]) if params[:basket_id]
+    end
   end
 end
 

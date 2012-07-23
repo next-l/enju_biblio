@@ -46,6 +46,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_event"
   s.add_development_dependency "enju_manifestation_viewer"
   s.add_development_dependency "enju_book_jacket"
-  s.add_development_dependency "enju_library"
   s.add_development_dependency "enju_export"
 end
