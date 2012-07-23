@@ -244,7 +244,7 @@ class ManifestationsController < ApplicationController
       end
       @manifestations = Kaminari.paginate_array(
         search_result.results, :total_count => max_count
-      )
+      ).page(page)
 
       if params[:format].blank? or params[:format] == 'html'
         @carrier_type_facet = search_result.facet(:carrier_type).rows
@@ -264,7 +264,7 @@ class ManifestationsController < ApplicationController
       end
 
       if defined?(EnjuSearchLog)
-        save_search_history(query, @manifestations.offset, @count[:query_result], current_user)
+        save_search_history(query, @manifestations.limit_value, @count[:query_result], current_user)
       end
 
       if defined?(EnjuOai)
@@ -274,7 +274,7 @@ class ManifestationsController < ApplicationController
               params[:resumptionToken],
               @from_time || Manifestation.last.updated_at,
               @until_time || Manifestation.first.updated_at,
-              per_page
+              @manifestations.limit_value
             )
           else
             @oai[:errors] << 'noRecordsMatch'
