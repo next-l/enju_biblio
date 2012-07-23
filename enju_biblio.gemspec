@@ -31,7 +31,6 @@ Gem::Specification.new do |s|
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
   s.add_dependency "enju_core"
-  s.add_dependency "enju_export"
   s.add_dependency "resque_mailer"
   # s.add_dependency "jquery-rails"
 
@@ -41,11 +40,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120720"
-  s.add_development_dependency "enju_circulation", "~> 0.0.70"
+  s.add_development_dependency "enju_circulation", "~> 0.0.71"
   s.add_development_dependency "enju_inventory"
   s.add_development_dependency "enju_bookmark"
   s.add_development_dependency "enju_event"
   s.add_development_dependency "enju_manifestation_viewer"
   s.add_development_dependency "enju_book_jacket"
   s.add_development_dependency "enju_library"
+  s.add_development_dependency "enju_export"
 end

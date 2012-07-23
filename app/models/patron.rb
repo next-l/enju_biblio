@@ -78,11 +78,9 @@ class Patron < ActiveRecord::Base
     integer :patron_type_id
   end
 
-  enju_export
+  #enju_export
 
-  def self.per_page
-    10
-  end
+  paginates_per 10
 
   def set_role_and_name
     self.required_role = Role.where(:name => 'Librarian').first if self.required_role_id.nil?

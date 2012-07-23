@@ -223,7 +223,7 @@ class ManifestationsController < ApplicationController
       end
 
       page ||= params[:page] || 1
-      per_page ||= Manifestation.per_page
+      per_page ||= Manifestation.default_per_page
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
@@ -242,9 +242,9 @@ class ManifestationsController < ApplicationController
       else
         max_count = @count[:query_result]
       end
-      @manifestations = WillPaginate::Collection.create(page, per_page, max_count) do |pager|
-        pager.replace(search_result.results)
-      end
+      @manifestations = Kaminari.paginate_array(
+        search_result.results, :total_count => max_count
+      )
 
       if params[:format].blank? or params[:format] == 'html'
         @carrier_type_facet = search_result.facet(:carrier_type).rows
@@ -274,7 +274,7 @@ class ManifestationsController < ApplicationController
               params[:resumptionToken],
               @from_time || Manifestation.last.updated_at,
               @until_time || Manifestation.first.updated_at,
-              @manifestations.per_page
+              per_page
             )
           else
             @oai[:errors] << 'noRecordsMatch'
@@ -359,10 +359,6 @@ class ManifestationsController < ApplicationController
     if defined?(EnjuCirculation)
       @reserved_count = Reserve.waiting.where(:manifestation_id => @manifestation.id, :checked_out_at => nil).count
       @reserve = current_user.reserves.where(:manifestation_id => @manifestation.id).first if user_signed_in?
-    end
-
-    if @manifestation.root_of_series?
-      @manifestations = @manifestation.series_statement.manifestations.periodical_children.page(params[:manifestation_page]).per_page(Manifestation.per_page)
     end
 
     if @manifestation.attachment.path

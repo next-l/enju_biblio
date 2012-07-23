@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "series_has_manifestations/index" do
   before(:each) do
-    assign(:series_has_manifestations, [
+    assign(:series_has_manifestations, Kaminari::paginate_array([
       stub_model(SeriesHasManifestation,
         :series_statement_id => 1,
         :manifestation_id => 1,
@@ -13,7 +13,7 @@ describe "series_has_manifestations/index" do
         :manifestation_id => 1,
         :position => 1
       )
-    ].paginate(:page => 1))
+    ]).page(1))
     @ability = Object.new
     @ability.extend(CanCan::Ability)
     controller.stub(:current_ability) { @ability }

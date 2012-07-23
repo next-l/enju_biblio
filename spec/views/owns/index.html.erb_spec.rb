@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "owns/index" do
   before(:each) do
-    assign(:owns, [
+    assign(:owns, Kaminari::paginate_array([
       stub_model(Own,
         :item_id => 1,
         :patron_id => 1
@@ -11,7 +11,7 @@ describe "owns/index" do
         :item_id => 1,
         :patron_id => 2
       )
-    ].paginate(:page => 1))
+    ]).page(1))
     @ability = Object.new
     @ability.extend(CanCan::Ability)
     controller.stub(:current_ability) { @ability }

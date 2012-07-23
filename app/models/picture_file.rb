@@ -21,10 +21,6 @@ class PictureFile < ActiveRecord::Base
   # http://railsforum.com/viewtopic.php?id=11615
   acts_as_list :scope => 'picture_attachable_type=\'#{picture_attachable_type}\''
   normalize_attributes :picture_attachable_type
-
-  def self.per_page
-    10
-  end
 end
 
 # == Schema Information

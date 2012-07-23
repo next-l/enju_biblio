@@ -17,7 +17,7 @@ class ItemsController < ApplicationController
   # GET /items.json
   def index
     query = params[:query].to_s.strip
-    per_page = Item.per_page
+    per_page = Item.default_per_page
     @count = {}
     if user_signed_in?
       if current_user.has_role?('Librarian')
@@ -40,7 +40,7 @@ class ItemsController < ApplicationController
               mode = 'not_on_shelf'
             end
             order = 'items.id'
-            @items = Item.inventory_items(@inventory_file, mode).order(order).page(params[:page]).per_page(per_page)
+            @items = Item.inventory_items(@inventory_file, mode).order(order).page(params[:page]).per(per_page)
           else
             access_denied
             return

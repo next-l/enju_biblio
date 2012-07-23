@@ -12,10 +12,6 @@ class Create < ActiveRecord::Base
 
   acts_as_list :scope => :work
 
-  def self.per_page
-    10
-  end
-
   def reindex
     patron.try(:index)
     work.try(:index)

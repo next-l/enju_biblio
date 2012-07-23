@@ -32,7 +32,7 @@ class Item < ActiveRecord::Base
   has_paper_trail
   normalize_attributes :item_identifier
 
-  enju_export
+  #enju_export
 
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher
@@ -84,9 +84,7 @@ class Item < ActiveRecord::Base
     end
   end
 
-  def self.per_page
-    10
-  end
+  paginates_per 10
 
   def title
     manifestation.try(:original_title)

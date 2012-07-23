@@ -13,10 +13,6 @@ class Produce < ActiveRecord::Base
 
   acts_as_list :scope => :manifestation
 
-  def self.per_page
-    10
-  end
-
   def reindex
     patron.try(:index)
     manifestation.try(:index)

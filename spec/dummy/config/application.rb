@@ -55,4 +55,12 @@ module Dummy
 end
 
 require 'enju_core'
-require 'enju_leaf'
+require 'enju_library'
+require 'enju_circulation'
+require 'enju_inventory'
+require 'enju_bookmark'
+require 'enju_event'
+require 'enju_manifestation_viewer'
+require 'enju_book_jacket'
+require 'enju_export'
+require 'plugins'

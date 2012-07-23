@@ -19,10 +19,6 @@ class ImportRequest < ActiveRecord::Base
     end
   end
 
-  def self.per_page
-    10
-  end
-
   def check_isbn
     if isbn.present?
       errors.add(:isbn) unless StdNum::ISBN.valid?(isbn)

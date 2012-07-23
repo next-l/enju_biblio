@@ -13,9 +13,7 @@ class SeriesHasManifestation < ActiveRecord::Base
 
   acts_as_list :scope => :series_statement_id
 
-  def self.per_page
-    10
-  end
+  paginates_per 10
 
   def reindex
     series_statement.reload; series_statement.try(:index)

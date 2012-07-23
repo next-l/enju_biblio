@@ -176,9 +176,8 @@ class Manifestation < ActiveRecord::Base
   enju_ndl_search
   #enju_amazon
   enju_oai
-  #enju_calil_check
-  #enju_cinii
-  enju_export
+  #enju_nii
+  #enju_export
 
   has_paper_trail
   if configatron.uploaded_file.storage == :s3
@@ -210,11 +209,9 @@ class Manifestation < ActiveRecord::Base
   after_save :index_series_statement
   after_destroy :index_series_statement
   normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
-  attr_accessor :during_import
+  paginates_per 10
 
-  def self.per_page
-    10
-  end
+  attr_accessor :during_import
 
   def check_isbn
     if isbn.present?

@@ -12,10 +12,6 @@ class Exemplify < ActiveRecord::Base
 
   acts_as_list :scope => :manifestation_id
 
-  def self.per_page
-    10
-  end
-
   def reindex
     manifestation.try(:index)
     item.try(:index)
