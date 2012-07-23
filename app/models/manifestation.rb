@@ -507,7 +507,7 @@ class Manifestation < ActiveRecord::Base
   if defined?(EnjuQuestion)
     def questions(options = {})
       id = self.id
-      options = {:page => 1, :per_page => Question.per_page}.merge(options)
+      options = {:page => 1, :per_page => Question.default_per_page}.merge(options)
       page = options[:page]
       per_page = options[:per_page]
       user = options[:user]

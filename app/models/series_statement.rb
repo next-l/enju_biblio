@@ -25,8 +25,10 @@ class SeriesStatement < ActiveRecord::Base
     integer :series_statement_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
   end
 
-  attr_accessor :selected
   normalize_attributes :original_title, :issn
+  paginates_per 10
+
+  attr_accessor :selected
 
   def last_issue
     manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first || manifestations.order(:id).last
