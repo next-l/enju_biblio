@@ -361,6 +361,10 @@ class ManifestationsController < ApplicationController
       @reserve = current_user.reserves.where(:manifestation_id => @manifestation.id).first if user_signed_in?
     end
 
+    if defined?(EnjuQuestion)
+      @questions = @manifestation.questions(:user => current_user, :page => params[:question_page])
+    end
+
     if @manifestation.attachment.path
       if configatron.uploaded_file.storage == :s3
         data = open(@manifestation.attachment.url).read.force_encoding('UTF-8')
