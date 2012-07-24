@@ -112,17 +112,17 @@ class PatronsController < ApplicationController
     patron = @patron
     role = current_user.try(:role) || Role.default_role
     @works = Manifestation.search do
-      with(:creator_ids).equal_to patron
+      with(:creator_ids).equal_to patron.id
       with(:required_role_id).less_than_or_equal_to role.id
       paginate :page => params[:work_list_page], :per_page => Manifestation.default_per_page
     end.results
     @expressions = Manifestation.search do
-      with(:contributor_ids).equal_to patron
+      with(:contributor_ids).equal_to patron.id
       with(:required_role_id).less_than_or_equal_to role.id
       paginate :page => params[:expression_list_page], :per_page => Manifestation.default_per_page
     end.results
     @manifestations = Manifestation.search do
-      with(:publisher_ids).equal_to patron
+      with(:publisher_ids).equal_to patron.id
       with(:required_role_id).less_than_or_equal_to role.id
       paginate :page => params[:manifestation_list_page], :per_page => Manifestation.default_per_page
     end.results
