@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.authors     = ["Kosuke Tanabe"]
   s.email       = ["tanabe@mwr.mediacom.keio.ac.jp"]
   s.homepage    = "https://github.com/nabeta/enju_biblio"
-  s.summary     = "enju_circulation plugin"
+  s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
@@ -40,7 +40,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120720"
-  # s.add_development_dependency "enju_circulation", "~> 0.0.71"
   s.add_development_dependency "enju_inventory"
   s.add_development_dependency "enju_bookmark"
   s.add_development_dependency "enju_event"
