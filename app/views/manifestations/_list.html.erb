@@ -6,7 +6,7 @@
 <br />
 
 <div>
-  <%- if manifestations and manifestations.size > @manifestations.per_page.div(2) -%>
+  <%- if manifestations and manifestations.size > @manifestations.limit_value.div(2) -%>
     <%= form_for :manifestations, :html => {:method => 'get'} do -%>
       <p>
         <%= t('page.search_term') -%>:
