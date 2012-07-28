@@ -69,7 +69,10 @@ Rails.application.routes.draw do
   resources :series_statements do
     resources :manifestations
     resources :series_has_manifestations
+    resources :series_statement_relationships
   end
+
+  resources :series_statement_relationships
 
   resources :countries
   resources :languages

@@ -1,0 +1,14 @@
+<%= simple_form_for(@series_statement_relationship) do |f| %>
+  <%= f.error_notification %>
+
+  <div class="form-inputs">
+    <%= link_to @series_statement_relationship.parent.original_title, @series_statement_relationship.parent if @series_statement_relationship.parent %>
+    <%= f.input :parent_id %>
+    <%= link_to @series_statement_relationship.child.original_title, @series_statement_relationship.child if @series_statement_relationship.child %>
+    <%= f.input :child_id %>
+  </div>
+
+  <div class="form-actions">
+    <%= f.button :submit %>
+  </div>
+<% end %>

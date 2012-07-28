@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <b>Parent:</b>
+  <%= @series_statement_relationship.parent_id %>
+</p>
+
+<p>
+  <b>Child:</b>
+  <%= @series_statement_relationship.child_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_series_statement_relationship_path(@series_statement_relationship) %> |
+<%= link_to 'Back', series_statement_relationships_path %>

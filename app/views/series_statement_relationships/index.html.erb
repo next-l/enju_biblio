@@ -1,0 +1,25 @@
+<h1>Listing series_statement_relationships</h1>
+
+<table>
+  <tr>
+    <th>Parent</th>
+    <th>Child</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @series_statement_relationships.each do |series_statement_relationship| %>
+  <tr>
+    <td><%= series_statement_relationship.parent_id %></td>
+    <td><%= series_statement_relationship.child_id %></td>
+    <td><%= link_to 'Show', series_statement_relationship %></td>
+    <td><%= link_to 'Edit', edit_series_statement_relationship_path(series_statement_relationship) %></td>
+    <td><%= link_to 'Destroy', series_statement_relationship, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Series statement relationship', new_series_statement_relationship_path %>

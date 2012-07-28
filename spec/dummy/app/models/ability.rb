@@ -52,6 +52,7 @@ class Ability
       can :read, ResourceImportResult
       can :manage, SeriesHasManifestation
       can :manage, SeriesStatement
+      can :manage, SeriesStatementRelationship
     when 'Librarian'
       can :manage, Accept
       can [:read, :update], CarrierType
@@ -102,6 +103,7 @@ class Ability
       can :read, ResourceImportResult
       can :manage, SeriesHasManifestation
       can :manage, SeriesStatement
+      can :manage, SeriesStatementRelationship
     when 'User'
       can :read, CarrierType
       can :read, ContentType

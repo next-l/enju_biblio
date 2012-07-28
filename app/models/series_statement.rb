@@ -7,6 +7,11 @@ class SeriesStatement < ActiveRecord::Base
   has_many :series_has_manifestations, :dependent => :destroy
   has_many :manifestations, :through => :series_has_manifestations
   belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation'
+  has_many :child_relationships, :foreign_key => 'parent_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
+  has_many :parent_relationships, :foreign_key => 'child_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
+  has_many :children, :through => :child_relationships, :source => :child
+  has_many :parents, :through => :parent_relationships, :source => :parent
+
   validates_presence_of :original_title
   validate :check_issn
   before_save :create_root_manifestation
@@ -18,17 +23,19 @@ class SeriesStatement < ActiveRecord::Base
     end
     text :numbering, :title_subseries, :numbering_subseries
     integer :manifestation_ids, :multiple => true do
-      series_has_manifestations.pluck(:manifestation_id)
+      series_has_manifestations.collect(&:manifestation_id)
     end
     integer :position
     boolean :periodical
     integer :series_statement_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
   end
 
-  normalize_attributes :original_title, :issn
-  paginates_per 10
-
   attr_accessor :selected
+  normalize_attributes :original_title, :issn
+
+  def self.per_page
+    10
+  end
 
   def last_issue
     manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first || manifestations.order(:id).last
