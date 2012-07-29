@@ -19,7 +19,7 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe SeriesStatementRelationshipsController do
-  fixtures :users, :roles
+  fixtures :all
 
   # This should return the minimal set of attributes required to create a valid
   # SeriesStatementRelationship. As you add validations to SeriesStatementRelationship, be sure to
