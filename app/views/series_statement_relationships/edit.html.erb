@@ -1,6 +1,15 @@
-<h1>Editing series_statement_relationship</h1>
+<div id="content_detail" class="ui-corner-all">
+  <h1 class="title"><%= t('page.editing', :model => t('activerecord.models.series_statement_relationship')) -%></h1>
+  <div id="content_list">
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @series_statement_relationship %> |
-<%= link_to 'Back', series_statement_relationships_path %>
+  </div>
+</div>
+
+<div id="submenu" class="ui-corner-all">
+  <ul>
+    <li><%= link_to 'Show', @series_statement_relationship %></li>
+    <li><%= link_to 'Back', series_statement_relationships_path %></li>
+  </ul>
+</div>
