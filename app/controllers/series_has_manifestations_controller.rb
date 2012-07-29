@@ -56,6 +56,7 @@ class SeriesHasManifestationsController < ApplicationController
         format.html { redirect_to @series_has_manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.series_has_manifestation')) }
         format.json { render :json => @series_has_manifestation, :status => :created, :location => @series_has_manifestation }
       else
+        @series_statement = @series_has_manifestation.series_statement
         format.html { render :action => "new" }
         format.json { render :json => @series_has_manifestation.errors, :status => :unprocessable_entity }
       end
@@ -73,6 +74,7 @@ class SeriesHasManifestationsController < ApplicationController
         format.html { redirect_to @series_has_manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.series_has_manifestation')) }
         format.json { head :no_content }
       else
+        @series_statement = @series_has_manifestation.series_statement
         format.html { render :action => "edit" }
         format.json { render :json => @series_has_manifestation.errors, :status => :unprocessable_entity }
       end
