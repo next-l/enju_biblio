@@ -36,5 +36,10 @@ ja:
       series_statement: シリーズ情報
       series_statement_relationship: シリーズ情報の関係
 
+    attributes:
+      series_statement_relationship:
+        parent_id: 親
+        child_id: 子
+
   resource_import_file:
     update_relationship: 関連を更新

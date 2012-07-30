@@ -4,8 +4,8 @@
 
 <table>
   <tr>
-    <th>Parent</th>
-    <th>Child</th>
+    <th><%= t('activerecord.attributes.series_statement_relationship.parent_id') %></th>
+    <th><%= t('activerecord.attributes.series_statement_relationship.child_id') %></th>
     <th></th>
     <th></th>
     <th></th>
@@ -15,9 +15,9 @@
   <tr>
     <td><%= link_to series_statement_relationship.parent.original_title, series_statement_relationship.parent %></td>
     <td><%= link_to series_statement_relationship.child.original_title, series_statement_relationship.child %></td>
-    <td><%= link_to 'Show', series_statement_relationship %></td>
-    <td><%= link_to 'Edit', edit_series_statement_relationship_path(series_statement_relationship) %></td>
-    <td><%= link_to 'Destroy', series_statement_relationship, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+    <td><%= link_to t('page.show'), series_statement_relationship %></td>
+    <td><%= link_to t('page.edit'), edit_series_statement_relationship_path(series_statement_relationship) %></td>
+    <td><%= link_to t('page.destroy'), series_statement_relationship, method: :delete, data: { confirm: t('page.are_you_sure') } %></td>
   </tr>
 <% end %>
 </table>
@@ -29,6 +29,6 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <li><%= link_to 'New Series statement relationship', new_series_statement_relationship_path %></li>
+    <li><%= link_to t('page.new', :model => t('activerecord.models.series_statement_relationship')), new_series_statement_relationship_path -%></li>
   </ul>
 </div>

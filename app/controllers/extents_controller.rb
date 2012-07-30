@@ -1,5 +1,6 @@
 class ExtentsController < InheritedResources::Base
   respond_to :html, :json
+  has_scope :page, :default => 1
   load_and_authorize_resource
 
   def update
@@ -9,9 +10,5 @@ class ExtentsController < InheritedResources::Base
       return
     end
     update!
-  end
-
-  def index
-    @extents = @extents.page(params[:page])
   end
 end

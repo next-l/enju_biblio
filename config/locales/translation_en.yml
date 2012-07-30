@@ -36,5 +36,10 @@ en:
       series_statement: Series statement
       series_statement_relationship: Series statement relationship
 
+    attributes:
+      series_statement_relationship:
+        parent_id: Parent
+        child_id: Child
+
   resource_import_file:
     update_relationship: Update relationship

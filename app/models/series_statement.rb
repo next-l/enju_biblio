@@ -19,7 +19,7 @@ class SeriesStatement < ActiveRecord::Base
   acts_as_list
   searchable do
     text :title do
-      (parents.collect(&:titles) + children.collect(&:titles)).flatten
+      titles
     end
     text :numbering, :title_subseries, :numbering_subseries
     integer :manifestation_ids, :multiple => true do
@@ -28,7 +28,12 @@ class SeriesStatement < ActiveRecord::Base
     integer :position
     boolean :periodical
     integer :series_statement_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
-    integer :parent_ids, :multiple => true
+    integer :parent_ids, :multiple => true do
+      parents.pluck('series_statements.id')
+    end
+    integer :child_ids, :multiple => true do
+      children.pluck('series_statements.id')
+    end
   end
 
   attr_accessor :selected
@@ -76,7 +81,12 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   def titles
-    [original_title, title_transcription]
+    [
+      original_title,
+      title_transcription,
+      parents.map{|parent| [parent.original_title, parent.title_transcription]},
+      children.map{|child| [child.original_title, child.title_transcription]}
+    ].flatten.compact
   end
 
   if defined?(EnjuResourceMerge)
