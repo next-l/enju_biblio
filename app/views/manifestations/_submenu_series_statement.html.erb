@@ -4,5 +4,6 @@
     <% end %>
     <% if can? :update, @series_statement %>
       <li><%= link_to t('page.edit'), edit_series_statement_path(@series_statement) %></li>
+      <li><%= link_to t('page.add_child'), series_statements_path(:parent_id => @series_statement.id) %></li>
     <% end %>
   </ul>
