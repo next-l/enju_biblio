@@ -39,6 +39,7 @@ module EnjuBiblio
           resource_import_files
           resource_import_results
           series_has_manifestations
+          series_statement_relationships
           series_statements
         )
 
