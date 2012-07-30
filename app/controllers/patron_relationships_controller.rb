@@ -2,10 +2,6 @@ class PatronRelationshipsController < InheritedResources::Base
   load_and_authorize_resource
   before_filter :prepare_options, :except => [:index, :destroy]
 
-  def prepare_options
-    @patron_relationship_types = PatronRelationshipType.all
-  end
-
   def new
     @patron_relationship = PatronRelationship.new(params[:patron_relationship])
     @patron_relationship.parent = Patron.find(params[:patron_id]) rescue nil
@@ -19,5 +15,10 @@ class PatronRelationshipsController < InheritedResources::Base
       return
     end
     update!
+  end
+
+  private
+  def prepare_options
+    @patron_relationship_types = PatronRelationshipType.all
   end
 end

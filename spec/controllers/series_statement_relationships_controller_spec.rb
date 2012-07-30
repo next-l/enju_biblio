@@ -25,7 +25,7 @@ describe SeriesStatementRelationshipsController do
   # SeriesStatementRelationship. As you add validations to SeriesStatementRelationship, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    {}
+    FactoryGirl.attributes_for(:series_statement_relationship)
   end
 
   # This should return the minimal set of values that should be in the session
@@ -40,7 +40,7 @@ describe SeriesStatementRelationshipsController do
 
     it "assigns all series_statement_relationships as @series_statement_relationships" do
       series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
-      get :index, {}, valid_session
+      get :index
       assigns(:series_statement_relationships).should eq([series_statement_relationship])
     end
   end
@@ -59,7 +59,7 @@ describe SeriesStatementRelationshipsController do
     login_fixture_librarian
 
     it "assigns a new series_statement_relationship as @series_statement_relationship" do
-      get :new, {}, valid_session
+      get :new
       assigns(:series_statement_relationship).should be_a_new(SeriesStatementRelationship)
     end
   end
@@ -69,7 +69,7 @@ describe SeriesStatementRelationshipsController do
 
     it "assigns the requested series_statement_relationship as @series_statement_relationship" do
       series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
-      get :edit, {:id => series_statement_relationship.to_param}, valid_session
+      get :edit, {:id => series_statement_relationship.to_param}
       assigns(:series_statement_relationship).should eq(series_statement_relationship)
     end
   end
@@ -80,18 +80,18 @@ describe SeriesStatementRelationshipsController do
     describe "with valid params" do
       it "creates a new SeriesStatementRelationship" do
         expect {
-          post :create, {:series_statement_relationship => valid_attributes}, valid_session
+          post :create, {:series_statement_relationship => valid_attributes}
         }.to change(SeriesStatementRelationship, :count).by(1)
       end
 
       it "assigns a newly created series_statement_relationship as @series_statement_relationship" do
-        post :create, {:series_statement_relationship => valid_attributes}, valid_session
+        post :create, {:series_statement_relationship => valid_attributes}
         assigns(:series_statement_relationship).should be_a(SeriesStatementRelationship)
         assigns(:series_statement_relationship).should be_persisted
       end
 
       it "redirects to the created series_statement_relationship" do
-        post :create, {:series_statement_relationship => valid_attributes}, valid_session
+        post :create, {:series_statement_relationship => valid_attributes}
         response.should redirect_to(SeriesStatementRelationship.last)
       end
     end
@@ -100,14 +100,14 @@ describe SeriesStatementRelationshipsController do
       it "assigns a newly created but unsaved series_statement_relationship as @series_statement_relationship" do
         # Trigger the behavior that occurs when invalid params are submitted
         SeriesStatementRelationship.any_instance.stub(:save).and_return(false)
-        post :create, {:series_statement_relationship => {}}, valid_session
+        post :create, {:series_statement_relationship => {}}
         assigns(:series_statement_relationship).should be_a_new(SeriesStatementRelationship)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        SeriesStatementRelationship.any_instance.stub(:save).and_return(false)
-        post :create, {:series_statement_relationship => {}}, valid_session
+        #SeriesStatementRelationship.any_instance.stub(:save).and_return(false)
+        post :create, {:series_statement_relationship => {}}
         response.should render_template("new")
       end
     end
@@ -124,18 +124,18 @@ describe SeriesStatementRelationshipsController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         SeriesStatementRelationship.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => {'these' => 'params'}}, valid_session
+        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => {'these' => 'params'}}
       end
 
       it "assigns the requested series_statement_relationship as @series_statement_relationship" do
         series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
-        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => valid_attributes}, valid_session
+        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => valid_attributes}
         assigns(:series_statement_relationship).should eq(series_statement_relationship)
       end
 
       it "redirects to the series_statement_relationship" do
         series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
-        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => valid_attributes}, valid_session
+        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => valid_attributes}
         response.should redirect_to(series_statement_relationship)
       end
     end
@@ -145,15 +145,15 @@ describe SeriesStatementRelationshipsController do
         series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
         # Trigger the behavior that occurs when invalid params are submitted
         SeriesStatementRelationship.any_instance.stub(:save).and_return(false)
-        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => {}}, valid_session
+        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => {}}
         assigns(:series_statement_relationship).should eq(series_statement_relationship)
       end
 
       it "re-renders the 'edit' template" do
         series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
         # Trigger the behavior that occurs when invalid params are submitted
-        SeriesStatementRelationship.any_instance.stub(:save).and_return(false)
-        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => {}}, valid_session
+        #SeriesStatementRelationship.any_instance.stub(:save).and_return(false)
+        put :update, {:id => series_statement_relationship.to_param, :series_statement_relationship => {:parent_id => nil}}
         response.should render_template("edit")
       end
     end
@@ -165,13 +165,13 @@ describe SeriesStatementRelationshipsController do
     it "destroys the requested series_statement_relationship" do
       series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
       expect {
-        delete :destroy, {:id => series_statement_relationship.to_param}, valid_session
+        delete :destroy, {:id => series_statement_relationship.to_param}
       }.to change(SeriesStatementRelationship, :count).by(-1)
     end
 
     it "redirects to the series_statement_relationships list" do
       series_statement_relationship = FactoryGirl.create(:series_statement_relationship)
-      delete :destroy, {:id => series_statement_relationship.to_param}, valid_session
+      delete :destroy, {:id => series_statement_relationship.to_param}
       response.should redirect_to(series_statement_relationships_url)
     end
   end

@@ -1067,6 +1067,7 @@ ActiveRecord::Schema.define(:version => 20120728204337) do
   create_table "series_statement_relationships", :force => true do |t|
     t.integer  "parent_id"
     t.integer  "child_id"
+    t.integer  "position"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
   end

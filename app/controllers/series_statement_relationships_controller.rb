@@ -6,4 +6,13 @@ class SeriesStatementRelationshipsController < InheritedResources::Base
     @series_statement_relationship.parent = SeriesStatement.find(params[:parent_id]) rescue nil
     @series_statement_relationship.child = SeriesStatement.find(params[:child_id]) rescue nil
   end
+
+  def update
+    @series_statement_relationship = SeriesStatementRelationship.find(params[:id])
+    if params[:move]
+      move_position(@series_statement_relationship, params[:move])
+      return
+    end
+    update!
+  end
 end

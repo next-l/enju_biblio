@@ -5,7 +5,9 @@ class SeriesStatementRelationship < ActiveRecord::Base
   after_save :reindex
   after_destroy :reindex
 
+  validates_presence_of :parent_id, :child_id
   validates_uniqueness_of :child_id, :scope => :parent_id
+  acts_as_list :scope => :parent_id
 
   def reindex
     parent.try(:index)
