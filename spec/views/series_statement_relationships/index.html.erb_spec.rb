@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe "series_statement_relationships/index" do
   before(:each) do
-    assign(:series_statement_relationships, [
+    assign(:series_statement_relationships, Kaminari::paginate_array([
       stub_model(SeriesStatementRelationship,
         :parent_id => 1,
         :child_id => 2
@@ -11,7 +11,7 @@ describe "series_statement_relationships/index" do
         :parent_id => 1,
         :child_id => 2
       )
-    ])
+    ]).page(1))
   end
 
   it "renders a list of series_statement_relationships" do
