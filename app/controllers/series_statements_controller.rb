@@ -54,7 +54,7 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/1
   # GET /series_statements/1.json
   def show
-    #@manifestations = @series_statement.manifestations.order('date_of_publication DESC').page(params[:manifestation_page]).per_page(Manifestation.per_page)
+    #@manifestations = @series_statement.manifestations.order('date_of_publication DESC').page(params[:manifestation_page]).per(Manifestation.default_per_page)
     #store_location
 
     respond_to do |format|
@@ -73,6 +73,7 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/new.json
   def new
     @series_statement = SeriesStatement.new
+    @frequencies = Frequency.all
     @series_statement.parent = @parent_series_statement if @parent_series_statement
 
     respond_to do |format|
@@ -84,6 +85,7 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/1/edit
   def edit
     @series_statement.work = @work if @work
+    @frequencies = Frequency.all
     @series_statement.parent = @parent_series_statement if @parent_series_statement
   end
 
@@ -99,6 +101,7 @@ class SeriesStatementsController < ApplicationController
         format.html { redirect_to @series_statement, :notice => t('controller.successfully_created', :model => t('activerecord.models.series_statement')) }
         format.json { render :json => @series_statement, :status => :created, :location => @series_statement }
       else
+        @frequencies = Frequency.all
         format.html { render :action => "new" }
         format.json { render :json => @series_statement.errors, :status => :unprocessable_entity }
       end
@@ -118,6 +121,7 @@ class SeriesStatementsController < ApplicationController
         format.html { redirect_to @series_statement, :notice => t('controller.successfully_updated', :model => t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else
+        @frequencies = Frequency.all
         format.html { render :action => "edit" }
         format.json { render :json => @series_statement.errors, :status => :unprocessable_entity }
       end
