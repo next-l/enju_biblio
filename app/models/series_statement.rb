@@ -39,9 +39,7 @@ class SeriesStatement < ActiveRecord::Base
   attr_accessor :selected
   normalize_attributes :original_title, :issn
 
-  def self.per_page
-    10
-  end
+  paginates_per 10
 
   def last_issue
     manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first || manifestations.order(:id).last
