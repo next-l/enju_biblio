@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency "enju_ndl"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
-  s.add_dependency "enju_core", "~> 0.1.0.pre"
+  s.add_dependency "enju_core", "~> 0.1.0"
   s.add_dependency "resque_mailer"
   # s.add_dependency "jquery-rails"
 
@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120720"
-  s.add_development_dependency "enju_library", "~> 0.1.0.pre"
+  s.add_development_dependency "enju_library", "~> 0.1.0.pre2"
   s.add_development_dependency "enju_inventory"
   s.add_development_dependency "enju_bookmark"
   s.add_development_dependency "enju_event"

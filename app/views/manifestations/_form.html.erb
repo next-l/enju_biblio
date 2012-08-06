@@ -95,7 +95,7 @@
   <div class="field">
     <%= f.label :lccn -%>
     <%= f.text_field :lccn, :class => 'resource_isbn_issn', :style => 'ime-mode: disabled' -%>
-    <% if @manifestation.periodical? %>
+    <%- if @series_statement.try(:periodical?) -%>
       <%= f.label :issn -%>
       <%= f.text_field :issn, :class => 'resource_isbn_issn', :style => 'ime-mode: disabled' -%>
     <% end %>
