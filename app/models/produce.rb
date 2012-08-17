@@ -1,5 +1,5 @@
 class Produce < ActiveRecord::Base
-  attr_accessible :patron_id, :manifestation_id, :produce_type_id
+  attr_accessible :patron_id, :manifestation_id, :produce_type_id, :position
   belongs_to :patron
   belongs_to :manifestation
   belongs_to :produce_type

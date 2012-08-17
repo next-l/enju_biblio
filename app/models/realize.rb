@@ -1,5 +1,5 @@
 class Realize < ActiveRecord::Base
-  attr_accessible :patron_id, :expression_id, :realize_type_id
+  attr_accessible :patron_id, :expression_id, :realize_type_id, :position
   belongs_to :patron
   belongs_to :expression, :class_name => 'Manifestation', :foreign_key => 'expression_id'
   belongs_to :realize_type

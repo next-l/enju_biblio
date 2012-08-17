@@ -1,5 +1,5 @@
 class ProduceType < ActiveRecord::Base
-  attr_accessible :name, :display_name, :note
+  attr_accessible :name, :display_name, :note, :position
   include MasterModel
   default_scope :order => 'produce_types.position'
 end

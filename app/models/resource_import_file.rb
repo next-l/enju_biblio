@@ -6,7 +6,7 @@ class ResourceImportFile < ActiveRecord::Base
   scope :not_imported, where(:state => 'pending')
   scope :stucked, where('created_at < ? AND state = ?', 1.hour.ago, 'pending')
 
-  if configatron.uploaded_file.storage == :s3
+  if Setting.uploaded_file.storage == :s3
     has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
       :s3_permissions => :private
   else
@@ -335,7 +335,7 @@ class ResourceImportFile < ActiveRecord::Base
   private
   def open_import_file
     tempfile = Tempfile.new('patron_import_file')
-    if configatron.uploaded_file.storage == :s3
+    if Setting.uploaded_file.storage == :s3
       uploaded_file_path = resource_import.expiring_url(10)
     else
       uploaded_file_path = resource_import.path

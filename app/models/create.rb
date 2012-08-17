@@ -1,5 +1,5 @@
 class Create < ActiveRecord::Base
-  attr_accessible :patron_id, :work_id, :create_type_id
+  attr_accessible :patron_id, :work_id, :create_type_id, :position
   belongs_to :patron
   belongs_to :work, :class_name => 'Manifestation', :foreign_key => 'work_id'
   belongs_to :create_type

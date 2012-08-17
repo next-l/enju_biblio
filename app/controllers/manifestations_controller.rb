@@ -201,7 +201,7 @@ class ManifestationsController < ApplicationController
           else
             flash[:search_query] = @search_query
             @manifestation_ids = search.build do
-              paginate :page => 1, :per_page => configatron.max_number_of_results
+              paginate :page => 1, :per_page => Setting.max_number_of_results
             end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
           end
         end
@@ -210,7 +210,7 @@ class ManifestationsController < ApplicationController
           if params[:view] == 'tag_cloud'
             unless @manifestation_ids
               @manifestation_ids = search.build do
-                paginate :page => 1, :per_page => configatron.max_number_of_results
+                paginate :page => 1, :per_page => Setting.max_number_of_results
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
             #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).pluck(:id)
@@ -237,8 +237,8 @@ class ManifestationsController < ApplicationController
         end
       end
       search_result = search.execute
-      if @count[:query_result] > configatron.max_number_of_results
-        max_count = configatron.max_number_of_results
+      if @count[:query_result] > Setting.max_number_of_results
+        max_count = Setting.max_number_of_results
       else
         max_count = @count[:query_result]
       end
@@ -366,7 +366,7 @@ class ManifestationsController < ApplicationController
     end
 
     if @manifestation.attachment.path
-      if configatron.uploaded_file.storage == :s3
+      if Setting.uploaded_file.storage == :s3
         data = open(@manifestation.attachment.url).read.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
@@ -392,7 +392,7 @@ class ManifestationsController < ApplicationController
       #format.js
       format.download {
         if @manifestation.attachment.path
-          if configatron.uploaded_file.storage == :s3
+          if Setting.uploaded_file.storage == :s3
             send_data @manifestation.attachment.data, :filename => File.basename(@manifestation.attachment_file_name), :type => 'application/octet-stream'
           else
             if File.exist?(file) and File.file?(file)
