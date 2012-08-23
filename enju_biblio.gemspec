@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency "validates_timeliness"
   s.add_dependency "enju_oai"
   s.add_dependency "has_scope"
-  s.add_dependency "enju_ndl"
+  s.add_dependency "enju_ndl", "~> 0.1.0.pre2"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
   s.add_dependency "enju_core", "~> 0.1.1.pre"
