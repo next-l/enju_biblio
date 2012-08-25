@@ -228,7 +228,10 @@ class Patron < ActiveRecord::Base
     patrons = []
     patron_lists.each do |patron_list|
       name_and_role = patron_list[:full_name].split('||')
-      patron = Patron.where(:full_name => name_and_role[0]).first
+      if patron_list[:patron_identifier].present?
+        patron = Patron.where(:patron_identifier => patron_list[:patron_identifier]).first
+      end
+      patron = Patron.where(:full_name => name_and_role[0]).first unless patron
       role_type = name_and_role[1].to_s.strip
       unless patron
         patron = Patron.new(
