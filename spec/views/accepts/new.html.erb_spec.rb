@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe "accepts/new" do
+  fixtures :all
+
   before(:each) do
     assign(:accept, stub_model(Accept,
       :item_id => 1
