@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe "manifestations/show" do
-  fixtures :carrier_types
+  fixtures :carrier_types, :languages
 
   before(:each) do
     @manifestation = assign(:manifestation, FactoryGirl.create(:manifestation))
