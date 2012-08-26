@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120720"
   s.add_development_dependency "enju_library", "~> 0.1.0.pre3"
   s.add_development_dependency "enju_inventory", "~> 0.1.11.pre"
-  s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre3"
+  s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre2"
   s.add_development_dependency "enju_event", "~> 0.1.17.pre2"
   s.add_development_dependency "enju_manifestation_viewer"
   s.add_development_dependency "enju_book_jacket", "~> 0.1.0.pre2"
