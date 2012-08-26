@@ -230,8 +230,9 @@ class Patron < ActiveRecord::Base
       name_and_role = patron_list[:full_name].split('||')
       if patron_list[:patron_identifier].present?
         patron = Patron.where(:patron_identifier => patron_list[:patron_identifier]).first
+      else
+        patron = Patron.where(:full_name => name_and_role[0]).first
       end
-      patron = Patron.where(:full_name => name_and_role[0]).first unless patron
       role_type = name_and_role[1].to_s.strip
       unless patron
         patron = Patron.new(
