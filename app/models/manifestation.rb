@@ -173,9 +173,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   enju_manifestation_viewer
-  enju_ndl_search
+  enju_ndl_search if defined?(EnjuNdl)
   #enju_amazon
-  enju_oai
+  enju_oai if defined?(EnjuOai)
   #enju_nii
   #enju_export
 
