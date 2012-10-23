@@ -8,6 +8,7 @@ require 'has_scope'
 require 'dynamic_form'
 require 'simple_form'
 require 'resque_mailer'
+require 'library_stdnums'
 
 module EnjuBiblio
   class Engine < ::Rails::Engine
