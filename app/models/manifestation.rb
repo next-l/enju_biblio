@@ -176,7 +176,7 @@ class Manifestation < ActiveRecord::Base
   enju_ndl_search if defined?(EnjuNdl)
   #enju_amazon
   enju_oai if defined?(EnjuOai)
-  enju_nii_cinii_book if defined?(EnjuNii)
+  enju_nii_cinii_books if defined?(EnjuNii)
   #enju_export
 
   has_paper_trail
