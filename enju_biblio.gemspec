@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency "enju_core", "~> 0.1.1.pre"
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
+  s.add_dependency "lisbn"
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"
