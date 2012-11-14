@@ -10,7 +10,10 @@ require 'simple_form'
 require 'resque_mailer'
 require 'library_stdnums'
 require 'nkf'
-require 'charlock_holmes/string' rescue nil
+begin
+  require 'charlock_holmes/string'
+rescue LoadError
+end
 
 module EnjuBiblio
   class Engine < ::Rails::Engine
