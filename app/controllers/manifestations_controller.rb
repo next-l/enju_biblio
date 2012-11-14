@@ -97,7 +97,7 @@ class ManifestationsController < ApplicationController
       @query = query.dup
       query = query.gsub('　', ' ')
 
-      includes = [:carrier_type, :required_role, :items, :creators, :contributors, :publishers]
+      includes = [:carrier_type, {:series_statement => :root_manifestation}]
       includes << :bookmarks if defined?(EnjuBookmark)
       search = Manifestation.search(:include => includes)
       role = current_user.try(:role) || Role.default_role
@@ -140,6 +140,9 @@ class ManifestationsController < ApplicationController
           with(:periodical_master).equal_to false
           if series_statement.periodical?
             if mode != 'add'
+              order_by :volume_number, sort[:order]
+              order_by :issue_number, sort[:order]
+              order_by :serial_number, sort[:order]
               with(:periodical).equal_to true
             end
           else

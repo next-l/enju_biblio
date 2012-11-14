@@ -156,12 +156,14 @@ class ResourceImportFile < ActiveRecord::Base
 
   def self.import_work(title, patrons, options = {:edit_mode => 'create'})
     work = Manifestation.new(title)
+    work.save
     work.creators = patrons.uniq unless patrons.empty?
     work
   end
 
   def self.import_expression(work, patrons, options = {:edit_mode => 'create'})
     expression = work
+    expression.save
     expression.contributors = patrons.uniq unless patrons.empty?
     expression
   end
@@ -342,7 +344,16 @@ class ResourceImportFile < ActiveRecord::Base
     end
     open(uploaded_file_path){|f|
       f.each{|line|
-        tempfile.puts(NKF.nkf('-w -Lu', line))
+        if defined?(CharlockHolmes::EncodingDetector)
+          begin
+            string = line.encode('UTF-8', CharlockHolmes::EncodingDetector.detect[:encoding])
+          rescue StandardError
+            string = NKF.nkf('-w -Lu', line)
+          end
+        else
+          string = NKF.nkf('-w -Lu', line)
+        end
+        tempfile.puts(string)
       }
     }
     tempfile.close

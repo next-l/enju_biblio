@@ -36,7 +36,7 @@ class ImportRequest < ActiveRecord::Base
   def import!
     unless manifestation
       manifestation = self.class.import_isbn!(isbn)
-      if manifestation
+      if manifestation.save
         self.manifestation = manifestation
         sm_complete!
         manifestation.index!

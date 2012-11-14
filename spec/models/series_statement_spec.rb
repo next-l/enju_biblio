@@ -11,6 +11,18 @@ describe SeriesStatement do
     series_statement.reload
     series_statement.root_manifestation.periodical_master?.should be_true
   end
+
+  it "should destroy root_manifestation" do
+    series_statement = FactoryGirl.create(:series_statement, :periodical => true)
+    series_statement.root_manifestation = Manifestation.first
+    series_statement.save
+    series_statement.reload
+    series_statement.root_manifestation.should be_true
+    series_statement.periodical = false
+    series_statement.save
+    series_statement.reload
+    series_statement.root_manifestation.should be_nil
+  end
 end
 
 

@@ -14,7 +14,7 @@ class SeriesStatement < ActiveRecord::Base
 
   validates_presence_of :original_title
   validate :check_issn
-  before_save :create_root_manifestation
+  before_save :create_root_manifestation, :destroy_root_manifestation
 
   acts_as_list
   searchable do
@@ -63,6 +63,12 @@ class SeriesStatement < ActiveRecord::Base
       )
       self.root_manifestation = manifestation
       self.manifestations << manifestation
+    end
+  end
+
+  def destroy_root_manifestation
+    unless periodical
+      self.root_manifestation = nil
     end
   end
 

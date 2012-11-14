@@ -1078,13 +1078,13 @@ ActiveRecord::Schema.define(:version => 20120728204337) do
     t.text     "title_subseries"
     t.text     "numbering_subseries"
     t.integer  "position"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
+    t.datetime "created_at",                                       :null => false
+    t.datetime "updated_at",                                       :null => false
     t.text     "title_transcription"
     t.text     "title_alternative"
     t.string   "series_statement_identifier"
     t.string   "issn"
-    t.boolean  "periodical"
+    t.boolean  "periodical",                    :default => false, :null => false
     t.integer  "root_manifestation_id"
     t.text     "note"
     t.text     "title_subseries_transcription"
