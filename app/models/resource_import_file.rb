@@ -139,6 +139,18 @@ class ResourceImportFile < ActiveRecord::Base
         import_result.item = create_item(row, manifestation)
         manifestation.index
       else
+        if manifestation.try(:fulltext_content?)
+          item = Item.new
+          item.circulation_status = CirculationStatus.where(:name => 'Available On Shelf').first
+          item.shelf = Shelf.web
+          begin
+            item.acquired_at = Time.zone.parse(row['acquired_at'].to_s.strip)
+          rescue ArgumentError
+          end
+          item.manifestation_id = manifestation.id
+          item.save!
+          manifestation.items << item
+        end
         num[:failed] += 1
       end
 
@@ -465,12 +477,18 @@ class ResourceImportFile < ActiveRecord::Base
     language = Language.where(:name => row['language'].to_s.strip.camelize).first
     language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
     language = Language.where(:iso_639_1 => row['language'].to_s.strip.downcase).first unless language
+    
+    carrier_type = CarrierType.where(:name => row['carrier_type'].to_s.strip).first
 
     if end_page >= 1
       start_page = 1
     else
       start_page = nil
       end_page = nil
+    end
+
+    if row['fulltext_content'].to_s.strip == "t"
+      fulltext_content = true
     end
 
     creators = row['creator'].to_s.split('//')
@@ -540,7 +558,8 @@ class ResourceImportFile < ActiveRecord::Base
         :end_page => end_page,
         :access_address => row['access_address'],
         :doi => row['doi'],
-        :manifestation_identifier => row['manifestation_identifier']
+        :manifestation_identifier => row['manifestation_identifier'],
+        :fulltext_content => fulltext_content
       }.delete_if{|key, value| value.nil?}
       manifestation = self.class.import_manifestation(expression, publisher_patrons, attributes,
       {
@@ -560,6 +579,8 @@ class ResourceImportFile < ActiveRecord::Base
       else
         manifestation.language = Language.where(:name => 'unknown').first unless manifestation.language
       end
+
+      manifestation.carrier_type = carrier_type if carrier_type
 
       manifestation.series_statement = series_statement if series_statement
       manifestation.save!

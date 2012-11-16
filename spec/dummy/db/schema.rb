@@ -647,6 +647,7 @@ ActiveRecord::Schema.define(:version => 20121116033446) do
     t.integer  "month_of_publication"
     t.string   "online_isbn"
     t.string   "doi"
+    t.boolean  "fulltext_content"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

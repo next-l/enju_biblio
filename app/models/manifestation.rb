@@ -11,6 +11,8 @@ class Manifestation < ActiveRecord::Base
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :online_isbn, :attachment,
     :series_has_manifestation_attributes
+  attr_accessible :fulltext_content, :online_isbn,
+    :doi, :number_of_page_string
 
   scope :periodical_master, where(:periodical => false)
   scope :periodical_children, where(:periodical => true)
@@ -64,7 +66,7 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, :multiple => true do
-      [isbn, isbn10, wrong_isbn]
+      [isbn, isbn10, wrong_isbn, online_isbn]
     end
     string :issn, :multiple => true do
       if series_statement
@@ -86,7 +88,11 @@ class Manifestation < ActiveRecord::Base
       end
     end
     string :language do
-      language.try(:name)
+      if periodical_master?
+        series_statement.last_issue.try(:language).try(:name)
+      else
+        language.try(:name)
+      end
     end
     string :item_identifier, :multiple => true do
       if periodical_master?
@@ -102,7 +108,11 @@ class Manifestation < ActiveRecord::Base
     time :updated_at
     time :deleted_at
     time :pub_date, :multiple => true do
-      pub_dates
+      if periodical_master?
+        series_statement.manifestations.map{|m| m.pub_dates}.flatten
+      else
+        pub_dates
+      end
     end
     time :date_of_publication
     integer :creator_ids, :multiple => true
@@ -114,9 +124,9 @@ class Manifestation < ActiveRecord::Base
     integer :height
     integer :width
     integer :depth
-    integer :volume_number, :multiple => true
-    integer :issue_number, :multiple => true
-    integer :serial_number, :multiple => true
+    integer :volume_number
+    integer :issue_number
+    integer :serial_number
     integer :start_page
     integer :end_page
     integer :number_of_pages
@@ -127,10 +137,10 @@ class Manifestation < ActiveRecord::Base
     boolean :repository_content
     # for OpenURL
     text :aulast do
-      creators.map{|creator| creator.last_name}
+      creators.pluck(:last_name)
     end
     text :aufirst do
-      creators.map{|creator| creator.first_name}
+      creators.pluck(:first_name)
     end
     # OTC start
     string :creator, :multiple => true do
@@ -153,7 +163,7 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      [isbn, isbn10, wrong_isbn]
+      [isbn, isbn10, wrong_isbn, online_isbn]
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statement
@@ -163,6 +173,7 @@ class Manifestation < ActiveRecord::Base
       end
     end
     string :sort_title
+    string :doi
     boolean :periodical do
       periodical?
     end
@@ -219,6 +230,11 @@ class Manifestation < ActiveRecord::Base
         errors.add(:isbn)
       end
     end
+    if online_isbn.present?
+      unless StdNum::ISBN.valid?(online_isbn)
+        errors.add(:online_isbn)
+      end
+    end
   end
 
   def check_issn
@@ -263,8 +279,12 @@ class Manifestation < ActiveRecord::Base
 
   def set_date_of_publication
     return if pub_date.blank?
-    date = nil
-    pub_date_string = pub_date.gsub(/[\[\]]/, '')
+    begin
+      date = Time.zone.parse(pub_date)
+    rescue ArgumentError, TZInfo::AmbiguousTime
+      date = nil
+    end
+    pub_date_string = pub_date.split(';').first.gsub(/[\[\]]/, '')
 
     while date.nil? do
       pub_date_string += '-01'
@@ -410,13 +430,15 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
+    online_lisbn = Lisbn.new(isbn.to_s)
+    if online_lisbn.valid?
+      manifestation = Manifestation.where(:online_isbn => online_lisbn.isbn).first || Manifestation.where(:online_isbn => online_lisbn.isbn10).first
+      return manifestation if manifestation
+    end
+
     lisbn = Lisbn.new(isbn.to_s)
     if lisbn.valid?
-      if lisbn.isbn.size == 10
-        Manifestation.where(:isbn => lisbn.isbn13).first || Manifestation.where(:isbn => lisbn.isbn10).first
-      else
-        Manifestation.where(:isbn => lisbn.isbn13).first || Manifestation.where(:isbn => lisbn.isbn10).first
-      end
+      Manifestation.where(:isbn => lisbn.isbn13).first || Manifestation.where(:isbn => lisbn.isbn10).first
     end
   end
 
