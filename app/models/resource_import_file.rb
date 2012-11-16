@@ -13,7 +13,13 @@ class ResourceImportFile < ActiveRecord::Base
     has_attached_file :resource_import,
       :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
-  validates_attachment_content_type :resource_import, :content_type => ['text/csv', 'text/plain', 'text/tab-separated-values', 'application/octet-stream']
+  validates_attachment_content_type :resource_import, :content_type => [
+    'text/csv',
+    'text/plain',
+    'text/tab-separated-values',
+    'application/octet-stream',
+    'application/vnd.ms-excel'
+  ]
   validates_attachment_presence :resource_import
   belongs_to :user, :validate => true
   has_many :resource_import_results
@@ -63,7 +69,7 @@ class ResourceImportFile < ActiveRecord::Base
     row_num = 2
 
     field = rows.first
-    if [field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
+    if [field['print_isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify isbn or original_tile in the first line"
     end
 
@@ -90,13 +96,17 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       unless manifestation
-        if row['isbn'].present?
-          isbn = StdNum::ISBN.normalize(row['isbn'])
+        if row['online_isbn'].present?
+          isbn = StdNum::ISBN.normalize(row['online_isbn'])
           m = Manifestation.find_by_isbn(isbn)
-          if m
-            unless m.series_statement
-              manifestation = m
-            end
+        end
+        if row['print_isbn'].present? and !m
+          isbn = StdNum::ISBN.normalize(row['print_isbn'])
+          m = Manifestation.find_by_isbn(isbn)
+        end
+        if m
+          unless m.series_statement
+            manifestation = m
           end
         end
       end
@@ -437,10 +447,16 @@ class ResourceImportFile < ActiveRecord::Base
       return nil
     end
 
-    lisbn = Lisbn.new(row['isbn'].to_s.strip)
+    lisbn = Lisbn.new(row['print_isbn'].to_s.strip)
     if lisbn.isbn.valid?
       isbn = lisbn.isbn
     end
+
+    online_lisbn = Lisbn.new(row['online_isbn'].to_s.strip)
+    if online_lisbn.isbn.valid?
+      online_isbn = lisbn.isbn
+    end
+
     # TODO: 小数点以下の表現
     width = NKF.nkf('-eZ1', row['width'].to_s).gsub(/\D/, '').to_i
     height = NKF.nkf('-eZ1', row['height'].to_s).gsub(/\D/, '').to_i
@@ -501,6 +517,7 @@ class ResourceImportFile < ActiveRecord::Base
         :title_alternative => title[:title_alternative],
         :title_alternative_transcription => title[:title_alternative_transcription],
         :isbn => isbn,
+        :online_isbn => online_isbn,
         :wrong_isbn => row['wrong_isbn'],
         :issn => row['issn'],
         :lccn => row['lccn'],
@@ -521,7 +538,8 @@ class ResourceImportFile < ActiveRecord::Base
         :note => row['note'],
         :start_page => start_page,
         :end_page => end_page,
-        :access_address => row['access_addres'],
+        :access_address => row['access_address'],
+        :doi => row['doi'],
         :manifestation_identifier => row['manifestation_identifier']
       }.delete_if{|key, value| value.nil?}
       manifestation = self.class.import_manifestation(expression, publisher_patrons, attributes,
