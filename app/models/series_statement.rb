@@ -3,6 +3,7 @@ class SeriesStatement < ActiveRecord::Base
     :numbering_subseries, :title_transcription, :title_alternative,
     :series_statement_identifier, :issn, :periodical, :note,
     :title_subseries_transcription
+  attr_accessible :url, :frequency_id
 
   has_many :series_has_manifestations, :dependent => :destroy
   has_many :manifestations, :through => :series_has_manifestations
@@ -11,7 +12,7 @@ class SeriesStatement < ActiveRecord::Base
   has_many :parent_relationships, :foreign_key => 'child_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
   has_many :children, :through => :child_relationships, :source => :child
   has_many :parents, :through => :parent_relationships, :source => :parent
-
+  belongs_to :frequency
   validates_presence_of :original_title
   validate :check_issn
   before_save :create_root_manifestation, :destroy_root_manifestation
@@ -42,7 +43,16 @@ class SeriesStatement < ActiveRecord::Base
   paginates_per 10
 
   def last_issue
-    manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first || manifestations.order(:id).last
+    issue = manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first
+    unless issue
+      issues = manifestations.order('manifestations.id DESC').limit(2)
+      if issues[0] == root_manifestation
+        issue = issues[1]
+      else
+        issue = issues[0]
+      end
+    end
+    issue
   end
 
   def check_issn
