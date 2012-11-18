@@ -69,7 +69,7 @@ class ResourceImportFile < ActiveRecord::Base
     row_num = 2
 
     field = rows.first
-    if [field['print_isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
+    if [field['print_isbn'], field['online_isbn'], field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify isbn or original_tile in the first line"
     end
 
@@ -102,6 +102,10 @@ class ResourceImportFile < ActiveRecord::Base
         end
         if row['print_isbn'].present? and !m
           isbn = StdNum::ISBN.normalize(row['print_isbn'])
+          m = Manifestation.find_by_isbn(isbn)
+        end
+        if row['isbn'].present? and !m
+          isbn = StdNum::ISBN.normalize(row['isbn'])
           m = Manifestation.find_by_isbn(isbn)
         end
         if m
@@ -462,6 +466,13 @@ class ResourceImportFile < ActiveRecord::Base
     lisbn = Lisbn.new(row['print_isbn'].to_s.strip)
     if lisbn.isbn.valid?
       isbn = lisbn.isbn
+    end
+
+    unless isbn
+      lisbn = Lisbn.new(row['isbn'].to_s.strip)
+      if lisbn.isbn.valid?
+        isbn = lisbn.isbn
+      end
     end
 
     online_lisbn = Lisbn.new(row['online_isbn'].to_s.strip)
