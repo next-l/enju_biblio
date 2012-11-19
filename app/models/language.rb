@@ -35,8 +35,8 @@ end
 #
 # Table name: languages
 #
-#  id           :integer         not null, primary key
-#  name         :string(255)     not null
+#  id           :integer          not null, primary key
+#  name         :string(255)      not null
 #  native_name  :string(255)
 #  display_name :text
 #  iso_639_1    :string(255)

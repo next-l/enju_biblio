@@ -41,30 +41,40 @@ describe Item do
   it "should not be able to checkout a removed item" do
     Item.for_checkout.include?(items(:item_00023)).should be_false
   end
+
+  it "should update lending policies" do
+    item = items(:item_00001)
+    item.checkout_type = CheckoutType.where(:name => 'serial').first
+    item.save
+    item.reload
+    item.lending_policies.where(:user_group_id => 1).first.loan_period.should eq 10
+  end
 end
+
 # == Schema Information
 #
 # Table name: items
 #
-#  id                    :integer         not null, primary key
+#  id                    :integer          not null, primary key
 #  call_number           :string(255)
 #  item_identifier       :string(255)
-#  circulation_status_id :integer         default(5), not null
-#  checkout_type_id      :integer         default(1), not null
-#  created_at            :datetime        not null
-#  updated_at            :datetime        not null
+#  circulation_status_id :integer          default(5), not null
+#  checkout_type_id      :integer          default(1), not null
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
 #  deleted_at            :datetime
-#  shelf_id              :integer         default(1), not null
-#  include_supplements   :boolean         default(FALSE), not null
+#  shelf_id              :integer          default(1), not null
+#  include_supplements   :boolean          default(FALSE), not null
 #  note                  :text
 #  url                   :string(255)
 #  price                 :integer
-#  lock_version          :integer         default(0), not null
-#  required_role_id      :integer         default(1), not null
+#  lock_version          :integer          default(0), not null
+#  required_role_id      :integer          default(1), not null
 #  state                 :string(255)
-#  required_score        :integer         default(0), not null
+#  required_score        :integer          default(0), not null
 #  acquired_at           :datetime
 #  bookstore_id          :integer
 #  budget_type_id        :integer
+#  manifestation_id      :integer
 #
 

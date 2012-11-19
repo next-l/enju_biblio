@@ -11,11 +11,11 @@ end
 #
 # Table name: series_has_manifestations
 #
-#  id                  :integer         not null, primary key
+#  id                  :integer          not null, primary key
 #  series_statement_id :integer
 #  manifestation_id    :integer
 #  position            :integer
-#  created_at          :datetime
-#  updated_at          :datetime
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
 #
 

@@ -10,12 +10,12 @@ end
 #
 # Table name: patron_relationships
 #
-#  id                          :integer         not null, primary key
+#  id                          :integer          not null, primary key
 #  parent_id                   :integer
 #  child_id                    :integer
 #  patron_relationship_type_id :integer
-#  created_at                  :datetime
-#  updated_at                  :datetime
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
 #  position                    :integer
 #
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121116033446) do
+ActiveRecord::Schema.define(:version => 20121119153944) do
 
   create_table "accepts", :force => true do |t|
     t.integer  "basket_id"
@@ -440,6 +440,7 @@ ActiveRecord::Schema.define(:version => 20121116033446) do
     t.datetime "acquired_at"
     t.integer  "bookstore_id"
     t.integer  "budget_type_id"
+    t.integer  "manifestation_id"
   end
 
   add_index "items", ["bookstore_id"], :name => "index_items_on_bookstore_id"
@@ -466,16 +467,16 @@ ActiveRecord::Schema.define(:version => 20121116033446) do
   add_index "languages", ["name"], :name => "index_languages_on_name", :unique => true
 
   create_table "lending_policies", :force => true do |t|
-    t.integer  "item_id",                         :null => false
-    t.integer  "user_group_id",                   :null => false
-    t.integer  "loan_period",    :default => 0,   :null => false
+    t.integer  "item_id",                       :null => false
+    t.integer  "user_group_id",                 :null => false
+    t.integer  "loan_period",    :default => 0, :null => false
     t.datetime "fixed_due_date"
-    t.integer  "renewal",        :default => 0,   :null => false
-    t.decimal  "fine",           :default => 0.0, :null => false
+    t.integer  "renewal",        :default => 0, :null => false
+    t.integer  "fine",           :default => 0, :null => false
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
   end
 
   add_index "lending_policies", ["item_id", "user_group_id"], :name => "index_lending_policies_on_item_id_and_user_group_id", :unique => true
@@ -646,8 +647,8 @@ ActiveRecord::Schema.define(:version => 20121116033446) do
     t.text     "attachment_meta"
     t.integer  "month_of_publication"
     t.string   "online_isbn"
-    t.string   "doi"
     t.boolean  "fulltext_content"
+    t.string   "doi"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

@@ -22,11 +22,11 @@ end
 #
 # Table name: exemplifies
 #
-#  id               :integer         not null, primary key
-#  manifestation_id :integer         not null
-#  item_id          :integer         not null
+#  id               :integer          not null, primary key
+#  manifestation_id :integer          not null
+#  item_id          :integer          not null
 #  position         :integer
-#  created_at       :datetime        not null
-#  updated_at       :datetime        not null
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
 

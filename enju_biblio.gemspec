@@ -47,7 +47,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_manifestation_viewer"
   s.add_development_dependency "enju_book_jacket", "~> 0.1.0.pre2"
   s.add_development_dependency "enju_export", "~> 0.1.1.pre"
-  s.add_development_dependency "enju_circulation", "~> 0.1.0.pre5"
+#  s.add_development_dependency "enju_circulation", "~> 0.1.0.pre7"
   s.add_development_dependency "enju_oai", "~> 0.1.0.pre4"
   s.add_development_dependency "enju_ndl", "~> 0.1.0.pre5"
 end

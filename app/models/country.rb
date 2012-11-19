@@ -33,8 +33,8 @@ end
 #
 # Table name: countries
 #
-#  id           :integer         not null, primary key
-#  name         :string(255)     not null
+#  id           :integer          not null, primary key
+#  name         :string(255)      not null
 #  display_name :text
 #  alpha_2      :string(255)
 #  alpha_3      :string(255)

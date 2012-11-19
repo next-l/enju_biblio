@@ -279,7 +279,7 @@ end
 #
 # Table name: patron_import_files
 #
-#  id                         :integer         not null, primary key
+#  id                         :integer          not null, primary key
 #  parent_id                  :integer
 #  content_type               :string(255)
 #  size                       :integer
@@ -291,8 +291,8 @@ end
 #  patron_import_content_type :string(255)
 #  patron_import_file_size    :integer
 #  patron_import_updated_at   :datetime
-#  created_at                 :datetime        not null
-#  updated_at                 :datetime        not null
+#  created_at                 :datetime         not null
+#  updated_at                 :datetime         not null
 #  patron_import_fingerprint  :string(255)
 #  error_message              :text
 #  edit_mode                  :string(255)
