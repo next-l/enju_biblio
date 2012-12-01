@@ -19,8 +19,8 @@
 
 <%= form_for :manifestations, :url => manifestations_path, :html => {:method => 'get'} do -%>
   <div>
-    <span id="next_link"><%= t('page.next') %></span>
     <span id="prev_link"><%= t('page.previous') %></span>
+    <span id="next_link"><%= t('page.next') %></span>
     <%= back_to_manifestation_index -%>
     <%= t('page.search_term') -%>:
     <%= search_field_tag 'query', @query, {:id => 'search_form_top', :class => 'search_form_short', :placeholder => t('page.search_term')} -%>
