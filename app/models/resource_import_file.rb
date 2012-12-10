@@ -69,7 +69,7 @@ class ResourceImportFile < ActiveRecord::Base
     row_num = 2
 
     field = rows.first
-    if [field['print_isbn'], field['online_isbn'], field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
+    if [field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify isbn or original_tile in the first line"
     end
 
@@ -96,15 +96,14 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       unless manifestation
-        if row['online_isbn'].present?
-          isbn = StdNum::ISBN.normalize(row['online_isbn'])
-          m = Manifestation.find_by_isbn(isbn)
+        if row['doi'].present?
+          doi = URI.parse(row['doi']).path.gsub(/^\//, "")
+          manifestation = Manifestation.where(:doi => doi).first if doi.present?
         end
-        if row['print_isbn'].present? and !m
-          isbn = StdNum::ISBN.normalize(row['print_isbn'])
-          m = Manifestation.find_by_isbn(isbn)
-        end
-        if row['isbn'].present? and !m
+      end
+
+      unless manifestation
+        if row['isbn'].present?
           isbn = StdNum::ISBN.normalize(row['isbn'])
           m = Manifestation.find_by_isbn(isbn)
         end
@@ -463,21 +462,9 @@ class ResourceImportFile < ActiveRecord::Base
       return nil
     end
 
-    lisbn = Lisbn.new(row['print_isbn'].to_s.strip)
+    lisbn = Lisbn.new(row['isbn'].to_s.strip)
     if lisbn.isbn.valid?
       isbn = lisbn.isbn
-    end
-
-    unless isbn
-      lisbn = Lisbn.new(row['isbn'].to_s.strip)
-      if lisbn.isbn.valid?
-        isbn = lisbn.isbn
-      end
-    end
-
-    online_lisbn = Lisbn.new(row['online_isbn'].to_s.strip)
-    if online_lisbn.isbn.valid?
-      online_isbn = lisbn.isbn
     end
 
     # TODO: 小数点以下の表現
@@ -546,7 +533,6 @@ class ResourceImportFile < ActiveRecord::Base
         :title_alternative => title[:title_alternative],
         :title_alternative_transcription => title[:title_alternative_transcription],
         :isbn => isbn,
-        :online_isbn => online_isbn,
         :wrong_isbn => row['wrong_isbn'],
         :issn => row['issn'],
         :lccn => row['lccn'],

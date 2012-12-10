@@ -646,7 +646,6 @@ ActiveRecord::Schema.define(:version => 20121119153944) do
     t.integer  "year_of_publication"
     t.text     "attachment_meta"
     t.integer  "month_of_publication"
-    t.string   "online_isbn"
     t.boolean  "fulltext_content"
     t.string   "doi"
   end

@@ -9,9 +9,9 @@ class Manifestation < ActiveRecord::Base
     :title_alternative_transcription, :description, :abstract, :available_at,
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :ndc, :content_type_id, :online_isbn, :attachment,
+    :ndc, :content_type_id, :attachment,
     :series_has_manifestation_attributes
-  attr_accessible :fulltext_content, :online_isbn,
+  attr_accessible :fulltext_content,
     :doi, :number_of_page_string
 
   scope :periodical_master, where(:periodical => false)
@@ -66,7 +66,7 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, :multiple => true do
-      [isbn, isbn10, wrong_isbn, online_isbn]
+      [isbn, isbn10, wrong_isbn]
     end
     string :issn, :multiple => true do
       if series_statement
@@ -163,7 +163,7 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      [isbn, isbn10, wrong_isbn, online_isbn]
+      [isbn, isbn10, wrong_isbn]
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statement
@@ -228,11 +228,6 @@ class Manifestation < ActiveRecord::Base
     if isbn.present?
       unless StdNum::ISBN.valid?(isbn)
         errors.add(:isbn)
-      end
-    end
-    if online_isbn.present?
-      unless StdNum::ISBN.valid?(online_isbn)
-        errors.add(:online_isbn)
       end
     end
   end
@@ -430,12 +425,6 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    online_lisbn = Lisbn.new(isbn.to_s)
-    if online_lisbn.valid?
-      manifestation = Manifestation.where(:online_isbn => online_lisbn.isbn).first || Manifestation.where(:online_isbn => online_lisbn.isbn10).first
-      return manifestation if manifestation
-    end
-
     lisbn = Lisbn.new(isbn.to_s)
     if lisbn.valid?
       Manifestation.where(:isbn => lisbn.isbn13).first || Manifestation.where(:isbn => lisbn.isbn10).first
@@ -707,7 +696,6 @@ end
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer
-#  online_isbn                     :string(255)
 #  fulltext_content                :boolean
 #  doi                             :string(255)
 #

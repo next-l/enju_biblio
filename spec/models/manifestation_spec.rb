@@ -298,7 +298,6 @@ end
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer
-#  online_isbn                     :string(255)
 #  fulltext_content                :boolean
 #  doi                             :string(255)
 #
