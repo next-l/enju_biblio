@@ -6,7 +6,7 @@
     <h2>[S] <%= link_to @parent.original_title, @parent %></h2>
 <%= form_for :series_statements, :url => series_statements_path, :html => {:method => 'get'} do -%>
   <p>
-    <%= t('page.search_term') -%>: <%= search_field_tag 'query', h(@query), {:id => 'search_form_top', :class => 'search_form', :placeholder => t('page.search_term')} -%>
+    <%= label_tag :search_form_top, t('page.search_term') -%>: <%= search_field_tag 'query', h(@query), {:id => 'search_form_top', :class => 'search_form', :placeholder => t('page.search_term')} -%>
     <%- if can? :update, @parent -%>
       <%= render 'page/add' %>
     <%- end -%>
