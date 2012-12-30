@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.version     = EnjuBiblio::VERSION
   s.authors     = ["Kosuke Tanabe"]
   s.email       = ["tanabe@mwr.mediacom.keio.ac.jp"]
-  s.homepage    = "https://github.com/nabeta/enju_biblio"
+  s.homepage    = "https://github.com/next-l/enju_biblio"
   s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
 
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"]
 
   s.add_dependency "rails", "~> 3.2"
-  s.add_dependency "paperclip"
+  s.add_dependency "paperclip", "~> 3.4"
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency "has_scope"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
-  s.add_dependency "enju_core", "~> 0.1.1.pre"
+  s.add_dependency "enju_core", "~> 0.1.1.pre2"
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"
@@ -40,14 +40,14 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120925"
-  s.add_development_dependency "enju_library", "~> 0.1.0.pre5"
-  s.add_development_dependency "enju_inventory", "~> 0.1.11.pre4"
-  s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre4"
-  s.add_development_dependency "enju_event", "~> 0.1.17.pre4"
+  s.add_development_dependency "enju_library", "~> 0.1.0.pre6"
+  s.add_development_dependency "enju_inventory", "~> 0.1.11.pre5"
+  s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre7"
+  s.add_development_dependency "enju_event", "~> 0.1.17.pre6"
   s.add_development_dependency "enju_manifestation_viewer"
-  s.add_development_dependency "enju_book_jacket", "~> 0.1.0.pre2"
-  s.add_development_dependency "enju_export", "~> 0.1.1.pre"
-  s.add_development_dependency "enju_circulation", "~> 0.1.0.pre8"
-  s.add_development_dependency "enju_oai", "~> 0.1.0.pre4"
-  s.add_development_dependency "enju_ndl", "~> 0.1.0.pre5"
+  s.add_development_dependency "enju_book_jacket", "~> 0.1.0.pre3"
+  s.add_development_dependency "enju_export", "~> 0.1.1.pre2"
+  s.add_development_dependency "enju_circulation", "~> 0.1.0.pre9"
+  s.add_development_dependency "enju_oai", "~> 0.1.0.pre5"
+  s.add_development_dependency "enju_ndl", "~> 0.1.0.pre7"
 end
