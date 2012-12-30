@@ -70,7 +70,7 @@ class ResourceImportFile < ActiveRecord::Base
 
     field = rows.first
     if [field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
-      raise "You should specify isbn or original_tile in the first line"
+      raise "You should specify isbn or original_title in the first line"
     end
 
     rows.each do |row|
