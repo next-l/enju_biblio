@@ -39,6 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "vcr"
   s.add_development_dependency "fakeweb"
+  s.add_development_dependency "simplecov"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0.pre.120925"
   s.add_development_dependency "enju_library", "~> 0.1.0.pre6"
   s.add_development_dependency "enju_inventory", "~> 0.1.11.pre5"
@@ -49,5 +50,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_export", "~> 0.1.1.pre2"
   s.add_development_dependency "enju_circulation", "~> 0.1.0.pre9"
   s.add_development_dependency "enju_oai", "~> 0.1.0.pre5"
-  s.add_development_dependency "enju_ndl", "~> 0.1.0.pre7"
+  s.add_development_dependency "enju_ndl", "~> 0.1.0.pre8"
 end

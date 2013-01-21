@@ -42,9 +42,9 @@ class Patron < ActiveRecord::Base
   validates_associated :language, :patron_type, :country
   validates :full_name, :presence => true, :length => {:maximum => 255}
   #validates :user_id, :uniqueness => true, :allow_nil => true
-  validates :birth_date, :format => {:with => /^\d+(-\d{0,2}){0,2}$/}, :allow_blank => true
-  validates :death_date, :format => {:with => /^\d+(-\d{0,2}){0,2}$/}, :allow_blank => true
-  validates :email, :format => {:with => /^([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})$/i}, :allow_blank => true
+  validates :birth_date, :format => {:with => /\A\d+(-\d{0,2}){0,2}\z/}, :allow_blank => true
+  validates :death_date, :format => {:with => /\A\d+(-\d{0,2}){0,2}\z/}, :allow_blank => true
+  validates :email, :format => {:with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i}, :allow_blank => true
   validate :check_birth_date
   before_validation :set_role_and_name, :on => :create
   before_save :set_date_of_birth, :set_date_of_death
