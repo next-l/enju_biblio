@@ -208,6 +208,15 @@ describe ManifestationsController do
         assigns(:library_facet).should_not be_empty
       end
 
+      it "should get index_pub_year_facet" do
+        get :index, :view => 'pub_year_facet'
+        response.should be_success
+        assigns(:pub_year_facet).first.value.should eq 2010.0..2020.0
+        assigns(:pub_year_facet).first.count.should eq 1
+        assigns(:pub_year_facet).last.value.should eq 2000.0..2010.0
+        assigns(:pub_year_facet).last.count.should eq 1
+      end
+
       it "should get tag_cloud" do
         get :index, :query => '2005', :view => 'tag_cloud'
         response.should be_success

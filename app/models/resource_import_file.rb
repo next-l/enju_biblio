@@ -361,7 +361,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   private
   def open_import_file
-    tempfile = Tempfile.new('patron_import_file')
+    tempfile = Tempfile.new('resource_import_file')
     if Setting.uploaded_file.storage == :s3
       uploaded_file_path = resource_import.expiring_url(10)
     else

@@ -42,20 +42,18 @@
     </tr>
     <% if can? :update, item %>
       <script>
-        $(document).ready(function(){
-          $('a#item_identifier_item_<%= item.id %>').qtip({
-            position: {
-              my: 'bottom left',
-              at: 'top center'
-            },
-            content: 'item_identifier: <%= item.item_identifier %>',
-            hide: {
-              fixed: true
-            }
+        $(function(){
+          $('a#item_identifier_item_<%= item.id %>').data(
+            'powertip',
+            'item_identifier: <%= item.item_identifier %>'
+          );
+          $('a#item_identifier_item_<%= item.id %>').powerTip({
+            placement: 'e',
+            mouseOnToPopup: true
           });
         });
       </script>
-      <%= render 'items/qtip', :item => item %>
+      <%= render 'items/tooltip', :item => item %>
     <% end %>
   <%- end -%>
 </table>

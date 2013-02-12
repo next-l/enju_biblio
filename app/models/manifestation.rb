@@ -115,6 +115,9 @@ class Manifestation < ActiveRecord::Base
       end
     end
     time :date_of_publication
+    integer :pub_year do
+      date_of_publication.try(:year)
+    end
     integer :creator_ids, :multiple => true
     integer :contributor_ids, :multiple => true
     integer :publisher_ids, :multiple => true

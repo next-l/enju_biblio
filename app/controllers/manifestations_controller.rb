@@ -230,11 +230,30 @@ class ManifestationsController < ApplicationController
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
+        pub_dates = parse_pub_date(params)
+        pub_date_range = {}
+        if pub_dates[:from] == '*'
+          pub_date_range[:from] = 0
+        else
+          pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
+        end
+        if pub_dates[:to] == '*'
+          pub_date_range[:to] = 10000
+        else
+          pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
+        end
+        if params[:pub_year_range_interval]
+          pub_year_range_interval = params[:pub_year_range_interval].to_i
+        else
+          pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
+        end
+
         search.build do
           facet :reservable if defined?(EnjuCirculation)
           facet :carrier_type
           facet :library
           facet :language
+          facet :pub_year, :range => pub_date_range[:from]..pub_date_range[:to], :range_interval => pub_year_range_interval
           facet :subject_ids if defined?(EnjuSubject)
           paginate :page => page.to_i, :per_page => per_page
         end
@@ -253,6 +272,7 @@ class ManifestationsController < ApplicationController
         @carrier_type_facet = search_result.facet(:carrier_type).rows
         @language_facet = search_result.facet(:language).rows
         @library_facet = search_result.facet(:library).rows
+        @pub_year_facet = search_result.facet(:pub_year).rows.reverse
       end
 
       @search_engines = Rails.cache.fetch('search_engine_all'){SearchEngine.all}
@@ -682,29 +702,33 @@ class ManifestationsController < ApplicationController
     end
   end
 
+  def parse_pub_date(options)
+    pub_date = {}
+    if options[:pub_date_from].blank?
+      pub_date[:from] = "*"
+    else
+      pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
+      unless pub_date[:from]
+        pub_date[:from] = Time.zone.parse(Time.mktime(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
+      end
+    end
+
+    if options[:pub_date_to].blank?
+      pub_date[:to] = "*"
+    else
+      pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+      unless pub_date[:to]
+        pub_date[:to] = Time.zone.parse(Time.mktime(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
+      end
+    end
+    pub_date
+  end
+
   def set_pub_date(query, options)
     unless options[:pub_date_from].blank? and options[:pub_date_to].blank?
       options[:pub_date_from].to_s.gsub!(/\D/, '')
       options[:pub_date_to].to_s.gsub!(/\D/, '')
-
-      pub_date = {}
-      if options[:pub_date_from].blank?
-        pub_date[:from] = "*"
-      else
-        pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
-        unless pub_date[:from]
-          pub_date[:from] = Time.zone.parse(Time.mktime(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
-        end
-      end
-
-      if options[:pub_date_to].blank?
-        pub_date[:to] = "*"
-      else
-        pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
-        unless pub_date[:to]
-          pub_date[:to] = Time.zone.parse(Time.mktime(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
-        end
-      end
+      pub_date = parse_pub_date(options)
       query = "#{query} date_of_publication_d:[#{pub_date[:from]} TO #{pub_date[:to]}]"
     end
     query
