@@ -6,7 +6,6 @@ class Item < ActiveRecord::Base
     :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
   scope :on_shelf, where('shelf_id != 1')
   scope :on_web, where(:shelf_id => 1)
-  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
   has_one :exemplify, :dependent => :destroy
   has_one :manifestation, :through => :exemplify
   has_many :owns
@@ -18,7 +17,6 @@ class Item < ActiveRecord::Base
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
-  has_one :accept
   #accepts_nested_attributes_for :exemplify
   #before_save :create_manifestation
 
@@ -102,32 +100,8 @@ class Item < ActiveRecord::Base
     manifestation.try(:publisher)
   end
 
-  if defined?(EnjuLibrary)
-    belongs_to :shelf, :counter_cache => true, :validate => true
-    validates_associated :shelf
-
-    searchable do
-      string :library do
-        shelf.library.name if shelf
-      end
-    end
-
-    def shelf_name
-      shelf.name
-    end
-  end
-
-  def hold?(library)
-    return true if self.shelf.library == library
-    false
-  end
-
   def owned(patron)
     owns.where(:patron_id => patron.id).first
-  end
-
-  def library_url
-    "#{LibraryGroup.site_config.url}libraries/#{self.shelf.library.name}"
   end
 
   def manifestation_url
@@ -149,6 +123,33 @@ class Item < ActiveRecord::Base
   def create_manifestation
     if manifestation_id
       self.manifestation = Manifestation.find(manifestation_id)
+    end
+  end
+
+  if defined?(EnjuLibrary)
+    has_one :accept
+    scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
+
+    belongs_to :shelf, :counter_cache => true, :validate => true
+    validates_associated :shelf
+
+    searchable do
+      string :library do
+        shelf.library.name if shelf
+      end
+    end
+
+    def shelf_name
+      shelf.name
+    end
+
+    def hold?(library)
+      return true if self.shelf.library == library
+      false
+    end
+
+    def library_url
+      "#{LibraryGroup.site_config.url}libraries/#{self.shelf.library.name}"
     end
   end
 end

@@ -4,7 +4,6 @@ class Ability
   def initialize(user, ip_addess = nil)
     case user.try(:role).try(:name)
     when 'Administrator'
-      can :manage, Accept
       can [:read, :update], ContentType
       can [:read, :update], Country
       can :manage, Create
@@ -54,7 +53,6 @@ class Ability
       can :manage, SeriesStatement
       can :manage, SeriesStatementRelationship
     when 'Librarian'
-      can :manage, Accept
       can [:read, :update], CarrierType
       can :read, ContentType
       can :read, Country
