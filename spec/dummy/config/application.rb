@@ -54,7 +54,6 @@ module Dummy
   end
 end
 
-require 'enju_core'
 require 'enju_library'
 require 'enju_circulation'
 require 'enju_inventory'
@@ -65,4 +64,5 @@ require 'enju_book_jacket'
 require 'enju_export'
 require 'enju_oai'
 require 'enju_ndl'
+require 'mobylette'
 require 'plugins'

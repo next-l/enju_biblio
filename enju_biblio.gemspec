@@ -51,5 +51,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_circulation", "~> 0.1.0.pre10"
   s.add_development_dependency "enju_oai", "~> 0.1.0.pre6"
   s.add_development_dependency "enju_ndl", "~> 0.1.0.pre8"
+  s.add_development_dependency "mobylette"
   s.add_development_dependency "simplecov"
 end
