@@ -35,6 +35,7 @@ ja:
       series_has_manifestation: シリーズ情報と資料の関係
       series_statement: シリーズ情報
       series_statement_relationship: シリーズ情報の関係
+      country: 国と地域
 
     attributes:
       manifestation:

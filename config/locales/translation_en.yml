@@ -35,6 +35,7 @@ en:
       series_has_manifestation: Series statement to manifestation
       series_statement: Series statement
       series_statement_relationship: Series statement relationship
+      country: Country
 
     attributes:
       manifestation:
