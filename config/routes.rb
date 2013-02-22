@@ -103,6 +103,8 @@ Rails.application.routes.draw do
 
   resources :picture_files
 
+  resources :accepts
+
   match '/isbn/:isbn' => 'manifestations#show'
   match '/page/advanced_search' => 'page#advanced_search'
 end

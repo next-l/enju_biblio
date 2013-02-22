@@ -186,7 +186,7 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  enju_manifestation_viewer
+  enju_manifestation_viewer if defined?(EnjuManifestationViewer)
   enju_ndl_search if defined?(EnjuNdl)
   #enju_amazon
   enju_oai if defined?(EnjuOai)

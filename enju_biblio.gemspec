@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency "has_scope"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
-  s.add_dependency "enju_core", "~> 0.1.1.pre2"
+  s.add_dependency "enju_core", "~> 0.1.1.pre3"
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"

@@ -1,9 +1,6 @@
   <div id="tabs">
     <%= render 'manifestations/tab_menu', :manifestation => manifestation %>
     <div id="detail">
-      <%- if manifestation.isbn -%>
-        <%= google_book_search_preview(manifestation.isbn) -%>
-      <%- end -%>
     <% cache([:manifestation => manifestation.id, :fragment => 'show_detail_librarian_html', :role => current_user_role_name, :locale => @locale]) do %>
       <table class="table table-striped" id="resource_detail">
         <%= embed_content(manifestation) -%>

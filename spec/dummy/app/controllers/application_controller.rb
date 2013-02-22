@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied, :with => :render_403
   rescue_from ActiveRecord::RecordNotFound, :with => :render_404
 
-  before_filter :get_library_group, :set_locale
+  before_filter :get_library_group, :set_locale, :set_available_languages
 
   enju_biblio
   enju_library
@@ -172,5 +172,15 @@ class ApplicationController < ActionController::Base
     end
   rescue InvalidLocaleError
     @locale = I18n.default_locale
+  end
+
+  def set_available_languages
+    if Rails.env == 'production'
+      @available_languages = Rails.cache.fetch('available_languages'){
+        Language.where(:iso_639_1 => I18n.available_locales.map{|l| l.to_s}).select([:id, :iso_639_1, :name, :native_name, :display_name, :position]).all
+      }
+    else
+      @available_languages = Language.where(:iso_639_1 => I18n.available_locales.map{|l| l.to_s})
+    end
   end
 end
