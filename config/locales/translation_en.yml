@@ -36,6 +36,7 @@ en:
       series_statement: Series statement
       series_statement_relationship: Series statement relationship
       country: Country
+      donate: Donate
 
     attributes:
       manifestation:
