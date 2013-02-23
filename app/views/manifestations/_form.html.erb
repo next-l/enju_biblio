@@ -152,5 +152,5 @@
     <%= hidden_field_tag :manifestation_id, @original_manifestation.id if @original_manifestation -%>
     <%= f.submit %>
   </div>
-  <%= javascript_tag("$('#manifestation_original_title').focus()") -%>
+  <%= javascript_tag("$(function(){$('#query').focus()})") %>
 <%- end -%>

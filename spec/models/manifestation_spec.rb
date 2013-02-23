@@ -3,7 +3,6 @@ require 'spec_helper'
 
 describe Manifestation, :solr => true do
   fixtures :all
-  use_vcr_cassette "enju_ndl/manifestation", :record => :new_episodes
   before do
     Manifestation.reindex
   end
@@ -201,8 +200,10 @@ describe Manifestation, :solr => true do
     manifestations(:manifestation_00001).title.should be_true
   end
 
-  it "should import isbn" do
-    Manifestation.import_isbn('4797327030').should be_valid
+  VCR.use_cassette "enju_ndl/manifestation", :record => :new_episodes do
+    it "should import isbn" do
+      Manifestation.import_isbn('4797327030').should be_valid
+    end
   end
 
   it "should respond to pickup" do

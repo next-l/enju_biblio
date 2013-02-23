@@ -38,8 +38,6 @@ RSpec.configure do |config|
 
   config.extend ControllerMacros, :type => :controller
 
-  config.extend VCR::RSpec::Macros
-
   $original_sunspot_session = Sunspot.session
 
   config.before do
@@ -55,3 +53,7 @@ end
 
 FactoryGirl.definition_file_paths << "#{::Rails.root}/../../spec/factories"
 FactoryGirl.find_definitions
+
+VCR.configure do |c|
+  c.allow_http_connections_when_no_cassette = true
+end
