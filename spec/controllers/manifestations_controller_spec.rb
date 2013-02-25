@@ -182,41 +182,6 @@ describe ManifestationsController do
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T14:59:59Z]'
       end
 
-      it "should get index_all_facet" do
-        get :index, :query => '2005', :view => 'all_facet'
-        response.should be_success
-        assigns(:carrier_type_facet).should_not be_empty
-        assigns(:language_facet).should_not be_empty
-        assigns(:library_facet).should_not be_empty
-      end
-
-      it "should get index_carrier_type_facet" do
-        get :index, :query => '2005', :view => 'carrier_type_facet'
-        response.should be_success
-        assigns(:carrier_type_facet).should_not be_empty
-      end
-
-      it "should get index_language_facet" do
-        get :index, :query => '2005', :view => 'language_facet'
-        response.should be_success
-        assigns(:language_facet).should_not be_empty
-      end
-
-      it "should get index_library_facet" do
-        get :index, :query => '2005', :view => 'library_facet'
-        response.should be_success
-        assigns(:library_facet).should_not be_empty
-      end
-
-      it "should get index_pub_year_facet" do
-        get :index, :view => 'pub_year_facet'
-        response.should be_success
-        assigns(:pub_year_facet).first.value.should eq 2010.0..2020.0
-        assigns(:pub_year_facet).first.count.should eq 1
-        assigns(:pub_year_facet).last.value.should eq 2000.0..2010.0
-        assigns(:pub_year_facet).last.count.should eq 1
-      end
-
       it "should get tag_cloud" do
         get :index, :query => '2005', :view => 'tag_cloud'
         response.should be_success

@@ -83,9 +83,6 @@
     <%= render 'submenu_series_statement' %>
   <% end %>
   <h3><%= link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(params.merge(:action => 'index', :view => nil, :carrier_type => nil, :library => nil, :language => nil, :subject => nil, :only_path => true))  -%></h3>
-    <%- if @manifestations.total_count > 0 -%>
-      <%= render 'manifestations/all_facet' -%>
-    <%- end -%>
   <div>
     <%- if params[:library_id].blank? -%>
       <%= link_to((image_tag 'icons/feed.png', :size => '16x16', :alt => t('page.feed'), :class => 'icon'), url_for(params.merge(:format => :rss, :page => nil, :library_id => nil, :only_path => true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(:format => :rss, :page => nil, :library_id => nil, :commit => nil, :only_path => true)) -%>

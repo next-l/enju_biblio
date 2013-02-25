@@ -9,6 +9,7 @@ require 'dynamic_form'
 require 'simple_form'
 require 'resque_mailer'
 require 'library_stdnums'
+require 'lisbn'
 require 'nkf'
 begin
   require 'charlock_holmes/string'
