@@ -48,9 +48,6 @@
           <%- if current_user.email.present? -%>
             <li><%= link_to t('manifestation.send_email'), manifestation_path(:mode => 'send_email'), :data => {:confirm => t('page.are_you_sure')} -%></li>
           <%- end -%>
-          <% if defined?(EnjuBookmark) %>
-            <li><%= link_to_bookmark(@manifestation) %></li>
-          <% end %>
         <% end %>
 
         <%- unless @manifestation.carrier_type.name == 'file' -%>

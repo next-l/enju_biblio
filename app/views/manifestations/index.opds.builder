@@ -10,9 +10,6 @@ atom_feed(:url => manifestations_url(:format => :atom),
     feed.entry(manifestation) do |entry|
       entry.link :rel => "http://opds-spec.org/acquisition/borrow", :href => manifestation_url(manifestation), :type => 'text/html'
       entry.title(manifestation.original_title)
-      if defined?(EnjuBookmark)
-        entry.content(manifestation.tags.join(' '), :type => 'html')
-      end
 
       manifestation.creators.readable_by(current_user).each do |patron|
         entry.author do |author|

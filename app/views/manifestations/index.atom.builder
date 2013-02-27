@@ -5,9 +5,6 @@ atom_feed(:url => manifestations_url(:format => :atom)) do |feed|
   @manifestations.each do |manifestation|
     feed.entry(manifestation) do |entry|
       entry.title(manifestation.original_title)
-      if defined?(EnjuBookmark)
-        entry.content(manifestation.tags.join(' '), :type => 'html')
-      end
 
       manifestation.creators.readable_by(current_user).each do |patron|
         entry.author do |author|

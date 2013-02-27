@@ -40,21 +40,6 @@
         </td>
       <% end %>
     </tr>
-    <% if can? :update, item %>
-      <script>
-        $(function(){
-          $('a#item_identifier_item_<%= item.id %>').data(
-            'powertip',
-            'item_identifier: <%= item.item_identifier %>'
-          );
-          $('a#item_identifier_item_<%= item.id %>').powerTip({
-            placement: 'e',
-            mouseOnToPopup: true
-          });
-        });
-      </script>
-      <%= render 'items/tooltip', :item => item %>
-    <% end %>
   <%- end -%>
 </table>
 </div>

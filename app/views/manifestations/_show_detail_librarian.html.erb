@@ -74,14 +74,6 @@
             </td>
           </tr>
         <% end %>
-        <% if defined?(EnjuBookmark) %>
-          <tr>
-            <td><%= t('activerecord.models.tag') -%>:</td>
-            <td>
-              <%= render 'manifestations/tag_list', :manifestation => manifestation -%>
-            </td>
-          </tr>
-        <% end %>
         <%- unless manifestation.periodical? -%>
           <tr>
             <td><%= t('page.identifier') -%>:</td>
