@@ -1,6 +1,6 @@
 class Manifestation < ActiveRecord::Base
   attr_accessible :original_title, :title_alternative, :title_transcription,
-    :classification_number, :manifestation_identifier, :date_copyrighted,
+    :manifestation_identifier, :date_copyrighted,
     :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
     :end_page, :height, :width, :depth, :isbn, :wrong_isbn, :nbn, :lccn,
     :oclc_number, :issn, :price, :fulltext, :volume_number_string,
@@ -186,6 +186,8 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
+  enju_circulation_model if defined?(EnjuCirculation)
+  enju_subject_model if defined?(EnjuSubject)
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)
   enju_ndl_search if defined?(EnjuNdl)
   #enju_amazon
@@ -463,32 +465,6 @@ class Manifestation < ActiveRecord::Base
 
   def web_item
     items.where(:shelf_id => Shelf.web.id).first
-  end
-
-  if defined?(EnjuCirculation)
-    enju_circulation_model
-  end
-
-  if defined?(EnjuSubject)
-    has_many :work_has_subjects, :foreign_key => 'work_id', :dependent => :destroy
-    has_many :subjects, :through => :work_has_subjects
-
-    searchable do
-      text :subject do
-        subjects.map{|s| [:term, :term_transcription]}.compact
-      end
-      string :subject, :multiple => true do
-        subjects.map{|s| [:term, :term_transcription]}.compact
-      end
-      string :classification, :multiple => true do
-        classifications.collect(&:category)
-      end
-      integer :subject_ids, :multiple => true
-    end
-
-    def classifications
-      subjects.collect(&:classifications).flatten
-    end
   end
 
   if defined?(EnjuBookmark)
