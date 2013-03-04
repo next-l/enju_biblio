@@ -1,7 +1,15 @@
 class LanguagesController < InheritedResources::Base
   respond_to :html, :json
-  has_scope :page, :default => 1
   load_and_authorize_resource
+
+  def index
+    @languages = Language.page(params[:page])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render :json => @languages }
+    end
+  end
 
   def update
     @language = Language.find(params[:id])
