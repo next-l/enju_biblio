@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121119153944) do
+ActiveRecord::Schema.define(:version => 20130304015019) do
 
   create_table "baskets", :force => true do |t|
     t.integer  "user_id"
@@ -429,7 +429,6 @@ ActiveRecord::Schema.define(:version => 20121119153944) do
     t.datetime "acquired_at"
     t.integer  "bookstore_id"
     t.integer  "budget_type_id"
-    t.integer  "manifestation_id"
   end
 
   add_index "items", ["bookstore_id"], :name => "index_items_on_bookstore_id"
@@ -961,11 +960,14 @@ ActiveRecord::Schema.define(:version => 20121119153944) do
     t.string   "state"
     t.boolean  "expiration_notice_to_patron",  :default => false
     t.boolean  "expiration_notice_to_library", :default => false
+    t.datetime "retained_at"
+    t.datetime "postponed_at"
   end
 
   add_index "reserves", ["item_id"], :name => "index_reserves_on_item_id"
   add_index "reserves", ["manifestation_id"], :name => "index_reserves_on_manifestation_id"
   add_index "reserves", ["request_status_type_id"], :name => "index_reserves_on_request_status_type_id"
+  add_index "reserves", ["state"], :name => "index_reserves_on_state"
   add_index "reserves", ["user_id"], :name => "index_reserves_on_user_id"
 
   create_table "resource_import_files", :force => true do |t|

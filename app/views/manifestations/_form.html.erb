@@ -102,6 +102,11 @@
   </div>
 
   <div class="field">
+    <%= f.label :classification_number -%><br />
+    <%= f.text_area :classification_number, :class => 'resource_textarea' -%>
+  </div>
+
+  <div class="field">
     <%= f.label :start_page -%>
     <%= f.text_field :start_page, :class => 'resource_integer' -%>
     <%= f.label :end_page -%>

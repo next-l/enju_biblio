@@ -27,10 +27,10 @@ describe Item do
     old_count = MessageRequest.count
     items(:item_00013).retain(users(:librarian1)).should be_true
     items(:item_00013).reserves.first.state.should eq 'retained'
-    MessageRequest.count.should eq old_count + 2
+    MessageRequest.count.should eq old_count + 4
   end
 
-  it "should not be checked out when it is clamed" do
+  it "should not be checked out when it is reserved" do
     items(:item_00012).available_for_checkout?.should be_false
   end
 

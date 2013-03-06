@@ -47,7 +47,7 @@ class Item < ActiveRecord::Base
 
   enju_circulation_item_model if defined?(EnjuCirculation)
 
-  attr_accessor :library_id
+  attr_accessor :library_id, :manifestation_id
 
   if defined?(EnjuInventory)
     has_many :inventories, :dependent => :destroy
