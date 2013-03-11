@@ -133,7 +133,7 @@ class ItemsController < ApplicationController
     end
     @item = Item.new
     @item.shelf = @library.shelves.first
-    @item.manifestation_id = @manifestation.id if @manifestation
+    @item.manifestation_id = @manifestation.id
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.where(
         :name => [

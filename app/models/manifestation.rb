@@ -193,6 +193,8 @@ class Manifestation < ActiveRecord::Base
   #enju_amazon
   enju_oai if defined?(EnjuOai)
   enju_nii_cinii_books if defined?(EnjuNii)
+  enju_question_manifestation if defined?(EnjuQuestion)
+  enju_bookmark_manifestation if defined?(EnjuBookmark)
   #enju_export
 
   has_paper_trail
@@ -465,53 +467,6 @@ class Manifestation < ActiveRecord::Base
 
   def web_item
     items.where(:shelf_id => Shelf.web.id).first
-  end
-
-  if defined?(EnjuBookmark)
-    has_many :bookmarks, :include => :tags, :dependent => :destroy, :foreign_key => :manifestation_id
-    has_many :users, :through => :bookmarks
-
-    searchable do
-      string :tag, :multiple => true do
-        tags.collect(&:name)
-      end
-      text :tag do
-        tags.collect(&:name)
-      end
-    end
-
-    def bookmarked?(user)
-      return true if user.bookmarks.where(:url => url).first
-      false
-    end
-
-    def tags
-      if self.bookmarks.first
-        self.bookmarks.tag_counts
-      else
-        []
-      end
-    end
-  end
-
-  if defined?(EnjuQuestion)
-    def questions(options = {})
-      id = self.id
-      options = {:page => 1, :per_page => Question.default_per_page}.merge(options)
-      page = options[:page]
-      per_page = options[:per_page]
-      user = options[:user]
-      Question.search do
-        with(:manifestation_id).equal_to id
-        any_of do
-          unless user.try(:has_role?, 'Librarian')
-            with(:shared).equal_to true
-          #  with(:username).equal_to user.try(:username)
-          end
-        end
-        paginate :page => page, :per_page => per_page
-      end.results
-    end
   end
 
   def set_patron_role_type(patron_lists, options = {:scope => :creator})
