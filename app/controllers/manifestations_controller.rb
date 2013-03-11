@@ -454,6 +454,9 @@ class ManifestationsController < ApplicationController
     end
     @original_manifestation = Manifestation.where(:id => params[:manifestation_id]).first
     @series_statement = @manifestation.series_statement unless @series_statement
+    if defined?(EnjuSubject)
+      @classification_types = ClassificationType.select(:display_name)
+    end
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
         @bookmark = current_user.bookmarks.where(:manifestation_id => @manifestation.id).first if @manifestation rescue nil
