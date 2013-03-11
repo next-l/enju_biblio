@@ -30,8 +30,6 @@ class Item < ActiveRecord::Base
   has_paper_trail
   normalize_attributes :item_identifier
 
-  #enju_export
-
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher
     string :item_identifier
@@ -46,34 +44,12 @@ class Item < ActiveRecord::Base
   end
 
   enju_circulation_item_model if defined?(EnjuCirculation)
+  enju_library_item_model if defined?(EnjuCirculation)
+  enju_question_item_model if defined?(EnjuQuestion)
+  enju_inventory_item_model if defined?(EnjuInventory)
+  #enju_export
 
   attr_accessor :library_id, :manifestation_id
-
-  if defined?(EnjuInventory)
-    has_many :inventories, :dependent => :destroy
-    has_many :inventory_files, :through => :inventories
-    searchable do
-      integer :inventory_file_ids, :multiple => true
-    end
-
-    def self.inventory_items(inventory_file, mode = 'not_on_shelf')
-      item_ids = Item.pluck(:id)
-      inventory_item_ids = inventory_file.items.pluck('items.id')
-      case mode
-      when 'not_on_shelf'
-        Item.where(:id => (item_ids - inventory_item_ids))
-      when 'not_in_catalog'
-        Item.where(:id => (inventory_item_ids - item_ids))
-      end
-    rescue
-      nil
-    end
-  end
-
-  if defined?(EnjuQuestion)
-    has_many :answer_has_items, :dependent => :destroy
-    has_many :answers, :through => :answer_has_items
-  end
 
   if defined?(EnjuInterLibraryLoan)
     has_many :inter_library_loans, :dependent => :destroy
@@ -123,33 +99,6 @@ class Item < ActiveRecord::Base
   def create_manifestation
     if manifestation_id
       self.manifestation = Manifestation.find(manifestation_id)
-    end
-  end
-
-  if defined?(EnjuLibrary)
-    has_one :accept
-    scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
-
-    belongs_to :shelf, :counter_cache => true, :validate => true
-    validates_associated :shelf
-
-    searchable do
-      string :library do
-        shelf.library.name if shelf
-      end
-    end
-
-    def shelf_name
-      shelf.name
-    end
-
-    def hold?(library)
-      return true if self.shelf.library == library
-      false
-    end
-
-    def library_url
-      "#{LibraryGroup.site_config.url}libraries/#{self.shelf.library.name}"
     end
   end
 end

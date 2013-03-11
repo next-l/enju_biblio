@@ -193,8 +193,8 @@ class Manifestation < ActiveRecord::Base
   #enju_amazon
   enju_oai if defined?(EnjuOai)
   enju_nii_cinii_books if defined?(EnjuNii)
-  enju_question_manifestation if defined?(EnjuQuestion)
-  enju_bookmark_manifestation if defined?(EnjuBookmark)
+  enju_question_manifestation_model if defined?(EnjuQuestion)
+  enju_bookmark_manifestation_model if defined?(EnjuBookmark)
   #enju_export
 
   has_paper_trail
