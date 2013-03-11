@@ -47,16 +47,10 @@ class Item < ActiveRecord::Base
   enju_library_item_model if defined?(EnjuCirculation)
   enju_question_item_model if defined?(EnjuQuestion)
   enju_inventory_item_model if defined?(EnjuInventory)
+  enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
   #enju_export
 
   attr_accessor :library_id, :manifestation_id
-
-  if defined?(EnjuInterLibraryLoan)
-    has_many :inter_library_loans, :dependent => :destroy
-    def inter_library_loaned?
-      true if self.inter_library_loans.size > 0
-    end
-  end
 
   paginates_per 10
 
