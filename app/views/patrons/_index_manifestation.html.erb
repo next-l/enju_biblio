@@ -29,7 +29,7 @@
       <td><%= manifestation.produced(patron).produce_type.display_name.localize if params[:mode] != 'add' and manifestation.produced(patron).try(:produce_type) -%></td>
       <td><%= patron.patron_type.display_name.localize -%></td>
       <td>
-        <%- if can? :destroy, patron -%>
+        <%- if can? :delete, patron -%>
           <%- if params[:mode] == 'add' -%>
             <%= link_to t('page.add'), new_manifestation_produce_path(manifestation, :patron_id => patron.id) unless manifestation.publishers.include?(patron) -%>
           <%- else -%>

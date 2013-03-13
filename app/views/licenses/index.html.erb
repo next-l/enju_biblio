@@ -27,7 +27,7 @@
       <%- if can? :update, license -%>
         <%= link_to t('page.edit'), edit_license_path(license) -%>
       <% end %>
-      <%- if can? :destroy, license -%>
+      <%- if can? :delete, license -%>
         <%= link_to t('page.destroy'), license, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>

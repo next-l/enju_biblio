@@ -39,12 +39,12 @@
       <td><%= patron.patron_type.display_name.localize -%></td>
       <td><%=l patron.date_of_birth if patron.date_of_birth -%></td>
       <td>
-        <%- if can? :destroy, patron -%>
+        <%- if can? :delete, patron -%>
           <%= link_to t('page.edit'), edit_patron_path(patron) -%>
         <% end %>
       </td>
       <td>
-        <%- if can? :destroy, patron -%>
+        <%- if can? :delete, patron -%>
           <%- if params[:mode] == "add" -%>
             <%= link_to t('page.add'), new_patron_patron_relationship_path(patron, :child_id => patron.id) unless patron.derived_patrons.include?(patron) or patron == patron -%>
           <%- else -%>

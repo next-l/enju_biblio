@@ -15,7 +15,7 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td><%= link_to exemplify.manifestation.original_title, exemplify.manifestation -%></td>
     <td><%= link_to exemplify.item.item_identifier, exemplify.item -%></td>
-    <%- if can? :destroy, exemplify -%>
+    <%- if can? :delete, exemplify -%>
       <td>
         <%= link_to t('page.show'), exemplify -%>
         <%= link_to t('page.destroy'), exemplify, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>

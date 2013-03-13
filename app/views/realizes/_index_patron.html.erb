@@ -18,7 +18,7 @@
     <td><%= l(realize.created_at) -%></td>
     <td><%= l(realize.updated_at) -%></td>
     <td>
-      <%- if can? :destroy, realize -%>
+      <%- if can? :delete, realize -%>
         <%= link_to t('page.destroy'), patron_realize_path(patron, realize), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>

@@ -31,7 +31,7 @@
         <%- if can? :update, picture_file -%>
           <%= link_to t('page.edit'), edit_picture_file_path(picture_file) -%>
         <% end %>
-        <%- if can? :destroy, picture_file -%>
+        <%- if can? :delete, picture_file -%>
           <%= link_to t('page.destroy'), picture_file, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
         <%- end -%>
       </td>

@@ -78,7 +78,7 @@
         <td><strong><%= t('activerecord.models.language') -%>:</strong></td>
         <td><%= @patron.language.display_name.localize -%></td>
       </tr>
-      <%- if can? :destroy, @patron -%>
+      <%- if can? :delete, @patron -%>
         <tr>
           <td><strong><%= t('activerecord.attributes.patron.zip_code_1') -%>:</strong></td>
           <td><%= @patron.zip_code_1 -%></td>
@@ -191,7 +191,7 @@
       <li><%= link_to t('page.edit'), edit_patron_path(@patron) -%></li>
       <li><%= link_to t('patron.add_derivation'), patron_patrons_path(@patron, :mode => 'add') -%></li>
     <%- end -%>
-    <%- if can? :destroy, @patron -%>
+    <%- if can? :delete, @patron -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.patron')), new_patron_path -%></li>
       <li><%= link_to t('page.destroy'), @patron, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <%- end -%>

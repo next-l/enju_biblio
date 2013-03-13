@@ -25,7 +25,7 @@
       <%- if can? :update, produce_type -%>
         <%= link_to t('page.edit'), edit_produce_type_path(produce_type) -%>
       <% end %>
-      <%- if can? :destroy, produce_type -%>
+      <%- if can? :delete, produce_type -%>
         <%= link_to t('page.destroy'), produce_type, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <% end %>
     </td>

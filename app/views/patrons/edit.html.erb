@@ -8,7 +8,7 @@
 <div id="submenu" class="ui-corner-all">
   <ul>
     <li><%= link_to t('page.show'), @patron -%></li>
-    <%- if can? :destroy, @patron -%>
+    <%- if can? :delete, @patron -%>
       <li><%= link_to t('page.destroy'), @patron, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <%- end -%>
     <li><%= link_to t('page.back'), patrons_path -%></li>

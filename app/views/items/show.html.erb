@@ -141,7 +141,7 @@
     <% if defined?(EnjuInterLibraryLoan) %>
       <li><%= link_to t('page.listing', :model => t('activerecord.models.inter_library_loan')), item_inter_library_loans_path(@item) -%></li>
     <% end %>
-    <% if can? :destroy, @item %>
+    <% if can? :delete, @item %>
       <li><%= link_to t('page.destroy'), @item, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <% end %>
     <% if defined?(EnjuInterLibraryLoan) %>

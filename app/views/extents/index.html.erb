@@ -28,7 +28,7 @@
       <%- if can? :update, extent -%>
         <%= link_to t('page.edit'), edit_extent_path(extent) -%>
       <% end %>
-      <%- if can? :destroy, extent -%>
+      <%- if can? :delete, extent -%>
         <%= link_to t('page.destroy'), extent, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
