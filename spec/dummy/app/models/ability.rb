@@ -170,8 +170,8 @@
         ]
       else
         can :index, Manifestation
-        can [:show, :edit], Manifestation do |manifestation|
-          manifestation.required_role_id <= 1
+        can :show, Manifestation do |manifestation|
+          manifestation.required_role_id == 1
         end
         can :index, Patron
         can :show, Patron do |patron|
