@@ -76,21 +76,8 @@ class User < ActiveRecord::Base
     end
   end
 
-  if defined?(EnjuMessage)
-    has_many :sent_messages, :foreign_key => 'sender_id', :class_name => 'Message'
-    has_many :received_messages, :foreign_key => 'receiver_id', :class_name => 'Message'
-
-    def send_message(status, options = {})
-      MessageRequest.transaction do
-        request = MessageRequest.new
-        request.sender = User.find(1)
-        request.receiver = self
-        request.message_template = MessageTemplate.localized_template(status, self.locale)
-        request.save_message_body(options)
-        request.sm_send_message!
-      end
-    end
-  end
+  enju_bookmark_user_model if defined?(EnjuBookmark)
+  enju_message_user_model if defined?(EnjuBookmark)
 
   def patron
     LocalPatron.new(self)

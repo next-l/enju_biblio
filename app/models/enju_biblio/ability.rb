@@ -1,8 +1,8 @@
-#module EnjuBiblio
+module EnjuBiblio
   class Ability
     include CanCan::Ability
 
-    def initialize(user, ip_address = '0.0.0.0')
+    def initialize(user, ip_address = nil)
       case user.try(:role).try(:name)
       when 'Administrator'
         can [:read, :create, :update], CarrierType
@@ -41,6 +41,7 @@
           SeriesHasManifestation
         ]
         can :update, [
+          CarrierType,
           ContentType,
           Country,
           Extent,
@@ -199,4 +200,4 @@
       end
     end
   end
-#end
+end
