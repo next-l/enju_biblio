@@ -6,15 +6,15 @@ module EnjuBiblio
       case user.try(:role).try(:name)
       when 'Administrator'
         can [:read, :create, :update], CarrierType
-        can :destroy, CarrierType do |carrier_type|
+        can [:destroy, :delete], CarrierType do |carrier_type|
           true unless carrier_type.manifestations.exists?
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can [:read, :create, :update], Item
-        can :destroy, Item do |item|
+        can [:destroy, :delete], Item do |item|
           item.deletable?
         end
         can [:read, :create, :update], Manifestation
-        can :destroy, Manifestation do |manifestation|
+        can [:destroy, :delete], Manifestation do |manifestation|
           manifestation.items.empty? and !manifestation.periodical_master?
         end
         can :manage, [
@@ -41,7 +41,6 @@ module EnjuBiblio
           SeriesHasManifestation
         ]
         can :update, [
-          CarrierType,
           ContentType,
           Country,
           Extent,
@@ -72,15 +71,16 @@ module EnjuBiblio
         ]
       when 'Librarian'
         can :manage, Item
-        can [:read, :create, :update], Manifestation
-        can :destroy, Manifestation do |manifestation|
+        can :index, Manifestation
+        can [:show, :create, :update], Manifestation
+        can [:destroy, :delete], Manifestation do |manifestation|
           manifestation.items.empty? and !manifestation.periodical_master?
         end
         can [:index, :create], Patron
         can :show, Patron do |patron|
           patron.required_role_id <= 3
         end
-        can [:update, :destroy], Patron do |patron|
+        can [:update, :destroy, :delete], Patron do |patron|
           !patron.user.try(:has_role?, 'Librarian') and patron.required_role_id <= 3
         end
         can :manage, [
@@ -123,7 +123,8 @@ module EnjuBiblio
         can :show, Item do |item|
           item.required_role_id <= 2
         end
-        can [:read, :edit], Manifestation do |manifestation|
+        can :index, Manifestation
+        can [:show, :edit], Manifestation do |manifestation|
           manifestation.required_role_id <= 2
         end
         can :index, Patron
