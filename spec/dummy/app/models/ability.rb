@@ -169,6 +169,10 @@
           SeriesHasManifestation
         ]
       else
+        can :index, Manifestation
+        can [:show, :edit], Manifestation do |manifestation|
+          manifestation.required_role_id <= 1
+        end
         can :index, Patron
         can :show, Patron do |patron|
           patron.required_role_id == 1 #name == 'Guest'
@@ -185,7 +189,6 @@
           Item,
           Language,
           License,
-          Manifestation,
           ManifestationRelationship,
           ManifestationRelationshipType,
           MediumOfPerformance,
