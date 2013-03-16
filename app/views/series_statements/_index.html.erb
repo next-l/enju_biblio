@@ -36,9 +36,11 @@
           <%= patrons_list(series_statement.root_manifestation.publishers.readable_by(current_user)) %>
         <% end %>
       <% else %>
-        <% if series_statement.latest_issue.publishers.exists? %>
-          <br />
-          <%= patrons_list(series_statement.latest_issue.publishers.readable_by(current_user)) %>
+        <% if series_statement.latest_issue %>
+          <% if series_statement.latest_issue.publishers.exists? %>
+            <br />
+            <%= patrons_list(series_statement.latest_issue.publishers.readable_by(current_user)) %>
+          <% end %>
         <% end %>
       <% end %>
       <% if series_statement.issn? %>
