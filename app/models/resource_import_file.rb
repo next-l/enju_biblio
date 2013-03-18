@@ -316,7 +316,7 @@ class ResourceImportFile < ActiveRecord::Base
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(:item_identifier => item_identifier).first
       if item
-        item.destroy if item.deletable?
+        item.destroy if item.removable?
       end
       row_num += 1
     end

@@ -11,7 +11,7 @@
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can [:read, :create, :update], Item
         can [:destroy, :delete], Item do |item|
-          item.deletable?
+          item.removable?
         end
         can [:read, :create, :update], Manifestation
         can [:destroy, :delete], Manifestation do |manifestation|

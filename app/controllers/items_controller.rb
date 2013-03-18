@@ -158,9 +158,11 @@ class ItemsController < ApplicationController
   # GET /items/1/edit
   def edit
     @item.library_id = @item.shelf.library_id
-    unless @item.use_restriction
-      @item.build_item_has_use_restriction
-      @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
+    if defined?(EnjuCirculation)
+      unless @item.use_restriction
+        @item.build_item_has_use_restriction
+        @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
+      end
     end
   end
 

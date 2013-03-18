@@ -9,7 +9,7 @@ class Manifestation < ActiveRecord::Base
     :title_alternative_transcription, :description, :abstract, :available_at,
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :ndc, :content_type_id, :attachment,
+    :ndc, :content_type_id, :attachment, :classification_number,
     :series_has_manifestation_attributes
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string
