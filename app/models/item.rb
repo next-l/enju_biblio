@@ -78,15 +78,13 @@ class Item < ActiveRecord::Base
     Addressable::URI.parse("#{LibraryGroup.site_config.url}manifestations/#{self.manifestation.id}").normalize.to_s if self.manifestation
   end
 
-  def deletable?
-    if circulation_status.name == 'Removed'
-      return false
+  def removable?
+    if defined?(EnjuCirculation)
+      return false if circulation_status.name == 'Removed'
+      return false if checkouts.not_returned.exists?
+      true
     else
-      if defined?(EnjuCirculation)
-        checkouts.not_returned.empty?
-      else
-        true
-      end
+      true
     end
   end
 
