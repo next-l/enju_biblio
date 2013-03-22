@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
-  s.add_dependency "rails", "~> 3.2.13.rc2"
+  s.add_dependency "enju_core", "~> 0.1.1.pre4"
   s.add_dependency "paperclip", "~> 3.4"
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
@@ -28,7 +28,6 @@ Gem::Specification.new do |s|
   s.add_dependency "has_scope"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
-  s.add_dependency "enju_core", "~> 0.1.1.pre3"
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"
@@ -41,12 +40,12 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sunspot_solr", "~> 2.0.0"
   s.add_development_dependency "enju_library", "~> 0.1.0.pre13"
   s.add_development_dependency "enju_inventory", "~> 0.1.11.pre6"
-  s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre8"
+  s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre9"
   s.add_development_dependency "enju_event", "~> 0.1.17.pre7"
   s.add_development_dependency "enju_manifestation_viewer", "~> 0.1.0.pre4"
   s.add_development_dependency "enju_book_jacket", "~> 0.1.0.pre6"
-  s.add_development_dependency "enju_export", "~> 0.1.1.pre2"
-  s.add_development_dependency "enju_circulation", "~> 0.1.0.pre15"
+  s.add_development_dependency "enju_export", "~> 0.1.1.pre3"
+  s.add_development_dependency "enju_circulation", "~> 0.1.0.pre16"
   s.add_development_dependency "enju_oai", "~> 0.1.0.pre8"
   s.add_development_dependency "enju_ndl", "~> 0.1.0.pre10"
   s.add_development_dependency "mobylette"
