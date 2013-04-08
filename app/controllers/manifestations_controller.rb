@@ -476,12 +476,11 @@ class ManifestationsController < ApplicationController
     end
 
     respond_to do |format|
+      set_patrons
       if @manifestation.save
         Sunspot.commit
-        Manifestation.transaction do
-          if @original_manifestation
-            @manifestation.derived_manifestations << @original_manifestation
-          end
+        if @original_manifestation
+          @manifestation.derived_manifestations << @original_manifestation
         end
 
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }
@@ -498,6 +497,7 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1.json
   def update
     respond_to do |format|
+      set_patrons
       if @manifestation.update_attributes(params[:manifestation])
         Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
@@ -772,5 +772,11 @@ class ManifestationsController < ApplicationController
       @manifestation.original_title = @original_manifestation.original_title
       @manifestation.title_transcription = @original_manifestation.title_transcription
     end
+  end
+
+  def set_patrons
+    @manifestation.set_creators(@manifestation.creators)
+    @manifestation.set_contributors(@manifestation.contributors)
+    @manifestation.set_publishers(@manifestation.publishers)
   end
 end

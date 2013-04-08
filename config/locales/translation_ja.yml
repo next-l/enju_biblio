@@ -284,3 +284,10 @@ ja:
 
   resource_import_file:
     update_relationship: 関連を更新
+
+  patron:
+    creator: 著者
+    contributor: 協力者・編者
+    publisher: 出版社
+    add: 追加
+    remove: 削除

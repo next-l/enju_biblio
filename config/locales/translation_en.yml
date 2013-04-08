@@ -284,3 +284,10 @@ en:
 
   resource_import_file:
     update_relationship: Update relationship
+ 
+  page:
+    creator: Creator
+    contributor: Contributor
+    publisher: Publisher
+    add: Add
+    remove: Remove

@@ -10,7 +10,8 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :attachment, :classification_number,
-    :series_has_manifestation_attributes
+    :series_has_manifestation_attributes,
+    :creators_attributes, :contributors_attributes, :publishers_attributes
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string
 
@@ -39,6 +40,9 @@ class Manifestation < ActiveRecord::Base
   has_one :resource_import_result
   belongs_to :nii_type if defined?(EnjuNii)
   accepts_nested_attributes_for :series_has_manifestation
+  accepts_nested_attributes_for :creators, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :contributors, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :publishers, :allow_destroy => true, :reject_if => :all_blank
 
   searchable do
     text :title, :default_boost => 2 do
@@ -229,7 +233,7 @@ class Manifestation < ActiveRecord::Base
   normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
   paginates_per 10
 
-  attr_accessor :during_import
+  attr_accessor :during_import, :creator_string
 
   def check_isbn
     if isbn.present?
@@ -525,6 +529,18 @@ class Manifestation < ActiveRecord::Base
     }.compact
   end
 
+  def set_creators(creators = [])
+    self.creators = set_patrons(creators)
+  end
+
+  def set_contributors(contributors = [])
+    self.contributors = set_patrons(contributors)
+  end
+
+  def set_publishers(publishers = [])
+    self.publishers = set_patrons(publishers)
+  end
+
   if defined?(EnjuScribd)
     attr_accessible :post_to_scribd
   end
@@ -560,6 +576,18 @@ class Manifestation < ActiveRecord::Base
       end
     end
     self
+  end
+
+  def set_patrons(patrons)
+    new_patrons = []
+    patrons.each do |patron|
+      if patron.full_name.present?
+        new_patron = Patron.where(:full_name => patron.full_name).first
+        new_patron = Patron.create(:full_name => patron.full_name) unless new_patron
+      end
+      new_patrons << new_patron if new_patron
+    end
+    new_patrons
   end
 end
 

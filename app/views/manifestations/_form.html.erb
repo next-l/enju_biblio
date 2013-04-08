@@ -1,5 +1,5 @@
 <%= render 'page/required_field' %>
-<%= simple_form_for(@manifestation, :html => { :multipart => true }) do |f| -%>
+<%= simple_nested_form_for(@manifestation, :html => { :multipart => true }) do |f| -%>
   <%= f.error_messages -%>
 
   <div class="field">
@@ -37,6 +37,33 @@
   <div class="field">
     <%= f.label :title_alternative -%><br />
     <%= f.text_field :title_alternative, :class => 'resource_title' -%>
+  </div>
+
+  <div class="field">
+    <%= f.label :creator_string -%><br />
+    <%= f.fields_for :creators do |creator_form| %>
+      <%= creator_form.text_field :full_name %>
+      <%= creator_form.link_to_remove t('page.remove') %>
+    <% end %>
+    <p><%= f.link_to_add t('page.add'), :creators %></p>
+  </div>
+
+  <div class="field">
+    <%= f.label :contributor_string -%><br />
+    <%= f.fields_for :contributors do |contributor_form| %>
+      <%= contributor_form.text_field :full_name %>
+      <%= contributor_form.link_to_remove t('page.remove') %>
+    <% end %>
+    <p><%= f.link_to_add t('page.add'), :contributors %></p>
+  </div>
+
+  <div class="field">
+    <%= f.label :publisher_string -%><br />
+    <%= f.fields_for :publishers do |publisher_form| %>
+      <%= publisher_form.text_field :full_name %>
+      <%= publisher_form.link_to_remove t('page.remove') %>
+    <% end %>
+    <p><%= f.link_to_add t('page.add'), :publishers %></p>
   </div>
 
   <%- if @series_statement.try(:periodical?) -%>
