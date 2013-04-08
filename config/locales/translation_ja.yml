@@ -2,7 +2,7 @@ ja:
   activerecord:
     models:
       carrier_type: 資料の形態
-      content_type: 協力した資料の形態
+      content_type: 資料の内容の形態
       create: 著作関係
       create_type: 著作の関係
       embody: 具体化
@@ -77,8 +77,8 @@ ja:
         subscription_master: 購読マスタ
         description: 説明
         creator_string: 著者
-        contributor_string: 著者
-        publisher_string: 著者
+        contributor_string: 協力者・編者
+        publisher_string: 出版者
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID
@@ -293,4 +293,6 @@ ja:
     contributor: 協力者・編者
     publisher: 出版社
     add: 追加
+
+  page:
     remove: 削除

@@ -288,9 +288,11 @@ en:
   resource_import_file:
     update_relationship: Update relationship
  
-  page:
+  patron:
     creator: Creator
     contributor: Contributor
     publisher: Publisher
     add: Add
+
+  page:
     remove: Remove
