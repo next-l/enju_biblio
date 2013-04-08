@@ -76,6 +76,9 @@ ja:
         issn: ISSN
         subscription_master: 購読マスタ
         description: 説明
+        creator_string: 著者
+        contributor_string: 著者
+        publisher_string: 著者
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID
