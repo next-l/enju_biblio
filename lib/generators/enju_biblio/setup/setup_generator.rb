@@ -1,4 +1,4 @@
-class EnjuBiblio::SetupGenerator < Rails::Generators::NamedBase
+class EnjuBiblio::SetupGenerator < Rails::Generators::Base
   source_root File.expand_path('../templates', __FILE__)
 
   def copy_setup_files
