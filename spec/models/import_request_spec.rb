@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe ImportRequest do
   context "import" do
-    it "should import bibliographic record", :vcr => true, :solr => true do
+    it "should import bibliographic record", :vcr => true do
       old_count = Manifestation.count
       import_request = ImportRequest.create(:isbn => '9784797350999')
       import_request.import!
