@@ -8,6 +8,7 @@ class ImportRequest < ActiveRecord::Base
   #validate :check_imported, :on => :create
   #validates_uniqueness_of :isbn, :if => Proc.new{|request| ImportRequest.where("created_at > ?", 1.day.ago).collect(&:isbn).include?(request.isbn)}
   enju_ndl_search if defined?(EnjuNdl)
+  enju_nii_cinii_books if defined?(EnjuNii)
 
   state_machine :initial => :pending do
     event :sm_fail do
@@ -35,8 +36,8 @@ class ImportRequest < ActiveRecord::Base
 
   def import!
     unless manifestation
-      manifestation = self.class.import_isbn!(isbn)
-      if manifestation.save
+      manifestation = Manifestation.import_isbn(isbn)
+      if manifestation
         self.manifestation = manifestation
         sm_complete!
         manifestation.index!
@@ -46,10 +47,14 @@ class ImportRequest < ActiveRecord::Base
     else
       sm_fail!
     end
-  rescue ActiveRecord::RecordInvalid
-    sm_fail!
-  rescue EnjuNdl::RecordNotFound
-    sm_fail!
+  #rescue ActiveRecord::RecordInvalid
+  #  sm_fail!
+  #rescue NameError
+  #  sm_fail!
+  #rescue EnjuNdl::RecordNotFound
+  #  sm_fail!
+  #rescue EnjuNii::RecordNotFound
+  #  sm_fail!
   end
 end
 

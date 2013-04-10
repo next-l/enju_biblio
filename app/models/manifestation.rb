@@ -541,8 +541,10 @@ class Manifestation < ActiveRecord::Base
     self.publishers = set_patrons(publishers)
   end
 
-  if defined?(EnjuScribd)
-    attr_accessible :post_to_scribd
+  def self.import_isbn(isbn)
+    manifestation = Manifestation.import_from_ndl_search(:isbn => isbn) if defined?(EnjuNdl)
+    #manifestation = Manifestation.import_from_cinii_books(:isbn => isbn) if defined?(EnjuNii)
+    manifestation
   end
 
   private
