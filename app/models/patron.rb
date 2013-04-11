@@ -78,8 +78,6 @@ class Patron < ActiveRecord::Base
     integer :patron_type_id
   end
 
-  #enju_export
-
   paginates_per 10
 
   def set_role_and_name
