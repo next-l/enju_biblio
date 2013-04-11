@@ -1,4 +1,13 @@
 class Manifestation < ActiveRecord::Base
+  enju_circulation_manifestation_model if defined?(EnjuCirculation)
+  enju_subject_manifestation_model if defined?(EnjuSubject)
+  enju_manifestation_viewer if defined?(EnjuManifestationViewer)
+  enju_ndl_ndl_search if defined?(EnjuNdl)
+  enju_nii_cinii_books if defined?(EnjuNii)
+  enju_export if defined?(EnjuExport)
+  enju_oai if defined?(EnjuOai)
+  enju_question_manifestation_model if defined?(EnjuQuestion)
+  enju_bookmark_manifestation_model if defined?(EnjuBookmark)
   attr_accessible :original_title, :title_alternative, :title_transcription,
     :manifestation_identifier, :date_copyrighted,
     :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,

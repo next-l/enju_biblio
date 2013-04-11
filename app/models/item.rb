@@ -1,5 +1,11 @@
 # -*- encoding: utf-8 -*-
 class Item < ActiveRecord::Base
+  enju_library_item_model if defined?(EnjuLibrary)
+  enju_circulation_item_model if defined?(EnjuCirculation)
+  enju_export if defined?(EnjuExport)
+  enju_question_item_model if defined?(EnjuQuestion)
+  enju_inventory_item_model if defined?(EnjuInventory)
+  enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
   attr_accessible :call_number, :item_identifier, :circulation_status_id,
     :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
     :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
