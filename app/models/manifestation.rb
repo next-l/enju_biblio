@@ -190,17 +190,6 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  enju_circulation_model if defined?(EnjuCirculation)
-  enju_subject_model if defined?(EnjuSubject)
-  enju_manifestation_viewer if defined?(EnjuManifestationViewer)
-  enju_ndl_search if defined?(EnjuNdl)
-  #enju_amazon
-  enju_oai if defined?(EnjuOai)
-  enju_nii_cinii_books if defined?(EnjuNii)
-  enju_question_manifestation_model if defined?(EnjuQuestion)
-  enju_bookmark_manifestation_model if defined?(EnjuBookmark)
-  #enju_export
-
   has_paper_trail
   if Setting.uploaded_file.storage == :s3
     has_attached_file :attachment, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",

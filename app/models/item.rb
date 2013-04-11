@@ -43,13 +43,6 @@ class Item < ActiveRecord::Base
     time :updated_at
   end
 
-  enju_circulation_item_model if defined?(EnjuCirculation)
-  enju_library_item_model if defined?(EnjuLibrary)
-  enju_question_item_model if defined?(EnjuQuestion)
-  enju_inventory_item_model if defined?(EnjuInventory)
-  enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
-  #enju_export
-
   attr_accessor :library_id, :manifestation_id
 
   paginates_per 10
