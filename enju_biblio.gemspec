@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency "paper_trail"
   s.add_dependency "state_machine"
   s.add_dependency "validates_timeliness"
-  s.add_dependency "has_scope"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
