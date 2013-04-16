@@ -47,6 +47,7 @@ class Item < ActiveRecord::Base
     integer :patron_ids, :multiple => true
     time :created_at
     time :updated_at
+    time :acquired_at
   end
 
   attr_accessor :library_id, :manifestation_id
