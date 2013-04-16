@@ -12,6 +12,10 @@
     <%= hidden_field_tag :manifestation_id, @manifestation.id if @manifestation -%>
     <%= submit_tag t('page.search') -%>
     <%= set_focus_on_search_form -%>
+    <br />
+    <%= t('activerecord.attributes.item.acquired_at') %>:
+    <%= text_field_tag 'acquired_from', @acquired_from, {:class => 'date_field', :placeholder => "#{t('page.example')}: 2012-04-12"} -%>
+    <%= t('advanced_search.from_to') %> <%= text_field_tag 'acquired_to', @acquired_to, {:class => 'date_field', :placeholder => "#{t('page.example')}: 2012-05-11"} -%>
   </p>
 <%- end -%>
 </div>

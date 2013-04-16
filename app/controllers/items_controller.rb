@@ -83,6 +83,25 @@ class ItemsController < ApplicationController
         with(:required_role_id).less_than_or_equal_to role.id
       end
 
+      if params[:acquired_from].present?
+        begin
+          acquired_from = Time.zone.parse(params[:acquired_from]).beginning_of_day
+          @acquired_from = acquired_from.strftime('%Y-%m-%d')
+        rescue ArgumentError
+        end
+      end
+      if params[:acquired_to].present?
+        begin
+          acquired_to = @acquired_to = Time.zone.parse(params[:acquired_to]).end_of_day
+          @acquired_to = acquired_to.strftime('%Y-%m-%d')
+        rescue ArgumentError
+        end
+      end
+      search.build do
+        with(:acquired_at).greater_than_or_equal_to acquired_from.beginning_of_day if acquired_from
+        with(:acquired_at).less_than acquired_to.tomorrow.beginning_of_day if acquired_to
+      end
+
       page = params[:page] || 1
       search.query.paginate(page.to_i, per_page)
       @items = search.execute!.results
