@@ -34,11 +34,9 @@
   <p>
     <strong><%= t('activerecord.models.circulation_status') -%>:</strong>
     <%= link_to @item.circulation_status.display_name.localize, @item.circulation_status -%>
-    <%- if user_signed_in? -%>
-      <%- if current_user.has_role?('Librarian') -%>
-       <%- unless @item.checkouts.not_returned.blank? -%>
-          (<%= link_to t('item.current_checkout'), checkout_path(@item.checkouts.not_returned.first) -%>)
-        <%- end -%>
+    <%- if current_user.try(:has_role?, 'Librarian') -%>
+     <%- unless @item.checkouts.not_returned.blank? -%>
+        (<%= link_to t('item.current_checkout'), @item.checkouts.not_returned.first -%>)
       <%- end -%>
     <%- end -%>
   </p>
@@ -87,17 +85,6 @@
   <strong><%= t('activerecord.attributes.item.include_supplements') -%>:</strong>
   <%= localized_boolean(@item.include_supplements) -%>
 </p>
-
-<!--
-<%- if can? :update, @item -%>
-  <p>
-    <strong><%= t('item.donor') -%>:</strong>
-    <%- @item.donors.each do |patron| -%>
-      <%= link_to patron.full_name, patron -%>
-    <%- end -%>
-  </p>
-<%- end -%>
--->
 
 <p>
   <strong><%= t('activerecord.attributes.item.acquired_at') -%>:</strong>
