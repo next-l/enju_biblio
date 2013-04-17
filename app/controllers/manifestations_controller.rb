@@ -286,8 +286,10 @@ class ManifestationsController < ApplicationController
         end
       end
 
-      if defined?(EnjuSearchLog) and current_user
-        current_user.save_search_history(query, @manifestations.offset_value + 1, @count[:query_result])
+      if defined?(EnjuSearchLog)
+        if current_user.try(:save_search_history)
+          current_user.save_history(query, @manifestations.offset_value + 1, @count[:query_result], params[:format])
+        end
       end
 
       if defined?(EnjuOai)
