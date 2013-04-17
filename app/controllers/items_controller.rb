@@ -88,6 +88,7 @@ class ItemsController < ApplicationController
           acquired_from = Time.zone.parse(params[:acquired_from]).beginning_of_day
           @acquired_from = acquired_from.strftime('%Y-%m-%d')
         rescue ArgumentError
+        rescue NoMethodError
         end
       end
       if params[:acquired_to].present?
@@ -95,6 +96,7 @@ class ItemsController < ApplicationController
           acquired_to = @acquired_to = Time.zone.parse(params[:acquired_to]).end_of_day
           @acquired_to = acquired_to.strftime('%Y-%m-%d')
         rescue ArgumentError
+        rescue NoMethodError
         end
       end
       search.build do
