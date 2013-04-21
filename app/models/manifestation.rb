@@ -20,9 +20,7 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :attachment, :classification_number,
-    :series_statements_attributes, :series_original_title,
-    :series_title_transcription, :series_creator_string,
-    :series_volume_number_string,
+    :series_statements_attributes,
     :creators_attributes, :contributors_attributes, :publishers_attributes
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string
@@ -206,7 +204,7 @@ class Manifestation < ActiveRecord::Base
   validates_associated :carrier_type, :language
   validates :start_page, :numericality => true, :allow_blank => true
   validates :end_page, :numericality => true, :allow_blank => true
-  validates :isbn, :uniqueness => true, :allow_blank => true, :unless => proc{|manifestation| manifestation.series_original_title.present?}
+  validates :isbn, :uniqueness => true, :allow_blank => true, :unless => proc{|manifestation| manifestation.series_statements.exists?}
   validates :nbn, :uniqueness => true, :allow_blank => true
   validates :manifestation_identifier, :uniqueness => true, :allow_blank => true
   validates :pub_date, :format => {:with => /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, :allow_blank => true

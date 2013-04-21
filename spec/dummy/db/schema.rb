@@ -572,20 +572,20 @@ ActiveRecord::Schema.define(:version => 20130421164124) do
   add_index "manifestation_reserve_stats", ["state"], :name => "index_manifestation_reserve_stats_on_state"
 
   create_table "manifestations", :force => true do |t|
-    t.text     "original_title",                                       :null => false
+    t.text     "original_title",                                     :null => false
     t.text     "title_alternative"
     t.text     "title_transcription"
     t.string   "classification_number"
     t.string   "manifestation_identifier"
     t.datetime "date_of_publication"
     t.datetime "date_copyrighted"
-    t.datetime "created_at",                                           :null => false
-    t.datetime "updated_at",                                           :null => false
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
     t.datetime "deleted_at"
     t.string   "access_address"
-    t.integer  "language_id",                       :default => 1,     :null => false
-    t.integer  "carrier_type_id",                   :default => 1,     :null => false
-    t.integer  "extent_id",                         :default => 1,     :null => false
+    t.integer  "language_id",                     :default => 1,     :null => false
+    t.integer  "carrier_type_id",                 :default => 1,     :null => false
+    t.integer  "extent_id",                       :default => 1,     :null => false
     t.integer  "start_page"
     t.integer  "end_page"
     t.integer  "height"
@@ -605,13 +605,13 @@ ActiveRecord::Schema.define(:version => 20130421164124) do
     t.string   "serial_number_string"
     t.integer  "edition"
     t.text     "note"
-    t.boolean  "repository_content",                :default => false, :null => false
-    t.integer  "lock_version",                      :default => 0,     :null => false
-    t.integer  "required_role_id",                  :default => 1,     :null => false
+    t.boolean  "repository_content",              :default => false, :null => false
+    t.integer  "lock_version",                    :default => 0,     :null => false
+    t.integer  "required_role_id",                :default => 1,     :null => false
     t.string   "state"
-    t.integer  "required_score",                    :default => 0,     :null => false
-    t.integer  "frequency_id",                      :default => 1,     :null => false
-    t.boolean  "subscription_master",               :default => false, :null => false
+    t.integer  "required_score",                  :default => 0,     :null => false
+    t.integer  "frequency_id",                    :default => 1,     :null => false
+    t.boolean  "subscription_master",             :default => false, :null => false
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
@@ -630,17 +630,13 @@ ActiveRecord::Schema.define(:version => 20130421164124) do
     t.integer  "issue_number"
     t.integer  "serial_number"
     t.string   "ndc"
-    t.integer  "content_type_id",                   :default => 1
+    t.integer  "content_type_id",                 :default => 1
     t.integer  "year_of_publication"
     t.text     "attachment_meta"
     t.integer  "month_of_publication"
     t.boolean  "fulltext_content"
     t.string   "doi"
     t.boolean  "periodical"
-    t.text     "series_original_title"
-    t.text     "series_title_transcription"
-    t.text     "series_title_creator_string"
-    t.text     "series_title_volume_number_string"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
