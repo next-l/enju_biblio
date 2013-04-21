@@ -29,23 +29,11 @@
     </td>
     <td>
       <strong><%= link_to series_statement.original_title, series_statement %></strong>
-      <%= image_tag('icons/newspaper.png', :size => '16x16', :alt => t('manifestation.serial')) if series_statement.periodical -%>
-      <% if series_statement.root_manifestation -%>
-        <% if series_statement.root_manifestation.publishers.exists? %>
+      <% if series_statement.manifestation -%>
+        <% if series_statement.manifestation.publishers.exists? %>
           <br />
-          <%= patrons_list(series_statement.root_manifestation.publishers.readable_by(current_user)) %>
+          <%= patrons_list(series_statement.manifestation.publishers.readable_by(current_user)) %>
         <% end %>
-      <% else %>
-        <% if series_statement.latest_issue %>
-          <% if series_statement.latest_issue.publishers.exists? %>
-            <br />
-            <%= patrons_list(series_statement.latest_issue.publishers.readable_by(current_user)) %>
-          <% end %>
-        <% end %>
-      <% end %>
-      <% if series_statement.issn? %>
-        <br />
-        ISSN: <%= series_statement.issn %>
       <% end %>
     </td>
     <td>
@@ -68,6 +56,4 @@
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.series_statement')), new_series_statement_path -%></li>
   </ul>
-  <hr/>
-  <%= render 'periodical_facet' %>
 </div>

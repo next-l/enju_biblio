@@ -79,6 +79,7 @@ ja:
         creator_string: 著者
         contributor_string: 協力者・編者
         publisher_string: 出版者
+        series_statement_string: シリーズ情報
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID

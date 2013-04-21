@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 class Manifestation < ActiveRecord::Base
   enju_circulation_manifestation_model if defined?(EnjuCirculation)
   enju_subject_manifestation_model if defined?(EnjuSubject)
@@ -19,13 +20,13 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :attachment, :classification_number,
-    :series_has_manifestation_attributes,
+    :series_statements_attributes, :series_original_title,
+    :series_title_transcription, :series_creator_string,
+    :series_volume_number_string,
     :creators_attributes, :contributors_attributes, :publishers_attributes
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string
 
-  scope :periodical_master, where(:periodical => false)
-  scope :periodical_children, where(:periodical => true)
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
   has_many :creators, :through => :creates, :source => :patron, :order => 'creates.position'
   has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
@@ -42,16 +43,15 @@ class Manifestation < ActiveRecord::Base
   belongs_to :language
   belongs_to :carrier_type
   belongs_to :manifestation_content_type, :class_name => 'ContentType', :foreign_key => 'content_type_id'
-  has_one :series_has_manifestation, :dependent => :destroy
-  has_one :series_statement, :through => :series_has_manifestation
+  has_many :series_statements
   belongs_to :frequency
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :nii_type if defined?(EnjuNii)
-  accepts_nested_attributes_for :series_has_manifestation
   accepts_nested_attributes_for :creators, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :contributors, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :publishers, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :series_statements, :allow_destroy => true, :reject_if => :all_blank
 
   searchable do
     text :title, :default_boost => 2 do
@@ -59,8 +59,8 @@ class Manifestation < ActiveRecord::Base
     end
     text :fulltext, :note, :creator, :contributor, :publisher, :description
     text :item_identifier do
-      if periodical_master?
-        series_statement.manifestations.map{|m| m.items.pluck(:item_identifier)}.flatten
+      if series_master?
+        root_series_statement.manifestation.items.pluck(:item_identifier)
       else
         items.pluck(:item_identifier)
       end
@@ -82,10 +82,10 @@ class Manifestation < ActiveRecord::Base
       [isbn, isbn10, wrong_isbn]
     end
     string :issn, :multiple => true do
-      if series_statement
-        ([series_statement.issn] + series_statement.manifestations.pluck(:issn)).uniq.compact
+      if series_statements.exists?
+        [issn, (series_statements.map{|s| s.manifestation.issn})].flatten.uniq.compact
       else
-        [issn, series_statement.try(:issn)].compact
+        issn
       end
     end
     string :lccn
@@ -94,22 +94,18 @@ class Manifestation < ActiveRecord::Base
       carrier_type.name
     end
     string :library, :multiple => true do
-      if periodical_master?
-        series_statement.manifestations.map{|m| m.items.map{|i| i.shelf.library.name}}.flatten.uniq
+      if series_master?
+        root_series_statement.manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
       else
         items.map{|i| i.shelf.library.name}
       end
     end
     string :language do
-      if periodical_master?
-        series_statement.last_issue.try(:language).try(:name)
-      else
-        language.try(:name)
-      end
+      language.try(:name)
     end
     string :item_identifier, :multiple => true do
-      if periodical_master?
-        series_statement.manifestations.collect{|m| m.items.pluck(:item_identifier)}.flatten
+      if series_master?
+        root_series_statement.manifestation.items.pluck(:item_identifier)
       else
         items.collect(&:item_identifier)
       end
@@ -121,8 +117,8 @@ class Manifestation < ActiveRecord::Base
     time :updated_at
     time :deleted_at
     time :pub_date, :multiple => true do
-      if periodical_master?
-        series_statement.manifestations.map{|m| m.pub_dates}.flatten
+      if series_master?
+        root_series_statement.manifestation.pub_dates
       else
         pub_dates
       end
@@ -147,9 +143,7 @@ class Manifestation < ActiveRecord::Base
     integer :end_page
     integer :number_of_pages
     float :price
-    integer :series_statement_id do
-      series_has_manifestation.try(:series_statement_id)
-    end
+    integer :series_statement_ids, :multiple => true
     boolean :repository_content
     # for OpenURL
     text :aulast do
@@ -166,24 +160,24 @@ class Manifestation < ActiveRecord::Base
       creator
     end
     text :atitle do
-      title if series_statement.try(:periodical)
+      unless series_master?
+        title if periodical?
+      end
     end
     text :btitle do
-      title unless series_statement.try(:periodical)
+      title unless periodical?
     end
     text :jtitle do
-      if series_statement.try(:periodical)  # 雑誌の場合
-        series_statement.titles
-      else                  # 雑誌以外（雑誌の記事も含む）
-        original_manifestations.map{|m| m.title}.flatten
+      if periodical?
+        titles
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
       [isbn, isbn10, wrong_isbn]
     end
     text :issn do # 前方一致検索のためtext指定を追加
-      if series_statement
-        ([series_statement.issn] + series_statement.manifestations.pluck(:issn)).uniq.compact
+      if series_statements.exists?
+        [issn, (series_statements.map{|s| s.manifestation.issn})].flatten.uniq.compact
       else
         issn
       end
@@ -193,8 +187,8 @@ class Manifestation < ActiveRecord::Base
     boolean :periodical do
       periodical?
     end
-    boolean :periodical_master do
-      periodical_master?
+    boolean :series_master do
+      series_master?
     end
     time :acquired_at
   end
@@ -212,7 +206,7 @@ class Manifestation < ActiveRecord::Base
   validates_associated :carrier_type, :language
   validates :start_page, :numericality => true, :allow_blank => true
   validates :end_page, :numericality => true, :allow_blank => true
-  validates :isbn, :uniqueness => true, :allow_blank => true, :unless => proc{|manifestation| manifestation.series_statement}
+  validates :isbn, :uniqueness => true, :allow_blank => true, :unless => proc{|manifestation| manifestation.series_original_title.present?}
   validates :nbn, :uniqueness => true, :allow_blank => true
   validates :manifestation_identifier, :uniqueness => true, :allow_blank => true
   validates :pub_date, :format => {:with => /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, :allow_blank => true
@@ -340,7 +334,7 @@ class Manifestation < ActiveRecord::Base
     title << issue_number_string
     title << serial_number.to_s
     title << edition_string
-    title << series_statement.titles if series_statement
+    title << series_statements.map{|s| s.titles}
     #title << original_title.wakati
     #title << title_transcription.wakati rescue nil
     #title << title_alternative.wakati rescue nil
@@ -350,17 +344,6 @@ class Manifestation < ActiveRecord::Base
   def url
     #access_address
     "#{LibraryGroup.site_config.url}#{self.class.to_s.tableize}/#{self.id}"
-  end
-
-  def set_series_statement(series_statement)
-    if series_statement
-      if series_statement.periodical?
-        set_serial_information(series_statement)
-      else
-        self.original_title = series_statement.original_title
-        self.title_transcription = series_statement.title_transcription
-      end
-    end
   end
 
   def creator
@@ -418,11 +401,11 @@ class Manifestation < ActiveRecord::Base
   end
 
   def sort_title
-    if periodical_master?
-      if series_statement.title_transcription?
-        NKF.nkf('-w --katakana', series_statement.title_transcription)
+    if series_master?
+      if root_series_statement.title_transcription?
+        NKF.nkf('-w --katakana', root_series_statement.title_transcription)
       else
-        series_statement.original_title
+        root_series_statement.original_title
       end
     else
       if title_transcription?
@@ -441,28 +424,20 @@ class Manifestation < ActiveRecord::Base
   end
 
   def index_series_statement
-    series_statement.try(:index)
+    series_statements.map{|s| s.index}
   end
 
   def acquired_at
     items.order(:acquired_at).first.try(:acquired_at)
   end
 
-  def root_of_series?
-    return true if series_statement.try(:root_manifestation) == self
-    false
+  def root_series_statement
+    series_statements.where(:series_master => true).first
   end
 
-  def periodical_master?
-    if series_statement
-      return true if series_statement.periodical and root_of_series?
-    end
-    false
-  end
-
-  def periodical?
-    if series_statement.try(:periodical)
-      return true unless root_of_series?
+  def series_master?
+    series_statements.each do |series_statement|
+      return true if series_statement.series_master
     end
     false
   end
@@ -546,38 +521,6 @@ class Manifestation < ActiveRecord::Base
   end
 
   private
-  def set_serial_information(series_statement)
-    return nil unless series_statement.periodical?
-    manifestation = series_statement.last_issue
-
-    if manifestation
-      self.original_title = manifestation.original_title
-      self.title_transcription = manifestation.title_transcription
-      self.title_alternative = manifestation.title_alternative
-      self.issn = series_statement.issn
-      # TODO: 雑誌ごとに巻・号・通号のパターンを設定できるようにする
-      if manifestation.serial_number.to_i > 0
-        self.serial_number = manifestation.serial_number.to_i + 1
-        if manifestation.issue_number.to_i > 0
-          self.issue_number = manifestation.issue_number.to_i + 1
-        else
-          self.issue_number = manifestation.issue_number
-        end
-        self.volume_number = manifestation.volume_number
-      else
-        if manifestation.issue_number.to_i > 0
-          self.issue_number = manifestation.issue_number.to_i + 1
-          self.volume_number = manifestation.volume_number
-        else
-          if manifestation.volume_number.to_i > 0
-            self.volume_number = manifestation.volume_number.to_i + 1
-          end
-        end
-      end
-    end
-    self
-  end
-
   def set_patrons(patrons)
     new_patrons = []
     patrons.each do |patron|
@@ -595,70 +538,75 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :integer          not null, primary key
-#  original_title                  :text             not null
-#  title_alternative               :text
-#  title_transcription             :text
-#  classification_number           :string(255)
-#  manifestation_identifier        :string(255)
-#  date_of_publication             :datetime
-#  date_copyrighted                :datetime
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
-#  deleted_at                      :datetime
-#  access_address                  :string(255)
-#  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          default(1), not null
-#  extent_id                       :integer          default(1), not null
-#  start_page                      :integer
-#  end_page                        :integer
-#  height                          :integer
-#  width                           :integer
-#  depth                           :integer
-#  isbn                            :string(255)
-#  isbn10                          :string(255)
-#  wrong_isbn                      :string(255)
-#  nbn                             :string(255)
-#  lccn                            :string(255)
-#  oclc_number                     :string(255)
-#  issn                            :string(255)
-#  price                           :integer
-#  fulltext                        :text
-#  volume_number_string            :string(255)
-#  issue_number_string             :string(255)
-#  serial_number_string            :string(255)
-#  edition                         :integer
-#  note                            :text
-#  repository_content              :boolean          default(FALSE), not null
-#  lock_version                    :integer          default(0), not null
-#  required_role_id                :integer          default(1), not null
-#  state                           :string(255)
-#  required_score                  :integer          default(0), not null
-#  frequency_id                    :integer          default(1), not null
-#  subscription_master             :boolean          default(FALSE), not null
-#  attachment_file_name            :string(255)
-#  attachment_content_type         :string(255)
-#  attachment_file_size            :integer
-#  attachment_updated_at           :datetime
-#  title_alternative_transcription :text
-#  description                     :text
-#  abstract                        :text
-#  available_at                    :datetime
-#  valid_until                     :datetime
-#  date_submitted                  :datetime
-#  date_accepted                   :datetime
-#  date_caputured                  :datetime
-#  pub_date                        :string(255)
-#  edition_string                  :string(255)
-#  volume_number                   :integer
-#  issue_number                    :integer
-#  serial_number                   :integer
-#  ndc                             :string(255)
-#  content_type_id                 :integer          default(1)
-#  year_of_publication             :integer
-#  attachment_meta                 :text
-#  month_of_publication            :integer
-#  fulltext_content                :boolean
-#  doi                             :string(255)
+#  id                                :integer          not null, primary key
+#  original_title                    :text             not null
+#  title_alternative                 :text
+#  title_transcription               :text
+#  classification_number             :string(255)
+#  manifestation_identifier          :string(255)
+#  date_of_publication               :datetime
+#  date_copyrighted                  :datetime
+#  created_at                        :datetime         not null
+#  updated_at                        :datetime         not null
+#  deleted_at                        :datetime
+#  access_address                    :string(255)
+#  language_id                       :integer          default(1), not null
+#  carrier_type_id                   :integer          default(1), not null
+#  extent_id                         :integer          default(1), not null
+#  start_page                        :integer
+#  end_page                          :integer
+#  height                            :integer
+#  width                             :integer
+#  depth                             :integer
+#  isbn                              :string(255)
+#  isbn10                            :string(255)
+#  wrong_isbn                        :string(255)
+#  nbn                               :string(255)
+#  lccn                              :string(255)
+#  oclc_number                       :string(255)
+#  issn                              :string(255)
+#  price                             :integer
+#  fulltext                          :text
+#  volume_number_string              :string(255)
+#  issue_number_string               :string(255)
+#  serial_number_string              :string(255)
+#  edition                           :integer
+#  note                              :text
+#  repository_content                :boolean          default(FALSE), not null
+#  lock_version                      :integer          default(0), not null
+#  required_role_id                  :integer          default(1), not null
+#  state                             :string(255)
+#  required_score                    :integer          default(0), not null
+#  frequency_id                      :integer          default(1), not null
+#  subscription_master               :boolean          default(FALSE), not null
+#  attachment_file_name              :string(255)
+#  attachment_content_type           :string(255)
+#  attachment_file_size              :integer
+#  attachment_updated_at             :datetime
+#  title_alternative_transcription   :text
+#  description                       :text
+#  abstract                          :text
+#  available_at                      :datetime
+#  valid_until                       :datetime
+#  date_submitted                    :datetime
+#  date_accepted                     :datetime
+#  date_caputured                    :datetime
+#  pub_date                          :string(255)
+#  edition_string                    :string(255)
+#  volume_number                     :integer
+#  issue_number                      :integer
+#  serial_number                     :integer
+#  ndc                               :string(255)
+#  content_type_id                   :integer          default(1)
+#  year_of_publication               :integer
+#  attachment_meta                   :text
+#  month_of_publication              :integer
+#  fulltext_content                  :boolean
+#  doi                               :string(255)
+#  periodical                        :boolean
+#  series_original_title             :text
+#  series_title_transcription        :text
+#  series_title_creator_string       :text
+#  series_title_volume_number_string :text
 #
 

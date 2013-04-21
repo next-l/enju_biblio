@@ -79,6 +79,7 @@ en:
         creator_string: Creator
         contributor_string: Contributor
         publisher_string: Publisher
+        series_statement_string: Series statement
       item:
         call_number: Call number
         item_identifier: Item identifier

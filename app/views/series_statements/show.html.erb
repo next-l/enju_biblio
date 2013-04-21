@@ -5,7 +5,6 @@
 
   <h2 class="resource_title">
     <%= @series_statement.original_title %>
-    <%= image_tag('icons/newspaper.png', :size => '16x16', :alt => t('manifestation.serial')) if @series_statement.periodical -%>
   </h2>
 
   <div id="tabs">
@@ -23,14 +22,6 @@
               (<%= @series_statement.title_subseries_transcription %>)
             <% end %>
           </td>
-        </tr>
-        <tr>
-          <td><%= t('activerecord.attributes.series_statement.periodical') -%></td>
-          <td><%= localized_boolean(@series_statement.periodical) %></td>
-        </tr>
-        <tr>
-          <td><%= t('activerecord.attributes.series_statement.issn') -%></td>
-          <td><%= @series_statement.issn %></td>
         </tr>
         <tr>
           <td><%= t('activerecord.attributes.series_statement.series_statement_identifier') -%></td>

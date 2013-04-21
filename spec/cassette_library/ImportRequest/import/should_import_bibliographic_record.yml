@@ -18,36 +18,36 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      date:
-      - Wed, 10 Apr 2013 04:25:06 GMT
-      server:
-      - Apache
-      x-powered-by:
-      - Phusion Passenger (mod_rails/mod_rack) 2.2.15
-      etag:
-      - '"227e9ca7cb520002ea44415cf39872d7"'
-      x-ua-compatible:
-      - IE=Edge,chrome=1
-      x-runtime:
-      - '0.146385'
       cache-control:
       - max-age=0, private, must-revalidate
-      status:
-      - '200'
+      content-length:
+      - '2700'
       content-type:
       - application/xml; charset=utf-8
+      date:
+      - Fri, 19 Apr 2013 04:44:49 GMT
+      etag:
+      - '"227e9ca7cb520002ea44415cf39872d7"'
+      proxy-connection:
+      - keep-alive
+      server:
+      - Apache
       set-cookie:
-      - _front_session_id=3a99272b1a0932c19417cb4f0608c472; domain=.iss.ndl.go.jp;
-        path=/; expires=Wed, 10-Apr-2013 05:25:06 GMT; HttpOnly
+      - _front_session_id=3890c1b81915a3f188347c2a43d28611; domain=.iss.ndl.go.jp;
+        path=/; expires=Fri, 19-Apr-2013 05:44:53 GMT; HttpOnly
       - serverid=1101; path=/
+      status:
+      - '200'
       vary:
       - Accept-Encoding,User-Agent
-      content-encoding:
-      - gzip
-      content-length:
-      - '1144'
-      connection:
-      - close
+      via:
+      - 1.0 webwasher (Webwasher 6.9.1.12571)
+      x-powered-by:
+      - Phusion Passenger (mod_rails/mod_rack) 2.2.15
+      x-runtime:
+      - '1.861414'
+      x-ua-compatible:
+      - IE=Edge,chrome=1
     body:
       encoding: ASCII-8BIT
       string: !binary |-
@@ -111,8 +111,8 @@ http_interactions:
         44GC44KKPC9kY3Rlcm1zOmRlc2NyaXB0aW9uPgogICAgICA8cmRmczpzZWVB
         bHNvIHJkZjpyZXNvdXJjZT0iaHR0cDovL2lkLm5kbC5nby5qcC9iaWIvMDAw
         MDA5ODk5MzQ2Ii8+CiAgICA8L2l0ZW0+CiAgPC9jaGFubmVsPgo8L3Jzcz4K
-    http_version: '1.0'
-  recorded_at: Wed, 10 Apr 2013 04:25:06 GMT
+    http_version: '1.1'
+  recorded_at: Fri, 19 Apr 2013 04:44:56 GMT
 - request:
     method: get
     uri: http://iss.ndl.go.jp/books/R100000002-I000009899346-00.rdf
@@ -131,34 +131,36 @@ http_interactions:
       code: 200
       message: OK
     headers:
-      date:
-      - Wed, 10 Apr 2013 04:25:06 GMT
-      server:
-      - Apache
-      x-powered-by:
-      - Phusion Passenger (mod_rails/mod_rack) 2.2.15
-      etag:
-      - '"0d9160cca47c40e60be448a33dfefaed"'
-      x-ua-compatible:
-      - IE=Edge,chrome=1
-      x-runtime:
-      - '0.936573'
       cache-control:
       - max-age=0, private, must-revalidate
+      content-type:
+      - text/xml; charset=utf-8
+      date:
+      - Fri, 19 Apr 2013 04:44:53 GMT
+      etag:
+      - '"0d9160cca47c40e60be448a33dfefaed"'
+      proxy-connection:
+      - keep-alive
+      server:
+      - Apache
+      set-cookie:
+      - _front_session_id=e18fadc8622e714e0d21d088d328bcce; domain=.iss.ndl.go.jp;
+        path=/; expires=Fri, 19-Apr-2013 05:44:54 GMT; HttpOnly
+      - serverid=1102; path=/
       status:
       - '200'
-      content-type:
-      - application/rdf+xml; charset=utf-8
-      set-cookie:
-      - _front_session_id=32ded44456b1099be525c6fd61968113; domain=.iss.ndl.go.jp;
-        path=/; expires=Wed, 10-Apr-2013 05:25:07 GMT; HttpOnly
-      - serverid=1105; path=/
+      transfer-encoding:
+      - chunked
       vary:
       - Accept-Encoding,User-Agent
-      content-encoding:
-      - gzip
-      connection:
-      - close
+      via:
+      - 1.0 webwasher (Webwasher 6.9.1.12571)
+      x-powered-by:
+      - Phusion Passenger (mod_rails/mod_rack) 2.2.15
+      x-runtime:
+      - '0.862473'
+      x-ua-compatible:
+      - IE=Edge,chrome=1
     body:
       encoding: ASCII-8BIT
       string: !binary |-
@@ -637,6 +639,6 @@ http_interactions:
         bGFiaWxpdHk+CiAgICA8ZGN0ZXJtczpkZXNjcmlwdGlvbj7phY3nva7loLTm
         iYAgOiDplovmnrbplrLopqflrqQ8L2RjdGVybXM6ZGVzY3JpcHRpb24+CiAg
         PC9kY25kbDpJdGVtPgo8L3JkZjpSREY+
-    http_version: '1.0'
-  recorded_at: Wed, 10 Apr 2013 04:25:07 GMT
+    http_version: '1.1'
+  recorded_at: Fri, 19 Apr 2013 04:44:57 GMT
 recorded_with: VCR 2.4.0

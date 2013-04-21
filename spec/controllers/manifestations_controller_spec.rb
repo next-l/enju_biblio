@@ -111,38 +111,6 @@ describe ManifestationsController do
         response.should render_template("manifestations/index")
       end
 
-      it "assigns all manifestations as @manifestations in oai format without verb" do
-        get :index, :format => 'oai'
-        assigns(:manifestations).should_not be_nil
-        response.should render_template("manifestations/index")
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with ListRecords" do
-        get :index, :format => 'oai', :verb => 'ListRecords'
-        assigns(:manifestations).should_not be_nil
-        response.should render_template("manifestations/list_records")
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with ListIdentifiers" do
-        get :index, :format => 'oai', :verb => 'ListIdentifiers'
-        assigns(:manifestations).should_not be_nil
-        response.should render_template("manifestations/list_identifiers")
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with GetRecord without identifier" do
-        get :index, :format => 'oai', :verb => 'GetRecord'
-        assigns(:manifestations).should be_nil
-        assigns(:manifestation).should be_nil
-        response.should render_template('manifestations/index')
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with GetRecord with identifier" do
-        get :index, :format => 'oai', :verb => 'GetRecord', :identifier => 'oai:localhost:manifestations-1'
-        assigns(:manifestations).should be_nil
-        assigns(:manifestation).should_not be_nil
-        response.should render_template('manifestations/show')
-      end
-
       it "should get index with manifestation_id" do
         get :index, :manifestation_id => 1
         response.should be_success
@@ -417,9 +385,9 @@ describe ManifestationsController do
         end
 
         it "assigns a series_statement" do
-          post :create, :manifestation => @attrs.merge(:series_has_manifestation_attributes => {:series_statement_id => 1})
+          post :create, :manifestation => @attrs.merge(:series_statements_attributes => {[0] => {:original_title => SeriesStatement.find(1).original_title}})
           assigns(:manifestation).reload
-          assigns(:manifestation).series_statement.should eq SeriesStatement.find(1)
+          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_true
         end
 
         it "redirects to the created manifestation" do
@@ -527,7 +495,7 @@ describe ManifestationsController do
   describe "PUT update" do
     before(:each) do
       @manifestation = FactoryGirl.create(:manifestation)
-      @manifestation.series_statement = SeriesStatement.find(1)
+      @manifestation.series_statements = [SeriesStatement.find(1)]
       @attrs = valid_attributes
       @invalid_attrs = {:original_title => ''}
     end
@@ -541,9 +509,9 @@ describe ManifestationsController do
         end
 
         it "assigns a series_statement" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(:series_has_manifestation_attributes => {:series_statement_id => 2})
+          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(:series_statements_attributes => {[0] => {:original_title => series_statements(:two).original_title, "_destroy"=>"false"}})
           assigns(:manifestation).reload
-          assigns(:manifestation).series_statement.should eq SeriesStatement.find(2)
+          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:two).original_title).should be_true
         end
 
         it "assigns the requested manifestation as @manifestation" do

@@ -14,8 +14,6 @@ class SeriesStatementsController < ApplicationController
     search = Sunspot.new_search(SeriesStatement)
     query = params[:query].to_s.strip
     page = params[:page] || 1
-    set_periodical
-    periodical = @periodical
 
     unless query.blank?
       @query = query.dup
@@ -25,8 +23,6 @@ class SeriesStatementsController < ApplicationController
       fulltext query if query.present?
       paginate :page => page.to_i, :per_page => SeriesStatement.default_per_page
       order_by :position, :asc
-      with(:periodical).equal_to periodical unless periodical.nil?
-      facet :periodical
     end
     #work = @work
     manifestation = @manifestation
@@ -38,7 +34,7 @@ class SeriesStatementsController < ApplicationController
       #  with(:work_id).equal_to work.id if work
         with(:parent_ids).equal_to parent.id if parent
         with(:child_ids).equal_to child.id if child
-        with(:manifestation_ids).equal_to manifestation.id if manifestation
+        with(:manifestation_id).equal_to manifestation.id if manifestation
         with(:series_statement_merge_list_ids).equal_to series_statement_merge_list.id if series_statement_merge_list
       end
     else
@@ -50,7 +46,6 @@ class SeriesStatementsController < ApplicationController
     search.query.paginate(page.to_i, SeriesStatement.default_per_page)
     search_result = search.execute!
     @series_statements = search_result.results
-    @periodical_facet = search_result.facet(:periodical).rows
 
     respond_to do |format|
       format.html # index.html.erb
@@ -150,16 +145,5 @@ class SeriesStatementsController < ApplicationController
   def get_parent_and_child
     @parent = SeriesStatement.find(params[:parent_id]) if params[:parent_id]
     @child = SeriesStatement.find(params[:child_id]) if params[:child_id]
-  end
-
-  def set_periodical
-    case params[:periodical]
-    when "true"
-      @periodical = true
-    when "false"
-      @periodical = false
-    else
-      @periodical = nil
-    end
   end
 end

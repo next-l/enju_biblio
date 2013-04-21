@@ -102,8 +102,6 @@ end
 #  id                    :integer          not null, primary key
 #  call_number           :string(255)
 #  item_identifier       :string(255)
-#  circulation_status_id :integer          default(5), not null
-#  checkout_type_id      :integer          default(1), not null
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  deleted_at            :datetime
@@ -119,6 +117,7 @@ end
 #  acquired_at           :datetime
 #  bookstore_id          :integer
 #  budget_type_id        :integer
-#  manifestation_id      :integer
+#  circulation_status_id :integer          default(5), not null
+#  checkout_type_id      :integer          default(1), not null
 #
 

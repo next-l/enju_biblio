@@ -97,7 +97,7 @@ class ManifestationsController < ApplicationController
       @query = query.dup
       query = query.gsub('　', ' ')
 
-      includes = [:carrier_type, {:series_statement => :root_manifestation}]
+      includes = [:carrier_type, :series_statements]
       includes << :bookmarks if defined?(EnjuBookmark)
       search = Manifestation.search(:include => includes)
       role = current_user.try(:role) || Role.default_role
@@ -125,7 +125,7 @@ class ManifestationsController < ApplicationController
           with(:contributor_ids).equal_to patron[:contributor].id if patron[:contributor]
           with(:publisher_ids).equal_to patron[:publisher].id if patron[:publisher]
           with(:original_manifestation_ids).equal_to manifestation.id if manifestation
-          with(:series_statement_id).equal_to series_statement.id if series_statement
+          with(:series_statement_ids).equal_to series_statement.id if series_statement
         end
       end
 
@@ -137,7 +137,7 @@ class ManifestationsController < ApplicationController
           with(:subject_ids).equal_to subject.id if subject
         end
         if series_statement
-          with(:periodical_master).equal_to false
+          with(:series_master).equal_to false
           if series_statement.periodical?
             if mode != 'add'
               order_by :volume_number, sort[:order]
@@ -374,10 +374,10 @@ class ManifestationsController < ApplicationController
     flash.keep(:search_query)
     store_location
 
-    if @manifestation.periodical_master?
+    if @manifestation.series_master?
       flash.keep(:notice) if flash[:notice]
       flash[:manifestation_id] = @manifestation.id
-      redirect_to series_statement_manifestations_url(@manifestation.series_statement)
+      redirect_to series_statement_manifestations_url(@manifestation.root_series_statement)
       return
     end
 
@@ -435,11 +435,7 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
-    @original_manifestation = Manifestation.where(:id => params[:manifestation_id]).first
-    set_title
     @manifestation.language = Language.where(:iso_639_1 => @locale).first
-    @manifestation.series_has_manifestation = SeriesHasManifestation.new
-    @manifestation.series_has_manifestation.series_statement = @series_statement
 
     respond_to do |format|
       format.html # new.html.erb
@@ -454,8 +450,6 @@ class ManifestationsController < ApplicationController
         access_denied; return
       end
     end
-    @original_manifestation = Manifestation.where(:id => params[:manifestation_id]).first
-    @series_statement = @manifestation.series_statement unless @series_statement
     if defined?(EnjuSubject)
       @classification_types = ClassificationType.select(:display_name)
     end
@@ -472,7 +466,6 @@ class ManifestationsController < ApplicationController
   # POST /manifestations.json
   def create
     @manifestation = Manifestation.new(params[:manifestation])
-    @original_manifestation = Manifestation.where(:id => params[:manifestation_id]).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
     end
@@ -481,9 +474,6 @@ class ManifestationsController < ApplicationController
       set_patrons
       if @manifestation.save
         Sunspot.commit
-        if @original_manifestation
-          @manifestation.derived_manifestations << @original_manifestation
-        end
 
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }
         format.json { render :json => @manifestation, :status => :created, :location => @manifestation }
@@ -499,8 +489,8 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1.json
   def update
     respond_to do |format|
-      set_patrons
       if @manifestation.update_attributes(params[:manifestation])
+        set_patrons
         Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
         format.json { head :no_content }
@@ -515,9 +505,7 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1
   # DELETE /manifestations/1.json
   def destroy
-    series_statement = @manifestation.series_statement
     @manifestation.destroy
-    series_statement.try(:index!)
 
     respond_to do |format|
       format.html { redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation')) }
@@ -765,15 +753,6 @@ class ManifestationsController < ApplicationController
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query
-  end
-
-  def set_title
-    if @series_statement
-      @manifestation.set_series_statement(@series_statement)
-    elsif @original_manifestation
-      @manifestation.original_title = @original_manifestation.original_title
-      @manifestation.title_transcription = @original_manifestation.title_transcription
-    end
   end
 
   def set_patrons

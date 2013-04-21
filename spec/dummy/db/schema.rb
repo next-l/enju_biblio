@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130416054135) do
+ActiveRecord::Schema.define(:version => 20130421164124) do
 
   create_table "baskets", :force => true do |t|
     t.integer  "user_id"
@@ -572,20 +572,20 @@ ActiveRecord::Schema.define(:version => 20130416054135) do
   add_index "manifestation_reserve_stats", ["state"], :name => "index_manifestation_reserve_stats_on_state"
 
   create_table "manifestations", :force => true do |t|
-    t.text     "original_title",                                     :null => false
+    t.text     "original_title",                                       :null => false
     t.text     "title_alternative"
     t.text     "title_transcription"
     t.string   "classification_number"
     t.string   "manifestation_identifier"
     t.datetime "date_of_publication"
     t.datetime "date_copyrighted"
-    t.datetime "created_at",                                         :null => false
-    t.datetime "updated_at",                                         :null => false
+    t.datetime "created_at",                                           :null => false
+    t.datetime "updated_at",                                           :null => false
     t.datetime "deleted_at"
     t.string   "access_address"
-    t.integer  "language_id",                     :default => 1,     :null => false
-    t.integer  "carrier_type_id",                 :default => 1,     :null => false
-    t.integer  "extent_id",                       :default => 1,     :null => false
+    t.integer  "language_id",                       :default => 1,     :null => false
+    t.integer  "carrier_type_id",                   :default => 1,     :null => false
+    t.integer  "extent_id",                         :default => 1,     :null => false
     t.integer  "start_page"
     t.integer  "end_page"
     t.integer  "height"
@@ -605,13 +605,13 @@ ActiveRecord::Schema.define(:version => 20130416054135) do
     t.string   "serial_number_string"
     t.integer  "edition"
     t.text     "note"
-    t.boolean  "repository_content",              :default => false, :null => false
-    t.integer  "lock_version",                    :default => 0,     :null => false
-    t.integer  "required_role_id",                :default => 1,     :null => false
+    t.boolean  "repository_content",                :default => false, :null => false
+    t.integer  "lock_version",                      :default => 0,     :null => false
+    t.integer  "required_role_id",                  :default => 1,     :null => false
     t.string   "state"
-    t.integer  "required_score",                  :default => 0,     :null => false
-    t.integer  "frequency_id",                    :default => 1,     :null => false
-    t.boolean  "subscription_master",             :default => false, :null => false
+    t.integer  "required_score",                    :default => 0,     :null => false
+    t.integer  "frequency_id",                      :default => 1,     :null => false
+    t.boolean  "subscription_master",               :default => false, :null => false
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
@@ -630,12 +630,17 @@ ActiveRecord::Schema.define(:version => 20130416054135) do
     t.integer  "issue_number"
     t.integer  "serial_number"
     t.string   "ndc"
-    t.integer  "content_type_id",                 :default => 1
+    t.integer  "content_type_id",                   :default => 1
     t.integer  "year_of_publication"
     t.text     "attachment_meta"
     t.integer  "month_of_publication"
     t.boolean  "fulltext_content"
     t.string   "doi"
+    t.boolean  "periodical"
+    t.text     "series_original_title"
+    t.text     "series_title_transcription"
+    t.text     "series_title_creator_string"
+    t.text     "series_title_volume_number_string"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
@@ -1070,19 +1075,21 @@ ActiveRecord::Schema.define(:version => 20130416054135) do
     t.text     "title_subseries"
     t.text     "numbering_subseries"
     t.integer  "position"
-    t.datetime "created_at",                                       :null => false
-    t.datetime "updated_at",                                       :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.text     "title_transcription"
     t.text     "title_alternative"
     t.string   "series_statement_identifier"
-    t.string   "issn"
-    t.boolean  "periodical",                    :default => false, :null => false
-    t.integer  "root_manifestation_id"
+    t.integer  "manifestation_id"
     t.text     "note"
     t.text     "title_subseries_transcription"
+    t.text     "creator_string"
+    t.text     "volume_number_string"
+    t.text     "volume_number_transcription_string"
+    t.boolean  "series_master"
   end
 
-  add_index "series_statements", ["root_manifestation_id"], :name => "index_series_statements_on_manifestation_id"
+  add_index "series_statements", ["manifestation_id"], :name => "index_series_statements_on_manifestation_id"
   add_index "series_statements", ["series_statement_identifier"], :name => "index_series_statements_on_series_statement_identifier"
 
   create_table "shelves", :force => true do |t|

@@ -108,7 +108,7 @@ class ResourceImportFile < ActiveRecord::Base
           m = Manifestation.find_by_isbn(isbn)
         end
         if m
-          unless m.series_statement
+          if m.series_statements.exists?
             manifestation = m
           end
         end
@@ -117,11 +117,9 @@ class ResourceImportFile < ActiveRecord::Base
 
       if row['original_title'].blank?
         unless manifestation
-          series_statement = find_series_statement(row)
           begin
             manifestation = Manifestation.import_isbn(isbn) if isbn
             if manifestation
-              manifestation.series_statement = series_statement
               num[:manifestation_imported] += 1
             end
           rescue EnjuNdl::InvalidIsbn
@@ -485,8 +483,12 @@ class ResourceImportFile < ActiveRecord::Base
       end_page = nil
     end
 
-    if row['fulltext_content'].to_s.strip == "t"
+    if row['fulltext_content'].to_s.downcase.strip == "t"
       fulltext_content = true
+    end
+
+    if row['periodical'].to_s.downcase.strip == "t"
+      periodical = true
     end
 
     creators = row['creator'].to_s.split('//')
@@ -504,11 +506,9 @@ class ResourceImportFile < ActiveRecord::Base
       publisher_patrons = Patron.import_patrons(publishers_list)
       #classification = Classification.where(:category => row['classification'].to_s.strip).first
       subjects = import_subject(row) if defined?(EnjuSubject)
-      series_statement = import_series_statement(row)
       case options[:edit_mode]
       when 'create'
         work = self.class.import_work(title, creator_patrons, options)
-        work.series_statement = series_statement
         if defined?(EnjuSubject)
           work.subjects = subjects.uniq unless subjects.empty?
         end
@@ -516,7 +516,6 @@ class ResourceImportFile < ActiveRecord::Base
       when 'update'
         expression = manifestation
         work = expression
-        work.series_statement = series_statement if series_statement
         work.creators = creator_patrons.uniq unless creator_patrons.empty?
         expression.contributors = contributor_patrons.uniq unless contributor_patrons.empty?
         if defined?(EnjuSubject)
@@ -579,7 +578,26 @@ class ResourceImportFile < ActiveRecord::Base
 
       manifestation.carrier_type = carrier_type if carrier_type
 
-      manifestation.series_statement = series_statement if series_statement
+      if row['series_original_title'].to_s.strip.present?
+        Manifestation.transaction do
+          if manifestation.series_statements.exists?
+            manifestation.series_statements.delete_all
+          end
+          series_title = row['series_original_title'].split('//')
+          series_title_transcription = row['series_title_transcription'].split('//')
+          series_statement = SeriesStatement.new(
+            :original_title => series_title[0],
+            :title_transcription => series_title_transcription[0],
+            :title_subseries => "#{series_title[1]} #{series_title[2]}",
+            :title_subseries_transcription => "#{series_title_transcription[1]} #{series_title_transcription[2]}",
+            :volume_number_string => series_title[0],
+            :creator_string => row['series_creator_string'],
+          )
+          series_statement.manifestation = manifestation
+          series_statement.save!
+        end
+      end
+
       manifestation.save!
 
       if options[:edit_mode] == 'create'
@@ -589,60 +607,6 @@ class ResourceImportFile < ActiveRecord::Base
       end
     end
     manifestation
-  end
-
-  def import_series_statement(row)
-    issn = StdNum::ISSN.normalize(row['issn'].to_s)
-    series_statement = find_series_statement(row)
-    unless series_statement
-      if row['series_title'].to_s.strip.present?
-        title = row['series_title'].to_s.strip.split('//')
-        title_transcription = row['series_title_transcription'].to_s.strip.split('//')
-        series_statement = SeriesStatement.new(
-          :original_title => title[0],
-          :title_transcription => title_transcription[0],
-          :series_statement_identifier => row['series_statement_identifier'].to_s.strip.split('//').first,
-          :title_subseries => "#{title[1]} #{title[2]}",
-          :title_subseries_transcription => "#{title_transcription[1]} #{title_transcription[2]}"
-        )
-        if issn.present?
-          series_statement.issn = issn
-        end
-        if row['periodical'].to_s.strip.present?
-          series_statement.periodical = true
-        end
-        series_statement.save!
-        if series_statement.periodical
-          SeriesStatement.transaction do
-            creators = row['series_statement_creator'].to_s.split('//')
-            creator_transcriptions = row['series_statement_creator_transcription'].to_s.split('//')
-            creators_list = creators.zip(creator_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
-            creator_patrons = Patron.import_patrons(creators_list)
-            series_statement.root_manifestation.creators = creator_patrons.uniq unless creator_patrons.empty?
-          end
-        end
-      end
-    end
-    if series_statement
-      series_statement
-    else
-      nil
-    end
-  end
-
-  def find_series_statement(row)
-    issn = StdNum::ISSN.normalize(row['issn'].to_s)
-    series_statement_identifier = row['series_statement_identifier'].to_s.strip
-    series_statement_id = row['series_statement_id'].to_s.strip
-    series_statement = SeriesStatement.where(:issn => issn).first if issn.present?
-    unless series_statement
-      series_statement = SeriesStatement.where(:series_statement_identifier => series_statement_identifier).first if series_statement_identifier.present?
-    end
-    unless series_statement
-      series_statement = SeriesStatement.where(:id => series_statement_id).first if series_statement_id
-    end
-    series_statement = SeriesStatement.where(:original_title => row['series_statement_original_title'].to_s.strip).first unless series_statement
-    series_statement
   end
 end
 

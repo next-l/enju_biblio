@@ -66,10 +66,10 @@ class SeriesHasManifestationsController < ApplicationController
   # PUT /series_has_manifestations/1
   # PUT /series_has_manifestations/1.json
   def update
-    old_series_statement = @series_has_manifestation.manifestation.series_statement
+    old_series_statements = @series_has_manifestation.manifestation.series_statements
     respond_to do |format|
       if @series_has_manifestation.update_attributes(params[:series_has_manifestation])
-        old_series_statement.index
+        old_series_statements.map{|s| s.index}
         Sunspot.commit
         format.html { redirect_to @series_has_manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.series_has_manifestation')) }
         format.json { head :no_content }

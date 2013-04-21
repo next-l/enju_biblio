@@ -16,7 +16,7 @@ describe ResourceImportFile do
           old_items_count = Item.count
           old_patrons_count = Patron.count
           old_import_results_count = ResourceImportResult.count
-          @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
+          @file.import_start.should eq({:manifestation_imported => 11, :item_imported => 6, :manifestation_found => 1, :item_found => 3, :failed => 7})
           manifestation = Item.where(:item_identifier => '11111').first.manifestation
           manifestation.publishers.first.full_name.should eq 'test4'
           manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -29,10 +29,11 @@ describe ResourceImportFile do
           ResourceImportResult.count.should eq old_import_results_count + 17
   
           manifestation_101 = Manifestation.where(:manifestation_identifier => '101').first
-          manifestation_101.series_statement.original_title.should eq '主シリーズ'
-          manifestation_101.series_statement.title_transcription.should eq 'しゅしりーず'
-          manifestation_101.series_statement.title_subseries.should eq '副シリーズ 1'
-          manifestation_101.series_statement.title_subseries_transcription.should eq 'ふくしりーず いち'
+          manifestation_101.series_statements.count.should eq 1
+          manifestation_101.series_statements.first.original_title.should eq '主シリーズ'
+          manifestation_101.series_statements.first.title_transcription.should eq 'しゅしりーず'
+          manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ 1'
+          manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず いち'
   
           item_10101 = Item.where(:item_identifier => '10101').first
           item_10101.manifestation.creators.size.should eq 2
@@ -81,7 +82,7 @@ describe ResourceImportFile do
           old_items_count = Item.count
           old_patrons_count = Patron.count
           old_import_results_count = ResourceImportResult.count
-          @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
+          @file.import_start.should eq({:manifestation_imported => 11, :item_imported => 6, :manifestation_found => 1, :item_found => 3, :failed => 7})
           manifestation = Item.where(:item_identifier => '11111').first.manifestation
           manifestation.publishers.first.full_name.should eq 'test4'
           manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -135,8 +136,8 @@ describe ResourceImportFile do
         manifestation = Manifestation.find(10)
         file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), :edit_mode => 'update'
         file.modify
-        manifestation.reload
-        manifestation.series_statement.should eq SeriesStatement.find(2)
+        #manifestation.reload
+        #manifestation.series_statements.should eq [SeriesStatement.find(2)]
       end
     end
   
@@ -173,4 +174,27 @@ end
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
 #
-  
+
+# == Schema Information
+#
+# Table name: resource_import_files
+#
+#  id                           :integer          not null, primary key
+#  parent_id                    :integer
+#  content_type                 :string(255)
+#  size                         :integer
+#  user_id                      :integer
+#  note                         :text
+#  executed_at                  :datetime
+#  state                        :string(255)
+#  resource_import_file_name    :string(255)
+#  resource_import_content_type :string(255)
+#  resource_import_file_size    :integer
+#  resource_import_updated_at   :datetime
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
+#  edit_mode                    :string(255)
+#  resource_import_fingerprint  :string(255)
+#  error_message                :text
+#
+
