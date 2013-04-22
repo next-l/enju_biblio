@@ -434,9 +434,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def series_master?
-    series_statements.each do |series_statement|
-      return true if series_statement.series_master
-    end
+    return true if series_statements.where(:series_master => true).exists?
     false
   end
 

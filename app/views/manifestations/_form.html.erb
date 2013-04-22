@@ -18,7 +18,12 @@
   <div class="field">
     <%= f.label :series_statement_string -%><br />
     <%= f.fields_for :series_statements do |series_form| %>
-      <%= series_form.text_field :original_title %>
+      <%= f.label :original_title %><br />
+      <%= series_form.text_field :original_title %><br />
+      <%= f.label :volume_number_string %><br />
+      <%= series_form.text_field :volume_number_string %>
+      <%= f.label :creator_string %><br />
+      <%= series_form.text_field :creator_string %><br />
       <%= series_form.link_to_remove t('page.remove') %>
     <% end %>
     <p><%= f.link_to_add t('page.add'), :series_statements %></p>
