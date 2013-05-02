@@ -54,6 +54,8 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <li><%= link_to t('page.new', :model => t('activerecord.models.series_statement')), new_series_statement_path -%></li>
+    <% if can? :create, SeriesStatement %>
+      <li><%= link_to t('page.new', :model => t('activerecord.models.series_statement')), new_series_statement_path -%></li>
+    <% end %>
   </ul>
 </div>
