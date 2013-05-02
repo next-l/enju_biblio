@@ -531,6 +531,18 @@ class Manifestation < ActiveRecord::Base
     manifestation
   end
 
+  def latest_issue
+    if series_master?
+      derived_manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first
+    end
+  end
+
+  def first_issue
+    if series_master?
+      derived_manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first
+    end
+  end
+
   private
   def set_patrons(patrons)
     new_patrons = []

@@ -1,14 +1,13 @@
 class SeriesStatement < ActiveRecord::Base
   attr_accessible :original_title, :numbering, :title_subseries,
     :numbering_subseries, :title_transcription, :title_alternative,
-    :series_statement_identifier, :note, :series_master,
+    :series_statement_identifier, :note,
     :root_manifestation_id,
     :title_subseries_transcription, :creator_string, :volume_number_string
-  attr_accessible :url, :frequency_id
+  attr_accessible :url
 
   belongs_to :manifestation
   belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation'
-  belongs_to :frequency
   validates_presence_of :original_title
   before_save :create_root_series_statement
 
