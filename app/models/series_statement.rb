@@ -8,12 +8,9 @@ class SeriesStatement < ActiveRecord::Base
 
   belongs_to :manifestation
   belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation'
-  has_many :child_relationships, :foreign_key => 'parent_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
-  has_many :parent_relationships, :foreign_key => 'child_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
-  has_many :children, :through => :child_relationships, :source => :child
-  has_many :parents, :through => :parent_relationships, :source => :parent
   belongs_to :frequency
   validates_presence_of :original_title
+  before_save :create_root_series_statement
 
   acts_as_list
   searchable do
@@ -24,12 +21,6 @@ class SeriesStatement < ActiveRecord::Base
     integer :manifestation_id
     integer :position
     integer :series_statement_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
-    integer :parent_ids, :multiple => true do
-      parents.pluck('series_statements.id')
-    end
-    integer :child_ids, :multiple => true do
-      children.pluck('series_statements.id')
-    end
   end
 
   attr_accessor :selected
@@ -40,10 +31,14 @@ class SeriesStatement < ActiveRecord::Base
   def titles
     [
       original_title,
-      title_transcription,
-      parents.map{|parent| [parent.original_title, parent.title_transcription]},
-      children.map{|child| [child.original_title, child.title_transcription]}
-    ].flatten.compact
+      title_transcription
+    ]
+  end
+
+  def create_root_series_statement
+    if series_master? and root_manifestation.nil?
+      self.root_manifestation = manifestation
+    end
   end
 
   if defined?(EnjuResourceMerge)

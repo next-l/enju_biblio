@@ -26,6 +26,8 @@
       <%= f.label :original_title %><br />
       <%= series_form.text_field :original_title %>
       <%= series_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %><br />
+      <%= f.label :title_transcription %><br />
+      <%= series_form.text_field :title_transcription %><br />
       <%= f.label :volume_number_string %><br />
       <%= series_form.text_field :volume_number_string %><br />
       <%= f.label :creator_string %><br />
@@ -119,10 +121,8 @@
   <div class="field">
     <%= f.label :lccn -%>
     <%= f.text_field :lccn, :class => 'resource_isbn_issn', :style => 'ime-mode: disabled' -%>
-    <%- if @series_statement.try(:periodical?) -%>
-      <%= f.label :issn -%>
-      <%= f.text_field :issn, :class => 'resource_isbn_issn', :style => 'ime-mode: disabled' -%>
-    <% end %>
+    <%= f.label :issn -%>
+    <%= f.text_field :issn, :class => 'resource_isbn_issn', :style => 'ime-mode: disabled' -%>
   </div>
 
   <div class="field">

@@ -4,7 +4,6 @@ Rails.application.routes.draw do
     resources :produces
     resources :exemplifies
     resources :series_statements
-    resources :series_has_manifestations
     resources :items
     resources :picture_files
     resources :manifestations
@@ -64,15 +63,9 @@ Rails.application.routes.draw do
 
   resources :donates
 
-  resources :series_has_manifestations
-
   resources :series_statements do
     resources :manifestations
-    resources :series_has_manifestations
-    resources :series_statement_relationships
   end
-
-  resources :series_statement_relationships
 
   resources :countries
   resources :languages

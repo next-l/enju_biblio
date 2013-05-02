@@ -125,7 +125,6 @@ class ManifestationsController < ApplicationController
           with(:creator_ids).equal_to patron[:creator].id if patron[:creator]
           with(:contributor_ids).equal_to patron[:contributor].id if patron[:contributor]
           with(:publisher_ids).equal_to patron[:publisher].id if patron[:publisher]
-          with(:original_manifestation_ids).equal_to manifestation.id if manifestation
           with(:series_statement_ids).equal_to series_statement.id if series_statement
           with(:parent_ids).equal_to parent.id if parent
         end
@@ -153,7 +152,7 @@ class ManifestationsController < ApplicationController
             #end
           else
             if mode != 'add'
-              with(:periodical).equal_to false
+              with(:resource_master).equal_to true
             end
           end
         end

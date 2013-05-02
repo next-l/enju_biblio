@@ -1046,14 +1046,6 @@ ActiveRecord::Schema.define(:version => 20130429020822) do
   add_index "series_statement_merges", ["series_statement_id"], :name => "index_series_statement_merges_on_series_statement_id"
   add_index "series_statement_merges", ["series_statement_merge_list_id"], :name => "index_series_statement_merges_on_series_statement_merge_list_id"
 
-  create_table "series_statement_relationships", :force => true do |t|
-    t.integer  "parent_id"
-    t.integer  "child_id"
-    t.integer  "position"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
-  end
-
   create_table "series_statements", :force => true do |t|
     t.text     "original_title"
     t.text     "numbering"
