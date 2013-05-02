@@ -37,8 +37,7 @@ module EnjuBiblio
           RealizeType,
           ResourceImportFile,
           SeriesStatement,
-          SeriesStatementRelationship,
-          SeriesHasManifestation
+          SeriesStatementRelationship
         ]
         can :update, [
           ContentType,
@@ -97,8 +96,7 @@ module EnjuBiblio
           Realize,
           ResourceImportFile,
           SeriesStatement,
-          SeriesStatementRelationship,
-          SeriesHasManifestation
+          SeriesStatementRelationship
         ]
         can :read, [
           CarrierType,
@@ -165,8 +163,7 @@ module EnjuBiblio
           PatronRelationshipType,
           Produce,
           Realize,
-          SeriesStatement,
-          SeriesHasManifestation
+          SeriesStatement
         ]
       else
         can :index, Manifestation
@@ -198,8 +195,7 @@ module EnjuBiblio
           PictureFile,
           Produce,
           Realize,
-          SeriesStatement,
-          SeriesHasManifestation
+          SeriesStatement
         ]
       end
     end
