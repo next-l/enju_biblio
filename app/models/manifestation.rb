@@ -20,10 +20,10 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :attachment, :classification_number,
-    :series_statements_attributes,
+    :series_statements_attributes, :periodical,
     :creators_attributes, :contributors_attributes, :publishers_attributes
   attr_accessible :fulltext_content,
-    :doi, :number_of_page_string
+    :doi, :number_of_page_string, :parent_id
 
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
   has_many :creators, :through => :creates, :source => :patron, :order => 'creates.position'
@@ -42,6 +42,7 @@ class Manifestation < ActiveRecord::Base
   belongs_to :carrier_type
   belongs_to :manifestation_content_type, :class_name => 'ContentType', :foreign_key => 'content_type_id'
   has_many :series_statements
+  has_one :root_series_statement, :foreign_key => 'root_manifestation_id', :class_name => 'SeriesStatement'
   belongs_to :frequency
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
@@ -58,7 +59,7 @@ class Manifestation < ActiveRecord::Base
     text :fulltext, :note, :creator, :contributor, :publisher, :description
     text :item_identifier do
       if series_master?
-        root_series_statement.manifestation.items.pluck(:item_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier)
       else
         items.pluck(:item_identifier)
       end
@@ -93,7 +94,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :library, :multiple => true do
       if series_master?
-        root_series_statement.manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
+        root_series_statement.root_manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
       else
         items.map{|i| i.shelf.library.name}
       end
@@ -103,7 +104,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :item_identifier, :multiple => true do
       if series_master?
-        root_series_statement.manifestation.items.pluck(:item_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier)
       else
         items.collect(&:item_identifier)
       end
@@ -116,7 +117,7 @@ class Manifestation < ActiveRecord::Base
     time :deleted_at
     time :pub_date, :multiple => true do
       if series_master?
-        root_series_statement.manifestation.pub_dates
+        root_series_statement.root_manifestation.pub_dates
       else
         pub_dates
       end
@@ -130,6 +131,9 @@ class Manifestation < ActiveRecord::Base
     integer :publisher_ids, :multiple => true
     integer :item_ids, :multiple => true
     integer :original_manifestation_ids, :multiple => true
+    integer :parent_ids, :multiple => true do
+      original_manifestations.pluck(:id)
+    end
     integer :required_role_id
     integer :height
     integer :width
@@ -158,8 +162,8 @@ class Manifestation < ActiveRecord::Base
       creator
     end
     text :atitle do
-      unless series_master?
-        title if periodical?
+      if periodical? and root_series_statement.nil?
+        titles
       end
     end
     text :btitle do
@@ -167,7 +171,11 @@ class Manifestation < ActiveRecord::Base
     end
     text :jtitle do
       if periodical?
-        titles
+        if root_series_statement
+          root_series_statement.titles
+        else
+          titles
+        end
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
@@ -223,7 +231,7 @@ class Manifestation < ActiveRecord::Base
   normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
   paginates_per 10
 
-  attr_accessor :during_import, :creator_string
+  attr_accessor :during_import, :parent_id
 
   def check_isbn
     if isbn.present?
@@ -429,12 +437,8 @@ class Manifestation < ActiveRecord::Base
     items.order(:acquired_at).first.try(:acquired_at)
   end
 
-  def root_series_statement
-    series_statements.where(:series_master => true).first
-  end
-
   def series_master?
-    return true if series_statements.where(:series_master => true).exists?
+    return true if root_series_statement
     false
   end
 

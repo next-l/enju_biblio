@@ -114,6 +114,7 @@ class ManifestationsController < ApplicationController
       @index_patron = patron
       manifestation = @manifestation if @manifestation
       series_statement = @series_statement if @series_statement
+      parent = @parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
 
       if defined?(EnjuSubject)
         subject = @subject if @subject
@@ -126,6 +127,7 @@ class ManifestationsController < ApplicationController
           with(:publisher_ids).equal_to patron[:publisher].id if patron[:publisher]
           with(:original_manifestation_ids).equal_to manifestation.id if manifestation
           with(:series_statement_ids).equal_to series_statement.id if series_statement
+          with(:parent_ids).equal_to parent.id if parent
         end
       end
 
@@ -136,23 +138,26 @@ class ManifestationsController < ApplicationController
         if defined?(EnjuSubject)
           with(:subject_ids).equal_to subject.id if subject
         end
-        if series_statement
-          with(:series_master).equal_to false
-          if series_statement.periodical?
-            if mode != 'add'
-              order_by :volume_number, sort[:order]
-              order_by :issue_number, sort[:order]
-              order_by :serial_number, sort[:order]
-              with(:periodical).equal_to true
-            end
+        unless parent
+          if params[:periodical].to_s.downcase == "true"
+            with(:series_master).equal_to true unless parent
+            with(:periodical).equal_to true
+            #if series_statement.periodical?
+            #  if mode != 'add'
+            #    order_by :volume_number, sort[:order]
+            #    order_by :issue_number, sort[:order]
+            #    order_by :serial_number, sort[:order]
+            #  end
+            #else
+            #  with(:periodical).equal_to false
+            #end
           else
-            with(:periodical).equal_to false
-          end
-        else
-          if mode != 'add'
-            with(:periodical).equal_to false
+            if mode != 'add'
+              with(:periodical).equal_to false
+            end
           end
         end
+        order_by sort[:sort_by], sort[:order] unless oai_search
         facet :reservable if defined?(EnjuCirculation)
       end
       search = make_internal_query(search)
@@ -377,7 +382,7 @@ class ManifestationsController < ApplicationController
     if @manifestation.series_master?
       flash.keep(:notice) if flash[:notice]
       flash[:manifestation_id] = @manifestation.id
-      redirect_to series_statement_manifestations_url(@manifestation.root_series_statement)
+      redirect_to manifestations_url(:parent_id => @manifestation.id)
       return
     end
 
@@ -436,6 +441,14 @@ class ManifestationsController < ApplicationController
   def new
     @manifestation = Manifestation.new
     @manifestation.language = Language.where(:iso_639_1 => @locale).first
+    parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
+    if parent
+      @manifestation.parent_id = parent.id
+      @manifestation.original_title = parent.original_title
+      @manifestation.title_transcription = parent.title_transcription
+      @manifestation.periodical = true if parent.periodical
+      @manifestation.series_statements.new(:original_title => parent.root_series_statement.original_title)
+    end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -466,6 +479,7 @@ class ManifestationsController < ApplicationController
   # POST /manifestations.json
   def create
     @manifestation = Manifestation.new(params[:manifestation])
+    parent = Manifestation.where(:id => @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
     end
@@ -473,6 +487,7 @@ class ManifestationsController < ApplicationController
     respond_to do |format|
       set_patrons
       if @manifestation.save
+        parent.derived_manifestations << @manifestation if parent
         Sunspot.commit
 
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }

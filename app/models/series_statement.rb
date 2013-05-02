@@ -1,19 +1,19 @@
 class SeriesStatement < ActiveRecord::Base
   attr_accessible :original_title, :numbering, :title_subseries,
     :numbering_subseries, :title_transcription, :title_alternative,
-    :series_statement_identifier, :note,
+    :series_statement_identifier, :note, :series_master,
+    :root_manifestation_id,
     :title_subseries_transcription, :creator_string, :volume_number_string
   attr_accessible :url, :frequency_id
 
   belongs_to :manifestation
-  belongs_to :manifestation, :foreign_key => :manifestation_id, :class_name => 'Manifestation'
+  belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation'
   has_many :child_relationships, :foreign_key => 'parent_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
   has_many :parent_relationships, :foreign_key => 'child_id', :class_name => 'SeriesStatementRelationship', :dependent => :destroy
   has_many :children, :through => :child_relationships, :source => :child
   has_many :parents, :through => :parent_relationships, :source => :parent
   belongs_to :frequency
   validates_presence_of :original_title
-  before_save :create_manifestation
 
   acts_as_list
   searchable do
@@ -48,16 +48,6 @@ class SeriesStatement < ActiveRecord::Base
       parents.map{|parent| [parent.original_title, parent.title_transcription]},
       children.map{|child| [child.original_title, child.title_transcription]}
     ].flatten.compact
-  end
-
-  def create_manifestation
-    return nil if manifestation
-    SeriesStatement.transaction do
-      manifestation = Manifestation.create!(
-        :original_title => original_title
-      )
-      self.manifestation = manifestation
-    end
   end
 
   if defined?(EnjuResourceMerge)

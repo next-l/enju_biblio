@@ -80,6 +80,8 @@ ja:
         contributor_string: 協力者・編者
         publisher_string: 出版者
         series_statement_string: シリーズ情報
+        periodical: 定期刊行物
+        series_master: シリーズ情報マスタ
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID
@@ -172,6 +174,7 @@ ja:
         periodical: 定期刊行物
         title_transcription: シリーズ名よみ
         note: 注記
+        series_master: マスタ
       country:
         name: 名前
         display_name: 表示名

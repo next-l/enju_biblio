@@ -16,15 +16,22 @@
   </div>
 
   <div class="field">
+    <%= f.label :periodical %><br />
+    <%= f.check_box :periodical %>
+  </div>
+
+  <div class="field">
     <%= f.label :series_statement_string -%><br />
     <%= f.fields_for :series_statements do |series_form| %>
       <%= f.label :original_title %><br />
-      <%= series_form.text_field :original_title %><br />
+      <%= series_form.text_field :original_title %>
+      <%= series_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %><br />
       <%= f.label :volume_number_string %><br />
-      <%= series_form.text_field :volume_number_string %>
+      <%= series_form.text_field :volume_number_string %><br />
       <%= f.label :creator_string %><br />
       <%= series_form.text_field :creator_string %><br />
-      <%= series_form.link_to_remove t('page.remove') %>
+      <%= f.label :series_master %>
+      <%= series_form.check_box :series_master %>
     <% end %>
     <p><%= f.link_to_add t('page.add'), :series_statements %></p>
   </div>
@@ -170,8 +177,7 @@
   </div>
 
   <div class="actions">
-    <%= hidden_field_tag :patron_id, @patron.id if @patron -%>
-    <%= hidden_field_tag :manifestation_id, @original_manifestation.id if @original_manifestation -%>
+    <%= f.hidden_field :parent_id %>
     <%= f.submit %>
   </div>
   <%= javascript_tag("$(function(){$('#query').focus()})") %>

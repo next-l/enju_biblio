@@ -34,7 +34,7 @@ describe Manifestation, :solr => true do
     results.size.should eq 8
     openurl = Openurl.new({:jtitle => "テスト"})
     results = openurl.search
-    results.size.should eq 2
+    results.size.should eq 3
     openurl.query_text.should eq "jtitle_text:テスト"
     openurl = Openurl.new({:atitle => "2005"})
     results = openurl.search
@@ -200,10 +200,8 @@ describe Manifestation, :solr => true do
     manifestations(:manifestation_00001).title.should be_true
   end
 
-  VCR.use_cassette "enju_ndl/manifestation", :record => :new_episodes do
-    it "should import isbn" do
-      Manifestation.import_isbn('4797327030').should be_valid
-    end
+  it "should import isbn", :vcr => true do
+    Manifestation.import_isbn('4797327030').should be_valid
   end
 
   it "should respond to pickup" do

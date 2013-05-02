@@ -1,15 +1,14 @@
-          <tr class="line<%= cycle("0", "1") -%>">
-            <td style="width: 30px"><%= @manifestations.offset_value + 1 + manifestation_counter -%></td>
+        <tr class="line<%= cycle("0", "1") -%>">
+          <td style="width: 30px"><%= @manifestations.offset_value + 1 + manifestation_counter -%></td>
+          <% cache([:manifestation => manifestation.id, :fragment => 'manifestation_html', :role => current_user_role_name, :locale => @locale]) do %>
             <td style="480px">
               <% if manifestation.root_series_statement %>
                 <%= render 'manifestations/show_series_index', :manifestation => manifestation, :series_statement => manifestation.root_series_statement -%>
               <% else %>
-                <% cache([:manifestation => manifestation.id, :fragment => 'manifestation_html', :role => current_user_role_name, :locale => @locale]) do %>
-                  <%= render 'manifestations/show_index', :manifestation => manifestation -%>
-                  <div class="access_address">
-                    <%= link_to manifestation.access_address, manifestation.access_address if manifestation.access_address.present? -%>
-                  </div>
-                <% end %>
+                <%= render 'manifestations/show_index', :manifestation => manifestation -%>
+                <div class="access_address">
+                  <%= link_to manifestation.access_address, manifestation.access_address if manifestation.access_address.present? -%>
+                </div>
               <% end %>
             </td>
             <% if signed_in? %>
@@ -52,10 +51,11 @@
                     <% when @item %>
                       <%= link_to t('page.change'), edit_exemplify_path(@item.exemplify, :manifestation_id => manifestation.id) unless @item.manifestation == manifestation -%>
                     <% else %>
-                      <%= link_to image_tag('icons/arrow_divide.png', :size => '16x16', :alt => t('manifestation.add_derivation')), manifestation_manifestations_path(manifestation, :mode => 'add') -%>
+                      <%= link_to image_tag('icons/arrow_divide.png', :size => '16x16', :alt => t('manifestation.add_derivation')), new_manifestation_path(:parent_id => manifestation.id) -%>
                     <% end %>
                   <%- end -%>
                 <%- end -%>
               </td>
             <% end %>
-          </tr>
+          <% end %>
+        </tr>

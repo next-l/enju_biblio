@@ -1,8 +1,4 @@
-<%- if @manifestation -%>
-  <%= render 'index_manifestation' -%>
-<%- elsif @parent -%>
-  <%= render 'index_parent' -%>
-<%- elsif @series_statement_merge_list -%>
+<%- if @series_statement_merge_list -%>
   <%= render 'index_series_statement_merge_list' -%>
 <%- else -%>
   <%= render 'index' -%>

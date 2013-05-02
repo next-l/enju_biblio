@@ -80,6 +80,8 @@ en:
         contributor_string: Contributor
         publisher_string: Publisher
         series_statement_string: Series statement
+        periodical: Periodical
+        series_master: Series master
       item:
         call_number: Call number
         item_identifier: Item identifier
@@ -172,6 +174,7 @@ en:
         periodical: Periodical
         title_transcription: Title transcription
         note: Note
+        series_master: Maseter
       country:
         name: Name
         display_name: Display name

@@ -5,9 +5,7 @@ describe SeriesStatement do
 
   it "should create manifestation" do
     series_statement = FactoryGirl.create(:series_statement)
-    series_statement.manifestation.should be_true
-    series_statement.reload
-    series_statement.manifestation.series_statements.count.should eq 1
+    series_statement.root_manifestation.should be_nil
   end
 end
 
