@@ -1,7 +1,7 @@
 class PageSweeper < ActionController::Caching::Sweeper
   include ExpireEditableFragment
   observe Create, Realize, Produce, Own, Exemplify,
-    SeriesStatement, SeriesHasManifestation, PictureFile
+    SeriesStatement, PictureFile
 
   def after_save(record)
     case record.class.to_s.to_sym

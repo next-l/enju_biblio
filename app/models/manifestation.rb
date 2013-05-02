@@ -196,6 +196,17 @@ class Manifestation < ActiveRecord::Base
     boolean :series_master do
       series_master?
     end
+    boolean :resource_master do
+      if periodical?
+        if series_master?
+          true
+        else
+          false
+        end
+      else
+        true
+      end
+    end
     time :acquired_at
   end
 

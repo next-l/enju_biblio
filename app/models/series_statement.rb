@@ -37,10 +37,6 @@ class SeriesStatement < ActiveRecord::Base
 
   paginates_per 10
 
-  def manifestation_included(manifestation)
-    series_has_manifestations.where(:manifestation_id => manifestation.id).first
-  end
-
   def titles
     [
       original_title,

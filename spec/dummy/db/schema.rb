@@ -1030,17 +1030,6 @@ ActiveRecord::Schema.define(:version => 20130429020822) do
     t.datetime "updated_at",       :null => false
   end
 
-  create_table "series_has_manifestations", :force => true do |t|
-    t.integer  "series_statement_id"
-    t.integer  "manifestation_id"
-    t.integer  "position"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
-  end
-
-  add_index "series_has_manifestations", ["manifestation_id"], :name => "index_series_has_manifestations_on_manifestation_id"
-  add_index "series_has_manifestations", ["series_statement_id"], :name => "index_series_has_manifestations_on_series_statement_id"
-
   create_table "series_statement_merge_lists", :force => true do |t|
     t.string   "title"
     t.datetime "created_at", :null => false
