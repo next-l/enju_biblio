@@ -171,7 +171,7 @@ describe ImportRequestsController do
       describe "with valid params", :vcr => true do
         it "assigns a newly created import_request as @import_request" do
           post :create, :import_request => @attrs
-          assigns(:import_request).should be_valid
+          assigns(:import_request).manifestation.save! #should be_valid
         end
 
         it "redirects to the created import_request" do

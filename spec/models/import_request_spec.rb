@@ -2,6 +2,8 @@
 require 'spec_helper'
 
 describe ImportRequest do
+  fixtures :all
+
   context "import" do
     it "should import bibliographic record", :vcr => true do
       old_count = Manifestation.count

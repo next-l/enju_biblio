@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130429020822) do
+ActiveRecord::Schema.define(:version => 20130504143515) do
 
   create_table "baskets", :force => true do |t|
     t.integer  "user_id"
@@ -191,6 +191,32 @@ ActiveRecord::Schema.define(:version => 20130429020822) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  create_table "classification_types", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "classifications", :force => true do |t|
+    t.integer  "parent_id"
+    t.string   "category",               :null => false
+    t.text     "note"
+    t.integer  "classification_type_id", :null => false
+    t.datetime "created_at",             :null => false
+    t.datetime "updated_at",             :null => false
+    t.integer  "lft"
+    t.integer  "rgt"
+    t.integer  "manifestation_id"
+  end
+
+  add_index "classifications", ["category"], :name => "index_classifications_on_category"
+  add_index "classifications", ["classification_type_id"], :name => "index_classifications_on_classification_type_id"
+  add_index "classifications", ["manifestation_id"], :name => "index_classifications_on_manifestation_id"
+  add_index "classifications", ["parent_id"], :name => "index_classifications_on_parent_id"
 
   create_table "content_types", :force => true do |t|
     t.string   "name",         :null => false
@@ -1087,6 +1113,58 @@ ActiveRecord::Schema.define(:version => 20130429020822) do
 
   add_index "shelves", ["library_id"], :name => "index_shelves_on_library_id"
 
+  create_table "subject_heading_type_has_subjects", :force => true do |t|
+    t.integer  "subject_id",              :null => false
+    t.string   "subject_type"
+    t.integer  "subject_heading_type_id", :null => false
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "subject_heading_type_has_subjects", ["subject_id"], :name => "index_subject_heading_type_has_subjects_on_subject_id"
+
+  create_table "subject_heading_types", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "subject_types", :force => true do |t|
+    t.string   "name",         :null => false
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "subjects", :force => true do |t|
+    t.integer  "parent_id"
+    t.integer  "use_term_id"
+    t.string   "term"
+    t.text     "term_transcription"
+    t.integer  "subject_type_id",                   :null => false
+    t.text     "scope_note"
+    t.text     "note"
+    t.integer  "required_role_id",   :default => 1, :null => false
+    t.integer  "lock_version",       :default => 0, :null => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.datetime "deleted_at"
+    t.string   "url"
+    t.integer  "manifestation_id"
+  end
+
+  add_index "subjects", ["manifestation_id"], :name => "index_subjects_on_manifestation_id"
+  add_index "subjects", ["parent_id"], :name => "index_subjects_on_parent_id"
+  add_index "subjects", ["required_role_id"], :name => "index_subjects_on_required_role_id"
+  add_index "subjects", ["subject_type_id"], :name => "index_subjects_on_subject_type_id"
+  add_index "subjects", ["term"], :name => "index_subjects_on_term"
+  add_index "subjects", ["use_term_id"], :name => "index_subjects_on_use_term_id"
+
   create_table "taggings", :force => true do |t|
     t.integer  "tag_id"
     t.integer  "taggable_id"
@@ -1225,5 +1303,17 @@ ActiveRecord::Schema.define(:version => 20130429020822) do
   end
 
   add_index "versions", ["item_type", "item_id"], :name => "index_versions_on_item_type_and_item_id"
+
+  create_table "work_has_subjects", :force => true do |t|
+    t.integer  "subject_id"
+    t.string   "subject_type"
+    t.integer  "work_id"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "work_has_subjects", ["subject_id"], :name => "index_work_has_subjects_on_subject_id"
+  add_index "work_has_subjects", ["work_id"], :name => "index_work_has_subjects_on_work_id"
 
 end
