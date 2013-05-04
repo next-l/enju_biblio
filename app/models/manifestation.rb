@@ -513,18 +513,6 @@ class Manifestation < ActiveRecord::Base
     }.compact
   end
 
-  def set_creators(creators = [])
-    self.creators = set_patrons(creators)
-  end
-
-  def set_contributors(contributors = [])
-    self.contributors = set_patrons(contributors)
-  end
-
-  def set_publishers(publishers = [])
-    self.publishers = set_patrons(publishers)
-  end
-
   def self.import_isbn(isbn)
     manifestation = Manifestation.import_from_ndl_search(:isbn => isbn) if defined?(EnjuNdl)
     #manifestation = Manifestation.import_from_cinii_books(:isbn => isbn) if defined?(EnjuNii)
@@ -541,19 +529,6 @@ class Manifestation < ActiveRecord::Base
     if series_master?
       derived_manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first
     end
-  end
-
-  private
-  def set_patrons(patrons)
-    new_patrons = []
-    patrons.each do |patron|
-      if patron.full_name.present?
-        new_patron = Patron.where(:full_name => patron.full_name).first
-        new_patron = Patron.create(:full_name => patron.full_name) unless new_patron
-      end
-      new_patrons << new_patron if new_patron
-    end
-    new_patrons
   end
 end
 

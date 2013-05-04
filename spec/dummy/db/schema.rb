@@ -640,6 +640,7 @@ ActiveRecord::Schema.define(:version => 20130429020822) do
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"
+  add_index "manifestations", ["date_of_publication"], :name => "index_manifestations_on_date_of_publication"
   add_index "manifestations", ["doi"], :name => "index_manifestations_on_doi"
   add_index "manifestations", ["isbn"], :name => "index_manifestations_on_isbn"
   add_index "manifestations", ["issn"], :name => "index_manifestations_on_issn"

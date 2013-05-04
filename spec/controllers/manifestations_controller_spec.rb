@@ -118,12 +118,6 @@ describe ManifestationsController do
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
       end
 
-      it "should get index with publisher_id" do
-        get :index, :publisher_id => 1
-        response.should be_success
-        assigns(:manifestations).collect(&:id).should eq Patron.find(1).manifestations.order('created_at DESC').collect(&:id)
-      end
-
       it "should get index with query" do
         get :index, :query => '2005'
         response.should be_success

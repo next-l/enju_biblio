@@ -45,18 +45,11 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/1
   # GET /series_statements/1.json
   def show
-    #@manifestations = @series_statement.manifestations.order('date_of_publication DESC').page(params[:manifestation_page]).per(Manifestation.default_per_page)
-    #store_location
-
     respond_to do |format|
-      format.html { # show.html.erb
-        redirect_to series_statement_manifestations_url(@series_statement)
-      }
+      format.html # show.html.erb
       format.json { render :json => @series_statement }
       #format.js
-      format.mobile {
-        redirect_to series_statement_manifestations_url(@series_statement)
-      }
+      #format.mobile
     end
   end
 

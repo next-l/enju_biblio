@@ -82,6 +82,8 @@ ja:
         series_statement_string: シリーズ情報
         periodical: 定期刊行物
         series_master: シリーズ情報マスタ
+        subject: 件名
+        classification: 分類
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID

@@ -16,18 +16,38 @@
   </div>
 
   <div class="field">
-    <%= f.label :periodical %><br />
+    <%= f.label :periodical %>
     <%= f.check_box :periodical %>
+  </div>
+
+  <div class="field">
+    <%= f.label :edition_string -%>
+    <%= f.text_field :edition_string %>
+    <%= f.label :edition -%>
+    <%= f.text_field :edition, :class => 'resource_integer' -%>
+    <br />
+    <%= f.label :volume_number_string -%>
+    <%= f.text_field :volume_number_string %>
+    <%= f.label :volume_number -%>
+    <%= f.text_field :volume_number, :class => 'resource_integer' -%>
+    <br />
+    <%= f.label :issue_number_string -%>
+    <%= f.text_field :issue_number_string %>
+    <%= f.label :issue_number -%>
+    <%= f.text_field :issue_number, :class => 'resource_integer' -%>
+    <br />
+    <%= f.label :serial_number -%>
+    <%= f.text_field :serial_number, :class => 'resource_integer' -%>
   </div>
 
   <div class="field">
     <%= f.label :series_statement_string -%><br />
     <%= f.fields_for :series_statements do |series_form| %>
       <%= f.label :original_title %><br />
-      <%= series_form.text_field :original_title %>
+      <%= series_form.text_field :original_title, :class => 'resource_title' %>
       <%= series_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %><br />
       <%= f.label :title_transcription %><br />
-      <%= series_form.text_field :title_transcription %><br />
+      <%= series_form.text_field :title_transcription, :class => 'resource_title' %><br />
       <%= f.label :volume_number_string %><br />
       <%= series_form.text_field :volume_number_string %><br />
       <%= f.label :creator_string %><br />
@@ -65,33 +85,20 @@
     <p><%= f.link_to_add t('page.add'), :publishers %></p>
   </div>
 
-  <%- if @series_statement.try(:periodical?) -%>
-    <%= render :partial => 'manifestations/serial_form', :locals => {:f => f, :manifestation => @manifestation} -%>
-  <%- else -%>
-    <div class="field">
-      <%= f.label :edition_string -%>
-      <%= f.text_field :edition_string %>
-      <%= f.label :edition -%>
-      <%= f.text_field :edition, :class => 'resource_integer' -%>
-      <br />
-      <%= f.label :volume_number_string -%>
-      <%= f.text_field :volume_number_string %>
-      <%= f.label :volume_number -%>
-      <%= f.text_field :volume_number, :class => 'resource_integer' -%>
-    </div>
-  <% end %>
+  <div class="field">
+    <%= f.label :pub_date -%>
+    <%= f.text_field :pub_date, :class => 'date_field', :placeholder => "#{t('page.example')}: 2011, 2011-04-12"-%>
+  </div>
 
   <div class="field">
-    <%= f.label t('page.file') -%><br />
+    <%= f.label t('page.file') -%>
     <%= f.file_field :attachment -%>
   </div>
 
   <div class="field">
     <%= f.label t('activerecord.models.content_type') -%>
     <%= f.select(:content_type_id, @content_types.collect{|c| [c.display_name.localize, c.id]}) -%>
-  </div>
 
-  <div class="field">
     <%= f.label t('activerecord.models.carrier_type') -%>
     <%= f.select(:carrier_type_id, @carrier_types.collect{|c| [c.display_name.localize, c.id]}) -%>
     <!-- TODO: Formの切り替え時に入力項目をAjaxで書き換える -->
@@ -100,14 +107,7 @@
   <div class="field">
     <%= f.label t('activerecord.models.frequency') -%>
     <%= f.select(:frequency_id, @frequencies.collect{|frequency| [frequency.display_name.localize, frequency.id]}) -%>
-  </div>
 
-  <div class="field">
-    <%= f.label :pub_date -%>
-    <%= f.text_field :pub_date, :class => 'date_field', :placeholder => "#{t('page.example')}: 2011, 2011-04-12"-%>
-  </div>
-
-  <div class="field">
     <%= f.label t('activerecord.models.language') -%>
     <%= f.select(:language_id, @languages.collect{|language| [language.display_name.localize, language.id]}) -%>
   </div>
@@ -126,8 +126,23 @@
   </div>
 
   <div class="field">
-    <%= f.label :classification_number -%><br />
-    <%= f.text_area :classification_number, :class => 'resource_textarea' -%>
+    <%= f.label :subject -%><br />
+    <%= f.fields_for :subjects do |subject_form| %>
+      <%= subject_form.text_field :term %>
+      <%= subject_form.select(:subject_type_id, @subject_types.collect{|s| [s.display_name.localize, s.id]}) %>
+      <%= subject_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure')  %>
+    <% end %>
+    <p><%= f.link_to_add t('page.add'), :subjects %></p>
+  </div>
+
+  <div class="field">
+    <%= f.label :classification -%><br />
+    <%= f.fields_for :classifications do |classification_form| %>
+      <%= classification_form.select(:classification_type_id, @classification_types.collect{|c| [c.display_name.localize, c.id]}) %>
+      <%= classification_form.text_field :category %>
+      <%= classification_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure')  %>
+    <% end %>
+    <p><%= f.link_to_add t('page.add'), :classifications %></p>
   </div>
 
   <div class="field">

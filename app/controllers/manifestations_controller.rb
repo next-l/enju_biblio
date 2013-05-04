@@ -181,7 +181,8 @@ class ManifestationsController < ApplicationController
         :issue_number,
         :serial_number,
         :edition_string,
-        :edition
+        :edition,
+        :periodical
       ] if params[:format] == 'html' or params[:format].nil?
       all_result = search.execute
       @count[:query_result] = all_result.total
@@ -446,7 +447,6 @@ class ManifestationsController < ApplicationController
       @manifestation.original_title = parent.original_title
       @manifestation.title_transcription = parent.title_transcription
       @manifestation.periodical = true if parent.periodical
-      @manifestation.series_statements.new(:original_title => parent.root_series_statement.original_title)
     end
 
     respond_to do |format|
@@ -461,9 +461,6 @@ class ManifestationsController < ApplicationController
       unless params[:mode] == 'tag_edit'
         access_denied; return
       end
-    end
-    if defined?(EnjuSubject)
-      @classification_types = ClassificationType.select(:display_name)
     end
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
@@ -484,9 +481,12 @@ class ManifestationsController < ApplicationController
     end
 
     respond_to do |format|
-      set_patrons
       if @manifestation.save
-        parent.derived_manifestations << @manifestation if parent
+        if parent
+          parent.derived_manifestations << @manifestation
+          parent.index
+          @manifestation.index
+        end
         Sunspot.commit
 
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }
@@ -504,7 +504,6 @@ class ManifestationsController < ApplicationController
   def update
     respond_to do |format|
       if @manifestation.update_attributes(params[:manifestation])
-        set_patrons
         Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
         format.json { head :no_content }
@@ -675,12 +674,16 @@ class ManifestationsController < ApplicationController
   end
 
   def prepare_options
-    @carrier_types = CarrierType.all
-    @content_types = ContentType.all
-    @roles = Role.all
-    @languages = Language.all_cache
-    @frequencies = Frequency.all
-    @nii_types = NiiType.all if defined?(EnjuNii)
+    @carrier_types = CarrierType.select([:id, :display_name, :position])
+    @content_types = ContentType.select([:id, :display_name, :position])
+    @roles = Role.select([:id, :display_name, :position])
+    @languages = Language.select([:id, :display_name, :position])
+    @frequencies = Frequency.select([:id, :display_name, :position])
+    @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
+    if defined?(EnjuSubject)
+      @subject_types = SubjectType.select([:id, :display_name, :position])
+      @classification_types = ClassificationType.select([:id, :display_name, :position])
+    end
   end
 
   def get_index_patron
@@ -767,11 +770,5 @@ class ManifestationsController < ApplicationController
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query
-  end
-
-  def set_patrons
-    @manifestation.set_creators(@manifestation.creators)
-    @manifestation.set_contributors(@manifestation.contributors)
-    @manifestation.set_publishers(@manifestation.publishers)
   end
 end
