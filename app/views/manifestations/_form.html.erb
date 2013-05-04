@@ -43,16 +43,16 @@
   <div class="field">
     <%= f.label :series_statement_string -%><br />
     <%= f.fields_for :series_statements do |series_form| %>
-      <%= f.label :original_title %><br />
+      <%= series_form.label :original_title %><br />
       <%= series_form.text_field :original_title, :class => 'resource_title' %>
       <%= series_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %><br />
-      <%= f.label :title_transcription %><br />
+      <%= series_form.label :title_transcription %><br />
       <%= series_form.text_field :title_transcription, :class => 'resource_title' %><br />
-      <%= f.label :volume_number_string %><br />
+      <%= series_form.label :volume_number_string %><br />
       <%= series_form.text_field :volume_number_string %><br />
-      <%= f.label :creator_string %><br />
+      <%= series_form.label :creator_string %><br />
       <%= series_form.text_field :creator_string %><br />
-      <%= f.label :series_master %>
+      <%= series_form.label :series_master %>
       <%= series_form.check_box :series_master %>
     <% end %>
     <p><%= f.link_to_add t('page.add'), :series_statements %></p>
@@ -62,7 +62,7 @@
     <%= f.label :creator_string -%><br />
     <%= f.fields_for :creators do |creator_form| %>
       <%= creator_form.text_field :full_name %>
-      <%= creator_form.link_to_remove t('page.remove') %>
+      <%= creator_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %>
     <% end %>
     <p><%= f.link_to_add t('page.add'), :creators %></p>
   </div>
@@ -71,7 +71,7 @@
     <%= f.label :contributor_string -%><br />
     <%= f.fields_for :contributors do |contributor_form| %>
       <%= contributor_form.text_field :full_name %>
-      <%= contributor_form.link_to_remove t('page.remove') %>
+      <%= contributor_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %>
     <% end %>
     <p><%= f.link_to_add t('page.add'), :contributors %></p>
   </div>
@@ -80,7 +80,7 @@
     <%= f.label :publisher_string -%><br />
     <%= f.fields_for :publishers do |publisher_form| %>
       <%= publisher_form.text_field :full_name %>
-      <%= publisher_form.link_to_remove t('page.remove') %>
+      <%= publisher_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure') %>
     <% end %>
     <p><%= f.link_to_add t('page.add'), :publishers %></p>
   </div>
@@ -128,6 +128,7 @@
   <div class="field">
     <%= f.label :subject -%><br />
     <%= f.fields_for :subjects do |subject_form| %>
+      <%= subject_form.select(:subject_heading_type_id, @subject_heading_types.collect{|s| [s.display_name.localize, s.id]}) %>
       <%= subject_form.text_field :term %>
       <%= subject_form.select(:subject_type_id, @subject_types.collect{|s| [s.display_name.localize, s.id]}) %>
       <%= subject_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure')  %>

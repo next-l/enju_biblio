@@ -682,6 +682,7 @@ class ManifestationsController < ApplicationController
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
     if defined?(EnjuSubject)
       @subject_types = SubjectType.select([:id, :display_name, :position])
+      @subject_heading_types = SubjectHeadingType.select([:id, :display_name, :position])
       @classification_types = ClassificationType.select([:id, :display_name, :position])
     end
   end

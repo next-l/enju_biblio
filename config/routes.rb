@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  resources :people
-
-
   resources :manifestations do
     resources :patrons
     resources :produces
@@ -66,9 +63,7 @@ Rails.application.routes.draw do
 
   resources :donates
 
-  resources :series_statements do
-    resources :manifestations
-  end
+  resources :series_statements
 
   resources :countries
   resources :languages
@@ -99,8 +94,6 @@ Rails.application.routes.draw do
 
   resources :picture_files
 
-  resources :accepts
-
-  match '/isbn/:isbn' => 'manifestations#show'
-  match '/page/advanced_search' => 'page#advanced_search'
+  get '/isbn/:isbn' => 'manifestations#show'
+  get '/page/advanced_search' => 'page#advanced_search'
 end
