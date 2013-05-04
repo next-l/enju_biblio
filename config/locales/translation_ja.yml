@@ -8,7 +8,7 @@ ja:
       embody: 具体化
       exemplify: 書誌と所蔵の関係
       extent: 大きさ
-      form_of_work: 書いた資料の形態
+      form_of_work: 著作の形態
       frequency: 発行頻度
       item: 所蔵情報
       language: 言語
@@ -32,7 +32,6 @@ ja:
       realize_type: 表現の関係
       resource_import_file: 資料のインポート用ファイル
       resource_import_result: 資料インポートの結果
-      series_has_manifestation: シリーズ情報と資料の関係
       series_statement: シリーズ情報
       series_statement_relationship: シリーズ情報の関係
       country: 国と地域
@@ -170,10 +169,9 @@ ja:
         title_subseries: 副シリーズ名
         title_subseries_transcription: 副シリーズ名よみ
         numbering_subseries: 副シリーズ番号
-        work: 書いた資料
+        work: 著作
         series_statement_identifier: シリーズ識別子
         issn: ISSN
-        periodical: 定期刊行物
         title_transcription: シリーズ名よみ
         note: 注記
         series_master: マスタ
