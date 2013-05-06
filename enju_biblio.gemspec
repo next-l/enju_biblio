@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_manifestation_viewer", "~> 0.1.0.pre7"
   s.add_development_dependency "enju_export", "~> 0.1.1.pre4"
   s.add_development_dependency "enju_circulation", "~> 0.1.0.pre25"
-  s.add_development_dependency "enju_ndl", "~> 0.1.0.pre18"
+  s.add_development_dependency "enju_ndl", "~> 0.1.0.pre19"
   s.add_development_dependency "mobylette"
   s.add_development_dependency "simplecov"
   s.add_development_dependency "fakeweb"

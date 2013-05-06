@@ -35,6 +35,7 @@ ja:
       series_statement: シリーズ情報
       country: 国と地域
       donate: 寄贈
+      identifier_type: 識別子の種類
 
     attributes:
       manifestation:
@@ -284,6 +285,10 @@ ja:
         display_name: 表示名
         note: 注記
       produce_type:
+        name: 名称
+        display_name: 表示名
+        note: 注記
+      identifier_type:
         name: 名称
         display_name: 表示名
         note: 注記

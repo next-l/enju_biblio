@@ -35,6 +35,7 @@ en:
       series_statement: Series statement
       country: Country
       donate: Donate
+      identifier_type: Identifier type
 
     attributes:
       manifestation:
@@ -284,6 +285,10 @@ en:
         display_name: Display name
         note: Note
       produce_type:
+        name: Name
+        display_name: Display name
+        note: Note
+      identitifer_type:
         name: Name
         display_name: Display name
         note: Note

@@ -11,7 +11,7 @@
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can [:read, :create, :update], IdentifierType
         can [:destroy, :delete], IdentifierType do |identifier_type|
-          true unless identifier_type.manifestations.exists?
+          true unless identifier_type.identifiers.exists?
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can [:read, :create, :update], Item
         can [:destroy, :delete], Item do |item|

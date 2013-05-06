@@ -1,9 +1,16 @@
-class IdentifierType < ActiveRecord::Base
-  attr_accessible :display_name, :name, :note, :position
-  include MasterModel
-  default_scope :order => "identifier_types.position"
-  has_many :identifiers
-end
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+one:
+  name: isbn
+  display_name: ISBN
+  note: 
+  position: 1
+
+two:
+  name: issn
+  display_name: ISSN
+  note: 
+  position: 2
 
 # == Schema Information
 #
