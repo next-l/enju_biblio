@@ -1,4 +1,9 @@
 Rails.application.routes.draw do
+
+  resources :identifiers
+
+  resources :identifier_types
+
   resources :manifestations do
     resources :patrons
     resources :produces

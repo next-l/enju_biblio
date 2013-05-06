@@ -9,6 +9,10 @@
         can [:destroy, :delete], CarrierType do |carrier_type|
           true unless carrier_type.manifestations.exists?
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
+        can [:read, :create, :update], IdentifierType
+        can [:destroy, :delete], IdentifierType do |identifier_type|
+          true unless identifier_type.manifestations.exists?
+        end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can [:read, :create, :update], Item
         can [:destroy, :delete], Item do |item|
           item.removable?
@@ -58,6 +62,7 @@
           Extent,
           Frequency,
           FormOfWork,
+          IdentifierType,
           Language,
           License,
           MediumOfPerformance,
@@ -103,6 +108,7 @@
           Extent,
           Frequency,
           FormOfWork,
+          IdentifierType,
           Language,
           License,
           ManifestationRelationshipType,
@@ -151,6 +157,7 @@
           Extent,
           Frequency,
           FormOfWork,
+          IdentifierType,
           Language,
           License,
           ManifestationRelationship,
@@ -181,6 +188,7 @@
           Extent,
           Frequency,
           FormOfWork,
+          IdentifierType,
           Item,
           Language,
           License,

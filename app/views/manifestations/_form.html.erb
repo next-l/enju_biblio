@@ -126,6 +126,16 @@
   </div>
 
   <div class="field">
+    <%= f.label :identifier -%><br />
+    <%= f.fields_for :identifiers do |identifier_form| %>
+      <%= identifier_form.select(:identifier_type_id, @identifier_types.collect{|i| [i.display_name.localize, i.id]}) %>
+      <%= identifier_form.text_field :body %>
+      <%= identifier_form.link_to_remove t('page.remove'), :confirm => t('page.are_you_sure')  %>
+    <% end %>
+    <p><%= f.link_to_add t('page.add'), :identifiers %></p>
+  </div>
+
+  <div class="field">
     <%= f.label :subject -%><br />
     <%= f.fields_for :subjects do |subject_form| %>
       <%= subject_form.select(:subject_heading_type_id, @subject_heading_types.collect{|s| [s.display_name.localize, s.id]}) %>

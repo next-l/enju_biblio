@@ -33,7 +33,6 @@ en:
       resource_import_file: Resource import file
       resource_import_result: Resource Import Result
       series_statement: Series statement
-      series_statement_relationship: Series statement relationship
       country: Country
       donate: Donate
 
@@ -83,6 +82,7 @@ en:
         series_master: Series master
         subject: Subject
         classification: Classification
+        identifier: Identifier
       item:
         call_number: Call number
         item_identifier: Item identifier
@@ -98,7 +98,7 @@ en:
       patron:
         last_name: Last name
         middle_name: Middle name
-        first_name: Name
+        first_name: First name
         last_name_transcription: Last name transcription
         middle_name_transcription: Middle name transcription
         first_name_transcription: First name transcription
@@ -129,9 +129,6 @@ en:
         language: Language
         email: Email
         url: URL
-      series_statement_relationship:
-        parent_id: Parent
-        child_id: Child
       patron_import_file:
         patron_import_file_name: Filename
         patron_import_content_type: Content type
@@ -175,6 +172,8 @@ en:
         title_transcription: Title transcription
         note: Note
         series_master: Maseter
+        volume_nunber_string: Volume number
+        creator_string: Creator
       country:
         name: Name
         display_name: Display name

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130504143515) do
+ActiveRecord::Schema.define(:version => 20130506175834) do
 
   create_table "baskets", :force => true do |t|
     t.integer  "user_id"
@@ -383,6 +383,26 @@ ActiveRecord::Schema.define(:version => 20130504143515) do
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
+
+  create_table "identifier_types", :force => true do |t|
+    t.string   "name"
+    t.text     "display_name"
+    t.text     "note"
+    t.integer  "position"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  create_table "identifiers", :force => true do |t|
+    t.string   "body"
+    t.integer  "identifier_type_id"
+    t.integer  "manifestation_id"
+    t.boolean  "primary"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+  end
+
+  add_index "identifiers", ["body", "identifier_type_id"], :name => "index_identifiers_on_body_and_identifier_type_id"
 
   create_table "import_requests", :force => true do |t|
     t.string   "isbn"
@@ -1146,16 +1166,17 @@ ActiveRecord::Schema.define(:version => 20130504143515) do
     t.integer  "use_term_id"
     t.string   "term"
     t.text     "term_transcription"
-    t.integer  "subject_type_id",                   :null => false
+    t.integer  "subject_type_id",                        :null => false
     t.text     "scope_note"
     t.text     "note"
-    t.integer  "required_role_id",   :default => 1, :null => false
-    t.integer  "lock_version",       :default => 0, :null => false
+    t.integer  "required_role_id",        :default => 1, :null => false
+    t.integer  "lock_version",            :default => 0, :null => false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
     t.string   "url"
     t.integer  "manifestation_id"
+    t.integer  "subject_heading_type_id"
   end
 
   add_index "subjects", ["manifestation_id"], :name => "index_subjects_on_manifestation_id"

@@ -21,7 +21,8 @@ class Manifestation < ActiveRecord::Base
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :ndc, :content_type_id, :attachment, :classification_number,
     :series_statements_attributes, :periodical,
-    :creators_attributes, :contributors_attributes, :publishers_attributes
+    :creators_attributes, :contributors_attributes, :publishers_attributes,
+    :identifiers_attributes
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string, :parent_id
 
@@ -46,11 +47,13 @@ class Manifestation < ActiveRecord::Base
   belongs_to :frequency
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
+  has_many :identifiers
   belongs_to :nii_type if defined?(EnjuNii)
   accepts_nested_attributes_for :creators, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :contributors, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :publishers, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :series_statements, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :identifiers, :allow_destroy => true, :reject_if => :all_blank
 
   searchable do
     text :title, :default_boost => 2 do

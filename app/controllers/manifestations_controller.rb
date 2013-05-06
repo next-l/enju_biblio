@@ -679,6 +679,8 @@ class ManifestationsController < ApplicationController
     @roles = Role.select([:id, :display_name, :position])
     @languages = Language.select([:id, :display_name, :position])
     @frequencies = Frequency.select([:id, :display_name, :position])
+    @identifier_types = IdentifierType.select([:id, :display_name, :position])
+    @content_types = ContentType.select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
     if defined?(EnjuSubject)
       @subject_types = SubjectType.select([:id, :display_name, :position])
