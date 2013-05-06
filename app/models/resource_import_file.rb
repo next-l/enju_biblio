@@ -393,11 +393,10 @@ class ResourceImportFile < ActiveRecord::Base
   def import_subject(row)
     subjects = []
     row['subject'].to_s.split('//').each do |s|
-      subject = Subject.where(:term => s.to_s.strip).first
-      unless subject
-        # TODO: Subject typeの設定
-        subject = Subject.create(:term => s.to_s.strip, :subject_type_id => 1)
-      end
+      # TODO: Subject typeの設定
+      subject = Subject.new(:term => s.to_s.strip)
+      subject.subject_type = SubjectType.where(:name => 'concept').first
+      subject.subject_heading_type = SubjectHeadingType.where(:name => 'unknown').first
       subjects << subject
     end
     subjects
