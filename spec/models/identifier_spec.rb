@@ -1,11 +1,9 @@
-class Identifier < ActiveRecord::Base
-  attr_accessible :body, :identifier_type_id, :manifestation_id, :primary
-  belongs_to :identifier_type
-  belongs_to :manifestation
+# -*- encoding: utf-8 -*-
+require 'spec_helper'
 
-  validates_presence_of :body
-  validates_uniqueness_of :body, :scope => [:identifier_type_id, :manifestation_id]
-  acts_as_list :scope => :manifestation_id
+describe Identifier do
+  #pending "add some examples to (or delete) #{__FILE__}"
+
 end
 
 # == Schema Information

@@ -1,0 +1,30 @@
+<%= form_for(@identifier) do |f| %>
+  <% if @identifier.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@identifier.errors.count, "error") %> prohibited this identifier from being saved:</h2>
+
+      <ul>
+      <% @identifier.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :body %><br />
+    <%= f.text_field :body %>
+  </div>
+  <div class="field">
+    <%= f.label :manifestation_id %><br />
+    <%= f.hidden_field :manifestation_id %>
+    <%= link_to @identifier.manifestation.original_title, @identifier.manifestation %>
+  </div>
+  <div class="field">
+    <%= f.label :primary %><br />
+    <%= f.check_box :primary %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

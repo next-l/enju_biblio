@@ -1,0 +1,14 @@
+<div id="content_detail" class="ui-corner-all">
+<h1 class="title"><%= t('page.new', :model => t('activerecord.models.identifier')) -%></h1>
+<div id="content_list" class="ui-corner-all">
+
+<%= render 'form' %>
+
+</div>
+</div>
+
+<div id="submenu">
+  <ul>
+    <li><%= link_to t('page.back'), identifiers_path %></li>
+  </ul>
+</div>

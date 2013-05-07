@@ -1,12 +1,16 @@
-class Identifier < ActiveRecord::Base
-  attr_accessible :body, :identifier_type_id, :manifestation_id, :primary
-  belongs_to :identifier_type
-  belongs_to :manifestation
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-  validates_presence_of :body
-  validates_uniqueness_of :body, :scope => [:identifier_type_id, :manifestation_id]
-  acts_as_list :scope => :manifestation_id
-end
+one:
+  body: 12345678
+  manifestation_id: 1
+  identifier_type_id: 1
+  primary: false
+
+two:
+  body: 99999999
+  manifestation_id: 2
+  identifier_type_id: 2
+  primary: false
 
 # == Schema Information
 #

@@ -394,10 +394,11 @@ ActiveRecord::Schema.define(:version => 20130506175834) do
   end
 
   create_table "identifiers", :force => true do |t|
-    t.string   "body"
-    t.integer  "identifier_type_id"
+    t.string   "body",               :null => false
+    t.integer  "identifier_type_id", :null => false
     t.integer  "manifestation_id"
     t.boolean  "primary"
+    t.integer  "position"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
   end

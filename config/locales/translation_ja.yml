@@ -293,6 +293,10 @@ ja:
         name: 名称
         display_name: 表示名
         note: 注記
+      identifier:
+        body: 内容
+        manifestation_id: 体現形
+        primary: 主に使用
 
   resource_import_file:
     update_relationship: 関連を更新

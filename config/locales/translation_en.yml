@@ -293,6 +293,10 @@ en:
         name: Name
         display_name: Display name
         note: Note
+      identifier:
+        body: Body
+        manifestation_id: Manifestation
+        primary: Primary
 
   resource_import_file:
     update_relationship: Update relationship

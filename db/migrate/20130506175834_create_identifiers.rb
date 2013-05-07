@@ -1,10 +1,11 @@
 class CreateIdentifiers < ActiveRecord::Migration
   def change
     create_table :identifiers do |t|
-      t.string :body
-      t.integer :identifier_type_id
+      t.string :body, :null => false
+      t.integer :identifier_type_id, :null => false
       t.integer :manifestation_id
       t.boolean :primary
+      t.integer :position
 
       t.timestamps
     end
