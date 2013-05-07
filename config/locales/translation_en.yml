@@ -35,6 +35,7 @@ en:
       series_statement: Series statement
       country: Country
       donate: Donate
+      identifier: Identifier
       identifier_type: Identifier type
 
     attributes:

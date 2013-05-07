@@ -23,8 +23,6 @@ class PageSweeper < ActionController::Caching::Sweeper
       expire_editable_fragment(record.item)
     when :SeriesStatement
       expire_editable_fragment(record.manifestation)
-    when :SeriesHasManifestation
-      expire_editable_fragment(record.manifestation)
     when :PictureFile
       if record.picture_attachable_type?
         expire_editable_fragment(record.picture_attachable)
