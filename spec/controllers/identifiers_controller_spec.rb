@@ -19,7 +19,7 @@ describe IdentifiersController do
 
       it "assigns all identifiers as @identifiers" do
         get :index
-        assigns(:identifiers).should eq(Identifier.all)
+        assigns(:identifiers).should eq(Identifier.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe IdentifiersController do
 
       it "assigns all identifiers as @identifiers" do
         get :index
-        assigns(:identifiers).should eq(Identifier.all)
+        assigns(:identifiers).should eq(Identifier.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe IdentifiersController do
 
       it "assigns all identifiers as @identifiers" do
         get :index
-        assigns(:identifiers).should eq(Identifier.all)
+        assigns(:identifiers).should eq(Identifier.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all identifiers as @identifiers" do
         get :index
-        assigns(:identifiers).should eq(Identifier.all)
+        assigns(:identifiers).should eq(Identifier.page(1))
       end
     end
   end

@@ -249,13 +249,6 @@ end
 #  height                          :integer
 #  width                           :integer
 #  depth                           :integer
-#  isbn                            :string(255)
-#  isbn10                          :string(255)
-#  wrong_isbn                      :string(255)
-#  nbn                             :string(255)
-#  lccn                            :string(255)
-#  oclc_number                     :string(255)
-#  issn                            :string(255)
 #  price                           :integer
 #  fulltext                        :text
 #  volume_number_string            :string(255)

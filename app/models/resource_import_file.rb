@@ -91,10 +91,6 @@ class ResourceImportFile < ActiveRecord::Base
         manifestation = Manifestation.where(:manifestation_identifier => row['manifestation_identifier'].to_s.strip).first
       end
 
-      if row['nbn'].present?
-        manifestation = Manifestation.where(:nbn => row['nbn'].to_s.strip).first
-      end
-
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "")
@@ -105,7 +101,7 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['isbn'].present?
           isbn = StdNum::ISBN.normalize(row['isbn'])
-          m = Manifestation.find_by_isbn(isbn)
+          m = Manifestation.find_by_isbn(isbn).first
         end
         if m
           if m.series_statements.exists?
@@ -530,12 +526,6 @@ class ResourceImportFile < ActiveRecord::Base
         :title_transcription => title[:title_transcription],
         :title_alternative => title[:title_alternative],
         :title_alternative_transcription => title[:title_alternative_transcription],
-        :isbn => isbn,
-        :wrong_isbn => row['wrong_isbn'],
-        :issn => row['issn'],
-        :lccn => row['lccn'],
-        :nbn => row['nbn'],
-        :ndc => row['ndc'],
         :pub_date => row['pub_date'],
         :volume_number_string => row['volume_number_string'].to_s.split('　').first.try(:tr, '０-９', '0-9'),
         :issue_number_string => row['issue_number_string'],

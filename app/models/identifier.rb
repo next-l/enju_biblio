@@ -6,13 +6,13 @@ class Identifier < ActiveRecord::Base
   validates_presence_of :body
   validates_uniqueness_of :body, :scope => [:identifier_type_id, :manifestation_id]
   validate :check_identifier
-  before_validation :convert_isbn
+  before_save :convert_isbn
 
   acts_as_list :scope => :manifestation_id
   normalize_attributes :body
 
   def check_identifier
-    case identifier_type.name
+    case identifier_type.try(:name)
     when 'isbn'
       unless StdNum::ISBN.valid?(body)
         errors.add(:body)
@@ -49,16 +49,16 @@ class Identifier < ActiveRecord::Base
   end
 end
 
-
 # == Schema Information
 #
 # Table name: identifiers
 #
 #  id                 :integer          not null, primary key
-#  body               :string(255)
-#  identifier_type_id :integer
+#  body               :string(255)      not null
+#  identifier_type_id :integer          not null
 #  manifestation_id   :integer
 #  primary            :boolean
+#  position           :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #

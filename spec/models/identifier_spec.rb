@@ -11,10 +11,11 @@ end
 # Table name: identifiers
 #
 #  id                 :integer          not null, primary key
-#  body               :string(255)
-#  identifier_type_id :integer
+#  body               :string(255)      not null
+#  identifier_type_id :integer          not null
 #  manifestation_id   :integer
 #  primary            :boolean
+#  position           :integer
 #  created_at         :datetime         not null
 #  updated_at         :datetime         not null
 #

@@ -35,6 +35,7 @@ class ImportRequest < ActiveRecord::Base
   end
 
   def import!
+    return nil unless Manifestation.respond_to?(:import_isbn)
     unless manifestation
       manifestation = Manifestation.import_isbn(isbn)
       if manifestation

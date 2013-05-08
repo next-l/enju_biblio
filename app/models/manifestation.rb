@@ -90,10 +90,10 @@ class Manifestation < ActiveRecord::Base
         identifier_contents(:issn)
       end
     end
-    string :lccn do
+    string :lccn, :multiple => true do
       identifier_contents(:lccn)
     end
-    string :nbn do
+    string :nbn, :multiple => true do
       identifier_contents(:nbn)
     end
     string :carrier_type do
@@ -383,10 +383,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    lisbn = Lisbn.new(isbn.to_s)
-    if lisbn.valid?
-      Manifestation.includes(:identifiers => :identifier_type)
-    end
+    identifier_type = IdentifierType.where(:name => 'isbn').first
+    return nil unless identifier_type
+    Manifestation.includes(:identifiers => :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
   end
 
   def index_series_statement
@@ -475,7 +474,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    if IdentifierType.where(:name => name).exists?
+    if IdentifierType.where(:name => name.to_s).exists?
       identifiers.where(:identifier_type_id => IdentifierType.where(:name => name).first.id).pluck(:body)
     end
   end
@@ -505,13 +504,6 @@ end
 #  height                          :integer
 #  width                           :integer
 #  depth                           :integer
-#  isbn                            :string(255)
-#  isbn10                          :string(255)
-#  wrong_isbn                      :string(255)
-#  nbn                             :string(255)
-#  lccn                            :string(255)
-#  oclc_number                     :string(255)
-#  issn                            :string(255)
 #  price                           :integer
 #  fulltext                        :text
 #  volume_number_string            :string(255)
