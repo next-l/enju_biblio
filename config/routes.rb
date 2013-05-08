@@ -99,6 +99,6 @@ Rails.application.routes.draw do
 
   resources :picture_files
 
-  get '/isbn/:isbn' => 'manifestations#show'
+  get '/isbn/:isbn' => 'manifestations#index'
   get '/page/advanced_search' => 'page#advanced_search'
 end

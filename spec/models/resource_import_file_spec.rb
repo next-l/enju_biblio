@@ -16,16 +16,16 @@ describe ResourceImportFile do
           old_items_count = Item.count
           old_patrons_count = Patron.count
           old_import_results_count = ResourceImportResult.count
-          @file.import_start.should eq({:manifestation_imported => 11, :item_imported => 6, :manifestation_found => 1, :item_found => 3, :failed => 7})
+          @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
           manifestation = Item.where(:item_identifier => '11111').first.manifestation
           manifestation.publishers.first.full_name.should eq 'test4'
           manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
           manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
           manifestation.produces.first.produce_type.name.should eq 'publisher'
           manifestation.creates.first.create_type.name.should eq 'author'
-          Manifestation.count.should eq old_manifestations_count + 8
+          Manifestation.count.should eq old_manifestations_count + 9
           Item.count.should eq old_items_count + 6
-          Patron.count.should eq old_patrons_count + 6
+          Patron.count.should eq old_patrons_count + 9
           ResourceImportResult.count.should eq old_import_results_count + 17
   
           manifestation_101 = Manifestation.where(:manifestation_identifier => '101').first
@@ -62,7 +62,7 @@ describe ResourceImportFile do
           item_10104.bookstore.should be_nil
   
           manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
-          manifestation_104.isbn.should eq '9784797327038'
+          manifestation_104.identifier_contents(:isbn).should eq '9784797327038'
           manifestation_104.original_title.should eq 'test10'
           manifestation_104.creators.collect(&:full_name).should eq ['test3']
           manifestation_104.publishers.collect(&:full_name).should eq ['test4']
@@ -82,14 +82,14 @@ describe ResourceImportFile do
           old_items_count = Item.count
           old_patrons_count = Patron.count
           old_import_results_count = ResourceImportResult.count
-          @file.import_start.should eq({:manifestation_imported => 11, :item_imported => 6, :manifestation_found => 1, :item_found => 3, :failed => 7})
+          @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
           manifestation = Item.where(:item_identifier => '11111').first.manifestation
           manifestation.publishers.first.full_name.should eq 'test4'
           manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
           manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
-          Manifestation.count.should eq old_manifestations_count + 8
+          Manifestation.count.should eq old_manifestations_count + 9
           Item.count.should eq old_items_count + 6
-          Patron.count.should eq old_patrons_count + 6
+          Patron.count.should eq old_patrons_count + 9
           ResourceImportResult.count.should eq old_import_results_count + 17
           Item.find_by_item_identifier('10101').manifestation.creators.size.should eq 2
           Item.find_by_item_identifier('10101').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')

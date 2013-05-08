@@ -348,18 +348,8 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/1
   # GET /manifestations/1.json
   def show
-    if params[:isbn]
-      @manifestation = Manifestation.find_by_isbn(params[:isbn])
-      if @manifestation
-        redirect_to manifestation_url(@manifestation, :format => params[:format])
-        return
-      else
-        raise ActiveRecord::RecordNotFound
-      end
-    else
-      if @version
-        @manifestation = @manifestation.versions.find(@version).item if @version
-      end
+    if @version
+      @manifestation = @manifestation.versions.find(@version).item if @version
     end
 
     case params[:mode]
@@ -557,39 +547,39 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} subject_sm:#{options[:subject]}"
     #end
 
-    unless options[:tag].blank?
+    if options[:tag].present?
       query = "#{query} tag_sm:#{options[:tag]}"
     end
 
-    unless options[:creator].blank?
+    if options[:creator].present?
       query = "#{query} creator_text:#{options[:creator]}"
     end
 
-    unless options[:contributor].blank?
+    if options[:contributor].present?
       query = "#{query} contributor_text:#{options[:contributor]}"
     end
 
-    unless options[:isbn].blank?
+    if options[:isbn].present?
       query = "#{query} isbn_sm:#{options[:isbn].gsub('-', '')}"
     end
 
-    unless options[:issn].blank?
+    if options[:issn].present?
       query = "#{query} issn_sm:#{options[:issn].gsub('-', '')}"
     end
 
-    unless options[:lccn].blank?
+    if options[:lccn].present?
       query = "#{query} lccn_s:#{options[:lccn]}"
     end
 
-    unless options[:nbn].blank?
+    if options[:nbn].present?
       query = "#{query} nbn_s:#{options[:nbn]}"
     end
 
-    unless options[:publisher].blank?
+    if options[:publisher].present?
       query = "#{query} publisher_text:#{options[:publisher]}"
     end
 
-    unless options[:item_identifier].blank?
+    if options[:item_identifier].present?
       query = "#{query} item_identifier_sm:#{options[:item_identifier]}"
     end
 

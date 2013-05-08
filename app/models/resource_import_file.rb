@@ -94,14 +94,21 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          manifestation = Manifestation.where(:doi => doi).first if doi.present?
+          manifestation = Manifestation.where(:doi => doi).first
+        end
+      end
+
+      unless manifestation
+        if row['nbn'].present?
+          nbn = row['nbn'].to_s.strip
+          manifestation = Identifier.where(:body => 'nbn', :identifier_type_id => IdentifierType.where(:name => 'nbn').first_or_create.id).first.try(:manifestation)
         end
       end
 
       unless manifestation
         if row['isbn'].present?
           isbn = StdNum::ISBN.normalize(row['isbn'])
-          m = Manifestation.find_by_isbn(isbn).first
+          m = Identifier.where(:body => isbn, :identifier_type_id => IdentifierType.where(:name => 'isbn').first_or_create.id).first.try(:manifestation)
         end
         if m
           if m.series_statements.exists?
@@ -471,6 +478,20 @@ class ResourceImportFile < ActiveRecord::Base
     
     carrier_type = CarrierType.where(:name => row['carrier_type'].to_s.strip).first
 
+    identifier = {}
+    if row['isbn']
+      identifier[:isbn] = Identifier.new(:body => row['isbn'])
+      identifier[:isbn].identifier_type = IdentifierType.where(:name => 'isbn').first_or_create
+    end
+    if row['nbn']
+      identifier[:nbn] = Identifier.new(:body => row['nbn'])
+      identifier[:nbn].identifier_type = IdentifierType.where(:name => 'nbn').first_or_create
+    end
+    if row['issn']
+      identifier[:issn] = Identifier.new(:body => row['issn'])
+      identifier[:issn].identifier_type = IdentifierType.where(:name => 'issn').first_or_create
+    end
+
     if end_page >= 1
       start_page = 1
     else
@@ -542,7 +563,6 @@ class ResourceImportFile < ActiveRecord::Base
         :start_page => start_page,
         :end_page => end_page,
         :access_address => row['access_address'],
-        :doi => row['doi'],
         :manifestation_identifier => row['manifestation_identifier'],
         :fulltext_content => fulltext_content
       }.delete_if{|key, value| value.nil?}
@@ -566,6 +586,13 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       manifestation.carrier_type = carrier_type if carrier_type
+
+      Manifestation.transaction do
+        manifestation.identifiers.delete_all if manifestation.identifiers.exists?
+        identifier.each do |k, v|
+          manifestation.identifiers << v if v.valid?
+        end
+      end
 
       if row['series_original_title'].to_s.strip.present?
         Manifestation.transaction do
