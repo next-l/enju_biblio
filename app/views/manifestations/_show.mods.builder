@@ -77,8 +77,12 @@
     end
     xml.abstract manifestation.description
     xml.note manifestation.note
-    xml.identifier manifestation.isbn, :type => 'isbn'
-    xml.identifier manifestation.lccn, :type => 'lccn'
+    manifestation.isbn.each do |i|
+      xml.identifier i, :type => 'isbn'
+    end
+    manifestation.lccn.each do |l|
+      xml.identifier l, :type => 'lccn'
+    end
     xml.recordInfo{
       xml.recordCreationDate manifestation.created_at
       xml.recordChangeDate manifestation.updated_at

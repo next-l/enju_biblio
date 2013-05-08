@@ -12,8 +12,8 @@ class Manifestation < ActiveRecord::Base
   attr_accessible :original_title, :title_alternative, :title_transcription,
     :manifestation_identifier, :date_copyrighted,
     :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
-    :end_page, :height, :width, :depth, :isbn, :wrong_isbn, :nbn, :lccn,
-    :oclc_number, :issn, :price, :fulltext, :volume_number_string,
+    :end_page, :height, :width, :depth,
+    :price, :fulltext, :volume_number_string,
     :issue_number_string, :serial_number_string, :edition, :note,
     :repository_content, :required_role_id, :frequency_id,
     :title_alternative_transcription, :description, :abstract, :available_at,
@@ -81,17 +81,21 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, :multiple => true do
-      [isbn, isbn10, wrong_isbn]
+      identifier_contents(:isbn)
     end
     string :issn, :multiple => true do
       if series_statements.exists?
-        [issn, (series_statements.map{|s| s.manifestation.issn})].flatten.uniq.compact
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
       else
-        issn
+        identifier_contents(:issn)
       end
     end
-    string :lccn
-    string :nbn
+    string :lccn do
+      identifier_contents(:lccn)
+    end
+    string :nbn do
+      identifier_contents(:nbn)
+    end
     string :carrier_type do
       carrier_type.name
     end
@@ -182,13 +186,13 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      [isbn, isbn10, wrong_isbn]
+      identifier_contents(:isbn)
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statements.exists?
-        [issn, (series_statements.map{|s| s.manifestation.issn})].flatten.uniq.compact
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
       else
-        issn
+        identifier_contents(:issn)
       end
     end
     string :sort_title
@@ -226,74 +230,21 @@ class Manifestation < ActiveRecord::Base
   validates_associated :carrier_type, :language
   validates :start_page, :numericality => true, :allow_blank => true
   validates :end_page, :numericality => true, :allow_blank => true
-  validates :isbn, :uniqueness => true, :allow_blank => true, :unless => proc{|manifestation| manifestation.series_statements.exists?}
-  validates :nbn, :uniqueness => true, :allow_blank => true
   validates :manifestation_identifier, :uniqueness => true, :allow_blank => true
   validates :pub_date, :format => {:with => /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, :allow_blank => true
   validates :access_address, :url => true, :allow_blank => true, :length => {:maximum => 255}
-  validate :check_isbn, :check_issn, :check_lccn, :unless => :during_import
   validates :issue_number, :numericality => {:greater_than => 0}, :allow_blank => true
   validates :volume_number, :numericality => {:greater_than => 0}, :allow_blank => true
   validates :serial_number, :numericality => {:greater_than => 0}, :allow_blank => true
   validates :edition, :numericality => {:greater_than => 0}, :allow_blank => true
-  before_validation :set_wrong_isbn, :check_issn, :check_lccn, :if => :during_import
-  before_validation :convert_isbn, :if => :isbn_changed?
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
   after_destroy :index_series_statement
-  normalize_attributes :manifestation_identifier, :pub_date, :isbn, :issn, :nbn, :lccn, :original_title
+  normalize_attributes :manifestation_identifier, :pub_date, :original_title
   paginates_per 10
 
   attr_accessor :during_import, :parent_id
-
-  def check_isbn
-    if isbn.present?
-      unless StdNum::ISBN.valid?(isbn)
-        errors.add(:isbn)
-      end
-    end
-  end
-
-  def check_issn
-    self.issn = StdNum::ISSN.normalize(issn)
-    if issn.present?
-      unless StdNum::ISSN.valid?(issn)
-        errors.add(:issn)
-      end
-    end
-  end
-
-  def check_lccn
-    if lccn.present?
-      unless StdNum::LCCN.valid?(lccn)
-        errors.add(:lccn)
-      end
-    end
-  end
-
-  def set_wrong_isbn
-    if isbn.present?
-      unless StdNum::ISBN.valid?(isbn)
-        self.wrong_isbn
-        self.isbn = nil
-      end
-    end
-  end
-
-  def convert_isbn
-    return nil unless isbn
-    lisbn = Lisbn.new(isbn)
-    if lisbn.isbn
-      if lisbn.isbn.length == 10
-        self.isbn10 = lisbn.isbn10
-        self.isbn = lisbn.isbn13
-      elsif lisbn.isbn.length == 13
-        self.isbn = lisbn.isbn10
-        self.isbn = lisbn.isbn13
-      end
-    end
-  end
 
   def set_date_of_publication
     return if pub_date.blank?
@@ -382,11 +333,6 @@ class Manifestation < ActiveRecord::Base
     titles
   end
 
-  def hyphenated_isbn
-    lisbn = Lisbn.new(isbn)
-    lisbn.parts.join('-')
-  end
-
   # TODO: よりよい推薦方法
   def self.pickup(keyword = nil)
     return nil if self.cached_numdocs < 5
@@ -439,7 +385,7 @@ class Manifestation < ActiveRecord::Base
   def self.find_by_isbn(isbn)
     lisbn = Lisbn.new(isbn.to_s)
     if lisbn.valid?
-      Manifestation.where(:isbn => lisbn.isbn13).first || Manifestation.where(:isbn => lisbn.isbn10).first
+      Manifestation.includes(:identifiers => :identifier_type)
     end
   end
 
@@ -516,12 +462,6 @@ class Manifestation < ActiveRecord::Base
     }.compact
   end
 
-  def self.import_isbn(isbn)
-    manifestation = Manifestation.import_from_ndl_search(:isbn => isbn) if defined?(EnjuNdl)
-    #manifestation = Manifestation.import_from_cinii_books(:isbn => isbn) if defined?(EnjuNii)
-    manifestation
-  end
-
   def latest_issue
     if series_master?
       derived_manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first
@@ -531,6 +471,12 @@ class Manifestation < ActiveRecord::Base
   def first_issue
     if series_master?
       derived_manifestations.where('date_of_publication IS NOT NULL').order('date_of_publication DESC').first
+    end
+  end
+
+  def identifier_contents(name)
+    if IdentifierType.where(:name => name).exists?
+      identifiers.where(:identifier_type_id => IdentifierType.where(:name => name).first.id).pluck(:body)
     end
   end
 end

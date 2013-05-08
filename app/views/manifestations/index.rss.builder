@@ -30,7 +30,9 @@ xml.rss('version' => "2.0",
             xml.pubDate manifestation.date_of_publication.try(:utc).try(:rfc822)
             xml.link manifestation_url(manifestation)
             xml.guid manifestation_url(manifestation), :isPermaLink => "true"
-            xml.tag! "dc:identifier", manifestation.isbn
+            manifestation.isbn.each do |i|
+              xml.tag! "dc:identifier", i
+            end
           end
         end
     end

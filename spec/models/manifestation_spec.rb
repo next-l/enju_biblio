@@ -200,10 +200,6 @@ describe Manifestation, :solr => true do
     manifestations(:manifestation_00001).title.should be_true
   end
 
-  it "should import isbn", :vcr => true do
-    Manifestation.import_isbn('4797327030').should be_valid
-  end
-
   it "should respond to pickup" do
     Manifestation.pickup.should_not raise_error(ActiveRecord::RecordNotFound)
   end
