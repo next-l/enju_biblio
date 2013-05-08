@@ -62,7 +62,7 @@ describe ResourceImportFile do
           item_10104.bookstore.should be_nil
   
           manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
-          manifestation_104.identifier_contents(:isbn).should eq '9784797327038'
+          manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
           manifestation_104.original_title.should eq 'test10'
           manifestation_104.creators.collect(&:full_name).should eq ['test3']
           manifestation_104.publishers.collect(&:full_name).should eq ['test4']
