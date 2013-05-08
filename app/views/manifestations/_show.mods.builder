@@ -77,10 +77,10 @@
     end
     xml.abstract manifestation.description
     xml.note manifestation.note
-    manifestation.isbn.each do |i|
+    manifestation.identifier_content(:isbn).each do |i|
       xml.identifier i, :type => 'isbn'
     end
-    manifestation.lccn.each do |l|
+    manifestation.identifier_content(:lccn).each do |l|
       xml.identifier l, :type => 'lccn'
     end
     xml.recordInfo{

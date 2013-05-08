@@ -1,12 +1,13 @@
 xml.dcndl :BibResource do
   xml.rdf :Description, 'rdf:about' => manifestation_url(manifestation) do
-    if manifestation.nbn?
-      xml.dcterms :identifier, manifestation.nbn, 'rdf:datatype' => 'http://ndl.go.jp/dcndl/terms/JPNO'
-      xml.rdfs :seeAlso, 'rdf:resource' => "http://id.ndl.go.jp/jpno/#{manifestation.nbn}"
+    if manifestation.identifier_contents(:nbn).first
+      xml.dcterms :identifier, manifestation.identifier_contents(:nbn).first, 'rdf:datatype' => 'http://ndl.go.jp/dcndl/terms/JPNO'
+
+      xml.rdfs :seeAlso, 'rdf:resource' => "http://id.ndl.go.jp/jpno/#{manifestation.identifier_contents(:nbn).first}"
     end
-    manifestation.isbn.each do |i|
+    manifestation.identifier_contents(:isbn).each do |i|
       xml.dcterms :identifier, i, 'rdf:datatype' => 'http://ndl.go.jp/dcndl/terms/ISBN'
-      xml.rdfs :seeAlso, 'rdf:resource' => "http://iss.ndl.go.jp/isbn/#{manifestation.i}"
+      xml.rdfs :seeAlso, 'rdf:resource' => "http://iss.ndl.go.jp/isbn/#{i}"
     end
     xml.dcterms :title, manifestation.original_title
     xml.dc :title do
