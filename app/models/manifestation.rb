@@ -19,7 +19,7 @@ class Manifestation < ActiveRecord::Base
     :title_alternative_transcription, :description, :abstract, :available_at,
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :ndc, :content_type_id, :attachment, :classification_number,
+    :content_type_id, :attachment,
     :series_statements_attributes, :periodical,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes
@@ -476,6 +476,8 @@ class Manifestation < ActiveRecord::Base
   def identifier_contents(name)
     if IdentifierType.where(:name => name.to_s).exists?
       identifiers.where(:identifier_type_id => IdentifierType.where(:name => name).first.id).pluck(:body)
+    else
+      []
     end
   end
 end
