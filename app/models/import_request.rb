@@ -48,14 +48,14 @@ class ImportRequest < ActiveRecord::Base
     else
       sm_fail!
     end
-  #rescue ActiveRecord::RecordInvalid
-  #  sm_fail!
-  #rescue NameError
-  #  sm_fail!
-  #rescue EnjuNdl::RecordNotFound
-  #  sm_fail!
-  #rescue EnjuNii::RecordNotFound
-  #  sm_fail!
+  rescue ActiveRecord::RecordInvalid
+    sm_fail!
+  rescue NameError
+    sm_fail!
+  rescue EnjuNdl::RecordNotFound
+    sm_fail!
+  rescue EnjuNii::RecordNotFound
+    sm_fail!
   end
 end
 
