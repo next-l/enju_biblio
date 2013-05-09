@@ -11,7 +11,7 @@
 
 <% @identifiers.each do |identifier| %>
   <tr class="line<%= cycle("0", "1") -%>">
-    <td><%= link_to identifier.body, identifier %></td>
+    <td><%= link_to "#{identifier.identifier_type.name}: #{identifier.body}", identifier %></td>
     <td><%= link_to identifier.manifestation.original_title, identifier.manifestation if identifier.manifestation %></td>
     <td>
       <%= link_to t('page.edit'), edit_identifier_path(identifier) %>
@@ -26,7 +26,7 @@
 </div>
 </div>
 
-<div id="submenu">
+<div id="submenu" class="ui-corner-all">
   <ul>
     <li><%= link_to 'New Identifier', new_identifier_path %></li>
   </ul>

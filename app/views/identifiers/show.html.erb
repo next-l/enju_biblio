@@ -4,24 +4,24 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <b>Body:</b>
-  <%= @identifier.body %>
+  <b><%= t('activerecord.attributes.identifier.body') %>:</b>
+  <%= @identifier.identifier_type.name %>: <%= @identifier.body %>
 </p>
 
 <p>
-  <b>Manifestation:</b>
-  <%= @identifier.manifestation_id %>
+  <b><%= t('activerecord.attributes.identifier.manifestation_id') %>:</b>
+  <%= link_to @identifier.manifestation.original_title, @identifier.manifestation %>
 </p>
 
 <p>
-  <b>Primary:</b>
+  <b><%= t('activerecord.attributes.identifier.primary') %>:</b>
   <%= @identifier.primary %>
 </p>
 
 </div>
 </div>
 
-<div id="submenu">
+<div id="submenu" class="ui-corner-all">
   <ul>
     <li><%= link_to t('page.edit'), edit_identifier_path(@identifier) %></li>
     <li><%= link_to t('page.back'), identifiers_path %></li>

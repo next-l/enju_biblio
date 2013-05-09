@@ -13,12 +13,13 @@
 
   <div class="field">
     <%= f.label :body %><br />
+    <%= @identifier.identifier_type.name if @identifier.identifier_type %>
     <%= f.text_field :body %>
   </div>
   <div class="field">
     <%= f.label :manifestation_id %><br />
     <%= f.hidden_field :manifestation_id %>
-    <%= link_to @identifier.manifestation.original_title, @identifier.manifestation %>
+    <%= link_to @identifier.manifestation.original_title, @identifier.manifestation if @identifier.manifestation %>
   </div>
   <div class="field">
     <%= f.label :primary %><br />
