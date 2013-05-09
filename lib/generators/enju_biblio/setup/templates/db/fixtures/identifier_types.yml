@@ -5,12 +5,14 @@ one:
   display_name: ISBN
   note: 
   position: 1
+  id: 1
 
 two:
   name: issn
   display_name: ISSN
   note: 
   position: 2
+  id: 2
 
 # == Schema Information
 #
