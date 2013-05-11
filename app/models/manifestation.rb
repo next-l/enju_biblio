@@ -19,7 +19,7 @@ class Manifestation < ActiveRecord::Base
     :title_alternative_transcription, :description, :abstract, :available_at,
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :content_type_id, :attachment,
+    :content_type_id, :attachment, :lock_version,
     :series_statements_attributes, :periodical,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes
