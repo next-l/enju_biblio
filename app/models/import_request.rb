@@ -54,8 +54,8 @@ class ImportRequest < ActiveRecord::Base
     sm_fail!
   rescue EnjuNdl::RecordNotFound
     sm_fail!
-  rescue EnjuNii::RecordNotFound
-    sm_fail!
+  #rescue EnjuNii::RecordNotFound
+  #  sm_fail!
   end
 end
 
