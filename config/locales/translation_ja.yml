@@ -85,6 +85,12 @@ ja:
         subject: 件名
         classification: 分類
         identifier: 識別子
+      manifestation/subjects:
+          term: 件名
+      manifestation/classifications:
+          category: 分類
+      manifestation/identifiers:
+          body: 識別子
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID

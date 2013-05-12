@@ -85,6 +85,12 @@ en:
         subject: Subject
         classification: Classification
         identifier: Identifier
+      manifestation/subjects:
+          term: Subject
+      manifestation/classifications:
+          category: Classification
+      manifestation/identifiers:
+          body: Identifier
       item:
         call_number: Call number
         item_identifier: Item identifier

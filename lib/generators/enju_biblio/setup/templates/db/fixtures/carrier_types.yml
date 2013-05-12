@@ -1,0 +1,35 @@
+--- 
+carrier_type_00001: 
+  name: print
+  display_name: print
+  id: 1
+  position: 1
+carrier_type_00002: 
+  name: CD
+  display_name: CD
+  id: 2
+  position: 2
+carrier_type_00003: 
+  name: DVD
+  display_name: DVD
+  id: 3
+  position: 3
+carrier_type_00004: 
+  name: file
+  display_name: file
+  id: 4
+  position: 4
+
+# == Schema Information
+#
+# Table name: carrier_types
+#
+#  id           :integer          not null, primary key
+#  name         :string(255)      not null
+#  display_name :text
+#  note         :text
+#  position     :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
