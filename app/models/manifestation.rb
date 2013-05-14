@@ -94,8 +94,8 @@ class Manifestation < ActiveRecord::Base
     string :lccn, :multiple => true do
       identifier_contents(:lccn)
     end
-    string :nbn, :multiple => true do
-      identifier_contents(:nbn)
+    string :jpno, :multiple => true do
+      identifier_contents(:jpno)
     end
     string :carrier_type do
       carrier_type.name

@@ -571,8 +571,8 @@ class ManifestationsController < ApplicationController
       query = "#{query} lccn_s:#{options[:lccn]}"
     end
 
-    if options[:nbn].present?
-      query = "#{query} nbn_s:#{options[:nbn]}"
+    if options[:jpno].present?
+      query = "#{query} jpno_s:#{options[:jpno]}"
     end
 
     if options[:publisher].present?

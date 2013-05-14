@@ -99,9 +99,9 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       unless manifestation
-        if row['nbn'].present?
-          nbn = row['nbn'].to_s.strip
-          manifestation = Identifier.where(:body => 'nbn', :identifier_type_id => IdentifierType.where(:name => 'nbn').first_or_create.id).first.try(:manifestation)
+        if row['jpno'].present?
+          jpno = row['jpno'].to_s.strip
+          manifestation = Identifier.where(:body => 'jpno', :identifier_type_id => IdentifierType.where(:name => 'jpno').first_or_create.id).first.try(:manifestation)
         end
       end
 
@@ -483,9 +483,9 @@ class ResourceImportFile < ActiveRecord::Base
       identifier[:isbn] = Identifier.new(:body => row['isbn'])
       identifier[:isbn].identifier_type = IdentifierType.where(:name => 'isbn').first_or_create
     end
-    if row['nbn']
-      identifier[:nbn] = Identifier.new(:body => row['nbn'])
-      identifier[:nbn].identifier_type = IdentifierType.where(:name => 'nbn').first_or_create
+    if row['jpno']
+      identifier[:jpno] = Identifier.new(:body => row['jpno'])
+      identifier[:jpno].identifier_type = IdentifierType.where(:name => 'jpno').first_or_create
     end
     if row['issn']
       identifier[:issn] = Identifier.new(:body => row['issn'])
