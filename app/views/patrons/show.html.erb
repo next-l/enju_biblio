@@ -78,58 +78,6 @@
         <td><strong><%= t('activerecord.models.language') -%>:</strong></td>
         <td><%= @patron.language.display_name.localize -%></td>
       </tr>
-      <%- if can? :delete, @patron -%>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.zip_code_1') -%>:</strong></td>
-          <td><%= @patron.zip_code_1 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.address_1') -%>:</strong></td>
-          <td><%= @patron.address_1 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.telephone_number_1') -%>:</strong></td>
-          <td><%= @patron.telephone_number_1 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.fax_number_1') -%>:</strong></td>
-          <td><%= @patron.fax_number_1 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.address_1_note') -%>:</strong></td>
-          <td><%= @patron.address_1_note -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.zip_code_2') -%>:</strong></td>
-          <td><%= @patron.zip_code_2 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.address_2') -%>:</strong></td>
-          <td><%= @patron.address_2 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.telephone_number_2') -%>:</strong></td>
-          <td><%= @patron.telephone_number_2 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.fax_number_2') -%>:</strong></td>
-          <td><%= @patron.fax_number_2 -%></td>
-        </tr>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.patron.address_2_note') -%>:</strong></td>
-          <td><%= @patron.address_2_note -%></td>
-        </tr>
-        <%- if !@patron.user or (@patron.user and current_user.try(:has_role?, 'Administrator')) %>
-          <tr>
-            <td><strong><%= t('activerecord.attributes.patron.date_of_birth') -%>:</strong></td>
-            <td><%= l(@patron.date_of_birth, :format => :only_date) if @patron.date_of_birth -%></td>
-          </tr>
-          <tr>
-            <td><strong><%= t('activerecord.attributes.patron.date_of_death') -%>:</strong></td>
-            <td><%= l(@patron.date_of_death, :format => :only_date) if @patron.date_of_death -%></td>
-          </tr>
-        <% end %>
-      <%- end -%>
       <tr>
         <td><strong><%= t('activerecord.attributes.patron.note') -%>:</strong></td>
         <td><%= @patron.note -%></td>

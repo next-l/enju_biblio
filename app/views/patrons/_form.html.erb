@@ -79,65 +79,6 @@
     <%= f.submit %>
   </div>
 
-  <hr />
-
-  <div id="address_1">
-  <div class="field">
-    <%= f.label :zip_code_1 -%><br />
-    <%= f.text_field :zip_code_1, :class => 'resource_zip_code' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :address_1 -%><br />
-    <%= f.text_area :address_1, :class => 'resource_textarea' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :telephone_number_1 -%><br />
-    <%= f.phone_field :telephone_number_1, :class => 'resource_telephone_number' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :fax_number_1 -%><br />
-    <%= f.phone_field :fax_number_1, :class => 'resource_telephone_number' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :address_1_note -%><br />
-    <%= f.text_area :address_1_note, :class => 'resource_textarea' -%>
-  </div>
-  <div class="field"><%= link_to_function t('patron.other_address'), "$('#address_2').toggle()" -%></div>
-  </div>
-
-  <div id="address_2" style="display: none">
-  <hr />
-  <div class="field">
-    <%= f.label :zip_code_2 -%><br />
-    <%= f.text_field :zip_code_2, :class => 'resource_zip_code' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :address_2 -%><br />
-    <%= f.text_area :address_2, :class => 'resource_textarea' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :telephone_number_2 -%><br />
-    <%= f.phone_field :telephone_number_2, :class => 'resource_telephone_number' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :fax_number_2 -%><br />
-    <%= f.phone_field :fax_number_2, :class => 'resource_telephone_number' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :address_2_note -%><br />
-    <%= f.text_area :address_2_note, :class => 'resource_textarea' -%>
-  </div>
-  </div>
-
-  <hr />
   <div class="field">
     <%= f.label :note -%><br />
     <%= f.text_area :note, :class => 'resource_textarea' -%>

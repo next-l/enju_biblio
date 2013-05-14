@@ -20,7 +20,7 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :content_type_id, :attachment, :lock_version,
-    :series_statements_attributes, :periodical,
+    :series_statements_attributes, :periodical, :statement_of_responsibility,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes
   attr_accessible :fulltext_content,
@@ -59,7 +59,8 @@ class Manifestation < ActiveRecord::Base
     text :title, :default_boost => 2 do
       titles
     end
-    text :fulltext, :note, :creator, :contributor, :publisher, :description
+    text :fulltext, :note, :creator, :contributor, :publisher, :description,
+      :statement_of_responsibility
     text :item_identifier do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier)

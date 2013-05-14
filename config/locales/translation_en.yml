@@ -85,6 +85,7 @@ en:
         subject: Subject
         classification: Classification
         identifier: Identifier
+        statement_of_responsibility: Statement of responsibility
       manifestation/subjects:
           term: Subject
       manifestation/classifications:
