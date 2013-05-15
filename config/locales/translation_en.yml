@@ -101,7 +101,6 @@ en:
         url: URL
         price: Price
         lock_version: Lock version
-        checkout_type: Checkout type
         acquired_at: Acquired at
         donation: Donation
       patron:

@@ -101,7 +101,6 @@ ja:
         url: URL
         price: 購入価格
         lock_version: ロックバージョン
-        checkout_type: 貸出区分
         acquired_at: 受入日
         donation: 寄贈情報
       patron:
