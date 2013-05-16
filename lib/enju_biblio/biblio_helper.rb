@@ -51,7 +51,7 @@ module EnjuBiblio
       if options[:nolink]
         patrons_list = patrons.map{|patron| patron.full_name}
       else
-        patrons_list = patrons.map{|patron| link_to(patron.full_name, manifestations_path(:query => patron.full_name), options)}
+        patrons_list = patrons.map{|patron| link_to(patron.full_name, manifestations_path(:query => "\"#{patron.full_name}\""), options)}
       end
       patrons_list.join(" ").html_safe
     end
