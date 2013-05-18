@@ -538,7 +538,6 @@ end
 #  volume_number                   :integer
 #  issue_number                    :integer
 #  serial_number                   :integer
-#  ndc                             :string(255)
 #  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
 #  attachment_meta                 :text
@@ -546,5 +545,6 @@ end
 #  fulltext_content                :boolean
 #  doi                             :string(255)
 #  periodical                      :boolean
+#  statement_of_responsibility     :text
 #
 

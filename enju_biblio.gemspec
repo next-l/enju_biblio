@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.add_dependency "enju_core", "~> 0.1.1.pre4"
   s.add_dependency "paperclip", "~> 3.4"
   s.add_dependency "paperclip-meta"
-  s.add_dependency "aws-sdk", "~> 1.9.5"
+  s.add_dependency "aws-sdk"
   s.add_dependency "marc"
   s.add_dependency "inherited_resources"
   s.add_dependency "paper_trail"
