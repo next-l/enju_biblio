@@ -48,14 +48,6 @@ class Patron < ActiveRecord::Base
   before_validation :set_role_and_name, :on => :create
   before_save :set_date_of_birth, :set_date_of_death
 
-  has_paper_trail
-  #attr_accessor :user_username
-  #[:address_1, :address_2].each do |column|
-  #  encrypt_with_public_key column,
-  #    :key_pair => File.join(Rails.root.to_s,'config','keypair.pem'),
-  #    :base64 => true
-  #end
-
   searchable do
     text :name, :place, :address_1, :address_2, :other_designation, :note
     string :zip_code_1

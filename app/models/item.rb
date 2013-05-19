@@ -33,7 +33,6 @@ class Item < ActiveRecord::Base
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
   validates_date :acquired_at, :allow_blank => true
 
-  has_paper_trail
   normalize_attributes :item_identifier
 
   searchable do

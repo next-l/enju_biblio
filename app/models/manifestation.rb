@@ -218,7 +218,6 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  has_paper_trail
   if Setting.uploaded_file.storage == :s3
     has_attached_file :attachment, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
       :s3_permissions => :private
