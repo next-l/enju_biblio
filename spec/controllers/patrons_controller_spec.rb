@@ -124,13 +124,17 @@ describe PatronsController do
       #end
 
       it "should not show patron who does not create a work" do
-        get :show, :id => 3, :work_id => 3
-        response.should be_missing
+        lambda{
+          get :show, :id => 3, :work_id => 3
+        }.should raise_error(ActiveRecord::RecordNotFound)
+        #response.should be_missing
       end
 
       it "should not show patron who does not produce a manifestation" do
-        get :show, :id => 4, :manifestation_id => 4
-        response.should be_missing
+        lambda{
+          get :show, :id => 4, :manifestation_id => 4
+        }.should raise_error(ActiveRecord::RecordNotFound)
+        #response.should be_missing
       end
 
       #it "should not show patron when required_role is 'Administrator'" do

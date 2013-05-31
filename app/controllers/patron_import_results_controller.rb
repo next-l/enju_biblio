@@ -9,7 +9,7 @@ class PatronImportResultsController < InheritedResources::Base
     if @patron_import_file
       @patron_import_results = @patron_import_file.patron_import_results.page(params[:page])
     else
-      @patron_import_results = @patron_import_results.page(params[:page])
+      @patron_import_results = PatronImportResult.page(params[:page])
     end
   end
 end

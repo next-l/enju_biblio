@@ -13,7 +13,7 @@ class ResourceImportResultsController < InheritedResources::Base
         @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
       end
     else
-      @resource_import_results = @resource_import_results.page(params[:page])
+      @resource_import_results = ResourceImportResult.page(params[:page])
     end
   end
 end

@@ -54,7 +54,7 @@ module Dummy
   end
 end
 
-require 'enju_library'
+require 'enju_leaf'
 require 'enju_circulation'
 require 'enju_inventory'
 require 'enju_bookmark'
