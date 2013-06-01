@@ -325,24 +325,26 @@ class ManifestationsController < ApplicationController
       format.csv  { render :layout => false }
       format.rdf  { render :layout => false }
       format.atom
-      format.oai {
-        case params[:verb]
-        when 'Identify'
-          render :template => 'manifestations/identify'
-        when 'ListMetadataFormats'
-          render :template => 'manifestations/list_metadata_formats'
-        when 'ListSets'
-          @series_statements = SeriesStatement.select([:id, :original_title])
-          render :template => 'manifestations/list_sets'
-        when 'ListIdentifiers'
-          render :template => 'manifestations/list_identifiers'
-        when 'ListRecords'
-          render :template => 'manifestations/list_records'
-        end
-      }
       format.mods
       format.json { render :json => @manifestations }
       format.js
+      if defined?(EnjuOai)
+        format.oai {
+          case params[:verb]
+          when 'Identify'
+            render :template => 'manifestations/identify'
+          when 'ListMetadataFormats'
+            render :template => 'manifestations/list_metadata_formats'
+          when 'ListSets'
+            @series_statements = SeriesStatement.select([:id, :original_title])
+            render :template => 'manifestations/list_sets'
+          when 'ListIdentifiers'
+            render :template => 'manifestations/list_identifiers'
+          when 'ListRecords'
+            render :template => 'manifestations/list_records'
+          end
+        }
+      end
     end
   end
 
@@ -406,7 +408,6 @@ class ManifestationsController < ApplicationController
         end
       }
       format.rdf
-      format.oai
       format.mods
       format.json { render :json => @manifestation }
       #format.atom { render :template => 'manifestations/oai_ore' }
@@ -424,6 +425,9 @@ class ManifestationsController < ApplicationController
           render :template => 'page/404', :status => 404
         end
       }
+      if defined?(EnjuOai)
+        format.oai
+      end
     end
   end
 
