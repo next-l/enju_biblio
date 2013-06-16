@@ -32,7 +32,7 @@
     <% end %>
   </tr>
   <%- @items.each do |item| -%>
-    <tr>
+    <tr class="line<%= cycle("0", "1") -%>">
       <td>
         <%- if item.item_identifier? -%>
           <%= link_to item.item_identifier, item -%>

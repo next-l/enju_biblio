@@ -41,7 +41,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all">
-  <%- if can? :create, Country -%>
+  <%- if can? :create, Language -%>
     <ul>
       <li><%= link_to t('page.new', :model => t('activerecord.models.language')), new_language_path -%></li>
     </ul>
