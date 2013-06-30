@@ -7,11 +7,11 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <%- if @create.patron -%>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.work')), creator_manifestations_path(@create.patron) -%></li>
+    <%- if @create.agent -%>
+      <li><%= link_to t('page.listing', :model => t('activerecord.models.work')), creator_manifestations_path(@create.agent) -%></li>
     <%- end -%>
     <%- if @create.work -%>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.patron')), work_patrons_path(@create.work) -%></li>
+      <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), work_agents_path(@create.work) -%></li>
     <%- end -%>
   </ul>
 </div>

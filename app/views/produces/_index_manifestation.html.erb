@@ -8,7 +8,7 @@
 <table class="table table-striped index">
   <tr>
     <th id="position"></th>
-    <th><%= t('activerecord.models.patron') -%></th>
+    <th><%= t('activerecord.models.agent') -%></th>
     <th><%= t('page.created_at') -%></th>
     <th><%= t('page.updated_at') -%></th>
   </tr>
@@ -21,7 +21,7 @@
         <%= produce.last? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_down.png', :size => '16x16', :alt => t('page.desc')), manifestation_produce_path(produce.manifestation, produce, :move => 'lower'), :method => :put) -%>
       <%- end -%>
     </td>
-    <td><%= link_to produce.patron.try(:full_name), produce.patron -%></td>
+    <td><%= link_to produce.agent.try(:full_name), produce.agent -%></td>
     <td><%= l(produce.created_at) -%></td>
     <td><%= l(produce.updated_at) -%></td>
   </tr>
@@ -35,7 +35,7 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.patron')), manifestation_patrons_path(manifestation) -%></li>
+    <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), manifestation_agents_path(manifestation) -%></li>
     <%- if can? :create, Produce -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_manifestation_produce_path(manifestation) -%></li>
     <%- end -%>

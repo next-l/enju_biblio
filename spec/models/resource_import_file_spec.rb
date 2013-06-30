@@ -13,7 +13,7 @@ describe ResourceImportFile do
       it "should be imported", :vcr => true do
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
-        old_patrons_count = Patron.count
+        old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
         @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
         manifestation = Item.where(:item_identifier => '11111').first.manifestation
@@ -24,7 +24,7 @@ describe ResourceImportFile do
         manifestation.creates.first.create_type.name.should eq 'author'
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 6
-        Patron.count.should eq old_patrons_count + 9
+        Agent.count.should eq old_agents_count + 9
         ResourceImportResult.count.should eq old_import_results_count + 17
 
         manifestation_101 = Manifestation.where(:manifestation_identifier => '101').first
@@ -37,7 +37,7 @@ describe ResourceImportFile do
         item_10101 = Item.where(:item_identifier => '10101').first
         item_10101.manifestation.creators.size.should eq 2
         item_10101.manifestation.creates.order(:id).first.create_type.name.should eq 'author'
-        item_10101.manifestation.creates.order(:id).second.patron.full_name.should eq 'test1'
+        item_10101.manifestation.creates.order(:id).second.agent.full_name.should eq 'test1'
         item_10101.manifestation.creates.order(:id).second.create_type.name.should eq 'illustrator'
         item_10101.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10101.budget_type.name.should eq 'Public fund'
@@ -79,7 +79,7 @@ describe ResourceImportFile do
       it "should be imported", :vcr => true do
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
-        old_patrons_count = Patron.count
+        old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
         @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
         manifestation = Item.where(:item_identifier => '11111').first.manifestation
@@ -88,7 +88,7 @@ describe ResourceImportFile do
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 6
-        Patron.count.should eq old_patrons_count + 9
+        Agent.count.should eq old_agents_count + 9
         ResourceImportResult.count.should eq old_import_results_count + 17
         Item.find_by_item_identifier('10101').manifestation.creators.size.should eq 2
         Item.find_by_item_identifier('10101').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
@@ -113,10 +113,10 @@ describe ResourceImportFile do
 
       it "should be imported", :vcr => true do
         old_manifestations_count = Manifestation.count
-        old_patrons_count = Patron.count
+        old_agents_count = Agent.count
         @file.import_start
         Manifestation.count.should eq old_manifestations_count + 1
-        Patron.count.should eq old_patrons_count + 4
+        Agent.count.should eq old_agents_count + 4
       end
     end
   end
@@ -125,7 +125,7 @@ describe ResourceImportFile do
     it "should update items", :vcr => true do
       @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), :edit_mode => 'update'
       @file.modify
-      Item.where(:item_identifier => '00001').first.manifestation.creators.order('patrons.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      Item.where(:item_identifier => '00001').first.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
       Item.where(:item_identifier => '00002').first.manifestation.publishers.collect(&:full_name).should eq ['test2']
       Item.where(:item_identifier => '00003').first.manifestation.original_title.should eq 'テスト3'
       Item.where(:item_identifier => '00003').first.acquired_at.should eq Time.zone.parse('2012-01-01')

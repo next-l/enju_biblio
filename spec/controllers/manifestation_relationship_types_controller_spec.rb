@@ -184,7 +184,7 @@ describe ManifestationRelationshipTypesController do
           assigns(:manifestation_relationship_type).should be_valid
         end
 
-        it "redirects to the created patron" do
+        it "redirects to the created agent" do
           post :create, :manifestation_relationship_type => @attrs
           response.should redirect_to(assigns(:manifestation_relationship_type))
         end

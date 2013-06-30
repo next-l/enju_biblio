@@ -31,10 +31,10 @@ module EnjuBiblio
           ManifestationRelationship,
           ManifestationRelationshipType,
           Own,
-          Patron,
-          PatronImportFile,
-          PatronRelationship,
-          PatronRelationshipType,
+          Agent,
+          AgentImportFile,
+          AgentRelationship,
+          AgentRelationshipType,
           PictureFile,
           Produce,
           ProduceType,
@@ -52,7 +52,7 @@ module EnjuBiblio
           Language,
           License,
           MediumOfPerformance,
-          PatronType,
+          AgentType,
           RequestStatusType,
           RequestType
         ] if LibraryGroup.site_config.network_access_allowed?(ip_address)
@@ -67,8 +67,8 @@ module EnjuBiblio
           Language,
           License,
           MediumOfPerformance,
-          PatronImportResult,
-          PatronType,
+          AgentImportResult,
+          AgentType,
           RequestStatusType,
           RequestType,
           ResourceImportResult
@@ -80,11 +80,11 @@ module EnjuBiblio
         can [:destroy, :delete], Manifestation do |manifestation|
           manifestation.items.empty? and !manifestation.series_master?
         end
-        can [:index, :create], Patron
-        can :show, Patron do |patron|
+        can [:index, :create], Agent
+        can :show, Agent do |patron|
           patron.required_role_id <= 3
         end
-        can [:update, :destroy, :delete], Patron do |patron|
+        can [:update, :destroy, :delete], Agent do |patron|
           !patron.user.try(:has_role?, 'Librarian') and patron.required_role_id <= 3
         end
         can :manage, [
@@ -95,8 +95,8 @@ module EnjuBiblio
           ImportRequest,
           ManifestationRelationship,
           Own,
-          PatronImportFile,
-          PatronRelationship,
+          AgentImportFile,
+          AgentRelationship,
           PictureFile,
           Produce,
           Realize,
@@ -114,9 +114,9 @@ module EnjuBiblio
           Language,
           License,
           ManifestationRelationshipType,
-          PatronImportResult,
-          PatronRelationshipType,
-          PatronType,
+          AgentImportResult,
+          AgentRelationshipType,
+          AgentType,
           RequestStatusType,
           RequestType,
           ResourceImportResult,
@@ -131,11 +131,11 @@ module EnjuBiblio
         can [:show, :edit], Manifestation do |manifestation|
           manifestation.required_role_id <= 2
         end
-        can :index, Patron
-        can :update, Patron do |patron|
+        can :index, Agent
+        can :update, Agent do |patron|
           patron.user == user
         end
-        can :show, Patron do |patron|
+        can :show, Agent do |patron|
           #if patron.user == user
           #  true
           #elsif patron.user != user
@@ -167,8 +167,8 @@ module EnjuBiblio
           ManifestationRelationshipType,
           MediumOfPerformance,
           Own,
-          PatronRelationship,
-          PatronRelationshipType,
+          AgentRelationship,
+          AgentRelationshipType,
           Produce,
           Realize,
           SeriesStatement
@@ -178,8 +178,8 @@ module EnjuBiblio
         can :show, Manifestation do |manifestation|
           manifestation.required_role_id == 1
         end
-        can :index, Patron
-        can :show, Patron do |patron|
+        can :index, Agent
+        can :show, Agent do |patron|
           patron.required_role_id == 1 #name == 'Guest'
         end
         can :read, [
@@ -200,8 +200,8 @@ module EnjuBiblio
           ManifestationRelationshipType,
           MediumOfPerformance,
           Own,
-          PatronRelationship,
-          PatronRelationshipType,
+          AgentRelationship,
+          AgentRelationshipType,
           PictureFile,
           Produce,
           Realize,

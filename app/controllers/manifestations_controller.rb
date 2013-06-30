@@ -3,7 +3,7 @@ class ManifestationsController < ApplicationController
   load_and_authorize_resource :except => :index
   authorize_resource :only => :index
   before_filter :authenticate_user!, :only => :edit
-  before_filter :get_patron, :get_manifestation, :except => [:create, :update, :destroy]
+  before_filter :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
   before_filter :get_expression, :only => :new
   if defined?(EnjuSubject)
     before_filter :get_subject, :except => [:create, :update, :destroy]
@@ -110,8 +110,8 @@ class ManifestationsController < ApplicationController
         reservable = nil
       end
 
-      patron = get_index_patron
-      @index_patron = patron
+      agent = get_index_agent
+      @index_agent = agent
       manifestation = @manifestation if @manifestation
       series_statement = @series_statement if @series_statement
       parent = @parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
@@ -122,9 +122,9 @@ class ManifestationsController < ApplicationController
 
       unless mode == 'add'
         search.build do
-          with(:creator_ids).equal_to patron[:creator].id if patron[:creator]
-          with(:contributor_ids).equal_to patron[:contributor].id if patron[:contributor]
-          with(:publisher_ids).equal_to patron[:publisher].id if patron[:publisher]
+          with(:creator_ids).equal_to agent[:creator].id if agent[:creator]
+          with(:contributor_ids).equal_to agent[:contributor].id if agent[:contributor]
+          with(:publisher_ids).equal_to agent[:publisher].id if agent[:publisher]
           with(:series_statement_ids).equal_to series_statement.id if series_statement
           with(:parent_ids).equal_to parent.id if parent
         end
@@ -683,19 +683,19 @@ class ManifestationsController < ApplicationController
     end
   end
 
-  def get_index_patron
-    patron = {}
+  def get_index_agent
+    agent = {}
     case
-    when params[:patron_id]
-      patron[:patron] = Patron.find(params[:patron_id])
+    when params[:agent_id]
+      agent[:agent] = Agent.find(params[:agent_id])
     when params[:creator_id]
-      patron[:creator] = @creator = Patron.find(params[:creator_id])
+      agent[:creator] = @creator = Agent.find(params[:creator_id])
     when params[:contributor_id]
-      patron[:contributor] = @contributor = Patron.find(params[:contributor_id])
+      agent[:contributor] = @contributor = Agent.find(params[:contributor_id])
     when params[:publisher_id]
-      patron[:publisher] = @publisher = Patron.find(params[:publisher_id])
+      agent[:publisher] = @publisher = Agent.find(params[:publisher_id])
     end
-    patron
+    agent
   end
 
   def set_reservable

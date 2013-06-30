@@ -180,25 +180,25 @@ class ResourceImportFile < ActiveRecord::Base
     raise e
   end
 
-  def self.import_work(title, patrons, options = {:edit_mode => 'create'})
+  def self.import_work(title, agents, options = {:edit_mode => 'create'})
     work = Manifestation.new(title)
     work.save
-    work.creators = patrons.uniq unless patrons.empty?
+    work.creators = agents.uniq unless agents.empty?
     work
   end
 
-  def self.import_expression(work, patrons, options = {:edit_mode => 'create'})
+  def self.import_expression(work, agents, options = {:edit_mode => 'create'})
     expression = work
     expression.save
-    expression.contributors = patrons.uniq unless patrons.empty?
+    expression.contributors = agents.uniq unless agents.empty?
     expression
   end
 
-  def self.import_manifestation(expression, patrons, options = {}, edit_options = {:edit_mode => 'create'})
+  def self.import_manifestation(expression, agents, options = {}, edit_options = {:edit_mode => 'create'})
     manifestation = expression
     manifestation.during_import = true
     manifestation.update_attributes!(options)
-    manifestation.publishers = patrons.uniq unless patrons.empty?
+    manifestation.publishers = agents.uniq unless agents.empty?
     manifestation
   end
 
@@ -234,9 +234,9 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.save
 
       full_name = record['700']['a']
-      publisher = Patron.where(:full_name => record['700']['a']).first
+      publisher = Agent.where(:full_name => record['700']['a']).first
       unless publisher
-        publisher = Patron.new(:full_name => full_name)
+        publisher = Agent.new(:full_name => full_name)
         publisher.save
       end
       manifestation.publishers << publisher
@@ -517,23 +517,23 @@ class ResourceImportFile < ActiveRecord::Base
     publisher_transcriptions = row['publisher_transcription'].to_s.split('//')
     publishers_list = publishers.zip(publisher_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
     ResourceImportFile.transaction do
-      creator_patrons = Patron.import_patrons(creators_list)
-      contributor_patrons = Patron.import_patrons(contributors_list)
-      publisher_patrons = Patron.import_patrons(publishers_list)
+      creator_agents = Agent.import_agents(creators_list)
+      contributor_agents = Agent.import_agents(contributors_list)
+      publisher_agents = Agent.import_agents(publishers_list)
       #classification = Classification.where(:category => row['classification'].to_s.strip).first
       subjects = import_subject(row) if defined?(EnjuSubject)
       case options[:edit_mode]
       when 'create'
-        work = self.class.import_work(title, creator_patrons, options)
+        work = self.class.import_work(title, creator_agents, options)
         if defined?(EnjuSubject)
           work.subjects = subjects.uniq unless subjects.empty?
         end
-        expression = self.class.import_expression(work, contributor_patrons)
+        expression = self.class.import_expression(work, contributor_agents)
       when 'update'
         expression = manifestation
         work = expression
-        work.creators = creator_patrons.uniq unless creator_patrons.empty?
-        expression.contributors = contributor_patrons.uniq unless contributor_patrons.empty?
+        work.creators = creator_agents.uniq unless creator_agents.empty?
+        expression.contributors = contributor_agents.uniq unless contributor_agents.empty?
         if defined?(EnjuSubject)
           work.subjects = subjects.uniq unless subjects.empty?
         end
@@ -566,7 +566,7 @@ class ResourceImportFile < ActiveRecord::Base
         :manifestation_identifier => row['manifestation_identifier'],
         :fulltext_content => fulltext_content
       }.delete_if{|key, value| value.nil?}
-      manifestation = self.class.import_manifestation(expression, publisher_patrons, attributes,
+      manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,
       {
         :edit_mode => options[:edit_mode]
       })
@@ -617,9 +617,9 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.save!
 
       if options[:edit_mode] == 'create'
-        manifestation.set_patron_role_type(creators_list)
-        manifestation.set_patron_role_type(contributors_list, :scope => :contributor)
-        manifestation.set_patron_role_type(publishers_list, :scope => :publisher)
+        manifestation.set_agent_role_type(creators_list)
+        manifestation.set_agent_role_type(contributors_list, :scope => :contributor)
+        manifestation.set_agent_role_type(publishers_list, :scope => :publisher)
       end
     end
     manifestation

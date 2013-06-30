@@ -4,8 +4,8 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong><%= t('activerecord.models.patron') -%>:</strong>
-  <%= link_to @own.patron.full_name, @own.patron -%>
+  <strong><%= t('activerecord.models.agent') -%>:</strong>
+  <%= link_to @own.agent.full_name, @own.agent -%>
 </p>
 
 <p>
@@ -19,7 +19,7 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <li><%= link_to t('page.back_to', :model => t('activerecord.models.patron')), item_patrons_path(@own.item) -%></li>
-    <li><%= link_to t('page.back_to', :model => t('activerecord.models.item')), patron_items_path(@own.patron) -%></li>
+    <li><%= link_to t('page.back_to', :model => t('activerecord.models.agent')), item_agents_path(@own.item) -%></li>
+    <li><%= link_to t('page.back_to', :model => t('activerecord.models.item')), agent_items_path(@own.agent) -%></li>
   </ul>
 </div>

@@ -11,7 +11,7 @@ end
 # Table name: creates
 #
 #  id             :integer          not null, primary key
-#  patron_id      :integer          not null
+#  agent_id      :integer          not null
 #  work_id        :integer          not null
 #  position       :integer
 #  created_at     :datetime         not null

@@ -55,8 +55,8 @@
         <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), shelf_picture_files_path(@picture_file.picture_attachable) -%></li>
      <%- when @picture_file.picture_attachable.is_a?(Manifestation) -%>
         <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), manifestation_picture_files_path(@picture_file.picture_attachable) -%></li>
-     <%- when @picture_file.picture_attachable.is_a?(Patron) -%>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), patron_picture_files_path(@picture_file.picture_attachable) -%></li>
+     <%- when @picture_file.picture_attachable.is_a?(Agent) -%>
+        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), agent_picture_files_path(@picture_file.picture_attachable) -%></li>
       <%- else -%>
         <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), picture_files_path -%></li>
       <%- end -%>

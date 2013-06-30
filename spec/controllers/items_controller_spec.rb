@@ -58,11 +58,11 @@ describe ItemsController do
         assigns(:items).should_not be_nil
       end
 
-      it "should get index with patron_id" do
-        get :index, :patron_id => 1
+      it "should get index with agent_id" do
+        get :index, :agent_id => 1
         response.should be_success
-        assigns(:patron).should eq Patron.find(1)
-        assigns(:items).should eq assigns(:patron).items.order('created_at DESC').page(1)
+        assigns(:agent).should eq Agent.find(1)
+        assigns(:items).should eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it "should get index with manifestation_id" do

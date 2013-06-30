@@ -6,16 +6,16 @@ class PageSweeper < ActionController::Caching::Sweeper
   def after_save(record)
     case record.class.to_s.to_sym
     when :Create
-      expire_editable_fragment(record.patron)
+      expire_editable_fragment(record.agent)
       expire_editable_fragment(record.work)
     when :Realize
-      expire_editable_fragment(record.patron)
+      expire_editable_fragment(record.agent)
       expire_editable_fragment(record.expression)
     when :Produce
-      expire_editable_fragment(record.patron)
+      expire_editable_fragment(record.agent)
       expire_editable_fragment(record.manifestation)
     when :Own
-      expire_editable_fragment(record.patron)
+      expire_editable_fragment(record.agent)
       expire_editable_fragment(record.item)
       expire_editable_fragment(record.item.manifestation)
     when :Exemplify

@@ -27,11 +27,11 @@ class Manifestation < ActiveRecord::Base
     :doi, :number_of_page_string, :parent_id
 
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
-  has_many :creators, :through => :creates, :source => :patron, :order => 'creates.position'
+  has_many :creators, :through => :creates, :source => :agent, :order => 'creates.position'
   has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, :through => :realizes, :source => :patron, :order => 'realizes.position'
+  has_many :contributors, :through => :realizes, :source => :agent, :order => 'realizes.position'
   has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, :through => :produces, :source => :patron, :order => 'produces.position'
+  has_many :publishers, :through => :produces, :source => :agent, :order => 'produces.position'
   has_many :exemplifies, :dependent => :destroy
   has_many :items, :through => :exemplifies
   has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
@@ -354,16 +354,16 @@ class Manifestation < ActiveRecord::Base
     save(:validate => false)
   end
 
-  def created(patron)
-    creates.where(:patron_id => patron.id).first
+  def created(agent)
+    creates.where(:agent_id => agent.id).first
   end
 
-  def realized(patron)
-    realizes.where(:patron_id => patron.id).first
+  def realized(agent)
+    realizes.where(:agent_id => agent.id).first
   end
 
-  def produced(patron)
-    produces.where(:patron_id => patron.id).first
+  def produced(agent)
+    produces.where(:agent_id => agent.id).first
   end
 
   def sort_title
@@ -405,28 +405,28 @@ class Manifestation < ActiveRecord::Base
     items.where(:shelf_id => Shelf.web.id).first
   end
 
-  def set_patron_role_type(patron_lists, options = {:scope => :creator})
-    patron_lists.each do |patron_list|
-      name_and_role = patron_list[:full_name].split('||')
-      if patron_list[:patron_identifier].present?
-        patron = Patron.where(:patron_identifier => patron_list[:patron_identifier]).first
+  def set_agent_role_type(agent_lists, options = {:scope => :creator})
+    agent_lists.each do |agent_list|
+      name_and_role = agent_list[:full_name].split('||')
+      if agent_list[:agent_identifier].present?
+        agent = Agent.where(:agent_identifier => agent_list[:agent_identifier]).first
       end
-      patron = Patron.where(:full_name => name_and_role[0]).first unless patron
-      next unless patron
+      agent = Agent.where(:full_name => name_and_role[0]).first unless agent
+      next unless agent
       type = name_and_role[1].to_s.strip
 
       case options[:scope]
       when :creator
         type = 'author' if type.blank?
         role_type = CreateType.where(:name => type).first
-        create = Create.where(:work_id => self.id, :patron_id => patron.id).first
+        create = Create.where(:work_id => self.id, :agent_id => agent.id).first
         if create
           create.create_type = role_type
           create.save(:validate => false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
-        produce = Produce.where(:manifestation_id => self.id, :patron_id => patron.id).first
+        produce = Produce.where(:manifestation_id => self.id, :agent_id => agent.id).first
         if produce
           produce.produce_type = ProduceType.where(:name => type).first
           produce.save(:validate => false)

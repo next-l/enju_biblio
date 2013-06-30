@@ -15,11 +15,11 @@ class Item < ActiveRecord::Base
   has_one :exemplify, :dependent => :destroy
   has_one :manifestation, :through => :exemplify
   has_many :owns
-  has_many :patrons, :through => :owns
+  has_many :agents, :through => :owns
   delegate :display_name, :to => :shelf, :prefix => true
   belongs_to :bookstore, :validate => true
   has_many :donates
-  has_many :donors, :through => :donates, :source => :patron
+  has_many :donors, :through => :donates, :source => :agent
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
@@ -43,7 +43,7 @@ class Item < ActiveRecord::Base
       manifestation.id if manifestation
     end
     integer :shelf_id
-    integer :patron_ids, :multiple => true
+    integer :agent_ids, :multiple => true
     time :created_at
     time :updated_at
     time :acquired_at
@@ -69,8 +69,8 @@ class Item < ActiveRecord::Base
     manifestation.try(:publisher)
   end
 
-  def owned(patron)
-    owns.where(:patron_id => patron.id).first
+  def owned(agent)
+    owns.where(:agent_id => agent.id).first
   end
 
   def manifestation_url

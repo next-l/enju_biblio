@@ -7,11 +7,11 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <%- if @realize.patron -%>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), contributor_manifestations_path(@realize.patron) -%></li>
+    <%- if @realize.agent -%>
+      <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), contributor_manifestations_path(@realize.agent) -%></li>
     <%- end -%>
     <%- if @realize.expression -%>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.patron')), expression_patrons_path(@realize.expression) -%></li>
+      <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), expression_agents_path(@realize.expression) -%></li>
     <%- end -%>
   </ul>
 </div>

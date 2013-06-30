@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'sunspot/rails/spec_helper'
 
 describe CountriesController do
-  fixtures :countries, :patron_types, :library_groups, :languages, :user_groups,
+  fixtures :countries, :agent_types, :library_groups, :languages, :user_groups,
     :roles
   disconnect_sunspot
 

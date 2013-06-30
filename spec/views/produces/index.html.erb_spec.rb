@@ -5,11 +5,11 @@ describe "produces/index" do
     assign(:produces, Kaminari::paginate_array([
       stub_model(Produce,
         :manifestation_id => 1,
-        :patron_id => 2
+        :agent_id => 2
       ),
       stub_model(Produce,
         :manifestation_id => 1,
-        :patron_id => 2
+        :agent_id => 2
       )
     ]).page(1))
     @ability = Object.new

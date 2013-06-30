@@ -1,6 +1,6 @@
 class CreatesController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_patron, :get_work
+  before_filter :get_agent, :get_work
   before_filter :prepare_options, :only => [:new, :edit]
   after_filter :solr_commit, :only => [:create, :update, :destroy]
   cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
@@ -9,8 +9,8 @@ class CreatesController < ApplicationController
   # GET /creates.json
   def index
     case
-    when @patron
-      @creates = @patron.creates.order('creates.position').page(params[:page])
+    when @agent
+      @creates = @agent.creates.order('creates.position').page(params[:page])
     when @work
       @creates = @work.creates.order('creates.position').page(params[:page])
     else
@@ -34,16 +34,16 @@ class CreatesController < ApplicationController
 
   # GET /creates/new
   def new
-    if @patron and @work.blank?
-      redirect_to patron_works_url(@patorn)
+    if @agent and @work.blank?
+      redirect_to agent_works_url(@patorn)
       return
-    elsif @work and @patron.blank?
-      redirect_to work_patrons_url(@work)
+    elsif @work and @agent.blank?
+      redirect_to work_agents_url(@work)
       return
     else
       @create = Create.new
       @create.work = @work
-      @create.patron = @patron
+      @create.agent = @agent
     end
   end
 
@@ -98,11 +98,11 @@ class CreatesController < ApplicationController
     respond_to do |format|
       flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.create'))
       case
-      when @patron
-        format.html { redirect_to patron_works_url(@patron) }
+      when @agent
+        format.html { redirect_to agent_works_url(@agent) }
         format.json { head :no_content }
       when @work
-        format.html { redirect_to work_patrons_url(@work) }
+        format.html { redirect_to work_agents_url(@work) }
         format.json { head :no_content }
       else
         format.html { redirect_to creates_url }

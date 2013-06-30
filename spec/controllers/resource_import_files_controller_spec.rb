@@ -128,7 +128,7 @@ describe ResourceImportFilesController do
         sign_in @user
       end
 
-      it "should create patron_import_file" do
+      it "should create agent_import_file" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
         assigns(:resource_import_file).should be_valid
         assigns(:resource_import_file).user.username.should eq @user.username

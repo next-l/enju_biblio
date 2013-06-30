@@ -59,7 +59,7 @@ class PictureFilesController < ApplicationController
       redirect_to picture_files_url
       return
     end
-    #raise unless @event or @manifestation or @shelf or @patron
+    #raise unless @event or @manifestation or @shelf or @agent
     @picture_file = PictureFile.new
     @picture_file.picture_attachable = @attachable
 
@@ -140,9 +140,9 @@ class PictureFilesController < ApplicationController
       @attachable = @manifestation
       return
     end
-    get_patron
-    if @patron
-      @attachable = @patron
+    get_agent
+    if @agent
+      @attachable = @agent
       return
     end
     get_event

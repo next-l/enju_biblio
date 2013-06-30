@@ -1,9 +1,9 @@
 class Donate < ActiveRecord::Base
-  attr_accessible :patron_id, :item_id
-  belongs_to :patron, :validate => true
+  attr_accessible :agent_id, :item_id
+  belongs_to :agent, :validate => true
   belongs_to :item, :validate => true
-  validates_associated :patron, :item
-  validates_presence_of :patron, :item
+  validates_associated :agent, :item
+  validates_presence_of :agent, :item
 end
 
 # == Schema Information
@@ -11,7 +11,7 @@ end
 # Table name: donates
 #
 #  id         :integer          not null, primary key
-#  patron_id  :integer          not null
+#  agent_id  :integer          not null
 #  item_id    :integer          not null
 #  created_at :datetime         not null
 #  updated_at :datetime         not null

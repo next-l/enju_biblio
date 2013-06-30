@@ -1,22 +1,22 @@
 # -*- encoding: utf-8 -*-
-class PatronsController < ApplicationController
+class AgentsController < ApplicationController
   load_and_authorize_resource :except => :index
   authorize_resource :only => :index
-  before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_patron, :except => [:update, :destroy]
+  before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
   if defined?(EnjuResourceMerge)
-    before_filter :get_patron_merge_list, :except => [:create, :update, :destroy]
+    before_filter :get_agent_merge_list, :except => [:create, :update, :destroy]
   end
   before_filter :prepare_options, :only => [:new, :edit]
   before_filter :store_location
   before_filter :get_version, :only => [:show]
   after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :patron_sweeper, :only => [:create, :update, :destroy]
+  cache_sweeper :agent_sweeper, :only => [:create, :update, :destroy]
 
-  # GET /patrons
-  # GET /patrons.json
+  # GET /agents
+  # GET /agents.json
   def index
     #session[:params] = {} unless session[:params]
-    #session[:params][:patron] = params
+    #session[:params][:agent] = params
     # 最近追加されたパトロン
     #@query = params[:query] ||= "[* TO *]"
     if params[:mode] == 'add'
@@ -35,12 +35,12 @@ class PatronsController < ApplicationController
     order = nil
     @count = {}
 
-    search = Patron.search(:include => [:patron_type, :required_role])
-    search.data_accessor_for(Patron).select = [
+    search = Agent.search(:include => [:agent_type, :required_role])
+    search.data_accessor_for(Agent).select = [
       :id,
       :full_name,
       :full_name_transcription,
-      :patron_type_id,
+      :agent_type_id,
       :required_role_id,
       :created_at,
       :updated_at,
@@ -61,14 +61,14 @@ class PatronsController < ApplicationController
       work = @work
       expression = @expression
       manifestation = @manifestation
-      patron = @patron
-      patron_merge_list = @patron_merge_list
+      agent = @agent
+      agent_merge_list = @agent_merge_list
       search.build do
         with(:work_ids).equal_to work.id if work
         with(:expression_ids).equal_to expression.id if expression
         with(:manifestation_ids).equal_to manifestation.id if manifestation
-        with(:original_patron_ids).equal_to patron.id if patron
-        with(:patron_merge_list_ids).equal_to patron_merge_list.id if patron_merge_list
+        with(:original_agent_ids).equal_to agent.id if agent
+        with(:agent_merge_list_ids).equal_to agent_merge_list.id if agent_merge_list
       end
     end
 
@@ -79,138 +79,138 @@ class PatronsController < ApplicationController
 
     page = params[:page].to_i || 1
     page = 1 if page == 0
-    search.query.paginate(page, Patron.default_per_page)
-    @patrons = search.execute!.results
+    search.query.paginate(page, Agent.default_per_page)
+    @agents = search.execute!.results
 
     flash[:page_info] = {:page => page, :query => query}
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @patrons }
+      format.xml  { render :xml => @agents }
       format.rss  { render :layout => false }
       format.atom
-      format.json { render :json => @patrons }
+      format.json { render :json => @agents }
       format.mobile
     end
   end
 
-  # GET /patrons/1
-  # GET /patrons/1.json
+  # GET /agents/1
+  # GET /agents/1.json
   def show
     case
     when @work
-      @patron = @work.creators.find(params[:id])
+      @agent = @work.creators.find(params[:id])
     when @manifestation
-      @patron = @manifestation.publishers.find(params[:id])
+      @agent = @manifestation.publishers.find(params[:id])
     when @item
-      @patron = @item.patrons.find(params[:id])
+      @agent = @item.agents.find(params[:id])
     else
       if @version
-        @patron = @patron.versions.find(@version).item if @version
+        @agent = @agent.versions.find(@version).item if @version
       end
     end
 
-    patron = @patron
+    agent = @agent
     role = current_user.try(:role) || Role.default_role
     @works = Manifestation.search do
-      with(:creator_ids).equal_to patron.id
+      with(:creator_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
       paginate :page => params[:work_list_page], :per_page => Manifestation.default_per_page
     end.results
     @expressions = Manifestation.search do
-      with(:contributor_ids).equal_to patron.id
+      with(:contributor_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
       paginate :page => params[:expression_list_page], :per_page => Manifestation.default_per_page
     end.results
     @manifestations = Manifestation.search do
-      with(:publisher_ids).equal_to patron.id
+      with(:publisher_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
       paginate :page => params[:manifestation_list_page], :per_page => Manifestation.default_per_page
     end.results
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @patron }
+      format.json { render :json => @agent }
       format.js
       format.mobile
     end
   end
 
-  # GET /patrons/new
-  # GET /patrons/new.json
+  # GET /agents/new
+  # GET /agents/new.json
   def new
-    @patron = Patron.new
-    @patron.required_role = Role.where(:name => 'Guest').first
-    @patron.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
-    @patron.country = current_user.library.country
+    @agent = Agent.new
+    @agent.required_role = Role.where(:name => 'Guest').first
+    @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
+    @agent.country = current_user.library.country
     prepare_options
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @patron }
+      format.json { render :json => @agent }
     end
   end
 
-  # GET /patrons/1/edit
+  # GET /agents/1/edit
   def edit
     prepare_options
   end
 
-  # POST /patrons
-  # POST /patrons.json
+  # POST /agents
+  # POST /agents.json
   def create
-    @patron = Patron.new(params[:patron])
-    #if @patron.user_username
-    #  @patron.user = User.find(@patron.user_username) rescue nil
+    @agent = Agent.new(params[:agent])
+    #if @agent.user_username
+    #  @agent.user = User.find(@agent.user_username) rescue nil
     #end
     #unless current_user.has_role?('Librarian')
-    #  if @patron.user != current_user
+    #  if @agent.user != current_user
     #    access_denied; return
     #  end
     #end
 
     respond_to do |format|
-      if @patron.save
+      if @agent.save
         case
         when @work
-          @patron.works << @work
+          @agent.works << @work
         when @manifestation
-          @patron.manifestations << @manifestation
+          @agent.manifestations << @manifestation
         when @item
-          @patron.items << @item
+          @agent.items << @item
         end
-        format.html { redirect_to @patron, :notice => t('controller.successfully_created', :model => t('activerecord.models.patron')) }
-        format.json { render :json => @patron, :status => :created, :location => @patron }
+        format.html { redirect_to @agent, :notice => t('controller.successfully_created', :model => t('activerecord.models.agent')) }
+        format.json { render :json => @agent, :status => :created, :location => @agent }
       else
         prepare_options
         format.html { render :action => "new" }
-        format.json { render :json => @patron.errors, :status => :unprocessable_entity }
+        format.json { render :json => @agent.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # PUT /patrons/1
-  # PUT /patrons/1.json
+  # PUT /agents/1
+  # PUT /agents/1.json
   def update
     respond_to do |format|
-      if @patron.update_attributes(params[:patron])
-        format.html { redirect_to @patron, :notice => t('controller.successfully_updated', :model => t('activerecord.models.patron')) }
+      if @agent.update_attributes(params[:agent])
+        format.html { redirect_to @agent, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent')) }
         format.json { head :no_content }
       else
         prepare_options
         format.html { render :action => "edit" }
-        format.json { render :json => @patron.errors, :status => :unprocessable_entity }
+        format.json { render :json => @agent.errors, :status => :unprocessable_entity }
       end
     end
   end
 
-  # DELETE /patrons/1
-  # DELETE /patrons/1.json
+  # DELETE /agents/1
+  # DELETE /agents/1.json
   def destroy
-    @patron.destroy
+    @agent.destroy
 
     respond_to do |format|
-      format.html { redirect_to patrons_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.patron')) }
+      format.html { redirect_to agents_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.agent')) }
       format.json { head :no_content }
     end
   end
@@ -218,9 +218,9 @@ class PatronsController < ApplicationController
   private
   def prepare_options
     @countries = Country.all_cache
-    @patron_types = PatronType.all
+    @agent_types = AgentType.all
     @roles = Role.all
     @languages = Language.all_cache
-    @patron_type = PatronType.where(:name => 'Person').first
+    @agent_type = AgentType.where(:name => 'Person').first
   end
 end

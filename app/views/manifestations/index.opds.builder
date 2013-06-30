@@ -11,9 +11,9 @@ atom_feed(:url => manifestations_url(:format => :atom),
       entry.link :rel => "http://opds-spec.org/acquisition/borrow", :href => manifestation_url(manifestation), :type => 'text/html'
       entry.title(manifestation.original_title)
 
-      manifestation.creators.readable_by(current_user).each do |patron|
+      manifestation.creators.readable_by(current_user).each do |agent|
         entry.author do |author|
-          author.name(patron.full_name)
+          author.name(agent.full_name)
         end
       end
     end

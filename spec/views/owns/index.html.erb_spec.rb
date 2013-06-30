@@ -5,11 +5,11 @@ describe "owns/index" do
     assign(:owns, Kaminari::paginate_array([
       stub_model(Own,
         :item_id => 1,
-        :patron_id => 1
+        :agent_id => 1
       ),
       stub_model(Own,
         :item_id => 1,
-        :patron_id => 2
+        :agent_id => 2
       )
     ]).page(1))
     @ability = Object.new

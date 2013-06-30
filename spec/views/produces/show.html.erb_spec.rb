@@ -4,7 +4,7 @@ describe "produces/show" do
   before(:each) do
     @produce = assign(:produce, stub_model(Produce,
       :manifestation_id => 1,
-      :patron_id => 1
+      :agent_id => 1
     ))
     @ability = Object.new
     @ability.extend(CanCan::Ability)

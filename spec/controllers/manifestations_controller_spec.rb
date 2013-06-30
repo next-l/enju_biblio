@@ -182,9 +182,9 @@ describe ManifestationsController do
         assigns(:manifestation).should eq(Manifestation.find(1))
       end
 
-      it "should show manifestation with patron who does not produce it" do
-        get :show, :id => 3, :patron_id => 3
-        assigns(:manifestation).should eq assigns(:patron).manifestations.find(3)
+      it "should show manifestation with agent who does not produce it" do
+        get :show, :id => 3, :agent_id => 3
+        assigns(:manifestation).should eq assigns(:agent).manifestations.find(3)
         response.should be_success
       end
     end
@@ -203,7 +203,7 @@ describe ManifestationsController do
       end
 
       #it "should show myself" do
-      #  get :show, :id => users(:user1).patron
+      #  get :show, :id => users(:user1).agent
       #  response.should be_success
       #end
     end

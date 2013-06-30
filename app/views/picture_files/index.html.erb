@@ -2,8 +2,8 @@
   <%= render 'index_shelf', :shelf => @attachable -%>
 <%- when 'Manifestation' -%>
   <%= render 'index_manifestation', :manifestation => @attachable -%>
-<%- when 'Patron' -%>
-  <%= render 'index_patron', :patron => @attachable -%>
+<%- when 'Agent' -%>
+  <%= render 'index_agent', :agent => @attachable -%>
 <%- when 'Event' -%>
   <%= render 'index_event', :event => @attachable -%>
 <%- else -%>

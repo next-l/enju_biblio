@@ -7,7 +7,7 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
   attr_accessible :email, :password, :password_confirmation, :remember_me
 
-  has_one :patron
+  #has_one :agent
   has_one :user_has_role
   has_one :role, :through => :user_has_role
   belongs_to :user_group
@@ -79,8 +79,8 @@ class User < ActiveRecord::Base
   enju_bookmark_user_model if defined?(EnjuBookmark)
   enju_message_user_model if defined?(EnjuBookmark)
 
-  def patron
-    LocalPatron.new(self)
+  def agent
+    LocalAgent.new(self)
   end
 
   def full_name

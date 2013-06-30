@@ -45,7 +45,7 @@ describe Manifestation, :solr => true do
     results.size.should eq 1
   end
 
-  it "should search patron in openurl" do
+  it "should search agent in openurl" do
     openurl = Openurl.new({:aulast => "Administrator"})
     results = openurl.search
     openurl.query_text.should eq "au_text:Administrator"

@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :identifier_types
 
   resources :manifestations do
-    resources :patrons
+    resources :agents
     resources :produces
     resources :exemplifies
     resources :series_statements
@@ -13,44 +13,44 @@ Rails.application.routes.draw do
   end
 
   resources :items do
-    resources :patrons
+    resources :agents
     resources :owns
     resource :exemplify
     resources :manifestations, :only => [:index]
   end
 
-  resources :patrons do
+  resources :agents do
     resources :works, :controller => 'manifestations'
     resources :expressions, :controller => 'manifestations'
     resources :manifestations
     resources :items
     resources :picture_files
-    resources :patrons
-    resources :patron_relationships
+    resources :agents
+    resources :agent_relationships
     resources :creates
     resources :realizes
     resources :produces
   end
 
   resources :works, :controller => 'manifestations', :except => [:index, :new, :create] do
-    resources :patrons
+    resources :agents
     resources :creates
   end
 
   resources :expressions, :controller => 'manifestations', :except => [:index, :new, :create] do
-    resources :patrons
+    resources :agents
     resources :realizes
   end
 
-  resources :creators, :controller => 'patrons', :except => [:index, :new, :create] do
+  resources :creators, :controller => 'agents', :except => [:index, :new, :create] do
     resources :manifestations
   end
 
-  resources :contributors, :controller => 'patrons', :except => [:index, :new, :create] do
+  resources :contributors, :controller => 'agents', :except => [:index, :new, :create] do
     resources :manifestations
   end
 
-  resources :publishers, :controller => 'patrons', :except => [:index, :new, :create] do
+  resources :publishers, :controller => 'agents', :except => [:index, :new, :create] do
     resources :manifestations
   end
 
@@ -76,10 +76,10 @@ Rails.application.routes.draw do
   resources :carrier_types
   resources :content_types
   resources :extents
-  resources :patron_types
+  resources :agent_types
 
-  resources :patron_relationship_types
-  resources :patron_relationships
+  resources :agent_relationship_types
+  resources :agent_relationships
   resources :manifestation_relationship_types
   resources :manifestation_relationships
 
@@ -87,10 +87,10 @@ Rails.application.routes.draw do
     resources :resource_import_results
   end
   resources :resource_import_results
-  resources :patron_import_files do
-    resources :patron_import_results
+  resources :agent_import_files do
+    resources :agent_import_results
   end
-  resources :patron_import_results
+  resources :agent_import_results
 
   resources :import_requests
 

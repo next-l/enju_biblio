@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_patron, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
+  before_filter :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
   if defined?(EnjuInventory)
     before_filter :get_inventory_file
   end
@@ -63,12 +63,12 @@ class ItemsController < ApplicationController
         end
       end
 
-      patron = @patron
+      agent = @agent
       manifestation = @manifestation
       shelf = @shelf
       unless params[:mode] == 'add'
         search.build do
-          with(:patron_ids).equal_to patron.id if patron
+          with(:agent_ids).equal_to agent.id if agent
           with(:manifestation_id).equal_to manifestation.id if manifestation
           with(:shelf_id).equal_to shelf.id if shelf
         end

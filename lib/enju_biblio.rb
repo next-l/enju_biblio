@@ -42,9 +42,9 @@ module EnjuBiblio
       @carrier_type = CarrierType.find(params[:carrier_type_id]) if params[:carrier_type_id]
     end
 
-    def get_patron
-      @patron = Patron.find(params[:patron_id]) if params[:patron_id]
-      authorize! :show, @patron if @patron
+    def get_agent
+      @agent = Agent.find(params[:agent_id]) if params[:agent_id]
+      authorize! :show, @agent if @agent
     end
 
     def get_series_statement

@@ -7,8 +7,8 @@
 
 <div id="submenu" class="ui-corner-all">
   <ul>
-    <%- if @patron -%>
-      <li><%= link_to t('page.back'), publisher_manifestations_path(@patron) -%></li>
+    <%- if @agent -%>
+      <li><%= link_to t('page.back'), publisher_manifestations_path(@agent) -%></li>
     <%- else -%>
       <li><%= link_to t('page.back'), manifestations_path -%></li>
     <%- end -%>
