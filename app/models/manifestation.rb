@@ -82,7 +82,9 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, :multiple => true do
-      identifier_contents(:isbn)
+      identifier_contents(:isbn).map{|i|
+        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
+      }.flatten
     end
     string :issn, :multiple => true do
       if series_statements.exists?
@@ -187,7 +189,9 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      identifier_contents(:isbn)
+      identifier_contents(:isbn).map{|i|
+        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
+      }.flatten
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statements.exists?
