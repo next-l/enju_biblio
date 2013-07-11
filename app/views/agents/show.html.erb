@@ -8,29 +8,12 @@
     <%= @agent.full_name -%>
   </h2>
 
-  <%- if @version -%>
-    <p>(<%= l(@agent.versions.find(@version).created_at) -%>)</p>
-  <%- end -%>
-  <p>
-    (<%= link_to_wikipedia(@agent.full_name_without_space) -%>)
-  </p>
-
 <div id="tabs">
   <ul>
     <li title="active" class="selected"><a href="#detail"><em><%= t('page.detail') -%></em></a></li>
     <%- if @agent.derived_agents.exists? or @agent.original_agents.exists? -%>
       <li><a href="#related"><em><%= t('page.related') -%></em></a></li>
     <%- end -%>
-    <%- if @agent.works.exists? -%>
-      <li><a href="#work"><em><%= t('activerecord.models.work') -%></em></a></li>
-    <%- end -%>
-    <%- if @agent.expressions.exists? -%>
-      <li><a href="#expression"><em><%= t('activerecord.models.expression') -%></em></a></li>
-    <%- end -%>
-    <%- if @agent.manifestations.exists? -%>
-      <li><a href="#manifestation"><em><%= t('activerecord.models.manifestation') -%></em></a></li>
-    <%- end -%>
-    <li><a href="#history"><em><%= t('page.history') -%></em></a></li>
   </ul>
   <div id="detail">
     <table class="table table-striped index vcard">
@@ -95,16 +78,6 @@
   <%- unless @agent.derived_agents.empty? and @agent.original_agents.empty? -%>
     <%= render 'agents/agent_list' -%>
   <%- end -%>
-  <%- unless @works.blank? -%>
-    <%= render 'agents/work_list' -%>
-  <%- end -%>
-  <%- unless @expressions.blank? -%>
-    <%= render 'agents/expression_list' -%>
-  <%- end -%>
-  <%- unless @manifestations.blank? -%>
-    <%= render 'agents/manifestation_list' -%>
-  <%- end -%>
-  <%= render 'history_list' -%>
   </div>
 </div>
 </div>
@@ -145,8 +118,6 @@
     <%- end -%>
   </ul>
   <ul>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.work')), creator_manifestations_path(@agent) -%></li>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.expression')), contributor_manifestations_path(@agent) -%></li>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), publisher_manifestations_path(@agent) -%></li>
+    <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path(:query => @agent.full_name) -%></li>
   </ul>
 </div>

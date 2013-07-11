@@ -19,12 +19,12 @@ en:
       manifestation_relationship_type: Resource relationship type
       medium_of_performance: Medium of performance
       own: Own
-      patron: Patron
-      patron_import_file: Patron import file
-      patron_import_result: Patron Import Result
-      patron_relationship: Patron relationship
-      patron_relationship_type: Patron relationship type
-      patron_type: Patron type
+      agent: Agent
+      agent_import_file: Agent import file
+      agent_import_result: Agent Import Result
+      agent_relationship: Agent relationship
+      agent_relationship_type: Agent relationship type
+      agent_type: Agent type
       picture_file: Picture file
       produce: Produce
       produce_type: Produce type
@@ -103,7 +103,7 @@ en:
         lock_version: Lock version
         acquired_at: Acquired at
         donation: Donation
-      patron:
+      agent:
         last_name: Last name
         middle_name: Middle name
         first_name: First name
@@ -133,18 +133,18 @@ en:
         lock_version: Lock version
         note: Note
         country: Country
-        patron_type: Patron type
+        agent_type: Agent type
         language: Language
         email: Email
         url: URL
-      patron_import_file:
-        patron_import_file_name: Filename
-        patron_import_content_type: Content type
-        patron_import_file_size: Size
-        patron_import_fingerprint: File hash
+      agent_import_file:
+        agent_import_file_name: Filename
+        agent_import_content_type: Content type
+        agent_import_file_size: Size
+        agent_import_fingerprint: File hash
         note: Note
         executed_at: Executed at
-        patron_import_updated_at: Updated at
+        agent_import_updated_at: Updated at
         state: State
         edit_mode: Edit mode
         error_message: Error message
@@ -205,7 +205,7 @@ en:
         display_name: Display name
         note: Note
         position: Position
-      patron_relationship_type:
+      agent_relationship_type:
         name: Name
         display_name: Display name
         note: Note
@@ -223,10 +223,10 @@ en:
       import_request:
         isbn: ISBN
         state: State
-      patron_relationship:
+      agent_relationship:
         parent_id: Parent
         child_id: Child
-        patron_relationship_type_id: Patron relationship type
+        agent_relationship_type_id: Agent relationship type
       manifestation_relationship:
         parent_id: Parent
         child_id: Child
@@ -270,7 +270,7 @@ en:
         display_name: Display name
         note: Note
         position: Position
-      patron_type:
+      agent_type:
         name: Name
         display_name: Display name
         note: Note
@@ -281,7 +281,7 @@ en:
         position: Position
       resource_import_result:
         body: Body
-      patron_import_result:
+      agent_import_result:
         body: Body
       create_type:
         name: Name
@@ -307,7 +307,7 @@ en:
   resource_import_file:
     update_relationship: Update relationship
  
-  patron:
+  agent:
     creator: Creator
     contributor: Contributor
     publisher: Publisher
