@@ -118,6 +118,6 @@
     <%- end -%>
   </ul>
   <ul>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path(:query => @agent.full_name) -%></li>
+    <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path(:query => "\"#{@agent.full_name}\"") -%></li>
   </ul>
 </div>
