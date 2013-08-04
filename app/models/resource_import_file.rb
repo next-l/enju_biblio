@@ -4,7 +4,7 @@ class ResourceImportFile < ActiveRecord::Base
   include ImportFile
   default_scope :order => 'resource_import_files.id DESC'
   scope :not_imported, where(:state => 'pending')
-  scope :stucked, where('created_at < ? AND state = ?', 1.hour.ago, 'pending')
+  scope :stucked, -> {where('created_at < ? AND state = ?', 1.hour.ago, 'pending')}
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
