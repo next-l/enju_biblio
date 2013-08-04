@@ -13,6 +13,12 @@ gem "jquery-rails"
 # Git. Remember to move these dependencies to your gemspec before releasing
 # your gem to rubygems.org.
 gem "enju_core", github: "next-l/enju_core", branch: "rails4"
+gem "enju_event", github: "next-l/enju_event", branch: "rails4"
+gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer", branch: "rails4"
+gem "enju_circulation", github: "next-l/enju_circulation", branch: "rails4"
+gem "enju_ndl", github: "next-l/enju_ndl", branch: "rails4"
+gem "enju_bookmark", github: "next-l/enju_bookmark", branch: "rails4"
+gem "paper_trail", github: "airblade/paper_trail", branch: "rails4"
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
