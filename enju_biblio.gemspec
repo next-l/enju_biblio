@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
   s.add_dependency "enju_core", "~> 0.1.1.pre4"
-  s.add_dependency "paperclip", "~> 3.4"
+  s.add_dependency "paperclip", "~> 3.5"
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
@@ -37,7 +37,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "vcr"
   s.add_development_dependency "sunspot_solr", "~> 2.0.0"
-  s.add_development_dependency "enju_leaf", "~> 1.1.0.rc4"
+  s.add_development_dependency "enju_leaf", "~> 1.1.0.rc5"
   s.add_development_dependency "enju_subject", "~> 0.1.0.pre20"
   s.add_development_dependency "enju_inventory", "~> 0.1.11.pre8"
   s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre12"
