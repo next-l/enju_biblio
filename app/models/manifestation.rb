@@ -27,11 +27,11 @@ class Manifestation < ActiveRecord::Base
     :doi, :number_of_page_string, :parent_id
 
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
-  has_many :creators, :through => :creates, -> {:order => 'creates.position'}, :source => :agent
+  has_many :creators, :through => :creates, -> {order('creates.position')}, :source => :agent
   has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, :through => :realizes, -> {:order => 'realizes.position'} :source => :agent
+  has_many :contributors, :through => :realizes, -> {order('realizes.position')} :source => :agent
   has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, :through => :produces, -> {:order => 'produces.position'}, :source => :agent
+  has_many :publishers, :through => :produces, -> {order('produces.position')}, :source => :agent
   has_many :exemplifies, :dependent => :destroy
   has_many :items, :through => :exemplifies
   has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
