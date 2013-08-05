@@ -10,8 +10,8 @@ class Item < ActiveRecord::Base
     :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
     :acquired_at, :bookstore_id, :missing_since, :budget_type_id, :lock_version,
     :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
-  scope :on_shelf, where('shelf_id != 1')
-  scope :on_web, where(:shelf_id => 1)
+  scope :on_shelf, -> {where('shelf_id != 1')}
+  scope :on_web, -> {where(:shelf_id => 1)}
   has_one :exemplify, :dependent => :destroy
   has_one :manifestation, :through => :exemplify
   has_many :owns

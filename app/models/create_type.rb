@@ -1,7 +1,7 @@
 class CreateType < ActiveRecord::Base
   attr_accessible :name, :display_name, :note, :position
   include MasterModel
-  default_scope :order => 'create_types.position'
+  default_scope {order('create_types.position')}
 end
 
 # == Schema Information
