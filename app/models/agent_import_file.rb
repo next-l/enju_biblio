@@ -235,9 +235,9 @@ class AgentImportFile < ActiveRecord::Base
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Guest')
+      agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Guest')
     #else
-    #  agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Librarian')
+    #  agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Librarian')
     #end
     language = Language.where(:name => row['language'].to_s.strip.camelize).first
     language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
@@ -265,9 +265,9 @@ class AgentImportFile < ActiveRecord::Base
   #  library = Library.where(:name => row['library_short_name'].to_s.strip).first || Library.web
   #  user_group = UserGroup.where(:name => row['user_group_name']).first || UserGroup.first
   #  user.library = library
-  #  role = Role.where(:name => row['role_name'].to_s.strip.camelize).first || Role.find('User')
+  #  role = Role.where(:name => row['role_name'].to_s.strip.camelize).first || Role.friendly.find('User')
   #  user.role = role
-  #  required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Librarian')
+  #  required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Librarian')
   #  user.required_role = required_role
   #  locale = Language.where(:iso_639_1 => row['locale'].to_s.strip).first
   #  user.locale = locale || I18n.default_locale.to_s
