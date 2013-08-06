@@ -1,6 +1,6 @@
 class CarrierTypesController < ApplicationController
   load_and_authorize_resource
-  before_filter :prepare_options, :only => [:new, :edit]
+  before_action :prepare_options, :only => [:new, :edit]
 
   # GET /carrier_types
   # GET /carrier_types.json

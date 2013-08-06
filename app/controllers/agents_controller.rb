@@ -2,14 +2,14 @@
 class AgentsController < ApplicationController
   load_and_authorize_resource :except => :index
   authorize_resource :only => :index
-  before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
+  before_action :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
   if defined?(EnjuResourceMerge)
-    before_filter :get_agent_merge_list, :except => [:create, :update, :destroy]
+    before_action :get_agent_merge_list, :except => [:create, :update, :destroy]
   end
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :store_location
-  before_filter :get_version, :only => [:show]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
+  before_action :prepare_options, :only => [:new, :edit]
+  before_action :store_location
+  before_action :get_version, :only => [:show]
+  after_action :solr_commit, :only => [:create, :update, :destroy]
   cache_sweeper :agent_sweeper, :only => [:create, :update, :destroy]
 
   # GET /agents

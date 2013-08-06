@@ -1,16 +1,16 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
+  before_action :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_filter :get_inventory_file
+    before_action :get_inventory_file
   end
-  before_filter :get_library, :get_item, :except => [:create, :update, :destroy]
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :get_version, :only => [:show]
-  #before_filter :store_location
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  after_filter :convert_charset, :only => :index
+  before_action :get_library, :get_item, :except => [:create, :update, :destroy]
+  before_action :prepare_options, :only => [:new, :edit]
+  before_action :get_version, :only => [:show]
+  #before_action :store_location
+  after_action :solr_commit, :only => [:create, :update, :destroy]
+  after_action :convert_charset, :only => :index
   cache_sweeper :item_sweeper, :only => [:create, :update, :destroy]
 
   # GET /items

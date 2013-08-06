@@ -1,8 +1,8 @@
 class CreatesController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_agent, :get_work
-  before_filter :prepare_options, :only => [:new, :edit]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
+  before_action :get_agent, :get_work
+  before_action :prepare_options, :only => [:new, :edit]
+  after_action :solr_commit, :only => [:create, :update, :destroy]
   cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
 
   # GET /creates

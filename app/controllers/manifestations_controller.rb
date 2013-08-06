@@ -2,18 +2,18 @@
 class ManifestationsController < ApplicationController
   load_and_authorize_resource :except => :index
   authorize_resource :only => :index
-  before_filter :authenticate_user!, :only => :edit
-  before_filter :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
-  before_filter :get_expression, :only => :new
+  before_action :authenticate_user!, :only => :edit
+  before_action :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
+  before_action :get_expression, :only => :new
   if defined?(EnjuSubject)
-    before_filter :get_subject, :except => [:create, :update, :destroy]
+    before_action :get_subject, :except => [:create, :update, :destroy]
   end
-  before_filter :get_series_statement, :only => [:index, :new, :edit]
-  before_filter :get_item, :get_libraries, :only => :index
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :get_version, :only => [:show]
-  after_filter :solr_commit, :only => :destroy
-  after_filter :convert_charset, :only => :index
+  before_action :get_series_statement, :only => [:index, :new, :edit]
+  before_action :get_item, :get_libraries, :only => :index
+  before_action :prepare_options, :only => [:new, :edit]
+  before_action :get_version, :only => [:show]
+  after_action :solr_commit, :only => :destroy
+  after_action :convert_charset, :only => :index
   cache_sweeper :manifestation_sweeper, :only => [:create, :update, :destroy]
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
@@ -314,7 +314,7 @@ class ManifestationsController < ApplicationController
       end
     end
 
-    store_location # before_filter ではファセット検索のURLを記憶してしまう
+    store_location # before_action ではファセット検索のURLを記憶してしまう
 
     respond_to do |format|
       format.html

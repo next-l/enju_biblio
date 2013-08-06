@@ -1,7 +1,7 @@
 class OwnsController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_agent, :get_item
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
+  before_action :get_agent, :get_item
+  after_action :solr_commit, :only => [:create, :update, :destroy]
   cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
 
   # GET /owns
