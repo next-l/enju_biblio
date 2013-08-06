@@ -1,6 +1,6 @@
 class ImportRequest < ActiveRecord::Base
   attr_accessible :isbn, :manifestation_id, :user_id
-  default_scope :order => 'id DESC'
+  default_scope {order('import_requests.id DESC')}
   belongs_to :manifestation
   belongs_to :user
   validates_presence_of :isbn

@@ -2,8 +2,8 @@
 class ResourceImportFile < ActiveRecord::Base
   attr_accessible :resource_import, :edit_mode
   include ImportFile
-  default_scope :order => 'resource_import_files.id DESC'
-  scope :not_imported, where(:state => 'pending')
+  default_scope {order('resource_import_files.id DESC')}
+  scope :not_imported, -> {where(:state => 'pending')}
   scope :stucked, -> {where('created_at < ? AND state = ?', 1.hour.ago, 'pending')}
 
   if Setting.uploaded_file.storage == :s3
