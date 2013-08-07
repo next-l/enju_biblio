@@ -25,7 +25,6 @@ gem "enju_message", github: "next-l/enju_message", branch: "rails4"
 gem "redis-rails", git: "git://github.com/jodosha/redis-store.git"
 gem "sunspot_rails", github: "sunspot/sunspot"
 gem "sunspot_solr", github: "sunspot/sunspot"
-gem "acts_as_list", github: "swanandp/acts_as_list"
 
 # To use debugger
 # gem 'ruby-debug19', :require => 'ruby-debug'
