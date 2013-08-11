@@ -1,7 +1,7 @@
 class Produce < ActiveRecord::Base
   attr_accessible :agent_id, :manifestation_id, :produce_type_id, :position
   belongs_to :agent
-  belongs_to :manifestation
+  belongs_to :manifestation, touch: true
   belongs_to :produce_type
   delegate :original_title, :to => :manifestation, :prefix => true
 
