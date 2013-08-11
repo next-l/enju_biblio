@@ -71,16 +71,16 @@
           xml.topic subject.term
         end
       }
-      manifestation.subjects.collect(&:classifications).flatten.each do |classification|
+      manifestation.classifications.each do |classification|
         xml.classification classification.category, 'authority' => classification.classification_type.name
       end
     end
     xml.abstract manifestation.description
     xml.note manifestation.note
-    manifestation.identifier_content(:isbn).each do |i|
+    manifestation.identifier_contents(:isbn).each do |i|
       xml.identifier i, :type => 'isbn'
     end
-    manifestation.identifier_content(:lccn).each do |l|
+    manifestation.identifier_contents(:lccn).each do |l|
       xml.identifier l, :type => 'lccn'
     end
     xml.recordInfo{
