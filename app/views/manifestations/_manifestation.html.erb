@@ -1,6 +1,5 @@
         <tr class="line<%= cycle("0", "1") -%>">
           <td style="width: 30px"><%= @manifestations.offset_value + 1 + manifestation_counter -%></td>
-          <% cache([current_user_role_name, @locale, manifestation]) do %>
             <td style="480px">
               <% if manifestation.root_series_statement %>
                 <%= render 'manifestations/show_series_index', :manifestation => manifestation, :series_statement => manifestation.root_series_statement -%>
@@ -29,11 +28,6 @@
                 <%- if can? :update, manifestation -%>
                   <% unless params[:mode] == 'add' %>
                     <%= link_to image_tag('icons/book_edit.png', :size => '16x16', :alt => t('page.edit')), edit_manifestation_path(manifestation) -%>
-                    <% if @series_statement %>
-                      <% if manifestation.root_series_statement == @series_statement %>
-                        <%= link_to t('page.destroy'), manifestation, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
-                      <% end %>
-                    <% end %>
                   <% else %>
                     <% case %>
                     <% when @parent %>
@@ -47,5 +41,4 @@
                 <%- end -%>
               </td>
             <% end %>
-          <% end %>
         </tr>
