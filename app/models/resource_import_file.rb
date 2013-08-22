@@ -405,6 +405,20 @@ class ResourceImportFile < ActiveRecord::Base
     subjects
   end
 
+  def import_classification(row)
+    classifications = []
+    classification_number = YAML.load(row['classification'].to_s)
+    return nil unless classification_number
+    classification_number.map{|k, v|
+      classification_type = ClassificationType.where(:name => k.downcase).first
+      classification = Classification.new(:category => v.to_s)
+      classification.classification_type = classification_type
+      classification.save!
+      classifications << classification
+    }
+    classifications
+  end
+
   def create_item(row, manifestation)
     shelf = Shelf.where(:name => row['shelf'].to_s.strip).first || Shelf.web
     bookstore = Bookstore.where(:name => row['bookstore'].to_s.strip).first
@@ -520,7 +534,6 @@ class ResourceImportFile < ActiveRecord::Base
       creator_agents = Agent.import_agents(creators_list)
       contributor_agents = Agent.import_agents(contributors_list)
       publisher_agents = Agent.import_agents(publishers_list)
-      #classification = Classification.where(:category => row['classification'].to_s.strip).first
       subjects = import_subject(row) if defined?(EnjuSubject)
       case options[:edit_mode]
       when 'create'
@@ -611,6 +624,13 @@ class ResourceImportFile < ActiveRecord::Base
           )
           series_statement.manifestation = manifestation
           series_statement.save!
+        end
+      end
+
+      if defined?(EnjuSubject)
+        classifications = import_classification(row)
+        if classifications.present?
+          manifestation.classifications << classifications
         end
       end
 
