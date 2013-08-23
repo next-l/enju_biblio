@@ -19,7 +19,7 @@ gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer", bra
 gem "enju_circulation", github: "next-l/enju_circulation", branch: "rails4"
 gem "enju_ndl", github: "next-l/enju_ndl", branch: "rails4"
 gem "enju_bookmark", github: "next-l/enju_bookmark", branch: "rails4"
-gem "paper_trail", github: "airblade/paper_trail", branch: "rails4"
+gem "paper_trail", github: "airblade/paper_trail"
 gem "simple_form", github: "plataformatec/simple_form"
 gem "enju_message", github: "next-l/enju_message", branch: "rails4"
 gem "redis-rails", git: "git://github.com/jodosha/redis-store.git"
