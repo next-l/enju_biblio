@@ -22,7 +22,6 @@ gem "enju_bookmark", github: "next-l/enju_bookmark", branch: "rails4"
 gem "paper_trail", github: "airblade/paper_trail"
 gem "simple_form", github: "plataformatec/simple_form"
 gem "enju_message", github: "next-l/enju_message", branch: "rails4"
-gem "redis-rails", git: "git://github.com/jodosha/redis-store.git"
 gem "sunspot_rails", github: "sunspot/sunspot"
 gem "sunspot_solr", github: "sunspot/sunspot"
 
