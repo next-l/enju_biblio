@@ -1,7 +1,8 @@
 --- 
 carrier_type_00001: 
   name: print
-  display_name: print
+  display_name: "en: print\r\n\
+    ja: 印刷物"
   id: 1
   position: 1
 carrier_type_00002: 
@@ -16,7 +17,8 @@ carrier_type_00003:
   position: 3
 carrier_type_00004: 
   name: file
-  display_name: file
+  display_name: "en: file\r\n\
+    ja: コンピュータファイル"
   id: 4
   position: 4
 
