@@ -57,11 +57,6 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/new.json
   def new
     @series_statement = SeriesStatement.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @series_statement }
-    end
   end
 
   # GET /series_statements/1/edit

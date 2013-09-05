@@ -144,11 +144,6 @@ class AgentsController < ApplicationController
     @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
     @agent.country = current_user.library.country
     prepare_options
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @agent }
-    end
   end
 
   # GET /agents/1/edit

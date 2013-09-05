@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.homepage    = "https://github.com/next-l/enju_biblio"
   s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
+  s.license     = "MIT"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
@@ -29,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"
+  s.add_dependency "paper_trail", "~> 3.0.0.beta1"
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"

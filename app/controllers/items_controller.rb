@@ -154,7 +154,7 @@ class ItemsController < ApplicationController
     end
     @item = Item.new
     @item.shelf = @library.shelves.first
-    @item.manifestation_id = @manifestation.id
+    @item.manifestation = @manifestation
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.where(
         :name => [
@@ -169,15 +169,13 @@ class ItemsController < ApplicationController
       @item.item_has_use_restriction = ItemHasUseRestriction.new
       @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
     end
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @item }
-    end
   end
 
   # GET /items/1/edit
   def edit
+    if @manifestation
+      @item.manifestation = @manifestation
+    end
     @item.library_id = @item.shelf.library_id
     if defined?(EnjuCirculation)
       unless @item.use_restriction
@@ -232,13 +230,12 @@ class ItemsController < ApplicationController
   # DELETE /items/1
   # DELETE /items/1.json
   def destroy
-    manifestation = @item.manifestation
     @item.destroy
 
     respond_to do |format|
       flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
       if @item.manifestation
-        format.html { redirect_to manifestation_items_url(manifestation) }
+        format.html { redirect_to manifestation_items_url(@item.manifestation) }
         format.json { head :no_content }
       else
         format.html { redirect_to items_url }

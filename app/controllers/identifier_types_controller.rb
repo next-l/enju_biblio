@@ -25,11 +25,6 @@ class IdentifierTypesController < ApplicationController
   # GET /identifier_types/new.json
   def new
     @identifier_type = IdentifierType.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @identifier_type }
-    end
   end
 
   # GET /identifier_types/1/edit

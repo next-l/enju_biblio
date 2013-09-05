@@ -12,14 +12,15 @@ class Item < ActiveRecord::Base
     :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
   scope :on_shelf, -> {where('shelf_id != 1')}
   scope :on_web, -> {where(:shelf_id => 1)}
-  has_one :exemplify, :dependent => :destroy
-  has_one :manifestation, :through => :exemplify
+  #has_one :exemplify, :dependent => :destroy
+  #has_one :manifestation, :through => :exemplify
+  belongs_to :manifestation, touch: true
   has_many :owns
   has_many :agents, :through => :owns
   delegate :display_name, :to => :shelf, :prefix => true
   belongs_to :bookstore, :validate => true
-  has_many :donates
-  has_many :donors, :through => :donates, :source => :agent
+  #has_many :donates
+  #has_many :donors, :through => :donates, :source => :agent
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
@@ -27,7 +28,7 @@ class Item < ActiveRecord::Base
   #before_save :create_manifestation
 
   validates_associated :bookstore
-  validates :manifestation_id, :presence => true, :on => :create
+  validates :manifestation_id, :presence => true #, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
@@ -49,7 +50,7 @@ class Item < ActiveRecord::Base
     time :acquired_at
   end
 
-  attr_accessor :library_id, :manifestation_id
+  attr_accessor :library_id #, :manifestation_id
 
   paginates_per 10
 

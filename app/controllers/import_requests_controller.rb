@@ -15,21 +15,12 @@ class ImportRequestsController < ApplicationController
   # GET /import_requests/1
   # GET /import_requests/1.json
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @import_request }
-    end
   end
 
   # GET /import_requests/new
   # GET /import_requests/new.json
   def new
     @import_request = ImportRequest.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @import_request }
-    end
   end
 
   # GET /import_requests/1/edit

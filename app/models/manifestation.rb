@@ -32,8 +32,9 @@ class Manifestation < ActiveRecord::Base
   has_many :contributors, -> {order('realizes.position')}, :through => :realizes, :source => :agent
   has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
   has_many :publishers, -> {order('produces.position')}, :through => :produces, :source => :agent
-  has_many :exemplifies, :dependent => :destroy
-  has_many :items, :through => :exemplifies
+  #has_many :exemplifies, :dependent => :destroy
+  #has_many :items, :through => :exemplifies
+  has_many :items #, :dependent => :destroy
   has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
   has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
   has_many :derived_manifestations, :through => :children, :source => :child

@@ -38,11 +38,6 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/new.json
   def new
     @resource_import_file = ResourceImportFile.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @resource_import_file }
-    end
   end
 
   # GET /resource_import_files/1/edit

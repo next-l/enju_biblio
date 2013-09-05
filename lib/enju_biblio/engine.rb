@@ -1,6 +1,6 @@
 require 'enju_core'
 require 'inherited_resources'
-#require 'paper_trail'
+require 'paper_trail'
 require 'paperclip'
 require 'paperclip-meta'
 require 'state_machine'
