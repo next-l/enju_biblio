@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.add_dependency "inherited_resources"
   s.add_dependency "state_machine"
   s.add_dependency "validates_timeliness"
-  s.add_dependency "simple_form"
+  s.add_dependency "simple_form", "~> 3.0"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
