@@ -20,7 +20,7 @@ class Identifier < ActiveRecord::Base
 
     when 'issn'
       unless StdNum::ISSN.valid?(body)
-        errors.add(:issn)
+        errors.add(:body)
       end
 
     when 'lccn'
