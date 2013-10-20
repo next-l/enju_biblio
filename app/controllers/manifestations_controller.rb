@@ -513,6 +513,7 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1
   # DELETE /manifestations/1.json
   def destroy
+    @manifestation.reload
     @manifestation.destroy
 
     respond_to do |format|
