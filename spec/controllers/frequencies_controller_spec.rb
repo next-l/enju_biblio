@@ -19,7 +19,7 @@ describe FrequenciesController do
 
       it "assigns all frequencies as @frequencies" do
         get :index
-        assigns(:frequencies).should eq(Frequency.all)
+        assigns(:frequencies).should eq(Frequency.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe FrequenciesController do
 
       it "assigns all frequencies as @frequencies" do
         get :index
-        assigns(:frequencies).should eq(Frequency.all)
+        assigns(:frequencies).should eq(Frequency.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe FrequenciesController do
 
       it "assigns all frequencies as @frequencies" do
         get :index
-        assigns(:frequencies).should eq(Frequency.all)
+        assigns(:frequencies).should eq(Frequency.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all frequencies as @frequencies" do
         get :index
-        assigns(:frequencies).should eq(Frequency.all)
+        assigns(:frequencies).should eq(Frequency.page(1))
       end
     end
   end

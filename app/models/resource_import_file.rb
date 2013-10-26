@@ -197,6 +197,7 @@ class ResourceImportFile < ActiveRecord::Base
   def self.import_manifestation(expression, agents, options = {}, edit_options = {:edit_mode => 'create'})
     manifestation = expression
     manifestation.during_import = true
+    manifestation.reload
     manifestation.update_attributes!(options)
     manifestation.publishers = agents.uniq unless agents.empty?
     manifestation

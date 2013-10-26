@@ -19,7 +19,7 @@ describe ExtentsController do
 
       it "assigns all extents as @extents" do
         get :index
-        assigns(:extents).should eq(Extent.all)
+        assigns(:extents).should eq(Extent.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe ExtentsController do
 
       it "assigns all extents as @extents" do
         get :index
-        assigns(:extents).should eq(Extent.all)
+        assigns(:extents).should eq(Extent.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe ExtentsController do
 
       it "assigns all extents as @extents" do
         get :index
-        assigns(:extents).should eq(Extent.all)
+        assigns(:extents).should eq(Extent.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all extents as @extents" do
         get :index
-        assigns(:extents).should eq(Extent.all)
+        assigns(:extents).should eq(Extent.page(1))
       end
     end
   end

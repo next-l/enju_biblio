@@ -19,7 +19,7 @@ describe MediumOfPerformancesController do
 
       it "assigns all medium_of_performances as @medium_of_performances" do
         get :index
-        assigns(:medium_of_performances).should eq(MediumOfPerformance.all)
+        assigns(:medium_of_performances).should eq(MediumOfPerformance.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe MediumOfPerformancesController do
 
       it "assigns all medium_of_performances as @medium_of_performances" do
         get :index
-        assigns(:medium_of_performances).should eq(MediumOfPerformance.all)
+        assigns(:medium_of_performances).should eq(MediumOfPerformance.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe MediumOfPerformancesController do
 
       it "assigns all medium_of_performances as @medium_of_performances" do
         get :index
-        assigns(:medium_of_performances).should eq(MediumOfPerformance.all)
+        assigns(:medium_of_performances).should eq(MediumOfPerformance.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all medium_of_performances as @medium_of_performances" do
         get :index
-        assigns(:medium_of_performances).should eq(MediumOfPerformance.all)
+        assigns(:medium_of_performances).should eq(MediumOfPerformance.page(1))
       end
     end
   end

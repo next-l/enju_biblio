@@ -19,7 +19,7 @@ describe LicensesController do
 
       it "assigns all licenses as @licenses" do
         get :index
-        assigns(:licenses).should eq(License.all)
+        assigns(:licenses).should eq(License.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe LicensesController do
 
       it "assigns all licenses as @licenses" do
         get :index
-        assigns(:licenses).should eq(License.all)
+        assigns(:licenses).should eq(License.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe LicensesController do
 
       it "assigns all licenses as @licenses" do
         get :index
-        assigns(:licenses).should eq(License.all)
+        assigns(:licenses).should eq(License.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all licenses as @licenses" do
         get :index
-        assigns(:licenses).should eq(License.all)
+        assigns(:licenses).should eq(License.page(1))
       end
     end
   end

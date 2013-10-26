@@ -19,7 +19,7 @@ describe FormOfWorksController do
 
       it "assigns all form_of_works as @form_of_works" do
         get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
+        assigns(:form_of_works).should eq(FormOfWork.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe FormOfWorksController do
 
       it "assigns all form_of_works as @form_of_works" do
         get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
+        assigns(:form_of_works).should eq(FormOfWork.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe FormOfWorksController do
 
       it "assigns all form_of_works as @form_of_works" do
         get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
+        assigns(:form_of_works).should eq(FormOfWork.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all form_of_works as @form_of_works" do
         get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
+        assigns(:form_of_works).should eq(FormOfWork.page(1))
       end
     end
   end

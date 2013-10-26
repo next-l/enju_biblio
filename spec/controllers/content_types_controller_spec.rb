@@ -19,7 +19,7 @@ describe ContentTypesController do
 
       it "assigns all content_types as @content_types" do
         get :index
-        assigns(:content_types).should eq(ContentType.all)
+        assigns(:content_types).should eq(ContentType.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe ContentTypesController do
 
       it "assigns all content_types as @content_types" do
         get :index
-        assigns(:content_types).should eq(ContentType.all)
+        assigns(:content_types).should eq(ContentType.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe ContentTypesController do
 
       it "assigns all content_types as @content_types" do
         get :index
-        assigns(:content_types).should eq(ContentType.all)
+        assigns(:content_types).should eq(ContentType.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all content_types as @content_types" do
         get :index
-        assigns(:content_types).should eq(ContentType.all)
+        assigns(:content_types).should eq(ContentType.page(1))
       end
     end
   end

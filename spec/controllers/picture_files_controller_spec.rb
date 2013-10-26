@@ -11,7 +11,7 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.page(1))
       end
     end
 
@@ -20,7 +20,7 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.page(1))
       end
     end
 
@@ -29,14 +29,14 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.page(1))
       end
     end
   end

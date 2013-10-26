@@ -19,7 +19,7 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.page(1))
       end
     end
   end
