@@ -32,7 +32,7 @@ describe ProduceTypesController do
     it "assigns all produce_types as @produce_types" do
       produce_type = ProduceType.create! valid_attributes
       get :index
-      assigns(:produce_types).should eq(ProduceType.all)
+      assigns(:produce_types).should eq(ProduceType.page(1))
     end
   end
 

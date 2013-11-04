@@ -3,6 +3,10 @@ class ExtentsController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @extents = Extent.page(params[:page])
+  end
+
   def update
     @extent = Extent.find(params[:id])
     if params[:move]

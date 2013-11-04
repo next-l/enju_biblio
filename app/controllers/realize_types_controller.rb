@@ -3,6 +3,10 @@ class RealizeTypesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @realize_types = RealizeType.page(params[:page])
+  end
+
   def update
     @realize_type = RealizeType.find(params[:id])
     if params[:move]

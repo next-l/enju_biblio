@@ -3,6 +3,10 @@ class ProduceTypesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @produce_types = ProduceType.page(params[:page])
+  end
+
   def update
     @produce_type = ProduceType.find(params[:id])
     if params[:move]

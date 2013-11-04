@@ -4,6 +4,10 @@ class AgentRelationshipsController < InheritedResources::Base
   load_and_authorize_resource
   before_action :prepare_options, :except => [:index, :destroy]
 
+  def index
+    @agent_relationships = AgentRelationship.page(params[:page])
+  end
+
   def new
     @agent_relationship = AgentRelationship.new(params[:agent_relationship])
     @agent_relationship.parent = Agent.find(params[:agent_id]) rescue nil

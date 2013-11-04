@@ -3,6 +3,10 @@ class CreateTypesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @create_types = CreateType.page(params[:page])
+  end
+
   def update
     @create_type = CreateType.find(params[:id])
     if params[:move]

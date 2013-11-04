@@ -3,6 +3,10 @@ class MediumOfPerformancesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @medium_of_performances = MediumOfPerformance.page(params[:page])
+  end
+
   def update
     @medium_of_performance = MediumOfPerformance.find(params[:id])
     if params[:move]

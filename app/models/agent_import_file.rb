@@ -60,7 +60,7 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def import
-    self.reload
+    reload
     num = {:agent_imported => 0, :user_imported => 0, :failed => 0}
     row_num = 2
     rows = open_import_file

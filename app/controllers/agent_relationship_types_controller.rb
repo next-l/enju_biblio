@@ -3,6 +3,10 @@ class AgentRelationshipTypesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @agent_relationship_types = AgentRelationshipType.page(params[:page])
+  end
+
   def update
     @agent_relationship_type = AgentRelationshipType.find(params[:id])
     if params[:move]

@@ -19,7 +19,7 @@ describe AgentTypesController do
 
       it "assigns all agent_types as @agent_types" do
         get :index
-        assigns(:agent_types).should eq(AgentType.all)
+        assigns(:agent_types).should eq(AgentType.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe AgentTypesController do
 
       it "assigns all agent_types as @agent_types" do
         get :index
-        assigns(:agent_types).should eq(AgentType.all)
+        assigns(:agent_types).should eq(AgentType.page(1))
       end
     end
 

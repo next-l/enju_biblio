@@ -3,6 +3,10 @@ class LicensesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @licenses = License.page(params[:page])
+  end
+
   def update
     @license = License.find(params[:id])
     if params[:move]

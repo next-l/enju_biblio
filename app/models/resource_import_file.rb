@@ -63,7 +63,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def import
     sm_start!
-    self.reload
+    reload
     num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
     rows = open_import_file
     row_num = 2

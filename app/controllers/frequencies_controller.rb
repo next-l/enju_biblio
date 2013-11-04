@@ -3,6 +3,10 @@ class FrequenciesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @frequencies = Frequency.page(params[:page])
+  end
+
   def update
     @frequency = Frequency.find(params[:id])
     if params[:move]

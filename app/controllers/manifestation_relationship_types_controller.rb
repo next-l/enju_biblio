@@ -3,6 +3,10 @@ class ManifestationRelationshipTypesController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @manifestation_relationship_types = ManifestationRelationshipType.page(params[:page])
+  end
+
   def update
     @manifestation_relationship_type = ManifestationRelationshipType.find(params[:id])
     if params[:move]

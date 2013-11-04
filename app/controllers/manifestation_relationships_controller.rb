@@ -4,6 +4,10 @@ class ManifestationRelationshipsController < InheritedResources::Base
   load_and_authorize_resource
   before_action :prepare_options, :except => [:index, :destroy]
 
+  def index
+    @manifestation_relationships = ManifestationRelationship.page(params[:page])
+  end
+
   def new
     @manifestation_relationship = ManifestationRelationship.new(params[:manifestation_relationship])
     @manifestation_relationship.parent = Manifestation.find(params[:manifestation_id]) rescue nil

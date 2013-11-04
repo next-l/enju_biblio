@@ -3,6 +3,10 @@ class FormOfWorksController < InheritedResources::Base
   has_scope :page, :default => 1
   load_and_authorize_resource
 
+  def index
+    @form_of_works = FormOfWork.page(params[:page])
+  end
+
   def update
     @form_of_work = FormOfWork.find(params[:id])
     if params[:move]
