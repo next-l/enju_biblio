@@ -31,7 +31,7 @@ describe Manifestation, :solr => true do
     openurl = Openurl.new({:title => "プログラミング"})
     results = openurl.search
     openurl.query_text.should eq "btitle_text:プログラミング"
-    results.size.should eq 8
+    results.size.should eq 7
     openurl = Openurl.new({:jtitle => "テスト"})
     results = openurl.search
     results.size.should eq 3
@@ -87,7 +87,7 @@ describe Manifestation, :solr => true do
   it "should serach multi in openurl" do
     openurl = Openurl.new({:btitle => "CGI Perl プログラミング"})
     results = openurl.search
-    results.size.should eq 3
+    results.size.should eq 2
     openurl = Openurl.new({:jtitle => "テスト", :pub => "テスト"})
     results = openurl.search
     results.size.should eq 2
@@ -201,7 +201,7 @@ describe Manifestation, :solr => true do
   end
 
   it "should respond to pickup" do
-    Manifestation.pickup.should_not raise_error(ActiveRecord::RecordNotFound)
+    lambda{Manifestation.pickup}.should_not raise_error #(ActiveRecord::RecordNotFound)
   end
 
   it "should be periodical if its series_statement is periodical" do
