@@ -202,6 +202,8 @@ class AgentsController < ApplicationController
   # DELETE /agents/1
   # DELETE /agents/1.json
   def destroy
+    @agent.picture_files.destroy_all #workaround
+    @agent.reload
     @agent.destroy
 
     respond_to do |format|

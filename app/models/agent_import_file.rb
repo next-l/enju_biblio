@@ -166,6 +166,8 @@ class AgentImportFile < ActiveRecord::Base
       next if row['dummy'].to_s.strip.present?
       agent = Agent.where(:id => row['id'].to_s.strip).first
       if agent
+        agent.picture_files.destroy_all
+        agent.reload
         agent.destroy
       end
       row_num += 1

@@ -513,6 +513,7 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1
   # DELETE /manifestations/1.json
   def destroy
+    @manifestation.picture_files.destroy_all #workaround
     @manifestation.reload
     @manifestation.destroy
 
