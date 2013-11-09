@@ -10,7 +10,6 @@ class AgentsController < ApplicationController
   before_action :store_location
   before_action :get_version, :only => [:show]
   after_action :solr_commit, :only => [:create, :update, :destroy]
-  #cache_sweeper :agent_sweeper, :only => [:create, :update, :destroy]
 
   # GET /agents
   # GET /agents.json
@@ -202,7 +201,7 @@ class AgentsController < ApplicationController
   # DELETE /agents/1
   # DELETE /agents/1.json
   def destroy
-    @agent.picture_files.destroy_all #workaround
+    @agent.picture_files.destroy_all # workaround
     @agent.reload
     @agent.destroy
 
