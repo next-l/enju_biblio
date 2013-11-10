@@ -47,6 +47,8 @@ class Agent < ActiveRecord::Base
   validate :check_birth_date
   before_validation :set_role_and_name, :on => :create
   before_save :set_date_of_birth, :set_date_of_death
+  before_update :touch
+  before_destroy :touch, :reload
 
   searchable do
     text :name, :place, :address_1, :address_2, :other_designation, :note
