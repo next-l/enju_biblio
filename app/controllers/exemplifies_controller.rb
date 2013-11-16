@@ -2,7 +2,6 @@ class ExemplifiesController < ApplicationController
   load_and_authorize_resource
   before_action :get_manifestation, :get_item
   after_action :solr_commit, :only => [:create, :update, :destroy]
-  #cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
 
   # GET /exemplifies
   # GET /exemplifies.json

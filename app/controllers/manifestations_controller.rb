@@ -14,7 +14,6 @@ class ManifestationsController < ApplicationController
   before_action :get_version, :only => [:show]
   after_action :solr_commit, :only => :destroy
   after_action :convert_charset, :only => :index
-  #cache_sweeper :manifestation_sweeper, :only => [:create, :update, :destroy]
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
 
@@ -513,7 +512,6 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1
   # DELETE /manifestations/1.json
   def destroy
-    @manifestation.reload
     @manifestation.destroy
 
     respond_to do |format|
