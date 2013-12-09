@@ -42,11 +42,14 @@ describe ResourceImportFile do
         item_10101.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10101.budget_type.name.should eq 'Public fund'
         item_10101.bookstore.name.should eq 'Example store'
-        item_10101.use_restriction.name.should eq 'Not For Loan'
+        item_10101.bookstore.name.should eq 'Example store'
         item_10101.manifestation.classifications.count.should eq 1
         item_10101.manifestation.classifications.first.classification_type.name.should eq 'ndc'
         item_10101.manifestation.classifications.first.category.should eq '007'
-        Item.where(:item_identifier => '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
+        item_10101.manifestation.language.name.should eq 'Japanese'
+        item_10102 = Item.where(:item_identifier => '10102').first
+        item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
+        item_10102.manifestation.language.name.should eq 'Japanese'
         Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(:item_identifier => '11111').first
