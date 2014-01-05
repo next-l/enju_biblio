@@ -35,6 +35,7 @@ module EnjuBiblio
           AgentImportFile,
           AgentRelationship,
           AgentRelationshipType,
+          FormOfWork,
           PictureFile,
           Produce,
           ProduceType,
@@ -43,12 +44,11 @@ module EnjuBiblio
           ResourceImportFile,
           SeriesStatement
         ]
-        can :update, [
+        can :manage, [
           ContentType,
           Country,
           Extent,
           Frequency,
-          FormOfWork,
           Language,
           License,
           MediumOfPerformance,
