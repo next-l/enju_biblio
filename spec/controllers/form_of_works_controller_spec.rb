@@ -30,49 +30,10 @@ describe FormOfWorksController do
   end
 
   describe "GET index" do
-<<<<<<< HEAD
-    before(:each) do
-      FactoryGirl.create(:form_of_work)
-    end
-
-    describe "When logged in as Administrator" do
-      login_admin
-
-      it "assigns all form_of_works as @form_of_works" do
-        get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
-      end
-    end
-
-    describe "When logged in as Librarian" do
-      login_librarian
-
-      it "assigns all form_of_works as @form_of_works" do
-        get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
-      end
-    end
-
-    describe "When logged in as User" do
-      login_user
-
-      it "assigns all form_of_works as @form_of_works" do
-        get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
-      end
-    end
-
-    describe "When not logged in" do
-      it "assigns all form_of_works as @form_of_works" do
-        get :index
-        assigns(:form_of_works).should eq(FormOfWork.all)
-      end
-=======
     it "assigns all form_of_works as @form_of_works" do
       form_of_work = FormOfWork.create! valid_attributes
       get :index
-      assigns(:form_of_works).should eq(FormOfWork.page(1))
->>>>>>> 176c69d... allowed creating form_of_work
+      assigns(:form_of_works).should eq(FormOfWork.all)
     end
   end
 
