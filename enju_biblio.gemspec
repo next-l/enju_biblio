@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
-  s.add_dependency "enju_core", "~> 0.2.0.pre1"
+  #s.add_dependency "enju_seed", "~> 0.2.0.pre1"
   s.add_dependency "paperclip", "~> 3.5"
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
