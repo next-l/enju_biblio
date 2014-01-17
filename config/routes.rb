@@ -84,15 +84,15 @@ Rails.application.routes.draw do
   resources :manifestation_relationships
 
   resources :resource_import_files do
-    resources :resource_import_results
+    resources :resource_import_results, :only => [:index, :show, :destroy]
   end
   resources :resource_import_results
   resources :agent_import_files do
-    resources :agent_import_results
+    resources :agent_import_results, :only => [:index, :show, :destroy]
   end
-  resources :agent_import_results
+  resources :agent_import_results, :only => [:index, :show, :destroy]
 
-  resources :import_requests
+  resources :import_requests, :only => [:index, :show, :destroy]
 
   resources :picture_files
 
