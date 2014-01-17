@@ -52,9 +52,7 @@ module EnjuBiblio
           Language,
           License,
           MediumOfPerformance,
-          AgentType,
-          RequestStatusType,
-          RequestType
+          AgentType
         ] if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can :read, [
           CarrierType,
@@ -69,8 +67,6 @@ module EnjuBiblio
           MediumOfPerformance,
           AgentImportResult,
           AgentType,
-          RequestStatusType,
-          RequestType,
           ResourceImportResult
         ]
       when 'Librarian'
@@ -117,8 +113,6 @@ module EnjuBiblio
           AgentImportResult,
           AgentRelationshipType,
           AgentType,
-          RequestStatusType,
-          RequestType,
           ResourceImportResult,
           MediumOfPerformance
         ]
