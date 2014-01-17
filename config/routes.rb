@@ -92,7 +92,7 @@ Rails.application.routes.draw do
   end
   resources :agent_import_results, :only => [:index, :show, :destroy]
 
-  resources :import_requests, :only => [:index, :show, :destroy]
+  resources :import_requests
 
   resources :picture_files
 
