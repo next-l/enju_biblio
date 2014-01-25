@@ -1,20 +1,12 @@
 <ul>
   <% manifestation.original_manifestations.each do |m| %>
     <li>
-      <%= link_to m.original_title, m %>
-      <% if can? :create, Manifestation and m.periodical? %>
-        (<%= link_to t('manifestation.add_next_issue'), new_manifestation_path(:parent_id => m.id) %>)
+      <% if series_statement.manifestation and manifestation.series_master? %>
+        <%= link_to series_statement.original_title, series_statement.manifestation %>
+      <% else %>
+        <%= series_statement.original_title %>
       <% end %>
-      <% if m.series_statements.exists? %>
-        <ul>
-          <% m.series_statements.each do |s| %>
-            <li>
-              <%= s.original_title %>
-              <%= s.volume_number_string %>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
+      <%= series_statement.volume_number_string %>
     </li>
   <% end %>
 </ul>
