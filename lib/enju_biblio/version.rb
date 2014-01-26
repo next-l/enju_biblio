@@ -1,3 +1,3 @@
 module EnjuBiblio
-  VERSION = "0.1.0.pre49"
+  VERSION = "0.1.0.pre50"
 end
