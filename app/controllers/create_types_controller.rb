@@ -4,7 +4,6 @@ class CreateTypesController < InheritedResources::Base
   load_and_authorize_resource
 
   def update
-    @create_type = CreateType.find(params[:id])
     if params[:move]
       move_position(@create_type, params[:move])
       return

@@ -127,9 +127,9 @@ describe LanguagesController do
           assigns(:language).should be_valid
         end
 
-        it "should be forbidden" do
+        it "redirects to the created language" do
           post :create, :language => @attrs
-          response.should be_forbidden
+          response.should redirect_to(assigns(:language))
         end
       end
 
@@ -139,9 +139,9 @@ describe LanguagesController do
           assigns(:language).should_not be_valid
         end
 
-        it "should be forbidden" do
+        it "re-renders the 'new' template" do
           post :create, :language => @invalid_attrs
-          response.should be_forbidden
+          response.should render_template("new")
         end
       end
     end
@@ -296,9 +296,9 @@ describe LanguagesController do
         delete :destroy, :id => @language.id
       end
 
-      it "should be forbidden" do
+      it "redirects to the languagees list" do
         delete :destroy, :id => @language.id
-        response.should be_forbidden
+        response.should redirect_to(languages_url)
       end
     end
 

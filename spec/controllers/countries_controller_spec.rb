@@ -97,7 +97,7 @@ describe CountriesController do
       it "assigns the requested country as @country" do
         get :new
         assigns(:country).should_not be_valid
-        response.should be_forbidden
+        response.should be_success
       end
     end
 
@@ -185,9 +185,9 @@ describe CountriesController do
           assigns(:country).should be_valid
         end
 
-        it "should be forbidden" do
+        it "redirects to the created country" do
           post :create, :country => @attrs
-          response.should be_forbidden
+          response.should redirect_to(assigns(:country))
         end
       end
 
@@ -197,9 +197,9 @@ describe CountriesController do
           assigns(:country).should_not be_valid
         end
 
-        it "should be forbidden" do
+        it "re-renders the 'new' template" do
           post :create, :country => @invalid_attrs
-          response.should be_forbidden
+          response.should render_template("new")
         end
       end
     end
@@ -408,9 +408,9 @@ describe CountriesController do
         delete :destroy, :id => @country.id
       end
 
-      it "should be forbidden" do
+      it "redirects to the countries list" do
         delete :destroy, :id => @country.id
-        response.should be_forbidden
+        response.should redirect_to(countries_url)
       end
     end
 

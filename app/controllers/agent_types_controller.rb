@@ -4,7 +4,6 @@ class AgentTypesController < InheritedResources::Base
   load_and_authorize_resource
 
   def update
-    @agent_type = AgentType.find(params[:id])
     if params[:move]
       move_position(@agent_type, params[:move])
       return
