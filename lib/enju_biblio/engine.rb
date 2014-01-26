@@ -1,4 +1,4 @@
-require 'enju_core'
+require 'enju_seed'
 require 'inherited_resources'
 require 'paper_trail'
 require 'paperclip'
