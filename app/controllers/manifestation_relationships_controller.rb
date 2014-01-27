@@ -11,7 +11,6 @@ class ManifestationRelationshipsController < InheritedResources::Base
   end
 
   def update
-    @manifestation_relationship = ManifestationRelationship.find(params[:id])
     if params[:move]
       move_position(@manifestation_relationship, params[:move])
       return

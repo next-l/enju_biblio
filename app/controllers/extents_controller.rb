@@ -4,7 +4,6 @@ class ExtentsController < InheritedResources::Base
   load_and_authorize_resource
 
   def update
-    @extent = Extent.find(params[:id])
     if params[:move]
       move_position(@extent, params[:move])
       return

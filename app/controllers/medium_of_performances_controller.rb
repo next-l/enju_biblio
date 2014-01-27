@@ -4,7 +4,6 @@ class MediumOfPerformancesController < InheritedResources::Base
   load_and_authorize_resource
 
   def update
-    @medium_of_performance = MediumOfPerformance.find(params[:id])
     if params[:move]
       move_position(@medium_of_performance, params[:move])
       return
