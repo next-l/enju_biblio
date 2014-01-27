@@ -8,7 +8,6 @@ class MediumOfPerformancesController < InheritedResources::Base
   end
 
   def update
-    @medium_of_performance = MediumOfPerformance.find(params[:id])
     if params[:move]
       move_position(@medium_of_performance, params[:move])
       return

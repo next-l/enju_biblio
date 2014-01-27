@@ -8,7 +8,6 @@ class FrequenciesController < InheritedResources::Base
   end
 
   def update
-    @frequency = Frequency.find(params[:id])
     if params[:move]
       move_position(@frequency, params[:move])
       return

@@ -8,7 +8,6 @@ class ExtentsController < InheritedResources::Base
   end
 
   def update
-    @extent = Extent.find(params[:id])
     if params[:move]
       move_position(@extent, params[:move])
       return

@@ -12,7 +12,6 @@ class CountriesController < InheritedResources::Base
   end
 
   def update
-    @country = Country.find(params[:id])
     if params[:move]
       move_position(@country, params[:move])
       return

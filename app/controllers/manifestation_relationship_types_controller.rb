@@ -8,7 +8,6 @@ class ManifestationRelationshipTypesController < InheritedResources::Base
   end
 
   def update
-    @manifestation_relationship_type = ManifestationRelationshipType.find(params[:id])
     if params[:move]
       move_position(@manifestation_relationship_type, params[:move])
       return

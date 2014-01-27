@@ -8,7 +8,6 @@ class FormOfWorksController < InheritedResources::Base
   end
 
   def update
-    @form_of_work = FormOfWork.find(params[:id])
     if params[:move]
       move_position(@form_of_work, params[:move])
       return

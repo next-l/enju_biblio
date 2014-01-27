@@ -12,7 +12,6 @@ class LanguagesController < InheritedResources::Base
   end
 
   def update
-    @language = Language.find(params[:id])
     if params[:move]
       move_position(@language, params[:move])
       return
