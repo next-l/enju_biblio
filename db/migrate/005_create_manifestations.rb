@@ -19,7 +19,7 @@ class CreateManifestations < ActiveRecord::Migration
       t.integer :height
       t.integer :width
       t.integer :depth
-      t.integer :price # TODO: 通貨単位
+      t.integer :price # TODO: currency unit
       t.text :fulltext
       t.string :volume_number_string
       t.string :issue_number_string

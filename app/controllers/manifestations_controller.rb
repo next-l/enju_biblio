@@ -159,31 +159,7 @@ class ManifestationsController < ApplicationController
         facet :reservable if defined?(EnjuCirculation)
       end
       search = make_internal_query(search)
-      search.data_accessor_for(Manifestation).select = [
-        :id,
-        :original_title,
-        :title_transcription,
-        :required_role_id,
-        :carrier_type_id,
-        :access_address,
-        :volume_number_string,
-        :issue_number_string,
-        :serial_number_string,
-        :date_of_publication,
-        :pub_date,
-        :language_id,
-        :created_at,
-        :updated_at,
-        :volume_number_string,
-        :volume_number,
-        :issue_number_string,
-        :issue_number,
-        :serial_number,
-        :edition_string,
-        :edition,
-        :periodical,
-        :statement_of_responsibility
-      ] if params[:format] == 'html' or params[:format].nil?
+      add_data_accessor(search)
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
@@ -235,23 +211,7 @@ class ManifestationsController < ApplicationController
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
-        pub_dates = parse_pub_date(params)
-        pub_date_range = {}
-        if pub_dates[:from] == '*'
-          pub_date_range[:from] = 0
-        else
-          pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
-        end
-        if pub_dates[:to] == '*'
-          pub_date_range[:to] = 10000
-        else
-          pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
-        end
-        if params[:pub_year_range_interval]
-          pub_year_range_interval = params[:pub_year_range_interval].to_i
-        else
-          pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
-        end
+        pub_date_range, pub_year_range_interval = set_pub_date_query
 
         search.build do
           facet :reservable if defined?(EnjuCirculation)
@@ -299,15 +259,15 @@ class ManifestationsController < ApplicationController
 
       if defined?(EnjuOai)
         if params[:format] == 'oai'
-          unless @manifestations.empty?
+          if @manifestations.empty?
+            @oai[:errors] << 'noRecordsMatch'
+          else
             @resumption = set_resumption_token(
               params[:resumptionToken],
               @from_time || Manifestation.last.updated_at,
               @until_time || Manifestation.first.updated_at,
               @manifestations.limit_value
             )
-          else
-            @oai[:errors] << 'noRecordsMatch'
           end
         end
       end
@@ -435,12 +395,14 @@ class ManifestationsController < ApplicationController
   def new
     @manifestation = Manifestation.new
     @manifestation.language = Language.where(:iso_639_1 => @locale).first
-    parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
-    if parent
-      @manifestation.parent_id = parent.id
-      @manifestation.original_title = parent.original_title
-      @manifestation.title_transcription = parent.title_transcription
-      @manifestation.periodical = true if parent.periodical
+    if params[:parent_id].present?
+    parent = Manifestation.where(:id => params[:parent_id]).first
+      if parent
+        @manifestation.parent_id = parent.id
+        @manifestation.original_title = parent.original_title
+        @manifestation.title_transcription = parent.title_transcription
+        @manifestation.periodical = true if parent.periodical
+      end
     end
 
     respond_to do |format|
@@ -766,5 +728,56 @@ class ManifestationsController < ApplicationController
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query
+  end
+
+  def add_data_accessor(search)
+    search.data_accessor_for(Manifestation).select = [
+        :id,
+        :original_title,
+        :title_transcription,
+        :required_role_id,
+        :carrier_type_id,
+        :access_address,
+        :volume_number_string,
+        :issue_number_string,
+        :serial_number_string,
+        :date_of_publication,
+        :pub_date,
+        :language_id,
+        :created_at,
+        :updated_at,
+        :volume_number_string,
+        :volume_number,
+        :issue_number_string,
+        :issue_number,
+        :serial_number,
+        :edition_string,
+        :edition,
+        :periodical,
+        :statement_of_responsibility
+    ] if params[:format] == 'html' or params[:format].nil?
+    search
+  end
+
+
+  def set_pub_date_query
+    pub_dates = parse_pub_date(params)
+    pub_date_range = {}
+    if pub_dates[:from] == '*'
+      pub_date_range[:from] = 0
+    else
+      pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
+    end
+    if pub_dates[:to] == '*'
+      pub_date_range[:to] = 10000
+    else
+      pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
+    end
+    if params[:pub_year_range_interval]
+      pub_year_range_interval = params[:pub_year_range_interval].to_i
+    else
+      pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
+    end
+    return pub_date_range, pub_year_range_interval
   end
 end
