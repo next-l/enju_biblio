@@ -375,6 +375,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def sort_title
+    return nil if RUBY_PLATFORM == 'java'
     if series_master?
       if root_series_statement.title_transcription?
         NKF.nkf('-w --katakana', root_series_statement.title_transcription)
