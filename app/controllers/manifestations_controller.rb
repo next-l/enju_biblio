@@ -276,8 +276,10 @@ class ManifestationsController < ApplicationController
     store_location # before_action ではファセット検索のURLを記憶してしまう
 
     respond_to do |format|
-      format.html
-      format.mobile
+      format.html {|html|
+        html
+        html.phone
+      }
       format.xml  { render :xml => @manifestations }
       format.sru  { render :layout => false }
       format.rss  { render :layout => false }
@@ -356,8 +358,10 @@ class ManifestationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.mobile
+      format.html {|html|
+        html
+        html.phone
+      }
       format.xml  {
         case params[:mode]
         when 'related'
