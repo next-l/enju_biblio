@@ -55,11 +55,3 @@ module Dummy
 end
 
 require 'enju_leaf'
-require 'enju_circulation'
-require 'enju_inventory'
-require 'enju_bookmark'
-require 'enju_event'
-require 'enju_manifestation_viewer'
-require 'enju_export'
-require 'enju_ndl'
-require 'enju_subject'
