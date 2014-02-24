@@ -55,3 +55,8 @@ module Dummy
 end
 
 require 'enju_leaf'
+require 'enju_inventory'
+require 'enju_subject'
+require 'enju_circulation'
+require 'enju_ndl'
+require 'enju_bookmark'
