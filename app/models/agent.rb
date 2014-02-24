@@ -1,14 +1,14 @@
 # -*- encoding: utf-8 -*-
 class Agent < ActiveRecord::Base
   enju_export if defined?(EnjuExport)
-  attr_accessible :last_name, :middle_name, :first_name,
-    :last_name_transcription, :middle_name_transcription,
-    :first_name_transcription, :corporate_name, :corporate_name_transcription,
-    :full_name, :full_name_transcription, :full_name_alternative,
-    :other_designation, :language_id,
-    :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
-    :full_name_alternative_transcription, :title,
-    :agent_identifier
+  #attr_accessible :last_name, :middle_name, :first_name,
+  #  :last_name_transcription, :middle_name_transcription,
+  #  :first_name_transcription, :corporate_name, :corporate_name_transcription,
+  #  :full_name, :full_name_transcription, :full_name_alternative,
+  #  :other_designation, :language_id,
+  #  :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+  #  :full_name_alternative_transcription, :title,
+  #  :agent_identifier
 
   scope :readable_by, lambda{|user| where('required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(:name => 'Guest').select(:id).first.id)}
   has_many :creates, :dependent => :destroy

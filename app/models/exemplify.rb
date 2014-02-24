@@ -1,5 +1,5 @@
 class Exemplify < ActiveRecord::Base
-  attr_accessible :manifestation_id, :item_id, :position
+  #attr_accessible :manifestation_id, :item_id, :position
   belongs_to :manifestation #, touch: true
   belongs_to :item #, touch: true
   #accepts_nested_attributes_for :item

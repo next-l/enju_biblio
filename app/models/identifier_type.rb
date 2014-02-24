@@ -1,5 +1,5 @@
 class IdentifierType < ActiveRecord::Base
-  attr_accessible :display_name, :name, :note, :position
+  #attr_accessible :display_name, :name, :note, :position
   include MasterModel
   default_scope {order("identifier_types.position")}
   has_many :identifiers

@@ -9,22 +9,22 @@ class Manifestation < ActiveRecord::Base
   enju_oai if defined?(EnjuOai)
   enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
-  attr_accessible :original_title, :title_alternative, :title_transcription,
-    :manifestation_identifier, :date_copyrighted,
-    :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
-    :end_page, :height, :width, :depth,
-    :price, :fulltext, :volume_number_string,
-    :issue_number_string, :serial_number_string, :edition, :note,
-    :repository_content, :required_role_id, :frequency_id,
-    :title_alternative_transcription, :description, :abstract, :available_at,
-    :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
-    :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :content_type_id, :attachment, :lock_version,
-    :series_statements_attributes, :periodical, :statement_of_responsibility,
-    :creators_attributes, :contributors_attributes, :publishers_attributes,
-    :identifiers_attributes
-  attr_accessible :fulltext_content,
-    :doi, :number_of_page_string, :parent_id
+  #attr_accessible :original_title, :title_alternative, :title_transcription,
+  #  :manifestation_identifier, :date_copyrighted,
+  #  :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
+  #  :end_page, :height, :width, :depth,
+  #  :price, :fulltext, :volume_number_string,
+  #  :issue_number_string, :serial_number_string, :edition, :note,
+  #  :repository_content, :required_role_id, :frequency_id,
+  #  :title_alternative_transcription, :description, :abstract, :available_at,
+  #  :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
+  #  :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
+  #  :content_type_id, :attachment, :lock_version,
+  #  :series_statements_attributes, :periodical, :statement_of_responsibility,
+  #  :creators_attributes, :contributors_attributes, :publishers_attributes,
+  #  :identifiers_attributes
+  #attr_accessible :fulltext_content,
+  #  :doi, :number_of_page_string, :parent_id
 
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
   has_many :creators, -> {order('creates.position')}, :through => :creates, :source => :agent
