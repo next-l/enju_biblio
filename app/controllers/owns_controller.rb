@@ -1,5 +1,6 @@
 class OwnsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
   before_action :get_agent, :get_item
   after_action :solr_commit, :only => [:create, :update, :destroy]
 
@@ -51,7 +52,7 @@ class OwnsController < ApplicationController
   # POST /owns
   # POST /owns.json
   def create
-    @own = Own.new(params[:own])
+    @own = Own.new(own_params)
 
     respond_to do |format|
       if @own.save
@@ -74,7 +75,7 @@ class OwnsController < ApplicationController
     end
 
     respond_to do |format|
-      if @own.update_attributes(params[:own])
+      if @own.update_attributes(own_params)
         format.html { redirect_to @own, :notice => t('controller.successfully_updated', :model => t('activerecord.models.own')) }
         format.json { head :no_content }
       else
@@ -103,5 +104,12 @@ class OwnsController < ApplicationController
       }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def own_params
+    params.require(:own).permit(
+      :agent_id, :item_id
+    )
   end
 end

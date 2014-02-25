@@ -1,5 +1,6 @@
 class CreatesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
   before_action :get_agent, :get_work
   before_action :prepare_options, :only => [:new, :edit]
   after_action :solr_commit, :only => [:create, :update, :destroy]
@@ -53,7 +54,7 @@ class CreatesController < ApplicationController
   # POST /creates
   # POST /creates.json
   def create
-    @create = Create.new(params[:create])
+    @create = Create.new(create_params)
 
     respond_to do |format|
       if @create.save
@@ -78,7 +79,7 @@ class CreatesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create.update_attributes(params[:create])
+      if @create.update_attributes(create_params)
         format.html { redirect_to @create, :notice => t('controller.successfully_updated', :model => t('activerecord.models.create')) }
         format.json { head :no_content }
       else
@@ -113,5 +114,11 @@ class CreatesController < ApplicationController
   private
   def prepare_options
     @create_types = CreateType.all
+  end
+
+  def create_params
+    params.require(:create).permit(
+      :agent_id, :work_id, :create_type_id
+    )
   end
 end

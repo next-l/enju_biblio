@@ -14,4 +14,11 @@ class FormOfWorksController < InheritedResources::Base
     end
     update!
   end
+
+  private
+  def permitted_params
+    params.permit(
+      :form_of_work => [:name, :display_name, :note]
+    )
+  end
 end

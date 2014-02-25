@@ -1,6 +1,6 @@
 class CarrierTypesController < ApplicationController
-  load_and_authorize_resource
-  before_action :prepare_options, :only => [:new, :edit]
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
 
   # GET /carrier_types
   # GET /carrier_types.json
@@ -40,7 +40,7 @@ class CarrierTypesController < ApplicationController
   # POST /carrier_types
   # POST /carrier_types.json
   def create
-    @carrier_type = CarrierType.new(params[:carrier_type])
+    @carrier_type = CarrierType.new(carrier_type_params)
 
     respond_to do |format|
       if @carrier_type.save
@@ -63,7 +63,7 @@ class CarrierTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @carrier_type.update_attributes(params[:carrier_type])
+      if @carrier_type.update_attributes(carrier_type_params)
         format.html { redirect_to @carrier_type, :notice => t('controller.successfully_updated', :model => t('activerecord.models.carrier_type')) }
         format.json { head :no_content }
       else
@@ -90,5 +90,13 @@ class CarrierTypesController < ApplicationController
     if defined?(EnjuCirculation)
       @checkout_types = CheckoutType.select([:id, :display_name, :position])
     end
+  end
+
+  def carrier_type_params
+    params.require(:carrier_type).permit(
+      :carrier_type => [
+        :name, :display_name, :note, :position
+      ]
+    )
   end
 end

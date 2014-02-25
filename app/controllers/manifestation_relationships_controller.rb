@@ -1,7 +1,8 @@
 class ManifestationRelationshipsController < InheritedResources::Base
   respond_to :html, :json
   has_scope :page, :default => 1
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
   before_action :prepare_options, :except => [:index, :destroy]
 
   def index
@@ -25,5 +26,13 @@ class ManifestationRelationshipsController < InheritedResources::Base
   private
   def prepare_options
     @manifestation_relationship_types = ManifestationRelationshipType.all
+  end
+
+  def permitted_params
+    params.permit(
+      :manifestation_relationship => [
+        :parent_id, :child_id, :manifestation_relationship_type_id
+      ]
+    )
   end
 end

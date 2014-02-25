@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 class SeriesStatementsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:index, :create]
+  authorize_resource only: [:index, :create]
   before_action :get_manifestation, :except => [:create, :update, :destroy]
   after_action :solr_commit, :only => [:create, :update, :destroy]
   if defined?(EnjuResourceMerge)
@@ -65,7 +66,7 @@ class SeriesStatementsController < ApplicationController
   # POST /series_statements
   # POST /series_statements.json
   def create
-    @series_statement = SeriesStatement.new(params[:series_statement])
+    @series_statement = SeriesStatement.new(series_statement_params)
     manifestation = Manifestation.find(@series_statement.manifestation_id) rescue nil
 
     respond_to do |format|
@@ -90,7 +91,7 @@ class SeriesStatementsController < ApplicationController
     end
 
     respond_to do |format|
-      if @series_statement.update_attributes(params[:series_statement])
+      if @series_statement.update_attributes(series_statement_params)
         format.html { redirect_to @series_statement, :notice => t('controller.successfully_updated', :model => t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else
@@ -110,5 +111,16 @@ class SeriesStatementsController < ApplicationController
       format.html { redirect_to series_statements_url }
       format.json { head :no_content }
     end
+  end
+
+  def series_statement_params
+    params.require(:series_statement).permit(
+      :original_title, :numbering, :title_subseries,
+      :numbering_subseries, :title_transcription, :title_alternative,
+      :series_statement_identifier, :note,
+      :root_manifestation_id, :url,
+      :title_subseries_transcription, :creator_string, :volume_number_string,
+      :series_master
+    )
   end
 end

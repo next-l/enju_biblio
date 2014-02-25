@@ -153,6 +153,45 @@ ActiveRecord::Schema.define(version: 20140110131010) do
 
   add_index "baskets", ["user_id"], name: "index_baskets_on_user_id"
 
+  create_table "bookmark_stat_has_manifestations", force: true do |t|
+    t.integer  "bookmark_stat_id", null: false
+    t.integer  "manifestation_id", null: false
+    t.integer  "bookmarks_count"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bookmark_stat_has_manifestations", ["bookmark_stat_id"], name: "index_bookmark_stat_has_manifestations_on_bookmark_stat_id"
+  add_index "bookmark_stat_has_manifestations", ["manifestation_id"], name: "index_bookmark_stat_has_manifestations_on_manifestation_id"
+
+  create_table "bookmark_stats", force: true do |t|
+    t.datetime "start_date"
+    t.datetime "end_date"
+    t.datetime "started_at"
+    t.datetime "completed_at"
+    t.text     "note"
+    t.string   "state"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bookmark_stats", ["state"], name: "index_bookmark_stats_on_state"
+
+  create_table "bookmarks", force: true do |t|
+    t.integer  "user_id",          null: false
+    t.integer  "manifestation_id"
+    t.text     "title"
+    t.string   "url"
+    t.text     "note"
+    t.boolean  "shared"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "bookmarks", ["manifestation_id"], name: "index_bookmarks_on_manifestation_id"
+  add_index "bookmarks", ["url"], name: "index_bookmarks_on_url"
+  add_index "bookmarks", ["user_id"], name: "index_bookmarks_on_user_id"
+
   create_table "bookstores", force: true do |t|
     t.text     "name",             null: false
     t.string   "zip_code"
@@ -626,9 +665,9 @@ ActiveRecord::Schema.define(version: 20140110131010) do
   add_index "libraries", ["name"], name: "index_libraries_on_name", unique: true
 
   create_table "library_groups", force: true do |t|
-    t.string   "name",                                              null: false
+    t.string   "name",                                                           null: false
     t.text     "display_name"
-    t.string   "short_name",                                        null: false
+    t.string   "short_name",                                                     null: false
     t.string   "email"
     t.text     "my_networks"
     t.text     "login_banner"
@@ -638,7 +677,8 @@ ActiveRecord::Schema.define(version: 20140110131010) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "admin_networks"
-    t.string   "url",            default: "http://localhost:3000/"
+    t.string   "url",                         default: "http://localhost:3000/"
+    t.boolean  "allow_bookmark_external_url", default: false,                    null: false
   end
 
   add_index "library_groups", ["short_name"], name: "index_library_groups_on_short_name"
@@ -1139,6 +1179,26 @@ ActiveRecord::Schema.define(version: 20140110131010) do
   add_index "subscriptions", ["order_list_id"], name: "index_subscriptions_on_order_list_id"
   add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id"
 
+  create_table "taggings", force: true do |t|
+    t.integer  "tag_id"
+    t.integer  "taggable_id"
+    t.string   "taggable_type"
+    t.integer  "tagger_id"
+    t.string   "tagger_type"
+    t.string   "context"
+    t.datetime "created_at"
+  end
+
+  add_index "taggings", ["tag_id"], name: "index_taggings_on_tag_id"
+  add_index "taggings", ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+
+  create_table "tags", force: true do |t|
+    t.string   "name"
+    t.string   "name_transcription"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "use_restrictions", force: true do |t|
     t.string   "name",         null: false
     t.text     "display_name"
@@ -1273,6 +1333,7 @@ ActiveRecord::Schema.define(version: 20140110131010) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "confirmed_at"
+    t.boolean  "share_bookmarks"
   end
 
   add_index "users", ["checkout_icalendar_token"], name: "index_users_on_checkout_icalendar_token", unique: true

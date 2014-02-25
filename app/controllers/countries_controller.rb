@@ -1,6 +1,7 @@
 class CountriesController < InheritedResources::Base
   respond_to :html, :json
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
 
   def index
     @countries = Country.page(params[:page])
@@ -17,5 +18,14 @@ class CountriesController < InheritedResources::Base
       return
     end
     update!
+  end
+
+  private
+  def permitted_params
+    params.permit(
+      :country => [
+        :name, :display_name, :alpha_2, :alpha_3, :numeric_3, :note
+      ]
+    )
   end
 end

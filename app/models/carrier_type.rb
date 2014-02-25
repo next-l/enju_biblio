@@ -1,5 +1,4 @@
 class CarrierType < ActiveRecord::Base
-  #attr_accessible :name, :display_name, :note, :position
   include MasterModel
   default_scope {order("carrier_types.position")}
   has_many :manifestations

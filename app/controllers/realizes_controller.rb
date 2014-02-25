@@ -1,5 +1,6 @@
 class RealizesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
   before_action :get_agent, :get_expression
   before_action :prepare_options, :only => [:new, :edit]
   after_action :solr_commit, :only => [:create, :update, :destroy]
@@ -53,7 +54,7 @@ class RealizesController < ApplicationController
   # POST /realizes
   # POST /realizes.json
   def create
-    @realize = Realize.new(params[:realize])
+    @realize = Realize.new(realize_params)
 
     respond_to do |format|
       if @realize.save
@@ -78,7 +79,7 @@ class RealizesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize.update_attributes(params[:realize])
+      if @realize.update_attributes(realize_params)
         format.html { redirect_to @realize, :notice => t('controller.successfully_updated', :model => t('activerecord.models.realize')) }
         format.json { head :no_content }
       else
@@ -113,5 +114,11 @@ class RealizesController < ApplicationController
   private
   def prepare_options
     @realize_types = RealizeType.all
+  end
+
+  def realize_params
+    params.require(:realize).permit(
+      :agent_id, :expression_id, :realize_type_id
+    )
   end
 end

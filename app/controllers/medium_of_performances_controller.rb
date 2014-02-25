@@ -14,4 +14,11 @@ class MediumOfPerformancesController < InheritedResources::Base
     end
     update!
   end
+
+  private
+  def permitted_params
+    params.permit(
+      :medium_of_performance => [:name, :display_name, :note]
+    )
+  end
 end

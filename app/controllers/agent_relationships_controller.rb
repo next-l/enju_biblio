@@ -1,7 +1,8 @@
 class AgentRelationshipsController < InheritedResources::Base
   respond_to :html, :json
   has_scope :page, :default => 1
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
   before_action :prepare_options, :except => [:index, :destroy]
 
   def index
@@ -26,5 +27,13 @@ class AgentRelationshipsController < InheritedResources::Base
   private
   def prepare_options
     @agent_relationship_types = AgentRelationshipType.all
+  end
+
+  def permitted_params
+    params.permit(
+      :agentn_relationship => [
+        :parent_id, :child_id, :agent_relationship_type_id
+      ]
+    )
   end
 end

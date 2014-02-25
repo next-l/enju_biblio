@@ -1,7 +1,8 @@
 class AgentRelationshipTypesController < InheritedResources::Base
   respond_to :html, :json
   has_scope :page, :default => 1
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
 
   def index
     @agent_relationship_types = AgentRelationshipType.page(params[:page])

@@ -1,5 +1,6 @@
 class IdentifierTypesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: :create
+  authorize_resource only: :create
 
   # GET /identifier_types
   # GET /identifier_types.json
@@ -34,7 +35,7 @@ class IdentifierTypesController < ApplicationController
   # POST /identifier_types
   # POST /identifier_types.json
   def create
-    @identifier_type = IdentifierType.new(params[:identifier_type])
+    @identifier_type = IdentifierType.new(identifier_type_params)
 
     respond_to do |format|
       if @identifier_type.save
@@ -56,7 +57,7 @@ class IdentifierTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @identifier_type.update_attributes(params[:identifier_type])
+      if @identifier_type.update_attributes(identifier_type_params)
         format.html { redirect_to @identifier_type, :notice => t('controller.successfully_updated', :model => t('activerecord.models.identifier_type')) }
         format.json { head :no_content }
       else
@@ -75,5 +76,14 @@ class IdentifierTypesController < ApplicationController
       format.html { redirect_to identifier_types_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def identifier_type_params
+    params.require(:identifier_type).permit(
+      :identifier_type => [
+        :body, :identifier_type_id, :manifestation_id, :primary
+      ]
+    )
   end
 end
