@@ -677,8 +677,8 @@ ActiveRecord::Schema.define(version: 20140110131010) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "admin_networks"
-    t.string   "url",                         default: "http://localhost:3000/"
     t.boolean  "allow_bookmark_external_url", default: false,                    null: false
+    t.string   "url",                         default: "http://localhost:3000/"
   end
 
   add_index "library_groups", ["short_name"], name: "index_library_groups_on_short_name"
@@ -1318,6 +1318,7 @@ ActiveRecord::Schema.define(version: 20140110131010) do
     t.datetime "updated_at"
     t.boolean  "save_checkout_history",    default: false, null: false
     t.string   "checkout_icalendar_token"
+    t.boolean  "share_bookmarks"
     t.string   "username"
     t.string   "user_number"
     t.string   "state"
@@ -1333,7 +1334,6 @@ ActiveRecord::Schema.define(version: 20140110131010) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "confirmed_at"
-    t.boolean  "share_bookmarks"
   end
 
   add_index "users", ["checkout_icalendar_token"], name: "index_users_on_checkout_icalendar_token", unique: true

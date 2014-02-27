@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 class ManifestationsController < ApplicationController
-  load_and_authorize_resource :except => :index
-  authorize_resource :only => :index
+  load_and_authorize_resource :except => [:index, :create]
+  authorize_resource :only => [:index, :create]
   before_action :authenticate_user!, :only => :edit
   before_action :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
   before_action :get_expression, :only => :new
@@ -434,7 +434,7 @@ class ManifestationsController < ApplicationController
   # POST /manifestations
   # POST /manifestations.json
   def create
-    @manifestation = Manifestation.new(params[:manifestation])
+    @manifestation = Manifestation.new(manifestation_params)
     parent = Manifestation.where(:id => @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
@@ -463,7 +463,7 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1.json
   def update
     respond_to do |format|
-      if @manifestation.update_attributes(params[:manifestation])
+      if @manifestation.update_attributes(manifestation_params)
         Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
         format.json { head :no_content }
@@ -783,5 +783,25 @@ class ManifestationsController < ApplicationController
       pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
     end
     return pub_date_range, pub_year_range_interval
+  end
+
+  def manifestation_params
+    params.require(:manifestation).permit(
+      :original_title, :title_alternative, :title_transcription,
+      :manifestation_identifier, :date_copyrighted,
+      :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
+      :end_page, :height, :width, :depth,
+      :price, :fulltext, :volume_number_string,
+      :issue_number_string, :serial_number_string, :edition, :note,
+      :repository_content, :required_role_id, :frequency_id,
+      :title_alternative_transcription, :description, :abstract, :available_at,
+      :valid_until, :date_submitted, :date_accepted, :date_captured,
+      :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
+      :serial_number, :content_type_id, :attachment, :lock_version,
+      :series_statements_attributes, :periodical, :statement_of_responsibility,
+      :creators_attributes, :contributors_attributes, :publishers_attributes,
+      :identifiers_attributes, :fulltext_content,
+      :number_of_page_string, :parent_id
+    )
   end
 end

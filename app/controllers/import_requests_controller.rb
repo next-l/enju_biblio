@@ -1,5 +1,6 @@
 class ImportRequestsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:index, :create]
+  authorize_resource only: [:index, :create]
 
   # GET /import_requests
   # GET /import_requests.json
@@ -30,7 +31,7 @@ class ImportRequestsController < ApplicationController
   # POST /import_requests
   # POST /import_requests.json
   def create
-    @import_request = ImportRequest.new(params[:import_request])
+    @import_request = ImportRequest.new(import_request_params)
     @import_request.user = current_user
 
     respond_to do |format|
@@ -59,7 +60,7 @@ class ImportRequestsController < ApplicationController
   # PUT /import_requests/1.json
   def update
     respond_to do |format|
-      if @import_request.update_attributes(params[:import_request])
+      if @import_request.update_attributes(import_request_params)
         @import_request.import!
         format.html { redirect_to @import_request, :notice => t('controller.successfully_updated', :model => t('activerecord.models.import_request')) }
         format.json { head :no_content }
@@ -79,5 +80,10 @@ class ImportRequestsController < ApplicationController
       format.html { redirect_to import_requests_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def import_request_params
+    params.require(:import_request).permit(:isbn, :manifestation_id, :user_id)
   end
 end

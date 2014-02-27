@@ -16,4 +16,11 @@ class AgentRelationshipTypesController < InheritedResources::Base
     end
     update!
   end
+
+  private
+  def permitted_params
+    params.permit(
+      :agent_relationship_type => [:name, :display_name, :note]
+    )
+  end
 end

@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 class AgentsController < ApplicationController
-  load_and_authorize_resource :except => :index
-  authorize_resource :only => :index
+  load_and_authorize_resource :except => [:index, :create]
+  authorize_resource :only => [:index, :create]
   before_action :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
   if defined?(EnjuResourceMerge)
     before_action :get_agent_merge_list, :except => [:create, :update, :destroy]
@@ -89,7 +89,7 @@ class AgentsController < ApplicationController
       format.rss  { render :layout => false }
       format.atom
       format.json { render :json => @agents }
-      format.mobile
+      format.html.phone
     end
   end
 
@@ -131,7 +131,7 @@ class AgentsController < ApplicationController
       format.html # show.html.erb
       format.json { render :json => @agent }
       format.js
-      format.mobile
+      format.html.phone
     end
   end
 
@@ -153,7 +153,7 @@ class AgentsController < ApplicationController
   # POST /agents
   # POST /agents.json
   def create
-    @agent = Agent.new(params[:agent])
+    @agent = Agent.new(agent_params)
     #if @agent.user_username
     #  @agent.user = User.find(@agent.user_username) rescue nil
     #end
@@ -187,7 +187,7 @@ class AgentsController < ApplicationController
   # PUT /agents/1.json
   def update
     respond_to do |format|
-      if @agent.update_attributes(params[:agent])
+      if @agent.update_attributes(agent_params)
         format.html { redirect_to @agent, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent')) }
         format.json { head :no_content }
       else
@@ -216,5 +216,18 @@ class AgentsController < ApplicationController
     @roles = Role.all
     @languages = Language.all_cache
     @agent_type = AgentType.where(:name => 'Person').first
+  end
+
+  def agent_params
+    params.require(:agent).permit(
+      :last_name, :middle_name, :first_name,
+      :last_name_transcription, :middle_name_transcription,
+      :first_name_transcription, :corporate_name, :corporate_name_transcription,
+      :full_name, :full_name_transcription, :full_name_alternative,
+      :other_designation, :language_id,
+      :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+      :full_name_alternative_transcription, :title,
+      :agent_identifier
+    )
   end
 end

@@ -1,5 +1,6 @@
 class ResourceImportFilesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:index, :create]
+  authorize_resource only: [:index, :create]
 
   # GET /resource_import_files
   # GET /resource_import_files.json
@@ -47,7 +48,7 @@ class ResourceImportFilesController < ApplicationController
   # POST /resource_import_files
   # POST /resource_import_files.json
   def create
-    @resource_import_file = ResourceImportFile.new(params[:resource_import_file])
+    @resource_import_file = ResourceImportFile.new(resource_import_file_params)
     @resource_import_file.user = current_user
 
     respond_to do |format|
@@ -65,7 +66,7 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1.json
   def update
     respond_to do |format|
-      if @resource_import_file.update_attributes(params[:resource_import_file])
+      if @resource_import_file.update_attributes(resource_import_file_params)
         format.html { redirect_to @resource_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file')) }
         format.json { head :no_content }
       else
@@ -84,5 +85,12 @@ class ResourceImportFilesController < ApplicationController
       format.html { redirect_to resource_import_files_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def resource_import_file_params
+    params.require(:resource_import_file).permit(
+      :resource_import, :edit_mode
+    )
   end
 end

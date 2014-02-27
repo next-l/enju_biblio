@@ -1,6 +1,6 @@
 class RealizesController < ApplicationController
-  load_and_authorize_resource except: :create
-  authorize_resource only: :create
+  load_and_authorize_resource except: [:index, :create]
+  authorize_resource only: [:index, :create]
   before_action :get_agent, :get_expression
   before_action :prepare_options, :only => [:new, :edit]
   after_action :solr_commit, :only => [:create, :update, :destroy]

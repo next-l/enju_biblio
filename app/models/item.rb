@@ -6,10 +6,6 @@ class Item < ActiveRecord::Base
   enju_question_item_model if defined?(EnjuQuestion)
   enju_inventory_item_model if defined?(EnjuInventory)
   enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
-  #attr_accessible :call_number, :item_identifier, :circulation_status_id,
-  #  :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
-  #  :acquired_at, :bookstore_id, :missing_since, :budget_type_id, :lock_version,
-  #  :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
   scope :on_shelf, -> {where('shelf_id != 1')}
   scope :on_web, -> {where(:shelf_id => 1)}
   #has_one :exemplify, :dependent => :destroy

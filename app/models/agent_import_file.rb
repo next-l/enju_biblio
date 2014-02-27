@@ -1,5 +1,4 @@
 class AgentImportFile < ActiveRecord::Base
-  #attr_accessible :agent_import, :edit_mode
   include ImportFile
   default_scope {order('agent_import_files.id DESC')}
   scope :not_imported, -> {where(:state => 'pending')}

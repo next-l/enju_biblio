@@ -1,5 +1,6 @@
 class AgentImportFilesController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource except: [:index, :create]
+  authorize_resource only: [:index, :create]
 
   # GET /agent_import_files
   # GET /agent_import_files.json
@@ -52,7 +53,7 @@ class AgentImportFilesController < ApplicationController
   # POST /agent_import_files
   # POST /agent_import_files.json
   def create
-    @agent_import_file = AgentImportFile.new(params[:agent_import_file])
+    @agent_import_file = AgentImportFile.new(agent_import_file_params)
     @agent_import_file.user = current_user
 
     respond_to do |format|
@@ -70,7 +71,7 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1.json
   def update
     respond_to do |format|
-      if @agent_import_file.update_attributes(params[:agent_import_file])
+      if @agent_import_file.update_attributes(agent_import_file_params)
         format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file')) }
         format.json { head :no_content }
       else
@@ -89,5 +90,12 @@ class AgentImportFilesController < ApplicationController
       format.html { redirect_to(agent_import_files_url) }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def agent_import_file_params
+    params.require(:agent_import_file).permit(
+      :agent_import, :edit_mode
+    )
   end
 end

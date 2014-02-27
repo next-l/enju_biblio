@@ -47,7 +47,7 @@ class ExemplifiesController < ApplicationController
   # POST /exemplifies
   # POST /exemplifies.json
   def create
-    @exemplify = Exemplify.new(params[:exemplify])
+    @exemplify = Exemplify.new(exemplify_params)
 
     respond_to do |format|
       if @exemplify.save
@@ -70,7 +70,7 @@ class ExemplifiesController < ApplicationController
     end
 
     respond_to do |format|
-      if @exemplify.update_attributes(params[:exemplify])
+      if @exemplify.update_attributes(exemplify_params)
         format.html { redirect_to @exemplify, :notice => t('controller.successfully_updated', :model => t('activerecord.models.exemplify')) }
         format.json { head :no_content }
       else
@@ -98,5 +98,10 @@ class ExemplifiesController < ApplicationController
       }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def exemplify_params
+    params.require(:exemplify).permit(:agent_id, :item_id)
   end
 end

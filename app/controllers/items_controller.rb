@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
-  load_and_authorize_resource
+  load_and_authorize_resource :except => [:index, :create]
+  authorize_resource :only => [:index, :create]
   before_action :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
   if defined?(EnjuInventory)
     before_action :get_inventory_file
@@ -187,7 +188,7 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new(item_params)
     manifestation = Manifestation.find(@item.manifestation_id)
 
     respond_to do |format|
@@ -215,7 +216,7 @@ class ItemsController < ApplicationController
   # PUT /items/1.json
   def update
     respond_to do |format|
-      if @item.update_attributes(params[:item])
+      if @item.update_attributes(item_params)
         format.html { redirect_to @item, :notice => t('controller.successfully_updated', :model => t('activerecord.models.item')) }
         format.json { head :no_content }
       else
@@ -264,5 +265,15 @@ class ItemsController < ApplicationController
         @checkout_types = CheckoutType.all
       end
     end
+  end
+
+  def item_params
+    params.require(:item).permit(
+      :call_number, :item_identifier, :circulation_status_id,
+      :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
+      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
+      :lock_version, :manifestation_id, :library_id, :required_role_id #,
+      # :exemplify_attributes
+    )
   end
 end
