@@ -1,6 +1,6 @@
 class IdentifierTypesController < ApplicationController
-  load_and_authorize_resource except: :create
-  authorize_resource only: :create
+  load_and_authorize_resource except: [:index, :create]
+  authorize_resource only: [:index, :create]
 
   # GET /identifier_types
   # GET /identifier_types.json
@@ -81,9 +81,7 @@ class IdentifierTypesController < ApplicationController
   private
   def identifier_type_params
     params.require(:identifier_type).permit(
-      :identifier_type => [
-        :body, :identifier_type_id, :manifestation_id, :primary
-      ]
+      :display_name, :name, :note, :position
     )
   end
 end
