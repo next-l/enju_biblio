@@ -41,7 +41,7 @@ class PictureFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @picture_file }
-      format.mobile {
+      format.html.phone {
         if params[:format] == 'download'
           render_image(file)
         end
@@ -76,6 +76,7 @@ class PictureFilesController < ApplicationController
   # POST /picture_files
   # POST /picture_files.json
   def create
+    authorize PictureFile
     @picture_file = PictureFile.new(picture_file_params)
 
     respond_to do |format|

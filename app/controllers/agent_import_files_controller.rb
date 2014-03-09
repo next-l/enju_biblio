@@ -5,6 +5,7 @@ class AgentImportFilesController < ApplicationController
 
   # GET /agent_import_files
   def index
+    authorize AgentImportFile
     @agent_import_files = AgentImportFile.page(params[:page])
   end
 
@@ -33,6 +34,7 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files/new
   # GET /agent_import_files/new.json
   def new
+    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new
 
     respond_to do |format|
@@ -48,6 +50,7 @@ class AgentImportFilesController < ApplicationController
   # POST /agent_import_files
   # POST /agent_import_files.json
   def create
+    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new(agent_import_file_params)
     @agent_import_file.user = current_user
 

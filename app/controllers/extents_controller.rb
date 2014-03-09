@@ -51,7 +51,7 @@ class ExtentsController < ApplicationController
   # DELETE /extents/1
   def destroy
     @extent.destroy
-    redirect_to extents_url, notice: 'Content type was successfully destroyed.'
+    redirect_to extents_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.extent'))
   end
 
   private

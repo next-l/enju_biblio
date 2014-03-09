@@ -51,7 +51,7 @@ class ContentTypesController < ApplicationController
   # DELETE /content_types/1
   def destroy
     @content_type.destroy
-    redirect_to content_types_url, notice: 'Content type was successfully destroyed.'
+    redirect_to content_types_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.content_type'))
   end
 
   private

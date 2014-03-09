@@ -51,7 +51,7 @@ class CountriesController < ApplicationController
   # DELETE /countries/1
   def destroy
     @country.destroy
-    redirect_to countries_url, notice: 'Content type was successfully destroyed.'
+    redirect_to countries_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.country'))
   end
 
   private

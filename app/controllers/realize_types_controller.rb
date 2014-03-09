@@ -51,7 +51,7 @@ class RealizeTypesController < ApplicationController
   # DELETE /realize_types/1
   def destroy
     @realize_type.destroy
-    redirect_to realize_types_url, notice: 'Budget type was successfully destroyed.'
+    redirect_to realize_types_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.realize_type'))
   end
 
   private

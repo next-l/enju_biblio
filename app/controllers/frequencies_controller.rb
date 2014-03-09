@@ -51,7 +51,7 @@ class FrequenciesController < ApplicationController
   # DELETE /frequencies/1
   def destroy
     @frequency.destroy
-    redirect_to frequencies_url, notice: 'Frequency was successfully destroyed.'
+    redirect_to frequencies_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.frequency'))
   end
 
   private
