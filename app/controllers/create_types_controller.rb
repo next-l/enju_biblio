@@ -1,26 +1,68 @@
-class CreateTypesController < InheritedResources::Base
-  respond_to :html, :json
-  has_scope :page, :default => 1
-  load_and_authorize_resource except: :create
-  authorize_resource only: :create
+class CreateTypesController < ApplicationController
+  before_action :set_create_type, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, :only => :index
 
+  # GET /create_types
   def index
-    @create_types = CreateType.page(params[:page])
+    authorize CreateType
+    @create_types = policy_scope(CreateType).order(:position)
   end
 
+  # GET /create_types/1
+  def show
+  end
+
+  # GET /create_types/new
+  def new
+    @create_type = CreateType.new
+    authorize @create_type
+  end
+
+  # GET /create_types/1/edit
+  def edit
+  end
+
+  # POST /create_types
+  def create
+    @create_type = CreateType.new(create_type_params)
+    authorize @create_type
+
+    if @create_type.save
+      redirect_to @create_type, notice:  t('controller.successfully_created', :model => t('activerecord.models.create_type'))
+    else
+      render action: 'new'
+    end
+  end
+
+  # PATCH/PUT /create_types/1
   def update
-    @create_type = CreateType.find(params[:id])
     if params[:move]
       move_position(@create_type, params[:move])
       return
     end
-    update!
+    if @create_type.update(create_type_params)
+      redirect_to @create_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.create_type'))
+    else
+      render action: 'edit'
+    end
+  end
+
+  # DELETE /create_types/1
+  def destroy
+    @create_type.destroy
+    redirect_to create_types_url, notice: 'Budget type was successfully destroyed.'
   end
 
   private
-  def permitted_params
-    params.permit(
-      :create_type => [:name, :display_name, :note]
-    )
-  end
+    # Use callbacks to share common setup or constraints between actions.
+    def set_create_type
+      @create_type = CreateType.find(params[:id])
+      authorize @create_type
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def create_type_params
+      params.require(:create_type).permit(:name, :display_name, :note)
+    end
 end

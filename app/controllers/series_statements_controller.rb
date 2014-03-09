@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 class SeriesStatementsController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_series_statement, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
   before_action :get_manifestation, :except => [:create, :update, :destroy]
   after_action :solr_commit, :only => [:create, :update, :destroy]
   if defined?(EnjuResourceMerge)
@@ -111,6 +111,12 @@ class SeriesStatementsController < ApplicationController
       format.html { redirect_to series_statements_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def set_series_statement
+    @series_statement = SeriesStatement.find(params[:id])
+    authorize @series_statement
   end
 
   def series_statement_params

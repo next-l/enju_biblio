@@ -1,6 +1,7 @@
 class ResourceImportFilesController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, :only => :index
 
   # GET /resource_import_files
   # GET /resource_import_files.json
@@ -88,6 +89,11 @@ class ResourceImportFilesController < ApplicationController
   end
 
   private
+  def set_resource_import_file
+    @resource_import_file = ResourceImportFile.find(params[:id])
+    authorize @resource_import_file
+  end
+
   def resource_import_file_params
     params.require(:resource_import_file).permit(
       :resource_import, :edit_mode

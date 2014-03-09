@@ -1,6 +1,6 @@
 class RealizesController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_realize, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
   before_action :get_agent, :get_expression
   before_action :prepare_options, :only => [:new, :edit]
   after_action :solr_commit, :only => [:create, :update, :destroy]
@@ -112,6 +112,11 @@ class RealizesController < ApplicationController
   end
 
   private
+  def set_realize
+    @realize = Realize.find(params[:id])
+    authorize @realize
+  end
+
   def prepare_options
     @realize_types = RealizeType.all
   end

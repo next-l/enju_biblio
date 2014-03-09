@@ -1,16 +1,11 @@
 class AgentImportFilesController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_agent_import_file, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, :only => :index
 
   # GET /agent_import_files
-  # GET /agent_import_files.json
   def index
     @agent_import_files = AgentImportFile.page(params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @agent_import_files }
-    end
   end
 
   # GET /agent_import_files/1
@@ -93,6 +88,11 @@ class AgentImportFilesController < ApplicationController
   end
 
   private
+  def set_agent_import_file
+    @agent_import_file = AgentImportFile.find(params[:id])
+    authorize @agent_import_file
+  end
+
   def agent_import_file_params
     params.require(:agent_import_file).permit(
       :agent_import, :edit_mode

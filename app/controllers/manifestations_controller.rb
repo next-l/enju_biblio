@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ManifestationsController < ApplicationController
-  load_and_authorize_resource :except => [:index, :create]
-  authorize_resource :only => [:index, :create]
+  before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!, :only => :edit
   before_action :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
   before_action :get_expression, :only => :new
@@ -12,6 +11,7 @@ class ManifestationsController < ApplicationController
   before_action :get_item, :get_libraries, :only => :index
   before_action :prepare_options, :only => [:new, :edit]
   before_action :get_version, :only => [:show]
+  after_action :verify_authorized
   after_action :solr_commit, :only => :destroy
   after_action :convert_charset, :only => :index
   include EnjuOai::OaiController if defined?(EnjuOai)
@@ -479,14 +479,14 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1.json
   def destroy
     @manifestation.destroy
-
-    respond_to do |format|
-      format.html { redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation')) }
-      format.json { head :no_content }
-    end
+    redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation'))
   end
 
   private
+  def set_manifestation
+    @manifestation = Manifestation.find(params[:id])
+    authorize @manifestation
+  end
 
   def make_query(query, options = {})
     # TODO: integerやstringもqfに含める

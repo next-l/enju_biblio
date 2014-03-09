@@ -1,6 +1,6 @@
 class CreatesController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_create, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
   before_action :get_agent, :get_work
   before_action :prepare_options, :only => [:new, :edit]
   after_action :solr_commit, :only => [:create, :update, :destroy]
@@ -112,6 +112,11 @@ class CreatesController < ApplicationController
   end
 
   private
+  def set_create
+    @create = Create.find(params[:id])
+    authorize @create
+  end
+
   def prepare_options
     @create_types = CreateType.all
   end

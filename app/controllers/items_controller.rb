@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
-  load_and_authorize_resource :except => [:index, :create]
-  authorize_resource :only => [:index, :create]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
   if defined?(EnjuInventory)
     before_action :get_inventory_file
@@ -10,6 +9,7 @@ class ItemsController < ApplicationController
   before_action :prepare_options, :only => [:new, :edit]
   before_action :get_version, :only => [:show]
   #before_action :store_location
+  after_action :verify_authorized
   after_action :solr_commit, :only => [:create, :update, :destroy]
   after_action :convert_charset, :only => :index
 
@@ -228,23 +228,23 @@ class ItemsController < ApplicationController
   end
 
   # DELETE /items/1
-  # DELETE /items/1.json
   def destroy
     @item.destroy
 
-    respond_to do |format|
-      flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
-      if @item.manifestation
-        format.html { redirect_to manifestation_items_url(@item.manifestation) }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to items_url }
-        format.json { head :no_content }
-      end
+    flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
+    if @item.manifestation
+      redirect_to manifestation_items_url(@item.manifestation)
+    else
+      redirect_to items_url
     end
   end
 
   private
+  def set_item
+    @item = Item.find(params[:id])
+    authorize @item
+  end
+
   def prepare_options
     @libraries = Library.real << Library.web
     if @item.new_record?

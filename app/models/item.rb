@@ -8,8 +8,6 @@ class Item < ActiveRecord::Base
   enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
   scope :on_shelf, -> {where('shelf_id != 1')}
   scope :on_web, -> {where(:shelf_id => 1)}
-  #has_one :exemplify, :dependent => :destroy
-  #has_one :manifestation, :through => :exemplify
   belongs_to :manifestation, touch: true
   has_many :owns
   has_many :agents, :through => :owns
@@ -20,7 +18,6 @@ class Item < ActiveRecord::Base
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
-  #accepts_nested_attributes_for :exemplify
   #before_save :create_manifestation
 
   validates_associated :bookstore

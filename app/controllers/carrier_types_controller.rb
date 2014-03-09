@@ -1,6 +1,7 @@
 class CarrierTypesController < ApplicationController
-  load_and_authorize_resource except: :create
-  authorize_resource only: :create
+  before_action :set_carrier_type, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, :only => :index
 
   # GET /carrier_types
   # GET /carrier_types.json
@@ -86,6 +87,11 @@ class CarrierTypesController < ApplicationController
   end
 
   private
+  def set_carrier_type
+    @carrier_type = CarrierType.find(params[:id])
+    authorize @carrier_type
+  end
+
   def prepare_options
     if defined?(EnjuCirculation)
       @checkout_types = CheckoutType.select([:id, :display_name, :position])

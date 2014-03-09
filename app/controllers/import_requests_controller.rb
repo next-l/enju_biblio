@@ -1,6 +1,6 @@
 class ImportRequestsController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_import_request, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
 
   # GET /import_requests
   # GET /import_requests.json
@@ -83,6 +83,11 @@ class ImportRequestsController < ApplicationController
   end
 
   private
+  def set_import_request
+    @import_request = ImportRequest.find(params[:id])
+    authorize @import_request
+  end
+
   def import_request_params
     params.require(:import_request).permit(:isbn, :manifestation_id, :user_id)
   end

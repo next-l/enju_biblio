@@ -12,9 +12,6 @@ describe "owns/index" do
         :agent_id => 2
       )
     ]).page(1))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders a list of owns" do

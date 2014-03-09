@@ -1,4 +1,3 @@
-require 'inherited_resources'
 require 'paper_trail'
 require 'paperclip'
 require 'paperclip-meta'

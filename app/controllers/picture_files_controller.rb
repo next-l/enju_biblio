@@ -1,6 +1,6 @@
 class PictureFilesController < ApplicationController
-  load_and_authorize_resource except: [:index, :create]
-  authorize_resource only: [:index, :create]
+  before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
   before_action :get_attachable, :only => [:index, :new]
 
   # GET /picture_files
@@ -134,6 +134,11 @@ class PictureFilesController < ApplicationController
   end
 
   private
+  def set_picture_file
+    @picture_file = PictureFile.find(params[:id])
+    authorize @picture_file
+  end
+
   def get_attachable
     get_manifestation
     if @manifestation

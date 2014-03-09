@@ -1,7 +1,6 @@
 # -*- encoding: utf-8 -*-
 class AgentsController < ApplicationController
-  load_and_authorize_resource :except => [:index, :create]
-  authorize_resource :only => [:index, :create]
+  before_action :set_agent, only: [:show, :edit, :update, :destroy]
   before_action :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
   if defined?(EnjuResourceMerge)
     before_action :get_agent_merge_list, :except => [:create, :update, :destroy]
@@ -9,6 +8,8 @@ class AgentsController < ApplicationController
   before_action :prepare_options, :only => [:new, :edit]
   before_action :store_location
   before_action :get_version, :only => [:show]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, :only => :index
   after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /agents
@@ -210,12 +211,9 @@ class AgentsController < ApplicationController
   end
 
   private
-  def prepare_options
-    @countries = Country.all_cache
-    @agent_types = AgentType.all
-    @roles = Role.all
-    @languages = Language.all_cache
-    @agent_type = AgentType.where(:name => 'Person').first
+  def set_agent
+    @agent = Agent.find(params[:id])
+    authorize @agent
   end
 
   def agent_params
@@ -229,5 +227,13 @@ class AgentsController < ApplicationController
       :full_name_alternative_transcription, :title,
       :agent_identifier
     )
+  end
+
+  def prepare_options
+    @countries = Country.all_cache
+    @agent_types = AgentType.all
+    @roles = Role.all
+    @languages = Language.all_cache
+    @agent_type = AgentType.where(:name => 'Person').first
   end
 end
