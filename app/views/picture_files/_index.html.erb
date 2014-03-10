@@ -23,7 +23,7 @@
       <td><%= link_to h(picture_file.picture_file_name), picture_file_path(picture_file, :format => :download, :size => 'original') -%></td>
       <td>
         <%= link_to t('page.show'), picture_file -%>
-        <%- if can? :update, picture_file -%>
+        <%- if policy(picture_file).update? -%>
           <%= link_to t('page.edit'), edit_picture_file_path(picture_file) -%>
         <% end %>
         <%- if can? :delete, picture_file -%>
@@ -39,7 +39,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <%- if can? :create, PictureFile -%>
+  <%- if policy(PictureFile).create? -%>
     <ul>
       <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path -%></li>
       <li><%= link_to t('page.listing', :model => t('activerecord.models.shelf')), shelves_path -%></li>

@@ -16,7 +16,7 @@
   <%- @picture_files.each do |picture_file| -%>
     <tr class="line<%= cycle("0", "1") -%>">
       <td>
-        <%- if can? :update, picture_file -%>
+        <%- if policy(picture_file).update? -%>
           <%= move_position(picture_file) -%>
         <%- end -%>
       </td>
@@ -28,7 +28,7 @@
       <td><%= link_to picture_file.picture_file_name, picture_file_path(picture_file, :format => :download, :size => 'original') -%></td>
       <td>
         <%= link_to t('page.show'), picture_file -%>
-        <%- if can? :update, picture_file -%>
+        <%- if policy(picture_file).update? -%>
           <%= link_to t('page.edit'), edit_picture_file_path(picture_file) -%>
         <% end %>
         <%- if can? :delete, picture_file -%>
@@ -44,7 +44,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <%- if can? :create, PictureFile -%>
+  <%- if policy(PictureFile).create? -%>
     <ul>
       <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_event_picture_file_path(event) -%></li>
       <li><%= link_to t('picture_file.all_picture'), picture_files_path -%></li>

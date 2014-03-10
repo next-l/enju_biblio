@@ -97,7 +97,7 @@
         })
       </script>
     <% end %>
-    <%- if can? :create, PictureFile -%>
+    <%- if policy(PictureFile).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_agent_picture_file_path(@agent) -%></li>
     <%- end -%>
   </ul>
