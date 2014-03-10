@@ -22,7 +22,7 @@
     <td><%= localized_state(import_request.state) -%></td>
     <td><%= link_to import_request.manifestation.original_title, import_request.manifestation if import_request.manifestation -%></td>
     <td>
-      <%- if can? :delete, import_request -%>
+      <%- if policy().destroy?import_request -%>
         <%= link_to image_tag('icons/delete.png', :size => '16x16', :alt => t('page.destroy')), import_request, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>

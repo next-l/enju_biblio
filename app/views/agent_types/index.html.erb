@@ -14,7 +14,7 @@
 <%- @agent_types.each do |agent_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, agent_type -%>
+      <%- if policy(agent_type).update? -%>
         <%= move_position(agent_type) -%>
       <%- end -%>
     </td>
@@ -22,7 +22,7 @@
     <td><%= link_to agent_type.display_name.localize, agent_type -%></td>
     <td><%= agent_type.note -%></td>
     <td>
-      <%- if can? :update, agent_type -%>
+      <%- if policy(agent_type).update? -%>
         <%= link_to t('page.edit'), edit_agent_type_path(agent_type) -%>
       <% end %>
       <%- if policy(agent).destroy?_type -%>

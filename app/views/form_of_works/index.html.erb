@@ -14,7 +14,7 @@
 <%- @form_of_works.each do |form_of_work| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, form_of_work -%>
+      <%- if policy(form_of_work).update? -%>
         <%= move_position(form_of_work) -%>
       <%- end -%>
     </td>
@@ -22,10 +22,10 @@
     <td><%= link_to form_of_work.display_name.localize, form_of_work -%></td>
     <td><%= form_of_work.note -%></td>
     <td>
-      <%- if can? :update, form_of_work -%>
+      <%- if policy(form_of_work).update? -%>
         <%= link_to t('page.edit'), edit_form_of_work_path(form_of_work) -%>
       <% end %>
-      <%- if can? :delete, form_of_work -%>
+      <%- if policy().destroy?form_of_work -%>
         <%= link_to t('page.destroy'), form_of_work, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>

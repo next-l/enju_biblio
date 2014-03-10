@@ -58,7 +58,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, Agent -%>
+    <%- if policy(Agent).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.agent')), new_work_agent_path(work) -%></li>
       <li><%= link_to t('page.rearrange_order'), work_creates_path(work) %></li>
     <%- end -%>

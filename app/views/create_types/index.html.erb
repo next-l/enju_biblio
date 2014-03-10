@@ -14,7 +14,7 @@
 <%- @create_types.each do |create_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, create_type -%>
+      <%- if policy(create_type).update? -%>
         <%= move_position(create_type) -%>
       <%- end -%>
     </td>
@@ -22,7 +22,7 @@
     <td><%= link_to create_type.display_name.localize, create_type -%></td>
     <td><%= create_type.note -%></td>
     <td>
-      <%- if can? :update, create_type -%>
+      <%- if policy(create_type).update? -%>
         <%= link_to t('page.edit'), edit_create_type_path(create_type) -%>
       <% end %>
       <%- if policy(create).destroy?_type -%>
