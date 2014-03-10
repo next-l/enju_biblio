@@ -36,7 +36,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, Frequency -%>
+    <%- if policy(Frequency).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.frequency')), new_frequency_path -%></li>
     <%- end -%>
  </ul>

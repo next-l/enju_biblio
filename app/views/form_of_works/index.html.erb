@@ -38,7 +38,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, FormOfWork -%>
+    <%- if policy(FormOfWork).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.form_of_work')), new_form_of_work_path -%></li>
     <%- end -%>
   </ul>

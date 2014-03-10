@@ -38,7 +38,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, CarrierType -%>
+    <%- if policy(CarrierType).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.carrier_type')), new_carrier_type_path -%></li>
     <%- end -%>
   </ul>

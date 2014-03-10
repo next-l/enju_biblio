@@ -38,7 +38,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, Donate -%>
+    <%- if policy(Donate).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.donate')), new_donate_path -%></li>
     <%- end -%>
   </ul>
