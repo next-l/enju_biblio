@@ -33,7 +33,7 @@
       <td><%= expression.realized(agent).realize_type.display_name.localize if params[:mode] != 'add' and expression.realized(agent).try(:realize_type) -%></td>
       <td><%= agent.agent_type.display_name.localize -%></td>
       <td>
-        <%- if can? :delete, agent -%>
+        <%- if policy(agent).destroy? -%>
           <%- if params[:mode] == 'add' -%>
             <%= link_to t('page.add'), new_expression_realize_path(expression, :agent_id => agent.id) unless expression.contributors.include?(agent) -%>
           <%- else -%>

@@ -39,12 +39,12 @@
       <td><%= agent.agent_type.display_name.localize -%></td>
       <td><%=l agent.date_of_birth if agent.date_of_birth -%></td>
       <td>
-        <%- if can? :delete, agent -%>
+        <%- if policy(agent).destroy? -%>
           <%= link_to t('page.edit'), edit_agent_path(agent) -%>
         <% end %>
       </td>
       <td>
-        <%- if can? :delete, agent -%>
+        <%- if policy(agent).destroy? -%>
           <%- if params[:mode] == "add" -%>
             <%= link_to t('page.add'), new_agent_agent_relationship_path(agent, :child_id => agent.id) unless agent.derived_agents.include?(agent) or agent == agent -%>
           <%- else -%>

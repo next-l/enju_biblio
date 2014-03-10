@@ -29,7 +29,7 @@
       <td><%= manifestation.produced(agent).produce_type.display_name.localize if params[:mode] != 'add' and manifestation.produced(agent).try(:produce_type) -%></td>
       <td><%= agent.agent_type.display_name.localize -%></td>
       <td>
-        <%- if can? :delete, agent -%>
+        <%- if policy(agent).destroy? -%>
           <%- if params[:mode] == 'add' -%>
             <%= link_to t('page.add'), new_manifestation_produce_path(manifestation, :agent_id => agent.id) unless manifestation.publishers.include?(agent) -%>
           <%- else -%>

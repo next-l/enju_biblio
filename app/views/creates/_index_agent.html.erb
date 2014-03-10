@@ -17,7 +17,7 @@
 <%- @creates.each do |create| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :delete, create -%>
+      <%- if policy(create).destroy? -%>
         <%= create.first? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_up.png', :size => '16x16', :alt => t('page.asc')), {:action => 'update', :move => 'higher', :id => create.id, :agent_id => agent.id}, :method => :put) -%>
         <%= create.last? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_down.png', :size => '16x16', :alt => t('page.desc')), {:action => 'update', :move => 'lower', :id => create.id, :agent_id => agent.id}, :method => :put) -%>
       <%- end -%>
@@ -26,7 +26,7 @@
     <td><%= l(create.created_at) -%></td>
     <td><%= l(create.updated_at) -%></td>
     <td>
-      <%- if can? :delete, create -%>
+      <%- if policy(create).destroy? -%>
         <%= link_to t('page.show'), agent_create_path(agent, create) -%>
         <%= link_to t('page.destroy'), agent_create_path(agent, create), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
@@ -41,7 +41,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, Create -%>
+    <%- if policy(Create).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.create')), new_agent_create_path(agent) -%></li>
     <%- end -%>
   </ul>
