@@ -14,7 +14,7 @@
 <%- @identifier_types.each do |identifier_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, identifier_type -%>
+      <%- if policy(identifier_type).update? -%>
         <%= move_position(identifier_type) -%>
       <%- end -%>
     </td>
@@ -22,10 +22,10 @@
     <td><%= link_to identifier_type.display_name.localize, identifier_type -%></td>
     <td><%= identifier_type.note -%></td>
     <td>
-      <%- if can? :update, identifier_type -%>
+      <%- if policy(identifier_type).update? -%>
         <%= link_to t('page.edit'), edit_identifier_type_path(identifier_type) -%>
       <% end %>
-      <%- if can? :delete, identifier_type -%>
+      <%- if policy(identifier_type).destroy? -%>
         <%= link_to t('page.destroy'), identifier_type_path(identifier_type), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
