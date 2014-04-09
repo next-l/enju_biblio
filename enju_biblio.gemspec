@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "enju_biblio"
   s.version     = EnjuBiblio::VERSION
   s.authors     = ["Kosuke Tanabe"]
-  s.email       = ["kosuke@e23.jp"]
+  s.email       = ["nabeta@fastmail.fm"]
   s.homepage    = "https://github.com/next-l/enju_biblio"
   s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
-  s.add_dependency "enju_seed", "~> 0.2.0.pre4"
+  s.add_dependency "enju_seed", "~> 0.2.0.pre5"
   s.add_dependency "paperclip", "~> 4.1"
   s.add_dependency "paperclip-meta", "~> 1.0"
   s.add_dependency "aws-sdk"
