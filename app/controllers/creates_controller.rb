@@ -55,6 +55,7 @@ class CreatesController < ApplicationController
   # POST /creates.json
   def create
     @create = Create.new(create_params)
+    authorize @create
 
     respond_to do |format|
       if @create.save

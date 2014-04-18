@@ -9,16 +9,12 @@ class AgentsController < ApplicationController
   before_action :store_location
   before_action :get_version, :only => [:show]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
   after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /agents
   # GET /agents.json
   def index
-    #session[:params] = {} unless session[:params]
-    #session[:params][:agent] = params
-    # 最近追加されたパトロン
-    #@query = params[:query] ||= "[* TO *]"
+    authorize Agent
     if params[:mode] == 'add'
       unless current_user.try(:has_role?, 'Librarian')
         access_denied; return
@@ -140,6 +136,7 @@ class AgentsController < ApplicationController
   # GET /agents/new.json
   def new
     @agent = Agent.new
+    authorize @agent
     @agent.required_role = Role.where(:name => 'Guest').first
     @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
     @agent.country = current_user.library.country
@@ -155,14 +152,7 @@ class AgentsController < ApplicationController
   # POST /agents.json
   def create
     @agent = Agent.new(agent_params)
-    #if @agent.user_username
-    #  @agent.user = User.find(@agent.user_username) rescue nil
-    #end
-    #unless current_user.has_role?('Librarian')
-    #  if @agent.user != current_user
-    #    access_denied; return
-    #  end
-    #end
+    authorize @agent
 
     respond_to do |format|
       if @agent.save

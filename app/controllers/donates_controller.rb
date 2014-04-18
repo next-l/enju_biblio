@@ -5,6 +5,7 @@ class DonatesController < ApplicationController
   # GET /donates
   # GET /donates.json
   def index
+    authorize Donate
     @donates = Donate.order('id DESC').page(params[:page])
 
     respond_to do |format|
@@ -41,6 +42,7 @@ class DonatesController < ApplicationController
   # POST /donates.json
   def create
     @donate = Donate.new(donate_params)
+    authorize @donate
 
     respond_to do |format|
       if @donate.save

@@ -1,7 +1,6 @@
 class AgentImportFilesController < ApplicationController
   before_action :set_agent_import_file, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /agent_import_files
   def index

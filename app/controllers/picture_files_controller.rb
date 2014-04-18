@@ -6,6 +6,7 @@ class PictureFilesController < ApplicationController
   # GET /picture_files
   # GET /picture_files.json
   def index
+    authorize PictureFile
     if @attachable
       @picture_files = @attachable.picture_files.attached.page(params[:page])
     else

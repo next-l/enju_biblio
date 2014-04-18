@@ -8,7 +8,6 @@ class ItemsController < ApplicationController
   before_action :get_library, :get_item, :except => [:create, :update, :destroy]
   before_action :prepare_options, :only => [:new, :edit]
   before_action :get_version, :only => [:show]
-  #before_action :store_location
   after_action :verify_authorized
   after_action :solr_commit, :only => [:create, :update, :destroy]
   after_action :convert_charset, :only => :index
@@ -153,6 +152,7 @@ class ItemsController < ApplicationController
       return
     end
     @item = Item.new
+    authorize @item
     @item.shelf = @library.shelves.first
     @item.manifestation = @manifestation
     if defined?(EnjuCirculation)
@@ -189,6 +189,7 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(item_params)
+    authorize @item
     manifestation = Manifestation.find(@item.manifestation_id)
 
     respond_to do |format|

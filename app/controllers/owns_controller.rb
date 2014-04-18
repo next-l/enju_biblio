@@ -7,6 +7,7 @@ class OwnsController < ApplicationController
   # GET /owns
   # GET /owns.json
   def index
+    authorize Own
     if @agent
       @owns = @agent.owns.order('owns.position').page(params[:page])
     elsif @item
@@ -53,6 +54,7 @@ class OwnsController < ApplicationController
   # POST /owns.json
   def create
     @own = Own.new(own_params)
+    authorize @own
 
     respond_to do |format|
       if @own.save

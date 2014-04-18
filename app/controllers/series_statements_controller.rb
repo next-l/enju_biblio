@@ -11,6 +11,7 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements
   # GET /series_statements.json
   def index
+    authorize SeriesStatement
     search = Sunspot.new_search(SeriesStatement)
     query = params[:query].to_s.strip
     page = params[:page] || 1
@@ -67,6 +68,7 @@ class SeriesStatementsController < ApplicationController
   # POST /series_statements.json
   def create
     @series_statement = SeriesStatement.new(series_statement_params)
+    authorize @series_statement
     manifestation = Manifestation.find(@series_statement.manifestation_id) rescue nil
 
     respond_to do |format|

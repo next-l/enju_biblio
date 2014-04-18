@@ -40,6 +40,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/new.json
   def new
     @resource_import_file = ResourceImportFile.new
+    authorize @resource_import_file
   end
 
   # GET /resource_import_files/1/edit
@@ -50,6 +51,7 @@ class ResourceImportFilesController < ApplicationController
   # POST /resource_import_files.json
   def create
     @resource_import_file = ResourceImportFile.new(resource_import_file_params)
+    authorize @resource_import_file
     @resource_import_file.user = current_user
 
     respond_to do |format|

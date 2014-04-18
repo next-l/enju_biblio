@@ -8,6 +8,7 @@ class RealizesController < ApplicationController
   # GET /realizes
   # GET /realizes.json
   def index
+    authorize Realize
     case
     when @agent
       @realizes = @agent.realizes.order('realizes.position').page(params[:page])
@@ -55,6 +56,7 @@ class RealizesController < ApplicationController
   # POST /realizes.json
   def create
     @realize = Realize.new(realize_params)
+    authorize @realize
 
     respond_to do |format|
       if @realize.save

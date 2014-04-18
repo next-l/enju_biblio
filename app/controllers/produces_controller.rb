@@ -8,6 +8,7 @@ class ProducesController < ApplicationController
   # GET /produces
   # GET /produces.json
   def index
+    authorize Produce
     case
     when @agent
       @produces = @agent.produces.order('produces.position').page(params[:page])
@@ -47,6 +48,7 @@ class ProducesController < ApplicationController
       return
     else
       @produce = Produce.new
+      authorize @produce
       @produce.manifestation = @manifestation
       @produce.agent = @agent
     end
@@ -60,6 +62,7 @@ class ProducesController < ApplicationController
   # POST /produces.json
   def create
     @produce = Produce.new(produce_params)
+    authorize @produce
 
     respond_to do |format|
       if @produce.save

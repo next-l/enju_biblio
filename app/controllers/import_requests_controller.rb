@@ -5,6 +5,7 @@ class ImportRequestsController < ApplicationController
   # GET /import_requests
   # GET /import_requests.json
   def index
+    authorize ImportRequest
     @import_requests = ImportRequest.page(params[:page])
 
     respond_to do |format|
@@ -22,6 +23,7 @@ class ImportRequestsController < ApplicationController
   # GET /import_requests/new.json
   def new
     @import_request = ImportRequest.new
+    authorize @import_request
   end
 
   # GET /import_requests/1/edit
@@ -32,6 +34,7 @@ class ImportRequestsController < ApplicationController
   # POST /import_requests.json
   def create
     @import_request = ImportRequest.new(import_request_params)
+    authorize @import_request
     @import_request.user = current_user
 
     respond_to do |format|

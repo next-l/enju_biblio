@@ -20,6 +20,7 @@ class ManifestationsController < ApplicationController
   # GET /manifestations
   # GET /manifestations.json
   def index
+    authorize Manifestation
     mode = params[:mode]
     if mode == 'add'
       unless current_user.try(:has_role?, 'Librarian')
@@ -398,6 +399,7 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
+    authorize @manifestation
     @manifestation.language = Language.where(:iso_639_1 => @locale).first
     if params[:parent_id].present?
     parent = Manifestation.where(:id => params[:parent_id]).first
@@ -435,6 +437,7 @@ class ManifestationsController < ApplicationController
   # POST /manifestations.json
   def create
     @manifestation = Manifestation.new(manifestation_params)
+    authorize @manifestation
     parent = Manifestation.where(:id => @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
