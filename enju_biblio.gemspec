@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "enju_biblio"
   s.version     = EnjuBiblio::VERSION
   s.authors     = ["Kosuke Tanabe"]
-  s.email       = ["kosuke@e23.jp"]
+  s.email       = ["nabeta@fastmail.fm"]
   s.homepage    = "https://github.com/next-l/enju_biblio"
   s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
