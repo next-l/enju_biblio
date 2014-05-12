@@ -677,6 +677,7 @@ ActiveRecord::Schema.define(:version => 20130509185724) do
     t.datetime "updated_at",                                                        :null => false
     t.boolean  "allow_bookmark_external_url", :default => false,                    :null => false
     t.string   "url",                         :default => "http://localhost:3000/"
+    t.text     "admin_networks"
   end
 
   add_index "library_groups", ["short_name"], :name => "index_library_groups_on_short_name"
