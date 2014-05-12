@@ -33,7 +33,7 @@ describe FormOfWorksController do
     it "assigns all form_of_works as @form_of_works" do
       form_of_work = FormOfWork.create! valid_attributes
       get :index
-      assigns(:form_of_works).should eq(FormOfWork.all)
+      assigns(:form_of_works).should eq(FormOfWork.page(1))
     end
   end
 

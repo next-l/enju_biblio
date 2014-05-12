@@ -32,7 +32,7 @@ describe LicensesController do
     it "assigns all licenses as @licenses" do
       license = License.create! valid_attributes
       get :index
-      assigns(:licenses).should eq(License.all)
+      assigns(:licenses).should eq(License.page(1))
     end
   end
 

@@ -1,35 +1,22 @@
 class IdentifierTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_identifier_type, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  after_action :verify_policy_scoped, :only => :index
 
   # GET /identifier_types
-  # GET /identifier_types.json
   def index
-    @identifier_types = IdentifierType.order(:position).page(params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @identifier_types }
-    end
+    authorize IdentifierType
+    @identifier_types = policy_scope(IdentifierType).order(:position)
   end
 
   # GET /identifier_types/1
-  # GET /identifier_types/1.json
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @identifier_type }
-    end
   end
 
   # GET /identifier_types/new
-  # GET /identifier_types/new.json
   def new
     @identifier_type = IdentifierType.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @identifier_type }
-    end
+    authorize @identifier_type
   end
 
   # GET /identifier_types/1/edit
@@ -37,48 +24,45 @@ class IdentifierTypesController < ApplicationController
   end
 
   # POST /identifier_types
-  # POST /identifier_types.json
   def create
-    @identifier_type = IdentifierType.new(params[:identifier_type])
+    @identifier_type = IdentifierType.new(identifier_type_params)
+    authorize @identifier_type
 
-    respond_to do |format|
-      if @identifier_type.save
-        format.html { redirect_to @identifier_type, :notice => t('controller.successfully_created', :model => t('activerecord.models.identifier_type')) }
-        format.json { render :json => @identifier_type, :status => :created, :location => @identifier_type }
-      else
-        format.html { render :action => "new" }
-        format.json { render :json => @identifier_type.errors, :status => :unprocessable_entity }
-      end
+    if @identifier_type.save
+      redirect_to @identifier_type, notice:  t('controller.successfully_created', :model => t('activerecord.models.identifier_type'))
+    else
+      render action: 'new'
     end
   end
 
-  # PUT /identifier_types/1
-  # PUT /identifier_types/1.json
+  # PATCH/PUT /identifier_types/1
   def update
     if params[:move]
       move_position(@identifier_type, params[:move])
       return
     end
-
-    respond_to do |format|
-      if @identifier_type.update_attributes(params[:identifier_type])
-        format.html { redirect_to @identifier_type, :notice => t('controller.successfully_updated', :model => t('activerecord.models.identifier_type')) }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @identifier_type.errors, :status => :unprocessable_entity }
-      end
+    if @identifier_type.update(identifier_type_params)
+      redirect_to @identifier_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.identifier_type'))
+    else
+      render action: 'edit'
     end
   end
 
   # DELETE /identifier_types/1
-  # DELETE /identifier_types/1.json
   def destroy
     @identifier_type.destroy
-
-    respond_to do |format|
-      format.html { redirect_to identifier_types_url }
-      format.json { head :no_content }
-    end
+    redirect_to identifier_types_url, notice: 'Identifier type was successfully destroyed.'
   end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_identifier_type
+      @identifier_type = IdentifierType.find(params[:id])
+      authorize @identifier_type
+    end
+
+    # Only allow a trusted parameter "white list" through.
+    def identifier_type_params
+      params.require(:identifier_type).permit(:name, :display_name, :note)
+    end
 end

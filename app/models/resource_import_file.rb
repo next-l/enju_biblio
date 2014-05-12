@@ -1,13 +1,12 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
-  attr_accessible :resource_import, :edit_mode
   include ImportFile
-  default_scope :order => 'resource_import_files.id DESC'
-  scope :not_imported, where(:state => 'pending')
-  scope :stucked, where('created_at < ? AND state = ?', 1.hour.ago, 'pending')
+  default_scope {order('resource_import_files.id DESC')}
+  scope :not_imported, -> {where(:state => 'pending')}
+  scope :stucked, -> {where('created_at < ? AND state = ?', 1.hour.ago, 'pending')}
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
+    has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
       :s3_permissions => :private
   else
     has_attached_file :resource_import,
@@ -63,7 +62,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def import
     sm_start!
-    self.reload
+    reload
     num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
     rows = open_import_file
     row_num = 2
@@ -197,6 +196,7 @@ class ResourceImportFile < ActiveRecord::Base
   def self.import_manifestation(expression, agents, options = {}, edit_options = {:edit_mode => 'create'})
     manifestation = expression
     manifestation.during_import = true
+    manifestation.reload
     manifestation.update_attributes!(options)
     manifestation.publishers = agents.uniq unless agents.empty?
     manifestation

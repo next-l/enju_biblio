@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.produce')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
     <td><%= link_to produce.agent.full_name, produce.agent -%></td>
     <td><%= link_to produce.manifestation_original_title, produce.manifestation -%></td>
     <td>
-      <%- if can? :delete, produce -%>
+      <%- if policy(produce).destroy? -%>
         <%= link_to t('page.show'), produce -%>
         <%= link_to t('page.destroy'), produce, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
@@ -23,12 +23,12 @@
 <%- end -%>
 </table>
 
-<%= paginate(@produces) -%>
+<%= paginate(@produces, :theme => 'enju_leaf') -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
-  <%- if can? :create, Produce -%>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <%- if policy(Produce).create? -%>
     <ul>
       <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_produce_path -%></li>
     </ul>

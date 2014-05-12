@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.showing', :model => t('activerecord.models.agent')) -%></h1>
 <div id="content_list">
   <p id="notice"><%= notice %></p>
@@ -82,7 +82,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <div id="manifestation_book_jacket">
     <%= agent_custom_book_jacket(@agent) -%>
   </div>
@@ -97,22 +97,15 @@
         })
       </script>
     <% end %>
-    <%- if can? :create, PictureFile -%>
+    <%- if policy(PictureFile).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_agent_picture_file_path(@agent) -%></li>
     <%- end -%>
   </ul>
   <ul>
     <li><%= back_to_index(flash[:page_info]) -%></li>
-    <%- if can? :create, User -%>
-      <%- if @agent.user.blank? -%>
-        <li><%= link_to t('agent.activate_as_user'), new_user_path(:agent_id => @agent.id) -%></li>
-      <%- else -%>
-        <li><%= link_to t('page.editing', :model => t('activerecord.models.user')), edit_user_path(@agent.user) -%></li>
-      <%- end -%>
-      <li><%= link_to t('page.edit'), edit_agent_path(@agent) -%></li>
-      <li><%= link_to t('agent.add_derivation'), agent_agents_path(@agent, :mode => 'add') -%></li>
-    <%- end -%>
-    <%- if can? :delete, @agent -%>
+    <li><%= link_to t('page.edit'), edit_agent_path(@agent) -%></li>
+    <li><%= link_to t('agent.add_derivation'), agent_agents_path(@agent, :mode => 'add') -%></li>
+    <%- if policy(@agent).destroy? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.agent')), new_agent_path -%></li>
       <li><%= link_to t('page.destroy'), @agent, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <%- end -%>

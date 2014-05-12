@@ -1,26 +1,26 @@
 # -*- encoding: utf-8 -*-
 class ManifestationsController < ApplicationController
-  load_and_authorize_resource :except => :index
-  authorize_resource :only => :index
-  before_filter :authenticate_user!, :only => :edit
-  before_filter :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
-  before_filter :get_expression, :only => :new
+  before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!, :only => :edit
+  before_action :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
+  before_action :get_expression, :only => :new
   if defined?(EnjuSubject)
-    before_filter :get_subject, :except => [:create, :update, :destroy]
+    before_action :get_subject, :except => [:create, :update, :destroy]
   end
-  before_filter :get_series_statement, :only => [:index, :new, :edit]
-  before_filter :get_item, :get_libraries, :only => :index
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :get_version, :only => [:show]
-  after_filter :solr_commit, :only => :destroy
-  after_filter :convert_charset, :only => :index
-  cache_sweeper :manifestation_sweeper, :only => [:create, :update, :destroy]
+  before_action :get_series_statement, :only => [:index, :new, :edit]
+  before_action :get_item, :get_libraries, :only => :index
+  before_action :prepare_options, :only => [:new, :edit]
+  before_action :get_version, :only => [:show]
+  after_action :verify_authorized
+  after_action :solr_commit, :only => :destroy
+  after_action :convert_charset, :only => :index
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
 
   # GET /manifestations
   # GET /manifestations.json
   def index
+    authorize Manifestation
     mode = params[:mode]
     if mode == 'add'
       unless current_user.try(:has_role?, 'Librarian')
@@ -160,31 +160,7 @@ class ManifestationsController < ApplicationController
         facet :reservable if defined?(EnjuCirculation)
       end
       search = make_internal_query(search)
-      search.data_accessor_for(Manifestation).select = [
-        :id,
-        :original_title,
-        :title_transcription,
-        :required_role_id,
-        :carrier_type_id,
-        :access_address,
-        :volume_number_string,
-        :issue_number_string,
-        :serial_number_string,
-        :date_of_publication,
-        :pub_date,
-        :language_id,
-        :created_at,
-        :updated_at,
-        :volume_number_string,
-        :volume_number,
-        :issue_number_string,
-        :issue_number,
-        :serial_number,
-        :edition_string,
-        :edition,
-        :periodical,
-        :statement_of_responsibility
-      ] if params[:format] == 'html' or params[:format].nil?
+      add_data_accessor(search)
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
@@ -236,23 +212,7 @@ class ManifestationsController < ApplicationController
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
-        pub_dates = parse_pub_date(params)
-        pub_date_range = {}
-        if pub_dates[:from] == '*'
-          pub_date_range[:from] = 0
-        else
-          pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
-        end
-        if pub_dates[:to] == '*'
-          pub_date_range[:to] = 10000
-        else
-          pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
-        end
-        if params[:pub_year_range_interval]
-          pub_year_range_interval = params[:pub_year_range_interval].to_i
-        else
-          pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
-        end
+        pub_date_range, pub_year_range_interval = set_pub_date_query
 
         search.build do
           facet :reservable if defined?(EnjuCirculation)
@@ -300,25 +260,27 @@ class ManifestationsController < ApplicationController
 
       if defined?(EnjuOai)
         if params[:format] == 'oai'
-          unless @manifestations.empty?
+          if @manifestations.empty?
+            @oai[:errors] << 'noRecordsMatch'
+          else
             @resumption = set_resumption_token(
               params[:resumptionToken],
               @from_time || Manifestation.last.updated_at,
               @until_time || Manifestation.first.updated_at,
               @manifestations.limit_value
             )
-          else
-            @oai[:errors] << 'noRecordsMatch'
           end
         end
       end
     end
 
-    store_location # before_filter ではファセット検索のURLを記憶してしまう
+    store_location # before_action ではファセット検索のURLを記憶してしまう
 
     respond_to do |format|
-      format.html
-      format.mobile
+      format.html {|html|
+        html
+        html.phone
+      }
       format.xml  { render :xml => @manifestations }
       format.sru  { render :layout => false }
       format.rss  { render :layout => false }
@@ -397,8 +359,10 @@ class ManifestationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html # show.html.erb
-      format.mobile
+      format.html {|html|
+        html
+        html.phone
+      }
       format.xml  {
         case params[:mode]
         when 'related'
@@ -435,13 +399,16 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
+    authorize @manifestation
     @manifestation.language = Language.where(:iso_639_1 => @locale).first
-    parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
-    if parent
-      @manifestation.parent_id = parent.id
-      @manifestation.original_title = parent.original_title
-      @manifestation.title_transcription = parent.title_transcription
-      @manifestation.periodical = true if parent.periodical
+    if params[:parent_id].present?
+    parent = Manifestation.where(:id => params[:parent_id]).first
+      if parent
+        @manifestation.parent_id = parent.id
+        @manifestation.original_title = parent.original_title
+        @manifestation.title_transcription = parent.title_transcription
+        @manifestation.periodical = true if parent.periodical
+      end
     end
 
     respond_to do |format|
@@ -469,7 +436,8 @@ class ManifestationsController < ApplicationController
   # POST /manifestations
   # POST /manifestations.json
   def create
-    @manifestation = Manifestation.new(params[:manifestation])
+    @manifestation = Manifestation.new(manifestation_params)
+    authorize @manifestation
     parent = Manifestation.where(:id => @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
@@ -498,7 +466,7 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1.json
   def update
     respond_to do |format|
-      if @manifestation.update_attributes(params[:manifestation])
+      if @manifestation.update_attributes(manifestation_params)
         Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
         format.json { head :no_content }
@@ -514,14 +482,14 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1.json
   def destroy
     @manifestation.destroy
-
-    respond_to do |format|
-      format.html { redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation')) }
-      format.json { head :no_content }
-    end
+    redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation'))
   end
 
   private
+  def set_manifestation
+    @manifestation = Manifestation.find(params[:id])
+    authorize @manifestation
+  end
 
   def make_query(query, options = {})
     # TODO: integerやstringもqfに含める
@@ -767,5 +735,76 @@ class ManifestationsController < ApplicationController
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query
+  end
+
+  def add_data_accessor(search)
+    search.data_accessor_for(Manifestation).select = [
+        :id,
+        :original_title,
+        :title_transcription,
+        :required_role_id,
+        :carrier_type_id,
+        :access_address,
+        :volume_number_string,
+        :issue_number_string,
+        :serial_number_string,
+        :date_of_publication,
+        :pub_date,
+        :language_id,
+        :created_at,
+        :updated_at,
+        :volume_number_string,
+        :volume_number,
+        :issue_number_string,
+        :issue_number,
+        :serial_number,
+        :edition_string,
+        :edition,
+        :periodical,
+        :statement_of_responsibility
+    ] if params[:format] == 'html' or params[:format].nil?
+    search
+  end
+
+
+  def set_pub_date_query
+    pub_dates = parse_pub_date(params)
+    pub_date_range = {}
+    if pub_dates[:from] == '*'
+      pub_date_range[:from] = 0
+    else
+      pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
+    end
+    if pub_dates[:to] == '*'
+      pub_date_range[:to] = 10000
+    else
+      pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
+    end
+    if params[:pub_year_range_interval]
+      pub_year_range_interval = params[:pub_year_range_interval].to_i
+    else
+      pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
+    end
+    return pub_date_range, pub_year_range_interval
+  end
+
+  def manifestation_params
+    params.require(:manifestation).permit(
+      :original_title, :title_alternative, :title_transcription,
+      :manifestation_identifier, :date_copyrighted,
+      :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
+      :end_page, :height, :width, :depth,
+      :price, :fulltext, :volume_number_string,
+      :issue_number_string, :serial_number_string, :edition, :note,
+      :repository_content, :required_role_id, :frequency_id,
+      :title_alternative_transcription, :description, :abstract, :available_at,
+      :valid_until, :date_submitted, :date_accepted, :date_captured,
+      :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
+      :serial_number, :content_type_id, :attachment, :lock_version,
+      :series_statements_attributes, :periodical, :statement_of_responsibility,
+      :creators_attributes, :contributors_attributes, :publishers_attributes,
+      :identifiers_attributes, :fulltext_content,
+      :number_of_page_string, :parent_id
+    )
   end
 end

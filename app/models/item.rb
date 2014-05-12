@@ -6,28 +6,22 @@ class Item < ActiveRecord::Base
   enju_question_item_model if defined?(EnjuQuestion)
   enju_inventory_item_model if defined?(EnjuInventory)
   enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
-  attr_accessible :call_number, :item_identifier, :circulation_status_id,
-    :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
-    :acquired_at, :bookstore_id, :missing_since, :budget_type_id, :lock_version,
-    :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
-  scope :on_shelf, where('shelf_id != 1')
-  scope :on_web, where(:shelf_id => 1)
-  has_one :exemplify, :dependent => :destroy
-  has_one :manifestation, :through => :exemplify
+  scope :on_shelf, -> {where('shelf_id != 1')}
+  scope :on_web, -> {where(:shelf_id => 1)}
+  belongs_to :manifestation, touch: true
   has_many :owns
   has_many :agents, :through => :owns
   delegate :display_name, :to => :shelf, :prefix => true
   belongs_to :bookstore, :validate => true
-  has_many :donates
-  has_many :donors, :through => :donates, :source => :agent
+  #has_many :donates
+  #has_many :donors, :through => :donates, :source => :agent
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
-  #accepts_nested_attributes_for :exemplify
   #before_save :create_manifestation
 
   validates_associated :bookstore
-  validates :manifestation_id, :presence => true, :on => :create
+  validates :manifestation_id, :presence => true #, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
@@ -49,7 +43,7 @@ class Item < ActiveRecord::Base
     time :acquired_at
   end
 
-  attr_accessor :library_id, :manifestation_id
+  attr_accessor :library_id #, :manifestation_id
 
   paginates_per 10
 

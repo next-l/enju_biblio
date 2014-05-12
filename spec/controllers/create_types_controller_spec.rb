@@ -33,7 +33,7 @@ describe CreateTypesController do
     it "assigns all create_types as @create_types" do
       create_type = CreateType.create! valid_attributes
       get :index
-      assigns(:create_types).should eq(CreateType.all)
+      assigns(:create_types).should eq(CreateType.page(1))
     end
   end
 

@@ -1,12 +1,13 @@
 class OwnsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_item
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
+  before_action :set_own, only: [:show, :edit, :update, :destroy]
+  before_action :get_agent, :get_item
+  after_action :verify_authorized
+  after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /owns
   # GET /owns.json
   def index
+    authorize Own
     if @agent
       @owns = @agent.owns.order('owns.position').page(params[:page])
     elsif @item
@@ -52,7 +53,8 @@ class OwnsController < ApplicationController
   # POST /owns
   # POST /owns.json
   def create
-    @own = Own.new(params[:own])
+    @own = Own.new(own_params)
+    authorize @own
 
     respond_to do |format|
       if @own.save
@@ -75,7 +77,7 @@ class OwnsController < ApplicationController
     end
 
     respond_to do |format|
-      if @own.update_attributes(params[:own])
+      if @own.update_attributes(own_params)
         format.html { redirect_to @own, :notice => t('controller.successfully_updated', :model => t('activerecord.models.own')) }
         format.json { head :no_content }
       else
@@ -104,5 +106,17 @@ class OwnsController < ApplicationController
       }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def set_own
+    @own = Own.find(params[:id])
+    authorize @own
+  end
+
+  def own_params
+    params.require(:own).permit(
+      :agent_id, :item_id
+    )
   end
 end

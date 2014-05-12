@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.extent')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
 <%- @extents.each do |extent| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, extent -%>
+      <%- if policy(extent).update? -%>
         <%= move_position(extent) -%>
       <%- end -%>
     </td>
@@ -25,10 +25,10 @@
     </td>
     <td><%= extent.note -%></td>
     <td>
-      <%- if can? :update, extent -%>
+      <%- if policy(extent).update? -%>
         <%= link_to t('page.edit'), edit_extent_path(extent) -%>
       <% end %>
-      <%- if can? :delete, extent -%>
+      <%- if policy().destroy?extent -%>
         <%= link_to t('page.destroy'), extent, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -36,11 +36,11 @@
 <%- end -%>
 </table>
 
-<%= paginate(@extents) -%>
+<%= paginate(@extents, :theme => 'enju_leaf') -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.extent')), new_extent_path -%></li>
   </ul>

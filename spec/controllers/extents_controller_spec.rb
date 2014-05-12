@@ -32,7 +32,7 @@ describe ExtentsController do
     it "assigns all extents as @extents" do
       extent = Extent.create! valid_attributes
       get :index
-      assigns(:extents).should eq(Extent.all)
+      assigns(:extents).should eq(Extent.page(1))
     end
   end
 

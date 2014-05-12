@@ -32,7 +32,7 @@ describe ContentTypesController do
     it "assigns all content_types as @content_types" do
       content_type = ContentType.create! valid_attributes
       get :index
-      assigns(:content_types).should eq(ContentType.all)
+      assigns(:content_types).should eq(ContentType.page(1))
     end
   end
 

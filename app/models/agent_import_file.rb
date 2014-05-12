@@ -1,12 +1,11 @@
 class AgentImportFile < ActiveRecord::Base
-  attr_accessible :agent_import, :edit_mode
   include ImportFile
-  default_scope :order => 'agent_import_files.id DESC'
-  scope :not_imported, where(:state => 'pending')
-  scope :stucked, where('created_at < ? AND state = ?', 1.hour.ago, 'pending')
+  default_scope {order('agent_import_files.id DESC')}
+  scope :not_imported, -> {where(:state => 'pending')}
+  scope :stucked, -> {where('created_at < ? AND state = ?', 1.hour.ago, 'pending')}
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :agent_import, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
+    has_attached_file :agent_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
       :s3_permissions => :private
   else
     has_attached_file :agent_import,
@@ -60,7 +59,7 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def import
-    self.reload
+    reload
     num = {:agent_imported => 0, :user_imported => 0, :failed => 0}
     row_num = 2
     rows = open_import_file
@@ -166,6 +165,8 @@ class AgentImportFile < ActiveRecord::Base
       next if row['dummy'].to_s.strip.present?
       agent = Agent.where(:id => row['id'].to_s.strip).first
       if agent
+        agent.picture_files.destroy_all
+        agent.reload
         agent.destroy
       end
       row_num += 1
@@ -235,9 +236,9 @@ class AgentImportFile < ActiveRecord::Base
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Guest')
+      agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Guest')
     #else
-    #  agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Librarian')
+    #  agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Librarian')
     #end
     language = Language.where(:name => row['language'].to_s.strip.camelize).first
     language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
@@ -265,9 +266,9 @@ class AgentImportFile < ActiveRecord::Base
   #  library = Library.where(:name => row['library_short_name'].to_s.strip).first || Library.web
   #  user_group = UserGroup.where(:name => row['user_group_name']).first || UserGroup.first
   #  user.library = library
-  #  role = Role.where(:name => row['role_name'].to_s.strip.camelize).first || Role.find('User')
+  #  role = Role.where(:name => row['role_name'].to_s.strip.camelize).first || Role.friendly.find('User')
   #  user.role = role
-  #  required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.find('Librarian')
+  #  required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Librarian')
   #  user.required_role = required_role
   #  locale = Language.where(:iso_639_1 => row['locale'].to_s.strip).first
   #  user.locale = locale || I18n.default_locale.to_s

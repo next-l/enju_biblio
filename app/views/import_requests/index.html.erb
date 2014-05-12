@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.import_request')) -%></h1>
 <div id="content_list">
 
@@ -22,7 +22,7 @@
     <td><%= localized_state(import_request.state) -%></td>
     <td><%= link_to import_request.manifestation.original_title, import_request.manifestation if import_request.manifestation -%></td>
     <td>
-      <%- if can? :delete, import_request -%>
+      <%- if policy().destroy?import_request -%>
         <%= link_to image_tag('icons/delete.png', :size => '16x16', :alt => t('page.destroy')), import_request, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -30,11 +30,11 @@
 <%- end -%>
 </table>
 
-<%= paginate(@import_requests) -%>
+<%= paginate(@import_requests, :theme => 'enju_leaf') -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.import_request')), new_import_request_path -%></li>
   </ul>

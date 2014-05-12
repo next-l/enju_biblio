@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.content_type')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
 <%- @content_types.each do |content_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, content_type -%>
+      <%- if policy(content_type).update? -%>
         <%= move_position(content_type) -%>
       <%- end -%>
     </td>
@@ -22,10 +22,10 @@
     <td><%= link_to content_type.display_name.localize, content_type -%></td>
     <td><%= content_type.note -%></td>
     <td>
-      <%- if can? :update, content_type -%>
+      <%- if policy(content_type).update? -%>
         <%= link_to t('page.edit'), edit_content_type_path(content_type) -%>
       <% end %>
-      <%- if can? :delete, content_type -%>
+      <%- if policy().destroy?content_type -%>
         <%= link_to t('page.destroy'), content_type_path(content_type), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -36,9 +36,9 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if policy(ContentType).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.content_type')), new_content_type_path -%></li>
     <%- end -%>
   </ul>

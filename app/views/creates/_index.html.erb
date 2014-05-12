@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.create')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
     <td><%= link_to create.agent.full_name, create.agent -%></td>
     <td><%= link_to create.work.original_title, create.work -%></td>
     <td>
-      <%- if can? :delete, create -%>
+      <%- if policy(create).destroy? -%>
         <%= link_to t('page.show'), create -%>
         <%= link_to t('page.destroy'), create, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
@@ -23,12 +23,12 @@
 <%- end -%>
 </table>
 
-<%= paginate(@creates) -%>
+<%= paginate(@creates, :theme => 'enju_leaf') -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
-  <%- if can? :create, Create -%>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <%- if policy(Create).create? -%>
     <ul>
       <li><%= link_to t('page.new', :model => t('activerecord.models.create')), new_create_path -%></li>
     </ul>

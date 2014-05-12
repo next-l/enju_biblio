@@ -1,11 +1,12 @@
 class PictureFilesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_attachable, :only => [:index, :new]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
+  before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  before_action :get_attachable, :only => [:index, :new]
 
   # GET /picture_files
   # GET /picture_files.json
   def index
+    authorize PictureFile
     if @attachable
       @picture_files = @attachable.picture_files.attached.page(params[:page])
     else
@@ -41,7 +42,7 @@ class PictureFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render :json => @picture_file }
-      format.mobile {
+      format.html.phone {
         if params[:format] == 'download'
           render_image(file)
         end
@@ -76,7 +77,8 @@ class PictureFilesController < ApplicationController
   # POST /picture_files
   # POST /picture_files.json
   def create
-    @picture_file = PictureFile.new(params[:picture_file])
+    authorize PictureFile
+    @picture_file = PictureFile.new(picture_file_params)
 
     respond_to do |format|
       if @picture_file.save
@@ -107,7 +109,7 @@ class PictureFilesController < ApplicationController
     end
 
     respond_to do |format|
-      if @picture_file.update_attributes(params[:picture_file])
+      if @picture_file.update_attributes(picture_file_params)
         format.html { redirect_to @picture_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.picture_file')) }
         format.json { head :no_content }
       else
@@ -134,6 +136,11 @@ class PictureFilesController < ApplicationController
   end
 
   private
+  def set_picture_file
+    @picture_file = PictureFile.find(params[:id])
+    authorize @picture_file
+  end
+
   def get_attachable
     get_manifestation
     if @manifestation
@@ -174,5 +181,11 @@ class PictureFilesController < ApplicationController
         end
       end
     end
+  end
+
+  def picture_file_params
+    params.require(:picture_file).permit(
+      :picture, :picture_attachable_id, :picture_attachable_type
+    )
   end
 end

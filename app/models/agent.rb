@@ -1,16 +1,8 @@
 # -*- encoding: utf-8 -*-
 class Agent < ActiveRecord::Base
   enju_export if defined?(EnjuExport)
-  attr_accessible :last_name, :middle_name, :first_name,
-    :last_name_transcription, :middle_name_transcription,
-    :first_name_transcription, :corporate_name, :corporate_name_transcription,
-    :full_name, :full_name_transcription, :full_name_alternative,
-    :other_designation, :language_id,
-    :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
-    :full_name_alternative_transcription, :title,
-    :agent_identifier
 
-  scope :readable_by, lambda{|user| {:conditions => ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(:name => 'Guest').select(:id).first.id]}}
+  scope :readable_by, lambda{|user| where('required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(:name => 'Guest').select(:id).first.id)}
   has_many :creates, :dependent => :destroy
   has_many :works, :through => :creates
   has_many :realizes, :dependent => :destroy
@@ -47,6 +39,8 @@ class Agent < ActiveRecord::Base
   validate :check_birth_date
   before_validation :set_role_and_name, :on => :create
   before_save :set_date_of_birth, :set_date_of_death
+  before_update :touch
+  before_destroy :touch, :reload
 
   searchable do
     text :name, :place, :address_1, :address_2, :other_designation, :note

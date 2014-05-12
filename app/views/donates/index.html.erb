@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.donate')) -%></h1>
 <div id="content_list">
 
@@ -22,7 +22,7 @@
     </td>
     <td><%= link_to t('page.show'), donate -%></td>
     <td>
-      <%- if can? :delete, donate -%>
+      <%- if policy().destroy?donate -%>
         <%= link_to t('page.edit'), edit_donate_path(donate) -%>
         <%= link_to t('page.destroy'), donate, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
@@ -31,14 +31,14 @@
 <%- end -%>
 </table>
 
-<%= paginate(@donates) -%>
+<%= paginate(@donates, :theme => 'enju_leaf') -%>
 
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, Donate -%>
+    <%- if policy(Donate).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.donate')), new_donate_path -%></li>
     <%- end -%>
   </ul>

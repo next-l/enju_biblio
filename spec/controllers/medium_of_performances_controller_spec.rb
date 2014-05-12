@@ -32,7 +32,7 @@ describe MediumOfPerformancesController do
     it "assigns all medium_of_performances as @medium_of_performances" do
       medium_of_performance = MediumOfPerformance.create! valid_attributes
       get :index
-      assigns(:medium_of_performances).should eq(MediumOfPerformance.all)
+      assigns(:medium_of_performances).should eq(MediumOfPerformance.page(1))
     end
   end
 

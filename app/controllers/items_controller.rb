@@ -1,17 +1,16 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_filter :get_inventory_file
+    before_action :get_inventory_file
   end
-  before_filter :get_library, :get_item, :except => [:create, :update, :destroy]
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :get_version, :only => [:show]
-  #before_filter :store_location
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  after_filter :convert_charset, :only => :index
-  cache_sweeper :item_sweeper, :only => [:create, :update, :destroy]
+  before_action :get_library, :get_item, :except => [:create, :update, :destroy]
+  before_action :prepare_options, :only => [:new, :edit]
+  before_action :get_version, :only => [:show]
+  after_action :verify_authorized
+  after_action :solr_commit, :only => [:create, :update, :destroy]
+  after_action :convert_charset, :only => :index
 
   # GET /items
   # GET /items.json
@@ -153,8 +152,9 @@ class ItemsController < ApplicationController
       return
     end
     @item = Item.new
+    authorize @item
     @item.shelf = @library.shelves.first
-    @item.manifestation_id = @manifestation.id
+    @item.manifestation = @manifestation
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.where(
         :name => [
@@ -169,15 +169,13 @@ class ItemsController < ApplicationController
       @item.item_has_use_restriction = ItemHasUseRestriction.new
       @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
     end
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @item }
-    end
   end
 
   # GET /items/1/edit
   def edit
+    if @manifestation
+      @item.manifestation = @manifestation
+    end
     @item.library_id = @item.shelf.library_id
     if defined?(EnjuCirculation)
       unless @item.use_restriction
@@ -190,7 +188,8 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new(item_params)
+    authorize @item
     manifestation = Manifestation.find(@item.manifestation_id)
 
     respond_to do |format|
@@ -218,7 +217,7 @@ class ItemsController < ApplicationController
   # PUT /items/1.json
   def update
     respond_to do |format|
-      if @item.update_attributes(params[:item])
+      if @item.update_attributes(item_params)
         format.html { redirect_to @item, :notice => t('controller.successfully_updated', :model => t('activerecord.models.item')) }
         format.json { head :no_content }
       else
@@ -230,28 +229,27 @@ class ItemsController < ApplicationController
   end
 
   # DELETE /items/1
-  # DELETE /items/1.json
   def destroy
-    manifestation = @item.manifestation
     @item.destroy
 
-    respond_to do |format|
-      flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
-      if @item.manifestation
-        format.html { redirect_to manifestation_items_url(manifestation) }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to items_url }
-        format.json { head :no_content }
-      end
+    flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
+    if @item.manifestation
+      redirect_to manifestation_items_url(@item.manifestation)
+    else
+      redirect_to items_url
     end
   end
 
   private
+  def set_item
+    @item = Item.find(params[:id])
+    authorize @item
+  end
+
   def prepare_options
     @libraries = Library.real << Library.web
     if @item.new_record?
-      @library = Library.real.first(:order => :position, :include => :shelves)
+      @library = Library.real.order(:position).includes(:shelves).first
     else
       @library = @item.shelf.library
     end
@@ -268,5 +266,15 @@ class ItemsController < ApplicationController
         @checkout_types = CheckoutType.all
       end
     end
+  end
+
+  def item_params
+    params.require(:item).permit(
+      :call_number, :item_identifier, :circulation_status_id,
+      :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
+      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
+      :lock_version, :manifestation_id, :library_id, :required_role_id #,
+      # :exemplify_attributes
+    )
   end
 end

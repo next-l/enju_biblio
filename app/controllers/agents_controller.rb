@@ -1,24 +1,20 @@
 # -*- encoding: utf-8 -*-
 class AgentsController < ApplicationController
-  load_and_authorize_resource :except => :index
-  authorize_resource :only => :index
-  before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
+  before_action :set_agent, only: [:show, :edit, :update, :destroy]
+  before_action :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, :except => [:update, :destroy]
   if defined?(EnjuResourceMerge)
-    before_filter :get_agent_merge_list, :except => [:create, :update, :destroy]
+    before_action :get_agent_merge_list, :except => [:create, :update, :destroy]
   end
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :store_location
-  before_filter :get_version, :only => [:show]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :agent_sweeper, :only => [:create, :update, :destroy]
+  before_action :prepare_options, :only => [:new, :edit]
+  before_action :store_location
+  before_action :get_version, :only => [:show]
+  after_action :verify_authorized
+  after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /agents
   # GET /agents.json
   def index
-    #session[:params] = {} unless session[:params]
-    #session[:params][:agent] = params
-    # 最近追加されたパトロン
-    #@query = params[:query] ||= "[* TO *]"
+    authorize Agent
     if params[:mode] == 'add'
       unless current_user.try(:has_role?, 'Librarian')
         access_denied; return
@@ -90,7 +86,7 @@ class AgentsController < ApplicationController
       format.rss  { render :layout => false }
       format.atom
       format.json { render :json => @agents }
-      format.mobile
+      format.html.phone
     end
   end
 
@@ -132,7 +128,7 @@ class AgentsController < ApplicationController
       format.html # show.html.erb
       format.json { render :json => @agent }
       format.js
-      format.mobile
+      format.html.phone
     end
   end
 
@@ -140,15 +136,11 @@ class AgentsController < ApplicationController
   # GET /agents/new.json
   def new
     @agent = Agent.new
+    authorize @agent
     @agent.required_role = Role.where(:name => 'Guest').first
     @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
     @agent.country = current_user.library.country
     prepare_options
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @agent }
-    end
   end
 
   # GET /agents/1/edit
@@ -159,15 +151,8 @@ class AgentsController < ApplicationController
   # POST /agents
   # POST /agents.json
   def create
-    @agent = Agent.new(params[:agent])
-    #if @agent.user_username
-    #  @agent.user = User.find(@agent.user_username) rescue nil
-    #end
-    #unless current_user.has_role?('Librarian')
-    #  if @agent.user != current_user
-    #    access_denied; return
-    #  end
-    #end
+    @agent = Agent.new(agent_params)
+    authorize @agent
 
     respond_to do |format|
       if @agent.save
@@ -193,7 +178,7 @@ class AgentsController < ApplicationController
   # PUT /agents/1.json
   def update
     respond_to do |format|
-      if @agent.update_attributes(params[:agent])
+      if @agent.update_attributes(agent_params)
         format.html { redirect_to @agent, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent')) }
         format.json { head :no_content }
       else
@@ -216,6 +201,24 @@ class AgentsController < ApplicationController
   end
 
   private
+  def set_agent
+    @agent = Agent.find(params[:id])
+    authorize @agent
+  end
+
+  def agent_params
+    params.require(:agent).permit(
+      :last_name, :middle_name, :first_name,
+      :last_name_transcription, :middle_name_transcription,
+      :first_name_transcription, :corporate_name, :corporate_name_transcription,
+      :full_name, :full_name_transcription, :full_name_alternative,
+      :other_designation, :language_id,
+      :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+      :full_name_alternative_transcription, :title,
+      :agent_identifier
+    )
+  end
+
   def prepare_options
     @countries = Country.all_cache
     @agent_types = AgentType.all

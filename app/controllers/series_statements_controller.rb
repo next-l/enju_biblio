@@ -1,16 +1,17 @@
 # -*- encoding: utf-8 -*-
 class SeriesStatementsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_manifestation, :except => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
+  before_action :set_series_statement, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  before_action :get_manifestation, :except => [:create, :update, :destroy]
+  after_action :solr_commit, :only => [:create, :update, :destroy]
   if defined?(EnjuResourceMerge)
-    before_filter :get_series_statement_merge_list, :except => [:create, :update, :destroy]
+    before_action :get_series_statement_merge_list, :except => [:create, :update, :destroy]
   end
 
   # GET /series_statements
   # GET /series_statements.json
   def index
+    authorize SeriesStatement
     search = Sunspot.new_search(SeriesStatement)
     query = params[:query].to_s.strip
     page = params[:page] || 1
@@ -57,11 +58,6 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/new.json
   def new
     @series_statement = SeriesStatement.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @series_statement }
-    end
   end
 
   # GET /series_statements/1/edit
@@ -71,7 +67,8 @@ class SeriesStatementsController < ApplicationController
   # POST /series_statements
   # POST /series_statements.json
   def create
-    @series_statement = SeriesStatement.new(params[:series_statement])
+    @series_statement = SeriesStatement.new(series_statement_params)
+    authorize @series_statement
     manifestation = Manifestation.find(@series_statement.manifestation_id) rescue nil
 
     respond_to do |format|
@@ -96,7 +93,7 @@ class SeriesStatementsController < ApplicationController
     end
 
     respond_to do |format|
-      if @series_statement.update_attributes(params[:series_statement])
+      if @series_statement.update_attributes(series_statement_params)
         format.html { redirect_to @series_statement, :notice => t('controller.successfully_updated', :model => t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else
@@ -116,5 +113,22 @@ class SeriesStatementsController < ApplicationController
       format.html { redirect_to series_statements_url }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def set_series_statement
+    @series_statement = SeriesStatement.find(params[:id])
+    authorize @series_statement
+  end
+
+  def series_statement_params
+    params.require(:series_statement).permit(
+      :original_title, :numbering, :title_subseries,
+      :numbering_subseries, :title_transcription, :title_alternative,
+      :series_statement_identifier, :note,
+      :root_manifestation_id, :url,
+      :title_subseries_transcription, :creator_string, :volume_number_string,
+      :series_master
+    )
   end
 end

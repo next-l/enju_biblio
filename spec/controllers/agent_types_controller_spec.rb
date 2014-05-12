@@ -32,7 +32,7 @@ describe AgentTypesController do
     it "assigns all agent_types as @agent_types" do
       agent_type = AgentType.create! valid_attributes
       get :index
-      assigns(:agent_types).should eq(AgentType.all)
+      assigns(:agent_types).should eq(AgentType.page(1))
     end
   end
 

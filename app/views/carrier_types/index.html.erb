@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.carrier_type')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
 <%- @carrier_types.each do |carrier_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, carrier_type -%>
+      <%- if policy(carrier_type).update? -%>
         <%= move_position(carrier_type) -%>
       <%- end -%>
     </td>
@@ -22,10 +22,10 @@
     <td><%= link_to carrier_type.display_name.localize, carrier_type -%></td>
     <td><%= carrier_type.note -%></td>
     <td>
-      <%- if can? :update, carrier_type -%>
+      <%- if policy(carrier_type).update? -%>
         <%= link_to t('page.edit'), edit_carrier_type_path(carrier_type) -%>
       <% end %>
-      <%- if can? :delete, carrier_type -%>
+      <%- if policy().destroy?carrier_type -%>
         <%= link_to t('page.destroy'), carrier_type_path(carrier_type), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -36,9 +36,9 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, CarrierType -%>
+    <%- if policy(CarrierType).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.carrier_type')), new_carrier_type_path -%></li>
     <%- end -%>
   </ul>

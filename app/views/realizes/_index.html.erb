@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.realize')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
     <td><%= link_to realize.agent.full_name, realize.agent -%></td>
     <td><%= link_to realize.expression.original_title, realize.expression -%></td>
     <td>
-      <%- if can? :delete, realize -%>
+      <%- if policy(realize).destroy? -%>
         <%= link_to t('page.show'), realize -%>
         <%= link_to t('page.destroy'), realize, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
@@ -23,12 +23,12 @@
 <%- end -%>
 </table>
 
-<%= paginate(@realizes) -%>
+<%= paginate(@realizes, :theme => 'enju_leaf') -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
-  <%- if can? :create, Realize -%>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <%- if policy(Realize).create? -%>
     <ul>
       <li><%= link_to t('page.new', :model => t('activerecord.models.realize')), new_realize_path -%></li>
     </ul>

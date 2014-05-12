@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.medium_of_performance')) -%></h1>
 <div id="content_list">
 
@@ -14,7 +14,7 @@
 <%- @medium_of_performances.each do |medium_of_performance| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, medium_of_performance -%>
+      <%- if policy(medium_of_performance).update? -%>
         <%= move_position(medium_of_performance) -%>
       <%- end -%>
     </td>
@@ -22,10 +22,10 @@
     <td><%= link_to medium_of_performance.display_name.localize, medium_of_performance -%></td>
     <td><%= medium_of_performance.note -%></td>
     <td>
-      <%- if can? :update, medium_of_performance -%>
+      <%- if policy(medium_of_performance).update? -%>
         <%= link_to t('page.edit'), edit_medium_of_performance_path(medium_of_performance) -%>
       <% end %>
-      <%- if can? :delete, medium_of_performance -%>
+      <%- if policy().destroy?medium_of_performance -%>
         <%= link_to t('page.destroy'), medium_of_performance, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -33,11 +33,11 @@
 <%- end -%>
 </table>
 
-<%= paginate(@medium_of_performances) -%>
+<%= paginate(@medium_of_performances, :theme => 'enju_leaf') -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.medium_of_performance')), new_medium_of_performance_path -%></li>
   </ul>

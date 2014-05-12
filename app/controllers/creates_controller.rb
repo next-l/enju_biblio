@@ -1,9 +1,9 @@
 class CreatesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_work
-  before_filter :prepare_options, :only => [:new, :edit]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
+  before_action :set_create, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  before_action :get_agent, :get_work
+  before_action :prepare_options, :only => [:new, :edit]
+  after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /creates
   # GET /creates.json
@@ -54,7 +54,8 @@ class CreatesController < ApplicationController
   # POST /creates
   # POST /creates.json
   def create
-    @create = Create.new(params[:create])
+    @create = Create.new(create_params)
+    authorize @create
 
     respond_to do |format|
       if @create.save
@@ -79,7 +80,7 @@ class CreatesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create.update_attributes(params[:create])
+      if @create.update_attributes(create_params)
         format.html { redirect_to @create, :notice => t('controller.successfully_updated', :model => t('activerecord.models.create')) }
         format.json { head :no_content }
       else
@@ -112,7 +113,18 @@ class CreatesController < ApplicationController
   end
 
   private
+  def set_create
+    @create = Create.find(params[:id])
+    authorize @create
+  end
+
   def prepare_options
     @create_types = CreateType.all
+  end
+
+  def create_params
+    params.require(:create).permit(
+      :agent_id, :work_id, :create_type_id
+    )
   end
 end

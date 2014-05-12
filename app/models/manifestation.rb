@@ -9,31 +9,16 @@ class Manifestation < ActiveRecord::Base
   enju_oai if defined?(EnjuOai)
   enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
-  attr_accessible :original_title, :title_alternative, :title_transcription,
-    :manifestation_identifier, :date_copyrighted,
-    :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
-    :end_page, :height, :width, :depth,
-    :price, :fulltext, :volume_number_string,
-    :issue_number_string, :serial_number_string, :edition, :note,
-    :repository_content, :required_role_id, :frequency_id,
-    :title_alternative_transcription, :description, :abstract, :available_at,
-    :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
-    :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
-    :content_type_id, :attachment, :lock_version,
-    :series_statements_attributes, :periodical, :statement_of_responsibility,
-    :creators_attributes, :contributors_attributes, :publishers_attributes,
-    :identifiers_attributes
-  attr_accessible :fulltext_content,
-    :doi, :number_of_page_string, :parent_id
 
   has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
-  has_many :creators, :through => :creates, :source => :agent, :order => 'creates.position'
+  has_many :creators, -> {order('creates.position')}, :through => :creates, :source => :agent
   has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, :through => :realizes, :source => :agent, :order => 'realizes.position'
+  has_many :contributors, -> {order('realizes.position')}, :through => :realizes, :source => :agent
   has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, :through => :produces, :source => :agent, :order => 'produces.position'
-  has_many :exemplifies, :dependent => :destroy
-  has_many :items, :through => :exemplifies
+  has_many :publishers, -> {order('produces.position')}, :through => :produces, :source => :agent
+  #has_many :exemplifies, :dependent => :destroy
+  #has_many :items, :through => :exemplifies
+  has_many :items #, :dependent => :destroy
   has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
   has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
   has_many :derived_manifestations, :through => :children, :source => :child
@@ -223,7 +208,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :attachment, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
+    has_attached_file :attachment, :storage => :s3,
+      :s3_credentials => "#{Setting.amazon}",
       :s3_permissions => :private
   else
     has_attached_file :attachment,
@@ -244,6 +230,8 @@ class Manifestation < ActiveRecord::Base
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
+  before_update :touch
+  before_destroy :touch, :reload
   after_destroy :index_series_statement
   normalize_attributes :manifestation_identifier, :pub_date, :original_title
   paginates_per 10
@@ -342,7 +330,7 @@ class Manifestation < ActiveRecord::Base
     return nil if self.cached_numdocs < 5
     manifestation = nil
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
-    response = Manifestation.search(:include => [:creators, :contributors, :publishers, :items]) do
+    response = Manifestation.search(:include => [:creates, :realizes, :produces, :items]) do
       fulltext keyword if keyword
       order_by(:random)
       paginate :page => 1, :per_page => 1
@@ -371,6 +359,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def sort_title
+    return nil if RUBY_PLATFORM == 'java'
     if series_master?
       if root_series_statement.title_transcription?
         NKF.nkf('-w --katakana', root_series_statement.title_transcription)

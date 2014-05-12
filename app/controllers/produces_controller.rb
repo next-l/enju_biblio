@@ -1,13 +1,14 @@
 class ProducesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_manifestation
-  before_filter :prepare_options, :only => [:new, :edit]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
+  before_action :set_produce, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  before_action :get_agent, :get_manifestation
+  before_action :prepare_options, :only => [:new, :edit]
+  after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /produces
   # GET /produces.json
   def index
+    authorize Produce
     case
     when @agent
       @produces = @agent.produces.order('produces.position').page(params[:page])
@@ -47,6 +48,7 @@ class ProducesController < ApplicationController
       return
     else
       @produce = Produce.new
+      authorize @produce
       @produce.manifestation = @manifestation
       @produce.agent = @agent
     end
@@ -59,7 +61,8 @@ class ProducesController < ApplicationController
   # POST /produces
   # POST /produces.json
   def create
-    @produce = Produce.new(params[:produce])
+    @produce = Produce.new(produce_params)
+    authorize @produce
 
     respond_to do |format|
       if @produce.save
@@ -83,7 +86,7 @@ class ProducesController < ApplicationController
     end
 
     respond_to do |format|
-      if @produce.update_attributes(params[:produce])
+      if @produce.update_attributes(produce_params)
         format.html { redirect_to @produce, :notice => t('controller.successfully_updated', :model => t('activerecord.models.produce')) }
         format.json { head :no_content }
       else
@@ -116,7 +119,18 @@ class ProducesController < ApplicationController
   end
 
   private
+  def set_produce
+    @produce = Produce.find(params[:id])
+    authorize @produce
+  end
+
   def prepare_options
     @produce_types = ProduceType.all
+  end
+
+  def produce_params
+    params.require(:produce).permit(
+      :agent_id, :manifestation_id, :produce_type_id
+    )
   end
 end

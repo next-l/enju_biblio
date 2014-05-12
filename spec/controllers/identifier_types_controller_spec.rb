@@ -33,7 +33,7 @@ describe IdentifierTypesController do
     it "assigns all identifier_types as @identifier_types" do
       identifier_type = IdentifierType.create! valid_attributes
       get :index
-      assigns(:identifier_types).should eq(IdentifierType.all)
+      assigns(:identifier_types).should eq(IdentifierType.order(:position).page(1))
     end
   end
 

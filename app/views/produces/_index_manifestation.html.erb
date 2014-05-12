@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.produce')) -%></h1>
 <div id="content_list">
   <h2 class="resource_title">
@@ -16,7 +16,7 @@
 <%- @produces.each do |produce| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :delete, produce -%>
+      <%- if policy(produce).destroy? -%>
         <%= produce.first? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_up.png', :size => '16x16', :alt => t('page.asc')), manifestation_produce_path(produce.manifestation, produce, :move => 'higher'), :method => :put) -%>
         <%= produce.last? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_down.png', :size => '16x16', :alt => t('page.desc')), manifestation_produce_path(produce.manifestation, produce, :move => 'lower'), :method => :put) -%>
       <%- end -%>
@@ -28,15 +28,15 @@
 <%- end -%>
 </table>
 
-<%= paginate(@produces) -%>
+<%= paginate(@produces, :theme => 'enju_leaf') -%>
 
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), manifestation_agents_path(manifestation) -%></li>
-    <%- if can? :create, Produce -%>
+    <%- if policy(Produce).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_manifestation_produce_path(manifestation) -%></li>
     <%- end -%>
   </ul>

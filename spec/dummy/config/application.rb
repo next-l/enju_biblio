@@ -44,7 +44,7 @@ module Dummy
     # This will create an empty whitelist of attributes available for mass-assignment for all models
     # in your app. As such, your models will need to explicitly whitelist or blacklist accessible
     # parameters by using an attr_accessible or attr_protected declaration.
-    config.active_record.whitelist_attributes = true
+    # config.active_record.whitelist_attributes = true
 
     # Enable the asset pipeline
     config.assets.enabled = true
@@ -55,8 +55,11 @@ module Dummy
 end
 
 require 'enju_leaf'
-require 'enju_inventory'
-require 'enju_subject'
 require 'enju_circulation'
-require 'enju_ndl'
+require 'enju_inventory'
 require 'enju_bookmark'
+require 'enju_event'
+require 'enju_manifestation_viewer'
+require 'enju_export'
+require 'enju_ndl'
+require 'enju_subject'

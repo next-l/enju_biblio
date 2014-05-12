@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.search_resource', :model => t('page.resource')) -%></h1>
 <div id="content_list">
   <%= render 'manifestations/title', :manifestation => @manifestation if @manifestation -%>
@@ -58,7 +58,7 @@
         <%= render @manifestations %>
       </table>
 
-      <%= paginate(@manifestations) -%>
+      <%= paginate(@manifestations, :theme => 'enju_leaf') -%>
       <br />
     </div>
 
@@ -72,8 +72,8 @@
   </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
-  <% if @parent and can?(:update, @parent) %>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <% if @parent and policy(@parent).update? %>
     <%= render 'submenu_parent' %>
   <% end %>
 </div>

@@ -1,15 +1,11 @@
 class AgentImportFilesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_agent_import_file, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
 
   # GET /agent_import_files
-  # GET /agent_import_files.json
   def index
+    authorize AgentImportFile
     @agent_import_files = AgentImportFile.page(params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @agent_import_files }
-    end
   end
 
   # GET /agent_import_files/1
@@ -37,6 +33,7 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files/new
   # GET /agent_import_files/new.json
   def new
+    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new
 
     respond_to do |format|
@@ -52,7 +49,8 @@ class AgentImportFilesController < ApplicationController
   # POST /agent_import_files
   # POST /agent_import_files.json
   def create
-    @agent_import_file = AgentImportFile.new(params[:agent_import_file])
+    authorize AgentImportFile
+    @agent_import_file = AgentImportFile.new(agent_import_file_params)
     @agent_import_file.user = current_user
 
     respond_to do |format|
@@ -70,7 +68,7 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1.json
   def update
     respond_to do |format|
-      if @agent_import_file.update_attributes(params[:agent_import_file])
+      if @agent_import_file.update_attributes(agent_import_file_params)
         format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file')) }
         format.json { head :no_content }
       else
@@ -89,5 +87,17 @@ class AgentImportFilesController < ApplicationController
       format.html { redirect_to(agent_import_files_url) }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def set_agent_import_file
+    @agent_import_file = AgentImportFile.find(params[:id])
+    authorize @agent_import_file
+  end
+
+  def agent_import_file_params
+    params.require(:agent_import_file).permit(
+      :agent_import, :edit_mode
+    )
   end
 end

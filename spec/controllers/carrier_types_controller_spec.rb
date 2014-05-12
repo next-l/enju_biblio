@@ -33,7 +33,7 @@ describe CarrierTypesController do
     it "assigns all carrier_types as @carrier_types" do
       carrier_type = CarrierType.create! valid_attributes
       get :index
-      assigns(:carrier_types).should eq(CarrierType.all)
+      assigns(:carrier_types).should eq(CarrierType.order(:position).page(1))
     end
   end
 
