@@ -42,6 +42,7 @@ class CarrierTypesController < ApplicationController
   # POST /carrier_types.json
   def create
     @carrier_type = CarrierType.new(carrier_type_params)
+    authorize @carrier_type
 
     respond_to do |format|
       if @carrier_type.save

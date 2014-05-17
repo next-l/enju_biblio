@@ -1,11 +1,12 @@
 class ResourceImportFilesController < ApplicationController
   before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
+  #after_action :verify_policy_scoped, :only => :index
 
   # GET /resource_import_files
   # GET /resource_import_files.json
   def index
+    authorize ResourceImportFile
     @resource_import_files = ResourceImportFile.page(params[:page])
 
     respond_to do |format|

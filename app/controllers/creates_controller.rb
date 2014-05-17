@@ -8,6 +8,7 @@ class CreatesController < ApplicationController
   # GET /creates
   # GET /creates.json
   def index
+    authorize Create
     case
     when @agent
       @creates = @agent.creates.order('creates.position').page(params[:page])

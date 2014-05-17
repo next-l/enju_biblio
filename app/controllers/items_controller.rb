@@ -15,6 +15,7 @@ class ItemsController < ApplicationController
   # GET /items
   # GET /items.json
   def index
+    authorize Item
     query = params[:query].to_s.strip
     per_page = Item.default_per_page
     @count = {}
