@@ -22,7 +22,7 @@ gem "enju_ndl", github: "next-l/enju_ndl"
 gem "enju_bookmark", github: "next-l/enju_bookmark", branch: "rails4"
 gem "enju_message", github: "next-l/enju_message"
 gem "enju_inventory", github: "next-l/enju_inventory", branch: "rails4"
-gem "enju_export", github: "next-l/enju_export", branch: "rails4"
+gem "enju_export", github: "next-l/enju_export"
 gem "state_machine", github: "seuros/state_machine"
 
 # To use debugger
