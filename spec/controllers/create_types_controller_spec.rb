@@ -20,7 +20,6 @@ require 'spec_helper'
 
 describe CreateTypesController do
   login_admin
-  fixtures :library_groups
 
   # This should return the minimal set of attributes required to create a valid
   # CreateType. As you add validations to CreateType, be sure to
@@ -33,7 +32,7 @@ describe CreateTypesController do
     it "assigns all create_types as @create_types" do
       create_type = CreateType.create! valid_attributes
       get :index
-      assigns(:create_types).should eq(CreateType.page(1))
+      assigns(:create_types).should eq(CreateType.order(:position))
     end
   end
 

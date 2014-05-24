@@ -248,6 +248,8 @@ class ItemsController < ApplicationController
       else
         @library = @item.shelf.library
       end
+    else
+      @library = @item.shelf.library
     end
     @shelves = @library.shelves
     @bookstores = Bookstore.all

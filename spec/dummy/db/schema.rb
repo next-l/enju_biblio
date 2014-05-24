@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140519171220) do
+ActiveRecord::Schema.define(version: 20140524020735) do
 
   create_table "accepts", force: true do |t|
     t.integer  "basket_id"
@@ -23,6 +23,18 @@ ActiveRecord::Schema.define(version: 20140519171220) do
 
   add_index "accepts", ["basket_id"], name: "index_accepts_on_basket_id"
   add_index "accepts", ["item_id"], name: "index_accepts_on_item_id"
+
+  create_table "agent_import_file_transitions", force: true do |t|
+    t.string   "to_state"
+    t.text     "metadata",             default: "{}"
+    t.integer  "sort_key"
+    t.integer  "agent_import_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "agent_import_file_transitions", ["agent_import_file_id"], name: "index_agent_import_file_transitions_on_agent_import_file_id"
+  add_index "agent_import_file_transitions", ["sort_key", "agent_import_file_id"], name: "index_agent_import_file_transitions_on_sort_key_and_file_id", unique: true
 
   create_table "agent_import_files", force: true do |t|
     t.integer  "parent_id"

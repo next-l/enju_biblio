@@ -123,7 +123,7 @@ describe AgentImportFilesController do
 
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        assigns(:agent_import_file).should_not be_valid
+        assigns(:agent_import_file).should be_nil
         response.should be_forbidden
       end
     end
@@ -131,7 +131,7 @@ describe AgentImportFilesController do
     describe "When not logged in" do
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        assigns(:agent_import_file).should_not be_valid
+        assigns(:agent_import_file).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end

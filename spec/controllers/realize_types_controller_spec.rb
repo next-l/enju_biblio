@@ -32,7 +32,7 @@ describe RealizeTypesController do
     it "assigns all realize_types as @realize_types" do
       realize_type = RealizeType.create! valid_attributes
       get :index
-      assigns(:realize_types).should eq(RealizeType.page(1))
+      assigns(:realize_types).should eq(RealizeType.order(:position))
     end
   end
 

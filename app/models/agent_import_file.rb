@@ -1,8 +1,9 @@
 class AgentImportFile < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordModel
   include ImportFile
   default_scope {order('agent_import_files.id DESC')}
-  scope :not_imported, -> {where(:state => 'pending')}
-  scope :stucked, -> {where('created_at < ? AND state = ?', 1.hour.ago, 'pending')}
+  scope :not_imported, -> {in_state(:pending)}
+  scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :agent_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
@@ -22,30 +23,17 @@ class AgentImportFile < ActiveRecord::Base
   belongs_to :user, :validate => true
   has_many :agent_import_results
 
-  state_machine :initial => :pending do
-    event :sm_start do
-      transition [:pending, :started] => :started
-    end
+  has_many :agent_import_file_transitions
 
-    event :sm_complete do
-      transition :started => :completed
-    end
-
-    event :sm_fail do
-      transition :started => :failed
-    end
-
-    before_transition any => :started do |agent_import_file|
-      agent_import_file.executed_at = Time.zone.now
-    end
-
-    before_transition any => :completed do |agent_import_file|
-      agent_import_file.error_message = nil
-    end
+  def state_machine
+    AgentImportFileStateMachine.new(self, transition_class: AgentImportFileTransition)
   end
 
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
+
   def import_start
-    sm_start!
+    transition_to!(:started)
     case edit_mode
     when 'create'
       import
@@ -59,7 +47,7 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def import
-    reload
+  #  reload
     num = {:agent_imported => 0, :user_imported => 0, :failed => 0}
     row_num = 2
     rows = open_import_file
@@ -103,12 +91,12 @@ class AgentImportFile < ActiveRecord::Base
     end
     Sunspot.commit
     rows.close
-    sm_complete!
+    transition_to!(:completed)
     return num
-  rescue => e
-    self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
-    raise e
+  #rescue => e
+  #  self.error_message = "line #{row_num}: #{e.message}"
+  #  transition_to!(:failed)
+  #  raise e
   end
 
   def self.import
@@ -120,7 +108,7 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def modify
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
     row_num = 2
 
@@ -149,15 +137,15 @@ class AgentImportFile < ActiveRecord::Base
       end
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
   def remove
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
     row_num = 2
 
@@ -171,14 +159,18 @@ class AgentImportFile < ActiveRecord::Base
       end
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
   private
+  def self.transition_class
+    AgentImportFileTransition
+  end
+
   def open_import_file
     tempfile = Tempfile.new('agent_import_file')
     if Setting.uploaded_file.storage == :s3
