@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "paperclip-meta", "~> 1.0"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "state_machine"
+  s.add_dependency "statesman"
   s.add_dependency "validates_timeliness"
   s.add_dependency "simple_form", "~> 3.0"
   s.add_dependency "dynamic_form"

@@ -43,6 +43,7 @@ class RealizesController < ApplicationController
       return
     else
       @realize = Realize.new
+      authorize @realize
       @realize.expression = @expression
       @realize.agent = @agent
     end
@@ -99,7 +100,7 @@ class RealizesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.realize'))
+        flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.realize'))
         case
         when @expression
           redirect_to expression_agents_url(@expression)

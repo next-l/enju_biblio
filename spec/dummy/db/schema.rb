@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140110131010) do
+ActiveRecord::Schema.define(version: 20140519171220) do
 
   create_table "accepts", force: true do |t|
     t.integer  "basket_id"
@@ -521,6 +521,18 @@ ActiveRecord::Schema.define(version: 20140110131010) do
   add_index "identifiers", ["body", "identifier_type_id"], name: "index_identifiers_on_body_and_identifier_type_id"
   add_index "identifiers", ["manifestation_id"], name: "index_identifiers_on_manifestation_id"
 
+  create_table "import_request_transitions", force: true do |t|
+    t.string   "to_state"
+    t.text     "metadata",          default: "{}"
+    t.integer  "sort_key"
+    t.integer  "import_request_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "import_request_transitions", ["import_request_id"], name: "index_import_request_transitions_on_import_request_id"
+  add_index "import_request_transitions", ["sort_key", "import_request_id"], name: "index_import_request_transitions_on_sort_key_and_request_id", unique: true
+
   create_table "import_requests", force: true do |t|
     t.string   "isbn"
     t.string   "state"
@@ -985,6 +997,16 @@ ActiveRecord::Schema.define(version: 20140110131010) do
   add_index "reserve_stat_has_users", ["user_id"], name: "index_reserve_stat_has_users_on_user_id"
   add_index "reserve_stat_has_users", ["user_reserve_stat_id"], name: "index_reserve_stat_has_users_on_user_reserve_stat_id"
 
+  create_table "reserve_transitions", force: true do |t|
+    t.string  "to_state"
+    t.text    "metadata",   default: "{}"
+    t.integer "sort_key"
+    t.integer "reserve_id"
+  end
+
+  add_index "reserve_transitions", ["reserve_id"], name: "index_reserve_transitions_on_reserve_id"
+  add_index "reserve_transitions", ["sort_key", "reserve_id"], name: "index_reserve_transitions_on_sort_key_and_reserve_id", unique: true
+
   create_table "reserves", force: true do |t|
     t.integer  "user_id",                                      null: false
     t.integer  "manifestation_id",                             null: false
@@ -1009,6 +1031,18 @@ ActiveRecord::Schema.define(version: 20140110131010) do
   add_index "reserves", ["request_status_type_id"], name: "index_reserves_on_request_status_type_id"
   add_index "reserves", ["state"], name: "index_reserves_on_state"
   add_index "reserves", ["user_id"], name: "index_reserves_on_user_id"
+
+  create_table "resource_import_file_transitions", force: true do |t|
+    t.string   "to_state"
+    t.text     "metadata",                default: "{}"
+    t.integer  "sort_key"
+    t.integer  "resource_import_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resource_import_file_transitions", ["resource_import_file_id"], name: "index_resource_import_file_transitions_on_file_id"
+  add_index "resource_import_file_transitions", ["sort_key", "resource_import_file_id"], name: "index_resource_import_file_transitions_on_sort_key_and_file_id", unique: true
 
   create_table "resource_import_files", force: true do |t|
     t.integer  "parent_id"

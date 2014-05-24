@@ -104,7 +104,7 @@ class ProducesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.produce'))
+        flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.produce'))
         case
         when @agent
           redirect_to agent_manifestations_url(@agent)

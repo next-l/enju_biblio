@@ -51,7 +51,7 @@ class LicensesController < ApplicationController
   # DELETE /licenses/1
   def destroy
     @license.destroy
-    redirect_to licenses_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.license'))
+    redirect_to licenses_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.license'))
   end
 
   private

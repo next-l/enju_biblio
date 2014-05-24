@@ -43,6 +43,7 @@ class CreatesController < ApplicationController
       return
     else
       @create = Create.new
+      authorize @create
       @create.work = @work
       @create.agent = @agent
     end
@@ -98,7 +99,7 @@ class CreatesController < ApplicationController
     @create.destroy
 
     respond_to do |format|
-      flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.create'))
+      flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.create'))
       case
       when @agent
         format.html { redirect_to agent_works_url(@agent) }

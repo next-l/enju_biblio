@@ -5,6 +5,7 @@ class AgentRelationshipsController < ApplicationController
 
   # GET /agent_relationships
   def index
+    authorize AgentRelationship
     @agent_relationships = AgentRelationship.page(params[:page])
   end
 

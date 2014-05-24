@@ -1,4 +1,8 @@
 class AgentImportResultPolicy < AdminPolicy
+  def index?
+    user.try(:has_role?, 'Librarian')
+  end
+
   def create?
     user.try(:has_role?, 'Administrator')
   end

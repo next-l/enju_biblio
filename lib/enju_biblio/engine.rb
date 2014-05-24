@@ -1,7 +1,7 @@
 require 'paper_trail'
 require 'paperclip'
 require 'paperclip-meta'
-require 'state_machine'
+require 'statesman'
 require 'validates_timeliness'
 require 'dynamic_form'
 require 'simple_form'

@@ -27,16 +27,16 @@ describe ImportRequestsController do
     describe "When logged in as User" do
       login_user
 
-      it "assigns empty as @import_requests" do
+      it "assigns nil as @import_requests" do
         get :index
-        assigns(:import_requests).should be_empty
+        assigns(:import_requests).should be_nil
       end
     end
 
     describe "When not logged in" do
-      it "assigns empty as @import_requests" do
+      it "assigns nil as @import_requests" do
         get :index
-        assigns(:import_requests).should be_empty
+        assigns(:import_requests).should be_nil
       end
     end
   end

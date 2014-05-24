@@ -1,4 +1,8 @@
 class AgentRelationshipPolicy < AdminPolicy
+  def index?
+    true
+  end
+
   def create?
     user.try(:has_role?, 'Librarian')
   end

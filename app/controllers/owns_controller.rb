@@ -41,6 +41,7 @@ class OwnsController < ApplicationController
       return
     else
       @own = Own.new
+      authorize @own
       @own.item = @item
       @own.agent = @agent
     end
@@ -94,7 +95,7 @@ class OwnsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.own'))
+        flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.own'))
         case
         when @agent
           redirect_to agent_owns_url(@agent)

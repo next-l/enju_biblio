@@ -482,7 +482,7 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1.json
   def destroy
     @manifestation.destroy
-    redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation'))
+    redirect_to manifestations_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.manifestation'))
   end
 
   private

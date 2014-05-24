@@ -51,7 +51,7 @@ class FormOfWorksController < ApplicationController
   # DELETE /form_of_works/1
   def destroy
     @form_of_work.destroy
-    redirect_to form_of_works_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.form_of_work'))
+    redirect_to form_of_works_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.form_of_work'))
   end
 
   private

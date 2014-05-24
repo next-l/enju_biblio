@@ -51,7 +51,7 @@ class CreateTypesController < ApplicationController
   # DELETE /create_types/1
   def destroy
     @create_type.destroy
-    redirect_to create_types_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.create_type'))
+    redirect_to create_types_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.create_type'))
   end
 
   private

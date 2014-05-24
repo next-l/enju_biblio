@@ -1,7 +1,6 @@
 class CarrierTypesController < ApplicationController
   before_action :set_carrier_type, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /carrier_types
   # GET /carrier_types.json
@@ -27,11 +26,7 @@ class CarrierTypesController < ApplicationController
   # GET /carrier_types/new.json
   def new
     @carrier_type = CarrierType.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @carrier_type }
-    end
+    authorize @carrier_type
   end
 
   # GET /carrier_types/1/edit
@@ -101,9 +96,7 @@ class CarrierTypesController < ApplicationController
 
   def carrier_type_params
     params.require(:carrier_type).permit(
-      :carrier_type => [
-        :name, :display_name, :note, :position
-      ]
+      :name, :display_name, :note, :position
     )
   end
 end

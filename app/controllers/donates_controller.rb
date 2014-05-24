@@ -27,6 +27,7 @@ class DonatesController < ApplicationController
   # GET /donates/new.json
   def new
     @donate = Donate.new
+    authorize @donate
 
     respond_to do |format|
       format.html # new.html.erb

@@ -130,13 +130,6 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
-    #@item = Item.find(params[:id])
-    @item = @item.versions.find(@version).item if @version
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @item }
-    end
   end
 
   # GET /items/new
@@ -165,7 +158,7 @@ class ItemsController < ApplicationController
           'Claimed Returned Or Never Borrowed',
           'Not Available']
       ).order(:position)
-      @item.circulation_status = CirculationStatus.where(:name => 'In Process').first
+      @item.circulation_status = CirculationStatus.where(name: 'In Process').first
       @item.checkout_type = @manifestation.carrier_type.checkout_types.first
       @item.item_has_use_restriction = ItemHasUseRestriction.new
       @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
@@ -204,12 +197,12 @@ class ItemsController < ApplicationController
             end
           end
         end
-        format.html { redirect_to(@item, :notice => t('controller.successfully_created', :model => t('activerecord.models.item'))) }
+        format.html { redirect_to(@item, notice: t('controller.successfully_created', :model => t('activerecord.models.item'))) }
         format.json { render :json => @item, :status => :created, :location => @item }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @item.errors, :status => :unprocessable_entity }
+        format.html { render action: 'new' }
+        format.json { render json: @item.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -219,12 +212,12 @@ class ItemsController < ApplicationController
   def update
     respond_to do |format|
       if @item.update_attributes(item_params)
-        format.html { redirect_to @item, :notice => t('controller.successfully_updated', :model => t('activerecord.models.item')) }
+        format.html { redirect_to @item, notice: t('controller.successfully_updated', :model => t('activerecord.models.item')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @item.errors, :status => :unprocessable_entity }
+        format.html { render action: 'edit' }
+        format.json { render json: @item.errors, :status => :unprocessable_entity }
       end
     end
   end
@@ -233,7 +226,7 @@ class ItemsController < ApplicationController
   def destroy
     @item.destroy
 
-    flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
+    flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     if @item.manifestation
       redirect_to manifestation_items_url(@item.manifestation)
     else
@@ -249,10 +242,12 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.real << Library.web
-    if @item.new_record?
-      @library = Library.real.order(:position).includes(:shelves).first
-    else
-      @library = @item.shelf.library
+    if @item
+      if @item.new_record?
+        @library = Library.real.order(:position).includes(:shelves).first
+      else
+        @library = @item.shelf.library
+      end
     end
     @shelves = @library.shelves
     @bookstores = Bookstore.all

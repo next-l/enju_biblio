@@ -195,7 +195,7 @@ class AgentsController < ApplicationController
     @agent.destroy
 
     respond_to do |format|
-      format.html { redirect_to agents_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.agent')) }
+      format.html { redirect_to agents_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.agent')) }
       format.json { head :no_content }
     end
   end

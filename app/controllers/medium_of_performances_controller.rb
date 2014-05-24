@@ -51,7 +51,7 @@ class MediumOfPerformancesController < ApplicationController
   # DELETE /medium_of_performances/1
   def destroy
     @medium_of_performance.destroy
-    redirect_to medium_of_performances_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.medium_of_performance'))
+    redirect_to medium_of_performances_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.medium_of_performance'))
   end
 
   private

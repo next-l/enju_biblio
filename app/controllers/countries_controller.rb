@@ -51,7 +51,7 @@ class CountriesController < ApplicationController
   # DELETE /countries/1
   def destroy
     @country.destroy
-    redirect_to countries_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.country'))
+    redirect_to countries_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.country'))
   end
 
   private

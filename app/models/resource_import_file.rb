@@ -1,5 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordModel
   include ImportFile
   default_scope {order('resource_import_files.id DESC')}
   scope :not_imported, -> {where(:state => 'pending')}
@@ -22,28 +23,14 @@ class ResourceImportFile < ActiveRecord::Base
   validates_attachment_presence :resource_import
   belongs_to :user, :validate => true
   has_many :resource_import_results
+  has_many :resource_import_file_transitions
 
-  state_machine :initial => :pending do
-    event :sm_start do
-      transition [:pending, :started] => :started
-    end
-
-    event :sm_complete do
-      transition :started => :completed
-    end
-
-    event :sm_fail do
-      transition :started => :failed
-    end
-
-    before_transition any => :started do |resource_import_file|
-      resource_import_file.executed_at = Time.zone.now
-    end
-
-    before_transition any => :completed do |resource_import_file|
-      resource_import_file.error_message = nil
-    end
+  def state_machine
+    ResourceImportFileStateMachine.new(self, transition_class: ResourceImportFileTransition)
   end
+
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   def import_start
     case edit_mode
@@ -61,7 +48,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def import
-    sm_start!
+    transition_to!(:started)
     reload
     num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
     rows = open_import_file
@@ -170,12 +157,12 @@ class ResourceImportFile < ActiveRecord::Base
 
     Sunspot.commit
     rows.close
-    sm_complete!
+    transition_to!(:completed)
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
     return num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
@@ -258,7 +245,7 @@ class ResourceImportFile < ActiveRecord::Base
   #end
 
   def modify
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
     row_num = 2
 
@@ -301,15 +288,15 @@ class ResourceImportFile < ActiveRecord::Base
       end
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
   def remove
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
     row_num = 2
 
@@ -321,15 +308,15 @@ class ResourceImportFile < ActiveRecord::Base
       end
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
   def update_relationship
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
     row_num = 2
 
@@ -357,7 +344,7 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.save!
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   end
 
   private
@@ -643,6 +630,10 @@ class ResourceImportFile < ActiveRecord::Base
       end
     end
     manifestation
+  end
+
+  def self.transition_class
+    ResourceImportFileTransition
   end
 end
 

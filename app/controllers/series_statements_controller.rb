@@ -58,6 +58,7 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements/new.json
   def new
     @series_statement = SeriesStatement.new
+    authorize @series_statement
   end
 
   # GET /series_statements/1/edit
