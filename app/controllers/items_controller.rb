@@ -249,7 +249,7 @@ class ItemsController < ApplicationController
         @library = @item.shelf.library
       end
     else
-      @library = @item.shelf.library
+      @library = Library.real.order(:position).includes(:shelves).first
     end
     @shelves = @library.shelves
     @bookstores = Bookstore.all
