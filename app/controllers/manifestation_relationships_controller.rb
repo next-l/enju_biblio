@@ -15,7 +15,7 @@ class ManifestationRelationshipsController < ApplicationController
 
   # GET /manifestation_relationships/new
   def new
-    @manifestation_relationship = ManifestationRelationship.new(manifestation_relationship_params)
+    @manifestation_relationship = ManifestationRelationship.new
     authorize @manifestation_relationship
     @manifestation_relationship.parent = Manifestation.find(params[:manifestation_id]) rescue nil
     @manifestation_relationship.child = Manifestation.find(params[:child_id]) rescue nil

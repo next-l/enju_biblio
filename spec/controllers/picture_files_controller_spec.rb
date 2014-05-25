@@ -229,7 +229,7 @@ describe PictureFilesController do
       describe "with valid params" do
         it "assigns a newly created picture_file as @picture_file" do
           post :create, :picture_file => @attrs
-          assigns(:picture_file).should be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do
@@ -241,7 +241,7 @@ describe PictureFilesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved picture_file as @picture_file" do
           post :create, :picture_file => @invalid_attrs
-          assigns(:picture_file).should_not be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do
@@ -255,7 +255,7 @@ describe PictureFilesController do
       describe "with valid params" do
         it "assigns a newly created picture_file as @picture_file" do
           post :create, :picture_file => @attrs
-          assigns(:picture_file).should be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do
@@ -267,7 +267,7 @@ describe PictureFilesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved picture_file as @picture_file" do
           post :create, :picture_file => @invalid_attrs
-          assigns(:picture_file).should_not be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do

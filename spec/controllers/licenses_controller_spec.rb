@@ -32,7 +32,7 @@ describe LicensesController do
     it "assigns all licenses as @licenses" do
       license = License.create! valid_attributes
       get :index
-      assigns(:licenses).should eq(License.page(1))
+      assigns(:licenses).should eq(License.order(:position))
     end
   end
 
@@ -83,15 +83,15 @@ describe LicensesController do
       it "assigns a newly created but unsaved license as @license" do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        post :create, :license => {}
+        post :create, :license => {name: ''}
         assigns(:license).should be_a_new(License)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        post :create, :license => {}
-        #response.should render_template("new")
+        post :create, :license => {name: ''}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe LicensesController do
         # specifies that the License created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        License.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => license.id, :license => {'these' => 'params'}
+        License.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => license.id, :license => {'name' => 'test'}
       end
 
       it "assigns the requested license as @license" do
@@ -134,7 +134,7 @@ describe LicensesController do
         license = License.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        put :update, :id => license.id, :license => {}
+        put :update, :id => license.id, :license => {name: ''}
         assigns(:license).should eq(license)
       end
 
@@ -142,8 +142,8 @@ describe LicensesController do
         license = License.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        put :update, :id => license.id, :license => {}
-        #response.should render_template("edit")
+        put :update, :id => license.id, :license => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

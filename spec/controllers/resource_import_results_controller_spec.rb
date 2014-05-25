@@ -26,17 +26,17 @@ describe ResourceImportResultsController do
     describe "When logged in as User" do
       login_user
 
-      it "assigns empty as @resource_import_results" do
+      it "assigns nil as @resource_import_results" do
         get :index
-        assigns(:resource_import_results).should be_empty
+        assigns(:resource_import_results).should be_nil
         response.should be_forbidden
       end
     end
 
     describe "When not logged in" do
-      it "assigns empty as @resource_import_results" do
+      it "assigns nil as @resource_import_results" do
         get :index
-        assigns(:resource_import_results).should be_empty
+        assigns(:resource_import_results).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end

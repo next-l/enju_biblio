@@ -32,7 +32,7 @@ describe ExtentsController do
     it "assigns all extents as @extents" do
       extent = Extent.create! valid_attributes
       get :index
-      assigns(:extents).should eq(Extent.page(1))
+      assigns(:extents).should eq(Extent.order(:position))
     end
   end
 
@@ -83,15 +83,15 @@ describe ExtentsController do
       it "assigns a newly created but unsaved extent as @extent" do
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
-        post :create, :extent => {}
+        post :create, :extent => {name: ''}
         assigns(:extent).should be_a_new(Extent)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
-        post :create, :extent => {}
-        #response.should render_template("new")
+        post :create, :extent => {name: ''}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe ExtentsController do
         # specifies that the Extent created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Extent.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => extent.id, :extent => {'these' => 'params'}
+        Extent.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => extent.id, :extent => {'name' => 'test'}
       end
 
       it "assigns the requested extent as @extent" do
@@ -134,7 +134,7 @@ describe ExtentsController do
         extent = Extent.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
-        put :update, :id => extent.id, :extent => {}
+        put :update, :id => extent.id, :extent => {name: ''}
         assigns(:extent).should eq(extent)
       end
 
@@ -142,8 +142,8 @@ describe ExtentsController do
         extent = Extent.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
-        put :update, :id => extent.id, :extent => {}
-        #response.should render_template("edit")
+        put :update, :id => extent.id, :extent => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

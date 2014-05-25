@@ -15,7 +15,8 @@ class AgentRelationshipsController < ApplicationController
 
   # GET /agent_relationships/new
   def new
-    @agent_relationship = AgentRelationship.new(agent_relationship_params)
+    @agent_relationship = AgentRelationship.new
+    authorize @agent_relationship
     @agent_relationship.parent = Agent.find(params[:agent_id]) rescue nil
     @agent_relationship.child = Agent.find(params[:child_id]) rescue nil
   end

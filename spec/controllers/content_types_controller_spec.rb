@@ -32,7 +32,7 @@ describe ContentTypesController do
     it "assigns all content_types as @content_types" do
       content_type = ContentType.create! valid_attributes
       get :index
-      assigns(:content_types).should eq(ContentType.page(1))
+      assigns(:content_types).should eq(ContentType.order(:position))
     end
   end
 
@@ -83,15 +83,15 @@ describe ContentTypesController do
       it "assigns a newly created but unsaved content_type as @content_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        post :create, :content_type => {}
+        post :create, :content_type => {name: ''}
         assigns(:content_type).should be_a_new(ContentType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        post :create, :content_type => {}
-        #response.should render_template("new")
+        post :create, :content_type => {name: ''}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe ContentTypesController do
         # specifies that the ContentType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        ContentType.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => content_type.id, :content_type => {'these' => 'params'}
+        ContentType.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => content_type.id, :content_type => {'name' => 'test'}
       end
 
       it "assigns the requested content_type as @content_type" do
@@ -134,7 +134,7 @@ describe ContentTypesController do
         content_type = ContentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        put :update, :id => content_type.id, :content_type => {}
+        put :update, :id => content_type.id, :content_type => {name: ''}
         assigns(:content_type).should eq(content_type)
       end
 
@@ -142,8 +142,8 @@ describe ContentTypesController do
         content_type = ContentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        put :update, :id => content_type.id, :content_type => {}
-        #response.should render_template("edit")
+        put :update, :id => content_type.id, :content_type => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

@@ -83,15 +83,15 @@ describe LanguagesController do
       it "assigns a newly created but unsaved language as @language" do
         # Trigger the behavior that occurs when invalid params are submitted
         Language.any_instance.stub(:save).and_return(false)
-        post :create, :language => {}
+        post :create, :language => {name: ''}
         assigns(:language).should be_a_new(Language)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Language.any_instance.stub(:save).and_return(false)
-        post :create, :language => {}
-        #response.should render_template("new")
+        post :create, :language => {name: ''}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe LanguagesController do
         # specifies that the Language created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Language.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => language.id, :language => {'these' => 'params'}
+        Language.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => language.id, :language => {'name' => 'test'}
       end
 
       it "assigns the requested language as @language" do
@@ -134,7 +134,7 @@ describe LanguagesController do
         language = Language.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Language.any_instance.stub(:save).and_return(false)
-        put :update, :id => language.id, :language => {}
+        put :update, :id => language.id, :language => {name: ''}
         assigns(:language).should eq(language)
       end
 
@@ -142,8 +142,8 @@ describe LanguagesController do
         language = Language.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Language.any_instance.stub(:save).and_return(false)
-        put :update, :id => language.id, :language => {}
-        #response.should render_template("edit")
+        put :update, :id => language.id, :language => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

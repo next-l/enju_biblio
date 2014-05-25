@@ -19,7 +19,7 @@ describe AgentRelationshipTypesController do
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
-        assigns(:agent_relationship_types).should eq(AgentRelationshipType.page(1))
+        assigns(:agent_relationship_types).should eq(AgentRelationshipType.order(:position))
       end
     end
 
@@ -28,23 +28,23 @@ describe AgentRelationshipTypesController do
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
-        assigns(:agent_relationship_types).should eq(AgentRelationshipType.page(1))
+        assigns(:agent_relationship_types).should eq(AgentRelationshipType.order(:position))
       end
     end
 
     describe "When logged in as User" do
       login_user
 
-      it "assigns all agent_relationship_types as @agent_relationship_types" do
+      it "assigns nil as @agent_relationship_types" do
         get :index
-        assigns(:agent_relationship_types).should eq(AgentRelationshipType.page(1))
+        assigns(:agent_relationship_types).should be_nil
       end
     end
 
     describe "When not logged in" do
-      it "assigns all agent_relationship_types as @agent_relationship_types" do
+      it "assigns nil as @agent_relationship_types" do
         get :index
-        assigns(:agent_relationship_types).should eq(AgentRelationshipType.page(1))
+        assigns(:agent_relationship_types).should be_nil
       end
     end
   end

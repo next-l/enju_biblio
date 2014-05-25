@@ -32,7 +32,7 @@ describe CountriesController do
     it "assigns all countries as @countries" do
       country = Country.create! valid_attributes
       get :index
-      assigns(:countries).should eq(Country.page(1))
+      assigns(:countries).should eq(Country.order(:position).page(1))
     end
   end
 
@@ -83,15 +83,15 @@ describe CountriesController do
       it "assigns a newly created but unsaved country as @country" do
         # Trigger the behavior that occurs when invalid params are submitted
         Country.any_instance.stub(:save).and_return(false)
-        post :create, :country => {}
+        post :create, :country => {name: 'test'}
         assigns(:country).should be_a_new(Country)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Country.any_instance.stub(:save).and_return(false)
-        post :create, :country => {}
-        #response.should render_template("new")
+        post :create, :country => {name: 'test'}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe CountriesController do
         # specifies that the Country created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Country.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => country.id, :country => {'these' => 'params'}
+        Country.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => country.id, :country => {'name' => 'test'}
       end
 
       it "assigns the requested country as @country" do
@@ -134,7 +134,7 @@ describe CountriesController do
         country = Country.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Country.any_instance.stub(:save).and_return(false)
-        put :update, :id => country.id, :country => {}
+        put :update, :id => country.id, :country => {name: ''}
         assigns(:country).should eq(country)
       end
 
@@ -142,8 +142,8 @@ describe CountriesController do
         country = Country.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Country.any_instance.stub(:save).and_return(false)
-        put :update, :id => country.id, :country => {}
-        #response.should render_template("edit")
+        put :update, :id => country.id, :country => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

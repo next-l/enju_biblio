@@ -801,10 +801,18 @@ class ManifestationsController < ApplicationController
       :valid_until, :date_submitted, :date_accepted, :date_captured,
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
-      :series_statements_attributes, :periodical, :statement_of_responsibility,
+      :periodical, :statement_of_responsibility,
       :creators_attributes, :contributors_attributes, :publishers_attributes,
       :identifiers_attributes, :fulltext_content,
-      :number_of_page_string, :parent_id
+      :number_of_page_string, :parent_id,
+      :series_statements_attributes => [
+        :id, :original_title, :numbering, :title_subseries,
+        :numbering_subseries, :title_transcription, :title_alternative,
+        :series_statement_identifier, :note,
+        :root_manifestation_id, :url, :series_master,
+        :title_subseries_transcription, :creator_string, :volume_number_string,
+        :_destroy
+      ]
     )
   end
 end

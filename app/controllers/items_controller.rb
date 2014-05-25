@@ -135,6 +135,8 @@ class ItemsController < ApplicationController
   # GET /items/new
   # GET /items/new.json
   def new
+    @item = Item.new
+    authorize @item
     if Shelf.real.blank?
       flash[:notice] = t('item.create_shelf_first')
       redirect_to libraries_url
@@ -145,8 +147,6 @@ class ItemsController < ApplicationController
       redirect_to manifestations_url
       return
     end
-    @item = Item.new
-    authorize @item
     @item.shelf = @library.shelves.first
     @item.manifestation = @manifestation
     if defined?(EnjuCirculation)

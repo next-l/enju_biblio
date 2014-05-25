@@ -32,17 +32,17 @@ describe AgentImportResultsController do
         sign_in FactoryGirl.create(:user)
       end
 
-      it "assigns empty as @agent_import_results" do
+      it "assigns nil as @agent_import_results" do
         get :index
-        assigns(:agent_import_results).should be_empty
+        assigns(:agent_import_results).should be_nil
         response.should be_forbidden
       end
     end
 
     describe "When not logged in" do
-      it "assigns empty as @agent_import_results" do
+      it "assigns nil as @agent_import_results" do
         get :index
-        assigns(:agent_import_results).should be_empty
+        assigns(:agent_import_results).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end

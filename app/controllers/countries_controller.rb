@@ -6,7 +6,7 @@ class CountriesController < ApplicationController
   # GET /countries
   def index
     authorize Country
-    @countries = policy_scope(Country).order(:position)
+    @countries = policy_scope(Country).order(:position).page(1)
   end
 
   # GET /countries/1

@@ -233,7 +233,7 @@ describe AgentImportFilesController do
       end
 
       it "should update agent_import_file" do
-        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
+        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => {note: 'test'}
         response.should redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
@@ -244,14 +244,14 @@ describe AgentImportFilesController do
       end
 
       it "should not update agent_import_file" do
-        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
+        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => {note: 'test'}
         response.should be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not update agent_import_file" do
-        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
+        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => {note: 'test'}
         response.should redirect_to new_user_session_url
       end
     end

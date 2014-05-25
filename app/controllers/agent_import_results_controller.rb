@@ -1,7 +1,6 @@
 class AgentImportResultsController < ApplicationController
   before_action :set_agent_import_result, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   def index
     authorize AgentImportResult

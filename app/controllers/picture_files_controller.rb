@@ -56,13 +56,13 @@ class PictureFilesController < ApplicationController
   # GET /picture_files/new
   # GET /picture_files/new.json
   def new
+    #raise unless @event or @manifestation or @shelf or @agent
+    @picture_file = PictureFile.new
+    authorize @picture_file
     unless @attachable
       redirect_to picture_files_url
       return
     end
-    #raise unless @event or @manifestation or @shelf or @agent
-    @picture_file = PictureFile.new
-    authorize @picture_file
     @picture_file.picture_attachable = @attachable
 
     respond_to do |format|

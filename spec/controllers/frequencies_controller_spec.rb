@@ -32,7 +32,7 @@ describe FrequenciesController do
     it "assigns all frequencies as @frequencies" do
       frequency = Frequency.create! valid_attributes
       get :index
-      assigns(:frequencies).should eq(Frequency.page(1))
+      assigns(:frequencies).should eq(Frequency.order(:position))
     end
   end
 
@@ -83,15 +83,15 @@ describe FrequenciesController do
       it "assigns a newly created but unsaved frequency as @frequency" do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        post :create, :frequency => {}
+        post :create, :frequency => {name: 'test'}
         assigns(:frequency).should be_a_new(Frequency)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        post :create, :frequency => {}
-        #response.should render_template("new")
+        post :create, :frequency => {name: 'test'}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe FrequenciesController do
         # specifies that the Frequency created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Frequency.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => frequency.id, :frequency => {'these' => 'params'}
+        Frequency.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => frequency.id, :frequency => {'name' => 'test'}
       end
 
       it "assigns the requested frequency as @frequency" do
@@ -134,7 +134,7 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        put :update, :id => frequency.id, :frequency => {}
+        put :update, :id => frequency.id, :frequency => {name: ''}
         assigns(:frequency).should eq(frequency)
       end
 
@@ -142,8 +142,8 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        put :update, :id => frequency.id, :frequency => {}
-        #response.should render_template("edit")
+        put :update, :id => frequency.id, :frequency => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

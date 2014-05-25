@@ -31,16 +31,16 @@ describe DonatesController do
     describe "When logged in as User" do
       login_user
 
-      it "assigns all donates as @donates" do
+      it "assigns nil donates as @donates" do
         get :index
-        assigns(:donates).should be_empty
+        assigns(:donates).should be_nil
       end
     end
 
     describe "When not logged in" do
-      it "assigns all donates as @donates" do
+      it "assigns nil donates as @donates" do
         get :index
-        assigns(:donates).should be_empty
+        assigns(:donates).should be_nil
       end
     end
   end

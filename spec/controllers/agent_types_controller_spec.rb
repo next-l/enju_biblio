@@ -32,7 +32,7 @@ describe AgentTypesController do
     it "assigns all agent_types as @agent_types" do
       agent_type = AgentType.create! valid_attributes
       get :index
-      assigns(:agent_types).should eq(AgentType.page(1))
+      assigns(:agent_types).should eq(AgentType.order(:position))
     end
   end
 
@@ -83,15 +83,15 @@ describe AgentTypesController do
       it "assigns a newly created but unsaved agent_type as @agent_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        post :create, :agent_type => {}
+        post :create, :agent_type => {name: ''}
         assigns(:agent_type).should be_a_new(AgentType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        post :create, :agent_type => {}
-        #response.should render_template("new")
+        post :create, :agent_type => {name: ''}
+        response.should render_template("new")
       end
     end
   end
@@ -104,8 +104,8 @@ describe AgentTypesController do
         # specifies that the AgentType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        AgentType.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => agent_type.id, :agent_type => {'these' => 'params'}
+        AgentType.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => agent_type.id, :agent_type => {'name' => 'test'}
       end
 
       it "assigns the requested agent_type as @agent_type" do
@@ -134,7 +134,7 @@ describe AgentTypesController do
         agent_type = AgentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        put :update, :id => agent_type.id, :agent_type => {}
+        put :update, :id => agent_type.id, :agent_type => {name: ''}
         assigns(:agent_type).should eq(agent_type)
       end
 
@@ -142,8 +142,8 @@ describe AgentTypesController do
         agent_type = AgentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        put :update, :id => agent_type.id, :agent_type => {}
-        #response.should render_template("edit")
+        put :update, :id => agent_type.id, :agent_type => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

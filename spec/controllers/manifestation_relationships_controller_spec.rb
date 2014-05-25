@@ -37,14 +37,14 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        assigns(:manifestation_relationships).should eq(ManifestationRelationship.page(1))
+        assigns(:manifestation_relationships).should be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        assigns(:manifestation_relationships).should eq(ManifestationRelationship.page(1))
+        assigns(:manifestation_relationships).should be_nil
       end
     end
   end

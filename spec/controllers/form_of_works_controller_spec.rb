@@ -33,7 +33,7 @@ describe FormOfWorksController do
     it "assigns all form_of_works as @form_of_works" do
       form_of_work = FormOfWork.create! valid_attributes
       get :index
-      assigns(:form_of_works).should eq(FormOfWork.page(1))
+      assigns(:form_of_works).should eq(FormOfWork.order(:position))
     end
   end
 
@@ -84,15 +84,15 @@ describe FormOfWorksController do
       it "assigns a newly created but unsaved form_of_work as @form_of_work" do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        post :create, :form_of_work => {}
+        post :create, :form_of_work => {name: ''}
         assigns(:form_of_work).should be_a_new(FormOfWork)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        post :create, :form_of_work => {}
-        #response.should render_template("new")
+        post :create, :form_of_work => {name: ''}
+        response.should render_template("new")
       end
     end
   end
@@ -105,8 +105,8 @@ describe FormOfWorksController do
         # specifies that the FormOfWork created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        FormOfWork.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => form_of_work.id, :form_of_work => {'these' => 'params'}
+        FormOfWork.any_instance.should_receive(:update).with({'name' => 'test'})
+        put :update, :id => form_of_work.id, :form_of_work => {'name' => 'test'}
       end
 
       it "assigns the requested form_of_work as @form_of_work" do
@@ -135,7 +135,7 @@ describe FormOfWorksController do
         form_of_work = FormOfWork.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        put :update, :id => form_of_work.id, :form_of_work => {}
+        put :update, :id => form_of_work.id, :form_of_work => {name: ''}
         assigns(:form_of_work).should eq(form_of_work)
       end
 
@@ -143,8 +143,8 @@ describe FormOfWorksController do
         form_of_work = FormOfWork.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        put :update, :id => form_of_work.id, :form_of_work => {}
-        #response.should render_template("edit")
+        put :update, :id => form_of_work.id, :form_of_work => {name: ''}
+        response.should render_template("edit")
       end
     end
   end

@@ -5,7 +5,8 @@ class CarrierTypesController < ApplicationController
   # GET /carrier_types
   # GET /carrier_types.json
   def index
-    @carrier_types = CarrierType.order(:position).page(params[:page])
+    authorize CarrierType
+    @carrier_types = CarrierType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,10 +17,6 @@ class CarrierTypesController < ApplicationController
   # GET /carrier_types/1
   # GET /carrier_types/1.json
   def show
-    respond_to do |format|
-      format.html # show.html.erb
-      format.json { render :json => @carrier_type }
-    end
   end
 
   # GET /carrier_types/new

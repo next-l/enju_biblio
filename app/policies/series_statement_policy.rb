@@ -3,6 +3,10 @@ class SeriesStatementPolicy < AdminPolicy
     true
   end
 
+  def show?
+    true
+  end
+
   def create?
     user.try(:has_role?, 'Librarian')
   end

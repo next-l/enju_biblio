@@ -33,7 +33,7 @@ describe CarrierTypesController do
     it "assigns all carrier_types as @carrier_types" do
       carrier_type = CarrierType.create! valid_attributes
       get :index
-      assigns(:carrier_types).should eq(CarrierType.order(:position).page(1))
+      assigns(:carrier_types).should eq(CarrierType.order(:position))
     end
   end
 
@@ -84,15 +84,15 @@ describe CarrierTypesController do
       it "assigns a newly created but unsaved carrier_type as @carrier_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        post :create, :carrier_type => {}
+        post :create, :carrier_type => {name: 'test'}
         assigns(:carrier_type).should be_a_new(CarrierType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        post :create, :carrier_type => {}
-        #response.should render_template("new")
+        post :create, :carrier_type => {name: 'test'}
+        response.should render_template("new")
       end
     end
   end
@@ -105,8 +105,8 @@ describe CarrierTypesController do
         # specifies that the CarrierType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        CarrierType.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => carrier_type.id, :carrier_type => {'these' => 'params'}
+        CarrierType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => carrier_type.id, :carrier_type => {'name' => 'test'}
       end
 
       it "assigns the requested carrier_type as @carrier_type" do
@@ -135,7 +135,7 @@ describe CarrierTypesController do
         carrier_type = CarrierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        put :update, :id => carrier_type.id, :carrier_type => {}
+        put :update, :id => carrier_type.id, :carrier_type => {name: ''}
         assigns(:carrier_type).should eq(carrier_type)
       end
 
@@ -143,8 +143,8 @@ describe CarrierTypesController do
         carrier_type = CarrierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        put :update, :id => carrier_type.id, :carrier_type => {}
-        #response.should render_template("edit")
+        put :update, :id => carrier_type.id, :carrier_type => {name: ''}
+        response.should render_template("edit")
       end
     end
   end
