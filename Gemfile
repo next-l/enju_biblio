@@ -16,9 +16,9 @@ gem "enju_event", github: "next-l/enju_event"
 gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer"
 gem "enju_circulation", github: "next-l/enju_circulation"
 gem "enju_ndl", github: "next-l/enju_ndl"
-gem "enju_bookmark", github: "next-l/enju_bookmark", branch: "rails4"
+gem "enju_bookmark", github: "next-l/enju_bookmark"
 gem "enju_message", github: "next-l/enju_message"
-gem "enju_inventory", github: "next-l/enju_inventory", branch: "rails4"
+gem "enju_inventory", github: "next-l/enju_inventory"
 gem "enju_export", github: "next-l/enju_export"
 
 # To use debugger
