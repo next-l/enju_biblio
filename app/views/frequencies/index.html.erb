@@ -23,7 +23,7 @@
       <%- if policy(frequency).update? -%>
         <%= link_to t('page.edit'), edit_frequency_path(frequency) -%>
       <% end %>
-      <%- if policy().destroy?frequency -%>
+      <%- if policy(frequency).destroy? -%>
         <%= link_to t('page.destroy'), frequency, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>

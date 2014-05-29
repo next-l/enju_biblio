@@ -25,7 +25,7 @@
       <%- if policy(agent_type).update? -%>
         <%= link_to t('page.edit'), edit_agent_type_path(agent_type) -%>
       <% end %>
-      <%- if policy(agent).destroy?_type -%>
+      <%- if policy(agent_type).destroy? -%>
         <%= link_to t('page.destroy'), agent_type, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
