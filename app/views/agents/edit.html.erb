@@ -8,7 +8,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.show'), @agent -%></li>
-    <%- if policy().destroy?@agent -%>
+    <%- if policy(@agent).destroy? -%>
       <li><%= link_to t('page.destroy'), @agent, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <%- end -%>
     <li><%= link_to t('page.back'), agents_path -%></li>
