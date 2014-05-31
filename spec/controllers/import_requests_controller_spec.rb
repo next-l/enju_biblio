@@ -176,7 +176,7 @@ describe ImportRequestsController do
 
         it "redirects to the created import_request" do
           post :create, :import_request => @attrs
-          response.should redirect_to manifestation_items_url(assigns(:import_request).manifestation)
+          response.should redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
 
@@ -200,7 +200,7 @@ describe ImportRequestsController do
 
         it "redirects to the created import_request", :vcr => true do
           post :create, :import_request => @attrs
-          response.should redirect_to manifestation_items_url(assigns(:import_request).manifestation)
+          response.should redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
     end
@@ -216,7 +216,7 @@ describe ImportRequestsController do
 
         it "redirects to the created import_request" do
           post :create, :import_request => @attrs
-          response.should redirect_to manifestation_items_url(assigns(:import_request).manifestation)
+          response.should redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
 
