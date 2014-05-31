@@ -47,7 +47,7 @@ class ImportRequestsController < ApplicationController
         @import_request.import!
         format.html {
           if @import_request.manifestation
-            redirect_to manifestation_items_url(@import_request.manifestation), :notice => t('controller.successfully_created', :model => t('activerecord.models.import_request'))
+            redirect_to @import_request.manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.import_request'))
           else
             redirect_to new_import_request_url, :notice => t('import_request.record_not_found')
           end
