@@ -20,7 +20,7 @@
     <td><%= l(agent_import_file.executed_at) if agent_import_file.executed_at -%></td>
     <td><%= link_to agent_import_file.user.username, agent_import_file.user -%></td>
     <td><%= agent_import_file.edit_mode -%></td>
-    <td><%= localized_state(agent_import_file.state) -%></td>
+    <td><%= localized_state(agent_import_file.current_state) -%></td>
     <td>
       <%= link_to t('page.show'), agent_import_file -%>
       <%= link_to t('page.destroy'), agent_import_file, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
