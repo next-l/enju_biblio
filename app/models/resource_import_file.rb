@@ -169,11 +169,11 @@ class ResourceImportFile < ActiveRecord::Base
       row_num += 1
     end
 
-    Sunspot.commit
     rows.close
     sm_complete!
+    Sunspot.commit
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
-    return num
+    num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     sm_fail!
