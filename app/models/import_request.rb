@@ -47,6 +47,7 @@ class ImportRequest < ActiveRecord::Base
     else
       transition_to!(:failed)
     end
+    save
   rescue ActiveRecord::RecordInvalid
     transition_to!(:failed)
   rescue NameError
