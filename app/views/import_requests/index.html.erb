@@ -23,7 +23,7 @@
       <%= import_request.isbn -%><br />
       <%=l import_request.created_at -%>
     </td>
-    <td><%= localized_state(import_request.state) -%></td>
+    <td><%= localized_state(import_request.current_state) -%></td>
     <td><%= link_to import_request.manifestation.original_title, import_request.manifestation if import_request.manifestation -%></td>
     <td>
       <%- if policy(import_request).destroy? -%>
