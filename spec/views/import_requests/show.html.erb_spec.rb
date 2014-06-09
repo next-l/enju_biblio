@@ -15,7 +15,7 @@ describe "import_requests/show" do
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     rendered.should match(/ISBN/)
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    rendered.should match(/状態/)
+    rendered.should match(localized_state('pending'))
     # Run the generator again with the --webrat flag if you want to use webrat matchers
     rendered.should match(/1/)
   end
