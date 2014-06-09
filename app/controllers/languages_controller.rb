@@ -6,7 +6,7 @@ class LanguagesController < ApplicationController
   # GET /languages
   def index
     authorize Language
-    @languages = policy_scope(Language).page(1)
+    @languages = policy_scope(Language).page(params[:page])
   end
 
   # GET /languages/1
