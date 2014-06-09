@@ -231,7 +231,7 @@ class ManifestationsController < ApplicationController
         max_count = @count[:query_result]
       end
       @manifestations = Kaminari.paginate_array(
-        search_result.results, total_count: 11
+        search_result.results, total_count: max_count
       ).page(page).per(per_page)
 
       if params[:format].blank? or params[:format] == 'html'
