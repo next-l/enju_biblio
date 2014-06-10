@@ -8,7 +8,8 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'vcr'
 require 'factory_girl'
-require 'sunspot-rails-tester'
+require 'rake'
+require 'elasticsearch/extensions/test/cluster/tasks'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -38,16 +39,12 @@ RSpec.configure do |config|
 
   config.extend ControllerMacros, :type => :controller
 
-  $original_sunspot_session = Sunspot.session
-
-  config.before do
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
+  config.before :suite do
+    Elasticsearch::Extensions::Test::Cluster.start(port: 9201) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9201)
   end
 
-  config.before :each, :solr => true do
-    Sunspot::Rails::Tester.start_original_sunspot_session
-    Sunspot.session = $original_sunspot_session
-    Sunspot.remove_all!
+  config.after :suite do
+    Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201)
   end
 end
 
