@@ -37,16 +37,16 @@ class ManifestationsController < ApplicationController
         role_ids = [1]
       end
 
-      oldest_pub_date = Manifestation.order(date_of_publication: :asc).where.not(date_of_publication: nil).pluck(:date_of_publication).first
-      latest_pub_date = Manifestation.order(date_of_publication: :desc).pluck(:date_of_publication).first
+      oldest_pub_date = Manifestation.order(date_of_publication: :asc).where.not(date_of_publication: nil).limit(1).pluck(:date_of_publication).first
+      latest_pub_date = Manifestation.order(date_of_publication: :desc).where.not(date_of_publication: nil).limit(1).pluck(:date_of_publication).first
+      pub_ranges = []
       if oldest_pub_date and latest_pub_date
         oldest_pub_year = oldest_pub_date.year / 10 * 10
         latest_pub_year = latest_pub_date.year / 10 * 10 + 10
-      end
-      pub_ranges = []
-      while(oldest_pub_year < latest_pub_year) do
-        pub_ranges << {from: oldest_pub_year, to: oldest_pub_year + 10}
-        oldest_pub_year += 10
+        while(oldest_pub_year < latest_pub_year) do
+          pub_ranges << {from: oldest_pub_year, to: oldest_pub_year + 10}
+          oldest_pub_year += 10
+        end
       end
 
       body = {body: {
