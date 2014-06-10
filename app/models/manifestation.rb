@@ -1,5 +1,99 @@
 # -*- encoding: utf-8 -*-
 class Manifestation < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  settings do
+    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
+      indexes :title, boost: 2
+      indexes :fulltext
+      indexes :note
+      indexes :creator
+      indexes :contributor
+      indexes :publisher
+      indexes :description
+      indexes :statement_of_responsibility
+      indexes :item_identifier
+      indexes :isbn
+      indexes :issn
+      indexes :lccn
+      indexes :jpno
+      indexes :carrier_type
+      indexes :library
+      indexes :language
+      indexes :created_at, type: 'date'
+      indexes :updated_at, type: 'date'
+      indexes :deleted_at, type: 'date'
+      indexes :date_of_publication, type: 'date'
+      indexes :pub_date, type: 'date'
+      indexes :pub_year, type: 'integer'
+      indexes :height, type: 'integer'
+      indexes :width, type: 'integer'
+      indexes :depth, type: 'integer'
+      indexes :volume_number, type: 'integer'
+      indexes :issue_number, type: 'integer'
+      indexes :serial_number, type: 'integer'
+      indexes :start_page, type: 'integer'
+      indexes :end_page, type: 'integer'
+      indexes :number_of_pages, type: 'integer'
+      indexes :price, type: 'integer'
+      indexes :repository_content, type: 'boolean'
+      indexes :doi
+      indexes :periodical, type: 'boolean'
+      indexes :series_master, type: 'boolean'
+      indexes :acquired_at
+      #indexes :creators, type: 'nested' do
+      #  indexes :full_name
+      #end
+    end
+  end
+
+  def as_indexed_json(options={})
+    as_json(
+      #include: {
+      #  creators: {only: :full_name},
+      #}
+    ).merge(
+      title: titles,
+      item_identifier:
+        if series_master?
+          root_series_statement.root_manifestation.items.pluck(:item_identifier)
+        else
+          items.pluck(:item_identifier)
+        end,
+      creator: creator,
+      contributor: contributor,
+      publisher: publisher,
+      isbn:
+        identifier_contents(:isbn).map{|i|
+          [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
+        }.flatten,
+      issn:
+        if series_statements.exists?
+          [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+        else
+          identifier_contents(:issn)
+        end,
+      lccn: identifier_contents(:lccn),
+      jpno: identifier_contents(:jpno),
+      carrier_type: carrier_type.name,
+      library: items.map{|i| i.shelf.library.name},
+      language: language.try(:name),
+      shelf: items.collect{|i| "#{i.shelf.library.name}_#{i.shelf.name}"},
+      pub_date: 
+        if series_master?
+          root_series_statement.root_manifestation.pub_dates
+        else
+          pub_dates
+        end,
+      pub_year: date_of_publication.try(:year),
+      doi: identifier_contents(:doi),
+      periodical: periodical?,
+      series_master: series_master?,
+      acquired_at: acquired_at
+    )
+  end
+
   enju_circulation_manifestation_model if defined?(EnjuCirculation)
   enju_subject_manifestation_model if defined?(EnjuSubject)
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)
@@ -41,19 +135,6 @@ class Manifestation < ActiveRecord::Base
   accepts_nested_attributes_for :identifiers, :allow_destroy => true, :reject_if => :all_blank
 
   searchable do
-    text :title, :default_boost => 2 do
-      titles
-    end
-    text :fulltext, :note, :creator, :contributor, :publisher, :description,
-      :statement_of_responsibility
-    text :item_identifier do
-      if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier)
-      else
-        items.pluck(:item_identifier)
-      end
-    end
-    string :title, :multiple => true
     # text フィールドだと区切りのない文字列の index が上手く作成
     #できなかったので。 downcase することにした。
     #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
@@ -66,61 +147,6 @@ class Manifestation < ActiveRecord::Base
     string :connect_publisher do
       publisher.join('').gsub(/\s/, '').downcase
     end
-    string :isbn, :multiple => true do
-      identifier_contents(:isbn).map{|i|
-        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
-      }.flatten
-    end
-    string :issn, :multiple => true do
-      if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
-      else
-        identifier_contents(:issn)
-      end
-    end
-    string :lccn, :multiple => true do
-      identifier_contents(:lccn)
-    end
-    string :jpno, :multiple => true do
-      identifier_contents(:jpno)
-    end
-    string :carrier_type do
-      carrier_type.name
-    end
-    string :library, :multiple => true do
-      if series_master?
-        root_series_statement.root_manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
-      else
-        items.map{|i| i.shelf.library.name}
-      end
-    end
-    string :language do
-      language.try(:name)
-    end
-    string :item_identifier, :multiple => true do
-      if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier)
-      else
-        items.collect(&:item_identifier)
-      end
-    end
-    string :shelf, :multiple => true do
-      items.collect{|i| "#{i.shelf.library.name}_#{i.shelf.name}"}
-    end
-    time :created_at
-    time :updated_at
-    time :deleted_at
-    time :pub_date, :multiple => true do
-      if series_master?
-        root_series_statement.root_manifestation.pub_dates
-      else
-        pub_dates
-      end
-    end
-    time :date_of_publication
-    integer :pub_year do
-      date_of_publication.try(:year)
-    end
     integer :creator_ids, :multiple => true
     integer :contributor_ids, :multiple => true
     integer :publisher_ids, :multiple => true
@@ -130,28 +156,13 @@ class Manifestation < ActiveRecord::Base
       original_manifestations.pluck(:id)
     end
     integer :required_role_id
-    integer :height
-    integer :width
-    integer :depth
-    integer :volume_number
-    integer :issue_number
-    integer :serial_number
-    integer :start_page
-    integer :end_page
-    integer :number_of_pages
-    float :price
     integer :series_statement_ids, :multiple => true
-    boolean :repository_content
     # for OpenURL
     text :aulast do
       creators.pluck(:last_name)
     end
     text :aufirst do
       creators.pluck(:first_name)
-    end
-    # OTC start
-    string :creator, :multiple => true do
-      creator.map{|au| au.gsub(' ', '')}
     end
     text :au do
       creator
@@ -173,26 +184,7 @@ class Manifestation < ActiveRecord::Base
         end
       end
     end
-    text :isbn do  # 前方一致検索のためtext指定を追加
-      identifier_contents(:isbn).map{|i|
-        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
-      }.flatten
-    end
-    text :issn do # 前方一致検索のためtext指定を追加
-      if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
-      else
-        identifier_contents(:issn)
-      end
-    end
     string :sort_title
-    string :doi
-    boolean :periodical do
-      periodical?
-    end
-    boolean :series_master do
-      series_master?
-    end
     boolean :resource_master do
       if periodical?
         if series_master?
@@ -204,7 +196,6 @@ class Manifestation < ActiveRecord::Base
         true
       end
     end
-    time :acquired_at
   end
 
   if Setting.uploaded_file.storage == :s3
