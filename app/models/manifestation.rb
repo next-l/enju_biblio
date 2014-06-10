@@ -262,7 +262,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.cached_numdocs
-    Rails.cache.fetch("manifestation_search_total"){Manifestation.search.total}
+    Rails.cache.fetch("manifestation_search_total"){Manifestation.search('*').total_count}
   end
 
   def clear_cached_numdocs
@@ -321,12 +321,15 @@ class Manifestation < ActiveRecord::Base
     return nil if self.cached_numdocs < 5
     manifestation = nil
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
-    response = Manifestation.search(:include => [:creates, :realizes, :produces, :items]) do
-      fulltext keyword if keyword
-      order_by(:random)
-      paginate :page => 1, :per_page => 1
-    end
-    manifestation = response.results.first
+    response = Manifestation.search(
+      query: {
+        function_score: {
+          query: {match_all: {}},
+          random_score: {}
+        }
+      }
+    )
+    manifestation = response.records.first
   end
 
   def extract_text

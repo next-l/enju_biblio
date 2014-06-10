@@ -26,7 +26,7 @@ class ManifestationsController < ApplicationController
       agent = get_index_agent
       @index_agent = agent
       @count = {}
-      if params[:query].strip == ''
+      if params[:query].to_s.strip == ''
         query = '*'
       else
         query = params[:query]
@@ -49,7 +49,31 @@ class ManifestationsController < ApplicationController
         end
       end
 
-      body = {body: {
+      query = {
+        query: {
+          filtered: {
+            query: {
+              query_string: {
+                query: query, fields: ['_all']
+              }
+            },
+            filter: {
+              term: {
+                carrier_type: 'dvd'
+              }
+            }
+          }
+        },
+        #filter: {
+        #  and: [
+        #    term: {
+        #      carrier_type: 'dvd'
+        #    }
+        #  ]
+        #}
+      }
+
+      body = {
         facets: {
           carrier_type: {
             terms: {
@@ -72,26 +96,25 @@ class ManifestationsController < ApplicationController
               ranges: pub_ranges
             }
           }
-        },
-        filter: {}
-      },
-      routing: role_ids}
+        }
+#        filter: {and: [{}]},
+      }
       if params[:carrier_type]
         carrier_type = CarrierType.where(name: params[:carrier_type]).first
-        body[:body][:filter].merge!(term: {carrier_type: carrier_type.name}) if carrier_type
+        body[:filter][:and] << {term: {carrier_type: carrier_type.name}} if carrier_type
       end
       if params[:library]
         library = Library.where(name: params[:library]).first
-        body[:body][:filter].merge!(term: {library: library.name}) if library
+        body[:filter][:and] << {term: {library: library.name}} if library
       end
       if params[:language]
         language = Language.where(name: params[:language]).first
-        body[:body][:filter].merge!(term: {language: language.name}) if language
+        body[:filter][:and] << {term: {language: language.name}} if language
       end
       if params[:pub_date_from] and params[:pub_date_to]
-        body[:body][:filter].merge!(range: {pub_year: {gte: params[:pub_date_from].to_i, lt: params[:pub_date_to].to_i + 1}})
+        body[:filter][:and] << {range: {pub_year: {gte: params[:pub_date_from].to_i, lt: params[:pub_date_to].to_i + 1}}}
       end
-      search = Manifestation.search(query, body)
+      search = Manifestation.search(query.merge(body), routing: role_ids)
       @manifestations = search.page(params[:page]).records
       @manifestation_ids = search.results.map(&:id).join(',')
       @count[:total] = search.results.total
