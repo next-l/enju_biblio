@@ -27,9 +27,9 @@ class ManifestationsController < ApplicationController
       @index_agent = agent
       @count = {}
       if params[:query].to_s.strip == ''
-        query = '*'
+        user_query = '*'
       else
-        query = params[:query]
+        user_query = params[:query]
       end
       if user_signed_in?
         role_ids = Role.where('id <= ?', current_user.role.id).pluck(:id)
@@ -54,14 +54,14 @@ class ManifestationsController < ApplicationController
           filtered: {
             query: {
               query_string: {
-                query: query, fields: ['_all']
+                query: user_query, fields: ['_all']
               }
             },
-            filter: {
-              term: {
-                carrier_type: 'dvd'
-              }
-            }
+            #filter: {
+            #  term: {
+            #    carrier_type: 'dvd'
+            #  }
+            #}
           }
         },
         #filter: {
