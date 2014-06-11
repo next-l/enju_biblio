@@ -1,18 +1,44 @@
 class SeriesStatement < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
   belongs_to :manifestation, touch: true
   belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation'
   validates_presence_of :original_title
   before_save :create_root_series_statement
 
   acts_as_list
-  searchable do
-    text :title do
-      titles
+
+  index_name "#{name.downcase.pluralize}-#{Rails.env}"
+
+  after_commit on: :create do
+    index_document
+  end
+
+  after_commit on: :update do
+    update_document
+  end
+
+  after_commit on: :destroy do
+    delete_document
+  end
+
+  settings do
+    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
+      indexes :title
+      indexes :numbering
+      indexes :title_subseries
+      indexes :numbering_subseries
+      indexes :manifestation_id, type: 'integer'
+      indexes :position, type: 'integer'
+      indexes :series_statement_merge_list_ids, type: 'integer' if defined?(EnjuResourceMerge)
     end
-    text :numbering, :title_subseries, :numbering_subseries
-    integer :manifestation_id
-    integer :position
-    integer :series_statement_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
+  end
+
+  def as_indexed_json(options={})
+    as_json.merge(
+      title: titles
+    )
   end
 
   attr_accessor :selected

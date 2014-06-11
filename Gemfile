@@ -11,7 +11,7 @@ gemspec
 # your gem to rubygems.org.
 gem "enju_seed", github: "next-l/enju_seed", branch: "elasticsearch"
 gem "enju_leaf", github: "next-l/enju_leaf", branch: "elasticsearch"
-gem "enju_library", github: "next-l/enju_library"
+gem "enju_library", github: "next-l/enju_library", branch: "elasticsearch"
 gem "enju_subject", github: "next-l/enju_subject"
 gem "enju_event", github: "next-l/enju_event"
 gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer"

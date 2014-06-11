@@ -3,6 +3,20 @@ class Manifestation < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  index_name "#{name.downcase.pluralize}-#{Rails.env}"
+
+  after_commit on: :create do
+    index_document
+  end
+
+  after_commit on: :update do
+    update_document
+  end
+
+  after_commit on: :destroy do
+    delete_document
+  end
+
   settings do
     mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
       indexes :title, boost: 2
@@ -134,69 +148,69 @@ class Manifestation < ActiveRecord::Base
   accepts_nested_attributes_for :series_statements, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :identifiers, :allow_destroy => true, :reject_if => :all_blank
 
-  searchable do
+  #searchable do
     # text フィールドだと区切りのない文字列の index が上手く作成
     #できなかったので。 downcase することにした。
     #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
-    string :connect_title do
-      title.join('').gsub(/\s/, '').downcase
-    end
-    string :connect_creator do
-      creator.join('').gsub(/\s/, '').downcase
-    end
-    string :connect_publisher do
-      publisher.join('').gsub(/\s/, '').downcase
-    end
-    integer :creator_ids, :multiple => true
-    integer :contributor_ids, :multiple => true
-    integer :publisher_ids, :multiple => true
-    integer :item_ids, :multiple => true
-    integer :original_manifestation_ids, :multiple => true
-    integer :parent_ids, :multiple => true do
-      original_manifestations.pluck(:id)
-    end
-    integer :required_role_id
-    integer :series_statement_ids, :multiple => true
-    # for OpenURL
-    text :aulast do
-      creators.pluck(:last_name)
-    end
-    text :aufirst do
-      creators.pluck(:first_name)
-    end
-    text :au do
-      creator
-    end
-    text :atitle do
-      if periodical? and root_series_statement.nil?
-        titles
-      end
-    end
-    text :btitle do
-      title unless periodical?
-    end
-    text :jtitle do
-      if periodical?
-        if root_series_statement
-          root_series_statement.titles
-        else
-          titles
-        end
-      end
-    end
-    string :sort_title
-    boolean :resource_master do
-      if periodical?
-        if series_master?
-          true
-        else
-          false
-        end
-      else
-        true
-      end
-    end
-  end
+  #  string :connect_title do
+  #    title.join('').gsub(/\s/, '').downcase
+  #  end
+  #  string :connect_creator do
+  #    creator.join('').gsub(/\s/, '').downcase
+  #  end
+  #  string :connect_publisher do
+  #    publisher.join('').gsub(/\s/, '').downcase
+  #  end
+  #  integer :creator_ids, :multiple => true
+  #  integer :contributor_ids, :multiple => true
+  #  integer :publisher_ids, :multiple => true
+  #  integer :item_ids, :multiple => true
+  #  integer :original_manifestation_ids, :multiple => true
+  #  integer :parent_ids, :multiple => true do
+  #    original_manifestations.pluck(:id)
+  #  end
+  #  integer :required_role_id
+  #  integer :series_statement_ids, :multiple => true
+  #  # for OpenURL
+  #  text :aulast do
+  #    creators.pluck(:last_name)
+  #  end
+  #  text :aufirst do
+  #    creators.pluck(:first_name)
+  #  end
+  #  text :au do
+  #    creator
+  #  end
+  #  text :atitle do
+  #    if periodical? and root_series_statement.nil?
+  #      titles
+  #    end
+  #  end
+  #  text :btitle do
+  #    title unless periodical?
+  #  end
+  #  text :jtitle do
+  #    if periodical?
+  #      if root_series_statement
+  #        root_series_statement.titles
+  #      else
+  #        titles
+  #      end
+  #    end
+  #  end
+  #  string :sort_title
+  #  boolean :resource_master do
+  #    if periodical?
+  #      if series_master?
+  #        true
+  #      else
+  #        false
+  #      end
+  #    else
+  #      true
+  #    end
+  #  end
+  #end
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :attachment, :storage => :s3,
