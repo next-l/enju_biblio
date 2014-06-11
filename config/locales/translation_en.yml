@@ -295,7 +295,7 @@ en:
         name: Name
         display_name: Display name
         note: Note
-      identitifer_type:
+      identifier_type:
         name: Name
         display_name: Display name
         note: Note
