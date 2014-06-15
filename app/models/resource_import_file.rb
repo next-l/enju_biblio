@@ -573,6 +573,7 @@ class ResourceImportFile < ActiveRecord::Base
         :description => row['description'],
         #:description_transcription => row['description_transcription'],
         :note => row['note'],
+        :statement_of_responsibility => row['statement_of_responsibility'],
         :start_page => start_page,
         :end_page => end_page,
         :access_address => row['access_address'],

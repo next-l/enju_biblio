@@ -47,6 +47,8 @@ describe ResourceImportFile do
         item_10101.manifestation.classifications.first.classification_type.name.should eq 'ndc'
         item_10101.manifestation.classifications.first.category.should eq '007'
         item_10101.manifestation.language.name.should eq 'Japanese'
+        item_10101.manifestation.statement_of_responsibility.should eq '著者A; 著者B'
+
         item_10102 = Item.where(:item_identifier => '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10102.manifestation.language.name.should eq 'Japanese'
