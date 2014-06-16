@@ -221,7 +221,7 @@ class ManifestationsController < ApplicationController
           facet :language
           facet :pub_year, :range => pub_date_range[:from]..pub_date_range[:to], :range_interval => pub_year_range_interval
           facet :subject_ids if defined?(EnjuSubject)
-          paginate :page => 1, :per_page => Setting.max_number_of_results
+          paginate :paginate :page => page.to_i, :per_page => per_page
         end
       end
       search_result = search.execute
@@ -232,7 +232,7 @@ class ManifestationsController < ApplicationController
       end
       @manifestations = Kaminari.paginate_array(
         search_result.results, total_count: max_count
-      ).page(page).per(per_page)
+      ).page(page)
 
       if params[:format].blank? or params[:format] == 'html'
         @carrier_type_facet = search_result.facet(:carrier_type).rows
