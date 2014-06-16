@@ -221,7 +221,7 @@ class ManifestationsController < ApplicationController
           facet :language
           facet :pub_year, :range => pub_date_range[:from]..pub_date_range[:to], :range_interval => pub_year_range_interval
           facet :subject_ids if defined?(EnjuSubject)
-          paginate :paginate :page => page.to_i, :per_page => per_page
+          paginate :page => page.to_i, :per_page => per_page
         end
       end
       search_result = search.execute
