@@ -481,6 +481,69 @@ class Manifestation < ActiveRecord::Base
       []
     end
   end
+
+  def self.export(options = {format: :tsv})
+    header = %w(
+      manifestation_id
+      original_title
+      creator
+      publisher
+      pub_date
+      price
+      isbn
+      item_identifier
+      call_number
+      item_price
+      acquired_at
+      bookstore
+      budget_type
+      circulation_status
+      shelf
+      library
+    ).join("\t")
+    items = Manifestation.all.map{|m|
+      if m.items.exists?
+        lines = []
+        m.items.each do |i|
+          item_lines = []
+          item_lines << m.id
+          item_lines << m.original_title
+          item_lines << m.creators.pluck(:full_name).join(";")
+          item_lines << m.publishers.pluck(:full_name).join(";")
+          item_lines << m.pub_date
+          item_lines << m.price
+          item_lines << m.identifier_contents(:isbn).first
+          item_lines << i.item_identifier
+          item_lines << i.call_number
+          item_lines << i.price
+          item_lines << i.acquired_at
+          item_lines << i.bookstore.try(:name)
+          item_lines << i.budget_type.try(:name)
+          item_lines << i.circulation_status.try(:name)
+          item_lines << i.shelf.name
+          item_lines << i.shelf.library.name
+          #raise item_lines.to_s if i.item_identifier == '10202'
+        lines << item_lines
+        end
+        lines
+      else
+        lines = []
+        lines << m.id
+        lines << m.original_title
+        lines << m.creators.pluck(:full_name).join(";")
+        lines << m.publishers.pluck(:full_name).join(";")
+        lines << m.pub_date
+        lines << m.price
+        lines << m.identifier_contents(:isbn).first
+        [lines]
+      end
+    }
+    if options[:format] == :tsv
+      items.map{|m| m.map{|i| i.join("\t")}}.flatten.unshift(header).join("\r\n")
+    else
+      items
+    end
+  end
 end
 
 # == Schema Information

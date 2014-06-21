@@ -1,0 +1,28 @@
+<%= form_for(@resource_export_file) do |f| %>
+  <% if @resource_export_file.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@resource_export_file.errors.count, "error") %> prohibited this resource_export_file from being saved:</h2>
+
+      <ul>
+      <% @resource_export_file.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= f.hidden_field :user_id %>
+  <!--
+  <div class="field">
+    <%= f.label :user_id %><br>
+    <%= @resource_export_file.user.username %>
+  </div>
+  <div class="field">
+    <%= f.label :resource_export %><br>
+    <%= f.text_field :resource_export %>
+  </div>
+  -->
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

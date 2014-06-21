@@ -1,0 +1,40 @@
+<div id="content_detail" class="ui-corner-all ui-widget-content">
+<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.resource_export_file')) -%></h1>
+<div id="content_list">
+
+<table>
+  <thead>
+    <tr>
+      <th>Id</th>
+      <th><%= t('activerecord.models.user') %></th>
+      <th>Resource export</th>
+      <th>State</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @resource_export_files.each do |resource_export_file| %>
+      <tr>
+        <td><%= resource_export_file.id %></td>
+        <td><%= resource_export_file.user.try(:username) %></td>
+        <td>
+          <%= link_to resource_export_file.resource_export_file_name, resource_export_file.resource_export.url if resource_export_file.resource_export.path %>
+          <br />
+          <%= resource_export_file.created_at %>
+        </td>
+        <td></td>
+        <td><%= link_to 'Destroy', resource_export_file, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= paginate(@resource_export_files) %>
+
+</div>
+</div>
+
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <%= link_to 'New Resource export file', new_resource_export_file_path %>
+</div>
