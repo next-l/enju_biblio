@@ -42,6 +42,7 @@ module EnjuBiblio
           Realize,
           RealizeType,
           ResourceImportFile,
+          ResourceExportFile,
           SeriesStatement
         ]
         can :manage, [
@@ -97,6 +98,7 @@ module EnjuBiblio
           Produce,
           Realize,
           ResourceImportFile,
+          ResourceExportFile,
           SeriesStatement
         ]
         can :read, [
