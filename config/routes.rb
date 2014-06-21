@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :resource_export_files
+
   resources :identifier_types
 
   resources :manifestations do
