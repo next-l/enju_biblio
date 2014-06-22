@@ -25,6 +25,7 @@ class Item < ActiveRecord::Base
   belongs_to :budget_type
   #accepts_nested_attributes_for :exemplify
   #before_save :create_manifestation
+  after_save :expire_manifestation_cache, if: Proc.new{|record| record.manifestation.present?}
 
   validates_associated :bookstore
   validates :manifestation_id, :presence => true, :on => :create
@@ -91,6 +92,10 @@ class Item < ActiveRecord::Base
     if manifestation_id
       self.manifestation = Manifestation.find(manifestation_id)
     end
+  end
+
+  def expire_manifestation_cache
+    ExpireFragmentCache.expire_fragment_cache(manifestation)
   end
 end
 
