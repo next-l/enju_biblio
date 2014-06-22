@@ -1,6 +1,7 @@
 class ImportRequest < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordModel
   attr_accessible :isbn, :manifestation_id, :user_id
-  default_scope :order => 'id DESC'
+  default_scope {order('import_requests.id DESC')}
   belongs_to :manifestation
   belongs_to :user
   validates_presence_of :isbn
@@ -10,15 +11,14 @@ class ImportRequest < ActiveRecord::Base
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_nii_cinii_books if defined?(EnjuNii)
 
-  state_machine :initial => :pending do
-    event :sm_fail do
-      transition :pending => :failed
-    end
+  has_many :import_request_transitions
 
-    event :sm_complete do
-      transition :pending => :completed
-    end
+  def state_machine
+    @state_machine ||= ImportRequestStateMachine.new(self, transition_class: ImportRequestTransition)
   end
+
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   def check_isbn
     if isbn.present?
@@ -40,22 +40,28 @@ class ImportRequest < ActiveRecord::Base
       manifestation = Manifestation.import_isbn(isbn)
       if manifestation
         self.manifestation = manifestation
-        sm_complete!
+        transition_to!(:completed)
         manifestation.index!
       else
-        sm_fail!
+        transition_to!(:failed)
       end
     else
-      sm_fail!
+      transition_to!(:failed)
     end
+    save
   rescue ActiveRecord::RecordInvalid
-    sm_fail!
+    transition_to!(:failed)
   rescue NameError
-    sm_fail!
+    transition_to!(:failed)
   rescue EnjuNdl::RecordNotFound
-    sm_fail!
+    transition_to!(:failed)
   #rescue EnjuNii::RecordNotFound
-  #  sm_fail!
+  #  transition_to!(:failed)
+  end
+
+  private
+  def self.transition_class
+    ImportRequestTransition
   end
 end
 

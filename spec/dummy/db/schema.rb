@@ -11,7 +11,19 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130509185724) do
+ActiveRecord::Schema.define(:version => 20140614141500) do
+
+  create_table "agent_import_file_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",             :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "agent_import_file_id"
+    t.datetime "created_at",                             :null => false
+    t.datetime "updated_at",                             :null => false
+  end
+
+  add_index "agent_import_file_transitions", ["agent_import_file_id"], :name => "index_agent_import_file_transitions_on_agent_import_file_id"
+  add_index "agent_import_file_transitions", ["sort_key", "agent_import_file_id"], :name => "index_agent_import_file_transitions_on_sort_key_and_file_id", :unique => true
 
   create_table "agent_import_files", :force => true do |t|
     t.integer  "parent_id"
@@ -525,6 +537,18 @@ ActiveRecord::Schema.define(:version => 20130509185724) do
   add_index "identifiers", ["body", "identifier_type_id"], :name => "index_identifiers_on_body_and_identifier_type_id"
   add_index "identifiers", ["manifestation_id"], :name => "index_identifiers_on_manifestation_id"
 
+  create_table "import_request_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",          :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "import_request_id"
+    t.datetime "created_at",                          :null => false
+    t.datetime "updated_at",                          :null => false
+  end
+
+  add_index "import_request_transitions", ["import_request_id"], :name => "index_import_request_transitions_on_import_request_id"
+  add_index "import_request_transitions", ["sort_key", "import_request_id"], :name => "index_import_request_transitions_on_sort_key_and_request_id", :unique => true
+
   create_table "import_requests", :force => true do |t|
     t.string   "isbn"
     t.string   "state"
@@ -675,9 +699,9 @@ ActiveRecord::Schema.define(:version => 20130509185724) do
     t.integer  "position"
     t.datetime "created_at",                                                        :null => false
     t.datetime "updated_at",                                                        :null => false
+    t.text     "admin_networks"
     t.boolean  "allow_bookmark_external_url", :default => false,                    :null => false
     t.string   "url",                         :default => "http://localhost:3000/"
-    t.text     "admin_networks"
   end
 
   add_index "library_groups", ["short_name"], :name => "index_library_groups_on_short_name"
@@ -1007,6 +1031,41 @@ ActiveRecord::Schema.define(:version => 20130509185724) do
   add_index "reserves", ["request_status_type_id"], :name => "index_reserves_on_request_status_type_id"
   add_index "reserves", ["state"], :name => "index_reserves_on_state"
   add_index "reserves", ["user_id"], :name => "index_reserves_on_user_id"
+
+  create_table "resource_export_file_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",                :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "resource_export_file_id"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "resource_export_file_transitions", ["resource_export_file_id"], :name => "index_resource_export_file_transitions_on_file_id"
+  add_index "resource_export_file_transitions", ["sort_key", "resource_export_file_id"], :name => "index_resource_export_file_transitions_on_sort_key_and_file_id", :unique => true
+
+  create_table "resource_export_files", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "resource_export_file_name"
+    t.string   "resource_export_content_type"
+    t.integer  "resource_export_file_size"
+    t.datetime "resource_export_updated_at"
+    t.datetime "executed_at"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+  end
+
+  create_table "resource_import_file_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",                :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "resource_import_file_id"
+    t.datetime "created_at",                                :null => false
+    t.datetime "updated_at",                                :null => false
+  end
+
+  add_index "resource_import_file_transitions", ["resource_import_file_id"], :name => "index_resource_import_file_transitions_on_file_id"
+  add_index "resource_import_file_transitions", ["sort_key", "resource_import_file_id"], :name => "index_resource_import_file_transitions_on_sort_key_and_file_id", :unique => true
 
   create_table "resource_import_files", :force => true do |t|
     t.integer  "parent_id"
