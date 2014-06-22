@@ -62,15 +62,10 @@ class ImportRequestsController < ApplicationController
   # PUT /import_requests/1
   # PUT /import_requests/1.json
   def update
-    respond_to do |format|
-      if @import_request.update_attributes(import_request_params)
-        @import_request.import!
-        format.html { redirect_to @import_request, :notice => t('controller.successfully_updated', :model => t('activerecord.models.import_request')) }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @import_request.errors, :status => :unprocessable_entity }
-      end
+    if @import_request.update(import_request_params)
+      redirect_to @import_request, notice: t('controller.successfully_updated', :model => t('activerecord.models.import_request'))
+    else
+      render :edit
     end
   end
 
@@ -78,11 +73,7 @@ class ImportRequestsController < ApplicationController
   # DELETE /import_requests/1.json
   def destroy
     @import_request.destroy
-
-    respond_to do |format|
-      format.html { redirect_to import_requests_url }
-      format.json { head :no_content }
-    end
+    redirect_to import_requests_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.import_request'))
   end
 
   private

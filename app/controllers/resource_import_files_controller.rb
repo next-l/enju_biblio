@@ -69,14 +69,10 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1
   # PUT /resource_import_files/1.json
   def update
-    respond_to do |format|
-      if @resource_import_file.update_attributes(resource_import_file_params)
-        format.html { redirect_to @resource_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file')) }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @resource_import_file.errors, :status => :unprocessable_entity }
-      end
+    if @resource_import_file.update(resource_import_file_params)
+      redirect_to @resource_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file'))
+    else
+      render :edit
     end
   end
 
@@ -84,11 +80,7 @@ class ResourceImportFilesController < ApplicationController
   # DELETE /resource_import_files/1.json
   def destroy
     @resource_import_file.destroy
-
-    respond_to do |format|
-      format.html { redirect_to resource_import_files_url }
-      format.json { head :no_content }
-    end
+    redirect_to resource_import_files_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.resource_import_file'))
   end
 
   private

@@ -51,7 +51,7 @@ class ManifestationRelationshipTypesController < ApplicationController
   # DELETE /manifestation_relationship_types/1
   def destroy
     @manifestation_relationship_type.destroy
-    redirect_to manifestation_relationship_types_url, notice: 'ManifestationRelationship type was successfully destroyed.'
+    redirect_to manifestation_relationship_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.manifestation_relationship_type'))
   end
 
   private
