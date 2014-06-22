@@ -51,7 +51,7 @@ class AgentTypesController < ApplicationController
   # DELETE /agent_types/1
   def destroy
     @agent_type.destroy
-    redirect_to agent_types_url, notice: 'Agent type was successfully destroyed.'
+    redirect_to agent_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.agent_type'))
   end
 
   private

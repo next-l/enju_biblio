@@ -193,11 +193,7 @@ class AgentsController < ApplicationController
   # DELETE /agents/1.json
   def destroy
     @agent.destroy
-
-    respond_to do |format|
-      format.html { redirect_to agents_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.agent')) }
-      format.json { head :no_content }
-    end
+    redirect_to agents_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.agent'))
   end
 
   private

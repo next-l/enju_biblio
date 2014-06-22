@@ -36,7 +36,7 @@ class ResourceExportFilesController < ApplicationController
   # PATCH/PUT /resource_export_files/1
   def update
     if @resource_export_file.update(resource_export_file_params)
-      redirect_to @resource_export_file, notice: 'Resource export file was successfully updated.'
+      redirect_to @resource_export_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_export_file'))
     else
       render :edit
     end
@@ -45,7 +45,7 @@ class ResourceExportFilesController < ApplicationController
   # DELETE /resource_export_files/1
   def destroy
     @resource_export_file.destroy
-    redirect_to resource_export_files_url, notice: 'Resource export file was successfully destroyed.'
+    redirect_to resource_export_files_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.resource_export_file'))
   end
 
   private

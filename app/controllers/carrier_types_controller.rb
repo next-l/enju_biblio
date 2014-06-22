@@ -57,15 +57,10 @@ class CarrierTypesController < ApplicationController
       return
     end
 
-    respond_to do |format|
-      if @carrier_type.update_attributes(carrier_type_params)
-        format.html { redirect_to @carrier_type, :notice => t('controller.successfully_updated', :model => t('activerecord.models.carrier_type')) }
-        format.json { head :no_content }
-      else
-        prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @carrier_type.errors, :status => :unprocessable_entity }
-      end
+    if @carrier_type.update(carrier_type_params)
+      redirect_to @carrier_type, notice: t('controller.successfully_updated', :model => t('activerecord.models.carrier_type'))
+    else
+      render :edit
     end
   end
 
@@ -73,11 +68,7 @@ class CarrierTypesController < ApplicationController
   # DELETE /carrier_types/1.json
   def destroy
     @carrier_type.destroy
-
-    respond_to do |format|
-      format.html { redirect_to carrier_types_url }
-      format.json { head :no_content }
-    end
+    redirect_to carrier_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.carrier_type'))
   end
 
   private

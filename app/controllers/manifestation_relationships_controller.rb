@@ -53,7 +53,7 @@ class ManifestationRelationshipsController < ApplicationController
   # DELETE /manifestation_relationships/1
   def destroy
     @manifestation_relationship.destroy
-    redirect_to manifestation_relationships_url, notice: 'Manifestation relationship was successfully destroyed.'
+    redirect_to manifestation_relationships_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.manifestation_relationship'))
   end
 
   private

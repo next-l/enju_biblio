@@ -124,6 +124,7 @@ class PictureFilesController < ApplicationController
   # DELETE /picture_files/1.json
   def destroy
     @picture_file.destroy
+    flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.picture_file'))
 
     respond_to do |format|
       if @shelf

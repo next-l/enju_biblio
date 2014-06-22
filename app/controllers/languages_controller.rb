@@ -51,7 +51,7 @@ class LanguagesController < ApplicationController
   # DELETE /languages/1
   def destroy
     @language.destroy
-    redirect_to languages_url, notice: 'Request type was successfully destroyed.'
+    redirect_to languages_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.language'))
   end
 
   private

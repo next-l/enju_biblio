@@ -51,7 +51,7 @@ class IdentifierTypesController < ApplicationController
   # DELETE /identifier_types/1
   def destroy
     @identifier_type.destroy
-    redirect_to identifier_types_url, notice: 'Identifier type was successfully destroyed.'
+    redirect_to identifier_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.identifier_type'))
   end
 
   private
