@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
-  s.add_dependency "enju_seed", "~> 0.1.1.pre9"
+  s.add_dependency "enju_seed", "~> 0.1.1.pre10"
   s.add_dependency "paperclip", "~> 3.5"
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
@@ -38,7 +38,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "vcr"
   s.add_development_dependency "sunspot_solr", "~> 2.1"
-  s.add_development_dependency "enju_leaf", "~> 1.1.0.rc9"
+  s.add_development_dependency "enju_leaf", "~> 1.1.0.rc10"
   s.add_development_dependency "enju_subject", "~> 0.1.0.pre23"
   s.add_development_dependency "enju_inventory", "~> 0.1.11.pre8"
   s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre12"
