@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
-  s.add_dependency "enju_seed", "~> 0.2.0.pre5"
+  s.add_dependency "enju_seed", "~> 0.2.0.pre6"
   s.add_dependency "paperclip", "~> 4.1"
   s.add_dependency "paperclip-meta", "~> 1.0"
   s.add_dependency "aws-sdk"
@@ -30,6 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"
   s.add_dependency "paper_trail", "~> 3.0"
+  s.add_dependency "dragonfly", "~> 1.0"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "rspec-rails", "2.99"
