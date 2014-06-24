@@ -316,3 +316,6 @@ en:
     add: Add
     remove: Remove
     add_series_statement: Add another series statement
+
+  export:
+    export_completed: Export completed.
