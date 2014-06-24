@@ -15,7 +15,7 @@ class ResourceExportFile < ActiveRecord::Base
         sender: User.find(1),
         recipient: user.username,
         subject: 'export completed',
-        body: 'エクスポートが完了しました'
+        body: t('export.export_completed')
       )
     end
   end
