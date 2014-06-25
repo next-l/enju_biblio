@@ -27,7 +27,7 @@ class ResourceExportFilesController < ApplicationController
 
     if @resource_export_file.save
       Resque.enqueue(ExportFile, @resource_export_file.id)
-      redirect_to @resource_export_file, notice: 'エクスポートのタスクが設定されました。エクスポートが完了しましたらメッセージでお知らせします。現在の状態は「エクスポートの一覧」でも確認できます。'
+      redirect_to @resource_export_file, notice: t('export.resource_export_task_created')
     else
       render :new
     end

@@ -319,3 +319,4 @@ en:
 
   export:
     export_completed: Export completed.
+    export_task_created: Export task created.
