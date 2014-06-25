@@ -40,11 +40,11 @@ RSpec.configure do |config|
   config.extend ControllerMacros, :type => :controller
 
   config.before :suite do
-    Elasticsearch::Extensions::Test::Cluster.start(port: 9201) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9201)
+    Elasticsearch::Extensions::Test::Cluster.start(port: 9200) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
   end
 
   config.after :suite do
-    Elasticsearch::Extensions::Test::Cluster.stop(port: 9201) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9201)
+    Elasticsearch::Extensions::Test::Cluster.stop(port: 9200) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
   end
 end
 
