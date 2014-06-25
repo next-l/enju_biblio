@@ -21,292 +21,112 @@ class ManifestationsController < ApplicationController
   # GET /manifestations.json
   def index
     authorize Manifestation
-    mode = params[:mode]
-    if mode == 'add'
-      unless current_user.try(:has_role?, 'Librarian')
-        access_denied; return
-      end
-    end
 
     @seconds = Benchmark.realtime do
-      if defined?(EnjuOai)
-        @oai = check_oai_params(params)
-        next if @oai[:need_not_to_search]
-        if params[:format] == 'oai'
-          oai_search = true
-          from_and_until_times = set_from_and_until(Manifestation, params[:from], params[:until])
-          from_time = @from_time = from_and_until_times[:from]
-          until_time = @until_time = from_and_until_times[:until]
-          # OAI-PMHのデフォルトの件数
-          per_page = 200
-          if params[:resumptionToken]
-            current_token = get_resumption_token(params[:resumptionToken])
-            if current_token
-              page = (current_token[:cursor].to_i + per_page).div(per_page) + 1
-            else
-              @oai[:errors] << 'badResumptionToken'
-            end
-          end
-          page ||= 1
-
-          if params[:verb] == 'GetRecord' and params[:identifier]
-            begin
-              @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
-            rescue ActiveRecord::RecordNotFound
-              @oai[:errors] << "idDoesNotExist"
-              render :formats => :oai, :layout => false
-              return
-            end
-            render :template => 'manifestations/show', :formats => :oai, :layout => false
-            return
-          end
-        end
-      end
-
-      set_reservable if defined?(EnjuCirculation)
-
-      manifestations, sort, @count = {}, {}, {}
-      query = ""
-
-      if params[:format] == 'csv'
-        per_page = 65534
-      end
-
-      if params[:format] == 'sru'
-        if params[:operation] == 'searchRetrieve'
-          sru = Sru.new(params)
-          query = sru.cql.to_sunspot
-          sort = sru.sort_by
-        else
-          render :template => 'manifestations/explain', :layout => false
-          return
-        end
-      else
-        if params[:api] == 'openurl'
-          openurl = Openurl.new(params)
-          @manifestations = openurl.search
-          query = openurl.query_text
-          sort = set_search_result_order(params[:sort_by], params[:order])
-        else
-          query = make_query(params[:query], params)
-          sort = set_search_result_order(params[:sort_by], params[:order])
-        end
-      end
-
-      # 絞り込みを行わない状態のクエリ
-      @query = query.dup
-      query = query.gsub('　', ' ')
-
-      includes = [:carrier_type, :series_statements]
-      includes << :bookmarks if defined?(EnjuBookmark)
-      search = Manifestation.search(:include => includes)
-      role = current_user.try(:role) || Role.default_role
-      case @reservable
-      when 'true'
-        reservable = true
-      when 'false'
-        reservable = false
-      else
-        reservable = nil
-      end
-
       agent = get_index_agent
       @index_agent = agent
-      manifestation = @manifestation if @manifestation
-      series_statement = @series_statement if @series_statement
-      parent = @parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
-
-      if defined?(EnjuSubject)
-        subject = @subject if @subject
-      end
-
-      unless mode == 'add'
-        search.build do
-          with(:creator_ids).equal_to agent[:creator].id if agent[:creator]
-          with(:contributor_ids).equal_to agent[:contributor].id if agent[:contributor]
-          with(:publisher_ids).equal_to agent[:publisher].id if agent[:publisher]
-          with(:series_statement_ids).equal_to series_statement.id if series_statement
-          with(:parent_ids).equal_to parent.id if parent
-        end
-      end
-
-      search.build do
-        fulltext query unless query.blank?
-        order_by sort[:sort_by], sort[:order] unless oai_search
-        order_by :updated_at, :desc if oai_search
-        if defined?(EnjuSubject)
-          with(:subject_ids).equal_to subject.id if subject
-        end
-        unless parent
-          if params[:periodical].to_s.downcase == "true"
-            with(:series_master).equal_to true unless parent
-            with(:periodical).equal_to true
-            #if series_statement.periodical?
-            #  if mode != 'add'
-            #    order_by :volume_number, sort[:order]
-            #    order_by :issue_number, sort[:order]
-            #    order_by :serial_number, sort[:order]
-            #  end
-            #else
-            #  with(:periodical).equal_to false
-            #end
-          else
-            if mode != 'add'
-              with(:resource_master).equal_to true
-            end
-          end
-        end
-        order_by sort[:sort_by], sort[:order] unless oai_search
-        facet :reservable if defined?(EnjuCirculation)
-      end
-      search = make_internal_query(search)
-      add_data_accessor(search)
-      all_result = search.execute
-      @count[:query_result] = all_result.total
-      @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
-
-      if session[:search_params]
-        unless search.query.to_params == session[:search_params]
-          clear_search_sessions
-        end
+      @count = {}
+      if params[:query].to_s.strip == ''
+        user_query = '*'
       else
-        clear_search_sessions
-        session[:params] = params
-        session[:search_params] == search.query.to_params
-        session[:query] = @query
+        user_query = params[:query]
       end
-
-      if params[:format] == 'html' or params[:format].nil?
-        @search_query = Digest::SHA1.hexdigest(Marshal.dump(search.query.to_params).force_encoding('UTF-8'))
-        if flash[:search_query] == @search_query
-          flash.keep(:search_query)
-        else
-          if @series_statement
-            flash.keep(:search_query)
-          else
-            flash[:search_query] = @search_query
-            @manifestation_ids = search.build do
-              paginate :page => 1, :per_page => Setting.max_number_of_results
-            end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
-          end
-        end
-
-        if defined?(EnjuBookmark)
-          if params[:view] == 'tag_cloud'
-            unless @manifestation_ids
-              @manifestation_ids = search.build do
-                paginate :page => 1, :per_page => Setting.max_number_of_results
-              end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
-            end
-            #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).pluck(:id)
-            bookmark_ids = Bookmark.where(:manifestation_id => @manifestation_ids).limit(1000).pluck(:id)
-            @tags = Tag.bookmarked(bookmark_ids)
-            render :partial => 'manifestations/tag_cloud'
-            return
-          end
-        end
-      end
-
-      page ||= params[:page] || 1
-      per_page ||= Manifestation.default_per_page
-      if params[:format] == 'sru'
-        search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
+      if user_signed_in?
+        role_ids = Role.where('id <= ?', current_user.role.id).pluck(:id)
       else
-        pub_date_range, pub_year_range_interval = set_pub_date_query
-
-        search.build do
-          facet :reservable if defined?(EnjuCirculation)
-          facet :carrier_type
-          facet :library
-          facet :language
-          facet :pub_year, :range => pub_date_range[:from]..pub_date_range[:to], :range_interval => pub_year_range_interval
-          facet :subject_ids if defined?(EnjuSubject)
-          paginate :page => page.to_i, :per_page => per_page
-        end
-      end
-      search_result = search.execute
-      if @count[:query_result] > Setting.max_number_of_results
-        max_count = Setting.max_number_of_results
-      else
-        max_count = @count[:query_result]
-      end
-      @manifestations = Kaminari.paginate_array(
-        search_result.results, total_count: max_count
-      ).page(page)
-
-      if params[:format].blank? or params[:format] == 'html'
-        @carrier_type_facet = search_result.facet(:carrier_type).rows
-        @language_facet = search_result.facet(:language).rows
-        @library_facet = search_result.facet(:library).rows
-        @pub_year_facet = search_result.facet(:pub_year).rows.reverse
+        role_ids = [1]
       end
 
-      @search_engines = Rails.cache.fetch('search_engine_all'){SearchEngine.all}
-
-      if defined?(EnjuBookmark)
-        # TODO: 検索結果が少ない場合にも表示させる
-        if @manifestation_ids.blank?
-          if query.respond_to?(:suggest_tags)
-            @suggested_tag = query.suggest_tags.first
-          end
+      oldest_pub_date = Manifestation.order(date_of_publication: :asc).where.not(date_of_publication: nil).limit(1).pluck(:date_of_publication).first
+      latest_pub_date = Manifestation.order(date_of_publication: :desc).where.not(date_of_publication: nil).limit(1).pluck(:date_of_publication).first
+      pub_ranges = []
+      if oldest_pub_date and latest_pub_date
+        oldest_pub_year = oldest_pub_date.year / 10 * 10
+        latest_pub_year = latest_pub_date.year / 10 * 10 + 10
+        while(oldest_pub_year < latest_pub_year) do
+          pub_ranges << {from: oldest_pub_year, to: oldest_pub_year + 10}
+          oldest_pub_year += 10
         end
       end
 
-      if defined?(EnjuSearchLog)
-        if current_user.try(:save_search_history)
-          current_user.save_history(query, @manifestations.offset_value + 1, @count[:query_result], params[:format])
-        end
-      end
-
-      if defined?(EnjuOai)
-        if params[:format] == 'oai'
-          if @manifestations.empty?
-            @oai[:errors] << 'noRecordsMatch'
-          else
-            @resumption = set_resumption_token(
-              params[:resumptionToken],
-              @from_time || Manifestation.last.updated_at,
-              @until_time || Manifestation.first.updated_at,
-              @manifestations.limit_value
-            )
-          end
-        end
-      end
-    end
-
-    store_location # before_action ではファセット検索のURLを記憶してしまう
-
-    respond_to do |format|
-      format.html {|html|
-        html
-        html.phone
+      query = {
+        query: {
+          filtered: {
+            query: {
+              query_string: {
+                query: user_query, fields: ['_all']
+              }
+            },
+            #filter: {
+            #  term: {
+            #    carrier_type: 'dvd'
+            #  }
+            #}
+          }
+        },
+        #filter: {
+        #  and: [
+        #    term: {
+        #      carrier_type: 'dvd'
+        #    }
+        #  ]
+        #}
       }
-      format.xml  { render :xml => @manifestations }
-      format.sru  { render :layout => false }
-      format.rss  { render :layout => false }
-      format.csv  { render :layout => false }
-      format.rdf  { render :layout => false }
-      format.atom
-      format.mods
-      format.json { render :json => @manifestations }
-      format.js
-      if defined?(EnjuOai)
-        format.oai {
-          case params[:verb]
-          when 'Identify'
-            render :template => 'manifestations/identify'
-          when 'ListMetadataFormats'
-            render :template => 'manifestations/list_metadata_formats'
-          when 'ListSets'
-            @series_statements = SeriesStatement.select([:id, :original_title])
-            render :template => 'manifestations/list_sets'
-          when 'ListIdentifiers'
-            render :template => 'manifestations/list_identifiers'
-          when 'ListRecords'
-            render :template => 'manifestations/list_records'
-          end
+
+      body = {
+        facets: {
+          carrier_type: {
+            terms: {
+              field: :carrier_type
+            }
+          },
+          library: {
+            terms: {
+              field: :library
+            }
+          },
+          language: {
+            terms: {
+              field: :language
+            }
+          },
+          pub_year: {
+            range: {
+              field: :pub_year,
+              ranges: pub_ranges
+            }
+          }
         }
+#        filter: {and: [{}]},
+      }
+      if params[:carrier_type]
+        carrier_type = CarrierType.where(name: params[:carrier_type]).first
+        body[:filter][:and] << {term: {carrier_type: carrier_type.name}} if carrier_type
       end
+      if params[:library]
+        library = Library.where(name: params[:library]).first
+        body[:filter][:and] << {term: {library: library.name}} if library
+      end
+      if params[:language]
+        language = Language.where(name: params[:language]).first
+        body[:filter][:and] << {term: {language: language.name}} if language
+      end
+      if params[:pub_date_from] and params[:pub_date_to]
+        body[:filter][:and] << {range: {pub_year: {gte: params[:pub_date_from].to_i, lt: params[:pub_date_to].to_i + 1}}}
+      end
+      search = Manifestation.search(query.merge(body), routing: role_ids)
+      @manifestations = search.page(params[:page]).records
+      @manifestation_ids = search.results.map(&:id).join(',')
+      @count[:total] = search.results.total
+      @count[:query_result] = search.results.total
+      @query = params[:query]
+      flash[:search_query] = Digest::SHA1.hexdigest(Marshal.dump(params[:query]))
+      @search_query = flash[:search_query]
+      @carrier_type_facet = search.response["facets"]["carrier_type"]["terms"]
+      @library_facet = search.response["facets"]["library"]["terms"]
+      @language_facet = search.response["facets"]["language"]["terms"]
+      @pub_year_facet = search.response["facets"]["pub_year"]["ranges"]
+      @search_engines = SearchEngine.all
     end
   end
 

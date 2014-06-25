@@ -1,5 +1,7 @@
 # -*- encoding: utf-8 -*-
 class Agent < ActiveRecord::Base
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
   enju_export if defined?(EnjuExport)
 
   scope :readable_by, lambda{|user| where('required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(:name => 'Guest').select(:id).first.id)}
@@ -42,26 +44,29 @@ class Agent < ActiveRecord::Base
   before_update :touch
   before_destroy :touch, :reload
 
-  searchable do
-    text :name, :place, :address_1, :address_2, :other_designation, :note
-    string :zip_code_1
-    string :zip_code_2
-    #string :username do
-    #  user.username if user
-    #end
-    time :created_at
-    time :updated_at
-    time :date_of_birth
-    time :date_of_death
-    #string :user
-    integer :work_ids, :multiple => true
-    integer :expression_ids, :multiple => true
-    integer :manifestation_ids, :multiple => true
-    integer :agent_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
-    integer :original_agent_ids, :multiple => true
-    integer :required_role_id
-    integer :agent_type_id
+  settings do
+    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
+      indexes :name
+      indexes :place
+      indexes :address_1
+      indexes :address_2
+      indexes :other_designation
+      indexes :note
+      indexes :zip_code_1
+      indexes :zip_code_2
+      indexes :created_at
+      indexes :updated_at
+      indexes :date_of_birth
+      indexes :date_of_death
+    end
   end
+    #integer :work_ids, :multiple => true
+    #integer :expression_ids, :multiple => true
+    #integer :manifestation_ids, :multiple => true
+    #integer :agent_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
+    #integer :original_agent_ids, :multiple => true
+    #integer :required_role_id
+    #integer :agent_type_id
 
   paginates_per 10
 
