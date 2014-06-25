@@ -44,6 +44,8 @@ class Agent < ActiveRecord::Base
   before_update :touch
   before_destroy :touch, :reload
 
+  index_name "#{name.downcase.pluralize}-#{Rails.env}"
+
   settings do
     mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
       indexes :name
