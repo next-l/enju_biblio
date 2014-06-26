@@ -4,7 +4,8 @@ require 'spec_helper'
 describe Manifestation, :solr => true do
   fixtures :all
   before do
-    Manifestation.reindex
+    Manifestation.__elasticsearch__.create_index!
+    Manifestation.import
   end
 
   it "should set year_of_publication" do
@@ -237,8 +238,8 @@ end
 #  manifestation_identifier        :string(255)
 #  date_of_publication             :datetime
 #  date_copyrighted                :datetime
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
+#  created_at                      :datetime
+#  updated_at                      :datetime
 #  deleted_at                      :datetime
 #  access_address                  :string(255)
 #  language_id                     :integer          default(1), not null
@@ -259,7 +260,6 @@ end
 #  repository_content              :boolean          default(FALSE), not null
 #  lock_version                    :integer          default(0), not null
 #  required_role_id                :integer          default(1), not null
-#  state                           :string(255)
 #  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
@@ -289,4 +289,3 @@ end
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #
-

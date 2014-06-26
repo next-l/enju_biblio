@@ -26,8 +26,7 @@ end
 #  agent_id         :integer          not null
 #  manifestation_id :integer          not null
 #  position         :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #  produce_type_id  :integer
 #
-

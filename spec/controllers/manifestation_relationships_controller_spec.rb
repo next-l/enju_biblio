@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe ManifestationRelationshipsController do
   fixtures :all
-  disconnect_sunspot
 
   def valid_attributes
     @attrs = FactoryGirl.attributes_for(:manifestation_relationship)

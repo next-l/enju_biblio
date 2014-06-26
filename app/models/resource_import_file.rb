@@ -144,18 +144,12 @@ class ResourceImportFile < ActiveRecord::Base
         num[:failed] += 1
       end
 
-      ExpireFragmentCache.expire_fragment_cache(manifestation)
       import_result.save!
       num[:item_imported] +=1 if import_result.item
 
-      if row_num % 50 == 0
-        Sunspot.commit
-        GC.start
-      end
       row_num += 1
     end
 
-    Sunspot.commit
     rows.close
     transition_to!(:completed)
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
@@ -649,15 +643,13 @@ end
 #  user_id                      :integer
 #  note                         :text
 #  executed_at                  :datetime
-#  state                        :string(255)
 #  resource_import_file_name    :string(255)
 #  resource_import_content_type :string(255)
 #  resource_import_file_size    :integer
 #  resource_import_updated_at   :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #  edit_mode                    :string(255)
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
 #
-

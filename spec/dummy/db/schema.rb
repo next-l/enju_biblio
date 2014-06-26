@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140529014410) do
+ActiveRecord::Schema.define(version: 20140614141500) do
 
   create_table "accepts", force: true do |t|
     t.integer  "basket_id"
@@ -43,7 +43,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "agent_import_file_name"
     t.string   "agent_import_content_type"
     t.integer  "agent_import_file_size"
@@ -56,7 +55,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
   end
 
   add_index "agent_import_files", ["parent_id"], name: "index_agent_import_files_on_parent_id"
-  add_index "agent_import_files", ["state"], name: "index_agent_import_files_on_state"
   add_index "agent_import_files", ["user_id"], name: "index_agent_import_files_on_user_id"
 
   create_table "agent_import_results", force: true do |t|
@@ -139,7 +137,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.text     "note"
     t.integer  "required_role_id",                    default: 1, null: false
     t.integer  "required_score",                      default: 0, null: false
-    t.string   "state"
     t.text     "email"
     t.text     "url"
     t.text     "full_name_alternative_transcription"
@@ -182,12 +179,9 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "started_at"
     t.datetime "completed_at"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "bookmark_stats", ["state"], name: "index_bookmark_stats_on_state"
 
   create_table "bookmarks", force: true do |t|
     t.integer  "user_id",          null: false
@@ -432,7 +426,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "event_import_file_name"
     t.string   "event_import_content_type"
     t.integer  "event_import_file_size"
@@ -445,7 +438,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
   end
 
   add_index "event_import_files", ["parent_id"], name: "index_event_import_files_on_parent_id"
-  add_index "event_import_files", ["state"], name: "index_event_import_files_on_state"
   add_index "event_import_files", ["user_id"], name: "index_event_import_files_on_user_id"
 
   create_table "event_import_results", force: true do |t|
@@ -547,7 +539,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
 
   create_table "import_requests", force: true do |t|
     t.string   "isbn"
-    t.string   "state"
     t.integer  "manifestation_id"
     t.integer  "user_id"
     t.datetime "created_at"
@@ -622,7 +613,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.integer  "price"
     t.integer  "lock_version",          default: 0,     null: false
     t.integer  "required_role_id",      default: 1,     null: false
-    t.string   "state"
     t.integer  "required_score",        default: 0,     null: false
     t.datetime "acquired_at"
     t.integer  "bookstore_id"
@@ -732,14 +722,11 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "manifestation_checkout_stats", ["state"], name: "index_manifestation_checkout_stats_on_state"
 
   create_table "manifestation_relationship_types", force: true do |t|
     t.string   "name",         null: false
@@ -766,14 +753,11 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "manifestation_reserve_stats", ["state"], name: "index_manifestation_reserve_stats_on_state"
 
   create_table "manifestations", force: true do |t|
     t.text     "original_title",                                  null: false
@@ -805,7 +789,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.boolean  "repository_content",              default: false, null: false
     t.integer  "lock_version",                    default: 0,     null: false
     t.integer  "required_role_id",                default: 1,     null: false
-    t.string   "state"
     t.integer  "required_score",                  default: 0,     null: false
     t.integer  "frequency_id",                    default: 1,     null: false
     t.boolean  "subscription_master",             default: false, null: false
@@ -858,12 +841,9 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "sent_at"
     t.datetime "deleted_at"
     t.text     "body"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "message_requests", ["state"], name: "index_message_requests_on_state"
 
   create_table "message_templates", force: true do |t|
     t.string   "status",                    null: false
@@ -884,7 +864,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.string   "subject",            null: false
     t.text     "body"
     t.integer  "message_request_id"
-    t.string   "state"
     t.integer  "parent_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -1042,7 +1021,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "canceled_at"
     t.datetime "expired_at"
     t.datetime "deleted_at"
-    t.string   "state"
     t.boolean  "expiration_notice_to_patron",  default: false
     t.boolean  "expiration_notice_to_library", default: false
     t.datetime "retained_at"
@@ -1053,8 +1031,30 @@ ActiveRecord::Schema.define(version: 20140529014410) do
   add_index "reserves", ["item_id"], name: "index_reserves_on_item_id"
   add_index "reserves", ["manifestation_id"], name: "index_reserves_on_manifestation_id"
   add_index "reserves", ["request_status_type_id"], name: "index_reserves_on_request_status_type_id"
-  add_index "reserves", ["state"], name: "index_reserves_on_state"
   add_index "reserves", ["user_id"], name: "index_reserves_on_user_id"
+
+  create_table "resource_export_file_transitions", force: true do |t|
+    t.string   "to_state"
+    t.text     "metadata",                default: "{}"
+    t.integer  "sort_key"
+    t.integer  "resource_export_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "resource_export_file_transitions", ["resource_export_file_id"], name: "index_resource_export_file_transitions_on_file_id"
+  add_index "resource_export_file_transitions", ["sort_key", "resource_export_file_id"], name: "index_resource_export_file_transitions_on_sort_key_and_file_id", unique: true
+
+  create_table "resource_export_files", force: true do |t|
+    t.integer  "user_id"
+    t.string   "resource_export_file_name"
+    t.string   "resource_export_content_type"
+    t.integer  "resource_export_file_size"
+    t.datetime "resource_export_updated_at"
+    t.datetime "executed_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "resource_import_file_transitions", force: true do |t|
     t.string   "to_state"
@@ -1075,7 +1075,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "resource_import_file_name"
     t.string   "resource_import_content_type"
     t.integer  "resource_import_file_size"
@@ -1088,7 +1087,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
   end
 
   add_index "resource_import_files", ["parent_id"], name: "index_resource_import_files_on_parent_id"
-  add_index "resource_import_files", ["state"], name: "index_resource_import_files_on_state"
   add_index "resource_import_files", ["user_id"], name: "index_resource_import_files_on_user_id"
 
   create_table "resource_import_results", force: true do |t|
@@ -1270,14 +1268,11 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "user_checkout_stats", ["state"], name: "index_user_checkout_stats_on_state"
 
   create_table "user_group_has_checkout_types", force: true do |t|
     t.integer  "user_group_id",                                   null: false
@@ -1328,7 +1323,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "user_import_file_name"
     t.string   "user_import_content_type"
     t.string   "user_import_file_size"
@@ -1352,14 +1346,11 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "user_reserve_stats", ["state"], name: "index_user_reserve_stats_on_state"
 
   create_table "users", force: true do |t|
     t.string   "email",                    default: "",    null: false
@@ -1379,7 +1370,6 @@ ActiveRecord::Schema.define(version: 20140529014410) do
     t.boolean  "share_bookmarks"
     t.string   "username"
     t.string   "user_number"
-    t.string   "state"
     t.string   "locale"
     t.datetime "deleted_at"
     t.datetime "expired_at"

@@ -75,8 +75,8 @@ end
 #  title_subseries                    :text
 #  numbering_subseries                :text
 #  position                           :integer
-#  created_at                         :datetime         not null
-#  updated_at                         :datetime         not null
+#  created_at                         :datetime
+#  updated_at                         :datetime
 #  title_transcription                :text
 #  title_alternative                  :text
 #  series_statement_identifier        :string(255)
@@ -89,4 +89,3 @@ end
 #  series_master                      :boolean
 #  root_manifestation_id              :integer
 #
-

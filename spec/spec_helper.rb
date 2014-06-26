@@ -5,7 +5,6 @@ SimpleCov.start 'rails'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../spec/dummy/config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'vcr'
 require 'factory_girl'
 require 'rake'
@@ -39,12 +38,14 @@ RSpec.configure do |config|
 
   config.extend ControllerMacros, :type => :controller
 
-  config.before :suite do
-    Elasticsearch::Extensions::Test::Cluster.start(port: 9200) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
-  end
+  unless ENV['TRAVIS']
+    config.before :suite do
+      Elasticsearch::Extensions::Test::Cluster.start(port: 9200) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
+    end
 
-  config.after :suite do
-    Elasticsearch::Extensions::Test::Cluster.stop(port: 9200) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
+    config.after :suite do
+      Elasticsearch::Extensions::Test::Cluster.stop(port: 9200) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
+    end
   end
 end
 
