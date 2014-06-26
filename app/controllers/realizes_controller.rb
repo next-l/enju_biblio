@@ -3,7 +3,6 @@ class RealizesController < ApplicationController
   after_action :verify_authorized
   before_action :get_agent, :get_expression
   before_action :prepare_options, :only => [:new, :edit]
-  after_action :solr_commit, :only => [:create, :update, :destroy]
 
   # GET /realizes
   # GET /realizes.json

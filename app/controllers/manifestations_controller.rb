@@ -12,7 +12,6 @@ class ManifestationsController < ApplicationController
   before_action :prepare_options, :only => [:new, :edit]
   before_action :get_version, :only => [:show]
   after_action :verify_authorized
-  after_action :solr_commit, :only => :destroy
   after_action :convert_charset, :only => :index
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
