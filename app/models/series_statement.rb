@@ -24,7 +24,7 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   settings do
-    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
+    mappings dynamic: 'false', _routing: {required: false} do
       indexes :title
       indexes :numbering
       indexes :title_subseries

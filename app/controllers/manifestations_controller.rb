@@ -266,10 +266,7 @@ class ManifestationsController < ApplicationController
       if @manifestation.save
         if parent
           parent.derived_manifestations << @manifestation
-          parent.index
-          @manifestation.index
         end
-        Sunspot.commit
 
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }
         format.json { render :json => @manifestation, :status => :created, :location => @manifestation }
@@ -286,7 +283,6 @@ class ManifestationsController < ApplicationController
   def update
     respond_to do |format|
       if @manifestation.update_attributes(manifestation_params)
-        Sunspot.commit
         format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
@@ -555,36 +551,6 @@ class ManifestationsController < ApplicationController
     end
     query
   end
-
-  def add_data_accessor(search)
-    search.data_accessor_for(Manifestation).select = [
-        :id,
-        :original_title,
-        :title_transcription,
-        :required_role_id,
-        :carrier_type_id,
-        :access_address,
-        :volume_number_string,
-        :issue_number_string,
-        :serial_number_string,
-        :date_of_publication,
-        :pub_date,
-        :language_id,
-        :created_at,
-        :updated_at,
-        :volume_number_string,
-        :volume_number,
-        :issue_number_string,
-        :issue_number,
-        :serial_number,
-        :edition_string,
-        :edition,
-        :periodical,
-        :statement_of_responsibility
-    ] if params[:format] == 'html' or params[:format].nil?
-    search
-  end
-
 
   def set_pub_date_query
     pub_dates = parse_pub_date(params)

@@ -67,10 +67,6 @@ class AgentImportFile < ActiveRecord::Base
       if agent.save!
         import_result.agent = agent
         num[:agent_imported] += 1
-        if row_num % 50 == 0
-          Sunspot.commit
-          GC.start
-        end
       end
 
       #unless row['username'].to_s.strip.blank?
@@ -89,7 +85,6 @@ class AgentImportFile < ActiveRecord::Base
       import_result.save!
       row_num += 1
     end
-    Sunspot.commit
     rows.close
     transition_to!(:completed)
     return num

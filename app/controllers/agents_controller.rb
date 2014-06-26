@@ -31,16 +31,6 @@ class AgentsController < ApplicationController
     @count = {}
 
     search = Agent.search(:include => [:agent_type, :required_role])
-    search.data_accessor_for(Agent).select = [
-      :id,
-      :full_name,
-      :full_name_transcription,
-      :agent_type_id,
-      :required_role_id,
-      :created_at,
-      :updated_at,
-      :date_of_birth
-    ]
     set_role_query(current_user, search)
 
     if params[:mode] == 'recent'

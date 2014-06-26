@@ -127,7 +127,7 @@ class ResourceImportFile < ActiveRecord::Base
 
       if manifestation and item_identifier.present?
         import_result.item = create_item(row, manifestation)
-        manifestation.index
+        manifestation.__elasticsearch__.update_document
       else
         if manifestation.try(:fulltext_content?)
           item = Item.new
@@ -269,7 +269,6 @@ class ResourceImportFile < ActiveRecord::Base
         item.acquired_at = row['acquired_at'] if row['acquired_at']
         item.note = row['note'] if row['note']
         item.save!
-        ExpireFragmentCache.expire_fragment_cache(item.manifestation)
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier.present?

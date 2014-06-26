@@ -10,7 +10,8 @@ describe ItemsController do
 
   describe "GET index", :solr => true do
     before do
-      Item.reindex
+      Item.__elasticsearch__.create_index!
+      Item.import
     end
 
     describe "When logged in as Administrator" do

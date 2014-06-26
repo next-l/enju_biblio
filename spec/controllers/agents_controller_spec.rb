@@ -7,9 +7,10 @@ describe AgentsController do
     FactoryGirl.attributes_for(:agent)
   end
 
-  describe "GET index", :solr => true do
+  describe "GET index" do
     before do
-      Agent.reindex
+      Agent.__elasticsearch__.create_index!
+      Agent.import
     end
 
     describe "When logged in as Administrator" do

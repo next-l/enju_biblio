@@ -7,14 +7,20 @@ class Manifestation < ActiveRecord::Base
 
   after_commit on: :create do
     index_document
+    self.parent.__elasticsearch__.update_document if self.parent
+    self.index_series_statement
   end
 
   after_commit on: :update do
     update_document
+    self.parent.__elasticsearch__.update_document if self.parent
+    self.index_series_statement
   end
 
   after_commit on: :destroy do
     delete_document
+    self.parent.__elasticsearch__.update_document if self.parent
+    self.index_series_statement
   end
 
   settings do
@@ -234,10 +240,8 @@ class Manifestation < ActiveRecord::Base
   validates :edition, :numericality => {:greater_than => 0}, :allow_blank => true
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
-  after_save :index_series_statement
   before_update :touch
   before_destroy :touch, :reload
-  after_destroy :index_series_statement
   normalize_attributes :manifestation_identifier, :pub_date, :original_title
   paginates_per 10
 
@@ -390,7 +394,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def index_series_statement
-    series_statements.map{|s| s.index}
+    series_statements.map{|s| s.__elasticsearch__.update_document}
   end
 
   def acquired_at

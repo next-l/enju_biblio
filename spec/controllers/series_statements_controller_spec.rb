@@ -7,9 +7,10 @@ describe SeriesStatementsController do
     FactoryGirl.attributes_for(:series_statement)
   end
 
-  describe "GET index", :solr => true do
+  describe "GET index" do
     before do
-      SeriesStatement.reindex
+      SeriesStatement.__elasticsearch__.create_index!
+      SeriesStatement.import
     end
 
     describe "When logged in as Administrator" do
