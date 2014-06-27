@@ -10,8 +10,7 @@ class ResourceImportFileStateMachine
   transition from: :started, to: [:completed, :failed]
 
   before_transition(from: :pending, to: :started) do |resource_import_file|
-    resource_import_file.executed_at = Time.zone.now
-    #resource_import_file.update_column(:executed_at, Time.zone.now)
+    resource_import_file.update_column(:executed_at, Time.zone.now)
   end
 
   before_transition(from: :started, to: :completed) do |resource_import_file|
