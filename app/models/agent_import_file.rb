@@ -175,7 +175,7 @@ class AgentImportFile < ActiveRecord::Base
     end
     open(uploaded_file_path){|f|
       f.each{|line|
-        tempfile.puts(convert_enconding(line))
+        tempfile.puts(convert_encoding(line))
       }
     }
     tempfile.close
