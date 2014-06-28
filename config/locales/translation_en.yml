@@ -148,6 +148,7 @@ en:
         state: State
         edit_mode: Edit mode
         error_message: Error message
+        user_encoding: Encoding
       language:
         name: Name
         native_name: Native name
@@ -168,6 +169,7 @@ en:
         state: State
         edit_mode: Edit mode
         error_message: Error message
+        user_encoding: Encoding
       series_statement:
         original_title: Title
         numbering: Numbering
