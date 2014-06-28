@@ -91,7 +91,7 @@ class ResourceImportFilesController < ApplicationController
 
   def resource_import_file_params
     params.require(:resource_import_file).permit(
-      :resource_import, :edit_mode
+      :resource_import, :edit_mode, :user_encoding
     )
   end
 end

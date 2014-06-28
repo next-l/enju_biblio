@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140614141500) do
+ActiveRecord::Schema.define(version: 20140628073535) do
 
   create_table "accepts", force: true do |t|
     t.integer  "basket_id"
@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 20140614141500) do
     t.string   "agent_import_fingerprint"
     t.text     "error_message"
     t.string   "edit_mode"
+    t.string   "user_encoding"
   end
 
   add_index "agent_import_files", ["parent_id"], name: "index_agent_import_files_on_parent_id"
@@ -1084,6 +1085,7 @@ ActiveRecord::Schema.define(version: 20140614141500) do
     t.string   "edit_mode"
     t.string   "resource_import_fingerprint"
     t.text     "error_message"
+    t.string   "user_encoding"
   end
 
   add_index "resource_import_files", ["parent_id"], name: "index_resource_import_files_on_parent_id"

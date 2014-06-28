@@ -178,4 +178,5 @@ end
 #  edit_mode                    :string(255)
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
+#  user_encoding                :string(255)
 #

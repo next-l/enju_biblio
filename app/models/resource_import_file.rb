@@ -342,7 +342,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   private
   def open_import_file
-    tempfile = Tempfile.new('resource_import_file')
+    tempfile = Tempfile.new(name.underscore)
     if Setting.uploaded_file.storage == :s3
       uploaded_file_path = resource_import.expiring_url(10)
     else
@@ -350,16 +350,7 @@ class ResourceImportFile < ActiveRecord::Base
     end
     open(uploaded_file_path){|f|
       f.each{|line|
-        if defined?(CharlockHolmes::EncodingDetector)
-          begin
-            string = line.encode('UTF-8', CharlockHolmes::EncodingDetector.detect(line)[:encoding], universal_newline: true)
-          rescue StandardError
-            string = NKF.nkf('-w -Lu', line)
-          end
-        else
-          string = NKF.nkf('-w -Lu', line)
-        end
-        tempfile.puts(string)
+        tempfile.puts(convert_enconding(line))
       }
     }
     tempfile.close
@@ -651,4 +642,5 @@ end
 #  edit_mode                    :string(255)
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
+#  user_encoding                :string(255)
 #

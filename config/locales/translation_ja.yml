@@ -149,6 +149,7 @@ ja:
         state: 状態
         edit_mode: 編集モード
         error_message: エラーメッセージ
+        user_encoding: 文字コード
       language:
         name: 名前
         native_name: ネイティブ名
@@ -169,6 +170,7 @@ ja:
         state: 状態
         edit_mode: 編集モード
         error_message: エラーメッセージ
+        user_encoding: 文字コード
       series_statement:
         original_title: シリーズ名
         numbering: シリーズ番号

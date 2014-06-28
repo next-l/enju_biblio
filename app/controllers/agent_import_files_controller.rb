@@ -93,7 +93,7 @@ class AgentImportFilesController < ApplicationController
 
   def agent_import_file_params
     params.require(:agent_import_file).permit(
-      :agent_import, :edit_mode
+      :agent_import, :edit_mode, :user_encoding
     )
   end
 end
