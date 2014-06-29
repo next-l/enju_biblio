@@ -1,18 +1,12 @@
 class ResourceImportFilesController < ApplicationController
   before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  #after_action :verify_policy_scoped, :only => :index
 
   # GET /resource_import_files
   # GET /resource_import_files.json
   def index
     authorize ResourceImportFile
     @resource_import_files = ResourceImportFile.page(params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render :json => @resource_import_files }
-    end
   end
 
   # GET /resource_import_files/1
@@ -69,6 +63,10 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1
   # PUT /resource_import_files/1.json
   def update
+    if @resource_import_file.mode == 'import'
+      ResourceImportFileQueue.perform(@resource_import_file.id)
+    end
+
     if @resource_import_file.update(resource_import_file_params)
       redirect_to @resource_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file'))
     else
@@ -91,7 +89,7 @@ class ResourceImportFilesController < ApplicationController
 
   def resource_import_file_params
     params.require(:resource_import_file).permit(
-      :resource_import, :edit_mode, :user_encoding
+      :resource_import, :edit_mode, :user_encoding, :mode
     )
   end
 end

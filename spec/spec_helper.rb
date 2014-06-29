@@ -57,4 +57,7 @@ VCR.configure do |c|
   c.hook_into :fakeweb
   c.configure_rspec_metadata!
   c.allow_http_connections_when_no_cassette = true
+  c.ignore_request do |request|
+    URI(request.uri).port == 9200
+  end
 end

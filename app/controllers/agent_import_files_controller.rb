@@ -3,6 +3,7 @@ class AgentImportFilesController < ApplicationController
   after_action :verify_authorized
 
   # GET /agent_import_files
+  # GET /agent_import_files.json
   def index
     authorize AgentImportFile
     @agent_import_files = AgentImportFile.page(params[:page])
@@ -33,13 +34,8 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files/new
   # GET /agent_import_files/new.json
   def new
-    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render :json => @agent_import_file }
-    end
+    authorize @agent_import_file
   end
 
   # GET /agent_import_files/1/edit
@@ -49,8 +45,8 @@ class AgentImportFilesController < ApplicationController
   # POST /agent_import_files
   # POST /agent_import_files.json
   def create
-    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new(agent_import_file_params)
+    authorize @agent_import_file
     @agent_import_file.user = current_user
 
     respond_to do |format|
@@ -67,14 +63,14 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1
   # PUT /agent_import_files/1.json
   def update
-    respond_to do |format|
-      if @agent_import_file.update_attributes(agent_import_file_params)
-        format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file')) }
-        format.json { head :no_content }
-      else
-        format.html { render :action => "edit" }
-        format.json { render :json => @agent_import_file.errors, :status => :unprocessable_entity }
-      end
+    if @agent_import_file.mode == 'import'
+      AgentImportFileQueue.perform(@agent_import_file.id)
+    end
+
+    if @agent_import_file.update(agent_import_file_params)
+      redirect_to @agent_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file'))
+    else
+      render :edit
     end
   end
 
@@ -93,7 +89,7 @@ class AgentImportFilesController < ApplicationController
 
   def agent_import_file_params
     params.require(:agent_import_file).permit(
-      :agent_import, :edit_mode, :user_encoding
+      :agent_import, :edit_mode, :user_encoding, :mode
     )
   end
 end
