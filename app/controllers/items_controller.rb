@@ -51,35 +51,39 @@ class ItemsController < ApplicationController
       end
     end
 
+    if params[:query].to_s.strip == ''
+      user_query = '*'
+    else
+      user_query = params[:query]
+    end
+
+    if user_signed_in?
+      role_ids = Role.where('id <= ?', current_user.role.id).pluck(:id)
+    else
+      role_ids = [1]
+    end
+
     unless @inventory_file
-      search = Sunspot.new_search(Item)
-      set_role_query(current_user, search)
+      @query = params[:query]
+      query = {
+        query: {
+          filtered: {
+            query: {
+              query_string: {
+                query: user_query, fields: ['_all']
+              }
+            }
+          }
+        },
+        sort: {
+          created_at: 'desc'
+        }
+      }
 
-      @query = query.dup
-      unless query.blank?
-        search.build do
-          fulltext query
-        end
-      end
-
-      agent = @agent
-      manifestation = @manifestation
-      shelf = @shelf
       unless params[:mode] == 'add'
-        search.build do
-          with(:agent_ids).equal_to agent.id if agent
-          with(:manifestation_id).equal_to manifestation.id if manifestation
-          with(:shelf_id).equal_to shelf.id if shelf
-        end
-      end
-
-      search.build do
-        order_by(:created_at, :desc)
-      end
-
-      role = current_user.try(:role) || Role.default_role
-      search.build do
-        with(:required_role_id).less_than_or_equal_to role.id
+        query[:query][:filtered][:query][:term] = {agent_id: @agent.id} if @agent
+        query[:query][:filtered][:query][:term] = {manifestation_id: @manifestation.id} if @manifestation
+        query[:query][:filtered][:query][:term] = {shelf_id: @shelf.id} if @shelf
       end
 
       if params[:acquired_from].present?
@@ -104,8 +108,8 @@ class ItemsController < ApplicationController
       end
 
       page = params[:page] || 1
-      search.query.paginate(page.to_i, per_page)
-      @items = search.execute!.results
+      search = Item.search(query, routing: role_ids)
+      @items = search.page(params[:page]).records
       @count[:total] = @items.total_entries
     end
 

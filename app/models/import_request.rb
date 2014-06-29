@@ -40,7 +40,7 @@ class ImportRequest < ActiveRecord::Base
       if manifestation
         self.manifestation = manifestation
         transition_to!(:completed)
-        manifestation.index!
+        manifestation.__elasticsearch__.index_document
       else
         transition_to!(:failed)
       end
