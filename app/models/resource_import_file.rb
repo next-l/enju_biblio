@@ -2,7 +2,7 @@
 class ResourceImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordModel
   include ImportFile
-  attr_accessible :resource_import, :edit_mode, :mode
+  attr_accessible :resource_import, :edit_mode, :user_encoding, :mode
   default_scope {order('resource_import_files.id DESC')}
   scope :not_imported, -> {in_state(:pending)}
   scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
