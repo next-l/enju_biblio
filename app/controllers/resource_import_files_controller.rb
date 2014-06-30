@@ -63,11 +63,10 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1
   # PUT /resource_import_files/1.json
   def update
-    if @resource_import_file.mode == 'import'
-      ResourceImportFileQueue.perform(@resource_import_file.id)
-    end
-
     if @resource_import_file.update(resource_import_file_params)
+      if @resource_import_file.mode == 'import'
+        ResourceImportFileQueue.perform(@resource_import_file.id)
+      end
       redirect_to @resource_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file'))
     else
       render :edit

@@ -63,11 +63,10 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1
   # PUT /agent_import_files/1.json
   def update
-    if @agent_import_file.mode == 'import'
-      AgentImportFileQueue.perform(@agent_import_file.id)
-    end
-
     if @agent_import_file.update(agent_import_file_params)
+      if @agent_import_file.mode == 'import'
+        AgentImportFileQueue.perform(@agent_import_file.id)
+      end
       redirect_to @agent_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file'))
     else
       render :edit
