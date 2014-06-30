@@ -1,7 +1,7 @@
 class AgentImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordModel
   include ImportFile
-  attr_accessible :agent_import, :edit_mode
+  attr_accessible :agent_import, :edit_mode, :mode
   default_scope {order('agent_import_files.id DESC')}
   scope :not_imported, -> {in_state(:pending)}
   scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
@@ -25,6 +25,9 @@ class AgentImportFile < ActiveRecord::Base
   has_many :agent_import_results
 
   has_many :agent_import_file_transitions
+
+  enju_import_file_model
+  attr_accessor :mode
 
   def state_machine
     AgentImportFileStateMachine.new(self, transition_class: AgentImportFileTransition)

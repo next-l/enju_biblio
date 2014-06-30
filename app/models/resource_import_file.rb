@@ -2,7 +2,7 @@
 class ResourceImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordModel
   include ImportFile
-  attr_accessible :resource_import, :edit_mode
+  attr_accessible :resource_import, :edit_mode, :mode
   default_scope {order('resource_import_files.id DESC')}
   scope :not_imported, -> {in_state(:pending)}
   scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
@@ -25,6 +25,9 @@ class ResourceImportFile < ActiveRecord::Base
   belongs_to :user, :validate => true
   has_many :resource_import_results
   has_many :resource_import_file_transitions
+
+  enju_import_file_model
+  attr_accessor :mode
 
   def state_machine
     ResourceImportFileStateMachine.new(self, transition_class: ResourceImportFileTransition)
