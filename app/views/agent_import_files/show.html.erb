@@ -62,6 +62,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
+  <%= form_for(@resource_import_file) do |f| %>
   <ul>
     <li><%= link_to t('activerecord.models.agent_import_result'), agent_import_file_agent_import_results_path(@agent_import_file) -%></li>
     <li><%= back_to_index(flash[:page_info]) -%></li>
@@ -72,4 +73,5 @@
       </li>
     <% end %>
   </ul>
+  <% end %>
 </div>
