@@ -352,7 +352,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   private
   def open_import_file
-    tempfile = Tempfile.new(name.underscore)
+    tempfile = Tempfile.new(self.class.name.underscore)
     if Setting.uploaded_file.storage == :s3
       uploaded_file_path = resource_import.expiring_url(10)
     else
