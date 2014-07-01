@@ -171,12 +171,9 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.datetime "started_at"
     t.datetime "completed_at"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
   end
-
-  add_index "bookmark_stats", ["state"], :name => "index_bookmark_stats_on_state"
 
   create_table "bookmarks", :force => true do |t|
     t.integer  "user_id",          :null => false
@@ -436,7 +433,6 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "event_import_file_name"
     t.string   "event_import_content_type"
     t.integer  "event_import_file_size"
@@ -449,7 +445,6 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
   end
 
   add_index "event_import_files", ["parent_id"], :name => "index_event_import_files_on_parent_id"
-  add_index "event_import_files", ["state"], :name => "index_event_import_files_on_state"
   add_index "event_import_files", ["user_id"], :name => "index_event_import_files_on_user_id"
 
   create_table "event_import_results", :force => true do |t|
@@ -719,14 +714,11 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "manifestation_checkout_stats", ["state"], :name => "index_manifestation_checkout_stats_on_state"
 
   create_table "manifestation_relationship_types", :force => true do |t|
     t.string   "name",         :null => false
@@ -753,14 +745,11 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "manifestation_reserve_stats", ["state"], :name => "index_manifestation_reserve_stats_on_state"
 
   create_table "manifestations", :force => true do |t|
     t.text     "original_title",                                     :null => false
@@ -845,12 +834,9 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.datetime "sent_at"
     t.datetime "deleted_at"
     t.text     "body"
-    t.string   "state"
     t.datetime "created_at",          :null => false
     t.datetime "updated_at",          :null => false
   end
-
-  add_index "message_requests", ["state"], :name => "index_message_requests_on_state"
 
   create_table "message_templates", :force => true do |t|
     t.string   "status",                       :null => false
@@ -871,7 +857,6 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.string   "subject",            :null => false
     t.text     "body"
     t.integer  "message_request_id"
-    t.string   "state"
     t.integer  "parent_id"
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
@@ -1268,14 +1253,11 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "user_checkout_stats", ["state"], :name => "index_user_checkout_stats_on_state"
 
   create_table "user_group_has_checkout_types", :force => true do |t|
     t.integer  "user_group_id",                                      :null => false
@@ -1324,14 +1306,11 @@ ActiveRecord::Schema.define(:version => 20140614141500) do
     t.datetime "start_date"
     t.datetime "end_date"
     t.text     "note"
-    t.string   "state"
     t.datetime "created_at",   :null => false
     t.datetime "updated_at",   :null => false
     t.datetime "started_at"
     t.datetime "completed_at"
   end
-
-  add_index "user_reserve_stats", ["state"], :name => "index_user_reserve_stats_on_state"
 
   create_table "users", :force => true do |t|
     t.integer  "user_group_id"
