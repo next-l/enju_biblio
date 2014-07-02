@@ -6,6 +6,8 @@ class ResourceExportFile < ActiveRecord::Base
   validates :user, presence: true
   attr_accessor :mode
 
+  has_many :resource_export_file_transitions
+
   def state_machine
     ResourceExportFileStateMachine.new(self, transition_class: ResourceExportFileTransition)
   end
