@@ -26,9 +26,10 @@ class ResourceExportFilesController < ApplicationController
   # POST /resource_export_files
   def create
     @resource_export_file = ResourceExportFile.new(resource_export_file_params)
-
     if @resource_export_file.save
-      Resque.enqueue(ExportFile, @resource_export_file.id)
+      if @resource_export_file.mode == 'export'
+        Resque.enqueue(ResourceExportFileQueue, @resource_export_file.id)
+      end
       redirect_to @resource_export_file, notice: t('export.resource_export_task_created')
     else
       render :new

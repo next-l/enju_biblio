@@ -65,7 +65,7 @@ class AgentImportFilesController < ApplicationController
   def update
     if @agent_import_file.update(agent_import_file_params)
       if @agent_import_file.mode == 'import'
-        AgentImportFileQueue.perform(@agent_import_file.id)
+        Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
       end
       redirect_to @agent_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file'))
     else

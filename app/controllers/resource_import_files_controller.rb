@@ -65,7 +65,7 @@ class ResourceImportFilesController < ApplicationController
   def update
     if @resource_import_file.update(resource_import_file_params)
       if @resource_import_file.mode == 'import'
-        ResourceImportFileQueue.perform(@resource_import_file.id)
+        Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
       end
       redirect_to @resource_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file'))
     else
