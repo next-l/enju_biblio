@@ -4,6 +4,7 @@ class ResourceExportFilesController < ApplicationController
 
   # GET /resource_export_files
   def index
+    authorize ResourceExportFile
     @resource_export_files = ResourceExportFile.order('id DESC').page(params[:page])
   end
 
@@ -15,6 +16,7 @@ class ResourceExportFilesController < ApplicationController
   def new
     @resource_export_file = ResourceExportFile.new
     @resource_export_file.user = current_user
+    authorize @resource_export_file
   end
 
   # GET /resource_export_files/1/edit
@@ -52,10 +54,11 @@ class ResourceExportFilesController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_resource_export_file
       @resource_export_file = ResourceExportFile.find(params[:id])
+      authorize @resource_export_file
     end
 
     # Only allow a trusted parameter "white list" through.
     def resource_export_file_params
-      params.require(:resource_export_file).permit(:user_id)#, :resource_export)
+      params.require(:resource_export_file).permit(:user_id, :mode)
     end
 end

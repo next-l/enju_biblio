@@ -305,6 +305,9 @@ en:
         body: Body
         manifestation_id: Manifestation
         primary: Primary
+      resource_export_file:
+        resource_export_file_name: Filename
+        resource_export_file_size: Size
 
   resource_import_file:
     update_relationship: Update relationship
@@ -321,4 +324,5 @@ en:
 
   export:
     export_completed: Export completed.
+    are_you_sure_to_export: It may take some time to complete. Are you sure to export?
     export_task_created: Export task created.

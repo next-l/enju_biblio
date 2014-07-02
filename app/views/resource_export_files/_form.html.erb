@@ -1,15 +1,5 @@
 <%= form_for(@resource_export_file) do |f| %>
-  <% if @resource_export_file.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@resource_export_file.errors.count, "error") %> prohibited this resource_export_file from being saved:</h2>
-
-      <ul>
-      <% @resource_export_file.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+  <%= f.error_messages %>
 
   <%= f.hidden_field :user_id %>
   <!--

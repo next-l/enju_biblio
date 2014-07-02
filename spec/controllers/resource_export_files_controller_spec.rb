@@ -9,7 +9,7 @@ describe ResourceExportFilesController do
 
       it "assigns all resource_export_files as @resource_export_files" do
         get :index
-        assigns(:resource_export_files).should eq(ResourceExportFile.page(1))
+        assigns(:resource_export_files).should eq(ResourceExportFile.order('id DESC').page(1))
       end
     end
 
@@ -18,7 +18,7 @@ describe ResourceExportFilesController do
 
       it "assigns all resource_export_files as @resource_export_files" do
         get :index
-        assigns(:resource_export_files).should eq(ResourceExportFile.page(1))
+        assigns(:resource_export_files).should eq(ResourceExportFile.order('id DESC').page(1))
       end
     end
 
@@ -35,7 +35,7 @@ describe ResourceExportFilesController do
     describe "When not logged in" do
       it "assigns empty as @resource_export_files" do
         get :index
-        assigns(:resource_export_files).should be_empty
+        assigns(:resource_export_files).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
