@@ -13,8 +13,4 @@ class ResourceExportFileStateMachine
     resource_export_file.update_column(:executed_at, Time.zone.now)
     resource_export_file.export!
   end
-
-  before_transition(from: :started, to: :completed) do |resource_export_file|
-    resource_export_file.error_message = nil
-  end
 end
