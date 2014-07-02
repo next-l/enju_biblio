@@ -13,6 +13,10 @@
   </div>
   -->
   <div class="actions">
-    <%= f.submit %>
+    <% if @resource_export_file.new_record? %>
+      <%= f.submit t('page.export') %>
+    <% else %>
+      <%= f.submit %>
+    <% end %>
   </div>
 <% end %>
