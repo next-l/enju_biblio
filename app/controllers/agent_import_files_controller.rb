@@ -72,7 +72,7 @@ class AgentImportFilesController < ApplicationController
     respond_to do |format|
       if @agent_import_file.update_attributes(params[:agent_import_file])
         if @agent_import_file.mode == 'import'
-          AgentImportFileQueue.perform(@agent_import_file.id)
+          Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
         end
         format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file')) }
         format.json { head :no_content }

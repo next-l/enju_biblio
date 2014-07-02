@@ -72,7 +72,7 @@ class ResourceImportFilesController < ApplicationController
     respond_to do |format|
       if @resource_import_file.update_attributes(params[:resource_import_file])
         if @resource_import_file.mode == 'import'
-          ResourceImportFileQueue.perform(@resource_import_file.id)
+          Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
         end
         format.html { redirect_to @resource_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file')) }
         format.json { head :no_content }

@@ -59,7 +59,7 @@ class ResourceExportFilesController < ApplicationController
     respond_to do |format|
       if @resource_export_file.save
         if @resource_export_file.mode == 'export'
-          ResourceExportFileQueue.perform(@resource_export_file.id)
+          Resque.enqueue(ResourceExportFileQueue, @resource_export_file.id)
         end
         format.html { redirect_to @resource_export_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.resource_export_file')) }
         format.json { render :json => @resource_export_file, :status => :created, :location => @resource_export_file }
