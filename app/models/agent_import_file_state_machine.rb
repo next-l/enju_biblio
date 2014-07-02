@@ -9,7 +9,7 @@ class AgentImportFileStateMachine
   transition from: :pending, to: :started
   transition from: :started, to: [:completed, :failed]
 
-  before_transition(from: :pending, to: :started) do |agent_import_file|
+  after_transition(from: :pending, to: :started) do |agent_import_file|
     agent_import_file.update_column(:executed_at, Time.zone.now)
   end
 
