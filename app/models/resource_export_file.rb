@@ -15,8 +15,7 @@ class ResourceExportFile < ActiveRecord::Base
   delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
     to: :state_machine
 
-  def export
-    sleep 10
+  def export!
     tempfile = Tempfile.new(['resource_export_file_', '.txt'])
     file = Manifestation.export(format: :tsv)
     tempfile.puts(file)

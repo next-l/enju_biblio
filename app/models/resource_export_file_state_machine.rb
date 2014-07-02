@@ -9,8 +9,9 @@ class ResourceExportFileStateMachine
   transition from: :pending, to: :started
   transition from: :started, to: [:completed, :failed]
 
-  before_transition(from: :pending, to: :started) do |resource_export_file|
-    resource_export_file.executed_at = Time.zone.now
+  after_transition(from: :pending, to: :started) do |resource_export_file|
+    resource_export_file.update_column(:executed_at, Time.zone.now)
+    resource_export_file.export!
   end
 
   before_transition(from: :started, to: :completed) do |resource_export_file|
