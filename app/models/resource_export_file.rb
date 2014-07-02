@@ -8,7 +8,7 @@ class ResourceExportFile < ActiveRecord::Base
 
   def export
     sleep 10
-    tempfile = Tempfile.new(['resource_export_file', '.txt'])
+    tempfile = Tempfile.new(['resource_export_file_', '.txt'])
     file = Manifestation.export(format: :tsv)
     tempfile.puts(file)
     tempfile.close
