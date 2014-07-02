@@ -7,6 +7,8 @@ class ResourceExportFile < ActiveRecord::Base
   attr_accessible :mode
   attr_accessor :mode
 
+  has_many :resource_export_file_transitions
+
   def state_machine
     ResourceExportFileStateMachine.new(self, transition_class: ResourceExportFileTransition)
   end
