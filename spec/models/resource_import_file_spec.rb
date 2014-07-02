@@ -156,6 +156,13 @@ describe ResourceImportFile do
       Item.count.should eq old_count - 2
     end
   end
+
+  it "should import in background" do
+    file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
+    file.user = users(:admin)
+    file.save
+    ResourceImportFileQueue.perform(file.id).should be_true
+  end
 end
 
 # == Schema Information
