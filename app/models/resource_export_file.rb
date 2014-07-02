@@ -17,7 +17,7 @@ class ResourceExportFile < ActiveRecord::Base
         sender: User.find(1),
         recipient: user.username,
         subject: 'export completed',
-        body: t('export.export_completed')
+        body: I18n.t('export.export_completed')
       )
     end
   end
