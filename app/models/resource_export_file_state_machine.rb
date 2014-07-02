@@ -11,6 +11,5 @@ class ResourceExportFileStateMachine
 
   after_transition(from: :pending, to: :started) do |resource_export_file|
     resource_export_file.update_column(:executed_at, Time.zone.now)
-    resource_export_file.export!
   end
 end
