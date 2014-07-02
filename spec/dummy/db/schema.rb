@@ -32,7 +32,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "agent_import_file_name"
     t.string   "agent_import_content_type"
     t.integer  "agent_import_file_size"
@@ -46,7 +45,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
   end
 
   add_index "agent_import_files", ["parent_id"], :name => "index_agent_import_files_on_parent_id"
-  add_index "agent_import_files", ["state"], :name => "index_agent_import_files_on_state"
   add_index "agent_import_files", ["user_id"], :name => "index_agent_import_files_on_user_id"
 
   create_table "agent_import_results", :force => true do |t|
@@ -129,7 +127,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
     t.text     "note"
     t.integer  "required_role_id",                    :default => 1, :null => false
     t.integer  "required_score",                      :default => 0, :null => false
-    t.string   "state"
     t.text     "email"
     t.text     "url"
     t.text     "full_name_alternative_transcription"
@@ -547,7 +544,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
 
   create_table "import_requests", :force => true do |t|
     t.string   "isbn"
-    t.string   "state"
     t.integer  "manifestation_id"
     t.integer  "user_id"
     t.datetime "created_at",       :null => false
@@ -609,7 +605,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
     t.integer  "price"
     t.integer  "lock_version",          :default => 0,     :null => false
     t.integer  "required_role_id",      :default => 1,     :null => false
-    t.string   "state"
     t.integer  "required_score",        :default => 0,     :null => false
     t.datetime "acquired_at"
     t.integer  "bookstore_id"
@@ -782,7 +777,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
     t.boolean  "repository_content",              :default => false, :null => false
     t.integer  "lock_version",                    :default => 0,     :null => false
     t.integer  "required_role_id",                :default => 1,     :null => false
-    t.string   "state"
     t.integer  "required_score",                  :default => 0,     :null => false
     t.integer  "frequency_id",                    :default => 1,     :null => false
     t.boolean  "subscription_master",             :default => false, :null => false
@@ -1060,7 +1054,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "state"
     t.string   "resource_import_file_name"
     t.string   "resource_import_content_type"
     t.integer  "resource_import_file_size"
@@ -1074,7 +1067,6 @@ ActiveRecord::Schema.define(:version => 20140628073535) do
   end
 
   add_index "resource_import_files", ["parent_id"], :name => "index_resource_import_files_on_parent_id"
-  add_index "resource_import_files", ["state"], :name => "index_resource_import_files_on_state"
   add_index "resource_import_files", ["user_id"], :name => "index_resource_import_files_on_user_id"
 
   create_table "resource_import_results", :force => true do |t|
