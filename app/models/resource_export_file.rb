@@ -16,6 +16,7 @@ class ResourceExportFile < ActiveRecord::Base
     to: :state_machine
 
   def export!
+    transition_to!(:started)
     tempfile = Tempfile.new(['resource_export_file_', '.txt'])
     file = Manifestation.export(format: :tsv)
     tempfile.puts(file)
@@ -29,6 +30,10 @@ class ResourceExportFile < ActiveRecord::Base
         body: I18n.t('export.export_completed')
       )
     end
+    transition_to!(:completed)
+  rescue => e
+    transition_to!(:failed)
+    raise e
   end
 
   private
