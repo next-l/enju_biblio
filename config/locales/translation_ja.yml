@@ -309,6 +309,7 @@ ja:
       resource_export_file:
         resource_export_file_name: ファイル名
         resource_export_file_size: ファイルサイズ
+        state: 状態
 
   resource_import_file:
     update_relationship: 関連を更新

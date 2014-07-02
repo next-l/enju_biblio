@@ -308,6 +308,7 @@ en:
       resource_export_file:
         resource_export_file_name: Filename
         resource_export_file_size: Size
+        state: State
 
   resource_import_file:
     update_relationship: Update relationship
