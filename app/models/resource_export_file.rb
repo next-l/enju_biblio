@@ -3,6 +3,7 @@ class ResourceExportFile < ActiveRecord::Base
   has_attached_file :resource_export
   validates_attachment_content_type :resource_export, :content_type => /\Atext\/plain\Z/
   validates :user, presence: true
+  attr_accessible :mode
   attr_accessor :mode
 
   def export
