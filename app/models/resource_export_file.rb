@@ -1,10 +1,18 @@
 class ResourceExportFile < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordModel
   belongs_to :user
   has_attached_file :resource_export
   validates_attachment_content_type :resource_export, :content_type => /\Atext\/plain\Z/
   validates :user, presence: true
   attr_accessible :mode
   attr_accessor :mode
+
+  def state_machine
+    ResourceImportFileStateMachine.new(self, transition_class: ResourceImportFileTransition)
+  end
+
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   def export
     sleep 10
@@ -21,5 +29,10 @@ class ResourceExportFile < ActiveRecord::Base
         body: I18n.t('export.export_completed')
       )
     end
+  end
+
+  private
+  def self.transition_class
+    ResourceExportFileTransition
   end
 end
