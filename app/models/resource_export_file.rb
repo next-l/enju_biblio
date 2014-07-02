@@ -8,7 +8,7 @@ class ResourceExportFile < ActiveRecord::Base
   attr_accessor :mode
 
   def state_machine
-    ResourceImportFileStateMachine.new(self, transition_class: ResourceImportFileTransition)
+    ResourceExportFileStateMachine.new(self, transition_class: ResourceExportFileTransition)
   end
 
   delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
