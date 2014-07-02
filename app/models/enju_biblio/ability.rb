@@ -78,11 +78,11 @@ module EnjuBiblio
           manifestation.items.empty? and !manifestation.series_master?
         end
         can [:index, :create], Agent
-        can :show, Agent do |patron|
-          patron.required_role_id <= 3
+        can :show, Agent do |agent|
+          agent.required_role_id <= 3
         end
-        can [:update, :destroy, :delete], Agent do |patron|
-          !patron.user.try(:has_role?, 'Librarian') and patron.required_role_id <= 3
+        can [:update, :destroy, :delete], Agent do |agent|
+          !agent.user.try(:has_role?, 'Librarian') and agent.required_role_id <= 3
         end
         can :manage, [
           Create,
@@ -128,14 +128,14 @@ module EnjuBiblio
           manifestation.required_role_id <= 2
         end
         can :index, Agent
-        can :update, Agent do |patron|
-          patron.user == user
+        can :update, Agent do |agent|
+          agent.user == user
         end
-        can :show, Agent do |patron|
-          #if patron.user == user
+        can :show, Agent do |agent|
+          #if agent.user == user
           #  true
-          #elsif patron.user != user
-            true if patron.required_role_id <= 2 #name == 'Administrator'
+          #elsif agent.user != user
+            true if agent.required_role_id <= 2 #name == 'Administrator'
           #end
         end
         can :index, PictureFile
@@ -175,8 +175,8 @@ module EnjuBiblio
           manifestation.required_role_id == 1
         end
         can :index, Agent
-        can :show, Agent do |patron|
-          patron.required_role_id == 1 #name == 'Guest'
+        can :show, Agent do |agent|
+          agent.required_role_id == 1 #name == 'Guest'
         end
         can :read, [
           CarrierType,

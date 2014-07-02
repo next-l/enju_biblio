@@ -69,6 +69,13 @@ describe AgentImportFile do
       Agent.count.should eq old_count - 7
     end
   end
+
+  it "should import in background" do
+    file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
+    file.user = users(:admin)
+    file.save
+    AgentImportFileQueue.perform(file.id).should be_true
+  end
 end
 
 # == Schema Information

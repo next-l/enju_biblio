@@ -41,6 +41,7 @@
           Realize,
           RealizeType,
           ResourceImportFile,
+          ResourceExportFile,
           SeriesStatement
         ]
         can :update, [
