@@ -27,7 +27,7 @@ describe ResourceExportFilesController do
 
       it "assigns empty as @resource_export_files" do
         get :index
-        assigns(:resource_export_files).should be_empty
+        assigns(:resource_export_files).should be_nil
         response.should be_forbidden
       end
     end
@@ -35,7 +35,7 @@ describe ResourceExportFilesController do
     describe "When not logged in" do
       it "assigns empty as @resource_export_files" do
         get :index
-        assigns(:resource_export_files).should be_empty
+        assigns(:resource_export_files).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -107,7 +107,7 @@ describe ResourceExportFilesController do
 
       it "should not assign the requested resource_export_file as @resource_export_file" do
         get :new
-        assigns(:resource_export_file).should_not be_valid
+        assigns(:resource_export_file).should be_valid
         response.should be_forbidden
       end
     end

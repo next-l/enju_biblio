@@ -1,14 +1,14 @@
 class ResourceExportFilePolicy < AdminPolicy
   def index?
-    user.try(:has_role?, 'User')
+    user.try(:has_role?, 'Librarian')
   end
 
   def show?
-    user.try(:has_role?, 'User')
+    user.try(:has_role?, 'Librarian')
   end
 
   def create?
-    user.try(:has_role?, 'User')
+    user.try(:has_role?, 'Librarian')
   end
 
   def update?
