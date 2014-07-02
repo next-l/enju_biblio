@@ -4,7 +4,7 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files
   # GET /resource_export_files.json
   def index
-    @resource_export_files = ResourceExportFile.page(params[:page])
+    @resource_export_files = ResourceExportFile.order('id DESC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -38,6 +38,7 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files/new.json
   def new
     @resource_export_file = ResourceExportFile.new
+    @resource_export_file.user = current_user
 
     respond_to do |format|
       format.html # new.html.erb

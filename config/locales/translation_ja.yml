@@ -306,6 +306,9 @@ ja:
         body: 内容
         manifestation_id: 体現形
         primary: 主に使用
+      resource_export_file:
+        resource_export_file_name: ファイル名
+        resource_export_file_size: ファイルサイズ
 
   resource_import_file:
     update_relationship: 関連を更新
@@ -322,3 +325,5 @@ ja:
 
   export:
     export_completed: エクスポートが完了しました。
+    are_you_sure_to_export: エクスポートに時間がかかることがあります。本当にエクスポートしますか？
+    export_task_created: エクスポートのタスクが設定されました。エクスポートが完了しましたらメッセージでお知らせします。現在の状態は「エクスポートの一覧」でも確認できます。
