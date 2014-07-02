@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "vcr"
   s.add_development_dependency "sunspot_solr", "~> 2.1"
   s.add_development_dependency "enju_leaf", "~> 1.1.0.rc10"
-  s.add_development_dependency "enju_subject", "~> 0.1.0.pre24"
+  s.add_development_dependency "enju_subject", "~> 0.1.0.pre25"
   s.add_development_dependency "enju_inventory", "~> 0.1.11.pre9"
   s.add_development_dependency "enju_bookmark", "~> 0.1.2.pre14"
   s.add_development_dependency "enju_event", "~> 0.1.17.pre17"
