@@ -335,6 +335,10 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} subject_sm:#{options[:subject]}"
     #end
 
+    if options[:title].present?
+      query = "#{query} title_text:#{options[:title]}"
+    end
+
     if options[:tag].present?
       query = "#{query} tag_sm:#{options[:tag]}"
     end
