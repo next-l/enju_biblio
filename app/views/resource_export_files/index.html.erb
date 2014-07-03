@@ -16,7 +16,7 @@
   <tbody>
     <% @resource_export_files.each do |resource_export_file| %>
       <tr class="line<%= cycle("0", "1") -%>">
-        <td><%= resource_export_file.id %></td>
+        <td><%= link_to resource_export_file.id, resource_export_file %></td>
         <td><%= resource_export_file.user.try(:username) %></td>
         <td>
           <%= link_to resource_export_file.resource_export_file_name, resource_export_file.resource_export.url if resource_export_file.resource_export.path %>
