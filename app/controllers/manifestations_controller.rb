@@ -355,6 +355,10 @@ class ManifestationsController < ApplicationController
       query = "#{query} isbn_sm:#{options[:isbn].gsub('-', '')}"
     end
 
+    if options[:isbn_id].present?
+      query = "#{query} isbn_sm:#{options[:isbn_id].gsub('-', '')}"
+    end
+
     if options[:issn].present?
       query = "#{query} issn_sm:#{options[:issn].gsub('-', '')}"
     end
