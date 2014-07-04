@@ -20,10 +20,8 @@ end
 #
 #  id               :integer          not null, primary key
 #  isbn             :string(255)
-#  state            :string(255)
 #  manifestation_id :integer
 #  user_id          :integer
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
-

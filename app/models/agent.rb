@@ -292,7 +292,6 @@ end
 #  note                                :text
 #  required_role_id                    :integer          default(1), not null
 #  required_score                      :integer          default(0), not null
-#  state                               :string(255)
 #  email                               :text
 #  url                                 :text
 #  full_name_alternative_transcription :text
@@ -300,4 +299,3 @@ end
 #  death_date                          :string(255)
 #  agent_identifier                    :string(255)
 #
-

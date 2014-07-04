@@ -176,7 +176,6 @@ end
 #  user_id                      :integer
 #  note                         :text
 #  executed_at                  :datetime
-#  state                        :string(255)
 #  resource_import_file_name    :string(255)
 #  resource_import_content_type :string(255)
 #  resource_import_file_size    :integer
@@ -186,6 +185,7 @@ end
 #  edit_mode                    :string(255)
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
+#  user_encoding                :string(255)
 #
 
 # == Schema Information

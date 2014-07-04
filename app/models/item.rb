@@ -111,7 +111,6 @@ end
 #  price                 :integer
 #  lock_version          :integer          default(0), not null
 #  required_role_id      :integer          default(1), not null
-#  state                 :string(255)
 #  required_score        :integer          default(0), not null
 #  acquired_at           :datetime
 #  bookstore_id          :integer
@@ -119,4 +118,3 @@ end
 #  circulation_status_id :integer          default(5), not null
 #  checkout_type_id      :integer          default(1), not null
 #
-
