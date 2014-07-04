@@ -16,7 +16,7 @@ describe ManifestationsController do
     end
 
     it "recognizes ISBN" do
-      { :get => "/isbn/4798002062" }.should route_to(:controller => "manifestations", :action => "index", :isbn => "4798002062")
+      { :get => "/isbn/4798002062" }.should route_to(:controller => "manifestations", :action => "index", :isbn_id => "4798002062")
     end
 
     it "recognizes and generates #edit" do
