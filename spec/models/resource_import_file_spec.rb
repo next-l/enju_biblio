@@ -74,8 +74,8 @@ describe ResourceImportFile do
         manifestation_104.creators.collect(&:full_name).should eq ['test3']
         manifestation_104.publishers.collect(&:full_name).should eq ['test4']
 
-        @file.resource_import_fingerprint.should be_true
-        @file.executed_at.should be_true
+        @file.resource_import_fingerprint.should be_truthy
+        @file.executed_at.should be_truthy
       end
     end
 
@@ -109,8 +109,8 @@ describe ResourceImportFile do
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
 
-        @file.resource_import_fingerprint.should be_true
-        @file.executed_at.should be_true
+        @file.resource_import_fingerprint.should be_truthy
+        @file.executed_at.should be_truthy
       end
     end
 
@@ -161,7 +161,7 @@ describe ResourceImportFile do
     file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
-    ResourceImportFileQueue.perform(file.id).should be_true
+    ResourceImportFileQueue.perform(file.id).should be_truthy
   end
 end
   

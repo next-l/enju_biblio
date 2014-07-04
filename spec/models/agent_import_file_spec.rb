@@ -20,8 +20,8 @@ describe AgentImportFile do
       Agent.count.should eq old_agents_count + 3
       AgentImportResult.count.should eq old_import_results_count + 4
 
-      @file.agent_import_fingerprint.should be_true
-      @file.executed_at.should be_true
+      @file.agent_import_fingerprint.should be_truthy
+      @file.executed_at.should be_truthy
     end
   end
 
@@ -43,8 +43,8 @@ describe AgentImportFile do
       Agent.order('id DESC')[1].email.should eq 'tanabe@library.example.jp'
       AgentImportResult.count.should eq old_import_results_count + 5
 
-      @file.agent_import_fingerprint.should be_true
-      @file.executed_at.should be_true
+      @file.agent_import_fingerprint.should be_truthy
+      @file.executed_at.should be_truthy
     end
   end
 
@@ -74,7 +74,7 @@ describe AgentImportFile do
     file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
-    AgentImportFileQueue.perform(file.id).should be_true
+    AgentImportFileQueue.perform(file.id).should be_truthy
   end
 end
 

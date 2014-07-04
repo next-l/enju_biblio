@@ -165,11 +165,11 @@ describe Manifestation, :solr => true do
   end
 
   it "should be reserved" do
-    manifestations(:manifestation_00007).is_reserved_by?(users(:admin)).should be_true
+    manifestations(:manifestation_00007).is_reserved_by?(users(:admin)).should be_truthy
   end
 
   it "should not be reserved" do
-    manifestations(:manifestation_00007).is_reserved_by?(users(:user1)).should be_false
+    manifestations(:manifestation_00007).is_reserved_by?(users(:user1)).should be_falsy
   end
 
   it "should_get_number_of_pages" do
@@ -185,7 +185,7 @@ describe Manifestation, :solr => true do
   end
 
   it "should have parent_of_series" do
-    manifestations(:manifestation_00001).parent_of_series.should be_true
+    manifestations(:manifestation_00001).parent_of_series.should be_truthy
   end
 
   it "should respond to extract_text" do
@@ -193,11 +193,11 @@ describe Manifestation, :solr => true do
   end
 
   it "should not be reserved it it has no item" do
-    manifestations(:manifestation_00008).is_reservable_by?(users(:admin)).should be_false
+    manifestations(:manifestation_00008).is_reservable_by?(users(:admin)).should be_falsy
   end
 
   it "should respond to title" do
-    manifestations(:manifestation_00001).title.should be_true
+    manifestations(:manifestation_00001).title.should be_truthy
   end
 
   it "should respond to pickup" do
@@ -205,7 +205,7 @@ describe Manifestation, :solr => true do
   end
 
   it "should be periodical if its series_statement is periodical" do
-    manifestations(:manifestation_00202).periodical?.should be_true
+    manifestations(:manifestation_00202).periodical?.should be_truthy
   end
 
   #it "should set series_statement if the manifestation is periodical" do
@@ -219,8 +219,8 @@ describe Manifestation, :solr => true do
 
   if defined?(EnjuCirculation)
     it "should respond to is_checked_out_by?" do
-      manifestations(:manifestation_00001).is_checked_out_by?(users(:admin)).should be_true
-      manifestations(:manifestation_00001).is_checked_out_by?(users(:librarian2)).should be_false
+      manifestations(:manifestation_00001).is_checked_out_by?(users(:admin)).should be_truthy
+      manifestations(:manifestation_00001).is_checked_out_by?(users(:librarian2)).should be_falsy
     end
   end
 end

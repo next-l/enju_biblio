@@ -26,19 +26,19 @@ describe Agent do
   end
 
   it "should be creator" do
-    agents(:agent_00001).creator?(manifestations(:manifestation_00001)).should be_true
+    agents(:agent_00001).creator?(manifestations(:manifestation_00001)).should be_truthy
   end
 
   it "should not be creator" do
-    agents(:agent_00010).creator?(manifestations(:manifestation_00001)).should be_false
+    agents(:agent_00010).creator?(manifestations(:manifestation_00001)).should be_falsy
   end
 
   it "should be publisher" do
-    agents(:agent_00001).publisher?(manifestations(:manifestation_00001)).should be_true
+    agents(:agent_00001).publisher?(manifestations(:manifestation_00001)).should be_truthy
   end
 
   it "should not be publisher" do
-    agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_false
+    agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_falsy
   end
 end
 

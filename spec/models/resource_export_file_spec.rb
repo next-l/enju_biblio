@@ -8,7 +8,7 @@ describe ResourceExportFile do
     file = ResourceExportFile.new
     file.user = users(:admin)
     file.save
-    ResourceExportFileQueue.perform(file.id).should be_true
+    ResourceExportFileQueue.perform(file.id).should be_truthy
   end
 end
 
