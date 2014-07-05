@@ -50,17 +50,16 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def import
-  #  reload
     num = {:agent_imported => 0, :user_imported => 0, :failed => 0}
-    row_num = 2
+    row_num = 1
     rows = open_import_file
     field = rows.first
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
-    #rows.shift
 
     rows.each do |row|
+      row_num += 1
       next if row['dummy'].to_s.strip.present?
       import_result = AgentImportResult.create!(:agent_import_file_id => self.id, :body => row.fields.join("\t"))
 
@@ -86,15 +85,14 @@ class AgentImportFile < ActiveRecord::Base
       #end
 
       import_result.save!
-      row_num += 1
     end
     rows.close
     transition_to!(:completed)
     return num
-  #rescue => e
-  #  self.error_message = "line #{row_num}: #{e.message}"
-  #  transition_to!(:failed)
-  #  raise e
+  rescue => e
+    self.error_message = "line #{row_num}: #{e.message}"
+    transition_to!(:failed)
+    raise e
   end
 
   def self.import
@@ -108,9 +106,10 @@ class AgentImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     rows.each do |row|
+      row_num += 1
       next if row['dummy'].to_s.strip.present?
       #user = User.where(:user_number => row['user_number'].to_s.strip).first
       #if user.try(:agent)
@@ -133,7 +132,6 @@ class AgentImportFile < ActiveRecord::Base
         agent.address_2 = row['address_2'] if row['address_2'].to_s.strip.present?
         agent.save!
       end
-      row_num += 1
     end
     transition_to!(:completed)
   rescue => e
@@ -145,9 +143,10 @@ class AgentImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     rows.each do |row|
+      row_num += 1
       next if row['dummy'].to_s.strip.present?
       agent = Agent.where(:id => row['id'].to_s.strip).first
       if agent
@@ -155,7 +154,6 @@ class AgentImportFile < ActiveRecord::Base
         agent.reload
         agent.destroy
       end
-      row_num += 1
     end
     transition_to!(:completed)
   rescue => e
