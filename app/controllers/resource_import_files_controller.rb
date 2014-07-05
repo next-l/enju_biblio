@@ -45,21 +45,17 @@ class ResourceImportFilesController < ApplicationController
   # POST /resource_import_files
   # POST /resource_import_files.json
   def create
+    authorize ResourceImportFile
     @resource_import_file = ResourceImportFile.new(resource_import_file_params)
-    authorize @resource_import_file
     @resource_import_file.user = current_user
 
-    respond_to do |format|
-      if @resource_import_file.save
-        if @resource_import_file.mode == 'import'
-          Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
-        end
-        format.html { redirect_to @resource_import_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.resource_import_file')) }
-        format.json { render :json => @resource_import_file, :status => :created, :location => @resource_import_file }
-      else
-        format.html { render :action => "new" }
-        format.json { render :json => @resource_import_file.errors, :status => :unprocessable_entity }
+    if @resource_import_file.save
+      if @resource_import_file.mode == 'import'
+        Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
       end
+      redirect_to @resource_import_file, notice: t('controller.successfully_created', :model => t('activerecord.models.resource_import_file'))
+    else
+      render action: 'new'
     end
   end
 

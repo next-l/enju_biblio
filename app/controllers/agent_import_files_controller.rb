@@ -45,18 +45,17 @@ class AgentImportFilesController < ApplicationController
   # POST /agent_import_files
   # POST /agent_import_files.json
   def create
+    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new(agent_import_file_params)
-    authorize @agent_import_file
     @agent_import_file.user = current_user
 
-    respond_to do |format|
-      if @agent_import_file.save
-        format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.agent_import_file')) }
-        format.json { render :json => @agent_import_file, :status => :created, :location => @agent_import_file }
-      else
-        format.html { render :action => "new" }
-        format.json { render :json => @agent_import_file.errors, :status => :unprocessable_entity }
+    if @agent_import_file.save
+      if @agent_import_file.mode == 'import'
+        Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
       end
+      redirect_to @agent_import_file, notice: t('controller.successfully_created', :model => t('activerecord.models.agent_import_file'))
+    else
+      render action: 'new'
     end
   end
 
