@@ -512,8 +512,8 @@ class Manifestation < ActiveRecord::Base
           item_lines = []
           item_lines << m.id
           item_lines << m.original_title
-          item_lines << m.creators.pluck(:full_name).join(";")
-          item_lines << m.publishers.pluck(:full_name).join(";")
+          item_lines << m.creators.pluck(:full_name).join("//")
+          item_lines << m.publishers.pluck(:full_name).join("//")
           item_lines << m.pub_date
           item_lines << m.price
           item_lines << m.identifier_contents(:isbn).first
