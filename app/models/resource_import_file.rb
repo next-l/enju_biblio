@@ -55,7 +55,7 @@ class ResourceImportFile < ActiveRecord::Base
     transition_to!(:started)
     num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     field = rows.first
     if [field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
@@ -63,6 +63,7 @@ class ResourceImportFile < ActiveRecord::Base
     end
 
     rows.each do |row|
+      row_num += 1
       next if row['dummy'].to_s.strip.present?
       import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, :body => row.fields.join("\t"))
 
@@ -155,7 +156,6 @@ class ResourceImportFile < ActiveRecord::Base
         Sunspot.commit
         GC.start
       end
-      row_num += 1
     end
 
     Sunspot.commit
@@ -250,9 +250,10 @@ class ResourceImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     rows.each do |row|
+      row_num += 1
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(:item_identifier => item_identifier).first if item_identifier.present?
       if item
@@ -289,7 +290,6 @@ class ResourceImportFile < ActiveRecord::Base
           fetch(row, :edit_mode => 'update')
         end
       end
-      row_num += 1
     end
     transition_to!(:completed)
   rescue => e
@@ -301,15 +301,15 @@ class ResourceImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     rows.each do |row|
+      row_num += 1
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(:item_identifier => item_identifier).first
       if item
         item.destroy if item.removable?
       end
-      row_num += 1
     end
     transition_to!(:completed)
   rescue => e
