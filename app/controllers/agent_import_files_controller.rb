@@ -57,6 +57,9 @@ class AgentImportFilesController < ApplicationController
 
     respond_to do |format|
       if @agent_import_file.save
+        if @agent_import_file.mode == 'import'
+          Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
+        end
         format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.agent_import_file')) }
         format.json { render :json => @agent_import_file, :status => :created, :location => @agent_import_file }
       else
