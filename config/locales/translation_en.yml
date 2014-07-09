@@ -37,6 +37,8 @@ en:
       donate: Donate
       identifier: Identifier
       identifier_type: Identifier type
+      resource_export_file: Resource export
+      agent_export_file: Agent export
 
     attributes:
       manifestation:
