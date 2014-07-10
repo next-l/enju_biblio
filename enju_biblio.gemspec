@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids}/*"]
 
   s.add_dependency "enju_seed", "~> 0.1.1.pre10"
-  s.add_dependency "paperclip", "~> 4.1"
-  s.add_dependency "paperclip-meta"
+  s.add_dependency "paperclip", "~> 4.2"
+  s.add_dependency "paperclip-meta", "~> 1.0"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
   s.add_dependency "inherited_resources"
