@@ -486,7 +486,7 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.export(options = {format: :tsv})
+  def self.export(options = {format: :txt})
     header = %w(
       manifestation_id
       original_title
@@ -542,7 +542,7 @@ class Manifestation < ActiveRecord::Base
         [lines]
       end
     }
-    if options[:format] == :tsv
+    if options[:format] == :txt
       items.map{|m| m.map{|i| i.join("\t")}}.flatten.unshift(header).join("\r\n")
     else
       items

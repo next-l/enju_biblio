@@ -6,7 +6,11 @@ class AgentImportResultsController < ApplicationController
     authorize AgentImportResult
     @agent_import_file = AgentImportFile.where(:id => params[:agent_import_file_id]).first
     if @agent_import_file
-      @agent_import_results = @agent_import_file.agent_import_results.page(params[:page])
+      if params[:format] == 'txt'
+        @agent_import_results = @agent_import_file.agent_import_results
+      else
+        @agent_import_results = @agent_import_file.agent_import_results.page(params[:page])
+      end
     else
       @agent_import_results = AgentImportResult.page(params[:page])
     end

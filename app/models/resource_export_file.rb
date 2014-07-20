@@ -18,7 +18,7 @@ class ResourceExportFile < ActiveRecord::Base
   def export!
     transition_to!(:started)
     tempfile = Tempfile.new(['resource_export_file_', '.txt'])
-    file = Manifestation.export(format: :tsv)
+    file = Manifestation.export(format: :txt)
     tempfile.puts(file)
     tempfile.close
     self.resource_export = File.new(tempfile.path, "r")
