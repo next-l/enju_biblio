@@ -68,7 +68,7 @@ class ManifestationsController < ApplicationController
       manifestations, sort, @count = {}, {}, {}
       query = ""
 
-      if params[:format] == 'csv'
+      if params[:format] == 'txt'
         per_page = 65534
       end
 
@@ -322,7 +322,7 @@ class ManifestationsController < ApplicationController
       format.xml  { render :xml => @manifestations }
       format.sru  { render :layout => false }
       format.rss  { render :layout => false }
-      format.csv  { render :layout => false }
+      format.txt  { render :layout => false }
       format.rdf  { render :layout => false }
       format.atom
       format.mods
