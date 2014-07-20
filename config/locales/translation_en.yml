@@ -105,6 +105,9 @@ en:
         lock_version: Lock version
         acquired_at: Acquired at
         donation: Donation
+        binding_item_identifier: Binding item identifier
+        binding_call_number: Binding call number
+        binded_at: Binded at
       agent:
         last_name: Last name
         middle_name: Middle name

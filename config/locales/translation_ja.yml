@@ -105,6 +105,9 @@ ja:
         lock_version: ロックバージョン
         acquired_at: 受入日
         donation: 寄贈情報
+        binding_item_identifier: 製本後の所蔵情報ID
+        binding_call_number: 製本後の請求記号
+        binded_at: 製本日
       agent:
         last_name: 姓
         middle_name: ミドルネーム

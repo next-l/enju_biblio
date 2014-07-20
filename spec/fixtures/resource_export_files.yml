@@ -15,22 +15,12 @@ resource_export_file_00003:
 # Table name: resource_export_files
 #
 #  id                           :integer          not null, primary key
-#  parent_id                    :integer
-#  content_type                 :string(255)
-#  size                         :integer
 #  user_id                      :integer
-#  note                         :text
-#  executed_at                  :datetime
-#  state                        :string(255)
 #  resource_export_file_name    :string(255)
 #  resource_export_content_type :string(255)
 #  resource_export_file_size    :integer
 #  resource_export_updated_at   :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
-#  edit_mode                    :string(255)
-#  resource_export_fingerprint  :string(255)
-#  error_message                :text
-#  user_encoding                :string(255)
+#  executed_at                  :datetime
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #
-
