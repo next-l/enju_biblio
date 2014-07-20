@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
     @count = {}
     if user_signed_in?
       if current_user.has_role?('Librarian')
-        if params[:format] == 'csv'
+        if params[:format] == 'txt'
           per_page = 65534
         elsif params[:mode] == 'barcode'
           per_page = 40
@@ -125,7 +125,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @items }
-      format.csv  { render :layout => false }
+      format.txt  { render :layout => false }
       format.atom
     end
   end
