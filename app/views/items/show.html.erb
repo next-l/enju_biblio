@@ -73,7 +73,7 @@
 
 <p>
   <strong><%= t('activerecord.models.budget_type') -%>:</strong>
-  <%= @item.budget_type.try(:name) -%>
+  <%= @item.budget_type.try(:display_name).try(:localize) -%>
 </p>
 
 <p>
