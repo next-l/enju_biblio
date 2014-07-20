@@ -1,5 +1,5 @@
 class AgentImportResultsController < InheritedResources::Base
-  respond_to :html, :json, :tsv
+  respond_to :html, :json, :txt
   load_and_authorize_resource
   has_scope :file_id
   actions :index, :show, :destroy
