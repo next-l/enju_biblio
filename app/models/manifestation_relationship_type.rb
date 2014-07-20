@@ -1,7 +1,6 @@
 class ManifestationRelationshipType < ActiveRecord::Base
-  attr_accessible :name, :display_name, :note
   include MasterModel
-  default_scope :order => 'manifestation_relationship_types.position'
+  default_scope {order('manifestation_relationship_types.position')}
   has_many :manifestation_relationships
 end
 
@@ -14,7 +13,6 @@ end
 #  display_name :text
 #  note         :text
 #  position     :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #
-

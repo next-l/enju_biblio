@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.showing', :model => t('activerecord.models.resource_import_file')) -%></h1>
 <div id="content_list">
 <p id="notice"><%= notice %></p>
@@ -44,8 +44,13 @@
 </p>
 
 <p>
+  <strong><%= t('activerecord.attributes.resource_import_file.user_encoding') -%>:</strong>
+  <%= @resource_import_file.user_encoding -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.resource_import_file.state') -%>:</strong>
-  <%= localized_state(@resource_import_file.state) -%>
+  <%= localized_state(@resource_import_file.current_state) -%>
 </p>
 
 <p>
@@ -61,9 +66,14 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <%= form_for(@resource_import_file) do |f| %>
   <ul>
     <li><%= link_to t('activerecord.models.resource_import_result'), resource_import_file_resource_import_results_path(@resource_import_file) -%></li>
     <li><%= back_to_index(flash[:page_info]) -%></li>
+    <% if current_user.has_role?('Administrator') %>
+      <li><%= link_to 'Resque', resque_path %></li>
+    <% end %>
   </ul>
+  <% end %>
 </div>

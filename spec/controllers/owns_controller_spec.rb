@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe OwnsController do
   fixtures :all
-  disconnect_sunspot
 
   def valid_attributes
     FactoryGirl.attributes_for(:own)
@@ -184,7 +182,7 @@ describe OwnsController do
           assigns(:own).should be_valid
         end
 
-        it "redirects to the created patron" do
+        it "redirects to the created agent" do
           post :create, :own => @attrs
           response.should redirect_to(assigns(:own))
         end
@@ -212,7 +210,7 @@ describe OwnsController do
           assigns(:own).should be_valid
         end
 
-        it "redirects to the created patron" do
+        it "redirects to the created agent" do
           post :create, :own => @attrs
           response.should redirect_to(assigns(:own))
         end

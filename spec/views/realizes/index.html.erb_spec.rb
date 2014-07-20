@@ -5,16 +5,13 @@ describe "realizes/index" do
     assign(:realizes, Kaminari::paginate_array([
       stub_model(Realize,
         :expression_id => 1,
-        :patron_id => 2
+        :agent_id => 2
       ),
       stub_model(Realize,
         :expression_id => 1,
-        :patron_id => 2
+        :agent_id => 2
       )
     ]).page(1))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders a list of realizes" do

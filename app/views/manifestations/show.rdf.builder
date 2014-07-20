@@ -6,6 +6,7 @@ xml.rdf(:RDF,
         'xmlns:dcterms' => "http://purl.org/dc/terms/",
         'xmlns:dcndl' => "http://ndl.go.jp/dcndl/terms/",
         'xmlns:foaf' => "http://xmlns.com/foaf/0.1/",
+        'xmlns:prism' => "http://prismstandard.org/namespaces/basic/2.0/",
         'xmlns:rdfs' =>"http://www.w3.org/2000/01/rdf-schema#") do
   xml << render('manifestations/show', :manifestation => @manifestation)
 end

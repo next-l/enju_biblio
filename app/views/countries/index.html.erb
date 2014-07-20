@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.country')) -%></h1>
 <div id="content_list">
 
@@ -15,7 +15,7 @@
 <%- @countries.each do |country| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, country -%>
+      <%- if policy(country).update? -%>
         <%= move_position(country) -%>
       <%- end -%>
     </td>
@@ -24,7 +24,7 @@
     <td><%= country.alpha_3 -%></td>
     <td><%= country.numeric_3 -%></td>
     <td>
-      <%- if can? :update, country -%>
+      <%- if policy(country).update? -%>
         <%= link_to t('page.edit'), edit_country_path(country) -%>
       <%- end -%>
     </td>
@@ -36,7 +36,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.country')), new_country_path -%></li>
   </ul>

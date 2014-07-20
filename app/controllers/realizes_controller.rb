@@ -1,16 +1,16 @@
 class RealizesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_patron, :get_expression
-  before_filter :prepare_options, :only => [:new, :edit]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
+  before_action :set_realize, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  before_action :get_agent, :get_expression
+  before_action :prepare_options, :only => [:new, :edit]
 
   # GET /realizes
   # GET /realizes.json
   def index
+    authorize Realize
     case
-    when @patron
-      @realizes = @patron.realizes.order('realizes.position').page(params[:page])
+    when @agent
+      @realizes = @agent.realizes.order('realizes.position').page(params[:page])
     when @expression
       @realizes = @expression.realizes.order('realizes.position').page(params[:page])
     else
@@ -34,16 +34,17 @@ class RealizesController < ApplicationController
 
   # GET /realizes/new
   def new
-    if @expression and @patron.blank?
-      redirect_to expression_patrons_url(@expression)
+    if @expression and @agent.blank?
+      redirect_to expression_agents_url(@expression)
       return
-    elsif @patron and @expression.blank?
-      redirect_to patron_expressions_url(@patron)
+    elsif @agent and @expression.blank?
+      redirect_to agent_expressions_url(@agent)
       return
     else
       @realize = Realize.new
+      authorize @realize
       @realize.expression = @expression
-      @realize.patron = @patron
+      @realize.agent = @agent
     end
   end
 
@@ -54,7 +55,8 @@ class RealizesController < ApplicationController
   # POST /realizes
   # POST /realizes.json
   def create
-    @realize = Realize.new(params[:realize])
+    @realize = Realize.new(realize_params)
+    authorize @realize
 
     respond_to do |format|
       if @realize.save
@@ -79,7 +81,7 @@ class RealizesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize.update_attributes(params[:realize])
+      if @realize.update_attributes(realize_params)
         format.html { redirect_to @realize, :notice => t('controller.successfully_updated', :model => t('activerecord.models.realize')) }
         format.json { head :no_content }
       else
@@ -97,12 +99,12 @@ class RealizesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.realize'))
+        flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.realize'))
         case
         when @expression
-          redirect_to expression_patrons_url(@expression)
-        when @patron
-          redirect_to patron_expressions_url(@patron)
+          redirect_to expression_agents_url(@expression)
+        when @agent
+          redirect_to agent_expressions_url(@agent)
         else
           redirect_to realizes_url
         end
@@ -112,7 +114,18 @@ class RealizesController < ApplicationController
   end
 
   private
+  def set_realize
+    @realize = Realize.find(params[:id])
+    authorize @realize
+  end
+
   def prepare_options
     @realize_types = RealizeType.all
+  end
+
+  def realize_params
+    params.require(:realize).permit(
+      :agent_id, :expression_id, :realize_type_id
+    )
   end
 end

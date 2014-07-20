@@ -1,4 +1,6 @@
 module ManifestationsHelper
+  include EnjuCirculation::ManifestationsHelper if defined?(EnjuCirculation)
+
   def resource_title(manifestation, action)
     string = LibraryGroup.site_config.display_name.localize.dup
     unless action == ('index' or 'new')
@@ -69,10 +71,10 @@ module ManifestationsHelper
     current = true if languages.include?(language.name)
     if current
       content_tag :strong do
-        link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(:page => nil, :language => language.name, :carrier_type => nil, :view => nil, :only_path => true)))
+        link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(:page => nil, :language => language.name, :view => nil, :only_path => true)))
       end
     else
-      link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(:page => nil, :language => language.name, :carrier_type => nil, :view => nil, :only_path => true)))
+      link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(:page => nil, :language => language.name, :view => nil, :only_path => true)))
     end
   end
 
@@ -108,6 +110,18 @@ module ManifestationsHelper
     end
   end
 
+  def pub_year_facet(pub_date_from, pub_date_to, facet)
+    string = ''
+    current = true if facet.value.first.to_i == pub_date_from.to_i and facet.value.last.to_i - 1 == pub_date_to.to_i
+    if current
+      content_tag :strong do
+        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(:pub_date_from => facet.value.first.to_i, :pub_date_to => facet.value.last.to_i - 1, :page => nil, :view => nil, :only_path => true)))
+      end
+    else
+      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(:pub_date_from => facet.value.first.to_i, :pub_date_to => facet.value.last.to_i - 1, :page => nil, :view => nil, :only_path => true)))
+    end
+  end
+
   def title_with_volume_number(manifestation)
     title = manifestation.original_title
     if manifestation.volume_number_string?
@@ -115,7 +129,7 @@ module ManifestationsHelper
     end
     if manifestation.periodical?
       if manifestation.issue_number_string?
-        title <<  " " + manifestation.issue_number_string
+        title <<  " (#{manifestation.issue_number_string})"
       end
       if manifestation.serial_number?
         title << " " + manifestation.serial_number.to_s
@@ -124,40 +138,12 @@ module ManifestationsHelper
     title
   end
 
-  def set_focus_on_search_form
-    javascript_tag("$('#search_form_top').focus()") if @query.blank?
-  end
-
   if defined?(EnjuBookmark)
     def link_to_bookmark(manifestation)
       if manifestation.bookmarked?(current_user)
         link_to t('bookmark.remove_from_my_bookmark'), bookmark_path(Bookmark.where(:user_id => current_user.id, :manifestation_id => manifestation.id).first), :confirm => t('page.are_you_sure'), :method => :delete
       else
         link_to t('bookmark.add_to_my_bookmark'), new_bookmark_path(:bookmark => {:url => manifestation_url(manifestation)})
-      end
-    end
-  end
-
-  if defined?(EnjuCirculation)
-    def link_to_reservation(manifestation, reserve)
-      unless current_user
-        unless manifestation.items.for_checkout.empty?
-          link_to t('manifestation.reserve_this'), new_reserve_path(:manifestation_id => manifestation.id)
-        end
-      else
-        if current_user.has_role?('Librarian')
-          link_to t('manifestation.reserve_this'), new_reserve_path(:manifestation_id => manifestation.id)
-        else
-          if manifestation.is_checked_out_by?(current_user)
-            I18n.t('manifestation.currently_checked_out')
-          else
-            if manifestation.is_reserved_by?(current_user)
-              link_to t('manifestation.cancel_reservation'), reserve, :confirm => t('page.are_you_sure'), :method => :delete 
-            else
-              link_to t('manifestation.reserve_this'), new_reserve_path(:manifestation_id => manifestation.id)
-            end
-          end
-        end
       end
     end
   end

@@ -9,7 +9,8 @@ describe ManifestationsController do
 
   describe "GET index", :solr => true do
     before do
-      Manifestation.reindex
+      Manifestation.__elasticsearch__.create_index!
+      Manifestation.import
     end
 
     describe "When logged in as Administrator" do
@@ -51,8 +52,8 @@ describe ManifestationsController do
         assigns(:manifestations).should_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations in csv format without operation" do
-        get :index, :format => 'csv'
+      it "assigns all manifestations as @manifestations in txt format without operation" do
+        get :index, :format => 'txt'
         response.should be_success
         assigns(:manifestations).should_not be_nil
         response.should render_template('manifestations/index')
@@ -111,49 +112,11 @@ describe ManifestationsController do
         response.should render_template("manifestations/index")
       end
 
-      it "assigns all manifestations as @manifestations in oai format without verb" do
-        get :index, :format => 'oai'
-        assigns(:manifestations).should_not be_nil
-        response.should render_template("manifestations/index")
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with ListRecords" do
-        get :index, :format => 'oai', :verb => 'ListRecords'
-        assigns(:manifestations).should_not be_nil
-        response.should render_template("manifestations/list_records")
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with ListIdentifiers" do
-        get :index, :format => 'oai', :verb => 'ListIdentifiers'
-        assigns(:manifestations).should_not be_nil
-        response.should render_template("manifestations/list_identifiers")
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with GetRecord without identifier" do
-        get :index, :format => 'oai', :verb => 'GetRecord'
-        assigns(:manifestations).should be_nil
-        assigns(:manifestation).should be_nil
-        response.should render_template('manifestations/index')
-      end
-
-      it "assigns all manifestations as @manifestations in oai format with GetRecord with identifier" do
-        get :index, :format => 'oai', :verb => 'GetRecord', :identifier => 'oai:localhost:manifestations-1'
-        assigns(:manifestations).should be_nil
-        assigns(:manifestation).should_not be_nil
-        response.should render_template('manifestations/show')
-      end
-
       it "should get index with manifestation_id" do
         get :index, :manifestation_id => 1
         response.should be_success
         assigns(:manifestation).should eq Manifestation.find(1)
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
-      end
-
-      it "should get index with publisher_id" do
-        get :index, :publisher_id => 1
-        response.should be_success
-        assigns(:manifestations).collect(&:id).should eq Patron.find(1).manifestations.order('created_at DESC').collect(&:id)
       end
 
       it "should get index with query" do
@@ -182,36 +145,22 @@ describe ManifestationsController do
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T14:59:59Z]'
       end
 
-      it "should get index_all_facet" do
-        get :index, :query => '2005', :view => 'all_facet'
-        response.should be_success
-        assigns(:carrier_type_facet).should_not be_empty
-        assigns(:language_facet).should_not be_empty
-        assigns(:library_facet).should_not be_empty
-      end
-
-      it "should get index_carrier_type_facet" do
-        get :index, :query => '2005', :view => 'carrier_type_facet'
-        response.should be_success
-        assigns(:carrier_type_facet).should_not be_empty
-      end
-
-      it "should get index_language_facet" do
-        get :index, :query => '2005', :view => 'language_facet'
-        response.should be_success
-        assigns(:language_facet).should_not be_empty
-      end
-
-      it "should get index_library_facet" do
-        get :index, :query => '2005', :view => 'library_facet'
-        response.should be_success
-        assigns(:library_facet).should_not be_empty
-      end
-
       it "should get tag_cloud" do
         get :index, :query => '2005', :view => 'tag_cloud'
         response.should be_success
         response.should render_template("manifestations/_tag_cloud")
+      end
+
+      it "should show manifestation with isbn", :solr => true do
+        get :index, :isbn => "4798002062"
+        response.should be_success
+        assigns(:manifestations).count.should eq 1
+      end
+
+      it "should not show missing manifestation with isbn", :solr => true do
+        get :index, :isbn => "47980020620"
+        response.should be_success
+        assigns(:manifestations).should be_empty
       end
     end
   end
@@ -234,9 +183,9 @@ describe ManifestationsController do
         assigns(:manifestation).should eq(Manifestation.find(1))
       end
 
-      it "should show manifestation with patron who does not produce it" do
-        get :show, :id => 3, :patron_id => 3
-        assigns(:manifestation).should eq assigns(:patron).manifestations.find(3)
+      it "should show manifestation with agent who does not produce it" do
+        get :show, :id => 3, :agent_id => 3
+        assigns(:manifestation).should eq assigns(:agent).manifestations.find(3)
         response.should be_success
       end
     end
@@ -255,7 +204,7 @@ describe ManifestationsController do
       end
 
       #it "should show myself" do
-      #  get :show, :id => users(:user1).patron
+      #  get :show, :id => users(:user1).agent
       #  response.should be_success
       #end
     end
@@ -276,16 +225,6 @@ describe ManifestationsController do
         get :show, :id => 22, :format => 'rdf'
         assigns(:manifestation).should eq Manifestation.find(22)
         response.should render_template("manifestations/show")
-      end
-
-      it "should show_manifestation with isbn" do
-        get :show, :isbn => "4798002062"
-        response.should redirect_to manifestation_url(assigns(:manifestation))
-      end
-
-      it "should not show missing manifestation with isbn" do
-        get :show, :isbn => "47980020620"
-        response.should be_missing
       end
 
       it "should show manifestation with holding" do
@@ -443,9 +382,9 @@ describe ManifestationsController do
         end
 
         it "assigns a series_statement" do
-          post :create, :manifestation => @attrs.merge(:series_has_manifestation_attributes => {:series_statement_id => 1})
+          post :create, :manifestation => @attrs.merge(:series_statements_attributes => {"0" => {:original_title => SeriesStatement.find(1).original_title}})
           assigns(:manifestation).reload
-          assigns(:manifestation).series_statement.should eq SeriesStatement.find(1)
+          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_true
         end
 
         it "redirects to the created manifestation" do
@@ -553,7 +492,7 @@ describe ManifestationsController do
   describe "PUT update" do
     before(:each) do
       @manifestation = FactoryGirl.create(:manifestation)
-      @manifestation.series_statement = SeriesStatement.find(1)
+      @manifestation.series_statements = [SeriesStatement.find(1)]
       @attrs = valid_attributes
       @invalid_attrs = {:original_title => ''}
     end
@@ -567,9 +506,11 @@ describe ManifestationsController do
         end
 
         it "assigns a series_statement" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(:series_has_manifestation_attributes => {:series_statement_id => 2})
+          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(
+            :series_statements_attributes => {"0" => {:original_title => series_statements(:two).original_title, "_destroy"=>"false"}}
+          )
           assigns(:manifestation).reload
-          assigns(:manifestation).series_statement.should eq SeriesStatement.find(2)
+          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:two).original_title).should be_true
         end
 
         it "assigns the requested manifestation as @manifestation" do

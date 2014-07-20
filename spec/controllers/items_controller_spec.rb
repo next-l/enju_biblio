@@ -10,7 +10,8 @@ describe ItemsController do
 
   describe "GET index", :solr => true do
     before do
-      Item.reindex
+      Item.__elasticsearch__.create_index!
+      Item.import
     end
 
     describe "When logged in as Administrator" do
@@ -58,11 +59,11 @@ describe ItemsController do
         assigns(:items).should_not be_nil
       end
 
-      it "should get index with patron_id" do
-        get :index, :patron_id => 1
+      it "should get index with agent_id" do
+        get :index, :agent_id => 1
         response.should be_success
-        assigns(:patron).should eq Patron.find(1)
-        assigns(:items).should eq assigns(:patron).items.order('created_at DESC').page(1)
+        assigns(:agent).should eq Agent.find(1)
+        assigns(:items).should eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it "should get index with manifestation_id" do
@@ -101,8 +102,10 @@ describe ItemsController do
       end
 
       it "should not show missing item" do
-        get :show, :id => 'missing'
-        response.should be_missing
+        lambda{
+          get :show, :id => 'missing'
+        }.should raise_error(ActiveRecord::RecordNotFound)
+        #response.should be_missing
       end
     end
 
@@ -192,8 +195,10 @@ describe ItemsController do
       end
 
       it "should not edit missing item" do
-        get :edit, :id => 'missing'
-        response.should be_missing
+        lambda{
+          get :edit, :id => 'missing'
+        }.should raise_error(ActiveRecord::RecordNotFound)
+        #response.should be_missing
       end
     end
 
@@ -268,9 +273,11 @@ describe ItemsController do
       end
 
       it "should not create item without manifestation_id" do
-        post :create, :item => { :circulation_status_id => 1 }
+        lambda{
+          post :create, :item => { :circulation_status_id => 1 }
+        }.should raise_error(ActiveRecord::RecordNotFound)
         assigns(:item).should_not be_valid
-        response.should be_missing
+        #response.should be_missing
       end
 
       it "should not create item already created" do
@@ -497,8 +504,10 @@ describe ItemsController do
       end
 
       it "should not destroy missing item" do
-        delete :destroy, :id => 'missing'
-        response.should be_missing
+        lambda{
+          delete :destroy, :id => 'missing'
+        }.should raise_error(ActiveRecord::RecordNotFound)
+        #response.should be_missing
       end
 
       it "should not destroy item if not checked in" do

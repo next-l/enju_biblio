@@ -1,0 +1,37 @@
+--- 
+carrier_type_00001: 
+  name: print
+  display_name: "en: print\r\n\
+    ja: 印刷物"
+  id: 1
+  position: 1
+carrier_type_00002: 
+  name: cd
+  display_name: CD
+  id: 2
+  position: 2
+carrier_type_00003: 
+  name: dvd
+  display_name: DVD
+  id: 3
+  position: 3
+carrier_type_00004: 
+  name: file
+  display_name: "en: file\r\n\
+    ja: コンピュータファイル"
+  id: 4
+  position: 4
+
+# == Schema Information
+#
+# Table name: carrier_types
+#
+#  id           :integer          not null, primary key
+#  name         :string(255)      not null
+#  display_name :text
+#  note         :text
+#  position     :integer
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+

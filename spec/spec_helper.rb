@@ -1,11 +1,15 @@
+require 'simplecov'
+SimpleCov.start 'rails'
+
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../spec/dummy/config/environment", __FILE__)
 require 'rspec/rails'
-require 'rspec/autorun'
 require 'vcr'
 require 'factory_girl'
-require 'sunspot-rails-tester'
+require 'rake'
+require 'elasticsearch/extensions/test/cluster/tasks'
+require 'rspec/active_model/mocks'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -35,20 +39,28 @@ RSpec.configure do |config|
 
   config.extend ControllerMacros, :type => :controller
 
-  config.extend VCR::RSpec::Macros
+  unless ENV['TRAVIS']
+    config.before :suite do
+      Elasticsearch::Extensions::Test::Cluster.start(port: 9200) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
+    end
 
-  $original_sunspot_session = Sunspot.session
-
-  config.before do
-    Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
+    config.after :suite do
+      Elasticsearch::Extensions::Test::Cluster.stop(port: 9200) if Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
+    end
   end
 
-  config.before :each, :solr => true do
-    Sunspot::Rails::Tester.start_original_sunspot_session
-    Sunspot.session = $original_sunspot_session
-    Sunspot.remove_all!
-  end
+  config.infer_spec_type_from_file_location!
 end
 
 FactoryGirl.definition_file_paths << "#{::Rails.root}/../../spec/factories"
 FactoryGirl.find_definitions
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassette_library'
+  c.hook_into :fakeweb
+  c.configure_rspec_metadata!
+  c.allow_http_connections_when_no_cassette = true
+  c.ignore_request do |request|
+    URI(request.uri).port == 9200
+  end
+end

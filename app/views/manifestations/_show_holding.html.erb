@@ -1,4 +1,4 @@
-<div id="holding">
+<div class="holding">
 <table class="table table-striped holding">
   <tr>
     <th><%= t('activerecord.attributes.item.item_identifier') -%></th>
@@ -9,7 +9,12 @@
       <th><%= t('activerecord.models.circulation_status') -%></th>
     <% end %>
   </tr>
-  <%- manifestation.items.on_shelf.each do |item| -%>
+  <% if current_user.try(:has_role?, 'Librarian') %>
+    <% items = manifestation.items %>
+  <% else %>
+    <% items = manifestation.items.for_checkout.on_shelf %>
+  <% end %>
+  <%- items.each do |item| -%>
     <tr>
       <td>
         <%- if item.item_identifier? -%>
@@ -31,32 +36,20 @@
       <% if defined?(EnjuCirculation) %>
         <td>
           <%= item.circulation_status.display_name.localize if item.circulation_status -%>
-          <%- if item.rent? -%>
+          <% if item.retained? %>
+            <br />
+            <%= t('reserve.retained') %>
+          <% end %>
+          <% if item.rent? %>
+            <br />
             (
               <%= t('activerecord.attributes.checkout.due_date') -%>:
               <%= l(item.checkouts.first.due_date, :format => :short) -%>
             )
-          <%- end -%>
+          <% end %>
         </td>
       <% end %>
     </tr>
-    <% if can? :update, item %>
-      <script>
-        $(document).ready(function(){
-          $('a#item_identifier_item_<%= item.id %>').qtip({
-            position: {
-              my: 'bottom left',
-              at: 'top center'
-            },
-            content: 'item_identifier: <%= item.item_identifier %>',
-            hide: {
-              fixed: true
-            }
-          });
-        });
-      </script>
-      <%= render 'items/qtip', :item => item %>
-    <% end %>
   <%- end -%>
 </table>
 </div>

@@ -1,9 +1,11 @@
 class DonatesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_donate, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
 
   # GET /donates
   # GET /donates.json
   def index
+    authorize Donate
     @donates = Donate.order('id DESC').page(params[:page])
 
     respond_to do |format|
@@ -25,6 +27,7 @@ class DonatesController < ApplicationController
   # GET /donates/new.json
   def new
     @donate = Donate.new
+    authorize @donate
 
     respond_to do |format|
       format.html # new.html.erb
@@ -39,7 +42,8 @@ class DonatesController < ApplicationController
   # POST /donates
   # POST /donates.json
   def create
-    @donate = Donate.new(params[:donate])
+    @donate = Donate.new(donate_params)
+    authorize @donate
 
     respond_to do |format|
       if @donate.save
@@ -56,7 +60,7 @@ class DonatesController < ApplicationController
   # PUT /donates/1.json
   def update
     respond_to do |format|
-      if @donate.update_attributes(params[:donate])
+      if @donate.update_attributes(donate_params)
         format.html { redirect_to @donate, :notice => t('controller.successfully_updated', :model => t('activerecord.models.donate')) }
         format.json { head :no_content }
       else
@@ -75,5 +79,15 @@ class DonatesController < ApplicationController
       format.html { redirect_to(donates_url) }
       format.json { head :no_content }
     end
+  end
+
+  private
+  def set_donate
+    @donate = Donate.find(params[:id])
+    authorize @donate
+  end
+
+  def donate_params
+    params.require(:donate).permit(:agent_id, :item_id)
   end
 end

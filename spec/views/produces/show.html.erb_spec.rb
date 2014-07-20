@@ -4,11 +4,8 @@ describe "produces/show" do
   before(:each) do
     @produce = assign(:produce, stub_model(Produce,
       :manifestation_id => 1,
-      :patron_id => 1
+      :agent_id => 1
     ))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders attributes in <p>" do

@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.showing', :model => t('activerecord.models.picture_file')) -%></h1>
 <div id="content_list">
 <p id="notice"><%= notice %></p>
@@ -47,7 +47,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.edit'), edit_picture_file_path(@picture_file) -%></li>
     <% if @picture_file.picture_attachable_type? %>
@@ -55,8 +55,8 @@
         <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), shelf_picture_files_path(@picture_file.picture_attachable) -%></li>
      <%- when @picture_file.picture_attachable.is_a?(Manifestation) -%>
         <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), manifestation_picture_files_path(@picture_file.picture_attachable) -%></li>
-     <%- when @picture_file.picture_attachable.is_a?(Patron) -%>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), patron_picture_files_path(@picture_file.picture_attachable) -%></li>
+     <%- when @picture_file.picture_attachable.is_a?(Agent) -%>
+        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), agent_picture_files_path(@picture_file.picture_attachable) -%></li>
       <%- else -%>
         <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), picture_files_path -%></li>
       <%- end -%>

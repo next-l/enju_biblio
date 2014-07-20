@@ -6,12 +6,9 @@ describe "creates/edit" do
   before(:each) do
     @create = assign(:create, stub_model(Create,
       :work_id => 1,
-      :patron_id => 1
+      :agent_id => 1
     ))
     @create_types = CreateType.all
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders the edit create form" do

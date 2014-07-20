@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe ManifestationRelationshipsController do
   fixtures :all
-  disconnect_sunspot
 
   def valid_attributes
     @attrs = FactoryGirl.attributes_for(:manifestation_relationship)
@@ -19,7 +17,7 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        assigns(:manifestation_relationships).should eq(ManifestationRelationship.all)
+        assigns(:manifestation_relationships).should eq(ManifestationRelationship.page(1))
       end
     end
 
@@ -28,7 +26,7 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        assigns(:manifestation_relationships).should eq(ManifestationRelationship.all)
+        assigns(:manifestation_relationships).should eq(ManifestationRelationship.page(1))
       end
     end
 
@@ -37,14 +35,14 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        assigns(:manifestation_relationships).should eq(ManifestationRelationship.all)
+        assigns(:manifestation_relationships).should be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        assigns(:manifestation_relationships).should eq(ManifestationRelationship.all)
+        assigns(:manifestation_relationships).should be_nil
       end
     end
   end

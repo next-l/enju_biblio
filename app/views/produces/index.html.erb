@@ -1,5 +1,5 @@
-<%- if @patron -%>
-  <%= render 'index_patron', :patron => @patron -%>
+<%- if @agent -%>
+  <%= render 'index_agent', :agent => @agent -%>
 <%- elsif @manifestation -%>
   <%= render 'index_manifestation', :manifestation => @manifestation -%>
 <%- else -%>

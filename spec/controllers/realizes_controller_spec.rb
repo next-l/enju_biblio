@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe RealizesController do
   fixtures :realizes
-  disconnect_sunspot
 
   describe "GET index" do
     describe "When logged in as Administrator" do

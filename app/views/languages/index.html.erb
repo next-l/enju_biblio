@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.language')) -%></h1>
 <div id="content_list">
 
@@ -17,7 +17,7 @@
 <%- @languages.each do |language| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, language -%>
+      <%- if policy(language).update? -%>
         <%= move_position(language) -%>
       <%- end -%>
     </td>
@@ -28,7 +28,7 @@
     <td><%= language.iso_639_2 -%></td>
     <td><%= language.iso_639_3 -%></td>
     <td>
-      <%- if can? :update, language -%>
+      <%- if policy(language).update? -%>
         <%= link_to t('page.edit'), edit_language_path(language) -%>
       <%- end -%>
     </td>
@@ -40,8 +40,8 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
-  <%- if can? :create, Country -%>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <%- if policy(Language).create? -%>
     <ul>
       <li><%= link_to t('page.new', :model => t('activerecord.models.language')), new_language_path -%></li>
     </ul>

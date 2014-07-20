@@ -1,7 +1,4 @@
 require "enju_biblio/engine"
-require "enju_biblio/openurl"
-require "enju_biblio/porta_cql"
-require "enju_biblio/sru"
 require "enju_biblio/biblio_helper"
 
 module EnjuBiblio
@@ -20,39 +17,41 @@ module EnjuBiblio
 
     def get_work
       @work = Manifestation.find(params[:work_id]) if params[:work_id]
-      authorize! :show, @work if @work
+      authorize @work, :show? if @work
     end
 
     def get_expression
       @expression = Manifestation.find(params[:expression_id]) if params[:expression_id]
-      authorize! :show, @expression if @expression
+      authorize @expression, :show? if @expression
     end
 
     def get_manifestation
       @manifestation = Manifestation.find(params[:manifestation_id]) if params[:manifestation_id]
-      authorize! :show, @manifestation if @manifestation
+      authorize @manifestation, :show? if @manifestation
     end
 
     def get_item
       @item = Item.find(params[:item_id]) if params[:item_id]
-      authorize! :show, @item if @item
+      authorize @item, :show? if @item
     end
 
     def get_carrier_type
       @carrier_type = CarrierType.find(params[:carrier_type_id]) if params[:carrier_type_id]
     end
 
-    def get_patron
-      @patron = Patron.find(params[:patron_id]) if params[:patron_id]
-      authorize! :show, @patron if @patron
+    def get_agent
+      @agent = Agent.find(params[:agent_id]) if params[:agent_id]
+      authorize @agent, :show? if @agent
     end
 
     def get_series_statement
       @series_statement = SeriesStatement.find(params[:series_statement_id]) if params[:series_statement_id]
+      authorize @series_statement, :show? if @series_statement
     end
 
     def get_basket
       @basket = Basket.find(params[:basket_id]) if params[:basket_id]
+      authorize @basket, :show? if @basket
     end
   end
 end

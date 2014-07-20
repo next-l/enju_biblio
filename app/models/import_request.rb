@@ -1,23 +1,23 @@
 class ImportRequest < ActiveRecord::Base
-  attr_accessible :isbn, :manifestation_id, :user_id
-  default_scope :order => 'id DESC'
+  include Statesman::Adapters::ActiveRecordModel
+  default_scope {order('import_requests.id DESC')}
   belongs_to :manifestation
   belongs_to :user
   validates_presence_of :isbn
   validate :check_isbn
   #validate :check_imported, :on => :create
   #validates_uniqueness_of :isbn, :if => Proc.new{|request| ImportRequest.where("created_at > ?", 1.day.ago).collect(&:isbn).include?(request.isbn)}
-  enju_ndl_search if defined?(EnjuNdl)
+  enju_ndl_ndl_search if defined?(EnjuNdl)
+  enju_nii_cinii_books if defined?(EnjuNii)
 
-  state_machine :initial => :pending do
-    event :sm_fail do
-      transition :pending => :failed
-    end
+  has_many :import_request_transitions
 
-    event :sm_complete do
-      transition :pending => :completed
-    end
+  def state_machine
+    @state_machine ||= ImportRequestStateMachine.new(self, transition_class: ImportRequestTransition)
   end
+
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   def check_isbn
     if isbn.present?
@@ -34,22 +34,33 @@ class ImportRequest < ActiveRecord::Base
   end
 
   def import!
+    return nil unless Manifestation.respond_to?(:import_isbn)
     unless manifestation
-      manifestation = self.class.import_isbn!(isbn)
-      if manifestation.save
+      manifestation = Manifestation.import_isbn(isbn)
+      if manifestation
         self.manifestation = manifestation
-        sm_complete!
-        manifestation.index!
+        transition_to!(:completed)
+        manifestation.__elasticsearch__.index_document
       else
-        sm_fail!
+        transition_to!(:failed)
       end
     else
-      sm_fail!
+      transition_to!(:failed)
     end
+    save
   rescue ActiveRecord::RecordInvalid
-    sm_fail!
+    transition_to!(:failed)
+  rescue NameError
+    transition_to!(:failed)
   rescue EnjuNdl::RecordNotFound
-    sm_fail!
+    transition_to!(:failed)
+  #rescue EnjuNii::RecordNotFound
+  #  transition_to!(:failed)
+  end
+
+  private
+  def self.transition_class
+    ImportRequestTransition
   end
 end
 
@@ -59,10 +70,8 @@ end
 #
 #  id               :integer          not null, primary key
 #  isbn             :string(255)
-#  state            :string(255)
 #  manifestation_id :integer
 #  user_id          :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #
-

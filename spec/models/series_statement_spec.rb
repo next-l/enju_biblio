@@ -1,26 +1,10 @@
-# -*- encoding: utf-8 -*-
 require 'spec_helper'
 
 describe SeriesStatement do
   fixtures :all
 
-  it "should create root_manifestation" do
-    series_statement = FactoryGirl.create(:series_statement, :periodical => true)
-    series_statement.root_manifestation.should be_true
-    series_statement.manifestations.size.should eq 1
-    series_statement.reload
-    series_statement.root_manifestation.periodical_master?.should be_true
-  end
-
-  it "should destroy root_manifestation" do
-    series_statement = FactoryGirl.create(:series_statement, :periodical => true)
-    series_statement.root_manifestation = Manifestation.first
-    series_statement.save
-    series_statement.reload
-    series_statement.root_manifestation.should be_true
-    series_statement.periodical = false
-    series_statement.save
-    series_statement.reload
+  it "should create manifestation" do
+    series_statement = FactoryGirl.create(:series_statement)
     series_statement.root_manifestation.should be_nil
   end
 end
@@ -29,21 +13,23 @@ end
 #
 # Table name: series_statements
 #
-#  id                            :integer          not null, primary key
-#  original_title                :text
-#  numbering                     :text
-#  title_subseries               :text
-#  numbering_subseries           :text
-#  position                      :integer
-#  created_at                    :datetime         not null
-#  updated_at                    :datetime         not null
-#  title_transcription           :text
-#  title_alternative             :text
-#  series_statement_identifier   :string(255)
-#  issn                          :string(255)
-#  periodical                    :boolean          default(FALSE), not null
-#  root_manifestation_id         :integer
-#  note                          :text
-#  title_subseries_transcription :text
+#  id                                 :integer          not null, primary key
+#  original_title                     :text
+#  numbering                          :text
+#  title_subseries                    :text
+#  numbering_subseries                :text
+#  position                           :integer
+#  created_at                         :datetime
+#  updated_at                         :datetime
+#  title_transcription                :text
+#  title_alternative                  :text
+#  series_statement_identifier        :string(255)
+#  manifestation_id                   :integer
+#  note                               :text
+#  title_subseries_transcription      :text
+#  creator_string                     :text
+#  volume_number_string               :text
+#  volume_number_transcription_string :text
+#  series_master                      :boolean
+#  root_manifestation_id              :integer
 #
-

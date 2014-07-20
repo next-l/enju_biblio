@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe ImportRequestsController do
   fixtures :all
-  disconnect_sunspot
 
   describe "GET index" do
     describe "When logged in as Administrator" do
@@ -11,7 +9,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        assigns(:import_requests).should eq(ImportRequest.all)
+        assigns(:import_requests).should eq(ImportRequest.page(1))
       end
     end
 
@@ -20,23 +18,23 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        assigns(:import_requests).should eq(ImportRequest.all)
+        assigns(:import_requests).should eq(ImportRequest.page(1))
       end
     end
 
     describe "When logged in as User" do
       login_user
 
-      it "assigns empty as @import_requests" do
+      it "assigns nil as @import_requests" do
         get :index
-        assigns(:import_requests).should be_empty
+        assigns(:import_requests).should be_nil
       end
     end
 
     describe "When not logged in" do
-      it "assigns empty as @import_requests" do
+      it "assigns nil as @import_requests" do
         get :index
-        assigns(:import_requests).should be_empty
+        assigns(:import_requests).should be_nil
       end
     end
   end
@@ -164,20 +162,19 @@ describe ImportRequestsController do
       @attrs = {:isbn => '9784873114422'}
       @invalid_attrs = {:isbn => 'invalid'}
     end
-    use_vcr_cassette "enju_ndl/ndl_search", :record => :new_episodes
 
     describe "When logged in as Administrator" do
       login_admin
 
-      describe "with valid params" do
+      describe "with valid params", :vcr => true do
         it "assigns a newly created import_request as @import_request" do
           post :create, :import_request => @attrs
-          assigns(:import_request).should be_valid
+          assigns(:import_request).manifestation.save! #should be_valid
         end
 
         it "redirects to the created import_request" do
           post :create, :import_request => @attrs
-          response.should redirect_to manifestation_items_url(assigns(:import_request).manifestation)
+          response.should redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
 
@@ -195,13 +192,13 @@ describe ImportRequestsController do
 
       describe "with isbn which is already imported" do
         it "assigns a newly created import_request as @import_request" do
-          post :create, :import_request => {:isbn => manifestations(:manifestation_00001).isbn}
+          post :create, :import_request => {:isbn => manifestations(:manifestation_00001).identifier_contents(:isbn).first}
           assigns(:import_request).should be_valid
         end
 
-        it "redirects to the created import_request" do
+        it "redirects to the created import_request", :vcr => true do
           post :create, :import_request => @attrs
-          response.should redirect_to manifestation_items_url(assigns(:import_request).manifestation)
+          response.should redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
     end
@@ -209,7 +206,7 @@ describe ImportRequestsController do
     describe "When logged in as Librarian" do
       login_librarian
 
-      describe "with valid params" do
+      describe "with valid params", :vcr => true do
         it "assigns a newly created import_request as @import_request" do
           post :create, :import_request => @attrs
           assigns(:import_request).should be_valid
@@ -217,7 +214,7 @@ describe ImportRequestsController do
 
         it "redirects to the created import_request" do
           post :create, :import_request => @attrs
-          response.should redirect_to manifestation_items_url(assigns(:import_request).manifestation)
+          response.should redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
 

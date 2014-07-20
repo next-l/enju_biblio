@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.frequency')) -%></h1>
 <div id="content_list">
 
@@ -13,17 +13,17 @@
 <%- @frequencies.each do |frequency| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, frequency -%>
+      <%- if policy(frequency).update? -%>
         <%= move_position(frequency) -%>
       <%- end -%>
     </td>
     <td><%= link_to frequency.name, frequency -%></td>
     <td><%= link_to frequency.display_name.localize, frequency -%></td>
     <td>
-      <%- if can? :update, frequency -%>
+      <%- if policy(frequency).update? -%>
         <%= link_to t('page.edit'), edit_frequency_path(frequency) -%>
       <% end %>
-      <%- if can? :destroy, frequency -%>
+      <%- if policy(frequency).destroy? -%>
         <%= link_to t('page.destroy'), frequency, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -34,9 +34,9 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, Frequency -%>
+    <%- if policy(Frequency).create? -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.frequency')), new_frequency_path -%></li>
     <%- end -%>
  </ul>

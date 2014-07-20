@@ -1,28 +1,28 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.search_resource', :model => t('page.resource')) -%></h1>
 <div id="content_list">
   <%= render 'manifestations/title', :manifestation => @manifestation if @manifestation -%>
 
   <% case %>
-  <% when @index_patron[:creator] %>
+  <% when @index_agent[:creator] %>
     <%= render 'index_form_creator' %>
-  <% when @index_patron[:contributor] %>
+  <% when @index_agent[:contributor] %>
     <%= render 'index_form_contributor' %>
-  <% when @index_patron[:publisher] %>
+  <% when @index_agent[:publisher] %>
     <%= render 'index_form_publisher' %>
   <% when @manifestation %>
     <%= render 'index_form_manifestation' %>
   <% when @item %>
     <%= render 'index_form_item' %>
-  <% when @series_statement %>
-    <%= render 'index_form_series_statement' %>
+  <% when @parent %>
+    <%= render 'index_form_parent' %>
   <% else %>
     <%= render 'index_form' %>
   <% end %>
   <%= set_focus_on_search_form %>
 
-  <% if @series_statement %>
-    <%= render 'show_series_statement' %>
+  <% if @parent %>
+    <%= render 'show_parent' %>
   <% end %>
 
   <%- if @manifestations.total_count > 0 -%>
@@ -54,22 +54,16 @@
     </p>
 
     <div class="autopagerize_page_element" id="list">
-      <%= render 'manifestations/list', :manifestations => @manifestations -%>
+      <table class="table table-striped index" id="manifestation_list">
+        <%= render @manifestations %>
+      </table>
+
+      <%= paginate(@manifestations) -%>
+      <br />
     </div>
 
-    <% if defined?(EnjuBookmark) %>
-      <div id="tag_cloud">
-        <h3 class="resource_title"><%= t('activerecord.models.tag') -%></h3>
-        <div id="tag_cloud_list"></div>
-        <%= image_tag 'spinner.gif', :id => 'spinner_tag_cloud',
-          :style => 'padding-bottom: 15px; padding-left: 40px;' -%>
-      </div>
-    <% end %>
   <%- else -%>
     <!-- TODO: 検索結果が少ない場合にも表示させる -->
-    <%- if @suggested_tag -%>
-      <p><%= t('page.did_you_mean') -%>: <%= link_to @suggested_tag.name, manifestations_path(:tag => @suggested_tag.name) -%></p>
-    <%- end -%>
     <%= render 'manifestations/not_found' -%>
   <%- end -%>
 
@@ -78,34 +72,11 @@
   </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
-  <% if @series_statement and can?(:update, @series_statement) %>
-    <%= render 'submenu_series_statement' %>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <% if @parent and policy(@parent).update? %>
+    <%= render 'submenu_parent' %>
   <% end %>
-  <h3><%= link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(params.merge(:action => 'index', :view => nil, :carrier_type => nil, :library => nil, :language => nil, :subject => nil, :only_path => true))  -%></h3>
-    <%- if @manifestations.total_count > 0 -%>
-      <%= render 'manifestations/all_facet' -%>
-    <%- end -%>
-  <div>
-    <%- if params[:library_id].blank? -%>
-      <%= link_to((image_tag 'icons/feed.png', :size => '16x16', :alt => t('page.feed'), :class => 'icon'), url_for(params.merge(:format => :rss, :page => nil, :library_id => nil, :only_path => true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(:format => :rss, :page => nil, :library_id => nil, :commit => nil, :only_path => true)) -%>
-    <%- else -%>
-      <%= link_to((image_tag 'icons/feed.png', :size => '16x16', :alt => t('page.feed'), :class => 'icon'), url_for(params.merge(:format => :rss, :page => nil, :only_path => true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(:format => :rss, :page => nil, :commit => nil, :only_path => true)) -%>
-    <%- end -%>
-  </div>
 </div>
-
-<% if defined?(EnjuBookmark) %>
-  <script type="text/javascript">
-    window.onload = function() {
-      $("#tag_cloud_list").load('<%= url_for(params.merge(:view => "tag_cloud", :only_path => true)) -%>', hideTagCloudSpinner);
-    }
-
-    function hideTagCloudSpinner(){
-      $("#spinner_tag_cloud").hide();
-    }
-  </script>
-<% end %>
 
 <% if @manifestation_ids and @search_query %>
   <%= render 'session_ids' %>

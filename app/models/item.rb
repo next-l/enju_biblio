@@ -1,88 +1,83 @@
 # -*- encoding: utf-8 -*-
 class Item < ActiveRecord::Base
-  attr_accessible :call_number, :item_identifier, :circulation_status_id,
-    :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
-    :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
-    :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
-  scope :on_shelf, where('shelf_id != 1')
-  scope :on_web, where(:shelf_id => 1)
-  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
-  has_one :exemplify, :dependent => :destroy
-  has_one :manifestation, :through => :exemplify
+  include Elasticsearch::Model
+  include Elasticsearch::Model::Callbacks
+
+  enju_library_item_model if defined?(EnjuLibrary)
+  enju_circulation_item_model if defined?(EnjuCirculation)
+  enju_export if defined?(EnjuExport)
+  enju_question_item_model if defined?(EnjuQuestion)
+  enju_inventory_item_model if defined?(EnjuInventory)
+  enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
+  scope :on_shelf, -> {where('shelf_id != 1')}
+  scope :on_web, -> {where(:shelf_id => 1)}
+  belongs_to :manifestation, touch: true
   has_many :owns
-  has_many :patrons, :through => :owns
+  has_many :agents, :through => :owns
   delegate :display_name, :to => :shelf, :prefix => true
   belongs_to :bookstore, :validate => true
-  has_many :donates
-  has_many :donors, :through => :donates, :source => :patron
+  #has_many :donates
+  #has_many :donors, :through => :donates, :source => :agent
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
-  has_one :accept
-  #accepts_nested_attributes_for :exemplify
   #before_save :create_manifestation
 
   validates_associated :bookstore
-  validates :manifestation_id, :presence => true, :on => :create
+  validates :manifestation_id, :presence => true #, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
+    :format => {:with => /\A[0-9A-Za-z_]+\Z/}
+  validates :binding_item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
   validates_date :acquired_at, :allow_blank => true
 
-  has_paper_trail
   normalize_attributes :item_identifier
 
-  #enju_export
+  index_name "#{name.downcase.pluralize}-#{Rails.env}"
 
-  searchable do
-    text :item_identifier, :note, :title, :creator, :contributor, :publisher
-    string :item_identifier
-    integer :required_role_id
-    integer :manifestation_id do
-      manifestation.id if manifestation
-    end
-    integer :shelf_id
-    integer :patron_ids, :multiple => true
-    time :created_at
-    time :updated_at
+  after_commit on: :create do
+    index_document
   end
 
-  enju_circulation_item_model if defined?(EnjuCirculation)
+  after_commit on: :update do
+    update_document
+  end
 
-  attr_accessor :library_id
+  after_commit on: :destroy do
+    delete_document
+  end
 
-  if defined?(EnjuInventory)
-    has_many :inventories, :dependent => :destroy
-    has_many :inventory_files, :through => :inventories
-    searchable do
-      integer :inventory_file_ids, :multiple => true
-    end
-
-    def self.inventory_items(inventory_file, mode = 'not_on_shelf')
-      item_ids = Item.pluck(:id)
-      inventory_item_ids = inventory_file.items.pluck('items.id')
-      case mode
-      when 'not_on_shelf'
-        Item.where(:id => (item_ids - inventory_item_ids))
-      when 'not_in_catalog'
-        Item.where(:id => (inventory_item_ids - item_ids))
-      end
-    rescue
-      nil
+  settings do
+    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
+      indexes :item_identifier
+      indexes :note
+      indexes :title
+      indexes :creator
+      indexes :contributor
+      indexes :publisher
+      indexes :manifestation_id, type: 'integer'
+      indexes :shelf_id, type: 'integer'
+      indexes :created_at
+      indexes :updated_at
+      indexes :acquired_at
+      indexes :agent_ids
     end
   end
 
-  if defined?(EnjuQuestion)
-    has_many :answer_has_items, :dependent => :destroy
-    has_many :answers, :through => :answer_has_items
+  def as_indexed_json(options={})
+    as_json.merge(
+      item_identifier: [item_identifier, binding_item_identifier],
+      title: title,
+      creator: creator,
+      contributor: contributor,
+      publisher: publisher,
+      manifestation_id: manifestation.try(:id),
+      agent_ids: agent_ids
+    )
   end
 
-  if defined?(EnjuInterLibraryLoan)
-    has_many :inter_library_loans, :dependent => :destroy
-    def inter_library_loaned?
-      true if self.inter_library_loans.size > 0
-    end
-  end
+  attr_accessor :library_id #, :manifestation_id
 
   paginates_per 10
 
@@ -102,47 +97,21 @@ class Item < ActiveRecord::Base
     manifestation.try(:publisher)
   end
 
-  if defined?(EnjuLibrary)
-    belongs_to :shelf, :counter_cache => true, :validate => true
-    validates_associated :shelf
-
-    searchable do
-      string :library do
-        shelf.library.name if shelf
-      end
-    end
-
-    def shelf_name
-      shelf.name
-    end
-  end
-
-  def hold?(library)
-    return true if self.shelf.library == library
-    false
-  end
-
-  def owned(patron)
-    owns.where(:patron_id => patron.id).first
-  end
-
-  def library_url
-    "#{LibraryGroup.site_config.url}libraries/#{self.shelf.library.name}"
+  def owned(agent)
+    owns.where(:agent_id => agent.id).first
   end
 
   def manifestation_url
     Addressable::URI.parse("#{LibraryGroup.site_config.url}manifestations/#{self.manifestation.id}").normalize.to_s if self.manifestation
   end
 
-  def deletable?
-    if circulation_status.name == 'Removed'
-      return false
+  def removable?
+    if defined?(EnjuCirculation)
+      return false if circulation_status.name == 'Removed'
+      return false if checkouts.not_returned.exists?
+      true
     else
-      if defined?(EnjuCirculation)
-        checkouts.not_returned.empty?
-      else
-        true
-      end
+      true
     end
   end
 
@@ -157,26 +126,27 @@ end
 #
 # Table name: items
 #
-#  id                    :integer          not null, primary key
-#  call_number           :string(255)
-#  item_identifier       :string(255)
-#  circulation_status_id :integer          default(5), not null
-#  checkout_type_id      :integer          default(1), not null
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  deleted_at            :datetime
-#  shelf_id              :integer          default(1), not null
-#  include_supplements   :boolean          default(FALSE), not null
-#  note                  :text
-#  url                   :string(255)
-#  price                 :integer
-#  lock_version          :integer          default(0), not null
-#  required_role_id      :integer          default(1), not null
-#  state                 :string(255)
-#  required_score        :integer          default(0), not null
-#  acquired_at           :datetime
-#  bookstore_id          :integer
-#  budget_type_id        :integer
-#  manifestation_id      :integer
+#  id                      :integer          not null, primary key
+#  manifestation_id        :integer
+#  call_number             :string(255)
+#  item_identifier         :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  deleted_at              :datetime
+#  shelf_id                :integer          default(1), not null
+#  include_supplements     :boolean          default(FALSE), not null
+#  note                    :text
+#  url                     :string(255)
+#  price                   :integer
+#  lock_version            :integer          default(0), not null
+#  required_role_id        :integer          default(1), not null
+#  required_score          :integer          default(0), not null
+#  acquired_at             :datetime
+#  bookstore_id            :integer
+#  budget_type_id          :integer
+#  circulation_status_id   :integer          default(5), not null
+#  checkout_type_id        :integer          default(1), not null
+#  binding_item_identifier :string(255)
+#  binding_call_number     :string(255)
+#  binded_at               :datetime
 #
-

@@ -1,6 +1,6 @@
 <div style="color: red"><%= flash[:message] -%></div>
 
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.showing', :model => t('activerecord.models.item')) -%></h1>
 <div id="content_list">
 <p id="notice"><%= notice %></p>
@@ -8,6 +8,16 @@
   <%- if @item.manifestation -%>
     <%= render 'manifestations/title', :manifestation => @item.manifestation -%>
   <%- end -%>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.item_identifier') -%>:</strong>
+  <%= @item.item_identifier -%>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.binding_item_identifier') -%>:</strong>
+  <%= @item.binding_item_identifier -%>
+</p>
 
 <p>
   <strong><%= t('activerecord.models.shelf') -%>:</strong>
@@ -34,14 +44,12 @@
   <p>
     <strong><%= t('activerecord.models.circulation_status') -%>:</strong>
     <%= link_to @item.circulation_status.display_name.localize, @item.circulation_status -%>
-    <%- if user_signed_in? -%>
-      <%- if current_user.has_role?('Librarian') -%>
-       <%- unless @item.checkouts.not_returned.blank? -%>
-          (<%= link_to t('item.current_checkout'), checkout_path(@item.checkouts.not_returned.first) -%>)
-        <%- end -%>
+    <%- if current_user.try(:has_role?, 'Librarian') -%>
+     <%- unless @item.checkouts.not_returned.blank? -%>
+        (<%= link_to t('item.current_checkout'), @item.checkouts.not_returned.first -%>)
       <%- end -%>
     <%- end -%>
-    </p>
+  </p>
 
   <p>
     <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
@@ -54,18 +62,18 @@
 <% end %>
 
 <p>
+  <strong><%= t('activerecord.attributes.item.include_supplements') -%>:</strong>
+  <%= localized_boolean(@item.include_supplements) -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.item.call_number') -%>:</strong>
   <%= @item.call_number -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.item_identifier') -%>:</strong>
-  <%= @item.item_identifier -%>
-</p>
-
-<p>
   <strong><%= t('activerecord.models.budget_type') -%>:</strong>
-  <%= @item.budget_type.try(:name) -%>
+  <%= @item.budget_type.try(:display_name).try(:localize) -%>
 </p>
 
 <p>
@@ -84,24 +92,18 @@
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.include_supplements') -%>:</strong>
-  <%= localized_boolean(@item.include_supplements) -%>
-</p>
-
-<!--
-<%- if can? :update, @item -%>
-  <p>
-    <strong><%= t('item.donor') -%>:</strong>
-    <%- @item.donors.each do |patron| -%>
-      <%= link_to patron.full_name, patron -%>
-    <%- end -%>
-  </p>
-<%- end -%>
--->
-
-<p>
   <strong><%= t('activerecord.attributes.item.acquired_at') -%>:</strong>
   <%= l(@item.acquired_at, :format => :only_date) if @item.acquired_at -%>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.binding_call_number') -%>:</strong>
+  <%= @item.binding_call_number -%>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.binded_at') -%>:</strong>
+  <%= l(@item.binded_at, :format => :only_date) if @item.binded_at -%>
 </p>
 
 <p>
@@ -126,11 +128,11 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <%= render 'manifestations/book_jacket', :manifestation => @item.manifestation -%>
   <ul>
     <li><%= back_to_index(flash[:page_info]) -%></li>
-    <% if can? :update, @item %>
+    <% if policy(@item).update? %>
       <%- if @shelf -%>
         <li><%= link_to t('page.edit'), edit_library_shelf_item_path(@shelf.library, @shelf, @item) -%></li>
       <%- else -%>
@@ -141,7 +143,7 @@
     <% if defined?(EnjuInterLibraryLoan) %>
       <li><%= link_to t('page.listing', :model => t('activerecord.models.inter_library_loan')), item_inter_library_loans_path(@item) -%></li>
     <% end %>
-    <% if can? :destroy, @item %>
+    <% if policy(@item).destroy? %>
       <li><%= link_to t('page.destroy'), @item, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <% end %>
     <% if defined?(EnjuInterLibraryLoan) %>
@@ -156,6 +158,6 @@
   </ul>
 </div>
 
-<% if can? :update, @item %>
-  <%= render 'qtip', :item => @item %>
+<% if policy(@item).update? %>
+  <%= render 'tooltip', :item => @item %>
 <% end %>

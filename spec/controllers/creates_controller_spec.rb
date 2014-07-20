@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe CreatesController do
   fixtures :all
-  disconnect_sunspot
 
   def valid_attributes
     FactoryGirl.attributes_for(:create)
@@ -19,7 +17,7 @@ describe CreatesController do
 
       it "assigns all creates as @creates" do
         get :index
-        assigns(:creates).should eq(Create.all)
+        assigns(:creates).should eq(Create.page(1))
       end
     end
 
@@ -28,7 +26,7 @@ describe CreatesController do
 
       it "assigns all creates as @creates" do
         get :index
-        assigns(:creates).should eq(Create.all)
+        assigns(:creates).should eq(Create.page(1))
       end
     end
 
@@ -37,14 +35,14 @@ describe CreatesController do
 
       it "assigns all creates as @creates" do
         get :index
-        assigns(:creates).should eq(Create.all)
+        assigns(:creates).should eq(Create.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all creates as @creates" do
         get :index
-        assigns(:creates).should eq(Create.all)
+        assigns(:creates).should eq(Create.page(1))
       end
     end
   end

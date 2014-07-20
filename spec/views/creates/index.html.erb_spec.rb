@@ -5,16 +5,13 @@ describe "creates/index" do
     assign(:creates, Kaminari::paginate_array([
       stub_model(Create,
         :work_id => 1,
-        :patron_id => 1
+        :agent_id => 1
       ),
       stub_model(Create,
         :work_id => 1,
-        :patron_id => 2
+        :agent_id => 2
       )
     ]).page(1))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders a list of creates" do

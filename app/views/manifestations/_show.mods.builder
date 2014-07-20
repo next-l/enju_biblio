@@ -5,7 +5,7 @@
       xml.title manifestation.title_alternative
     }
     manifestation.creators.readable_by(current_user).each do |creator|
-      case creator.patron_type.name
+      case creator.agent_type.name
       when "Person"
         xml.name('type' => 'personal'){
           xml.namePart creator.full_name
@@ -31,7 +31,7 @@
       end
     end
     manifestation.contributors.readable_by(current_user).each do |contributor|
-      case contributor.patron_type.name
+      case contributor.agent_type.name
       when "Person"
         xml.name('type' => 'personal'){
           xml.namePart contributor.full_name
@@ -49,8 +49,8 @@
     end
     xml.typeOfResource manifestation.carrier_type.mods_type
     xml.originInfo{
-      manifestation.publishers.readable_by(current_user).each do |patron|
-        xml.publisher patron.full_name
+      manifestation.publishers.readable_by(current_user).each do |agent|
+        xml.publisher agent.full_name
       end
       xml.dateIssued manifestation.date_of_publication
       xml.frequency manifestation.frequency.name
@@ -71,14 +71,18 @@
           xml.topic subject.term
         end
       }
-      manifestation.subjects.collect(&:classifications).flatten.each do |classification|
+      manifestation.classifications.each do |classification|
         xml.classification classification.category, 'authority' => classification.classification_type.name
       end
     end
     xml.abstract manifestation.description
     xml.note manifestation.note
-    xml.identifier manifestation.isbn, :type => 'isbn'
-    xml.identifier manifestation.lccn, :type => 'lccn'
+    manifestation.identifier_contents(:isbn).each do |i|
+      xml.identifier i, :type => 'isbn'
+    end
+    manifestation.identifier_contents(:lccn).each do |l|
+      xml.identifier l, :type => 'lccn'
+    end
     xml.recordInfo{
       xml.recordCreationDate manifestation.created_at
       xml.recordChangeDate manifestation.updated_at

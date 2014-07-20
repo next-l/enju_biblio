@@ -4,11 +4,8 @@ describe "realizes/show" do
   before(:each) do
     @realize = assign(:realize, stub_model(Realize,
       :expression_id => 1,
-      :patron_id => 1
+      :agent_id => 1
     ))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders attributes in <p>" do

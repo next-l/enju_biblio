@@ -1,7 +1,7 @@
 class FormOfWork < ActiveRecord::Base
-  attr_accessible :name, :display_name, :note
+  #attr_accessible :name, :display_name, :note
   include MasterModel
-  default_scope :order => "form_of_works.position"
+  default_scope {order("form_of_works.position")}
   has_many :works
 end
 
@@ -14,7 +14,6 @@ end
 #  display_name :text
 #  note         :text
 #  position     :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #
-

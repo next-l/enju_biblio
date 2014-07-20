@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.license')) -%></h1>
 <div id="content_list">
 
@@ -13,7 +13,7 @@
 <%- @licenses.each do |license| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, license -%>
+      <%- if policy(license).update? -%>
         <%= move_position(license) -%>
       <%- end -%>
     </td>
@@ -24,10 +24,10 @@
     </td>
     <td><%= license.note -%></td>
     <td>
-      <%- if can? :update, license -%>
+      <%- if policy(license).update? -%>
         <%= link_to t('page.edit'), edit_license_path(license) -%>
       <% end %>
-      <%- if can? :destroy, license -%>
+      <%- if policy(license).destroy? -%>
         <%= link_to t('page.destroy'), license, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
@@ -35,11 +35,10 @@
 <%- end -%>
 </table>
 
-<%= paginate(@licenses) -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.license')), new_license_path -%></li>
   </ul>

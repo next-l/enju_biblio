@@ -34,8 +34,8 @@ module EnjuBiblio
       image_tag('icons/help.png', :size => '16x16', :alt => t('page.unknown'))
     end
 
-    def patron_type_icon(patron_type)
-      case patron_type
+    def agent_type_icon(agent_type)
+      case agent_type
       when 'Person'
         image_tag('icons/user.png', :size => '16x16', :alt => 'Person')
       when 'CorporateBody'
@@ -45,15 +45,15 @@ module EnjuBiblio
       end
     end
 
-    def patrons_list(patrons = [], options = {})
-      return nil if patrons.blank?
-      patrons_list = []
+    def agents_list(agents = [], options = {})
+      return nil if agents.blank?
+      agents_list = []
       if options[:nolink]
-        patrons_list = patrons.map{|patron| patron.full_name}
+        agents_list = agents.map{|agent| agent.full_name}
       else
-        patrons_list = patrons.map{|patron| link_to(patron.full_name, patron, options)}
+        agents_list = agents.map{|agent| link_to(agent.full_name, manifestations_path(:query => "\"#{agent.full_name}\""), options)}
       end
-      patrons_list.join(" ").html_safe
+      agents_list.join(" ").html_safe
     end
   end
 end

@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe PictureFilesController do
   fixtures :all
-  disconnect_sunspot
 
   describe "GET index" do
     describe "When logged in as Administrator" do
@@ -11,7 +9,7 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.attached.page(1))
       end
     end
 
@@ -20,7 +18,7 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.attached.page(1))
       end
     end
 
@@ -29,14 +27,14 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.attached.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all picture_files as @picture_files" do
         get :index
-        assigns(:picture_files).should eq(PictureFile.all)
+        assigns(:picture_files).should eq(PictureFile.attached.page(1))
       end
     end
   end
@@ -229,7 +227,7 @@ describe PictureFilesController do
       describe "with valid params" do
         it "assigns a newly created picture_file as @picture_file" do
           post :create, :picture_file => @attrs
-          assigns(:picture_file).should be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do
@@ -241,7 +239,7 @@ describe PictureFilesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved picture_file as @picture_file" do
           post :create, :picture_file => @invalid_attrs
-          assigns(:picture_file).should_not be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do
@@ -255,7 +253,7 @@ describe PictureFilesController do
       describe "with valid params" do
         it "assigns a newly created picture_file as @picture_file" do
           post :create, :picture_file => @attrs
-          assigns(:picture_file).should be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do
@@ -267,7 +265,7 @@ describe PictureFilesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved picture_file as @picture_file" do
           post :create, :picture_file => @invalid_attrs
-          assigns(:picture_file).should_not be_valid
+          assigns(:picture_file).should be_nil
         end
 
         it "should be forbidden" do

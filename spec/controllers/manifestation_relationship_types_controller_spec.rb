@@ -1,9 +1,7 @@
 require 'spec_helper'
-require 'sunspot/rails/spec_helper'
 
 describe ManifestationRelationshipTypesController do
   fixtures :all
-  disconnect_sunspot
 
   def valid_attributes
     FactoryGirl.attributes_for(:manifestation_relationship_type)
@@ -19,7 +17,7 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.order(:position))
       end
     end
 
@@ -28,23 +26,23 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.order(:position))
       end
     end
 
     describe "When logged in as User" do
       login_user
 
-      it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
+      it "assigns nil as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should be_nil
       end
     end
 
     describe "When not logged in" do
-      it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
+      it "assigns nil as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.all)
+        assigns(:manifestation_relationship_types).should be_nil
       end
     end
   end
@@ -184,7 +182,7 @@ describe ManifestationRelationshipTypesController do
           assigns(:manifestation_relationship_type).should be_valid
         end
 
-        it "redirects to the created patron" do
+        it "redirects to the created agent" do
           post :create, :manifestation_relationship_type => @attrs
           response.should redirect_to(assigns(:manifestation_relationship_type))
         end

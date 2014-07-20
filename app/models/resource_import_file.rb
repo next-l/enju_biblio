@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
-  attr_accessible :resource_import, :edit_mode
+  include Statesman::Adapters::ActiveRecordModel
   include ImportFile
-  default_scope :order => 'resource_import_files.id DESC'
-  scope :not_imported, where(:state => 'pending')
-  scope :stucked, where('created_at < ? AND state = ?', 1.hour.ago, 'pending')
+  default_scope {order('resource_import_files.id DESC')}
+  scope :not_imported, -> {in_state(:pending)}
+  scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
+    has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
       :s3_permissions => :private
   else
     has_attached_file :resource_import,
@@ -23,28 +23,17 @@ class ResourceImportFile < ActiveRecord::Base
   validates_attachment_presence :resource_import
   belongs_to :user, :validate => true
   has_many :resource_import_results
+  has_many :resource_import_file_transitions
 
-  state_machine :initial => :pending do
-    event :sm_start do
-      transition [:pending, :started] => :started
-    end
+  enju_import_file_model
+  attr_accessor :mode
 
-    event :sm_complete do
-      transition :started => :completed
-    end
-
-    event :sm_fail do
-      transition :started => :failed
-    end
-
-    before_transition any => :started do |resource_import_file|
-      resource_import_file.executed_at = Time.zone.now
-    end
-
-    before_transition any => :completed do |resource_import_file|
-      resource_import_file.error_message = nil
-    end
+  def state_machine
+    ResourceImportFileStateMachine.new(self, transition_class: ResourceImportFileTransition)
   end
+
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   def import_start
     case edit_mode
@@ -62,18 +51,19 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def import
-    sm_start!
-    self.reload
+    transition_to!(:started)
+    reload
     num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     field = rows.first
-    if [field['print_isbn'], field['online_isbn'], field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
-      raise "You should specify isbn or original_tile in the first line"
+    if [field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
+      raise "You should specify isbn or original_title in the first line"
     end
 
     rows.each do |row|
+      row_num += 1
       next if row['dummy'].to_s.strip.present?
       import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, :body => row.fields.join("\t"))
 
@@ -91,25 +81,27 @@ class ResourceImportFile < ActiveRecord::Base
         manifestation = Manifestation.where(:manifestation_identifier => row['manifestation_identifier'].to_s.strip).first
       end
 
-      if row['nbn'].present?
-        manifestation = Manifestation.where(:nbn => row['nbn'].to_s.strip).first
+      unless manifestation
+        if row['doi'].present?
+          doi = URI.parse(row['doi']).path.gsub(/^\//, "")
+          manifestation = Manifestation.where(:doi => doi).first
+        end
       end
 
       unless manifestation
-        if row['online_isbn'].present?
-          isbn = StdNum::ISBN.normalize(row['online_isbn'])
-          m = Manifestation.find_by_isbn(isbn)
+        if row['jpno'].present?
+          jpno = row['jpno'].to_s.strip
+          manifestation = Identifier.where(:body => 'jpno', :identifier_type_id => IdentifierType.where(:name => 'jpno').first_or_create.id).first.try(:manifestation)
         end
-        if row['print_isbn'].present? and !m
-          isbn = StdNum::ISBN.normalize(row['print_isbn'])
-          m = Manifestation.find_by_isbn(isbn)
-        end
-        if row['isbn'].present? and !m
+      end
+
+      unless manifestation
+        if row['isbn'].present?
           isbn = StdNum::ISBN.normalize(row['isbn'])
-          m = Manifestation.find_by_isbn(isbn)
+          m = Identifier.where(:body => isbn, :identifier_type_id => IdentifierType.where(:name => 'isbn').first_or_create.id).first.try(:manifestation)
         end
         if m
-          unless m.series_statement
+          if m.series_statements.exists?
             manifestation = m
           end
         end
@@ -118,12 +110,10 @@ class ResourceImportFile < ActiveRecord::Base
 
       if row['original_title'].blank?
         unless manifestation
-          series_statement = find_series_statement(row)
           begin
-            manifestation = Manifestation.import_isbn(isbn)
+            manifestation = Manifestation.import_isbn(isbn) if isbn
             if manifestation
-              manifestation.series_statement = series_statement
-              num[:manifestation_imported] += 1 if manifestation
+              num[:manifestation_imported] += 1
             end
           rescue EnjuNdl::InvalidIsbn
             manifestation = nil
@@ -141,7 +131,7 @@ class ResourceImportFile < ActiveRecord::Base
 
       if manifestation and item_identifier.present?
         import_result.item = create_item(row, manifestation)
-        manifestation.index
+        manifestation.__elasticsearch__.update_document
       else
         if manifestation.try(:fulltext_content?)
           item = Item.new
@@ -158,47 +148,42 @@ class ResourceImportFile < ActiveRecord::Base
         num[:failed] += 1
       end
 
-      ExpireFragmentCache.expire_fragment_cache(manifestation)
       import_result.save!
       num[:item_imported] +=1 if import_result.item
 
-      if row_num % 50 == 0
-        Sunspot.commit
-        GC.start
-      end
       row_num += 1
     end
 
-    Sunspot.commit
     rows.close
-    sm_complete!
+    transition_to!(:completed)
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
     return num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
-  def self.import_work(title, patrons, options = {:edit_mode => 'create'})
+  def self.import_work(title, agents, options = {:edit_mode => 'create'})
     work = Manifestation.new(title)
     work.save
-    work.creators = patrons.uniq unless patrons.empty?
+    work.creators = agents.uniq unless agents.empty?
     work
   end
 
-  def self.import_expression(work, patrons, options = {:edit_mode => 'create'})
+  def self.import_expression(work, agents, options = {:edit_mode => 'create'})
     expression = work
     expression.save
-    expression.contributors = patrons.uniq unless patrons.empty?
+    expression.contributors = agents.uniq unless agents.empty?
     expression
   end
 
-  def self.import_manifestation(expression, patrons, options = {}, edit_options = {:edit_mode => 'create'})
+  def self.import_manifestation(expression, agents, options = {}, edit_options = {:edit_mode => 'create'})
     manifestation = expression
     manifestation.during_import = true
+    manifestation.reload
     manifestation.update_attributes!(options)
-    manifestation.publishers = patrons.uniq unless patrons.empty?
+    manifestation.publishers = agents.uniq unless agents.empty?
     manifestation
   end
 
@@ -234,9 +219,9 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.save
 
       full_name = record['700']['a']
-      publisher = Patron.where(:full_name => record['700']['a']).first
+      publisher = Agent.where(:full_name => record['700']['a']).first
       unless publisher
-        publisher = Patron.new(:full_name => full_name)
+        publisher = Agent.new(:full_name => full_name)
         publisher.save
       end
       manifestation.publishers << publisher
@@ -258,11 +243,12 @@ class ResourceImportFile < ActiveRecord::Base
   #end
 
   def modify
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     rows.each do |row|
+      row_num += 1
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(:item_identifier => item_identifier).first if item_identifier.present?
       if item
@@ -288,7 +274,6 @@ class ResourceImportFile < ActiveRecord::Base
         item.acquired_at = row['acquired_at'] if row['acquired_at']
         item.note = row['note'] if row['note']
         item.save!
-        ExpireFragmentCache.expire_fragment_cache(item.manifestation)
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier.present?
@@ -301,35 +286,36 @@ class ResourceImportFile < ActiveRecord::Base
       end
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
   def remove
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
-    row_num = 2
+    row_num = 1
 
     rows.each do |row|
+      row_num += 1
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(:item_identifier => item_identifier).first
       if item
-        item.destroy if item.deletable?
+        item.destroy if item.removable?
       end
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
-    sm_fail!
+    transition_to!(:failed)
     raise e
   end
 
   def update_relationship
-    sm_start!
+    transition_to!(:started)
     rows = open_import_file
     row_num = 2
 
@@ -357,12 +343,12 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.save!
       row_num += 1
     end
-    sm_complete!
+    transition_to!(:completed)
   end
 
   private
   def open_import_file
-    tempfile = Tempfile.new('patron_import_file')
+    tempfile = Tempfile.new(self.class.name.underscore)
     if Setting.uploaded_file.storage == :s3
       uploaded_file_path = resource_import.expiring_url(10)
     else
@@ -370,16 +356,7 @@ class ResourceImportFile < ActiveRecord::Base
     end
     open(uploaded_file_path){|f|
       f.each{|line|
-        if defined?(CharlockHolmes::EncodingDetector)
-          begin
-            string = line.encode('UTF-8', CharlockHolmes::EncodingDetector.detect(line)[:encoding])
-          rescue StandardError
-            string = NKF.nkf('-w -Lu', line)
-          end
-        else
-          string = NKF.nkf('-w -Lu', line)
-        end
-        tempfile.puts(string)
+        tempfile.puts(convert_encoding(line))
       }
     }
     tempfile.close
@@ -396,14 +373,27 @@ class ResourceImportFile < ActiveRecord::Base
   def import_subject(row)
     subjects = []
     row['subject'].to_s.split('//').each do |s|
-      subject = Subject.where(:term => s.to_s.strip).first
-      unless subject
-        # TODO: Subject typeの設定
-        subject = Subject.create(:term => s.to_s.strip, :subject_type_id => 1)
-      end
+      # TODO: Subject typeの設定
+      subject = Subject.new(:term => s.to_s.strip)
+      subject.subject_type = SubjectType.where(:name => 'concept').first
+      subject.subject_heading_type = SubjectHeadingType.where(:name => 'unknown').first
       subjects << subject
     end
     subjects
+  end
+
+  def import_classification(row)
+    classifications = []
+    classification_number = YAML.load(row['classification'].to_s)
+    return nil unless classification_number
+    classification_number.map{|k, v|
+      classification_type = ClassificationType.where(:name => k.downcase).first
+      classification = Classification.new(:category => v.to_s)
+      classification.classification_type = classification_type
+      classification.save!
+      classifications << classification
+    }
+    classifications
   end
 
   def create_item(row, manifestation)
@@ -463,21 +453,9 @@ class ResourceImportFile < ActiveRecord::Base
       return nil
     end
 
-    lisbn = Lisbn.new(row['print_isbn'].to_s.strip)
+    lisbn = Lisbn.new(row['isbn'].to_s.strip)
     if lisbn.isbn.valid?
       isbn = lisbn.isbn
-    end
-
-    unless isbn
-      lisbn = Lisbn.new(row['isbn'].to_s.strip)
-      if lisbn.isbn.valid?
-        isbn = lisbn.isbn
-      end
-    end
-
-    online_lisbn = Lisbn.new(row['online_isbn'].to_s.strip)
-    if online_lisbn.isbn.valid?
-      online_isbn = lisbn.isbn
     end
 
     # TODO: 小数点以下の表現
@@ -491,6 +469,20 @@ class ResourceImportFile < ActiveRecord::Base
     
     carrier_type = CarrierType.where(:name => row['carrier_type'].to_s.strip).first
 
+    identifier = {}
+    if row['isbn']
+      identifier[:isbn] = Identifier.new(:body => row['isbn'])
+      identifier[:isbn].identifier_type = IdentifierType.where(:name => 'isbn').first_or_create
+    end
+    if row['jpno']
+      identifier[:jpno] = Identifier.new(:body => row['jpno'])
+      identifier[:jpno].identifier_type = IdentifierType.where(:name => 'jpno').first_or_create
+    end
+    if row['issn']
+      identifier[:issn] = Identifier.new(:body => row['issn'])
+      identifier[:issn].identifier_type = IdentifierType.where(:name => 'issn').first_or_create
+    end
+
     if end_page >= 1
       start_page = 1
     else
@@ -498,8 +490,12 @@ class ResourceImportFile < ActiveRecord::Base
       end_page = nil
     end
 
-    if row['fulltext_content'].to_s.strip == "t"
+    if row['fulltext_content'].to_s.downcase.strip == "t"
       fulltext_content = true
+    end
+
+    if row['periodical'].to_s.downcase.strip == "t"
+      periodical = true
     end
 
     creators = row['creator'].to_s.split('//')
@@ -512,26 +508,22 @@ class ResourceImportFile < ActiveRecord::Base
     publisher_transcriptions = row['publisher_transcription'].to_s.split('//')
     publishers_list = publishers.zip(publisher_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
     ResourceImportFile.transaction do
-      creator_patrons = Patron.import_patrons(creators_list)
-      contributor_patrons = Patron.import_patrons(contributors_list)
-      publisher_patrons = Patron.import_patrons(publishers_list)
-      #classification = Classification.where(:category => row['classification'].to_s.strip).first
+      creator_agents = Agent.import_agents(creators_list)
+      contributor_agents = Agent.import_agents(contributors_list)
+      publisher_agents = Agent.import_agents(publishers_list)
       subjects = import_subject(row) if defined?(EnjuSubject)
-      series_statement = import_series_statement(row)
       case options[:edit_mode]
       when 'create'
-        work = self.class.import_work(title, creator_patrons, options)
-        work.series_statement = series_statement
+        work = self.class.import_work(title, creator_agents, options)
         if defined?(EnjuSubject)
           work.subjects = subjects.uniq unless subjects.empty?
         end
-        expression = self.class.import_expression(work, contributor_patrons)
+        expression = self.class.import_expression(work, contributor_agents)
       when 'update'
         expression = manifestation
         work = expression
-        work.series_statement = series_statement if series_statement
-        work.creators = creator_patrons.uniq unless creator_patrons.empty?
-        expression.contributors = contributor_patrons.uniq unless contributor_patrons.empty?
+        work.creators = creator_agents.uniq unless creator_agents.empty?
+        expression.contributors = contributor_agents.uniq unless contributor_agents.empty?
         if defined?(EnjuSubject)
           work.subjects = subjects.uniq unless subjects.empty?
         end
@@ -545,13 +537,6 @@ class ResourceImportFile < ActiveRecord::Base
         :title_transcription => title[:title_transcription],
         :title_alternative => title[:title_alternative],
         :title_alternative_transcription => title[:title_alternative_transcription],
-        :isbn => isbn,
-        :online_isbn => online_isbn,
-        :wrong_isbn => row['wrong_isbn'],
-        :issn => row['issn'],
-        :lccn => row['lccn'],
-        :nbn => row['nbn'],
-        :ndc => row['ndc'],
         :pub_date => row['pub_date'],
         :volume_number_string => row['volume_number_string'].to_s.split('　').first.try(:tr, '０-９', '0-9'),
         :issue_number_string => row['issue_number_string'],
@@ -565,14 +550,14 @@ class ResourceImportFile < ActiveRecord::Base
         :description => row['description'],
         #:description_transcription => row['description_transcription'],
         :note => row['note'],
+        :statement_of_responsibility => row['statement_of_responsibility'],
         :start_page => start_page,
         :end_page => end_page,
         :access_address => row['access_address'],
-        :doi => row['doi'],
         :manifestation_identifier => row['manifestation_identifier'],
         :fulltext_content => fulltext_content
       }.delete_if{|key, value| value.nil?}
-      manifestation = self.class.import_manifestation(expression, publisher_patrons, attributes,
+      manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,
       {
         :edit_mode => options[:edit_mode]
       })
@@ -593,70 +578,53 @@ class ResourceImportFile < ActiveRecord::Base
 
       manifestation.carrier_type = carrier_type if carrier_type
 
-      manifestation.series_statement = series_statement if series_statement
+      Manifestation.transaction do
+        manifestation.identifiers.delete_all if manifestation.identifiers.exists?
+        identifier.each do |k, v|
+          manifestation.identifiers << v if v.valid?
+        end
+      end
+
+      if row['series_original_title'].to_s.strip.present?
+        Manifestation.transaction do
+          if manifestation.series_statements.exists?
+            manifestation.series_statements.delete_all
+          end
+          series_title = row['series_original_title'].split('//')
+          series_title_transcription = row['series_title_transcription'].split('//')
+          series_statement = SeriesStatement.new(
+            :original_title => series_title[0],
+            :title_transcription => series_title_transcription[0],
+            :title_subseries => "#{series_title[1]} #{series_title[2]}",
+            :title_subseries_transcription => "#{series_title_transcription[1]} #{series_title_transcription[2]}",
+            :volume_number_string => series_title[0],
+            :creator_string => row['series_creator_string'],
+          )
+          series_statement.manifestation = manifestation
+          series_statement.save!
+        end
+      end
+
+      if defined?(EnjuSubject)
+        classifications = import_classification(row)
+        if classifications.present?
+          manifestation.classifications << classifications
+        end
+      end
+
       manifestation.save!
 
       if options[:edit_mode] == 'create'
-        manifestation.set_patron_role_type(creators_list)
-        manifestation.set_patron_role_type(contributors_list, :scope => :contributor)
-        manifestation.set_patron_role_type(publishers_list, :scope => :publisher)
+        manifestation.set_agent_role_type(creators_list)
+        manifestation.set_agent_role_type(contributors_list, :scope => :contributor)
+        manifestation.set_agent_role_type(publishers_list, :scope => :publisher)
       end
     end
     manifestation
   end
 
-  def import_series_statement(row)
-    issn = StdNum::ISSN.normalize(row['issn'].to_s)
-    series_statement = find_series_statement(row)
-    unless series_statement
-      if row['series_title'].to_s.strip.present?
-        title = row['series_title'].to_s.strip.split('//')
-        title_transcription = row['series_title_transcription'].to_s.strip.split('//')
-        series_statement = SeriesStatement.new(
-          :original_title => title[0],
-          :title_transcription => title_transcription[0],
-          :series_statement_identifier => row['series_statement_identifier'].to_s.strip.split('//').first,
-          :title_subseries => "#{title[1]} #{title[2]}",
-          :title_subseries_transcription => "#{title_transcription[1]} #{title_transcription[2]}"
-        )
-        if issn.present?
-          series_statement.issn = issn
-        end
-        if row['periodical'].to_s.strip.present?
-          series_statement.periodical = true
-        end
-        series_statement.save!
-        if series_statement.periodical
-          SeriesStatement.transaction do
-            creators = row['series_statement_creator'].to_s.split('//')
-            creator_transcriptions = row['series_statement_creator_transcription'].to_s.split('//')
-            creators_list = creators.zip(creator_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
-            creator_patrons = Patron.import_patrons(creators_list)
-            series_statement.root_manifestation.creators = creator_patrons.uniq unless creator_patrons.empty?
-          end
-        end
-      end
-    end
-    if series_statement
-      series_statement
-    else
-      nil
-    end
-  end
-
-  def find_series_statement(row)
-    issn = StdNum::ISSN.normalize(row['issn'].to_s)
-    series_statement_identifier = row['series_statement_identifier'].to_s.strip
-    series_statement_id = row['series_statement_id'].to_s.strip
-    series_statement = SeriesStatement.where(:issn => issn).first if issn.present?
-    unless series_statement
-      series_statement = SeriesStatement.where(:series_statement_identifier => series_statement_identifier).first if series_statement_identifier.present?
-    end
-    unless series_statement
-      series_statement = SeriesStatement.where(:id => series_statement_id).first if series_statement_id
-    end
-    series_statement = SeriesStatement.where(:original_title => row['series_statement_original_title'].to_s.strip).first unless series_statement
-    series_statement
+  def self.transition_class
+    ResourceImportFileTransition
   end
 end
 
@@ -671,15 +639,14 @@ end
 #  user_id                      :integer
 #  note                         :text
 #  executed_at                  :datetime
-#  state                        :string(255)
 #  resource_import_file_name    :string(255)
 #  resource_import_content_type :string(255)
 #  resource_import_file_size    :integer
 #  resource_import_updated_at   :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #  edit_mode                    :string(255)
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
+#  user_encoding                :string(255)
 #
-

@@ -1,16 +1,16 @@
 class CreatesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_patron, :get_work
-  before_filter :prepare_options, :only => [:new, :edit]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
+  before_action :set_create, only: [:show, :edit, :update, :destroy]
+  after_action :verify_authorized
+  before_action :get_agent, :get_work
+  before_action :prepare_options, :only => [:new, :edit]
 
   # GET /creates
   # GET /creates.json
   def index
+    authorize Create
     case
-    when @patron
-      @creates = @patron.creates.order('creates.position').page(params[:page])
+    when @agent
+      @creates = @agent.creates.order('creates.position').page(params[:page])
     when @work
       @creates = @work.creates.order('creates.position').page(params[:page])
     else
@@ -34,16 +34,17 @@ class CreatesController < ApplicationController
 
   # GET /creates/new
   def new
-    if @patron and @work.blank?
-      redirect_to patron_works_url(@patorn)
+    if @agent and @work.blank?
+      redirect_to agent_works_url(@patorn)
       return
-    elsif @work and @patron.blank?
-      redirect_to work_patrons_url(@work)
+    elsif @work and @agent.blank?
+      redirect_to work_agents_url(@work)
       return
     else
       @create = Create.new
+      authorize @create
       @create.work = @work
-      @create.patron = @patron
+      @create.agent = @agent
     end
   end
 
@@ -54,7 +55,8 @@ class CreatesController < ApplicationController
   # POST /creates
   # POST /creates.json
   def create
-    @create = Create.new(params[:create])
+    @create = Create.new(create_params)
+    authorize @create
 
     respond_to do |format|
       if @create.save
@@ -79,7 +81,7 @@ class CreatesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create.update_attributes(params[:create])
+      if @create.update_attributes(create_params)
         format.html { redirect_to @create, :notice => t('controller.successfully_updated', :model => t('activerecord.models.create')) }
         format.json { head :no_content }
       else
@@ -96,13 +98,13 @@ class CreatesController < ApplicationController
     @create.destroy
 
     respond_to do |format|
-      flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.create'))
+      flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.create'))
       case
-      when @patron
-        format.html { redirect_to patron_works_url(@patron) }
+      when @agent
+        format.html { redirect_to agent_works_url(@agent) }
         format.json { head :no_content }
       when @work
-        format.html { redirect_to work_patrons_url(@work) }
+        format.html { redirect_to work_agents_url(@work) }
         format.json { head :no_content }
       else
         format.html { redirect_to creates_url }
@@ -112,7 +114,18 @@ class CreatesController < ApplicationController
   end
 
   private
+  def set_create
+    @create = Create.find(params[:id])
+    authorize @create
+  end
+
   def prepare_options
     @create_types = CreateType.all
+  end
+
+  def create_params
+    params.require(:create).permit(
+      :agent_id, :work_id, :create_type_id
+    )
   end
 end

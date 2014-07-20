@@ -1,12 +1,12 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.editing', :model => t('activerecord.models.donate')) -%></h1>
 <div id="content_list">
 
 <%= form_for(@donate) do |f| -%>
   <%= f.error_messages -%>
   <div class="field">
-    <%= f.label t('activerecord.models.patron') -%><br />
-    <%= f.text_field :patron_id -%>
+    <%= f.label t('activerecord.models.agent') -%><br />
+    <%= f.text_field :agent_id -%>
   </div>
 
   <div class="field">
@@ -22,7 +22,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.show'), @donate -%></li>
     <li><%= link_to t('page.back'), donates_path -%></li>

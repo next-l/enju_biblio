@@ -25,17 +25,17 @@ describe ResourceImportFilesController do
     describe "When logged in as User" do
       login_user
 
-      it "assigns empty as @resource_import_files" do
+      it "assigns nil as @resource_import_files" do
         get :index
-        assigns(:resource_import_files).should be_empty
+        assigns(:resource_import_files).should be_nil
         response.should be_forbidden
       end
     end
 
     describe "When not logged in" do
-      it "assigns empty as @resource_import_files" do
+      it "assigns nil as @resource_import_files" do
         get :index
-        assigns(:resource_import_files).should be_empty
+        assigns(:resource_import_files).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -128,7 +128,7 @@ describe ResourceImportFilesController do
         sign_in @user
       end
 
-      it "should create patron_import_file" do
+      it "should create agent_import_file" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
         assigns(:resource_import_file).should be_valid
         assigns(:resource_import_file).user.username.should eq @user.username
@@ -203,7 +203,7 @@ describe ResourceImportFilesController do
       login_admin
 
       it "should update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {note: 'test'}
         response.should redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
     end
@@ -212,7 +212,7 @@ describe ResourceImportFilesController do
       login_librarian
 
       it "should update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {note: 'test'}
         response.should redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
     end
@@ -221,14 +221,14 @@ describe ResourceImportFilesController do
       login_user
 
       it "should not update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {note: 'test'}
         response.should be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {note: 'test'}
         response.should redirect_to new_user_session_url
       end
     end

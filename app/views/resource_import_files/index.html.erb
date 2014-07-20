@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.resource_import_file')) -%></h1>
 <div id="content_list">
 
@@ -20,7 +20,7 @@
     <td><%= l(resource_import_file.executed_at) if resource_import_file.executed_at -%></td>
     <td><%= link_to resource_import_file.user.username, resource_import_file.user -%></td>
     <td><%= resource_import_file.edit_mode -%></td>
-    <td><%= localized_state(resource_import_file.state) -%></td>
+    <td><%= localized_state(resource_import_file.current_state) -%></td>
     <td>
       <%= link_to t('page.show'), resource_import_file -%>
       <%= link_to t('page.destroy'), resource_import_file, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
@@ -33,7 +33,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.new', :model => t('activerecord.models.resource_import_file')), new_resource_import_file_path -%></li>
   </ul>

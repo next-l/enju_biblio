@@ -1,7 +1,7 @@
 class License < ActiveRecord::Base
-  attr_accessible :name, :display_name, :note
+  #attr_accessible :name, :display_name, :note
   include MasterModel
-  default_scope :order => 'licenses.position'
+  default_scope {order('licenses.position')}
 end
 
 # == Schema Information
@@ -13,7 +13,6 @@ end
 #  display_name :string(255)
 #  note         :text
 #  position     :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #
-

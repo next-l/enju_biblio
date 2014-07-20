@@ -69,16 +69,16 @@ def get_record(manifestation)
     'xmlns:srw_dc' => "info:srw/schema/1/dc-v1.1",
     'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance",
     'xsi:schemaLocation' => "info:srw/schema/1/dc-v1.1 http://www.loc.gov/standards/sru/dc-schema.xsd" do
-    cache([:manifestation => manifestation.id, :fragment => 'index_sru', :role => current_user_role_name, :locale => @locale]) do
+    cache([current_user_role_name, :locale => @locale, manifestation]) do
       xml.tag! 'dc:title', manifestation.original_title
-      manifestation.creators.readable_by(current_user).each do |patron|
-        xml.tag! 'dc:creator', patron.full_name
+      manifestation.creators.readable_by(current_user).each do |agent|
+        xml.tag! 'dc:creator', agent.full_name
       end
-      manifestation.contributors.each do |patron|
-        xml.tag! 'dc:contributor', patron.full_name
+      manifestation.contributors.each do |agent|
+        xml.tag! 'dc:contributor', agent.full_name
       end
-      manifestation.publishers.each do |patron|
-        xml.tag! 'dc:publisher', patron.full_name
+      manifestation.publishers.each do |agent|
+        xml.tag! 'dc:publisher', agent.full_name
       end
       if defined?(EnjuSubject)
         manifestation.subjects.each do |subject|

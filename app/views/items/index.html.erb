@@ -1,4 +1,4 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.item')) -%></h1>
 <div id="content_list">
 <p id="notice"><%= notice %></p>
@@ -8,10 +8,15 @@
 <div class="search_form">
 <%= form_for :items, :url => items_path, :html => {:method => 'get'} do -%>
   <p>
-    <%= t('page.search_term') -%>: <%= search_field_tag 'query', h(@query), {:id => 'search_form_top', :class => 'search_form', :placeholder => t('page.search_term')} -%>
+    <%= label_tag :search_form_top, t('page.search_term') -%>: <%= search_field_tag 'query', h(@query), {:id => 'search_form_top', :class => 'search_form', :placeholder => t('page.search_term')} -%>
     <%= hidden_field_tag :manifestation_id, @manifestation.id if @manifestation -%>
     <%= submit_tag t('page.search') -%>
     <%= set_focus_on_search_form -%>
+    <br />
+    <%= t('activerecord.attributes.item.acquired_at') %>:
+    <%= t('advanced_search.from') %>
+    <%= text_field_tag 'acquired_from', @acquired_from, {:class => 'date_field', :placeholder => "#{t('page.example')}: 2012-04-12"} -%>
+    <%= t('advanced_search.to') %> <%= text_field_tag 'acquired_to', @acquired_to, {:class => 'date_field', :placeholder => "#{t('page.example')}: 2012-05-11"} -%>
   </p>
 <%- end -%>
 </div>
@@ -27,7 +32,7 @@
     <% end %>
   </tr>
   <%- @items.each do |item| -%>
-    <tr>
+    <tr class="line<%= cycle("0", "1") -%>">
       <td>
         <%- if item.item_identifier? -%>
           <%= link_to item.item_identifier, item -%>
@@ -64,10 +69,10 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <%= render 'manifestations/book_jacket', :manifestation => @manifestation if @manifestation -%>
   <ul>
-    <%- if can?(:create, Item) and @manifestation -%>
+    <%- if policy(Item).create? and @manifestation -%>
       <li><%= link_to t('page.new', :model => t('activerecord.models.item')), new_manifestation_item_path(@manifestation) -%></li>
     <%- end -%>
   </ul>

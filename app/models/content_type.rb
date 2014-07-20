@@ -1,7 +1,6 @@
 class ContentType < ActiveRecord::Base
-  attr_accessible :name, :display_name, :note
   include MasterModel
-  default_scope :order => "content_types.position"
+  default_scope {order("content_types.position")}
   has_many :manifestations
 end
 
@@ -14,7 +13,6 @@ end
 #  display_name :text
 #  note         :text
 #  position     :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #
-

@@ -1,11 +1,11 @@
-<div id="content_detail" class="ui-corner-all">
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.series_statement')) -%></h1>
 <div id="content_list">
 
 <div class="search_form">
 <%= form_for :series_statements, :url => series_statements_path, :html => {:method => 'get'} do -%>
   <p>
-    <%= t('page.search_term') -%>: <%= search_field_tag 'query', h(@query), {:id => 'search_form_top', :class => 'search_form', :placeholder => t('page.search_term')} -%>
+    <%= label_tag :search_form_top, t('page.search_term') -%>: <%= search_field_tag 'query', h(@query), {:id => 'search_form_top', :class => 'search_form', :placeholder => t('page.search_term')} -%>
     <%= submit_tag t('page.search') -%>
     <%= set_focus_on_search_form -%>
   </p>
@@ -17,41 +17,21 @@
     <th id="position"></th>
     <th><%= t('activerecord.attributes.series_statement.original_title') -%></th>
     <th></th>
-    <th></th>
   </tr>
 
 <% @series_statements.each do |series_statement| %>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if @query.present? and can? :update, series_statement -%>
+      <%- if @query.present? and policy(series_statement).update? -%>
         <%= move_position(series_statement) -%>
       <%- end -%>
     </td>
     <td>
       <strong><%= link_to series_statement.original_title, series_statement %></strong>
-      <%= image_tag('icons/newspaper.png', :size => '16x16', :alt => t('manifestation.serial')) if series_statement.periodical -%>
-      <% if series_statement.root_manifestation -%>
-        <% if series_statement.root_manifestation.publishers.exists? %>
-          <br />
-          <%= patrons_list(series_statement.root_manifestation.publishers.readable_by(current_user)) %>
-        <% end %>
-      <% else %>
-        <% if series_statement.latest_issue.publishers.exists? %>
-          <br />
-          <%= patrons_list(series_statement.latest_issue.publishers.readable_by(current_user)) %>
-        <% end %>
-      <% end %>
-      <% if series_statement.issn? %>
-        <br />
-        ISSN: <%= series_statement.issn %>
-      <% end %>
     </td>
     <td>
-      <%= link_to t('page.new', :model => t('activerecord.models.manifestation')), new_series_statement_manifestation_path(series_statement) -%>
-    </td>
-    <td>
-      <%= link_to t('page.edit'), edit_series_statement_path(series_statement) if can? :update, series_statement -%>
-      <%= link_to t('page.destroy'), series_statement, :data => {:confirm => t('page.are_you_sure')}, :method => :delete if can? :destroy, series_statement -%>
+      <%= link_to t('page.edit'), edit_series_statement_path(series_statement) if policy(series_statement).update? -%>
+      <%= link_to t('page.destroy'), series_statement, :data => {:confirm => t('page.are_you_sure')}, :method => :delete if policy(series_statement).destroy? -%>
     </td>
   </tr>
 <% end %>
@@ -62,10 +42,10 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all">
+<div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li><%= link_to t('page.new', :model => t('activerecord.models.series_statement')), new_series_statement_path -%></li>
+    <% if policy(SeriesStatement).create? %>
+      <li><%= link_to t('page.new', :model => t('activerecord.models.series_statement')), new_series_statement_path -%></li>
+    <% end %>
   </ul>
-  <hr/>
-  <%= render 'periodical_facet' %>
 </div>
