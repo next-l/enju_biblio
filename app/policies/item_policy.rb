@@ -12,6 +12,8 @@ class ItemPolicy < AdminPolicy
   end
 
   def destroy?
-    user.try(:has_role?, 'Librarian')
+    if user.try(:has_role?, 'Librarian')
+      true if item.removable?
+    end
   end
 end
