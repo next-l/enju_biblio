@@ -10,6 +10,16 @@
   <%- end -%>
 
 <p>
+  <strong><%= t('activerecord.attributes.item.item_identifier') -%>:</strong>
+  <%= @item.item_identifier -%>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.binding_item_identifier') -%>:</strong>
+  <%= @item.binding_item_identifier -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.models.shelf') -%>:</strong>
   <%= link_to(@item.shelf_display_name.localize, @item.shelf, :id => "shelf_item_#{@item.id}") -%>
   <%= render 'items/shelf_picture', :item => @item -%>
@@ -52,13 +62,13 @@
 <% end %>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.call_number') -%>:</strong>
-  <%= @item.call_number -%>
+  <strong><%= t('activerecord.attributes.item.include_supplements') -%>:</strong>
+  <%= localized_boolean(@item.include_supplements) -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.item_identifier') -%>:</strong>
-  <%= @item.item_identifier -%>
+  <strong><%= t('activerecord.attributes.item.call_number') -%>:</strong>
+  <%= @item.call_number -%>
 </p>
 
 <p>
@@ -82,13 +92,18 @@
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.include_supplements') -%>:</strong>
-  <%= localized_boolean(@item.include_supplements) -%>
+  <strong><%= t('activerecord.attributes.item.acquired_at') -%>:</strong>
+  <%= l(@item.acquired_at, :format => :only_date) if @item.acquired_at -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.acquired_at') -%>:</strong>
-  <%= l(@item.acquired_at, :format => :only_date) if @item.acquired_at -%>
+  <strong><%= t('activerecord.attributes.item.binding_call_number') -%>:</strong>
+  <%= @item.binding_call_number -%>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.binded_at') -%>:</strong>
+  <%= l(@item.binded_at, :format => :only_date) if @item.binded_at -%>
 </p>
 
 <p>

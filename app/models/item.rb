@@ -9,7 +9,8 @@ class Item < ActiveRecord::Base
   attr_accessible :call_number, :item_identifier, :circulation_status_id,
     :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
     :acquired_at, :bookstore_id, :missing_since, :budget_type_id, :lock_version,
-    :manifestation_id, :library_id, :required_role_id #,:exemplify_attributes
+    :manifestation_id, :library_id, :required_role_id,
+    :binding_item_identifier, :binding_call_number, :binded_at #,:exemplify_attributes
   scope :on_shelf, where('shelf_id != 1')
   scope :on_web, where(:shelf_id => 1)
   has_one :exemplify, :dependent => :destroy
@@ -98,23 +99,26 @@ end
 #
 # Table name: items
 #
-#  id                    :integer          not null, primary key
-#  call_number           :string(255)
-#  item_identifier       :string(255)
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  deleted_at            :datetime
-#  shelf_id              :integer          default(1), not null
-#  include_supplements   :boolean          default(FALSE), not null
-#  note                  :text
-#  url                   :string(255)
-#  price                 :integer
-#  lock_version          :integer          default(0), not null
-#  required_role_id      :integer          default(1), not null
-#  required_score        :integer          default(0), not null
-#  acquired_at           :datetime
-#  bookstore_id          :integer
-#  budget_type_id        :integer
-#  circulation_status_id :integer          default(5), not null
-#  checkout_type_id      :integer          default(1), not null
+#  id                      :integer          not null, primary key
+#  call_number             :string(255)
+#  item_identifier         :string(255)
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  deleted_at              :datetime
+#  shelf_id                :integer          default(1), not null
+#  include_supplements     :boolean          default(FALSE), not null
+#  note                    :text
+#  url                     :string(255)
+#  price                   :integer
+#  lock_version            :integer          default(0), not null
+#  required_role_id        :integer          default(1), not null
+#  required_score          :integer          default(0), not null
+#  acquired_at             :datetime
+#  bookstore_id            :integer
+#  budget_type_id          :integer
+#  circulation_status_id   :integer          default(5), not null
+#  checkout_type_id        :integer          default(1), not null
+#  binding_item_identifier :string(255)
+#  binding_call_number     :string(255)
+#  binded_at               :datetime
 #
