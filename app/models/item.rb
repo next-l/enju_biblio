@@ -27,6 +27,8 @@ class Item < ActiveRecord::Base
   validates :manifestation_id, :presence => true #, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
+  validates :binding_item_identifier, :allow_blank => true, :uniqueness => true,
+    :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
   validates_date :acquired_at, :allow_blank => true
 
@@ -65,6 +67,7 @@ class Item < ActiveRecord::Base
 
   def as_indexed_json(options={})
     as_json.merge(
+      item_identifier: [item_identifier, binding_item_identifier],
       title: title,
       creator: creator,
       contributor: contributor,
