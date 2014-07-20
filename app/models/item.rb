@@ -27,6 +27,8 @@ class Item < ActiveRecord::Base
   validates :manifestation_id, :presence => true #, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
+  validates :binding_item_identifier, :allow_blank => true, :uniqueness => true,
+    :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
   validates_date :acquired_at, :allow_blank => true
 
@@ -65,6 +67,7 @@ class Item < ActiveRecord::Base
 
   def as_indexed_json(options={})
     as_json.merge(
+      item_identifier: [item_identifier, binding_item_identifier],
       title: title,
       creator: creator,
       contributor: contributor,
@@ -123,24 +126,27 @@ end
 #
 # Table name: items
 #
-#  id                    :integer          not null, primary key
-#  manifestation_id      :integer
-#  call_number           :string(255)
-#  item_identifier       :string(255)
-#  created_at            :datetime
-#  updated_at            :datetime
-#  deleted_at            :datetime
-#  shelf_id              :integer          default(1), not null
-#  include_supplements   :boolean          default(FALSE), not null
-#  note                  :text
-#  url                   :string(255)
-#  price                 :integer
-#  lock_version          :integer          default(0), not null
-#  required_role_id      :integer          default(1), not null
-#  required_score        :integer          default(0), not null
-#  acquired_at           :datetime
-#  bookstore_id          :integer
-#  budget_type_id        :integer
-#  circulation_status_id :integer          default(5), not null
-#  checkout_type_id      :integer          default(1), not null
+#  id                      :integer          not null, primary key
+#  manifestation_id        :integer
+#  call_number             :string(255)
+#  item_identifier         :string(255)
+#  created_at              :datetime
+#  updated_at              :datetime
+#  deleted_at              :datetime
+#  shelf_id                :integer          default(1), not null
+#  include_supplements     :boolean          default(FALSE), not null
+#  note                    :text
+#  url                     :string(255)
+#  price                   :integer
+#  lock_version            :integer          default(0), not null
+#  required_role_id        :integer          default(1), not null
+#  required_score          :integer          default(0), not null
+#  acquired_at             :datetime
+#  bookstore_id            :integer
+#  budget_type_id          :integer
+#  circulation_status_id   :integer          default(5), not null
+#  checkout_type_id        :integer          default(1), not null
+#  binding_item_identifier :string(255)
+#  binding_call_number     :string(255)
+#  binded_at               :datetime
 #
