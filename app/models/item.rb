@@ -31,20 +31,25 @@ class Item < ActiveRecord::Base
   validates :manifestation_id, :presence => true, :on => :create
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
+  validates :binding_item_identifier, :allow_blank => true, :uniqueness => true,
+    :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
   validates_date :acquired_at, :allow_blank => true
 
   normalize_attributes :item_identifier
 
   searchable do
-    text :item_identifier, :note, :title, :creator, :contributor, :publisher
-    string :item_identifier
+    text :item_identifier, :note, :title, :creator, :contributor, :publisher,
+      :binding_item_identifier
+    string :item_identifier, multiple: true do
+      [item_identifier, binding_item_identifier]
+    end
     integer :required_role_id
     integer :manifestation_id do
       manifestation.id if manifestation
     end
     integer :shelf_id
-    integer :agent_ids, :multiple => true
+    integer :agent_ids, multiple: true
     time :created_at
     time :updated_at
     time :acquired_at
