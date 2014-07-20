@@ -4,6 +4,7 @@ class Manifestation < ActiveRecord::Base
   enju_subject_manifestation_model if defined?(EnjuSubject)
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)
   enju_ndl_ndl_search if defined?(EnjuNdl)
+  enju_loc_search if defined?(EnjuLoc)
   enju_nii_cinii_books if defined?(EnjuNii)
   enju_export if defined?(EnjuExport)
   enju_oai if defined?(EnjuOai)
