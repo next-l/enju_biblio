@@ -22,11 +22,12 @@ class ResourceImportFile < ActiveRecord::Base
   ]
   validates_attachment_presence :resource_import
   belongs_to :user, :validate => true
+  belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
   has_many :resource_import_file_transitions
 
   enju_import_file_model
-  attr_accessor :mode
+  attr_accessor :mode, :library_id
 
   def state_machine
     ResourceImportFileStateMachine.new(self, transition_class: ResourceImportFileTransition)
@@ -255,7 +256,7 @@ class ResourceImportFile < ActiveRecord::Base
         if item.manifestation
           fetch(row, :edit_mode => 'update')
         end
-        shelf = Shelf.where(:name => row['shelf']).first
+        shelf = Shelf.where(:name => row['shelf'].to_s.strip).first
         circulation_status = CirculationStatus.where(:name => row['circulation_status']).first
         checkout_type = CheckoutType.where(:name => row['checkout_type']).first
         bookstore = Bookstore.where(:name => row['bookstore']).first
@@ -397,7 +398,10 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def create_item(row, manifestation)
-    shelf = Shelf.where(:name => row['shelf'].to_s.strip).first || Shelf.web
+    shelf = Shelf.where(:name => row['shelf'].to_s.strip).first
+    unless shelf
+      shelf = default_shelf || Shelf.web
+    end
     bookstore = Bookstore.where(:name => row['bookstore'].to_s.strip).first
     budget_type = BudgetType.where(:name => row['budget_type'].to_s.strip).first
     acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
@@ -649,4 +653,5 @@ end
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
 #  user_encoding                :string(255)
+#  default_shelf_id             :integer
 #

@@ -7,7 +7,7 @@ describe ResourceImportFile do
   describe "when its mode is 'create'" do
     describe "when it is written in utf-8" do
       before(:each) do
-        @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
+        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
       end
 
       it "should be imported", :vcr => true do
@@ -55,7 +55,7 @@ describe ResourceImportFile do
         Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(:item_identifier => '11111').first
-        Shelf.where(:name => 'first_shelf').first.should eq item.shelf
+        item.shelf.name.should eq Shelf.find(3).name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
@@ -104,7 +104,7 @@ describe ResourceImportFile do
         Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(:item_identifier => '11111').first
-        Shelf.where(:name => 'first_shelf').first.should eq item.shelf
+        item.shelf.name.should eq Shelf.where(:name => 'first_shelf').first.name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
@@ -186,4 +186,5 @@ end
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
 #  user_encoding                :string(255)
+#  default_shelf_id             :integer
 #

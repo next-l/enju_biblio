@@ -49,6 +49,11 @@
 </p>
 
 <p>
+  <strong><%= t('activerecord.attributes.resource_import_file.default_shelf_id') -%>:</strong>
+  <%= link_to @resource_import_file.default_shelf.name, @resource_import_file.default_shelf if @resource_import_file.default_shelf -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.resource_import_file.state') -%>:</strong>
   <%= localized_state(@resource_import_file.current_state) -%>
 </p>
