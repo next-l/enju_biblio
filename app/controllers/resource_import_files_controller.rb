@@ -50,12 +50,9 @@ class ResourceImportFilesController < ApplicationController
     @resource_import_file = ResourceImportFile.new(resource_import_file_params)
     @resource_import_file.user = current_user
 
-<<<<<<< HEAD
     if @resource_import_file.save
       if @resource_import_file.mode == 'import'
         Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
-        format.html { render :action => "new" }
-        format.json { render :json => @resource_import_file.errors, :status => :unprocessable_entity }
       end
       redirect_to @resource_import_file, notice: t('controller.successfully_created', :model => t('activerecord.models.resource_import_file'))
     else
