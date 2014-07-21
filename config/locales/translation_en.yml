@@ -175,6 +175,7 @@ en:
         edit_mode: Edit mode
         error_message: Error message
         user_encoding: Encoding
+        default_shelf_id: Default shelf
       series_statement:
         original_title: Title
         numbering: Numbering

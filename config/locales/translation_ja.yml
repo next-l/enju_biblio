@@ -175,6 +175,7 @@ ja:
         edit_mode: 編集モード
         error_message: エラーメッセージ
         user_encoding: 文字コード
+        default_shelf_id: 既定の本棚
       series_statement:
         original_title: シリーズ名
         numbering: シリーズ番号

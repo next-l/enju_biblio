@@ -1,5 +1,6 @@
 class ResourceImportFilesController < ApplicationController
   load_and_authorize_resource
+  before_filter :prepare_options, only: [:new, :edit]
 
   # GET /resource_import_files
   # GET /resource_import_files.json
@@ -63,6 +64,7 @@ class ResourceImportFilesController < ApplicationController
         format.html { redirect_to @resource_import_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.resource_import_file')) }
         format.json { render :json => @resource_import_file, :status => :created, :location => @resource_import_file }
       else
+        prepare_options
         format.html { render :action => "new" }
         format.json { render :json => @resource_import_file.errors, :status => :unprocessable_entity }
       end
@@ -80,6 +82,7 @@ class ResourceImportFilesController < ApplicationController
         format.html { redirect_to @resource_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file')) }
         format.json { head :no_content }
       else
+        prepare_options
         format.html { render :action => "edit" }
         format.json { render :json => @resource_import_file.errors, :status => :unprocessable_entity }
       end
@@ -95,5 +98,11 @@ class ResourceImportFilesController < ApplicationController
       format.html { redirect_to resource_import_files_url }
       format.json { head :no_content }
     end
+  end
+
+  def prepare_options
+    @resource_import_file.library_id = current_user.library if @resource_import_file.new_record?
+    @libraries = Library.all
+    @shelves = Shelf.all
   end
 end
