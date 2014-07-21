@@ -19,55 +19,61 @@ class AgentsController < ApplicationController
         access_denied; return
       end
     end
-    query = params[:query].to_s.strip
-
-    if query.size == 1
-      query = "#{query}*"
-    end
-
-    @query = query.dup
-    query = query.gsub('　', ' ')
+    @query = params[:query]
     order = nil
     @count = {}
 
-    search = Agent.search(:include => [:agent_type, :required_role])
-    set_role_query(current_user, search)
+    if params[:query].to_s.strip == ''
+      user_query = '*'
+    else
+      user_query = params[:query]
+    end
+    if user_signed_in?
+      role_ids = Role.where('id <= ?', current_user.role.id).pluck(:id)
+    else
+      role_ids = [1]
+    end
 
-    if params[:mode] == 'recent'
-      query = "#{query} created_at_d:[NOW-1MONTH TO NOW]"
-    end
-    unless query.blank?
-      search.build do
-        fulltext query
-      end
-    end
+    #search = Agent.search(:include => [:agent_type, :required_role])
+    #set_role_query(current_user, search)
 
-    unless params[:mode] == 'add'
-      work = @work
-      expression = @expression
-      manifestation = @manifestation
-      agent = @agent
-      agent_merge_list = @agent_merge_list
-      search.build do
-        with(:work_ids).equal_to work.id if work
-        with(:expression_ids).equal_to expression.id if expression
-        with(:manifestation_ids).equal_to manifestation.id if manifestation
-        with(:original_agent_ids).equal_to agent.id if agent
-        with(:agent_merge_list_ids).equal_to agent_merge_list.id if agent_merge_list
-      end
-    end
+    #if params[:mode] == 'recent'
+    #  query = "#{query} created_at_d:[NOW-1MONTH TO NOW]"
+    #end
+    #unless query.blank?
+    #  search.build do
+    #    fulltext query
+    #  end
+    #end
+
+    #unless params[:mode] == 'add'
+    #  work = @work
+    #  expression = @expression
+    #  manifestation = @manifestation
+    #  agent = @agent
+    #  agent_merge_list = @agent_merge_list
+    #  search.build do
+    #    with(:work_ids).equal_to work.id if work
+    #    with(:expression_ids).equal_to expression.id if expression
+    #    with(:manifestation_ids).equal_to manifestation.id if manifestation
+    #    with(:original_agent_ids).equal_to agent.id if agent
+    #    with(:agent_merge_list_ids).equal_to agent_merge_list.id if agent_merge_list
+    #  end
+    #end
 
     role = current_user.try(:role) || Role.default_role
-    search.build do
-      with(:required_role_id).less_than_or_equal_to role.id
-    end
+    #search.build do
+    #  with(:required_role_id).less_than_or_equal_to role.id
+    #end
 
     page = params[:page].to_i || 1
     page = 1 if page == 0
-    search.query.paginate(page, Agent.default_per_page)
-    @agents = search.execute!.results
+    search = Agent.search((user_query), routing: role_ids)
+    @agents = search.page(page).records
+    #search.query.paginate(page, Agent.default_per_page)
+    #@agents = search.execute!.results
 
-    flash[:page_info] = {:page => page, :query => query}
+    flash[:page_info] = {:page => page, :query => @query}
 
     respond_to do |format|
       format.html # index.html.erb
@@ -97,21 +103,21 @@ class AgentsController < ApplicationController
 
     agent = @agent
     role = current_user.try(:role) || Role.default_role
-    @works = Manifestation.search do
-      with(:creator_ids).equal_to agent.id
-      with(:required_role_id).less_than_or_equal_to role.id
-      paginate :page => params[:work_list_page], :per_page => Manifestation.default_per_page
-    end.results
-    @expressions = Manifestation.search do
-      with(:contributor_ids).equal_to agent.id
-      with(:required_role_id).less_than_or_equal_to role.id
-      paginate :page => params[:expression_list_page], :per_page => Manifestation.default_per_page
-    end.results
-    @manifestations = Manifestation.search do
-      with(:publisher_ids).equal_to agent.id
-      with(:required_role_id).less_than_or_equal_to role.id
-      paginate :page => params[:manifestation_list_page], :per_page => Manifestation.default_per_page
-    end.results
+    #@works = Manifestation.search do
+    #  with(:creator_ids).equal_to agent.id
+    #  with(:required_role_id).less_than_or_equal_to role.id
+    #  paginate :page => params[:work_list_page], :per_page => Manifestation.default_per_page
+    #end.results
+    #@expressions = Manifestation.search do
+    #  with(:contributor_ids).equal_to agent.id
+    #  with(:required_role_id).less_than_or_equal_to role.id
+    #  paginate :page => params[:expression_list_page], :per_page => Manifestation.default_per_page
+    #end.results
+    #@manifestations = Manifestation.search do
+    #  with(:publisher_ids).equal_to agent.id
+    #  with(:required_role_id).less_than_or_equal_to role.id
+    #  paginate :page => params[:manifestation_list_page], :per_page => Manifestation.default_per_page
+    #end.results
 
     respond_to do |format|
       format.html # show.html.erb

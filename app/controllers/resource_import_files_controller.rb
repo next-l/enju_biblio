@@ -1,7 +1,7 @@
 class ResourceImportFilesController < ApplicationController
   before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
-  before_action :prepare_options, only: [:new, :edit]
   after_action :verify_authorized
+  after_action :prepare_options, only: [:new, :edit]
 
   # GET /resource_import_files
   # GET /resource_import_files.json
