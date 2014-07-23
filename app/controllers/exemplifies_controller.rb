@@ -28,7 +28,7 @@ class ExemplifiesController < ApplicationController
   # GET /exemplifies/new.json
   def new
     if @manifestation and @item.blank?
-      redirect_to manifestation_items_url(@manifestation)
+      redirect_to items_url(manifestation_id: @manifestation.id)
       return
     elsif @item and @manifestation.blank?
       redirect_to manifestations_url
@@ -66,7 +66,7 @@ class ExemplifiesController < ApplicationController
   def update
     if @manifestation and params[:move]
       move_position(@exemplify, params[:move], false)
-      redirect_to manifestation_exemplifies_url(@manifestation)
+      redirect_to exemplifies_url(manifestation_id: @exemplify.manifestation_id)
       return
     end
 

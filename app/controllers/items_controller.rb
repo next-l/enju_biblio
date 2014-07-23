@@ -238,7 +238,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       flash[:notice] = t('controller.successfully_deleted', :model => t('activerecord.models.item'))
       if @item.manifestation
-        format.html { redirect_to manifestation_items_url(manifestation) }
+        format.html { redirect_to items_url(manifestation_id: manifestation.id) }
         format.json { head :no_content }
       else
         format.html { redirect_to items_url }

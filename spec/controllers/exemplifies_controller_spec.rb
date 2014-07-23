@@ -326,7 +326,7 @@ describe ExemplifiesController do
         it "moves its position when specified" do
           position = @exemplify.position
           put :update, :id => @exemplify.id, :manifestation_id => @exemplify.manifestation.id, :move => 'lower'
-          response.should redirect_to manifestation_exemplifies_url(@exemplify.manifestation)
+          response.should redirect_to exemplifies_url(manifestation_id: @exemplify.manifestation_id)
           assigns(:exemplify).position.should eq position + 1
         end
       end

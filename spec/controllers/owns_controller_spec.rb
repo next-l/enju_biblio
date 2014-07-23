@@ -309,7 +309,7 @@ describe OwnsController do
 
         it "moves its position when specified" do
           put :update, :id => @own.id, :own => @attrs, :item_id => @own.item.id, :move => 'lower'
-          response.should redirect_to(item_owns_url(@own.item))
+          response.should redirect_to(owns_url(item_id: @own.item_id))
         end
       end
 

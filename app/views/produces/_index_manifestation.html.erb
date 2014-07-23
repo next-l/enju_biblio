@@ -35,9 +35,9 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), manifestation_agents_path(manifestation) -%></li>
+    <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), agents_path(manifestation_id: manifestation.id) -%></li>
     <%- if can? :create, Produce -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_manifestation_produce_path(manifestation) -%></li>
+      <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_produce_path(manifestation_id: manifestation.id) -%></li>
     <%- end -%>
   </ul>
 </div>

@@ -499,7 +499,7 @@ describe ItemsController do
       it "redirects to the items list" do
         manifestation = @item.manifestation
         delete :destroy, :id => @item.id
-        response.should redirect_to(manifestation_items_url(manifestation))
+        response.should redirect_to(items_url(manifestation_id: manifestation.id))
       end
 
       it "should not destroy missing item" do
@@ -530,7 +530,7 @@ describe ItemsController do
       it "redirects to the items list" do
         manifestation = @item.manifestation
         delete :destroy, :id => @item.id
-        response.should redirect_to(manifestation_items_url(manifestation))
+        response.should redirect_to(items_url(manifestation_id: manifestation.id))
       end
     end
 

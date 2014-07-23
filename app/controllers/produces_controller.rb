@@ -78,7 +78,7 @@ class ProducesController < ApplicationController
   def update
     if @manifestation and params[:move]
       move_position(@produce, params[:move], false)
-      redirect_to manifestation_produces_url(@manifestation)
+      redirect_to produces_url(manifestation_id: @produce.manifestation_id)
       return
     end
 

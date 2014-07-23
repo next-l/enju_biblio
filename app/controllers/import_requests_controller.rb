@@ -59,7 +59,7 @@ class ImportRequestsController < ApplicationController
       end
     end
   rescue Timeout::Error
-    @import_request.sm_fail!
+    @import_request.transition_to!(:failed)
     flash[:notice] = t('page.timed_out')
     redirect_to new_import_request_url
   end

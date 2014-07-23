@@ -93,7 +93,7 @@
 
 <p>
   <strong><%= t('activerecord.attributes.item.acquired_at') -%>:</strong>
-  <%= l(@item.acquired_at, :format => :only_date) if @item.acquired_at -%>
+  <%= l(@item.acquired_at, format: :only_date) if @item.acquired_at -%>
 </p>
 
 <p>
@@ -103,7 +103,7 @@
 
 <p>
   <strong><%= t('activerecord.attributes.item.binded_at') -%>:</strong>
-  <%= l(@item.binded_at, :format => :only_date) if @item.binded_at -%>
+  <%= l(@item.binded_at, format: :only_date) if @item.binded_at -%>
 </p>
 
 <p>
@@ -148,7 +148,7 @@
     <% end %>
     <% if defined?(EnjuInterLibraryLoan) %>
       <%- if @item.inter_library_loans.empty? -%>
-        <li><%= link_to t('item.add_new_copy'), new_manifestation_item_path(@item.manifestation) -%></li>
+        <li><%= link_to t('item.add_new_copy'), new_item_path(manifestation_id: @item.manifestation.id) -%></li>
       <%- end -%>
     <% end %>
     <% if defined?(EnjuCirculation) %>

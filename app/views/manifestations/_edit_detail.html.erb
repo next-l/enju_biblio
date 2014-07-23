@@ -2,7 +2,7 @@
   <li>
     <%= link_to t('page.edit'), edit_manifestation_path(@manifestation) -%>
   </li>
-  <li><%= link_to t('manifestation.edit_item'), manifestation_items_path(@manifestation) -%></li>
+  <li><%= link_to t('manifestation.edit_item'), items_path(manifestation_id: @manifestation.id) -%></li>
   <li><%= link_to t('manifestation.add_derivation'), manifestations_path(:parent_id => @manifestation.id, :mode => 'add') -%></li>
   <% if can? :delete, @manifestation %>
     <li><%= link_to t('page.destroy'), @manifestation, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>

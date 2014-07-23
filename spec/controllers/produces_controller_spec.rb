@@ -326,7 +326,7 @@ describe ProducesController do
         it "moves its position when specified" do
           position = @produce.position
           put :update, :id => @produce.id, :manifestation_id => @produce.manifestation.id, :move => 'lower'
-          response.should redirect_to manifestation_produces_url(@produce.manifestation)
+          response.should redirect_to produces_url(manifestation_id: @produce.manifestation_id)
           assigns(:produce).position.should eq position + 1
         end
       end

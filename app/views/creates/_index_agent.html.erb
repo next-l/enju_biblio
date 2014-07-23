@@ -27,8 +27,7 @@
     <td><%= l(create.updated_at) -%></td>
     <td>
       <%- if can? :delete, create -%>
-        <%= link_to t('page.show'), agent_create_path(agent, create) -%>
-        <%= link_to t('page.destroy'), agent_create_path(agent, create), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), create_path(create, agent_id: agent.id), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -42,7 +41,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if can? :create, Create -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.create')), new_agent_create_path(agent) -%></li>
+      <li><%= link_to t('page.new', :model => t('activerecord.models.create')), new_create_path(agent_id: agent.id) -%></li>
     <%- end -%>
   </ul>
 </div>

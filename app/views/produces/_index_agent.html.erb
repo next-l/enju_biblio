@@ -19,7 +19,7 @@
     <td><%= l(produce.updated_at) -%></td>
     <td>
       <%- if can? :delete, produce -%>
-        <%= link_to t('page.destroy'), agent_produce_path(agent, produce), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), produce_path(produce, agent_id: agent.id), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -34,7 +34,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if can? :create, Produce -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_agent_produce_path(agent) -%></li>
+      <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_produce_path(agent_id: agent.id) -%></li>
     <%- end -%>
   </ul>
 </div>
