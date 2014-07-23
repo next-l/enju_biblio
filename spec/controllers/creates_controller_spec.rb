@@ -328,7 +328,7 @@ describe CreatesController do
         it "moves its position when specified" do
           position = @create.position
           put :update, :id => @create.id, :work_id => @create.work.id, :move => 'lower'
-          response.should redirect_to work_creates_url(@create.work)
+          response.should redirect_to creates_url(work_id: @create.work_id)
           assigns(:create).position.should eq position + 1
         end
       end

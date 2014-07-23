@@ -76,7 +76,7 @@ class CreatesController < ApplicationController
     # 並べ替え
     if @work and params[:move]
       move_position(@create, params[:move], false)
-      redirect_to work_creates_url(@work)
+      redirect_to creates_url(work_id: @create.work_id)
       return
     end
 

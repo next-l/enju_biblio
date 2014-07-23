@@ -13,7 +13,7 @@
 
   <ul>
     <%- if @manifestation -%>
-      <li><%= link_to t('page.back'), manifestation_items_path(@manifestation) -%></li>
+      <li><%= link_to t('page.back'), items_path(manifestation_id: @manifestation.id) -%></li>
     <%- else -%>
       <li><%= link_to t('page.back'), items_path -%></li>
     <%- end -%>

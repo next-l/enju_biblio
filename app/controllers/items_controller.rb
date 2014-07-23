@@ -231,7 +231,7 @@ class ItemsController < ApplicationController
 
     flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     if @item.manifestation
-      redirect_to manifestation_items_url(@item.manifestation), notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
+      redirect_to items_url(manifestation_id: @item.manifestation_id), notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     else
       redirect_to items_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     end
