@@ -61,7 +61,7 @@ class ResourceImportFilesController < ApplicationController
         if @resource_import_file.mode == 'import'
           Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
         end
-        format.html { redirect_to @resource_import_file, notice: t('import.successfully_created', model: t('activerecord.models.resource_import_file'))
+        format.html { redirect_to @resource_import_file, notice: t('import.successfully_created', model: t('activerecord.models.resource_import_file')) }
         format.json { render :json => @resource_import_file, :status => :created, :location => @resource_import_file }
       else
         prepare_options
