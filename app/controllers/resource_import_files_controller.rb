@@ -39,6 +39,8 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/new.json
   def new
     @resource_import_file = ResourceImportFile.new
+    @resource_import_file.library_id = current_user.library_id
+    @shelves = Library.find(@resource_import_file.library_id).shelves
 
     respond_to do |format|
       format.html # new.html.erb
@@ -101,8 +103,12 @@ class ResourceImportFilesController < ApplicationController
   end
 
   def prepare_options
-    @resource_import_file.library_id = current_user.library if @resource_import_file.new_record?
     @libraries = Library.all
-    @shelves = Shelf.all
+    library = Library.where(id: @resource_import_file.try(:library_id)).first
+    if library
+      @shelves = library.shelves
+    else
+      @shelves = current_user.library.shelves
+    end
   end
 end
