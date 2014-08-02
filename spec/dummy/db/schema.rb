@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140721151416) do
+ActiveRecord::Schema.define(:version => 20140802082007) do
 
   create_table "agent_import_file_transitions", :force => true do |t|
     t.string   "to_state"
@@ -614,6 +614,7 @@ ActiveRecord::Schema.define(:version => 20140721151416) do
     t.string   "binding_item_identifier"
     t.string   "binding_call_number"
     t.datetime "binded_at"
+    t.integer  "manifestation_id"
   end
 
   add_index "items", ["binding_item_identifier"], :name => "index_items_on_binding_item_identifier"
@@ -621,6 +622,7 @@ ActiveRecord::Schema.define(:version => 20140721151416) do
   add_index "items", ["checkout_type_id"], :name => "index_items_on_checkout_type_id"
   add_index "items", ["circulation_status_id"], :name => "index_items_on_circulation_status_id"
   add_index "items", ["item_identifier"], :name => "index_items_on_item_identifier"
+  add_index "items", ["manifestation_id"], :name => "index_items_on_manifestation_id"
   add_index "items", ["required_role_id"], :name => "index_items_on_required_role_id"
   add_index "items", ["shelf_id"], :name => "index_items_on_shelf_id"
 

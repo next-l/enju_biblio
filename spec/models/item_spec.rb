@@ -77,4 +77,5 @@ end
 #  binding_item_identifier :string(255)
 #  binding_call_number     :string(255)
 #  binded_at               :datetime
+#  manifestation_id        :integer
 #

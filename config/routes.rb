@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   resources :manifestations do
     resources :agents
     resources :produces
-    resources :exemplifies
     resources :series_statements
     resources :items
     resources :picture_files
@@ -17,7 +16,6 @@ Rails.application.routes.draw do
   resources :items do
     resources :agents
     resources :owns
-    resource :exemplify
     resources :manifestations, :only => [:index]
   end
 
@@ -63,7 +61,6 @@ Rails.application.routes.draw do
   resources :produces
   resources :produce_types
   resources :owns
-  resources :exemplifies
 
   resources :donates
 

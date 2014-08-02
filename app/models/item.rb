@@ -10,11 +10,10 @@ class Item < ActiveRecord::Base
     :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
     :acquired_at, :bookstore_id, :missing_since, :budget_type_id, :lock_version,
     :manifestation_id, :library_id, :required_role_id,
-    :binding_item_identifier, :binding_call_number, :binded_at #,:exemplify_attributes
+    :binding_item_identifier, :binding_call_number, :binded_at
   scope :on_shelf, where('shelf_id != 1')
   scope :on_web, where(:shelf_id => 1)
-  has_one :exemplify, :dependent => :destroy
-  has_one :manifestation, :through => :exemplify
+  belongs_to :manifestation
   has_many :owns
   has_many :agents, :through => :owns
   delegate :display_name, :to => :shelf, :prefix => true
@@ -24,11 +23,9 @@ class Item < ActiveRecord::Base
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   has_one :resource_import_result
   belongs_to :budget_type
-  #accepts_nested_attributes_for :exemplify
-  #before_save :create_manifestation
 
   validates_associated :bookstore
-  validates :manifestation_id, :presence => true, :on => :create
+  validates :manifestation_id, :presence => true
   validates :item_identifier, :allow_blank => true, :uniqueness => true,
     :format => {:with => /\A[0-9A-Za-z_]+\Z/}
   validates :binding_item_identifier, :allow_blank => true,
@@ -45,9 +42,7 @@ class Item < ActiveRecord::Base
       [item_identifier, binding_item_identifier]
     end
     integer :required_role_id
-    integer :manifestation_id do
-      manifestation.id if manifestation
-    end
+    integer :manifestation_id
     integer :shelf_id
     integer :agent_ids, multiple: true
     time :created_at
@@ -55,7 +50,7 @@ class Item < ActiveRecord::Base
     time :acquired_at
   end
 
-  attr_accessor :library_id, :manifestation_id
+  attr_accessor :library_id
 
   paginates_per 10
 
@@ -92,12 +87,6 @@ class Item < ActiveRecord::Base
       true
     end
   end
-
-  def create_manifestation
-    if manifestation_id
-      self.manifestation = Manifestation.find(manifestation_id)
-    end
-  end
 end
 
 # == Schema Information
@@ -126,4 +115,5 @@ end
 #  binding_item_identifier :string(255)
 #  binding_call_number     :string(255)
 #  binded_at               :datetime
+#  manifestation_id        :integer
 #
