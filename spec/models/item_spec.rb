@@ -49,6 +49,12 @@ describe Item do
     item.reload
     item.lending_policies.where(:user_group_id => 1).first.loan_period.should eq 10
   end
+
+  it "should not create item without manifestation_id" do
+    item = items(:item_00001)
+    item.manifestation_id = nil
+    item.valid?.should be_falsy
+  end
 end
 
 # == Schema Information
