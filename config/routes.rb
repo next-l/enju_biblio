@@ -3,6 +3,8 @@ Rails.application.routes.draw do
 
   resources :identifier_types
 
+  get "/manifestations/:manifestation_id/items" => redirect("/items?manifestation_id=%{manifestation_id}")
+
   resources :manifestations do
     resources :agents
     resources :produces
