@@ -163,8 +163,9 @@ class ResourceImportFile < ActiveRecord::Base
     Sunspot.commit
     rows.close
     transition_to!(:completed)
+    send_message
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
-    return num
+    num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     transition_to!(:failed)

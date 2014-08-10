@@ -8,6 +8,7 @@ describe ResourceImportFile do
     describe "when it is written in utf-8" do
       before(:each) do
         @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
+        @file.user = users(:admin)
       end
 
       it "should be imported", vcr: true do
@@ -77,11 +78,19 @@ describe ResourceImportFile do
         @file.resource_import_fingerprint.should be_truthy
         @file.executed_at.should be_truthy
       end
+
+      it "should send message when import is completed" do
+        old_message_count = Message.count
+        @file.import_start
+        Message.count.should eq old_message_count + 1
+        Message.order(:id).last.subject.should eq 'インポートが完了しました'
+      end
     end
 
     describe "when it is written in shift_jis" do
       before(:each) do
         @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
+        @file.user = users(:admin)
       end
 
       it "should be imported", vcr: true do
@@ -117,6 +126,7 @@ describe ResourceImportFile do
     describe "when it has only isbn" do
       before(:each) do
         @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
+        @file.user = users(:admin)
       end
 
       it "should be imported", vcr: true do

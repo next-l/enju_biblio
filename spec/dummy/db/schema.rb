@@ -828,6 +828,18 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
     t.datetime "updated_at",   :null => false
   end
 
+  create_table "message_request_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",           :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "message_request_id"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+  end
+
+  add_index "message_request_transitions", ["message_request_id"], :name => "index_message_request_transitions_on_message_request_id"
+  add_index "message_request_transitions", ["sort_key", "message_request_id"], :name => "index_message_request_transitions_on_sort_key_and_request_id", :unique => true
+
   create_table "message_requests", :force => true do |t|
     t.integer  "sender_id"
     t.integer  "receiver_id"
@@ -850,6 +862,18 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
   end
 
   add_index "message_templates", ["status"], :name => "index_message_templates_on_status", :unique => true
+
+  create_table "message_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",   :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "message_id"
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
+  end
+
+  add_index "message_transitions", ["message_id"], :name => "index_message_transitions_on_message_id"
+  add_index "message_transitions", ["sort_key", "message_id"], :name => "index_message_transitions_on_sort_key_and_message_id", :unique => true
 
   create_table "messages", :force => true do |t|
     t.datetime "read_at"
@@ -1314,34 +1338,45 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
   end
 
   create_table "users", :force => true do |t|
-    t.integer  "user_group_id"
-    t.integer  "required_role_id"
-    t.string   "username"
-    t.text     "note"
-    t.string   "locale"
-    t.string   "user_number"
-    t.integer  "library_id"
-    t.datetime "locked_at"
-    t.datetime "created_at",                                  :null => false
-    t.datetime "updated_at",                                  :null => false
     t.string   "email",                    :default => "",    :null => false
     t.string   "encrypted_password",       :default => "",    :null => false
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",            :default => 0
+    t.integer  "sign_in_count",            :default => 0,     :null => false
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
     t.string   "last_sign_in_ip"
+    t.datetime "created_at",                                  :null => false
+    t.datetime "updated_at",                                  :null => false
     t.boolean  "save_checkout_history",    :default => false, :null => false
     t.string   "checkout_icalendar_token"
     t.boolean  "share_bookmarks"
+    t.string   "username"
+    t.string   "user_number"
+    t.string   "state"
+    t.string   "locale"
+    t.datetime "deleted_at"
+    t.datetime "expired_at"
+    t.integer  "library_id",               :default => 1,     :null => false
+    t.integer  "required_role_id",         :default => 1,     :null => false
+    t.integer  "user_group_id",            :default => 1,     :null => false
+    t.text     "note"
+    t.text     "keyword_list"
+    t.integer  "failed_attempts",          :default => 0
+    t.string   "unlock_token"
+    t.datetime "locked_at"
+    t.datetime "confirmed_at"
   end
 
   add_index "users", ["checkout_icalendar_token"], :name => "index_users_on_checkout_icalendar_token", :unique => true
-  add_index "users", ["email"], :name => "index_users_on_email"
+  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
+  add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
+  add_index "users", ["user_group_id"], :name => "index_users_on_user_group_id"
+  add_index "users", ["user_number"], :name => "index_users_on_user_number", :unique => true
+  add_index "users", ["username"], :name => "index_users_on_username", :unique => true
 
   create_table "versions", :force => true do |t|
     t.string   "item_type",  :null => false
