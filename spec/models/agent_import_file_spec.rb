@@ -38,9 +38,6 @@ describe AgentImportFile do
       Agent.count.should eq old_agents_count + 4
       Agent.order('id DESC')[0].full_name.should eq '原田 ushi 隆史'
       Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
-      Agent.order('id DESC')[2].email.should eq 'fugafuga@example.jp'
-      Agent.order('id DESC')[3].required_role.should eq Role.find_by_name('Guest')
-      Agent.order('id DESC')[1].email.should eq 'tanabe@library.example.jp'
       AgentImportResult.count.should eq old_import_results_count + 5
 
       @file.agent_import_fingerprint.should be_truthy
