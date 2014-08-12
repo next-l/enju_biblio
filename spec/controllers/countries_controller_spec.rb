@@ -2,8 +2,7 @@ require 'spec_helper'
 require 'sunspot/rails/spec_helper'
 
 describe CountriesController do
-  fixtures :countries, :agent_types, :library_groups, :languages, :user_groups,
-    :roles
+  fixtures :all
   disconnect_sunspot
 
   def valid_attributes
@@ -16,7 +15,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all countries as @countries" do
         get :index
@@ -25,7 +24,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all countries as @countries" do
         get :index
@@ -34,7 +33,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all countries as @countries" do
         get :index
@@ -56,7 +55,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested country as @country" do
         get :show, :id => @country.id
@@ -65,7 +64,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested country as @country" do
         get :show, :id => @country.id
@@ -74,7 +73,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested country as @country" do
         get :show, :id => @country.id
@@ -92,7 +91,7 @@ describe CountriesController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested country as @country" do
         get :new
@@ -102,7 +101,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested country as @country" do
         get :new
@@ -112,7 +111,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested country as @country" do
         get :new
@@ -132,7 +131,7 @@ describe CountriesController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested country as @country" do
         country = FactoryGirl.create(:country)
@@ -142,7 +141,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested country as @country" do
         country = FactoryGirl.create(:country)
@@ -152,7 +151,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested country as @country" do
         country = FactoryGirl.create(:country)
@@ -177,7 +176,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created country as @country" do
@@ -205,7 +204,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created country as @country" do
@@ -233,7 +232,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created country as @country" do
@@ -295,7 +294,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested country" do
@@ -322,7 +321,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested country" do
@@ -349,7 +348,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested country" do
@@ -402,7 +401,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested country" do
         delete :destroy, :id => @country.id
@@ -415,7 +414,7 @@ describe CountriesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested country" do
         delete :destroy, :id => @country.id
@@ -428,7 +427,7 @@ describe CountriesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested country" do
         delete :destroy, :id => @country.id

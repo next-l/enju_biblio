@@ -19,7 +19,8 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe LicensesController do
-  login_admin
+  fixtures :all
+  login_fixture_admin
 
   # This should return the minimal set of attributes required to create a valid
   # License. As you add validations to License, be sure to

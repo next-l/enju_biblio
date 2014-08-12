@@ -6,9 +6,7 @@ describe AgentImportFilesController do
 
   describe "GET index" do
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "assigns all agent_import_files as @agent_import_files" do
         get :index
@@ -17,9 +15,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "assigns all agent_import_files as @agent_import_files" do
         get :index
@@ -28,9 +24,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "assigns empty as @agent_import_files" do
         get :index
@@ -50,9 +44,7 @@ describe AgentImportFilesController do
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
@@ -61,9 +53,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
@@ -72,9 +62,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
@@ -93,9 +81,7 @@ describe AgentImportFilesController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :new
@@ -105,9 +91,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
@@ -117,9 +101,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
@@ -139,10 +121,7 @@ describe AgentImportFilesController do
 
   describe "POST create" do
     describe "When logged in as Librarian" do
-      before(:each) do
-        @user = FactoryGirl.create(:librarian)
-        sign_in @user
-      end
+      login_fixture_librarian
 
       it "should create agent_import_file" do
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../../examples/agent_import_file_sample1.tsv", 'text/csv') }
@@ -155,16 +134,13 @@ describe AgentImportFilesController do
         old_agents_count = Agent.count
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../../examples/agent_import_file_sample2.tsv", 'text/csv') }
         assigns(:agent_import_file).import_start
-        Agent.count.should eq old_agents_count + 7
+        Agent.count.should eq old_agents_count + 6
         response.should redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      login_fixture_user
 
       it "should be forbidden" do
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../..//examples/agent_import_file_sample1.tsv", 'text/csv') }
@@ -182,9 +158,7 @@ describe AgentImportFilesController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
@@ -194,9 +168,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
@@ -206,9 +178,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
@@ -228,9 +198,7 @@ describe AgentImportFilesController do
 
   describe "PUT update" do
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "should update agent_import_file" do
         put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
@@ -239,9 +207,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "should not update agent_import_file" do
         put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
@@ -263,9 +229,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "destroys the requested agent_import_file" do
         delete :destroy, :id => @agent_import_file.id
@@ -278,9 +242,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "destroys the requested agent_import_file" do
         delete :destroy, :id => @agent_import_file.id
@@ -293,9 +255,7 @@ describe AgentImportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "destroys the requested agent_import_file" do
         delete :destroy, :id => @agent_import_file.id

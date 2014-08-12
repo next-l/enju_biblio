@@ -6,9 +6,7 @@ describe AgentImportResultsController do
 
   describe "GET index" do
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "assigns all agent_import_results as @agent_import_results" do
         get :index
@@ -17,9 +15,7 @@ describe AgentImportResultsController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "assigns all agent_import_results as @agent_import_results" do
         get :index
@@ -28,9 +24,7 @@ describe AgentImportResultsController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "assigns empty as @agent_import_results" do
         get :index
@@ -50,9 +44,7 @@ describe AgentImportResultsController do
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      before(:each) do
-        sign_in FactoryGirl.create(:admin)
-      end
+      login_fixture_admin
 
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
@@ -61,9 +53,7 @@ describe AgentImportResultsController do
     end
 
     describe "When logged in as Librarian" do
-      before(:each) do
-        sign_in FactoryGirl.create(:librarian)
-      end
+      login_fixture_librarian
 
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
@@ -72,9 +62,7 @@ describe AgentImportResultsController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        sign_in FactoryGirl.create(:user)
-      end
+      login_fixture_user
 
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1

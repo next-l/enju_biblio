@@ -15,7 +15,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all creates as @creates" do
         get :index
@@ -24,7 +24,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all creates as @creates" do
         get :index
@@ -33,7 +33,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all creates as @creates" do
         get :index
@@ -51,7 +51,7 @@ describe CreatesController do
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested create as @create" do
         create = FactoryGirl.create(:create)
@@ -61,7 +61,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested create as @create" do
         create = FactoryGirl.create(:create)
@@ -71,7 +71,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested create as @create" do
         create = FactoryGirl.create(:create)
@@ -91,7 +91,7 @@ describe CreatesController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested create as @create" do
         get :new
@@ -100,7 +100,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested create as @create" do
         get :new
@@ -109,7 +109,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "should not assign the requested create as @create" do
         get :new
@@ -129,7 +129,7 @@ describe CreatesController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested create as @create" do
         create = FactoryGirl.create(:create)
@@ -139,7 +139,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested create as @create" do
         create = FactoryGirl.create(:create)
@@ -149,7 +149,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested create as @create" do
         create = FactoryGirl.create(:create)
@@ -174,7 +174,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created create as @create" do
@@ -202,7 +202,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created create as @create" do
@@ -230,7 +230,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created create as @create" do
@@ -292,7 +292,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested create" do
@@ -314,7 +314,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested create" do
@@ -349,7 +349,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested create" do
@@ -398,7 +398,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested create" do
         delete :destroy, :id => @create.id
@@ -411,7 +411,7 @@ describe CreatesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested create" do
         delete :destroy, :id => @create.id
@@ -424,7 +424,7 @@ describe CreatesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested create" do
         delete :destroy, :id => @create.id

@@ -142,7 +142,7 @@ class AgentsController < ApplicationController
     @agent = Agent.new
     @agent.required_role = Role.where(:name => 'Guest').first
     @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
-    @agent.country = current_user.library.country
+    @agent.country = current_user.profile.library.country
     prepare_options
 
     respond_to do |format|

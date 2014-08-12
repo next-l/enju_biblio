@@ -15,7 +15,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
@@ -24,7 +24,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
@@ -33,7 +33,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
@@ -51,7 +51,7 @@ describe ManifestationRelationshipsController do
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
@@ -61,7 +61,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
@@ -71,7 +71,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
@@ -91,7 +91,7 @@ describe ManifestationRelationshipsController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         get :new
@@ -101,7 +101,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "should not assign the requested manifestation_relationship as @manifestation_relationship" do
         get :new
@@ -111,7 +111,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "should not assign the requested manifestation_relationship as @manifestation_relationship" do
         get :new
@@ -131,7 +131,7 @@ describe ManifestationRelationshipsController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
@@ -141,7 +141,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
@@ -151,7 +151,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
@@ -176,7 +176,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship as @manifestation_relationship" do
@@ -204,7 +204,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship as @manifestation_relationship" do
@@ -232,7 +232,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship as @manifestation_relationship" do
@@ -294,7 +294,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested manifestation_relationship" do
@@ -322,7 +322,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested manifestation_relationship" do
@@ -345,7 +345,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested manifestation_relationship" do
@@ -394,7 +394,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested manifestation_relationship" do
         delete :destroy, :id => @manifestation_relationship.id
@@ -407,7 +407,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested manifestation_relationship" do
         delete :destroy, :id => @manifestation_relationship.id
@@ -420,7 +420,7 @@ describe ManifestationRelationshipsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested manifestation_relationship" do
         delete :destroy, :id => @manifestation_relationship.id

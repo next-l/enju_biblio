@@ -20,7 +20,7 @@ require 'spec_helper'
 
 describe CarrierTypesController do
   fixtures :all
-  login_admin
+  login_fixture_admin
 
   # This should return the minimal set of attributes required to create a valid
   # CarrierType. As you add validations to CarrierType, be sure to

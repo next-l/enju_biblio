@@ -19,7 +19,8 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe AgentTypesController do
-  login_admin
+  fixtures :all
+  login_fixture_admin
 
   # This should return the minimal set of attributes required to create a valid
   # AgentType. As you add validations to AgentType, be sure to

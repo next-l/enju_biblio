@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140802082007) do
+ActiveRecord::Schema.define(:version => 20140811031145) do
 
   create_table "agent_import_file_transitions", :force => true do |t|
     t.string   "to_state"
@@ -957,6 +957,24 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
   add_index "produces", ["agent_id"], :name => "index_produces_on_agent_id"
   add_index "produces", ["manifestation_id"], :name => "index_produces_on_manifestation_id"
 
+  create_table "profiles", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "user_group_id"
+    t.integer  "library_id"
+    t.string   "locale"
+    t.string   "user_number"
+    t.text     "full_name"
+    t.text     "note"
+    t.text     "keyword_list"
+    t.integer  "required_role_id"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+    t.datetime "expired_at"
+  end
+
+  add_index "profiles", ["user_id"], :name => "index_profiles_on_user_id"
+  add_index "profiles", ["user_number"], :name => "index_profiles_on_user_number", :unique => true
+
   create_table "realize_types", :force => true do |t|
     t.string   "name"
     t.text     "display_name"
@@ -1284,6 +1302,29 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
     t.datetime "completed_at"
   end
 
+  create_table "user_export_file_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",            :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "user_export_file_id"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+  end
+
+  add_index "user_export_file_transitions", ["sort_key", "user_export_file_id"], :name => "index_user_export_file_transitions_on_sort_key_and_file_id", :unique => true
+  add_index "user_export_file_transitions", ["user_export_file_id"], :name => "index_user_export_file_transitions_on_file_id"
+
+  create_table "user_export_files", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "user_export_file_name"
+    t.string   "user_export_content_type"
+    t.integer  "user_export_file_size"
+    t.datetime "user_export_updated_at"
+    t.datetime "executed_at"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+  end
+
   create_table "user_group_has_checkout_types", :force => true do |t|
     t.integer  "user_group_id",                                      :null => false
     t.integer  "checkout_type_id",                                   :null => false
@@ -1325,6 +1366,44 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
     t.integer  "role_id"
     t.datetime "created_at", :null => false
     t.datetime "updated_at", :null => false
+  end
+
+  create_table "user_import_file_transitions", :force => true do |t|
+    t.string   "to_state"
+    t.text     "metadata",            :default => "{}"
+    t.integer  "sort_key"
+    t.integer  "user_import_file_id"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+  end
+
+  add_index "user_import_file_transitions", ["sort_key", "user_import_file_id"], :name => "index_user_import_file_transitions_on_sort_key_and_file_id", :unique => true
+  add_index "user_import_file_transitions", ["user_import_file_id"], :name => "index_user_import_file_transitions_on_user_import_file_id"
+
+  create_table "user_import_files", :force => true do |t|
+    t.integer  "user_id"
+    t.text     "note"
+    t.datetime "executed_at"
+    t.string   "user_import_file_name"
+    t.string   "user_import_content_type"
+    t.string   "user_import_file_size"
+    t.datetime "user_import_updated_at"
+    t.string   "user_import_fingerprint"
+    t.string   "edit_mode"
+    t.text     "error_message"
+    t.datetime "created_at",               :null => false
+    t.datetime "updated_at",               :null => false
+    t.string   "user_encoding"
+    t.integer  "default_library_id"
+    t.integer  "default_user_group_id"
+  end
+
+  create_table "user_import_results", :force => true do |t|
+    t.integer  "user_import_file_id"
+    t.integer  "user_id"
+    t.text     "body"
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
   end
 
   create_table "user_reserve_stats", :force => true do |t|
@@ -1371,7 +1450,7 @@ ActiveRecord::Schema.define(:version => 20140802082007) do
   end
 
   add_index "users", ["checkout_icalendar_token"], :name => "index_users_on_checkout_icalendar_token", :unique => true
-  add_index "users", ["email"], :name => "index_users_on_email", :unique => true
+  add_index "users", ["email"], :name => "index_users_on_email"
   add_index "users", ["reset_password_token"], :name => "index_users_on_reset_password_token", :unique => true
   add_index "users", ["unlock_token"], :name => "index_users_on_unlock_token", :unique => true
   add_index "users", ["user_group_id"], :name => "index_users_on_user_group_id"

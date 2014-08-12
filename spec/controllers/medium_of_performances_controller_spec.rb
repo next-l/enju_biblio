@@ -19,7 +19,8 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe MediumOfPerformancesController do
-  login_admin
+  fixtures :all
+  login_fixture_admin
 
   # This should return the minimal set of attributes required to create a valid
   # MediumOfPerformance. As you add validations to MediumOfPerformance, be sure to

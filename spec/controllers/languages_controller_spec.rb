@@ -3,7 +3,7 @@ require 'sunspot/rails/spec_helper'
 
 describe LanguagesController do
   disconnect_sunspot
-  fixtures :languages
+  fixtures :all
 
   def valid_attributes
      FactoryGirl.attributes_for(:language)
@@ -15,7 +15,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all languages as @languages" do
         get :index
@@ -24,7 +24,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all languages as @languages" do
         get :index
@@ -33,7 +33,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all languages as @languages" do
         get :index
@@ -55,7 +55,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested language as @language" do
         get :show, :id => @language.id
@@ -73,7 +73,7 @@ describe LanguagesController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested language as @language" do
         get :new
@@ -96,7 +96,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested language as @language" do
         get :edit, :id => @language.id
@@ -119,7 +119,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created language as @language" do
@@ -147,7 +147,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created language as @language" do
@@ -175,7 +175,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created language as @language" do
@@ -237,7 +237,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested language" do
@@ -290,7 +290,7 @@ describe LanguagesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested language" do
         delete :destroy, :id => @language.id

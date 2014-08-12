@@ -15,7 +15,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all owns as @owns" do
         get :index
@@ -24,7 +24,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all owns as @owns" do
         get :index
@@ -33,7 +33,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all owns as @owns" do
         get :index
@@ -51,7 +51,7 @@ describe OwnsController do
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested own as @own" do
         own = FactoryGirl.create(:own)
@@ -61,7 +61,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested own as @own" do
         own = FactoryGirl.create(:own)
@@ -71,7 +71,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested own as @own" do
         own = FactoryGirl.create(:own)
@@ -91,7 +91,7 @@ describe OwnsController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested own as @own" do
         get :new
@@ -101,7 +101,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested own as @own" do
         get :new
@@ -111,7 +111,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "should not assign the requested own as @own" do
         get :new
@@ -131,7 +131,7 @@ describe OwnsController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested own as @own" do
         own = FactoryGirl.create(:own)
@@ -141,7 +141,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested own as @own" do
         own = FactoryGirl.create(:own)
@@ -151,7 +151,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested own as @own" do
         own = FactoryGirl.create(:own)
@@ -176,7 +176,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created own as @own" do
@@ -204,7 +204,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created own as @own" do
@@ -232,7 +232,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created own as @own" do
@@ -294,7 +294,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested own" do
@@ -322,7 +322,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested own" do
@@ -345,7 +345,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested own" do
@@ -394,7 +394,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested own" do
         delete :destroy, :id => @own.id
@@ -407,7 +407,7 @@ describe OwnsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested own" do
         delete :destroy, :id => @own.id
@@ -420,7 +420,7 @@ describe OwnsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested own" do
         delete :destroy, :id => @own.id

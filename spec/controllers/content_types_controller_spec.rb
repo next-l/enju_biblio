@@ -19,7 +19,8 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe ContentTypesController do
-  login_admin
+  fixtures :all
+  login_fixture_admin
 
   # This should return the minimal set of attributes required to create a valid
   # ContentType. As you add validations to ContentType, be sure to

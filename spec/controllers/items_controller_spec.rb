@@ -14,7 +14,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all items as @items" do
         get :index
@@ -23,7 +23,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all items as @items" do
         get :index
@@ -39,7 +39,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all items as @items" do
         get :index
@@ -93,7 +93,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested item as @item" do
         get :show, :id => @item.id
@@ -109,7 +109,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested item as @item" do
         get :show, :id => @item.id
@@ -118,7 +118,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested item as @item" do
         get :show, :id => @item.id
@@ -140,7 +140,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested item as @item" do
         get :new, :manifestation_id => @manifestation.id
@@ -155,7 +155,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested item as @item" do
         get :new, :manifestation_id => @manifestation.id
@@ -165,7 +165,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "should not assign the requested item as @item" do
         get :new, :manifestation_id => @manifestation.id
@@ -185,7 +185,7 @@ describe ItemsController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested item as @item" do
         item = FactoryGirl.create(:item)
@@ -202,7 +202,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested item as @item" do
         item = FactoryGirl.create(:item)
@@ -212,7 +212,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested item as @item" do
         item = FactoryGirl.create(:item)
@@ -238,7 +238,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created item as @item" do
@@ -287,7 +287,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created item as @item" do
@@ -325,7 +325,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created item as @item" do
@@ -387,7 +387,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested item" do
@@ -413,7 +413,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested item" do
@@ -441,7 +441,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested item" do
@@ -490,7 +490,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested item" do
         delete :destroy, :id => @item.id
@@ -521,7 +521,7 @@ describe ItemsController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested item" do
         delete :destroy, :id => @item.id
@@ -535,7 +535,7 @@ describe ItemsController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested item" do
         delete :destroy, :id => @item.id

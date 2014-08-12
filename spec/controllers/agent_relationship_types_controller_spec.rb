@@ -15,7 +15,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
@@ -24,7 +24,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
@@ -33,7 +33,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
@@ -51,7 +51,7 @@ describe AgentRelationshipTypesController do
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
@@ -61,7 +61,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
@@ -71,7 +71,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
@@ -91,7 +91,7 @@ describe AgentRelationshipTypesController do
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         get :new
@@ -101,7 +101,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "should not assign the requested agent_relationship_type as @agent_relationship_type" do
         get :new
@@ -111,7 +111,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "should not assign the requested agent_relationship_type as @agent_relationship_type" do
         get :new
@@ -131,7 +131,7 @@ describe AgentRelationshipTypesController do
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
@@ -141,7 +141,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
@@ -151,7 +151,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested agent_relationship_type as @agent_relationship_type" do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
@@ -176,7 +176,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created agent_relationship_type as @agent_relationship_type" do
@@ -204,7 +204,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created agent_relationship_type as @agent_relationship_type" do
@@ -232,7 +232,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created agent_relationship_type as @agent_relationship_type" do
@@ -294,7 +294,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested agent_relationship_type" do
@@ -321,7 +321,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested agent_relationship_type" do
@@ -344,7 +344,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested agent_relationship_type" do
@@ -393,7 +393,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested agent_relationship_type" do
         delete :destroy, :id => @agent_relationship_type.id
@@ -406,7 +406,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested agent_relationship_type" do
         delete :destroy, :id => @agent_relationship_type.id
@@ -419,7 +419,7 @@ describe AgentRelationshipTypesController do
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested agent_relationship_type" do
         delete :destroy, :id => @agent_relationship_type.id
