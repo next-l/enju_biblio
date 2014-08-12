@@ -61,7 +61,7 @@ class ResourceExportFilesController < ApplicationController
         if @resource_export_file.mode == 'export'
           Resque.enqueue(ResourceExportFileQueue, @resource_export_file.id)
         end
-        format.html { redirect_to @resource_export_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.resource_export_file')) }
+        format.html { redirect_to @resource_export_file, :notice => t('export.successfully_created', :model => t('activerecord.models.resource_export_file')) }
         format.json { render :json => @resource_export_file, :status => :created, :location => @resource_export_file }
       else
         format.html { render :action => "new" }

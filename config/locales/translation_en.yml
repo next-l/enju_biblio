@@ -328,8 +328,3 @@ en:
     add: Add
     remove: Remove
     add_series_statement: Add another series statement
-
-  export:
-    export_completed: Export completed.
-    are_you_sure_to_export: It may take some time to complete. Are you sure to export?
-    export_task_created: Export task created.

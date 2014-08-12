@@ -332,8 +332,3 @@ ja:
     add: 追加
     remove: 削除
     add_series_statement: 別のシリーズ情報を追加する
-
-  export:
-    export_completed: エクスポートが完了しました。
-    are_you_sure_to_export: エクスポートに時間がかかることがあります。本当にエクスポートしますか？
-    export_task_created: エクスポートのタスクが設定されました。エクスポートが完了しましたらメッセージでお知らせします。現在の状態は「エクスポートの一覧」でも確認できます。
