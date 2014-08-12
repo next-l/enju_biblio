@@ -8,6 +8,17 @@
   <%= @carrier_type.display_name.localize -%>
 </p>
 
+<% if defined?(EnjuCirculation) %>
+  <p>
+    <strong><%= t('activerecord.models.checkout_type') -%>:</strong>
+  </p>
+  <ul>
+    <% @carrier_type.checkout_types.each do |checkout_type| %>
+      <li><%= link_to checkout_type.display_name.localize, checkout_type %></li>
+    <% end %>
+  </ul>
+<% end %>
+
 <p>
   <strong><%= t('activerecord.attributes.carrier_type.note') -%>:</strong>
   <%= @carrier_type.note -%>
