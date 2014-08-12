@@ -14,5 +14,5 @@ URL: <%= @manifestation.access_address %>
 <%= "#{LibraryGroup.site_config.url}manifestations/#{@manifestation.id}" %>
 
 -- 
-<%= LibraryGroup.system_name(@user.locale) %>
+<%= LibraryGroup.system_name(@user.profile.locale) %>
 <%= LibraryGroup.site_config.url %>
