@@ -88,6 +88,7 @@ en:
         classification: Classification
         identifier: Identifier
         statement_of_responsibility: Statement of responsibility
+        publication_place: Publication place
       manifestation/subjects:
           term: Subject
       manifestation/classifications:

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140811031145) do
+ActiveRecord::Schema.define(:version => 20140813182425) do
 
   create_table "agent_import_file_transitions", :force => true do |t|
     t.string   "to_state"
@@ -809,6 +809,7 @@ ActiveRecord::Schema.define(:version => 20140811031145) do
     t.string   "doi"
     t.boolean  "periodical"
     t.text     "statement_of_responsibility"
+    t.text     "publication_place"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

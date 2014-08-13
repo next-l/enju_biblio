@@ -88,6 +88,7 @@ ja:
         classification: 分類
         identifier: 識別子
         statement_of_responsibility: 責任表示
+        publication_place: 出版地
       manifestation/subjects:
           term: 件名
       manifestation/classifications:

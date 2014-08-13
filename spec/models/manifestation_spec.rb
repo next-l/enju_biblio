@@ -287,4 +287,5 @@ end
 #  doi                             :string(255)
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
+#  publication_place               :text
 #
