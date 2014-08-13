@@ -81,7 +81,7 @@ module EnjuBiblio
           agent.required_role_id <= 3
         end
         can [:update, :destroy, :delete], Agent do |agent|
-          !agent.user.try(:has_role?, 'Librarian') and agent.required_role_id <= 3
+          agent.required_role_id <= 3
         end
         can :manage, [
           Create,
@@ -126,15 +126,8 @@ module EnjuBiblio
           manifestation.required_role_id <= 2
         end
         can :index, Agent
-        can :update, Agent do |agent|
-          agent.user == user
-        end
         can :show, Agent do |agent|
-          #if agent.user == user
-          #  true
-          #elsif agent.user != user
-            true if agent.required_role_id <= 2 #name == 'Administrator'
-          #end
+          true if agent.required_role_id <= 2 #name == 'Administrator'
         end
         can :index, PictureFile
         can :show, PictureFile do |picture_file|

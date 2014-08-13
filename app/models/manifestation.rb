@@ -245,6 +245,11 @@ class Manifestation < ActiveRecord::Base
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
   after_destroy :index_series_statement
+  after_touch do |manifestation|
+    manifestation.index
+    manifestation.index_series_statement
+    Sunspot.commit
+  end
   normalize_attributes :manifestation_identifier, :pub_date, :original_title
   paginates_per 10
 

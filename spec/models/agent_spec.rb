@@ -47,7 +47,6 @@ end
 # Table name: agents
 #
 #  id                                  :integer          not null, primary key
-#  user_id                             :integer
 #  last_name                           :string(255)
 #  middle_name                         :string(255)
 #  first_name                          :string(255)

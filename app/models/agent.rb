@@ -30,7 +30,6 @@ class Agent < ActiveRecord::Base
     has_many :agent_merges, :dependent => :destroy
     has_many :agent_merge_lists, :through => :agent_merges
   end
-  #belongs_to :user
   belongs_to :agent_type
   belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
   belongs_to :language
@@ -40,26 +39,35 @@ class Agent < ActiveRecord::Base
   validates_presence_of :language, :agent_type, :country
   validates_associated :language, :agent_type, :country
   validates :full_name, :presence => true, :length => {:maximum => 255}
-  #validates :user_id, :uniqueness => true, :allow_nil => true
   validates :birth_date, :format => {:with => /\A\d+(-\d{0,2}){0,2}\z/}, :allow_blank => true
   validates :death_date, :format => {:with => /\A\d+(-\d{0,2}){0,2}\z/}, :allow_blank => true
   validates :email, :format => {:with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i}, :allow_blank => true
   validate :check_birth_date
   before_validation :set_role_and_name, :on => :create
   before_save :set_date_of_birth, :set_date_of_death
+  after_save do |agent|
+    agent.works.map{|work| work.index}
+    agent.expressions.map{|expression| expression.index}
+    agent.manifestations.map{|manifestation| manifestation.index}
+    agent.items.map{|item| item.index}
+    Sunspot.commit
+  end
+  after_destroy do |agent|
+    agent.works.map{|work| work.index}
+    agent.expressions.map{|expression| expression.index}
+    agent.manifestations.map{|manifestation| manifestation.index}
+    agent.items.map{|item| item.index}
+    Sunspot.commit
+  end
 
   searchable do
     text :name, :place, :address_1, :address_2, :other_designation, :note
     string :zip_code_1
     string :zip_code_2
-    #string :username do
-    #  user.username if user
-    #end
     time :created_at
     time :updated_at
     time :date_of_birth
     time :date_of_death
-    #string :user
     integer :work_ids, :multiple => true
     integer :expression_ids, :multiple => true
     integer :manifestation_ids, :multiple => true
@@ -241,10 +249,6 @@ class Agent < ActiveRecord::Base
   def agents
     self.original_agents + self.derived_agents
   end
-
-  def user
-    # TODO: 外部サービスから取得する
-  end
 end
 
 # == Schema Information
@@ -252,7 +256,6 @@ end
 # Table name: agents
 #
 #  id                                  :integer          not null, primary key
-#  user_id                             :integer
 #  last_name                           :string(255)
 #  middle_name                         :string(255)
 #  first_name                          :string(255)

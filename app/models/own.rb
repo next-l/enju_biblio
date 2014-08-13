@@ -1,7 +1,7 @@
 class Own < ActiveRecord::Base
   attr_accessible :agent_id, :item_id
-  belongs_to :agent #, :counter_cache => true #, :polymorphic => true, :validate => true
-  belongs_to :item #, :counter_cache => true #, :validate => true
+  belongs_to :agent
+  belongs_to :item
 
   validates_associated :agent, :item
   validates_presence_of :agent, :item
