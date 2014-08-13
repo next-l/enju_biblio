@@ -1,4 +1,4 @@
-<%= @user.full_name -%> :
+<%= @user.username -%> :
 
 Title: <%= @manifestation.original_title %>
 Creator(s): <%= @manifestation.creators.readable_by(@user).collect(&:full_name).join("/") %>
