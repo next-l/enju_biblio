@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.license')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.license')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -28,7 +28,7 @@
         <%= link_to t('page.edit'), edit_license_path(license) -%>
       <% end %>
       <%- if can? :delete, license -%>
-        <%= link_to t('page.destroy'), license, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), license, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -41,6 +41,6 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li><%= link_to t('page.new', :model => t('activerecord.models.license')), new_license_path -%></li>
+    <li><%= link_to t('page.new', model: t('activerecord.models.license')), new_license_path -%></li>
   </ul>
 </div>

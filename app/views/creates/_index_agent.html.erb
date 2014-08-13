@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.create')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.create')) -%></h1>
 <div id="content_list">
   <h2 class="resource_title">
     <%= link_to agent.full_name, agent -%>
@@ -18,8 +18,8 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
       <%- if can? :delete, create -%>
-        <%= create.first? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_up.png', :size => '16x16', :alt => t('page.asc')), {:action => 'update', :move => 'higher', :id => create.id, :agent_id => agent.id}, :method => :put) -%>
-        <%= create.last? ? image_tag('icons/stop.png', :size => '16x16') : link_to(image_tag('icons/arrow_down.png', :size => '16x16', :alt => t('page.desc')), {:action => 'update', :move => 'lower', :id => create.id, :agent_id => agent.id}, :method => :put) -%>
+        <%= create.first? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_up.png', size: '16x16', alt: t('page.asc')), {:action => 'update', :move => 'higher', id: create.id, :agent_id => agent.id}, method: :put) -%>
+        <%= create.last? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_down.png', size: '16x16', alt: t('page.desc')), {:action => 'update', :move => 'lower', id: create.id, :agent_id => agent.id}, method: :put) -%>
       <%- end -%>
     </td>
     <td><%= link_to create.work.try(:original_title), create.work -%></td>
@@ -27,7 +27,7 @@
     <td><%= l(create.updated_at) -%></td>
     <td>
       <%- if can? :delete, create -%>
-        <%= link_to t('page.destroy'), create_path(create, agent_id: agent.id), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), create_path(create, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -41,7 +41,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if can? :create, Create -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.create')), new_create_path(agent_id: agent.id) -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.create')), new_create_path(agent_id: agent.id) -%></li>
     <%- end -%>
   </ul>
 </div>

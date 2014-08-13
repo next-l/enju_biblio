@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.showing', :model => t('activerecord.models.picture_file')) -%></h1>
+<h1 class="title"><%= t('page.showing', model: t('activerecord.models.picture_file')) -%></h1>
 <div id="content_list">
 <p id="notice"><%= notice %></p>
 
@@ -20,7 +20,7 @@
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_file_name') -%>:</strong>
-  <%= link_to @picture_file.picture_file_name, picture_file_path(@picture_file, :format => :download, :size => 'original') -%><br />
+  <%= link_to @picture_file.picture_file_name, picture_file_path(@picture_file, format: :download, size: 'original') -%><br />
   <%= render 'picture_files/link', :picture_file => @picture_file %>
 </p>
 
@@ -52,16 +52,16 @@
     <li><%= link_to t('page.edit'), edit_picture_file_path(@picture_file) -%></li>
     <% if @picture_file.picture_attachable_type? %>
       <%- case when @picture_file.picture_attachable.is_a?(Shelf) -%>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), shelf_picture_files_path(@picture_file.picture_attachable) -%></li>
+        <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), shelf_picture_files_path(@picture_file.picture_attachable) -%></li>
      <%- when @picture_file.picture_attachable.is_a?(Manifestation) -%>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), manifestation_picture_files_path(@picture_file.picture_attachable) -%></li>
+        <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), manifestation_picture_files_path(@picture_file.picture_attachable) -%></li>
      <%- when @picture_file.picture_attachable.is_a?(Agent) -%>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), agent_picture_files_path(@picture_file.picture_attachable) -%></li>
+        <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), agent_picture_files_path(@picture_file.picture_attachable) -%></li>
       <%- else -%>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), picture_files_path -%></li>
+        <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path -%></li>
       <%- end -%>
     <% else %>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), picture_files_path -%></li>
+      <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path -%></li>
     <% end %>
   </ul>
 </div>

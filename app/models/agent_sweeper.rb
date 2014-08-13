@@ -1,5 +1,4 @@
 class AgentSweeper < ActionController::Caching::Sweeper
-  include ExpireEditableFragment
   observe Agent
 
   def after_save(record)

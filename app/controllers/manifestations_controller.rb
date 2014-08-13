@@ -14,7 +14,6 @@ class ManifestationsController < ApplicationController
   before_filter :get_version, :only => [:show]
   after_filter :solr_commit, :only => :destroy
   after_filter :convert_charset, :only => :index
-  cache_sweeper :manifestation_sweeper, :only => [:create, :update, :destroy]
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
 

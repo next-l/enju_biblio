@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.medium_of_performance')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.medium_of_performance')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -26,7 +26,7 @@
         <%= link_to t('page.edit'), edit_medium_of_performance_path(medium_of_performance) -%>
       <% end %>
       <%- if can? :delete, medium_of_performance -%>
-        <%= link_to t('page.destroy'), medium_of_performance, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), medium_of_performance, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -39,6 +39,6 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li><%= link_to t('page.new', :model => t('activerecord.models.medium_of_performance')), new_medium_of_performance_path -%></li>
+    <li><%= link_to t('page.new', model: t('activerecord.models.medium_of_performance')), new_medium_of_performance_path -%></li>
   </ul>
 </div>

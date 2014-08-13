@@ -1,5 +1,4 @@
 class ItemSweeper < ActionController::Caching::Sweeper
-  include ExpireEditableFragment
   observe Item
 
   def after_save(record)

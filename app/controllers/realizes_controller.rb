@@ -3,7 +3,6 @@ class RealizesController < ApplicationController
   before_filter :get_agent, :get_expression
   before_filter :prepare_options, :only => [:new, :edit]
   after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
 
   # GET /realizes
   # GET /realizes.json

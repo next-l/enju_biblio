@@ -1,17 +1,17 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.editing', :model => t('activerecord.models.item')) -%></h1>
+<h1 class="title"><%= t('page.editing', model: t('activerecord.models.item')) -%></h1>
 <div id="content_list">
-  <%= render 'manifestations/title', :manifestation => @item.manifestation -%>
+  <%= render 'manifestations/title', manifestation: @item.manifestation -%>
   <%= render 'form' %>
 </div>
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <%= render 'manifestations/book_jacket', :manifestation => @item.manifestation -%>
+  <%= render 'manifestations/book_jacket', manifestation: @item.manifestation -%>
   <ul>
     <li><%= link_to t('page.show'), @item -%></li>
     <% if can? :delete, @item %>
-      <li><%= link_to t('page.destroy'), @item, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
+      <li><%= link_to t('page.destroy'), @item, data: {confirm: t('page.are_you_sure')}, method: :delete -%></li>
     <% end %>
     <li><%= link_to t('page.back'), items_path(@item.manifestation.id) -%></li>
   </ul>

@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.import_request')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.import_request')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -27,7 +27,7 @@
     <td><%= link_to import_request.manifestation.original_title, import_request.manifestation if import_request.manifestation -%></td>
     <td>
       <%- if can? :delete, import_request -%>
-        <%= link_to t('page.destroy'), import_request, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), import_request, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -40,6 +40,6 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li><%= link_to t('page.new', :model => t('activerecord.models.import_request')), new_import_request_path -%></li>
+    <li><%= link_to t('page.new', model: t('activerecord.models.import_request')), new_import_request_path -%></li>
   </ul>
 </div>

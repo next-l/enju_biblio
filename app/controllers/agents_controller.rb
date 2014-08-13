@@ -10,7 +10,6 @@ class AgentsController < ApplicationController
   before_filter :store_location
   before_filter :get_version, :only => [:show]
   after_filter :solr_commit, :only => [:create, :update, :destroy]
-  cache_sweeper :agent_sweeper, :only => [:create, :update, :destroy]
 
   # GET /agents
   # GET /agents.json

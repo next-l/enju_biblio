@@ -1,4 +1,4 @@
-<%= form_for :series_statements, :url => series_statements_path, :html => {:method => 'get'} do |f| -%>
+<%= form_for :series_statements, url: series_statements_path, html: {method: 'get'} do |f| -%>
 <table class="table table-striped index">
   <tr>
     <th id="position"></th>
@@ -12,7 +12,7 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
       <input type="checkbox" name="selected[]" value="<%= series_statement.id %>" /><br />
-      <%= link_to "select", series_statements_path(:parent_id => series_statement.id) %>
+      <%= link_to "select", series_statements_path(parent_id: series_statement.id) %>
     </td>
     <td><%= link_to series_statement.original_title, series_statement %></td>
     <td><%= series_statement.numbering %></td>

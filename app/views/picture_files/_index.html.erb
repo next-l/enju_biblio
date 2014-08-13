@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-  <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.picture_file')) -%></h1>
+  <h1 class="title"><%= t('page.listing', model: t('activerecord.models.picture_file')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -20,14 +20,14 @@
       </td>
       <td><%= picture_file.picture_file_size -%></td>
       <td><%= picture_file.picture_content_type -%></td>
-      <td><%= link_to h(picture_file.picture_file_name), picture_file_path(picture_file, :format => :download, :size => 'original') -%></td>
+      <td><%= link_to h(picture_file.picture_file_name), picture_file_path(picture_file, format: :download, size: 'original') -%></td>
       <td>
         <%= link_to t('page.show'), picture_file -%>
         <%- if can? :update, picture_file -%>
           <%= link_to t('page.edit'), edit_picture_file_path(picture_file) -%>
         <% end %>
         <%- if can? :delete, picture_file -%>
-          <%= link_to t('page.destroy'), picture_file, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+          <%= link_to t('page.destroy'), picture_file, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
         <%- end -%>
       </td>
     </tr>
@@ -41,12 +41,12 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <%- if can? :create, PictureFile -%>
     <ul>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path -%></li>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.shelf')), shelves_path -%></li>
+      <li><%= link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path -%></li>
+      <li><%= link_to t('page.listing', model: t('activerecord.models.shelf')), shelves_path -%></li>
       <% if defined?(EnjuEvent) %>
-        <li><%= link_to t('page.listing', :model => t('activerecord.models.event')), events_path -%></li>
+        <li><%= link_to t('page.listing', model: t('activerecord.models.event')), events_path -%></li>
       <% end %>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), agents_path -%></li>
+      <li><%= link_to t('page.listing', model: t('activerecord.models.agent')), agents_path -%></li>
     </ul>
   <%- end -%>
 </div>

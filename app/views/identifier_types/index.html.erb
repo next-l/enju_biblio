@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.identifier_type')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.identifier_type')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -26,7 +26,7 @@
         <%= link_to t('page.edit'), edit_identifier_type_path(identifier_type) -%>
       <% end %>
       <%- if can? :delete, identifier_type -%>
-        <%= link_to t('page.destroy'), identifier_type_path(identifier_type), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), identifier_type_path(identifier_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -39,7 +39,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if can? :create, IdentifierType -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.identifier_type')), new_identifier_type_path -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.identifier_type')), new_identifier_type_path -%></li>
     <%- end -%>
   </ul>
 </div>

@@ -2,7 +2,6 @@
 class SeriesStatementsController < ApplicationController
   load_and_authorize_resource
   before_filter :get_manifestation, :except => [:create, :update, :destroy]
-  cache_sweeper :page_sweeper, :only => [:create, :update, :destroy]
   after_filter :solr_commit, :only => [:create, :update, :destroy]
   if defined?(EnjuResourceMerge)
     before_filter :get_series_statement_merge_list, :except => [:create, :update, :destroy]

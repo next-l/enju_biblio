@@ -1,5 +1,5 @@
 <div data-role="header">
-  <h1 class="title"><%= t('page.showing', :model => t('activerecord.models.agent')) -%></h1>
+  <h1 class="title"><%= t('page.showing', model: t('activerecord.models.agent')) -%></h1>
 </div>
 <div data-role="content">
   <h2 class="resource_title">
@@ -31,13 +31,13 @@
       <tr>
         <td><strong><%= t('activerecord.attributes.agent.email') -%>:</strong></td>
         <td>
-          <%= mail_to @agent.email, nil, :class => 'email' -%>
+          <%= mail_to @agent.email, nil, class: 'email' -%>
         </td>
       </tr>
       <tr>
         <td><strong><%= t('activerecord.attributes.agent.url') -%>:</strong></td>
         <td>
-          <%= link_to @agent.url, @agent.url, :class => 'url' if @agent.url? -%>
+          <%= link_to @agent.url, @agent.url, class: 'url' if @agent.url? -%>
         </td>
       </tr>
       <tr>

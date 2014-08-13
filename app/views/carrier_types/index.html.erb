@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.carrier_type')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.carrier_type')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -26,7 +26,7 @@
         <%= link_to t('page.edit'), edit_carrier_type_path(carrier_type) -%>
       <% end %>
       <%- if can? :delete, carrier_type -%>
-        <%= link_to t('page.destroy'), carrier_type_path(carrier_type), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), carrier_type_path(carrier_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -39,7 +39,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if can? :create, CarrierType -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.carrier_type')), new_carrier_type_path -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.carrier_type')), new_carrier_type_path -%></li>
     <%- end -%>
   </ul>
 </div>

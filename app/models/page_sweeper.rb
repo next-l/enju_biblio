@@ -1,5 +1,4 @@
 class PageSweeper < ActionController::Caching::Sweeper
-  include ExpireEditableFragment
   observe Create, Realize, Produce, Own, Exemplify,
     SeriesStatement, PictureFile
 

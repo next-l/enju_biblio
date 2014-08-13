@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.donate')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.donate')) -%></h1>
 <div id="content_list">
 
 <table class="table table-striped index">
@@ -15,7 +15,7 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td><%= link_to donate.agent.full_name, donate.agent -%></td>
     <td>
-      <%= render 'manifestations/show_index', :manifestation => donate.item.manifestation -%>
+      <%= render 'manifestations/show_index', manifestation: donate.item.manifestation -%>
     </td>
     <td>
       <%= link_to donate.item.item_identifier, donate.item -%>
@@ -24,7 +24,7 @@
     <td>
       <%- if can? :delete, donate -%>
         <%= link_to t('page.edit'), edit_donate_path(donate) -%>
-        <%= link_to t('page.destroy'), donate, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), donate, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -39,7 +39,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if can? :create, Donate -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.donate')), new_donate_path -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.donate')), new_donate_path -%></li>
     <%- end -%>
   </ul>
 </div>

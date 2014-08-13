@@ -1,5 +1,4 @@
 class ManifestationSweeper < ActionController::Caching::Sweeper
-  include ExpireEditableFragment
   observe Manifestation
 
   def after_save(record)
