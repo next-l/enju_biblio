@@ -150,7 +150,6 @@ class ResourceImportFile < ActiveRecord::Base
         num[:failed] += 1
       end
 
-      ExpireFragmentCache.expire_fragment_cache(manifestation)
       import_result.save!
       num[:item_imported] +=1 if import_result.item
 
@@ -282,7 +281,6 @@ class ResourceImportFile < ActiveRecord::Base
         item.acquired_at = row['acquired_at'] if row['acquired_at']
         item.note = row['note'] if row['note']
         item.save!
-        ExpireFragmentCache.expire_fragment_cache(item.manifestation)
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier.present?
