@@ -1,6 +1,6 @@
 class CarrierTypesController < ApplicationController
   load_and_authorize_resource
-  before_filter :prepare_options, :only => [:new, :edit]
+  before_filter :prepare_options, only: [:new, :edit]
 
   # GET /carrier_types
   # GET /carrier_types.json
@@ -9,7 +9,7 @@ class CarrierTypesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @carrier_types }
+      format.json { render json: @carrier_types }
     end
   end
 
@@ -18,7 +18,7 @@ class CarrierTypesController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @carrier_type }
+      format.json { render json: @carrier_type }
     end
   end
 
@@ -29,7 +29,7 @@ class CarrierTypesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @carrier_type }
+      format.json { render json: @carrier_type }
     end
   end
 
@@ -44,12 +44,12 @@ class CarrierTypesController < ApplicationController
 
     respond_to do |format|
       if @carrier_type.save
-        format.html { redirect_to @carrier_type, :notice => t('controller.successfully_created', :model => t('activerecord.models.carrier_type')) }
-        format.json { render :json => @carrier_type, :status => :created, :location => @carrier_type }
+        format.html { redirect_to @carrier_type, notice: t('controller.successfully_created', model: t('activerecord.models.carrier_type')) }
+        format.json { render json: @carrier_type, status: :created, location: @carrier_type }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @carrier_type.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @carrier_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -64,12 +64,12 @@ class CarrierTypesController < ApplicationController
 
     respond_to do |format|
       if @carrier_type.update_attributes(params[:carrier_type])
-        format.html { redirect_to @carrier_type, :notice => t('controller.successfully_updated', :model => t('activerecord.models.carrier_type')) }
+        format.html { redirect_to @carrier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.carrier_type')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @carrier_type.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @carrier_type.errors, status: :unprocessable_entity }
       end
     end
   end

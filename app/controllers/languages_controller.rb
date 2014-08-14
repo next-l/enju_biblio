@@ -7,7 +7,7 @@ class LanguagesController < InheritedResources::Base
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @languages }
+      format.json { render json: @languages }
     end
   end
 

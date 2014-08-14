@@ -1,8 +1,8 @@
 class ManifestationRelationshipsController < InheritedResources::Base
   respond_to :html, :json
-  has_scope :page, :default => 1
+  has_scope :page, default: 1
   load_and_authorize_resource
-  before_filter :prepare_options, :except => [:index, :destroy]
+  before_filter :prepare_options, except: [:index, :destroy]
 
   def new
     @manifestation_relationship = ManifestationRelationship.new(params[:manifestation_relationship])

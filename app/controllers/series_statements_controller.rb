@@ -1,10 +1,10 @@
 # -*- encoding: utf-8 -*-
 class SeriesStatementsController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_manifestation, :except => [:create, :update, :destroy]
-  after_filter :solr_commit, :only => [:create, :update, :destroy]
+  before_filter :get_manifestation, except: [:create, :update, :destroy]
+  after_filter :solr_commit, only: [:create, :update, :destroy]
   if defined?(EnjuResourceMerge)
-    before_filter :get_series_statement_merge_list, :except => [:create, :update, :destroy]
+    before_filter :get_series_statement_merge_list, except: [:create, :update, :destroy]
   end
 
   # GET /series_statements
@@ -37,7 +37,7 @@ class SeriesStatementsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @series_statements }
+      format.json { render json: @series_statements }
     end
   end
 
@@ -46,7 +46,7 @@ class SeriesStatementsController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @series_statement }
+      format.json { render json: @series_statement }
       #format.js
       #format.mobile
     end
@@ -59,7 +59,7 @@ class SeriesStatementsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @series_statement }
+      format.json { render json: @series_statement }
     end
   end
 
@@ -76,12 +76,12 @@ class SeriesStatementsController < ApplicationController
     respond_to do |format|
       if @series_statement.save
         @series_statement.manifestations << manifestation if manifestation
-        format.html { redirect_to @series_statement, :notice => t('controller.successfully_created', :model => t('activerecord.models.series_statement')) }
-        format.json { render :json => @series_statement, :status => :created, :location => @series_statement }
+        format.html { redirect_to @series_statement, notice: t('controller.successfully_created', model: t('activerecord.models.series_statement')) }
+        format.json { render json: @series_statement, status: :created, location: @series_statement }
       else
         @frequencies = Frequency.all
-        format.html { render :action => "new" }
-        format.json { render :json => @series_statement.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @series_statement.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -96,12 +96,12 @@ class SeriesStatementsController < ApplicationController
 
     respond_to do |format|
       if @series_statement.update_attributes(params[:series_statement])
-        format.html { redirect_to @series_statement, :notice => t('controller.successfully_updated', :model => t('activerecord.models.series_statement')) }
+        format.html { redirect_to @series_statement, notice: t('controller.successfully_updated', model: t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else
         @frequencies = Frequency.all
-        format.html { render :action => "edit" }
-        format.json { render :json => @series_statement.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @series_statement.errors, status: :unprocessable_entity }
       end
     end
   end

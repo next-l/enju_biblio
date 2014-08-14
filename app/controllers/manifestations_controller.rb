@@ -1,19 +1,19 @@
 # -*- encoding: utf-8 -*-
 class ManifestationsController < ApplicationController
-  load_and_authorize_resource :except => :index
-  authorize_resource :only => :index
-  before_filter :authenticate_user!, :only => :edit
-  before_filter :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
-  before_filter :get_expression, :only => :new
+  load_and_authorize_resource except: :index
+  authorize_resource only: :index
+  before_filter :authenticate_user!, only: :edit
+  before_filter :get_agent, :get_manifestation, except: [:create, :update, :destroy]
+  before_filter :get_expression, only: :new
   if defined?(EnjuSubject)
-    before_filter :get_subject, :except => [:create, :update, :destroy]
+    before_filter :get_subject, except: [:create, :update, :destroy]
   end
-  before_filter :get_series_statement, :only => [:index, :new, :edit]
-  before_filter :get_item, :get_libraries, :only => :index
-  before_filter :prepare_options, :only => [:new, :edit]
-  before_filter :get_version, :only => [:show]
-  after_filter :solr_commit, :only => :destroy
-  after_filter :convert_charset, :only => :index
+  before_filter :get_series_statement, only: [:index, :new, :edit]
+  before_filter :get_item, :get_libraries, only: :index
+  before_filter :prepare_options, only: [:new, :edit]
+  before_filter :get_version, only: [:show]
+  after_filter :solr_commit, only: :destroy
+  after_filter :convert_charset, only: :index
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
 
@@ -53,10 +53,10 @@ class ManifestationsController < ApplicationController
               @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
             rescue ActiveRecord::RecordNotFound
               @oai[:errors] << "idDoesNotExist"
-              render :formats => :oai, :layout => false
+              render :formats => :oai, layout: false
               return
             end
-            render :template => 'manifestations/show', :formats => :oai, :layout => false
+            render template: 'manifestations/show', :formats => :oai, layout: false
             return
           end
         end
@@ -77,7 +77,7 @@ class ManifestationsController < ApplicationController
           query = sru.cql.to_sunspot
           sort = sru.sort_by
         else
-          render :template => 'manifestations/explain', :layout => false
+          render template: 'manifestations/explain', layout: false
           return
         end
       else
@@ -224,7 +224,7 @@ class ManifestationsController < ApplicationController
             #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).pluck(:id)
             bookmark_ids = Bookmark.where(:manifestation_id => @manifestation_ids).limit(1000).pluck(:id)
             @tags = Tag.bookmarked(bookmark_ids)
-            render :partial => 'manifestations/tag_cloud'
+            render partial: 'manifestations/tag_cloud'
             return
           end
         end
@@ -319,28 +319,28 @@ class ManifestationsController < ApplicationController
       format.html
       format.mobile
       format.xml  { render :xml => @manifestations }
-      format.sru  { render :layout => false }
-      format.rss  { render :layout => false }
-      format.txt  { render :layout => false }
-      format.rdf  { render :layout => false }
+      format.sru  { render layout: false }
+      format.rss  { render layout: false }
+      format.txt  { render layout: false }
+      format.rdf  { render layout: false }
       format.atom
       format.mods
-      format.json { render :json => @manifestations }
+      format.json { render json: @manifestations }
       format.js
       if defined?(EnjuOai)
         format.oai {
           case params[:verb]
           when 'Identify'
-            render :template => 'manifestations/identify'
+            render template: 'manifestations/identify'
           when 'ListMetadataFormats'
-            render :template => 'manifestations/list_metadata_formats'
+            render template: 'manifestations/list_metadata_formats'
           when 'ListSets'
             @series_statements = SeriesStatement.select([:id, :original_title])
-            render :template => 'manifestations/list_sets'
+            render template: 'manifestations/list_sets'
           when 'ListIdentifiers'
-            render :template => 'manifestations/list_identifiers'
+            render template: 'manifestations/list_identifiers'
           when 'ListRecords'
-            render :template => 'manifestations/list_records'
+            render template: 'manifestations/list_records'
           end
         }
       end
@@ -401,27 +401,27 @@ class ManifestationsController < ApplicationController
       format.xml  {
         case params[:mode]
         when 'related'
-          render :template => 'manifestations/related'
+          render template: 'manifestations/related'
         else
           render :xml => @manifestation
         end
       }
       format.rdf
       format.mods
-      format.json { render :json => @manifestation }
-      #format.atom { render :template => 'manifestations/oai_ore' }
+      format.json { render json: @manifestation }
+      #format.atom { render template: 'manifestations/oai_ore' }
       #format.js
       format.download {
         if @manifestation.attachment.path
           if Setting.uploaded_file.storage == :s3
-            send_data @manifestation.attachment.data, :filename => File.basename(@manifestation.attachment_file_name), :type => 'application/octet-stream'
+            send_data @manifestation.attachment.data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
             if File.exist?(file) and File.file?(file)
-              send_file file, :filename => File.basename(@manifestation.attachment_file_name), :type => 'application/octet-stream'
+              send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
             end
           end
         else
-          render :template => 'page/404', :status => 404
+          render template: 'page/404', status: 404
         end
       }
       if defined?(EnjuOai)
@@ -445,7 +445,7 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @manifestation }
+      format.json { render json: @manifestation }
     end
   end
 
@@ -459,7 +459,7 @@ class ManifestationsController < ApplicationController
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
         @bookmark = current_user.bookmarks.where(:manifestation_id => @manifestation.id).first if @manifestation rescue nil
-        render :partial => 'manifestations/tag_edit', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
       store_location unless params[:mode] == 'tag_edit'
     end
@@ -483,12 +483,12 @@ class ManifestationsController < ApplicationController
         end
         Sunspot.commit
 
-        format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }
-        format.json { render :json => @manifestation, :status => :created, :location => @manifestation }
+        format.html { redirect_to @manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation')) }
+        format.json { render json: @manifestation, status: :created, location: @manifestation }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @manifestation.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @manifestation.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -499,12 +499,12 @@ class ManifestationsController < ApplicationController
     respond_to do |format|
       if @manifestation.update_attributes(params[:manifestation])
         Sunspot.commit
-        format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
+        format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @manifestation.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @manifestation.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -515,7 +515,7 @@ class ManifestationsController < ApplicationController
     @manifestation.destroy
 
     respond_to do |format|
-      format.html { redirect_to manifestations_url, :notice => t('controller.successfully_deleted', :model => t('activerecord.models.manifestation')) }
+      format.html { redirect_to manifestations_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.manifestation')) }
       format.json { head :no_content }
     end
   end
@@ -644,31 +644,31 @@ class ManifestationsController < ApplicationController
   def render_mode(mode)
     case mode
     when 'holding'
-      render :partial => 'manifestations/show_holding', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_holding', locals: {manifestation: @manifestation}
     when 'barcode'
       if defined?(EnjuBarcode)
         barcode = Barby::QrCode.new(@manifestation.id)
-        send_data(barcode.to_svg, :disposition => 'inline', :type => 'image/svg+xml')
+        send_data(barcode.to_svg, :disposition => 'inline', type: 'image/svg+xml')
       end
     when 'tag_edit'
       if defined?(EnjuBookmark)
-        render :partial => 'manifestations/tag_edit', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
     when 'tag_list'
       if defined?(EnjuBookmark)
-        render :partial => 'manifestations/tag_list', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/tag_list', locals: {manifestation: @manifestation}
       end
     when 'show_index'
-      render :partial => 'manifestations/show_index', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_index', locals: {manifestation: @manifestation}
     when 'show_creators'
-      render :partial => 'manifestations/show_creators', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_creators', locals: {manifestation: @manifestation}
     when 'show_all_creators'
-      render :partial => 'manifestations/show_creators', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_creators', locals: {manifestation: @manifestation}
     when 'pickup'
-      render :partial => 'manifestations/pickup', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/pickup', locals: {manifestation: @manifestation}
     when 'calil_list'
       if defined?(EnjuCalil)
-        render :partial => 'manifestations/calil_list', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/calil_list', locals: {manifestation: @manifestation}
       end
     else
       false

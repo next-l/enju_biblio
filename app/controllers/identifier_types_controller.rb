@@ -8,7 +8,7 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @identifier_types }
+      format.json { render json: @identifier_types }
     end
   end
 
@@ -17,7 +17,7 @@ class IdentifierTypesController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @identifier_type }
+      format.json { render json: @identifier_type }
     end
   end
 
@@ -28,7 +28,7 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @identifier_type }
+      format.json { render json: @identifier_type }
     end
   end
 
@@ -43,11 +43,11 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       if @identifier_type.save
-        format.html { redirect_to @identifier_type, :notice => t('controller.successfully_created', :model => t('activerecord.models.identifier_type')) }
-        format.json { render :json => @identifier_type, :status => :created, :location => @identifier_type }
+        format.html { redirect_to @identifier_type, notice: t('controller.successfully_created', model: t('activerecord.models.identifier_type')) }
+        format.json { render json: @identifier_type, status: :created, location: @identifier_type }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @identifier_type.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @identifier_type.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -62,11 +62,11 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       if @identifier_type.update_attributes(params[:identifier_type])
-        format.html { redirect_to @identifier_type, :notice => t('controller.successfully_updated', :model => t('activerecord.models.identifier_type')) }
+        format.html { redirect_to @identifier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.identifier_type')) }
         format.json { head :no_content }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @identifier_type.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @identifier_type.errors, status: :unprocessable_entity }
       end
     end
   end

@@ -8,7 +8,7 @@ class AgentImportFilesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @agent_import_files }
+      format.json { render json: @agent_import_files }
     end
   end
 
@@ -23,12 +23,12 @@ class AgentImportFilesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @agent_import_file }
+      format.json { render json: @agent_import_file }
       format.download {
         if Setting.uploaded_file.storage == :s3
           redirect_to @agent_import_file.agent_import.expiring_url(10)
         else
-          send_file file, :filename => @agent_import_file.agent_import_file_name, :type => 'application/octet-stream'
+          send_file file, filename: @agent_import_file.agent_import_file_name, type: 'application/octet-stream'
         end
       }
     end
@@ -41,7 +41,7 @@ class AgentImportFilesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @agent_import_file }
+      format.json { render json: @agent_import_file }
     end
   end
 
@@ -60,11 +60,11 @@ class AgentImportFilesController < ApplicationController
         if @agent_import_file.mode == 'import'
           Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
         end
-        format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.agent_import_file')) }
-        format.json { render :json => @agent_import_file, :status => :created, :location => @agent_import_file }
+        format.html { redirect_to @agent_import_file, notice: t('controller.successfully_created', model: t('activerecord.models.agent_import_file')) }
+        format.json { render json: @agent_import_file, status: :created, location: @agent_import_file }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @agent_import_file.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @agent_import_file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -77,11 +77,11 @@ class AgentImportFilesController < ApplicationController
         if @agent_import_file.mode == 'import'
           Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
         end
-        format.html { redirect_to @agent_import_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent_import_file')) }
+        format.html { redirect_to @agent_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_import_file')) }
         format.json { head :no_content }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @agent_import_file.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @agent_import_file.errors, status: :unprocessable_entity }
       end
     end
   end

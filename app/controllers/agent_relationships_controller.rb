@@ -1,8 +1,8 @@
 class AgentRelationshipsController < InheritedResources::Base
   respond_to :html, :json
-  has_scope :page, :default => 1
+  has_scope :page, default: 1
   load_and_authorize_resource
-  before_filter :prepare_options, :except => [:index, :destroy]
+  before_filter :prepare_options, except: [:index, :destroy]
 
   def new
     @agent_relationship = AgentRelationship.new(params[:agent_relationship])

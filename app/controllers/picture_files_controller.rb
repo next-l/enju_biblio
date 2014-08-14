@@ -1,6 +1,6 @@
 class PictureFilesController < ApplicationController
   load_and_authorize_resource
-  before_filter :get_attachable, :only => [:index, :new]
+  before_filter :get_attachable, only: [:index, :new]
 
   # GET /picture_files
   # GET /picture_files.json
@@ -13,7 +13,7 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @picture_files }
+      format.json { render json: @picture_files }
     end
   end
 
@@ -39,7 +39,7 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @picture_file }
+      format.json { render json: @picture_file }
       format.mobile {
         if params[:format] == 'download'
           render_image(file)
@@ -64,7 +64,7 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @picture_file }
+      format.json { render json: @picture_file }
     end
   end
 
@@ -79,11 +79,11 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       if @picture_file.save
-        format.html { redirect_to @picture_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.picture_file')) }
-        format.json { render :json => @picture_file, :status => :created, :location => @picture_file }
+        format.html { redirect_to @picture_file, notice: t('controller.successfully_created', model: t('activerecord.models.picture_file')) }
+        format.json { render json: @picture_file, status: :created, location: @picture_file }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @picture_file.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @picture_file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -107,11 +107,11 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       if @picture_file.update_attributes(params[:picture_file])
-        format.html { redirect_to @picture_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.picture_file')) }
+        format.html { redirect_to @picture_file, notice: t('controller.successfully_updated', model: t('activerecord.models.picture_file')) }
         format.json { head :no_content }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @picture_file.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @picture_file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -166,10 +166,10 @@ class PictureFilesController < ApplicationController
 
     if @picture_file.picture.path
       if Setting.uploaded_file.storage == :s3
-        send_data file, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition
+        send_data file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, :disposition => disposition
       else
         if File.exist?(file) and File.file?(file)
-          send_file file, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition
+          send_file file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, :disposition => disposition
         end
       end
     end
