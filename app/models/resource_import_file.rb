@@ -56,7 +56,7 @@ class ResourceImportFile < ActiveRecord::Base
   def import
     transition_to!(:started)
     num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
-    rows = open_import_file
+    rows = open_import_file(create_import_temp_file(resource_import))
     row_num = 1
 
     field = rows.first
@@ -251,7 +251,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def modify
     transition_to!(:started)
-    rows = open_import_file
+    rows = open_import_file(create_import_temp_file(resource_import))
     row_num = 1
 
     rows.each do |row|
@@ -301,7 +301,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def remove
     transition_to!(:started)
-    rows = open_import_file
+    rows = open_import_file(create_import_temp_file(resource_import))
     row_num = 1
 
     rows.each do |row|
@@ -321,7 +321,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def update_relationship
     transition_to!(:started)
-    rows = open_import_file
+    rows = open_import_file(create_import_temp_file(resource_import))
     row_num = 2
 
     rows.each do |row|
@@ -352,23 +352,34 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   private
-  def open_import_file
-    tempfile = Tempfile.new(self.class.name.underscore)
-    if Setting.uploaded_file.storage == :s3
-      uploaded_file_path = resource_import.expiring_url(10)
-    else
-      uploaded_file_path = resource_import.path
+  def open_import_file(tempfile)
+    file = CSV.open(tempfile, :col_sep => "\t")
+    header_columns = %w(
+      original_title manifestation_identifier item_identifier shelf note
+      title_transcription title_alternative title_alternative_transcription
+      periodical manifestation_id publication_place
+      series_statement_identifier series_original_title series_creator_string
+      series_title_transcription creator creator_transcription publisher
+      publisher_transcription pub_date creator creator_transcription
+      contributor contributor_transcription description access_address
+      volume_number_string edition_string issue_number_string
+      edition serial_number isbn issn manifestation_price item_price
+      width height depth number_of_pages jpno lccn budget_type bookstore
+      language fulltext_content required_role
+      statement_of_responsibility acquired_at call_number circulation_status
+      use_restriction
+      dummy
+    )
+    if defined?(EnjuSubject)
+      header_columns += %w(subject classification)
     end
-    open(uploaded_file_path){|f|
-      f.each{|line|
-        tempfile.puts(convert_encoding(line))
-      }
-    }
-    tempfile.close
-
-    file = CSV.open(tempfile.path, 'r:utf-8', :col_sep => "\t")
     header = file.first
-    rows = CSV.open(tempfile.path, 'r:utf-8', :headers => header, :col_sep => "\t")
+    ignored_columns = header - header_columns
+    unless ignored_columns.empty?
+      self.error_message = I18n.t('import.following_column_were_ignored', column: ignored_columns.join(', '))
+      save!
+    end
+    rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
     ResourceImportResult.create!(:resource_import_file_id => self.id, :body => header.join("\t"))
     tempfile.close(true)
     file.close
