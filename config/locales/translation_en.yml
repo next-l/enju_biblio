@@ -329,3 +329,5 @@ en:
     add: Add
     remove: Remove
     add_series_statement: Add another series statement
+  resource_import_file:
+    default_shelf: If "shelf" column is not set in the TSV file, this shelf is set to the new item.

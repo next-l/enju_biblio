@@ -176,7 +176,7 @@ ja:
         edit_mode: 編集モード
         error_message: エラーメッセージ
         user_encoding: 文字コード
-        default_shelf_id: 既定の本棚
+        default_shelf_id: 既定の書棚
       series_statement:
         original_title: シリーズ名
         numbering: シリーズ番号
@@ -333,3 +333,5 @@ ja:
     add: 追加
     remove: 削除
     add_series_statement: 別のシリーズ情報を追加する
+  resource_import_file:
+    default_shelf: TSVファイルで"shelf"列が指定されていない場合、この書棚が登録されます。
