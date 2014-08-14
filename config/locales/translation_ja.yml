@@ -323,6 +323,7 @@ ja:
 
   resource_import_file:
     update_relationship: 関連を更新
+    default_shelf: TSVファイルで"shelf"列が指定されていない場合、この書棚が登録されます。
 
   agent:
     creator: 著者
@@ -333,5 +334,3 @@ ja:
     add: 追加
     remove: 削除
     add_series_statement: 別のシリーズ情報を追加する
-  resource_import_file:
-    default_shelf: TSVファイルで"shelf"列が指定されていない場合、この書棚が登録されます。
