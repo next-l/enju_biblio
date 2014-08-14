@@ -39,7 +39,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/new.json
   def new
     @resource_import_file = ResourceImportFile.new
-    @resource_import_file.library_id = current_user.library_id
+    @resource_import_file.library_id = current_user.profile.library_id
     @shelves = Library.find(@resource_import_file.library_id).shelves
 
     respond_to do |format|
