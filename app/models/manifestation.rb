@@ -13,7 +13,7 @@ class Manifestation < ActiveRecord::Base
   attr_accessible :original_title, :title_alternative, :title_transcription,
     :manifestation_identifier, :date_copyrighted,
     :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
-    :end_page, :height, :width, :depth,
+    :end_page, :height, :width, :depth, :publication_place,
     :price, :fulltext, :volume_number_string,
     :issue_number_string, :serial_number_string, :edition, :note,
     :repository_content, :required_role_id, :frequency_id,
