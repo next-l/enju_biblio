@@ -11,27 +11,27 @@ class Agent < ActiveRecord::Base
     :agent_identifier
 
   scope :readable_by, lambda{|user| {:conditions => ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(:name => 'Guest').select(:id).first.id]}}
-  has_many :creates, :dependent => :destroy
-  has_many :works, :through => :creates
-  has_many :realizes, :dependent => :destroy
-  has_many :expressions, :through => :realizes
-  has_many :produces, :dependent => :destroy
-  has_many :manifestations, :through => :produces
-  has_many :children, :foreign_key => 'parent_id', :class_name => 'AgentRelationship', :dependent => :destroy
-  has_many :parents, :foreign_key => 'child_id', :class_name => 'AgentRelationship', :dependent => :destroy
-  has_many :derived_agents, :through => :children, :source => :child
-  has_many :original_agents, :through => :parents, :source => :parent
-  has_many :picture_files, :as => :picture_attachable, :dependent => :destroy
+  has_many :creates, dependent: :destroy
+  has_many :works, through: :creates
+  has_many :realizes, dependent: :destroy
+  has_many :expressions, through: :realizes
+  has_many :produces, dependent: :destroy
+  has_many :manifestations, through: :produces
+  has_many :children, :foreign_key => 'parent_id', :class_name => 'AgentRelationship', dependent: :destroy
+  has_many :parents, :foreign_key => 'child_id', :class_name => 'AgentRelationship', dependent: :destroy
+  has_many :derived_agents, through: :children, :source => :child
+  has_many :original_agents, through: :parents, :source => :parent
+  has_many :picture_files, :as => :picture_attachable, dependent: :destroy
   has_many :donates
-  has_many :donated_items, :through => :donates, :source => :item
-  has_many :owns, :dependent => :destroy
-  has_many :items, :through => :owns
+  has_many :donated_items, through: :donates, :source => :item
+  has_many :owns, dependent: :destroy
+  has_many :items, through: :owns
   if defined?(EnjuResourceMerge)
-    has_many :agent_merges, :dependent => :destroy
-    has_many :agent_merge_lists, :through => :agent_merges
+    has_many :agent_merges, dependent: :destroy
+    has_many :agent_merge_lists, through: :agent_merges
   end
   belongs_to :agent_type
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
+  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', validate: true
   belongs_to :language
   belongs_to :country
   has_one :agent_import_result

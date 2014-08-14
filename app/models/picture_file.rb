@@ -2,7 +2,7 @@ class PictureFile < ActiveRecord::Base
   attr_accessible :picture, :picture_attachable_id,
     :picture_attachable_type
   scope :attached, where('picture_attachable_id IS NOT NULL')
-  belongs_to :picture_attachable, :polymorphic => true, :validate => true
+  belongs_to :picture_attachable, :polymorphic => true, validate: true
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :picture, :storage => :s3, :styles => { :medium => "600x600>", :thumb => "100x100>" },

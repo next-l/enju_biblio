@@ -21,7 +21,7 @@ class AgentImportFile < ActiveRecord::Base
     'application/vnd.ms-excel'
   ]
   validates_attachment_presence :agent_import
-  belongs_to :user, :validate => true
+  belongs_to :user, validate: true
   has_many :agent_import_results
 
   has_many :agent_import_file_transitions

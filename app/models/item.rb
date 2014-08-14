@@ -15,12 +15,12 @@ class Item < ActiveRecord::Base
   scope :on_web, where(:shelf_id => 1)
   belongs_to :manifestation, touch: true
   has_many :owns
-  has_many :agents, :through => :owns
+  has_many :agents, through: :owns
   delegate :display_name, :to => :shelf, :prefix => true
-  belongs_to :bookstore, :validate => true
+  belongs_to :bookstore, validate: true
   has_many :donates
-  has_many :donors, :through => :donates, :source => :agent
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
+  has_many :donors, through: :donates, :source => :agent
+  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', validate: true
   has_one :resource_import_result
   belongs_to :budget_type
 

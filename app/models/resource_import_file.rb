@@ -23,7 +23,7 @@ class ResourceImportFile < ActiveRecord::Base
     'application/vnd.ms-excel'
   ]
   validates_attachment_presence :resource_import
-  belongs_to :user, :validate => true
+  belongs_to :user, validate: true
   belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
   has_many :resource_import_file_transitions

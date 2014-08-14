@@ -27,27 +27,27 @@ class Manifestation < ActiveRecord::Base
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string, :parent_id
 
-  has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
-  has_many :creators, :through => :creates, :source => :agent, :order => 'creates.position'
-  has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, :through => :realizes, :source => :agent, :order => 'realizes.position'
-  has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, :through => :produces, :source => :agent, :order => 'produces.position'
-  has_many :items, :dependent => :destroy
-  has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
-  has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
-  has_many :derived_manifestations, :through => :children, :source => :child
-  has_many :original_manifestations, :through => :parents, :source => :parent
-  has_many :picture_files, :as => :picture_attachable, :dependent => :destroy
+  has_many :creates, dependent: :destroy, :foreign_key => 'work_id'
+  has_many :creators, through: :creates, :source => :agent, :order => 'creates.position'
+  has_many :realizes, dependent: :destroy, :foreign_key => 'expression_id'
+  has_many :contributors, through: :realizes, :source => :agent, :order => 'realizes.position'
+  has_many :produces, dependent: :destroy, :foreign_key => 'manifestation_id'
+  has_many :publishers, through: :produces, :source => :agent, :order => 'produces.position'
+  has_many :items, dependent: :destroy
+  has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', dependent: :destroy
+  has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', dependent: :destroy
+  has_many :derived_manifestations, through: :children, :source => :child
+  has_many :original_manifestations, through: :parents, :source => :parent
+  has_many :picture_files, :as => :picture_attachable, dependent: :destroy
   belongs_to :language
   belongs_to :carrier_type
   belongs_to :manifestation_content_type, :class_name => 'ContentType', :foreign_key => 'content_type_id'
   has_many :series_statements
   has_one :root_series_statement, :foreign_key => 'root_manifestation_id', :class_name => 'SeriesStatement'
   belongs_to :frequency
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
+  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', validate: true
   has_one :resource_import_result
-  has_many :identifiers, :dependent => :destroy
+  has_many :identifiers, dependent: :destroy
   belongs_to :nii_type if defined?(EnjuNii)
   accepts_nested_attributes_for :creators, :allow_destroy => true, :reject_if => :all_blank
   accepts_nested_attributes_for :contributors, :allow_destroy => true, :reject_if => :all_blank
@@ -360,7 +360,7 @@ class Manifestation < ActiveRecord::Base
     # TODO: S3 support
     response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=ruby" --data-binary @#{attachment.path} -H "Content-type:text/html"`
     self.fulltext = eval(response)[""]
-    save(:validate => false)
+    save(validate: false)
   end
 
   def created(agent)
@@ -431,14 +431,14 @@ class Manifestation < ActiveRecord::Base
         create = Create.where(:work_id => self.id, :agent_id => agent.id).first
         if create
           create.create_type = role_type
-          create.save(:validate => false)
+          create.save(validate: false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
         produce = Produce.where(:manifestation_id => self.id, :agent_id => agent.id).first
         if produce
           produce.produce_type = ProduceType.where(:name => type).first
-          produce.save(:validate => false)
+          produce.save(validate: false)
         end
       else
         raise "#{options[:scope]} is not supported!"

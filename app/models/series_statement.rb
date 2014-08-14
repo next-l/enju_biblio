@@ -43,8 +43,8 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   if defined?(EnjuResourceMerge)
-    has_many :series_statement_merges, :dependent => :destroy
-    has_many :series_statement_merge_lists, :through => :series_statement_merges
+    has_many :series_statement_merges, dependent: :destroy
+    has_many :series_statement_merge_lists, through: :series_statement_merges
   end
 end
 
