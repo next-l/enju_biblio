@@ -19,7 +19,7 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td><%= link_to import_request.id, import_request -%></td>
     <td>
-      <%= link_to import_request.user.username, import_request.user if import_request.user -%><br />
+      <%= link_to import_request.user.username, import_request.user.profile if import_request.user.try(:profile) -%><br />
       <%= import_request.isbn -%><br />
       <%=l import_request.created_at -%>
     </td>
