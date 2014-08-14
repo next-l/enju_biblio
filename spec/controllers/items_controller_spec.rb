@@ -320,7 +320,7 @@ describe ItemsController do
         response.should redirect_to item_url(assigns(:item))
         flash[:message].should eq I18n.t('item.this_item_is_reserved')
         assigns(:item).manifestation.should eq Manifestation.find(2)
-        assigns(:item).manifestation.next_reservation.state.should eq 'retained'
+        assigns(:item).manifestation.next_reservation.current_state.should eq 'retained'
       end
     end
 
