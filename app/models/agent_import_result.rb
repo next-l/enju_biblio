@@ -1,6 +1,6 @@
 class AgentImportResult < ActiveRecord::Base
   attr_accessible :agent_import_file_id, :agent_id, :user_id, :body
-  default_scope :order => 'agent_import_results.id'
+  default_scope order: 'agent_import_results.id'
   scope :file_id, proc{|file_id| where(:agent_import_file_id => file_id)}
   scope :failed, where(:agent_id => nil)
 

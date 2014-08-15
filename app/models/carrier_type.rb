@@ -1,7 +1,7 @@
 class CarrierType < ActiveRecord::Base
   attr_accessible :name, :display_name, :note, :position
   include MasterModel
-  default_scope :order => "carrier_types.position"
+  default_scope order: "carrier_types.position"
   has_many :manifestations
   if defined?(EnjuCirculation)
     attr_accessible :carrier_type_has_checkout_types_attributes

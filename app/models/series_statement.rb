@@ -7,7 +7,7 @@ class SeriesStatement < ActiveRecord::Base
   attr_accessible :series_master
 
   belongs_to :manifestation, touch: true
-  belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation', touch: true
+  belongs_to :root_manifestation, foreign_key: :root_manifestation_id, class_name: 'Manifestation', touch: true
   validates_presence_of :original_title
   before_save :create_root_series_statement
 

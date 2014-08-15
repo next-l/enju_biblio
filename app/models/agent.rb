@@ -17,13 +17,13 @@ class Agent < ActiveRecord::Base
   has_many :expressions, through: :realizes
   has_many :produces, dependent: :destroy
   has_many :manifestations, through: :produces
-  has_many :children, :foreign_key => 'parent_id', :class_name => 'AgentRelationship', dependent: :destroy
-  has_many :parents, :foreign_key => 'child_id', :class_name => 'AgentRelationship', dependent: :destroy
-  has_many :derived_agents, through: :children, :source => :child
-  has_many :original_agents, through: :parents, :source => :parent
-  has_many :picture_files, :as => :picture_attachable, dependent: :destroy
+  has_many :children, foreign_key: 'parent_id', class_name: 'AgentRelationship', dependent: :destroy
+  has_many :parents, foreign_key: 'child_id', class_name: 'AgentRelationship', dependent: :destroy
+  has_many :derived_agents, through: :children, source: :child
+  has_many :original_agents, through: :parents, source: :parent
+  has_many :picture_files, as: :picture_attachable, dependent: :destroy
   has_many :donates
-  has_many :donated_items, through: :donates, :source => :item
+  has_many :donated_items, through: :donates, source: :item
   has_many :owns, dependent: :destroy
   has_many :items, through: :owns
   if defined?(EnjuResourceMerge)
@@ -31,7 +31,7 @@ class Agent < ActiveRecord::Base
     has_many :agent_merge_lists, through: :agent_merges
   end
   belongs_to :agent_type
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', validate: true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   belongs_to :language
   belongs_to :country
   has_one :agent_import_result
@@ -39,11 +39,11 @@ class Agent < ActiveRecord::Base
   validates_presence_of :language, :agent_type, :country
   validates_associated :language, :agent_type, :country
   validates :full_name, :presence => true, :length => {:maximum => 255}
-  validates :birth_date, :format => {:with => /\A\d+(-\d{0,2}){0,2}\z/}, :allow_blank => true
-  validates :death_date, :format => {:with => /\A\d+(-\d{0,2}){0,2}\z/}, :allow_blank => true
-  validates :email, :format => {:with => /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i}, :allow_blank => true
+  validates :birth_date, format: {with: /\A\d+(-\d{0,2}){0,2}\z/}, allow_blank: true
+  validates :death_date, format: {with: /\A\d+(-\d{0,2}){0,2}\z/}, allow_blank: true
+  validates :email, format: {with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i}, allow_blank: true
   validate :check_birth_date
-  before_validation :set_role_and_name, :on => :create
+  before_validation :set_role_and_name, on: :create
   before_save :set_date_of_birth, :set_date_of_death
   after_save do |agent|
     agent.works.map{|work| work.index}

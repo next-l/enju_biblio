@@ -27,25 +27,25 @@ class Manifestation < ActiveRecord::Base
   attr_accessible :fulltext_content,
     :doi, :number_of_page_string, :parent_id
 
-  has_many :creates, dependent: :destroy, :foreign_key => 'work_id'
-  has_many :creators, through: :creates, :source => :agent, :order => 'creates.position'
-  has_many :realizes, dependent: :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, through: :realizes, :source => :agent, :order => 'realizes.position'
-  has_many :produces, dependent: :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, through: :produces, :source => :agent, :order => 'produces.position'
+  has_many :creates, dependent: :destroy, foreign_key: 'work_id'
+  has_many :creators, through: :creates, source: :agent, order: 'creates.position'
+  has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'
+  has_many :contributors, through: :realizes, source: :agent, order: 'realizes.position'
+  has_many :produces, dependent: :destroy, foreign_key: 'manifestation_id'
+  has_many :publishers, through: :produces, source: :agent, order: 'produces.position'
   has_many :items, dependent: :destroy
-  has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', dependent: :destroy
-  has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', dependent: :destroy
-  has_many :derived_manifestations, through: :children, :source => :child
-  has_many :original_manifestations, through: :parents, :source => :parent
-  has_many :picture_files, :as => :picture_attachable, dependent: :destroy
+  has_many :children, foreign_key: 'parent_id', class_name: 'ManifestationRelationship', dependent: :destroy
+  has_many :parents, foreign_key: 'child_id', class_name: 'ManifestationRelationship', dependent: :destroy
+  has_many :derived_manifestations, through: :children, source: :child
+  has_many :original_manifestations, through: :parents, source: :parent
+  has_many :picture_files, as: :picture_attachable, dependent: :destroy
   belongs_to :language
   belongs_to :carrier_type
-  belongs_to :manifestation_content_type, :class_name => 'ContentType', :foreign_key => 'content_type_id'
+  belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
   has_many :series_statements
-  has_one :root_series_statement, :foreign_key => 'root_manifestation_id', :class_name => 'SeriesStatement'
+  has_one :root_series_statement, foreign_key: 'root_manifestation_id', class_name: 'SeriesStatement'
   belongs_to :frequency
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', validate: true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   belongs_to :nii_type if defined?(EnjuNii)
@@ -232,15 +232,15 @@ class Manifestation < ActiveRecord::Base
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
-  validates :start_page, :numericality => true, :allow_blank => true
-  validates :end_page, :numericality => true, :allow_blank => true
-  validates :manifestation_identifier, :uniqueness => true, :allow_blank => true
-  validates :pub_date, :format => {:with => /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, :allow_blank => true
-  validates :access_address, :url => true, :allow_blank => true, :length => {:maximum => 255}
-  validates :issue_number, :numericality => {:greater_than => 0}, :allow_blank => true
-  validates :volume_number, :numericality => {:greater_than => 0}, :allow_blank => true
-  validates :serial_number, :numericality => {:greater_than => 0}, :allow_blank => true
-  validates :edition, :numericality => {:greater_than => 0}, :allow_blank => true
+  validates :start_page, :numericality => true, allow_blank: true
+  validates :end_page, :numericality => true, allow_blank: true
+  validates :manifestation_identifier, :uniqueness => true, allow_blank: true
+  validates :pub_date, format: {with: /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, allow_blank: true
+  validates :access_address, url: true, allow_blank: true, :length => {:maximum => 255}
+  validates :issue_number, :numericality => {:greater_than => 0}, allow_blank: true
+  validates :volume_number, :numericality => {:greater_than => 0}, allow_blank: true
+  validates :serial_number, :numericality => {:greater_than => 0}, allow_blank: true
+  validates :edition, :numericality => {:greater_than => 0}, allow_blank: true
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
