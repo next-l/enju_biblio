@@ -21,7 +21,7 @@
         <td><%= link_to resource_import_file.id, resource_import_file -%></td>
         <td><%= link_to resource_import_file.resource_import_file_name, resource_import_file -%></td>
         <td><%= l(resource_import_file.executed_at) if resource_import_file.executed_at -%></td>
-        <td><%= link_to resource_import_file.user.username, resource_import_file.user -%></td>
+        <td><%= link_to resource_import_file.user.username, resource_import_file.user.profile if resource_import_file.user.try(:profile) -%></td>
         <td><%= resource_import_file.edit_mode -%></td>
         <td><%= localized_state(resource_import_file.current_state) -%></td>
         <td>
