@@ -6,7 +6,7 @@
     <%= f.label :parent_id -%><br />
     <ul>
       <% @manifestation.original_manifestations.each do |manifestation| %>
-        <li><%= manifestation.original_title, manifestation %></li>
+        <li><%= link_to manifestation.original_title, manifestation %></li>
       <% end %>
     </ul>
   <% end %>
