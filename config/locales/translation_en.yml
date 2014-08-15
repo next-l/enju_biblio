@@ -89,6 +89,7 @@ en:
         identifier: Identifier
         statement_of_responsibility: Statement of responsibility
         publication_place: Publication place
+        parent_id: Parent
       manifestation/subjects:
           term: Subject
       manifestation/classifications:

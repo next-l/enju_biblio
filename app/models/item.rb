@@ -26,11 +26,11 @@ class Item < ActiveRecord::Base
 
   validates_associated :bookstore
   validates :manifestation_id, presence: true
-  validates :item_identifier, allow_blank: true, :uniqueness => true,
+  validates :item_identifier, allow_blank: true, uniqueness: true,
     format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :binding_item_identifier, allow_blank: true,
     format: {with: /\A[0-9A-Za-z_]+\Z/}
-  validates :url, url: true, allow_blank: true, :length => {:maximum => 255}
+  validates :url, url: true, allow_blank: true, length: {:maximum => 255}
   validates_date :acquired_at, allow_blank: true
 
   normalize_attributes :item_identifier, :binding_item_identifier

@@ -38,7 +38,7 @@ class Agent < ActiveRecord::Base
 
   validates_presence_of :language, :agent_type, :country
   validates_associated :language, :agent_type, :country
-  validates :full_name, presence: true, :length => {:maximum => 255}
+  validates :full_name, presence: true, length: {:maximum => 255}
   validates :birth_date, format: {with: /\A\d+(-\d{0,2}){0,2}\z/}, allow_blank: true
   validates :death_date, format: {with: /\A\d+(-\d{0,2}){0,2}\z/}, allow_blank: true
   validates :email, format: {with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i}, allow_blank: true
