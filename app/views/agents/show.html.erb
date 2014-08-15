@@ -89,7 +89,7 @@
   <ul>
     <%- if @agent.picture_files.exists? -%>
       <li><%= t('page.total') %>: <%= @agent.picture_files.count %> <%= t('page.number_of_pictures', count: @agent.picture_files.count) %></li>
-      <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), agent_picture_files_path(@agent) -%></li>
+      <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @agent.id) -%></li>
       <script type="text/javascript">
         $(document).ready(function(){
           $("a[rel='agent_<%= @agent.id -%>']").colorbox({transition:"none", photo:true});
@@ -98,7 +98,7 @@
       </script>
     <% end %>
     <%- if can? :create, PictureFile -%>
-      <li><%= link_to t('page.new', model: t('activerecord.models.picture_file')), new_agent_picture_file_path(@agent) -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id) -%></li>
     <%- end -%>
   </ul>
   <ul>

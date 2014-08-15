@@ -26,12 +26,8 @@ Rails.application.routes.draw do
     resources :expressions, :controller => 'manifestations'
     resources :manifestations
     resources :items
-    resources :picture_files
     resources :agents
     resources :agent_relationships
-    resources :creates
-    resources :realizes
-    resources :produces
   end
 
   resources :works, :controller => 'manifestations', :except => [:index, :new, :create] do
