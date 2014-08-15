@@ -208,6 +208,12 @@ describe Manifestation, :solr => true do
     manifestations(:manifestation_00202).periodical?.should be_truthy
   end
 
+  it "should validate access_address" do
+    manifestation = manifestations(:manifestation_00202)
+    manifestation.access_address = 'http:/www.example.jp'
+    manifestation.should_not be_valid
+  end
+
   #it "should set series_statement if the manifestation is periodical" do
   #  manifestation = series_statements(:two).manifestations.new
   #  manifestation.set_series_statements([series_statements(:two)])
