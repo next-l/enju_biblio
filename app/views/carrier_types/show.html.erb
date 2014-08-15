@@ -4,6 +4,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong><%= t('activerecord.attributes.carrier_type.name') -%>:</strong>
+  <%= @carrier_type.name -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.carrier_type.display_name') -%>:</strong>
   <%= @carrier_type.display_name.localize -%>
 </p>

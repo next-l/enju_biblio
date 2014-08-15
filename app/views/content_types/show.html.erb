@@ -4,6 +4,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong><%= t('activerecord.attributes.content_type.name') -%>:</strong>
+  <%= @content_type.name -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.content_type.display_name') -%>:</strong>
   <%= @content_type.display_name.localize -%>
 </p>

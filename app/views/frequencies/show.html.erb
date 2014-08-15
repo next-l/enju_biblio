@@ -4,6 +4,11 @@
 <p id="notice"><%= notice %></p>
 
 <p>
+  <strong><%= t('activerecord.attributes.frequency.name') -%>:</strong>
+  <%= @frequency.name -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.frequency.display_name') -%>:</strong>
   <%= @frequency.display_name.localize -%>
 </p>
