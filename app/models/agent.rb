@@ -10,7 +10,7 @@ class Agent < ActiveRecord::Base
     :full_name_alternative_transcription, :title,
     :agent_identifier
 
-  scope :readable_by, lambda{|user| {:conditions => ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(:name => 'Guest').select(:id).first.id]}}
+  scope :readable_by, lambda{|user| {:conditions => ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(name: 'Guest').select(:id).first.id]}}
   has_many :creates, dependent: :destroy
   has_many :works, through: :creates
   has_many :realizes, dependent: :destroy
@@ -68,11 +68,11 @@ class Agent < ActiveRecord::Base
     time :updated_at
     time :date_of_birth
     time :date_of_death
-    integer :work_ids, :multiple => true
-    integer :expression_ids, :multiple => true
-    integer :manifestation_ids, :multiple => true
-    integer :agent_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
-    integer :original_agent_ids, :multiple => true
+    integer :work_ids, multiple: true
+    integer :expression_ids, multiple: true
+    integer :manifestation_ids, multiple: true
+    integer :agent_merge_list_ids, multiple: true if defined?(EnjuResourceMerge)
+    integer :original_agent_ids, multiple: true
     integer :required_role_id
     integer :agent_type_id
   end
@@ -80,7 +80,7 @@ class Agent < ActiveRecord::Base
   paginates_per 10
 
   def set_role_and_name
-    self.required_role = Role.where(:name => 'Librarian').first if self.required_role_id.nil?
+    self.required_role = Role.where(name: 'Librarian').first if self.required_role_id.nil?
     set_full_name
   end
 
@@ -238,7 +238,7 @@ class Agent < ActiveRecord::Base
           :agent_identifier => agent_list[:agent_identifier],
           :language_id => 1
         )
-        agent.required_role = Role.where(:name => 'Guest').first
+        agent.required_role = Role.where(name: 'Guest').first
         agent.save
       end
       agents << agent

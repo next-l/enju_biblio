@@ -5,7 +5,7 @@ class ManifestationRelationship < ActiveRecord::Base
   belongs_to :manifestation_relationship_type
   validate :check_parent
   validates_presence_of :parent_id, :child_id
-  acts_as_list :scope => :parent_id
+  acts_as_list scope: :parent_id
 
   def check_parent
     if parent_id == child_id

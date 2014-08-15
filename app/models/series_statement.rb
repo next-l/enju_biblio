@@ -19,7 +19,7 @@ class SeriesStatement < ActiveRecord::Base
     text :numbering, :title_subseries, :numbering_subseries
     integer :manifestation_id
     integer :position
-    integer :series_statement_merge_list_ids, :multiple => true if defined?(EnjuResourceMerge)
+    integer :series_statement_merge_list_ids, multiple: true if defined?(EnjuResourceMerge)
   end
 
   attr_accessor :selected

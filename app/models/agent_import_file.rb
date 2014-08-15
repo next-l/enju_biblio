@@ -63,7 +63,7 @@ class AgentImportFile < ActiveRecord::Base
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      import_result = AgentImportResult.create!(:agent_import_file_id => self.id, :body => row.fields.join("\t"))
+      import_result = AgentImportResult.create!(:agent_import_file_id => self.id, body: row.fields.join("\t"))
 
       agent = Agent.new
       agent = set_agent_value(agent, row)
@@ -125,7 +125,7 @@ class AgentImportFile < ActiveRecord::Base
       #  set_user_value(user, row)
       #  user.save!
       #end
-      agent = Agent.where(:id => row['id']).first
+      agent = Agent.where(id: row['id']).first
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
         agent.full_name_transcription = row['full_name_transcription'] if row['full_name_transcription'].to_s.strip.present?
@@ -155,7 +155,7 @@ class AgentImportFile < ActiveRecord::Base
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.where(:id => row['id'].to_s.strip).first
+      agent = Agent.where(id: row['id'].to_s.strip).first
       if agent
         agent.picture_files.destroy_all
         agent.reload
@@ -191,7 +191,7 @@ class AgentImportFile < ActiveRecord::Base
     file = CSV.open(tempfile, :col_sep => "\t")
     header = file.first
     rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
-    AgentImportResult.create!(:agent_import_file_id => self.id, :body => header.join("\t"))
+    AgentImportResult.create!(:agent_import_file_id => self.id, body: header.join("\t"))
     tempfile.close(true)
     file.close
     rows
@@ -222,15 +222,15 @@ class AgentImportFile < ActiveRecord::Base
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(:name => row['required_role'].to_s.strip.camelize).first || Role.find('Guest')
+      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Guest')
     #else
-    #  agent.required_role = Role.where(:name => row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
+    #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
     #end
-    language = Language.where(:name => row['language'].to_s.strip.camelize).first
+    language = Language.where(name: row['language'].to_s.strip.camelize).first
     language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
     language = Language.where(:iso_639_1 => row['language'].to_s.strip.downcase).first unless language
     agent.language = language if language
-    country = Country.where(:name => row['country'].to_s.strip).first
+    country = Country.where(name: row['country'].to_s.strip).first
     agent.country = country if country
     agent
   end
@@ -249,12 +249,12 @@ class AgentImportFile < ActiveRecord::Base
   #  end
   #  user.username = row['username'] if row['username']
   #  user.user_number = row['user_number'] if row['user_number']
-  #  library = Library.where(:name => row['library_short_name'].to_s.strip).first || Library.web
-  #  user_group = UserGroup.where(:name => row['user_group_name']).first || UserGroup.first
+  #  library = Library.where(name: row['library_short_name'].to_s.strip).first || Library.web
+  #  user_group = UserGroup.where(name: row['user_group_name']).first || UserGroup.first
   #  user.library = library
-  #  role = Role.where(:name => row['role'].to_s.strip.camelize).first || Role.find('User')
+  #  role = Role.where(name: row['role'].to_s.strip.camelize).first || Role.find('User')
   #  user.role = role
-  #  required_role = Role.where(:name => row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
+  #  required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
   #  user.required_role = required_role
   #  locale = Language.where(:iso_639_1 => row['locale'].to_s.strip).first
   #  user.locale = locale || I18n.default_locale.to_s

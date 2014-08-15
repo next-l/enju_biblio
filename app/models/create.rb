@@ -6,11 +6,11 @@ class Create < ActiveRecord::Base
 
   validates_associated :agent, :work
   validates_presence_of :agent_id, :work_id
-  validates_uniqueness_of :work_id, :scope => :agent_id
+  validates_uniqueness_of :work_id, scope: :agent_id
   after_save :reindex
   after_destroy :reindex
 
-  acts_as_list :scope => :work
+  acts_as_list scope: :work
 
   def reindex
     agent.try(:index)

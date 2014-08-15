@@ -19,7 +19,7 @@ class PictureFile < ActiveRecord::Base
   validates_associated :picture_attachable
   default_scope order: 'picture_files.position'
   # http://railsforum.com/viewtopic.php?id=11615
-  acts_as_list :scope => 'picture_attachable_type=\'#{picture_attachable_type}\''
+  acts_as_list scope: 'picture_attachable_type=\'#{picture_attachable_type}\''
   normalize_attributes :picture_attachable_type
 
   paginates_per 10

@@ -71,7 +71,7 @@ class Item < ActiveRecord::Base
   end
 
   def owned(agent)
-    owns.where(:agent_id => agent.id).first
+    owns.where(agent_id: agent.id).first
   end
 
   def manifestation_url

@@ -10,7 +10,7 @@ class Exemplify < ActiveRecord::Base
   after_save :reindex
   after_destroy :reindex
 
-  acts_as_list :scope => :manifestation_id
+  acts_as_list scope: :manifestation_id
 
   def reindex
     manifestation.try(:index)

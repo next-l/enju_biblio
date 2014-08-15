@@ -68,7 +68,7 @@ class Manifestation < ActiveRecord::Base
         items.pluck(:item_identifier)
       end
     end
-    string :title, :multiple => true
+    string :title, multiple: true
     # text フィールドだと区切りのない文字列の index が上手く作成
     #できなかったので。 downcase することにした。
     #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
@@ -81,28 +81,28 @@ class Manifestation < ActiveRecord::Base
     string :connect_publisher do
       publisher.join('').gsub(/\s/, '').downcase
     end
-    string :isbn, :multiple => true do
+    string :isbn, multiple: true do
       identifier_contents(:isbn).map{|i|
         [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
       }.flatten
     end
-    string :issn, :multiple => true do
+    string :issn, multiple: true do
       if series_statements.exists?
         [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
       else
         identifier_contents(:issn)
       end
     end
-    string :lccn, :multiple => true do
+    string :lccn, multiple: true do
       identifier_contents(:lccn)
     end
-    string :jpno, :multiple => true do
+    string :jpno, multiple: true do
       identifier_contents(:jpno)
     end
     string :carrier_type do
       carrier_type.name
     end
-    string :library, :multiple => true do
+    string :library, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
       else
@@ -112,20 +112,20 @@ class Manifestation < ActiveRecord::Base
     string :language do
       language.try(:name)
     end
-    string :item_identifier, :multiple => true do
+    string :item_identifier, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier)
       else
         items.collect(&:item_identifier)
       end
     end
-    string :shelf, :multiple => true do
+    string :shelf, multiple: true do
       items.collect{|i| "#{i.shelf.library.name}_#{i.shelf.name}"}
     end
     time :created_at
     time :updated_at
     time :deleted_at
-    time :pub_date, :multiple => true do
+    time :pub_date, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.pub_dates
       else
@@ -136,12 +136,12 @@ class Manifestation < ActiveRecord::Base
     integer :pub_year do
       date_of_publication.try(:year)
     end
-    integer :creator_ids, :multiple => true
-    integer :contributor_ids, :multiple => true
-    integer :publisher_ids, :multiple => true
-    integer :item_ids, :multiple => true
-    integer :original_manifestation_ids, :multiple => true
-    integer :parent_ids, :multiple => true do
+    integer :creator_ids, multiple: true
+    integer :contributor_ids, multiple: true
+    integer :publisher_ids, multiple: true
+    integer :item_ids, multiple: true
+    integer :original_manifestation_ids, multiple: true
+    integer :parent_ids, multiple: true do
       original_manifestations.pluck(:id)
     end
     integer :required_role_id
@@ -155,7 +155,7 @@ class Manifestation < ActiveRecord::Base
     integer :end_page
     integer :number_of_pages
     float :price
-    integer :series_statement_ids, :multiple => true
+    integer :series_statement_ids, multiple: true
     boolean :repository_content
     # for OpenURL
     text :aulast do
@@ -165,7 +165,7 @@ class Manifestation < ActiveRecord::Base
       creators.pluck(:first_name)
     end
     # OTC start
-    string :creator, :multiple => true do
+    string :creator, multiple: true do
       creator.map{|au| au.gsub(' ', '')}
     end
     text :au do
@@ -364,15 +364,15 @@ class Manifestation < ActiveRecord::Base
   end
 
   def created(agent)
-    creates.where(:agent_id => agent.id).first
+    creates.where(agent_id: agent.id).first
   end
 
   def realized(agent)
-    realizes.where(:agent_id => agent.id).first
+    realizes.where(agent_id: agent.id).first
   end
 
   def produced(agent)
-    produces.where(:agent_id => agent.id).first
+    produces.where(agent_id: agent.id).first
   end
 
   def sort_title
@@ -392,7 +392,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    identifier_type = IdentifierType.where(:name => 'isbn').first
+    identifier_type = IdentifierType.where(name: 'isbn').first
     return nil unless identifier_type
     Manifestation.includes(:identifiers => :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
   end
@@ -414,7 +414,7 @@ class Manifestation < ActiveRecord::Base
     items.where(:shelf_id => Shelf.web.id).first
   end
 
-  def set_agent_role_type(agent_lists, options = {:scope => :creator})
+  def set_agent_role_type(agent_lists, options = {scope: :creator})
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
@@ -427,17 +427,17 @@ class Manifestation < ActiveRecord::Base
       case options[:scope]
       when :creator
         type = 'author' if type.blank?
-        role_type = CreateType.where(:name => type).first
-        create = Create.where(:work_id => self.id, :agent_id => agent.id).first
+        role_type = CreateType.where(name: type).first
+        create = Create.where(:work_id => self.id, agent_id: agent.id).first
         if create
           create.create_type = role_type
           create.save(validate: false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
-        produce = Produce.where(:manifestation_id => self.id, :agent_id => agent.id).first
+        produce = Produce.where(:manifestation_id => self.id, agent_id: agent.id).first
         if produce
-          produce.produce_type = ProduceType.where(:name => type).first
+          produce.produce_type = ProduceType.where(name: type).first
           produce.save(validate: false)
         end
       else
@@ -483,8 +483,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    if IdentifierType.where(:name => name.to_s).exists?
-      identifiers.where(:identifier_type_id => IdentifierType.where(:name => name).first.id).pluck(:body)
+    if IdentifierType.where(name: name.to_s).exists?
+      identifiers.where(:identifier_type_id => IdentifierType.where(name: name).first.id).pluck(:body)
     else
       []
     end

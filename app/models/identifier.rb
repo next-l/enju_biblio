@@ -4,11 +4,11 @@ class Identifier < ActiveRecord::Base
   belongs_to :manifestation, touch: true
 
   validates_presence_of :body
-  validates_uniqueness_of :body, :scope => [:identifier_type_id, :manifestation_id]
+  validates_uniqueness_of :body, scope: [:identifier_type_id, :manifestation_id]
   validate :check_identifier
   before_save :convert_isbn
 
-  acts_as_list :scope => :manifestation_id
+  acts_as_list scope: :manifestation_id
   normalize_attributes :body
 
   def check_identifier
