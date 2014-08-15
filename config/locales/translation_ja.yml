@@ -2,7 +2,7 @@ ja:
   activerecord:
     models:
       carrier_type: 資料の形態
-      content_type: 資料の内容の形態
+      content_type: 資料の内容の種別
       create: 著作関係
       create_type: 著作の関係
       embody: 具体化
