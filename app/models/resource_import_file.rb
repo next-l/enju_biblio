@@ -367,7 +367,7 @@ class ResourceImportFile < ActiveRecord::Base
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi
       statement_of_responsibility acquired_at call_number circulation_status
-      use_restriction
+      use_restriction binding_item_identifier
       dummy
     )
     if defined?(EnjuSubject)
@@ -421,11 +421,12 @@ class ResourceImportFile < ActiveRecord::Base
     budget_type = BudgetType.where(name: row['budget_type'].to_s.strip).first
     acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
     item = self.class.import_item(manifestation, {
-      :manifestation_id => manifestation.id,
+      manifestation_id: manifestation.id,
       item_identifier: row['item_identifier'],
-      :price => row['item_price'],
-      :call_number => row['call_number'].to_s.strip,
-      :acquired_at => acquired_at,
+      price: row['item_price'],
+      call_number: row['call_number'].to_s.strip,
+      acquired_at: acquired_at,
+      binding_item_identifier: row['binding_item_identifier']
     })
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(name: row['circulation_status'].to_s.strip).first || CirculationStatus.where(name: 'In Process').first

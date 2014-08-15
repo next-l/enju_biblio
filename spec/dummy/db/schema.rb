@@ -998,9 +998,9 @@ ActiveRecord::Schema.define(:version => 20140813182425) do
     t.integer  "required_role_id"
     t.datetime "created_at",                                  :null => false
     t.datetime "updated_at",                                  :null => false
-    t.datetime "expired_at"
     t.string   "checkout_icalendar_token"
     t.boolean  "save_checkout_history",    :default => false, :null => false
+    t.datetime "expired_at"
   end
 
   add_index "profiles", ["checkout_icalendar_token"], :name => "index_profiles_on_checkout_icalendar_token", :unique => true
