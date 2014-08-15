@@ -25,7 +25,7 @@ class Item < ActiveRecord::Base
   belongs_to :budget_type
 
   validates_associated :bookstore
-  validates :manifestation_id, :presence => true
+  validates :manifestation_id, presence: true
   validates :item_identifier, allow_blank: true, :uniqueness => true,
     format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :binding_item_identifier, allow_blank: true,

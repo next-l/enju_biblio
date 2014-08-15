@@ -11,7 +11,7 @@ class AgentImportFile < ActiveRecord::Base
       :s3_permissions => :private
   else
     has_attached_file :agent_import,
-      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_content_type :agent_import, :content_type => [
     'text/csv',
@@ -188,9 +188,9 @@ class AgentImportFile < ActiveRecord::Base
     }
     tempfile.close
 
-    file = CSV.open(tempfile, :col_sep => "\t")
+    file = CSV.open(tempfile, col_sep: "\t")
     header = file.first
-    rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
+    rows = CSV.open(tempfile, headers: header, col_sep: "\t")
     AgentImportResult.create!(:agent_import_file_id => self.id, body: header.join("\t"))
     tempfile.close(true)
     file.close

@@ -49,11 +49,11 @@ class Manifestation < ActiveRecord::Base
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   belongs_to :nii_type if defined?(EnjuNii)
-  accepts_nested_attributes_for :creators, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :contributors, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :publishers, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :series_statements, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :identifiers, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :creators, :allow_destroy => true, reject_if: :all_blank
+  accepts_nested_attributes_for :contributors, :allow_destroy => true, reject_if: :all_blank
+  accepts_nested_attributes_for :publishers, :allow_destroy => true, reject_if: :all_blank
+  accepts_nested_attributes_for :series_statements, :allow_destroy => true, reject_if: :all_blank
+  accepts_nested_attributes_for :identifiers, :allow_destroy => true, reject_if: :all_blank
 
   searchable do
     text :title, :default_boost => 2 do
@@ -227,7 +227,7 @@ class Manifestation < ActiveRecord::Base
       :s3_permissions => :private
   else
     has_attached_file :attachment,
-      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
 
   validates_presence_of :original_title, :carrier_type, :language

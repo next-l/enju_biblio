@@ -13,7 +13,7 @@ class ResourceImportFile < ActiveRecord::Base
       :s3_permissions => :private
   else
     has_attached_file :resource_import,
-      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_content_type :resource_import, :content_type => [
     'text/csv',
@@ -353,7 +353,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   private
   def open_import_file(tempfile)
-    file = CSV.open(tempfile, :col_sep => "\t")
+    file = CSV.open(tempfile, col_sep: "\t")
     header_columns = %w(
       original_title manifestation_identifier item_identifier shelf note
       title_transcription title_alternative title_alternative_transcription
@@ -379,7 +379,7 @@ class ResourceImportFile < ActiveRecord::Base
       self.error_message = I18n.t('import.following_column_were_ignored', column: ignored_columns.join(', '))
       save!
     end
-    rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
+    rows = CSV.open(tempfile, headers: header, col_sep: "\t")
     ResourceImportResult.create!(:resource_import_file_id => self.id, body: header.join("\t"))
     tempfile.close(true)
     file.close
