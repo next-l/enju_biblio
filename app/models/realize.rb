@@ -1,7 +1,7 @@
 class Realize < ActiveRecord::Base
   attr_accessible :agent_id, :expression_id, :realize_type_id, :position
   belongs_to :agent
-  belongs_to :expression, class_name: 'Manifestation', foreign_key: 'expression_id'
+  belongs_to :expression, class_name: 'Manifestation', foreign_key: 'expression_id', touch: true
   belongs_to :realize_type
 
   validates_associated :agent, :expression
