@@ -17,7 +17,7 @@ describe ResourceImportFile do
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
         @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
-        manifestation = Item.where(:item_identifier => '11111').first.manifestation
+        manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
@@ -35,7 +35,7 @@ describe ResourceImportFile do
         manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ 1'
         manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず いち'
 
-        item_10101 = Item.where(:item_identifier => '10101').first
+        item_10101 = Item.where(item_identifier: '10101').first
         item_10101.manifestation.creators.size.should eq 2
         item_10101.manifestation.creates.order(:id).first.create_type.name.should eq 'author'
         item_10101.manifestation.creates.order(:id).second.agent.full_name.should eq 'test1'
@@ -54,25 +54,26 @@ describe ResourceImportFile do
         item_10101.binded_at.should eq Time.zone.parse('2014-08-16')
         item_10101.manifestation.publication_place.should eq '東京'
 
-        item_10102 = Item.where(:item_identifier => '10102').first
+        item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10102.manifestation.language.name.should eq 'Japanese'
 
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
-        item = Item.where(:item_identifier => '11111').first
+        item = Item.where(item_identifier: '11111').first
         item.shelf.name.should eq Shelf.find(3).name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
 
-        item_10103 = Item.where(:item_identifier => '10103').first
+        item_10103 = Item.where(item_identifier: '10103').first
         item_10103.budget_type.should be_nil
         item_10103.bookstore.name.should eq 'Example store'
 
-        item_10104 = Item.where(:item_identifier => '10104').first
+        item_10104 = Item.where(item_identifier: '10104').first
         item_10104.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10104.budget_type.name.should eq 'Public fund'
         item_10104.bookstore.should be_nil
+        item_10104.call_number.should eq '007|A'
 
         manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
@@ -97,7 +98,7 @@ describe ResourceImportFile do
 
     describe "when it is written in shift_jis" do
       before(:each) do
-        @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
+        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
         @file.user = users(:admin)
       end
 
@@ -107,7 +108,7 @@ describe ResourceImportFile do
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
         @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
-        manifestation = Item.where(:item_identifier => '11111').first.manifestation
+        manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
@@ -115,13 +116,13 @@ describe ResourceImportFile do
         Item.count.should eq old_items_count + 6
         Agent.count.should eq old_agents_count + 9
         ResourceImportResult.count.should eq old_import_results_count + 17
-        Item.where(:item_identifier => '10101').first.manifestation.creators.size.should eq 2
-        Item.where(:item_identifier => '10101').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
-        Item.where(:item_identifier => '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
-        Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
+        Item.where(item_identifier: '10101').first.manifestation.creators.size.should eq 2
+        Item.where(item_identifier: '10101').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
+        Item.where(item_identifier: '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
+        Item.where(item_identifier: '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
-        item = Item.where(:item_identifier => '11111').first
-        item.shelf.name.should eq Shelf.where(:name => 'first_shelf').first.name
+        item = Item.where(item_identifier: '11111').first
+        item.shelf.name.should eq Shelf.where(name: 'web').first.name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
@@ -133,7 +134,7 @@ describe ResourceImportFile do
 
     describe "when it has only isbn" do
       before(:each) do
-        @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
+        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
         @file.user = users(:admin)
       end
 
@@ -150,17 +151,17 @@ describe ResourceImportFile do
 
   describe "when its mode is 'update'" do
     it "should update items", vcr: true do
-      @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), :edit_mode => 'update'
+      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
       @file.modify
-      Item.where(:item_identifier => '00001').first.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
-      Item.where(:item_identifier => '00002').first.manifestation.publishers.collect(&:full_name).should eq ['test2']
-      Item.where(:item_identifier => '00003').first.manifestation.original_title.should eq 'テスト3'
-      Item.where(:item_identifier => '00003').first.acquired_at.should eq Time.zone.parse('2012-01-01')
+      Item.where(item_identifier: '00001').first.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      Item.where(item_identifier: '00002').first.manifestation.publishers.collect(&:full_name).should eq ['test2']
+      Item.where(item_identifier: '00003').first.manifestation.original_title.should eq 'テスト3'
+      Item.where(item_identifier: '00003').first.acquired_at.should eq Time.zone.parse('2012-01-01')
     end
 
     it "should update series_statement", vcr: true do
       manifestation = Manifestation.find(10)
-      file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), :edit_mode => 'update'
+      file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
       file.modify
       #manifestation.reload
       #manifestation.series_statements.should eq [SeriesStatement.find(2)]
@@ -170,14 +171,14 @@ describe ResourceImportFile do
   describe "when its mode is 'destroy'" do
     it "should remove items", vcr: true do
       old_count = Item.count
-      @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), :edit_mode => 'destroy'
+      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
       @file.remove
       Item.count.should eq old_count - 2
     end
   end
 
   it "should import in background", vcr: true do
-    file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
+    file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
     ResourceImportFileQueue.perform(file.id).should be_truthy
