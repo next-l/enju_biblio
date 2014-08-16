@@ -19,15 +19,15 @@ http_interactions:
       message: OK
     headers:
       date:
-      - Wed, 23 Jul 2014 09:41:38 GMT
+      - Sat, 16 Aug 2014 12:21:48 GMT
       server:
       - Apache
       etag:
-      - '"a3cab3195c8a1f5ed570cf919329dd38"'
+      - '"f6ed27b8e85a20ba45b23d8f4f32af76"'
       x-ua-compatible:
       - IE=Edge,chrome=1
       x-runtime:
-      - '0.223956'
+      - '0.151745'
       cache-control:
       - max-age=0, private, must-revalidate
       status:
@@ -35,9 +35,9 @@ http_interactions:
       content-type:
       - application/xml; charset=utf-8
       set-cookie:
-      - _front_session_id=d72820a65757ef8147eafcd4c9c46506; domain=.iss.ndl.go.jp;
-        path=/; expires=Wed, 23-Jul-2014 10:41:38 GMT; HttpOnly
-      - serverid=1101; path=/
+      - _front_session_id=b885b71b052db513d5e5a310007a8e28; domain=.iss.ndl.go.jp;
+        path=/; expires=Sat, 16-Aug-2014 13:21:48 GMT; HttpOnly
+      - serverid=1102; path=/
       vary:
       - Accept-Encoding,User-Agent
       content-encoding:
@@ -47,7 +47,7 @@ http_interactions:
       x-frame-options:
       - SAMEORIGIN
       content-length:
-      - '1314'
+      - '1312'
       connection:
       - close
     body:
@@ -66,9 +66,9 @@ http_interactions:
         ZS8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4NDc5ODAwMjA2NCBp
         c3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4Eg
         T3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5n
-        by5qcC9hcGkvb3BlbnNlYXJjaD9jbnQ9MTAmYW1wO2lkeD0xJmFtcDttZWRp
-        YXR5cGU9MSZhbXA7aXNibj05Nzg0Nzk4MDAyMDY0JmFtcDtkcGlkPWlzcy1u
-        ZGwtb3BhYzwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0
+        by5qcC9hcGkvb3BlbnNlYXJjaD9tZWRpYXR5cGU9MSZhbXA7aWR4PTEmYW1w
+        O2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTAmYW1wO2lzYm49OTc4NDc5
+        ODAwMjA2NDwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0
         cyBmb3IgaXNibj05Nzg0Nzk4MDAyMDY0IG1lZGlhdHlwZT0xIGNudD0xMCBk
         cGlkPWlzcy1uZGwtb3BhYyA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdl
         PmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4x
@@ -130,7 +130,7 @@ http_interactions:
         a2EubGcuanAvd2Vib3BhY19pX2phLzAwMTAxOTY3NzkiLz4KICAgIDwvaXRl
         bT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
     http_version: '1.0'
-  recorded_at: Wed, 23 Jul 2014 09:41:38 GMT
+  recorded_at: Sat, 16 Aug 2014 12:21:50 GMT
 - request:
     method: get
     uri: http://iss.ndl.go.jp/books/R100000002-I000003046546-00.rdf
@@ -150,7 +150,7 @@ http_interactions:
       message: OK
     headers:
       date:
-      - Wed, 23 Jul 2014 09:41:39 GMT
+      - Sat, 16 Aug 2014 12:21:48 GMT
       server:
       - Apache
       etag:
@@ -158,7 +158,7 @@ http_interactions:
       x-ua-compatible:
       - IE=Edge,chrome=1
       x-runtime:
-      - '0.479383'
+      - '0.505788'
       cache-control:
       - max-age=0, private, must-revalidate
       status:
@@ -166,9 +166,9 @@ http_interactions:
       content-type:
       - application/rdf+xml; charset=utf-8
       set-cookie:
-      - _front_session_id=08313fdb265d70530f85b68001eae58e; domain=.iss.ndl.go.jp;
-        path=/; expires=Wed, 23-Jul-2014 10:41:39 GMT; HttpOnly
-      - serverid=1102; path=/
+      - _front_session_id=b3686ba552dd7653e9862efd351e17bf; domain=.iss.ndl.go.jp;
+        path=/; expires=Sat, 16-Aug-2014 13:21:49 GMT; HttpOnly
+      - serverid=1105; path=/
       vary:
       - Accept-Encoding,User-Agent
       content-encoding:
@@ -429,5 +429,5 @@ http_interactions:
         ICAgIDxkY25kbDpjYWxsTnVtYmVyPjU0Ny44NHx844Oo44KvfHwyMDAxPC9k
         Y25kbDpjYWxsTnVtYmVyPgogIDwvZGNuZGw6SXRlbT4KPC9yZGY6UkRGPg==
     http_version: '1.0'
-  recorded_at: Wed, 23 Jul 2014 09:41:39 GMT
+  recorded_at: Sat, 16 Aug 2014 12:21:50 GMT
 recorded_with: VCR 2.9.2

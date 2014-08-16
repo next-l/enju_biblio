@@ -139,6 +139,7 @@ describe ResourceImportFile do
         @file.import_start
         Manifestation.count.should eq old_manifestations_count + 1
         Agent.count.should eq old_agents_count + 4
+        Manifestation.order(:id).last.publication_place.should eq '東京'
       end
     end
   end
