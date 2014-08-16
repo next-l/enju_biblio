@@ -60,7 +60,7 @@
 
 <p>
   <strong><%= t('activerecord.models.user') -%>:</strong>
-  <%= link_to @agent_import_file.user.username, @agent_import_file.user -%>
+  <%= link_to @agent_import_file.user.username, @agent_import_file.user.profile if @agent_import_file.user.try(:profile) -%>
 </p>
 
 </div>

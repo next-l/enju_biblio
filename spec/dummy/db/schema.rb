@@ -50,7 +50,6 @@ ActiveRecord::Schema.define(:version => 20140813182425) do
   create_table "agent_import_results", :force => true do |t|
     t.integer  "agent_import_file_id"
     t.integer  "agent_id"
-    t.integer  "user_id"
     t.text     "body"
     t.datetime "created_at",           :null => false
     t.datetime "updated_at",           :null => false

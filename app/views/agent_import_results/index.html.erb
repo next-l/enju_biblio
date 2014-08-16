@@ -11,7 +11,6 @@
   <tr>
     <th><%= t('activerecord.models.agent_import_file') %></th>
     <th><%= t('activerecord.models.agent') %></th>
-    <th><%= t('activerecord.models.user') %></th>
     <th></th>
   </tr>
 
@@ -23,7 +22,6 @@
       <%=l agent_import_result.created_at %>
     </td>
     <td><%= link_to agent_import_result.agent.full_name, agent_import_result.agent if agent_import_result.agent %></td>
-    <td><%= link_to agent_import_result.user.username, agent_import_result.user if agent_import_result.user %></td>
     <td>
       <%= link_to t('page.show'), agent_import_result %>
       <%= link_to t('page.destroy'), agent_import_result, data: {confirm: t('page.are_you_sure')}, method: :delete %>

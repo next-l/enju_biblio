@@ -77,19 +77,6 @@ class AgentImportFile < ActiveRecord::Base
         end
       end
 
-      #unless row['username'].to_s.strip.blank?
-      #  user = User.new
-      #  user.agent = agent
-      #  set_user_value(user, row)
-      #  if user.password.blank?
-      #    user.set_auto_generated_password
-      #  end
-      #  if user.save!
-      #    import_result.user = user
-      #  end
-      #  num[:user_imported] += 1
-      #end
-
       import_result.save!
     end
     Sunspot.commit
@@ -118,13 +105,6 @@ class AgentImportFile < ActiveRecord::Base
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      #user = User.where(:user_number => row['user_number'].to_s.strip).first
-      #if user.try(:agent)
-      #  set_agent_value(user.agent, row)
-      #  user.agent.save!
-      #  set_user_value(user, row)
-      #  user.save!
-      #end
       agent = Agent.where(id: row['id']).first
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
@@ -234,32 +214,6 @@ class AgentImportFile < ActiveRecord::Base
     agent.country = country if country
     agent
   end
-
-  #def set_user_value(user, row)
-  #  user.operator = User.find(1)
-  #  email = row['email'].to_s.strip
-  #  if email.present?
-  #    user.email = email
-  #    user.email_confirmation = email
-  #  end
-  #  password = row['password'].to_s.strip
-  #  if password.present?
-  #    user.password = password
-  #    user.password_confirmation = password
-  #  end
-  #  user.username = row['username'] if row['username']
-  #  user.user_number = row['user_number'] if row['user_number']
-  #  library = Library.where(name: row['library_short_name'].to_s.strip).first || Library.web
-  #  user_group = UserGroup.where(name: row['user_group_name']).first || UserGroup.first
-  #  user.library = library
-  #  role = Role.where(name: row['role'].to_s.strip.camelize).first || Role.find('User')
-  #  user.role = role
-  #  required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
-  #  user.required_role = required_role
-  #  locale = Language.where(:iso_639_1 => row['locale'].to_s.strip).first
-  #  user.locale = locale || I18n.default_locale.to_s
-  #  user
-  #end
 end
 
 # == Schema Information
