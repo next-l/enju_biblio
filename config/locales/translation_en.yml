@@ -195,9 +195,9 @@ en:
       country:
         name: Name
         display_name: Display name
-        alpha_2: Alpha 2
-        alpha_3: Alpha 3
-        numeric_3: Numeric 3
+        alpha_2: ISO 3166-1 alpha-2
+        alpha_3: ISO 3166-1 alpha-3
+        numeric_3: ISO 3166-1 numeric
         note: Note
         position: Position
       medium_of_performance:
