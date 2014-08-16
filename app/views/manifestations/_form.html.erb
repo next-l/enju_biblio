@@ -2,19 +2,15 @@
 <%= simple_nested_form_for(@manifestation, html: { multipart: true }) do |f| -%>
   <%= f.error_messages -%>
 
-  <% if @manifestation.original_manifestations.exists? %>
+  <% if @manifestation.original_manifestations.exists? or @parent %>
     <%= f.label :parent_id -%><br />
     <ul>
+      <% if @parent %>
+        <li><%= render 'show_parent_form', manifestation: @parent %></li>
+      <% end %>
       <% @manifestation.original_manifestations.each do |manifestation| %>
         <li>
-          <%= link_to manifestation.original_title, manifestation %>
-          <% if manifestation.periodical? %>
-            <%= image_tag('icons/newspaper.png', size: '16x16', alt: t('manifestation.serial')) -%>
-          <%- end -%>
-          <%= link_to form_icon(manifestation.carrier_type), manifestation -%>
-          <%= manifestation.statement_of_responsibility %>
-          <% if manifestation.year_of_publication.present? %>
-            (<%= manifestation.year_of_publication %>)
+          <% if manifestation != @parent %>
           <% end %>
         </li>
       <% end %>

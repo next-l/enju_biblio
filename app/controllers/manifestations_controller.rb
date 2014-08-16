@@ -435,12 +435,12 @@ class ManifestationsController < ApplicationController
   def new
     @manifestation = Manifestation.new
     @manifestation.language = Language.where(:iso_639_1 => @locale).first
-    parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
-    if parent
-      @manifestation.parent_id = parent.id
-      @manifestation.original_title = parent.original_title
-      @manifestation.title_transcription = parent.title_transcription
-      @manifestation.periodical = true if parent.periodical
+    @parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
+    if @parent
+      @manifestation.parent_id = @parent.id
+      @manifestation.original_title = @parent.original_title
+      @manifestation.title_transcription = @parent.title_transcription
+      @manifestation.periodical = true if @parent.periodical
     end
 
     respond_to do |format|
