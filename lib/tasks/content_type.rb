@@ -6,14 +6,14 @@ def update_content_type
     case l["name"]
     when "text"
     when "performed_music"
-    content_type = ContentType.where(name: 'audio').first
-    content_type.update_attributes!(l) if content_type
+      content_type = ContentType.where(name: 'audio').first
+      content_type.update_attributes!(l) if content_type
     when "two_dimensional_moving_image"
-    content_type = ContentType.where(name: 'video').first
-    content_type.update_attributes!(l) if content_type
+      content_type = ContentType.where(name: 'video').first
+      content_type.update_attributes!(l) if content_type
     end
 
-    content_type = ContentType.where(name: l["name"])
+    content_type = ContentType.where(name: l["name"]).first
     ContentType.create!(l) unless content_type
   end
 end
