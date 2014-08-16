@@ -43,7 +43,6 @@ describe ResourceImportFile do
         item_10101.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10101.budget_type.name.should eq 'Public fund'
         item_10101.bookstore.name.should eq 'Example store'
-        item_10101.bookstore.name.should eq 'Example store'
         item_10101.manifestation.classifications.count.should eq 1
         item_10101.manifestation.classifications.first.classification_type.name.should eq 'ndc'
         item_10101.manifestation.classifications.first.category.should eq '007'
@@ -53,6 +52,7 @@ describe ResourceImportFile do
         item_10101.binding_call_number.should eq '330|A'
         item_10101.binded_at.should eq Time.zone.parse('2014-08-16')
         item_10101.manifestation.publication_place.should eq '東京'
+        item_10101.include_supplements.should eq true
 
         item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
@@ -153,10 +153,18 @@ describe ResourceImportFile do
     it "should update items", vcr: true do
       @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
       @file.modify
-      Item.where(item_identifier: '00001').first.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      item_00001 = Item.where(item_identifier: '00001').first
+      item_00001.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      item_00001.binding_item_identifier.should eq '900001'
+      item_00001.binding_call_number.should eq '336|A'
+      item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
       Item.where(item_identifier: '00002').first.manifestation.publishers.collect(&:full_name).should eq ['test2']
-      Item.where(item_identifier: '00003').first.manifestation.original_title.should eq 'テスト3'
-      Item.where(item_identifier: '00003').first.acquired_at.should eq Time.zone.parse('2012-01-01')
+
+      item_00003 = Item.where(item_identifier: '00003').first
+      item_00003.acquired_at.should eq Time.zone.parse('2012-01-01')
+      item_00003.include_supplements.should be_truthy
+
+      Item.where(item_identifier: '00004').first.include_supplements.should be_falsy
     end
 
     it "should update series_statement", vcr: true do

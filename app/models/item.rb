@@ -33,7 +33,8 @@ class Item < ActiveRecord::Base
   validates :url, url: true, allow_blank: true, length: {:maximum => 255}
   validates_date :acquired_at, allow_blank: true
 
-  normalize_attributes :item_identifier, :binding_item_identifier
+  normalize_attributes :item_identifier, :binding_item_identifier,
+    :call_number, :binding_call_number
 
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher,

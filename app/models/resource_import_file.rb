@@ -276,11 +276,27 @@ class ResourceImportFile < ActiveRecord::Base
         item.bookstore = bookstore if bookstore
         item.required_role = required_role if required_role
         item.use_restriction = use_restriction if use_restriction
-        item.include_supplements = row['include_supplements'] if row['include_supplements']
-        item.call_number = row['call_number'] if row['call_number']
-        item.item_price = row['item_price'] if row['item_price']
-        item.acquired_at = row['acquired_at'] if row['acquired_at']
-        item.note = row['note'] if row['note']
+
+        acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
+        binded_at = Time.zone.parse(row['binded_at']) rescue nil
+        item.acquired_at = acquired_at if acquired_at
+        item.binded_at = binded_at if binded_at
+
+        item_columns = %w(
+          call_number item_price note
+          binding_item_identifier binding_call_number binded_at
+        )
+        item_columns.each do |column|
+          item.assign_attributes(:"#{column}" => row[column], as: :admin)
+        end
+
+        if row['include_supplements']
+          if %w(t true).include?(row['include_supplements'].downcase.strip)
+            item.include_supplements = true
+          else
+            item.include_supplements = false if item.include_supplements
+          end
+        end
         item.save!
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
@@ -369,7 +385,7 @@ class ResourceImportFile < ActiveRecord::Base
       language fulltext_content required_role doi
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at
-      use_restriction
+      use_restriction include_supplements
       dummy
     )
     if defined?(EnjuSubject)
@@ -445,6 +461,10 @@ class ResourceImportFile < ActiveRecord::Base
     item.bookstore = bookstore
     item.budget_type = budget_type
     item.shelf = shelf
+
+    if %w(t true).include?(row['include_supplements'].to_s.downcase.strip)
+      item.include_supplements = true
+    end
     item
   end
 
@@ -503,11 +523,11 @@ class ResourceImportFile < ActiveRecord::Base
       end_page = nil
     end
 
-    if row['fulltext_content'].to_s.downcase.strip == "t"
+    if %w(t true).include?(row['fulltext_content'].to_s.downcase.strip)
       fulltext_content = true
     end
 
-    if row['periodical'].to_s.downcase.strip == "t"
+    if %w(t true).include?(row['periodical'].to_s.downcase.strip)
       periodical = true
     end
 
