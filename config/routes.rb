@@ -80,13 +80,9 @@ Rails.application.routes.draw do
   resources :manifestation_relationship_types
   resources :manifestation_relationships
 
-  resources :resource_import_files do
-    resources :resource_import_results, :only => [:index, :show, :destroy]
-  end
-  resources :resource_import_results
-  resources :agent_import_files do
-    resources :agent_import_results, :only => [:index, :show, :destroy]
-  end
+  resources :resource_import_files
+  resources :resource_import_results, :only => [:index, :show, :destroy]
+  resources :agent_import_files
   resources :agent_import_results, :only => [:index, :show, :destroy]
 
   resources :import_requests

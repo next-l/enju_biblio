@@ -6,8 +6,11 @@
   <tr>
     <th id="position"></th>
     <th><%= t('activerecord.attributes.carrier_type.name') -%></th>
-    <th><%= t('activerecord.attributes.carrier_type.display_name') -%></th>
-    <th><%= t('activerecord.attributes.carrier_type.note') -%></th>
+    <th>
+      <%= t('activerecord.attributes.carrier_type.display_name') -%>
+      /
+      <%= t('activerecord.attributes.carrier_type.note') -%>
+    </th>
     <th></th>
   </tr>
 
@@ -18,9 +21,12 @@
         <%= move_position(carrier_type) -%>
       <%- end -%>
     </td>
-    <td><%= link_to carrier_type.name, carrier_type -%></td>
-    <td><%= link_to carrier_type.display_name.localize, carrier_type -%></td>
-    <td><%= carrier_type.note -%></td>
+    <td><%= carrier_type.name -%></td>
+    <td>
+      <%= link_to carrier_type.display_name.localize, carrier_type -%>
+      <br />
+      <%= carrier_type.note %>
+    </td>
     <td>
       <%- if can? :update, carrier_type -%>
         <%= link_to t('page.edit'), edit_carrier_type_path(carrier_type) -%>
@@ -38,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, CarrierType -%>
+    <%- if can? :create, ContentType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.carrier_type')), new_carrier_type_path -%></li>
     <%- end -%>
   </ul>

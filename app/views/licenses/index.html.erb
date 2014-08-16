@@ -1,12 +1,16 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
+<div id="carrier_detail" class="ui-corner-all ui-widget-carrier">
 <h1 class="title"><%= t('page.listing', model: t('activerecord.models.license')) -%></h1>
-<div id="content_list">
+<div id="carrier_list">
 
 <table class="table table-striped index">
   <tr>
     <th id="position"></th>
     <th><%= t('activerecord.attributes.license.name') -%></th>
-    <th><%= t('activerecord.attributes.license.note') -%></th>
+    <th>
+      <%= t('activerecord.attributes.license.display_name') -%>
+      /
+      <%= t('activerecord.attributes.license.note') -%>
+    </th>
     <th></th>
   </tr>
 
@@ -17,30 +21,31 @@
         <%= move_position(license) -%>
       <%- end -%>
     </td>
+    <td><%= license.name -%></td>
     <td>
       <%= link_to license.display_name.localize, license -%>
       <br />
-      (<%= link_to license.name, license -%>)
+      <%= license.note %>
     </td>
-    <td><%= license.note -%></td>
     <td>
       <%- if can? :update, license -%>
         <%= link_to t('page.edit'), edit_license_path(license) -%>
       <% end %>
       <%- if can? :delete, license -%>
-        <%= link_to t('page.destroy'), license, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
+        <%= link_to t('page.destroy'), license_path(license), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
 <%- end -%>
 </table>
 
-<%= paginate(@licenses) -%>
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div id="submenu" class="ui-corner-all ui-widget-carrier">
   <ul>
-    <li><%= link_to t('page.new', model: t('activerecord.models.license')), new_license_path -%></li>
+    <%- if can? :create, ContentType -%>
+      <li><%= link_to t('page.new', model: t('activerecord.models.license')), new_license_path -%></li>
+    <%- end -%>
   </ul>
 </div>

@@ -1,12 +1,16 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
+<div id="carrier_detail" class="ui-corner-all ui-widget-carrier">
 <h1 class="title"><%= t('page.listing', model: t('activerecord.models.frequency')) -%></h1>
-<div id="content_list">
+<div id="carrier_list">
 
 <table class="table table-striped index">
   <tr>
     <th id="position"></th>
     <th><%= t('activerecord.attributes.frequency.name') -%></th>
-    <th><%= t('activerecord.attributes.frequency.display_name') -%></th>
+    <th>
+      <%= t('activerecord.attributes.frequency.display_name') -%>
+      /
+      <%= t('activerecord.attributes.frequency.note') -%>
+    </th>
     <th></th>
   </tr>
 
@@ -17,14 +21,18 @@
         <%= move_position(frequency) -%>
       <%- end -%>
     </td>
-    <td><%= link_to frequency.name, frequency -%></td>
-    <td><%= link_to frequency.display_name.localize, frequency -%></td>
+    <td><%= frequency.name -%></td>
+    <td>
+      <%= link_to frequency.display_name.localize, frequency -%>
+      <br />
+      <%= frequency.note %>
+    </td>
     <td>
       <%- if can? :update, frequency -%>
         <%= link_to t('page.edit'), edit_frequency_path(frequency) -%>
       <% end %>
       <%- if can? :delete, frequency -%>
-        <%= link_to t('page.destroy'), frequency, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
+        <%= link_to t('page.destroy'), frequency_path(frequency), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -34,10 +42,10 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div id="submenu" class="ui-corner-all ui-widget-carrier">
   <ul>
-    <%- if can? :create, Frequency -%>
+    <%- if can? :create, ContentType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.frequency')), new_frequency_path -%></li>
     <%- end -%>
- </ul>
+  </ul>
 </div>

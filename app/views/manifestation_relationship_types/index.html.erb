@@ -1,13 +1,16 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
+<div id="manifestation_relationship_detail" class="ui-corner-all ui-widget-manifestation_relationship">
 <h1 class="title"><%= t('page.listing', model: t('activerecord.models.manifestation_relationship_type')) -%></h1>
-<div id="content_list">
+<div id="manifestation_relationship_list">
 
 <table class="table table-striped index">
   <tr>
     <th id="position"></th>
     <th><%= t('activerecord.attributes.manifestation_relationship_type.name') -%></th>
-    <th><%= t('activerecord.attributes.manifestation_relationship_type.display_name') -%></th>
-    <th><%= t('activerecord.attributes.manifestation_relationship_type.note') -%></th>
+    <th>
+      <%= t('activerecord.attributes.manifestation_relationship_type.display_name') -%>
+      /
+      <%= t('activerecord.attributes.manifestation_relationship_type.note') -%>
+    </th>
     <th></th>
   </tr>
 
@@ -18,16 +21,19 @@
         <%= move_position(manifestation_relationship_type) -%>
       <%- end -%>
     </td>
-    <td><%= link_to manifestation_relationship_type.name, manifestation_relationship_type -%></td>
-    <td><%= link_to manifestation_relationship_type.display_name.localize, manifestation_relationship_type -%></td>
-    <td><%= manifestation_relationship_type.note -%></td>
+    <td><%= manifestation_relationship_type.name -%></td>
+    <td>
+      <%= link_to manifestation_relationship_type.display_name.localize, manifestation_relationship_type -%>
+      <br />
+      <%= manifestation_relationship_type.note %>
+    </td>
     <td>
       <%- if can? :update, manifestation_relationship_type -%>
         <%= link_to t('page.edit'), edit_manifestation_relationship_type_path(manifestation_relationship_type) -%>
       <% end %>
       <%- if can? :delete, manifestation_relationship_type -%>
-        <%= link_to t('page.destroy'), manifestation_relationship_type, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
-      <% end %>
+        <%= link_to t('page.destroy'), manifestation_relationship_type_path(manifestation_relationship_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
+      <%- end -%>
     </td>
   </tr>
 <%- end -%>
@@ -36,8 +42,10 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div id="submenu" class="ui-corner-all ui-widget-manifestation_relationship">
   <ul>
-    <li><%= link_to t('page.new', model: t('activerecord.models.manifestation_relationship_type')), new_manifestation_relationship_type_path -%></li>
+    <%- if can? :create, ContentType -%>
+      <li><%= link_to t('page.new', model: t('activerecord.models.manifestation_relationship_type')), new_manifestation_relationship_type_path -%></li>
+    <%- end -%>
   </ul>
 </div>
