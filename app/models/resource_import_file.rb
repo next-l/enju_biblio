@@ -9,13 +9,13 @@ class ResourceImportFile < ActiveRecord::Base
   scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :resource_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
+    has_attached_file :resource_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
       :s3_permissions => :private
   else
     has_attached_file :resource_import,
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
-  validates_attachment_content_type :resource_import, :content_type => [
+  validates_attachment_content_type :resource_import, content_type: [
     'text/csv',
     'text/plain',
     'text/tab-separated-values',
@@ -86,21 +86,21 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          manifestation = Manifestation.where(:doi => doi).first
+          manifestation = Manifestation.where(doi: doi).first
         end
       end
 
       unless manifestation
         if row['jpno'].present?
           jpno = row['jpno'].to_s.strip
-          manifestation = Identifier.where(body: 'jpno', :identifier_type_id => IdentifierType.where(name: 'jpno').first_or_create.id).first.try(:manifestation)
+          manifestation = Identifier.where(body: 'jpno', identifier_type_id: IdentifierType.where(name: 'jpno').first_or_create.id).first.try(:manifestation)
         end
       end
 
       unless manifestation
         if row['isbn'].present?
           isbn = StdNum::ISBN.normalize(row['isbn'])
-          m = Identifier.where(body: isbn, :identifier_type_id => IdentifierType.where(name: 'isbn').first_or_create.id).first.try(:manifestation)
+          m = Identifier.where(body: isbn, identifier_type_id: IdentifierType.where(name: 'isbn').first_or_create.id).first.try(:manifestation)
         end
         if m
           if m.series_statements.exists?
@@ -368,7 +368,8 @@ class ResourceImportFile < ActiveRecord::Base
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi
       statement_of_responsibility acquired_at call_number circulation_status
-      use_restriction binding_item_identifier
+      binding_item_identifier binding_call_number binded_at
+      use_restriction
       dummy
     )
     if defined?(EnjuSubject)
@@ -421,13 +422,16 @@ class ResourceImportFile < ActiveRecord::Base
     bookstore = Bookstore.where(name: row['bookstore'].to_s.strip).first
     budget_type = BudgetType.where(name: row['budget_type'].to_s.strip).first
     acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
+    binded_at = Time.zone.parse(row['binded_at']) rescue nil
     item = self.class.import_item(manifestation, {
       manifestation_id: manifestation.id,
       item_identifier: row['item_identifier'],
       price: row['item_price'],
       call_number: row['call_number'].to_s.strip,
       acquired_at: acquired_at,
-      binding_item_identifier: row['binding_item_identifier']
+      binding_item_identifier: row['binding_item_identifier'],
+      binding_call_number: row['binding_call_number'],
+      binded_at: binded_at
     })
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(name: row['circulation_status'].to_s.strip).first || CirculationStatus.where(name: 'In Process').first
@@ -490,19 +494,7 @@ class ResourceImportFile < ActiveRecord::Base
     
     carrier_type = CarrierType.where(name: row['carrier_type'].to_s.strip).first
 
-    identifier = {}
-    if row['isbn']
-      identifier[:isbn] = Identifier.new(body: row['isbn'])
-      identifier[:isbn].identifier_type = IdentifierType.where(name: 'isbn').first_or_create
-    end
-    if row['jpno']
-      identifier[:jpno] = Identifier.new(body: row['jpno'])
-      identifier[:jpno].identifier_type = IdentifierType.where(name: 'jpno').first_or_create
-    end
-    if row['issn']
-      identifier[:issn] = Identifier.new(body: row['issn'])
-      identifier[:issn].identifier_type = IdentifierType.where(name: 'issn').first_or_create
-    end
+    identifier = set_identifier(row)
 
     if end_page >= 1
       start_page = 1
@@ -576,7 +568,8 @@ class ResourceImportFile < ActiveRecord::Base
         :end_page => end_page,
         :access_address => row['access_address'],
         :manifestation_identifier => row['manifestation_identifier'],
-        :fulltext_content => fulltext_content
+        :fulltext_content => fulltext_content,
+        :publication_place => row['publication_place']
       }.delete_if{|key, value| value.nil?}
       manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,
       {
@@ -646,6 +639,23 @@ class ResourceImportFile < ActiveRecord::Base
 
   def self.transition_class
     ResourceImportFileTransition
+  end
+
+  def set_identifier(row)
+    identifier = {}
+    if row['isbn']
+      identifier[:isbn] = Identifier.new(body: row['isbn'])
+      identifier[:isbn].identifier_type = IdentifierType.where(name: 'isbn').first_or_create
+    end
+    if row['jpno']
+      identifier[:jpno] = Identifier.new(body: row['jpno'])
+      identifier[:jpno].identifier_type = IdentifierType.where(name: 'jpno').first_or_create
+    end
+    if row['issn']
+      identifier[:issn] = Identifier.new(body: row['issn'])
+      identifier[:issn].identifier_type = IdentifierType.where(name: 'issn').first_or_create
+    end
+    identifier
   end
 end
 

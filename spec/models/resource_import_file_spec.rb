@@ -50,11 +50,14 @@ describe ResourceImportFile do
         item_10101.manifestation.language.name.should eq 'Japanese'
         item_10101.manifestation.statement_of_responsibility.should eq '著者A; 著者B'
         item_10101.binding_item_identifier.should eq '9001'
+        item_10101.binding_call_number.should eq '330|A'
+        item_10101.binded_at.should eq Time.zone.parse('2014-08-16')
+        item_10101.manifestation.publication_place.should eq '東京'
 
         item_10102 = Item.where(:item_identifier => '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10102.manifestation.language.name.should eq 'Japanese'
-        Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
+
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(:item_identifier => '11111').first
         item.shelf.name.should eq Shelf.find(3).name
@@ -67,6 +70,7 @@ describe ResourceImportFile do
         item_10103.bookstore.name.should eq 'Example store'
 
         item_10104 = Item.where(:item_identifier => '10104').first
+        item_10104.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10104.budget_type.name.should eq 'Public fund'
         item_10104.bookstore.should be_nil
 
