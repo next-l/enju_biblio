@@ -9,10 +9,9 @@
         <li><%= render 'show_parent_form', manifestation: @parent %></li>
       <% end %>
       <% @manifestation.original_manifestations.each do |manifestation| %>
-        <li>
-          <% if manifestation != @parent %>
-          <% end %>
-        </li>
+        <% if manifestation != @parent %>
+          <li><%= render 'show_parent_form', manifestation: @manifestation %></li>
+        <% end %>
       <% end %>
     </ul>
   <% end %>
