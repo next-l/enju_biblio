@@ -24,7 +24,7 @@ class Manifestation < ActiveRecord::Base
     :series_statements_attributes, :periodical, :statement_of_responsibility,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes
-  attr_accessible :fulltext_content,
+  attr_accessible :fulltext_content, :extent_of_text,
     :doi, :number_of_page_string, :parent_id
 
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
@@ -617,4 +617,5 @@ end
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
+#  extent_of_text                  :text
 #
