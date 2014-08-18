@@ -372,7 +372,9 @@ class ResourceImportFile < ActiveRecord::Base
       title_transcription title_alternative title_alternative_transcription
       periodical manifestation_id publication_place carrier_type
       series_statement_identifier series_original_title series_creator_string
-      series_title_transcription creator creator_transcription publisher
+      series_title_transcription series_volume_number_string
+      series_title_subseries series_title_subseries_transcription
+      creator creator_transcription publisher
       publisher_transcription pub_date creator creator_transcription
       contributor contributor_transcription description access_address
       volume_number volume_number_string issue_number issue_number_string
@@ -617,18 +619,18 @@ class ResourceImportFile < ActiveRecord::Base
           if manifestation.series_statements.exists?
             manifestation.series_statements.delete_all
           end
-          series_title = row['series_original_title'].split('//')
-          series_title_transcription = row['series_title_transcription'].split('//')
-          series_statement = SeriesStatement.new(
-            :original_title => series_title[0],
-            :title_transcription => series_title_transcription[0],
-            :title_subseries => "#{series_title[1]} #{series_title[2]}",
-            :title_subseries_transcription => "#{series_title_transcription[1]} #{series_title_transcription[2]}",
-            :volume_number_string => series_title[0],
-            :creator_string => row['series_creator_string'],
-          )
-          series_statement.manifestation = manifestation
-          series_statement.save!
+          if row['series_original_title']
+            series_statement = SeriesStatement.new(
+              :original_title => row['series_original_title'],
+              :title_transcription => row['series_title_transcription'],
+              :title_subseries => row['series_title_subseries'],
+              :title_subseries_transcription => row['series_title_subseries_transcription'],
+              :volume_number_string => row['series_volume_number_string'],
+              :creator_string => row['series_creator_string'],
+            )
+            series_statement.manifestation = manifestation
+            series_statement.save!
+          end
         end
       end
 

@@ -32,8 +32,8 @@ describe ResourceImportFile do
         manifestation_101.series_statements.count.should eq 1
         manifestation_101.series_statements.first.original_title.should eq '主シリーズ'
         manifestation_101.series_statements.first.title_transcription.should eq 'しゅしりーず'
-        manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ 1'
-        manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず いち'
+        manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ'
+        manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず'
 
         item_10101 = Item.where(item_identifier: '10101').first
         item_10101.manifestation.creators.size.should eq 2
@@ -68,6 +68,8 @@ describe ResourceImportFile do
         item_10102.manifestation.depth.should eq 12
         item_10102.manifestation.start_page.should eq 1
         item_10102.manifestation.end_page.should eq 200
+        item_10102.manifestation.series_statements.first.creator_string.should eq 'シリーズの著者'
+        item_10102.manifestation.series_statements.first.volume_number_string.should eq 'シリーズ1号'
 
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(item_identifier: '11111').first
