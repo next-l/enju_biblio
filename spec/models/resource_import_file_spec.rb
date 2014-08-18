@@ -53,6 +53,9 @@ describe ResourceImportFile do
         item_10101.binded_at.should eq Time.zone.parse('2014-08-16')
         item_10101.manifestation.publication_place.should eq '東京'
         item_10101.include_supplements.should eq true
+        item_10101.note.should eq 'カバーなし'
+        item_10101.url.should eq 'http://example.jp/item/1'
+
 
         item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')

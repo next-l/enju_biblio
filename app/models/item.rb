@@ -34,7 +34,7 @@ class Item < ActiveRecord::Base
   validates_date :acquired_at, allow_blank: true
 
   normalize_attributes :item_identifier, :binding_item_identifier,
-    :call_number, :binding_call_number
+    :call_number, :binding_call_number, :url
 
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher,

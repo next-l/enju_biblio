@@ -1,6 +1,7 @@
 require 'active_record/fixtures'
 require 'tasks/carrier_type'
 require 'tasks/content_type'
+require 'tasks/identifier_type'
 require 'tasks/item'
 
 namespace :enju_biblio do
@@ -27,6 +28,7 @@ namespace :enju_biblio do
       update_item
       update_carrier_type
       update_content_type
+      update_identifier_type
     end
     puts 'enju_biblio: The upgrade completed successfully.'
   end

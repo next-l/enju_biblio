@@ -195,13 +195,6 @@ class ResourceImportFile < ActiveRecord::Base
     manifestation
   end
 
-  def self.import_item(manifestation, options)
-    item = Item.new(options)
-    item.shelf = Shelf.web unless item.shelf
-    item.manifestation = manifestation
-    item
-  end
-
   def import_marc(marc_type)
     file = File.open(self.resource_import.path)
     case marc_type
@@ -283,12 +276,15 @@ class ResourceImportFile < ActiveRecord::Base
         item.binded_at = binded_at if binded_at
 
         item_columns = %w(
-          call_number item_price note
+          call_number item_price
           binding_item_identifier binding_call_number binded_at
         )
         item_columns.each do |column|
           item.assign_attributes(:"#{column}" => row[column], as: :admin)
         end
+
+        item.note = row['item_note'] if row['item_note'].present?
+        item.url = row['item_url'] if row['item_url'].present?
 
         if row['include_supplements']
           if %w(t true).include?(row['include_supplements'].downcase.strip)
@@ -385,7 +381,7 @@ class ResourceImportFile < ActiveRecord::Base
       language fulltext_content required_role doi
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at
-      use_restriction include_supplements
+      use_restriction include_supplements item_note item_url
       dummy
     )
     if defined?(EnjuSubject)
@@ -439,7 +435,7 @@ class ResourceImportFile < ActiveRecord::Base
     budget_type = BudgetType.where(name: row['budget_type'].to_s.strip).first
     acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
     binded_at = Time.zone.parse(row['binded_at']) rescue nil
-    item = self.class.import_item(manifestation, {
+    item = Item.new(
       manifestation_id: manifestation.id,
       item_identifier: row['item_identifier'],
       price: row['item_price'],
@@ -447,8 +443,11 @@ class ResourceImportFile < ActiveRecord::Base
       acquired_at: acquired_at,
       binding_item_identifier: row['binding_item_identifier'],
       binding_call_number: row['binding_call_number'],
-      binded_at: binded_at
-    })
+      binded_at: binded_at,
+      url: row['item_url'],
+      note: row['item_note']
+    )
+    item.manifestation = manifestation
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(name: row['circulation_status'].to_s.strip).first || CirculationStatus.where(name: 'In Process').first
       item.circulation_status = circulation_status
@@ -461,6 +460,7 @@ class ResourceImportFile < ActiveRecord::Base
     item.bookstore = bookstore
     item.budget_type = budget_type
     item.shelf = shelf
+    item.shelf = Shelf.web unless item.shelf
 
     if %w(t true).include?(row['include_supplements'].to_s.downcase.strip)
       item.include_supplements = true
