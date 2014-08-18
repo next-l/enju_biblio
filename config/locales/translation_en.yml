@@ -190,7 +190,7 @@ en:
         title_transcription: Title transcription
         note: Note
         series_master: Master
-        volume_nunber_string: Volume number
+        volume_number_string: Volume number
         creator_string: Creator
       country:
         name: Name
