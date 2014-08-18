@@ -86,14 +86,14 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          manifestation = Manifestation.where(doi: doi).first
+          manifestation = Identifier.where(body: doi, identifier_type_id: IdentifierType.where(name: 'doi').first_or_create.id).first.try(:manifestation)
         end
       end
 
       unless manifestation
         if row['jpno'].present?
           jpno = row['jpno'].to_s.strip
-          manifestation = Identifier.where(body: 'jpno', identifier_type_id: IdentifierType.where(name: 'jpno').first_or_create.id).first.try(:manifestation)
+          manifestation = Identifier.where(body: jpno, identifier_type_id: IdentifierType.where(name: 'jpno').first_or_create.id).first.try(:manifestation)
         end
       end
 
