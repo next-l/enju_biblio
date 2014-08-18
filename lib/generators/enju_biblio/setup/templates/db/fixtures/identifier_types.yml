@@ -21,6 +21,13 @@ three:
   position: 3
   id: 3
 
+four:
+  name: doi
+  display_name: DOI
+  note: 
+  position: 4
+  id: 4
+
 # == Schema Information
 #
 # Table name: identifier_types
