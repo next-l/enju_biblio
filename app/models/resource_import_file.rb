@@ -370,7 +370,7 @@ class ResourceImportFile < ActiveRecord::Base
     header_columns = %w(
       original_title manifestation_identifier item_identifier shelf note
       title_transcription title_alternative title_alternative_transcription
-      periodical manifestation_id publication_place
+      periodical manifestation_id publication_place carrier_type
       series_statement_identifier series_original_title series_creator_string
       series_title_transcription creator creator_transcription publisher
       publisher_transcription pub_date creator creator_transcription

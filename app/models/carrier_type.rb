@@ -12,7 +12,7 @@ class CarrierType < ActiveRecord::Base
 
   def mods_type
     case name
-    when 'print'
+    when 'volume'
       'text'
     else
       # TODO: その他のタイプ
