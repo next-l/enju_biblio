@@ -8,7 +8,7 @@
     <%= auto_discovery_link_tag(:rss, url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (RSS)")) %>
     <%= auto_discovery_link_tag(:atom, url_for(params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (Atom)")) %>
   <%- end -%>
-  <% if controller.action_name == 'show' %>
+  <% if %w(show edit).include?(controller.action_name) %>
     <% if Setting.book_jacket.source == :google %>
       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
       <%= render 'manifestations/google_book_thumbnail_header' %>
