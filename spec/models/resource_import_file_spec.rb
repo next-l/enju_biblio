@@ -58,6 +58,7 @@ describe ResourceImportFile do
         item_10101.manifestation.carrier_type.name.should eq 'volume'
         item_10101.manifestation.manifestation_content_type.name.should eq 'text'
         item_10101.manifestation.frequency.name.should eq 'monthly'
+        item_10101.manifestation.extent_of_text.should eq 'xv, 213 pages'
 
         item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
@@ -82,6 +83,13 @@ describe ResourceImportFile do
         item_10104.manifestation.carrier_type.name.should eq 'online_resource'
         item_10104.manifestation.manifestation_content_type.name.should eq 'still_image'
         item_10104.manifestation.frequency.name.should eq 'unknown'
+        item_10104.manifestation.volume_number_string.should eq '第3巻'
+        item_10104.manifestation.volume_number.should eq 3
+        item_10104.manifestation.issue_number_string.should eq '第10号'
+        item_10104.manifestation.issue_number.should eq 10
+        item_10104.manifestation.edition_string.should eq '初版'
+        item_10104.manifestation.edition.should eq 1
+        item_10104.manifestation.serial_number.should eq 120
 
         manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']

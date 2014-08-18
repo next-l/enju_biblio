@@ -375,12 +375,13 @@ class ResourceImportFile < ActiveRecord::Base
       series_title_transcription creator creator_transcription publisher
       publisher_transcription pub_date creator creator_transcription
       contributor contributor_transcription description access_address
-      volume_number_string edition_string issue_number_string
-      edition serial_number isbn issn manifestation_price item_price
+      volume_number volume_number_string issue_number issue_number_string
+      edition edition_string serial_number isbn issn manifestation_price
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
+      extent_of_text
       statement_of_responsibility acquired_at call_number circulation_status
-      binding_item_identifier binding_call_number binded_at
+      binding_item_identifier binding_call_number binded_at item_price
       use_restriction include_supplements item_note item_url
       dummy
     )
@@ -563,9 +564,6 @@ class ResourceImportFile < ActiveRecord::Base
           work.subjects = subjects.uniq unless subjects.empty?
         end
       end
-      if row['volume_number'].present?
-        volume_number = row['volume_number'].to_s.tr('０-９', '0-9').to_i
-      end
 
       attributes = {
         :original_title => title[:original_title],
@@ -573,7 +571,9 @@ class ResourceImportFile < ActiveRecord::Base
         :title_alternative => title[:title_alternative],
         :title_alternative_transcription => title[:title_alternative_transcription],
         :pub_date => row['pub_date'],
-        :volume_number_string => row['volume_number_string'].to_s.split('　').first.try(:tr, '０-９', '0-9'),
+        :volume_number => row['volume_number'],
+        :volume_number_string => row['volume_number_string'],
+        :issue_number => row['issue_number'],
         :issue_number_string => row['issue_number_string'],
         :serial_number => row['serial_number'],
         :edition => row['edition'],
@@ -591,13 +591,13 @@ class ResourceImportFile < ActiveRecord::Base
         :access_address => row['access_address'],
         :manifestation_identifier => row['manifestation_identifier'],
         :fulltext_content => fulltext_content,
-        :publication_place => row['publication_place']
+        :publication_place => row['publication_place'],
+        :extent_of_text => row['extent_of_text']
       }.delete_if{|key, value| value.nil?}
       manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,
       {
         edit_mode: options[:edit_mode]
       })
-      manifestation.volume_number = volume_number if volume_number
 
       required_role = Role.where(name: row['required_role_name'].to_s.strip.camelize).first
       if required_role and row['required_role_name'].present?
