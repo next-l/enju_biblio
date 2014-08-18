@@ -378,7 +378,7 @@ class ResourceImportFile < ActiveRecord::Base
       volume_number_string edition_string issue_number_string
       edition serial_number isbn issn manifestation_price item_price
       width height depth number_of_pages jpno lccn budget_type bookstore
-      language fulltext_content required_role doi
+      language fulltext_content required_role doi content_type frequency
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at
       use_restriction include_supplements item_note item_url
@@ -509,10 +509,12 @@ class ResourceImportFile < ActiveRecord::Base
     depth = NKF.nkf('-eZ1', row['depth'].to_s).gsub(/\D/, '').to_i
     end_page = NKF.nkf('-eZ1', row['number_of_pages'].to_s).gsub(/\D/, '').to_i
     language = Language.where(name: row['language'].to_s.strip.camelize).first
-    language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(:iso_639_1 => row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
     
     carrier_type = CarrierType.where(name: row['carrier_type'].to_s.strip).first
+    content_type = ContentType.where(name: row['content_type'].to_s.strip).first
+    frequency = Frequency.where(name: row['frequency'].to_s.strip).first
 
     identifier = set_identifier(row)
 
@@ -611,6 +613,8 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       manifestation.carrier_type = carrier_type if carrier_type
+      manifestation.manifestation_content_type = content_type if content_type
+      manifestation.frequency = frequency if frequency
 
       Manifestation.transaction do
         manifestation.identifiers.delete_all if manifestation.identifiers.exists?
@@ -663,17 +667,9 @@ class ResourceImportFile < ActiveRecord::Base
 
   def set_identifier(row)
     identifier = {}
-    if row['isbn']
-      identifier[:isbn] = Identifier.new(body: row['isbn'])
-      identifier[:isbn].identifier_type = IdentifierType.where(name: 'isbn').first_or_create
-    end
-    if row['jpno']
-      identifier[:jpno] = Identifier.new(body: row['jpno'])
-      identifier[:jpno].identifier_type = IdentifierType.where(name: 'jpno').first_or_create
-    end
-    if row['issn']
-      identifier[:issn] = Identifier.new(body: row['issn'])
-      identifier[:issn].identifier_type = IdentifierType.where(name: 'issn').first_or_create
+    %w(isbn issn doi jpno).each do |id_type|
+      identifier[:"#{id_type}"] = Identifier.new(body: row["#{id_type}"])
+      identifier[:"#{id_type}"].identifier_type = IdentifierType.where(name: id_type).first_or_create
     end
     identifier
   end

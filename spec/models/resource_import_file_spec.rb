@@ -55,7 +55,9 @@ describe ResourceImportFile do
         item_10101.include_supplements.should eq true
         item_10101.note.should eq 'カバーなし'
         item_10101.url.should eq 'http://example.jp/item/1'
-
+        item_10101.manifestation.carrier_type.name.should eq 'volume'
+        item_10101.manifestation.manifestation_content_type.name.should eq 'text'
+        item_10101.manifestation.frequency.name.should eq 'monthly'
 
         item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
@@ -77,6 +79,9 @@ describe ResourceImportFile do
         item_10104.budget_type.name.should eq 'Public fund'
         item_10104.bookstore.should be_nil
         item_10104.call_number.should eq '007|A'
+        item_10104.manifestation.carrier_type.name.should eq 'online_resource'
+        item_10104.manifestation.manifestation_content_type.name.should eq 'still_image'
+        item_10104.manifestation.frequency.name.should eq 'unknown'
 
         manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
