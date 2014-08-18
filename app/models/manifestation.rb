@@ -234,8 +234,8 @@ class Manifestation < ActiveRecord::Base
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
-  validates :start_page, :numericality => true, allow_blank: true
-  validates :end_page, :numericality => true, allow_blank: true
+  validates :start_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :end_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :manifestation_identifier, uniqueness: true, allow_blank: true
   validates :pub_date, format: {with: /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, allow_blank: true
   validates :access_address, url: true, allow_blank: true, length: {:maximum => 255}
