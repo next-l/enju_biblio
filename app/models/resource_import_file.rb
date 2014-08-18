@@ -507,10 +507,6 @@ class ResourceImportFile < ActiveRecord::Base
     end
 
     # TODO: 小数点以下の表現
-    width = NKF.nkf('-eZ1', row['width'].to_s).gsub(/\D/, '').to_i
-    height = NKF.nkf('-eZ1', row['height'].to_s).gsub(/\D/, '').to_i
-    depth = NKF.nkf('-eZ1', row['depth'].to_s).gsub(/\D/, '').to_i
-    end_page = NKF.nkf('-eZ1', row['number_of_pages'].to_s).gsub(/\D/, '').to_i
     language = Language.where(name: row['language'].to_s.strip.camelize).first
     language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
     language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
@@ -573,9 +569,9 @@ class ResourceImportFile < ActiveRecord::Base
         :serial_number => row['serial_number'],
         :edition => row['edition'],
         :edition_string => row['edition_string'],
-        :width => width,
-        :depth => depth,
-        :height => height,
+        :width => row['width'],
+        :depth => row['depth'],
+        :height => row['height'],
         :price => row['manifestation_price'],
         :description => row['description'],
         #:description_transcription => row['description_transcription'],

@@ -98,6 +98,9 @@ describe ResourceImportFile do
         item_10104.manifestation.edition.should eq 1
         item_10104.manifestation.serial_number.should eq 120
         item_10104.manifestation.identifier_contents(:doi).should eq ['example/2014.08.18']
+        item_10104.manifestation.height.should be_nil
+        item_10104.manifestation.width.should be_nil
+        item_10104.manifestation.depth.should be_nil
 
         manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
