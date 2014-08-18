@@ -668,8 +668,10 @@ class ResourceImportFile < ActiveRecord::Base
   def set_identifier(row)
     identifier = {}
     %w(isbn issn doi jpno).each do |id_type|
-      identifier[:"#{id_type}"] = Identifier.new(body: row["#{id_type}"])
-      identifier[:"#{id_type}"].identifier_type = IdentifierType.where(name: id_type).first_or_create
+      if row["#{id_type}"].present?
+        identifier[:"#{id_type}"] = Identifier.new(body: row["#{id_type}"])
+        identifier[:"#{id_type}"].identifier_type = IdentifierType.where(name: id_type).first_or_create
+      end
     end
     identifier
   end
