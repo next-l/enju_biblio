@@ -62,6 +62,8 @@ module EnjuBiblio
         link_to identifier.body, "http://dx.doi.org/#{identifier.body}"
       when 'iss_itemno'
         link_to identifier.body, "http://iss.ndl.go.jp/books/#{identifier.body}"
+      when 'lccn'
+        link_to identifier.body, "http://lccn.loc.gov/#{identifier.body}"
       else
         identifier.body
       end
