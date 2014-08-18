@@ -96,11 +96,19 @@ class PictureFilesController < ApplicationController
       move_position(@picture_file, params[:move], false)
       case
       when @picture_file.picture_attachable.is_a?(Shelf)
-        redirect_to shelf_picture_files_url(@picture_file.picture_attachable)
+        redirect_to picture_files_url(shelf_id: @picture_file.picture_attachable_id)
       when @picture_file.picture_attachable.is_a?(Manifestation)
-        redirect_to manifestation_picture_files_url(@picture_file.picture_attachable)
+        redirect_to picture_files_url(manifestation_id: @picture_file.picture_attachable_id)
       else
-        redirect_to picture_files_url
+        if defined?(EnjuEvent)
+          if @picture_file.picture_attachable.is_a?(Event)
+            redirect_to picture_files_url(manifestation_id: @picture_file.picture_attachable_id)
+          else
+            redirect_to picture_files_url
+          end
+        else
+          redirect_to picture_files_url
+        end
       end
       return
     end
@@ -119,16 +127,32 @@ class PictureFilesController < ApplicationController
   # DELETE /picture_files/1
   # DELETE /picture_files/1.json
   def destroy
+    attachable = @picture_file.picture_attachable
     @picture_file.destroy
 
     respond_to do |format|
-      if @shelf
-        format.html { redirect_to shelf_picture_files_url(@shelf) }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to picture_files_url }
-        format.json { head :no_content }
-      end
+      flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.picture_file'))
+      format.html {
+        case attachable.class.name
+        when 'Manifestation'
+          redirect_to picture_files_url(manifestation_id: attachable.id)
+        when 'Agent'
+          redirect_to picture_files_url(agent_id: attachable.id)
+        when 'Shelf'
+          redirect_to picture_files_url(shelf_id: attachable.id)
+        else
+          if defined?(EnjuEvent)
+            if attachable.class.name == 'Event'
+              redirect_to picture_files_url(event_id: attachable.id)
+            else
+              redirect_to picture_files_url
+            end
+          else
+            redirect_to picture_files_url
+          end
+        end
+      }
+      format.json { head :no_content }
     end
   end
 

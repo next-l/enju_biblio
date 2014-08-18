@@ -300,7 +300,7 @@ describe PictureFilesController do
 
         it "moves its position when specified" do
           put :update, :id => @picture_file.id, :move => 'lower'
-          response.should redirect_to(shelf_picture_files_url(@picture_file.picture_attachable))
+          response.should redirect_to(picture_files_url(shelf_id: @picture_file.picture_attachable_id))
         end
       end
 
@@ -398,7 +398,7 @@ describe PictureFilesController do
 
       it "redirects to the picture_files list" do
         delete :destroy, :id => @picture_file.id
-        response.should redirect_to(picture_files_url)
+        response.should redirect_to(picture_files_url(shelf_id: @picture_file.picture_attachable_id))
       end
     end
 
@@ -411,7 +411,7 @@ describe PictureFilesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @picture_file.id
-        response.should redirect_to(picture_files_url)
+        response.should redirect_to(picture_files_url(shelf_id: @picture_file.picture_attachable_id))
       end
     end
 
