@@ -55,5 +55,16 @@ module EnjuBiblio
       end
       agents_list.join(" ").html_safe
     end
+
+    def identifier_link(identifier)
+      case identifier.identifier_type.name
+      when 'doi'
+        link_to "#{identifier.identifier_type.display_name.localize}: #{identifier.body}", "http://dx.doi.org/#{identifier.body}"
+      when 'iss_itemno'
+        link_to "#{identifier.identifier_type.display_name.localize}: #{identifier.body}", "http://iss.ndl.go.jp/books/#{identifier.body}"
+      else
+        "#{identifier.identifier_type.display_name.localize}: #{identifier.body}"
+      end
+    end
   end
 end

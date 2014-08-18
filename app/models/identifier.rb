@@ -27,6 +27,11 @@ class Identifier < ActiveRecord::Base
       unless StdNum::LCCN.valid?(body)
         errors.add(:body)
       end
+
+    when 'doi'
+      if URI.parse(body).scheme
+        errors.add(:body)
+      end
     end
   end
 
