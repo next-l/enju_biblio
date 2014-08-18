@@ -290,7 +290,6 @@ end
 #  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
-#  doi                             :string(255)
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text

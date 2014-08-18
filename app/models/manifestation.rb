@@ -25,7 +25,7 @@ class Manifestation < ActiveRecord::Base
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes
   attr_accessible :fulltext_content, :extent_of_text,
-    :doi, :number_of_page_string, :parent_id
+    :number_of_page_string, :parent_id
 
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
   has_many :creators, through: :creates, source: :agent, order: 'creates.position'
@@ -201,7 +201,9 @@ class Manifestation < ActiveRecord::Base
       end
     end
     string :sort_title
-    string :doi
+    string :doi, multiple: true do
+      identifier_contents(:doi)
+    end
     boolean :periodical do
       periodical?
     end
@@ -613,7 +615,6 @@ end
 #  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
-#  doi                             :string(255)
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
