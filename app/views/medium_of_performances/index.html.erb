@@ -44,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if can? :create, MediumOfPerformance -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.medium_of_performance')), new_medium_of_performance_path -%></li>
     <%- end -%>
   </ul>

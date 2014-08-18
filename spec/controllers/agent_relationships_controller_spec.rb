@@ -96,7 +96,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         get :new
         assigns(:agent_relationship).should_not be_valid
-        response.should be_success
+        response.should redirect_to agents_url
       end
     end
 
@@ -106,7 +106,7 @@ describe AgentRelationshipsController do
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
         assigns(:agent_relationship).should_not be_valid
-        response.should be_success
+        response.should redirect_to agents_url
       end
     end
 
@@ -308,8 +308,8 @@ describe AgentRelationshipsController do
         end
 
         it "moves its position when specified" do
-          put :update, :id => @agent_relationship.id, :agent_relationship => @attrs, :move => 'lower'
-          response.should redirect_to(agent_relationships_url)
+          put :update, :id => @agent_relationship.id, :agent_relationship => @attrs, :move => 'lower', agent_id: @agent_relationship.parent.id
+          response.should redirect_to(agent_relationships_url(agent_id: @agent_relationship.parent_id))
         end
       end
 

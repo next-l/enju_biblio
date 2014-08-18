@@ -96,7 +96,7 @@ describe ManifestationRelationshipsController do
       it "assigns the requested manifestation_relationship as @manifestation_relationship" do
         get :new
         assigns(:manifestation_relationship).should_not be_valid
-        response.should be_success
+        response.should redirect_to manifestations_url
       end
     end
 
@@ -106,7 +106,7 @@ describe ManifestationRelationshipsController do
       it "should not assign the requested manifestation_relationship as @manifestation_relationship" do
         get :new
         assigns(:manifestation_relationship).should_not be_valid
-        response.should be_success
+        response.should redirect_to manifestations_url
       end
     end
 
@@ -308,8 +308,8 @@ describe ManifestationRelationshipsController do
         end
 
         it "moves its position when specified" do
-          put :update, :id => @manifestation_relationship.id, :manifestation_relationship => @attrs, :move => 'lower'
-          response.should redirect_to(manifestation_relationships_url)
+          put :update, :id => @manifestation_relationship.id, :manifestation_relationship => @attrs, :move => 'lower', manifestation_id: @manifestation_relationship.parent.id
+          response.should redirect_to(manifestation_relationships_url(manifestation_id: @manifestation_relationship.parent_id))
         end
       end
 

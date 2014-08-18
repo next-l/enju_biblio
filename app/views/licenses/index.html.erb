@@ -44,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if can? :create, License -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.license')), new_license_path -%></li>
     <%- end -%>
   </ul>

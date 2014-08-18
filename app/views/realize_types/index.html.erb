@@ -44,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-realize">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if can? :create, RealizeType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.realize_type')), new_realize_type_path -%></li>
     <%- end -%>
   </ul>

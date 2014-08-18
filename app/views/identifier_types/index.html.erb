@@ -6,8 +6,11 @@
   <tr>
     <th id="position"></th>
     <th><%= t('activerecord.attributes.identifier_type.name') -%></th>
-    <th><%= t('activerecord.attributes.identifier_type.display_name') -%></th>
-    <th><%= t('activerecord.attributes.identifier_type.note') -%></th>
+    <th>
+      <%= t('activerecord.attributes.identifier_type.display_name') -%>
+      /
+      <%= t('activerecord.attributes.identifier_type.note') -%>
+    </th>
     <th></th>
   </tr>
 
@@ -18,9 +21,12 @@
         <%= move_position(identifier_type) -%>
       <%- end -%>
     </td>
-    <td><%= link_to identifier_type.name, identifier_type -%></td>
-    <td><%= link_to identifier_type.display_name.localize, identifier_type -%></td>
-    <td><%= identifier_type.note -%></td>
+    <td><%= identifier_type.name -%></td>
+    <td>
+      <%= link_to identifier_type.display_name.localize, identifier_type -%>
+      <br />
+      <%= identifier_type.note %>
+    </td>
     <td>
       <%- if can? :update, identifier_type -%>
         <%= link_to t('page.edit'), edit_identifier_type_path(identifier_type) -%>

@@ -44,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-create">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if can? :create, CreateType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.create_type')), new_create_type_path -%></li>
     <%- end -%>
   </ul>

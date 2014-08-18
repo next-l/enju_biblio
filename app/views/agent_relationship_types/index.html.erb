@@ -44,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-agent_relationship">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if can? :create, AgentRelationshipType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.agent_relationship_type')), new_agent_relationship_type_path -%></li>
     <%- end -%>
   </ul>

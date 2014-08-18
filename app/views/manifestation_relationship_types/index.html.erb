@@ -44,7 +44,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-manifestation_relationship">
   <ul>
-    <%- if can? :create, ContentType -%>
+    <%- if can? :create, ManifestationRelationshipType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.manifestation_relationship_type')), new_manifestation_relationship_type_path -%></li>
     <%- end -%>
   </ul>

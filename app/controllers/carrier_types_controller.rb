@@ -80,7 +80,7 @@ class CarrierTypesController < ApplicationController
     @carrier_type.destroy
 
     respond_to do |format|
-      format.html { redirect_to carrier_types_url }
+      format.html { redirect_to carrier_types_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.carrier_type')) }
       format.json { head :no_content }
     end
   end

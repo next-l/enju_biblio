@@ -1,10 +1,9 @@
 class IdentifierTypesController < ApplicationController
   load_and_authorize_resource
-
   # GET /identifier_types
   # GET /identifier_types.json
   def index
-    @identifier_types = IdentifierType.order(:position).page(params[:page])
+    @identifier_types = IdentifierType.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -43,7 +42,7 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       if @identifier_type.save
-        format.html { redirect_to @identifier_type, notice: t('controller.successfully_created', model: t('activerecord.models.identifier_type')) }
+        format.html { redirect_to @identifier_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.identifier_type')) }
         format.json { render json: @identifier_type, status: :created, location: @identifier_type }
       else
         format.html { render action: "new" }
@@ -62,7 +61,7 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       if @identifier_type.update_attributes(params[:identifier_type])
-        format.html { redirect_to @identifier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.identifier_type')) }
+        format.html { redirect_to @identifier_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.identifier_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,7 +76,7 @@ class IdentifierTypesController < ApplicationController
     @identifier_type.destroy
 
     respond_to do |format|
-      format.html { redirect_to identifier_types_url }
+      format.html { redirect_to identifier_types_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.identifier_type')) }
       format.json { head :no_content }
     end
   end
