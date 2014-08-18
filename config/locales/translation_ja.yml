@@ -44,7 +44,7 @@ ja:
       manifestation:
         original_title: 原題
         title_alternative: 代替タイトル
-        title_transcription: タイトルよみ
+        title_transcription: タイトルのヨミ
         classification_number: 分類番号
         manifestation_identifier: 識別子
         date_of_publication: 出版日
@@ -114,13 +114,13 @@ ja:
         last_name: 姓
         middle_name: ミドルネーム
         first_name: 名
-        last_name_transcription: 姓（よみ）
-        middle_name_transcription: ミドルネーム（よみ）
-        first_name_transcription: 名（よみ）
+        last_name_transcription: 姓（ヨミ）
+        middle_name_transcription: ミドルネーム（ヨミ）
+        first_name_transcription: 名（ヨミ）
         corporate_name: 会社名
-        corporate_name_transcription: 企業名（よみ）
+        corporate_name_transcription: 企業名（ヨミ）
         full_name: フルネーム
-        full_name_transcription: フルネーム（よみ）
+        full_name_transcription: フルネーム（ヨミ）
         full_name_alternative: フルネーム代替
         deleted_at: 削除時刻
         zip_code_1: 郵便番号1
@@ -182,12 +182,12 @@ ja:
         original_title: シリーズ名
         numbering: シリーズ番号
         title_subseries: 副シリーズ名
-        title_subseries_transcription: 副シリーズ名よみ
+        title_subseries_transcription: 副シリーズ名のヨミ
         numbering_subseries: 副シリーズ番号
         work: 著作
         series_statement_identifier: シリーズ識別子
         issn: ISSN
-        title_transcription: シリーズ名よみ
+        title_transcription: シリーズ名のヨミ
         note: 注記
         series_master: マスタ
         volume_number_string: シリーズ巻号
