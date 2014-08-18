@@ -379,7 +379,7 @@ class ResourceImportFile < ActiveRecord::Base
       edition edition_string serial_number isbn issn manifestation_price
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
-      extent_of_text
+      extent_of_text start_page end_page
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at item_price
       use_restriction include_supplements item_note item_url
@@ -519,13 +519,6 @@ class ResourceImportFile < ActiveRecord::Base
 
     identifier = set_identifier(row)
 
-    if end_page >= 1
-      start_page = 1
-    else
-      start_page = nil
-      end_page = nil
-    end
-
     if %w(t true).include?(row['fulltext_content'].to_s.downcase.strip)
       fulltext_content = true
     end
@@ -586,14 +579,15 @@ class ResourceImportFile < ActiveRecord::Base
         #:description_transcription => row['description_transcription'],
         :note => row['note'],
         :statement_of_responsibility => row['statement_of_responsibility'],
-        :start_page => start_page,
-        :end_page => end_page,
         :access_address => row['access_address'],
         :manifestation_identifier => row['manifestation_identifier'],
         :fulltext_content => fulltext_content,
         :publication_place => row['publication_place'],
-        :extent_of_text => row['extent_of_text']
+        :extent_of_text => row['extent_of_text'],
+        :start_page => row['start_page'],
+        :end_page => row['end_page']
       }.delete_if{|key, value| value.nil?}
+
       manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,
       {
         edit_mode: options[:edit_mode]
@@ -615,13 +609,8 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.carrier_type = carrier_type if carrier_type
       manifestation.manifestation_content_type = content_type if content_type
       manifestation.frequency = frequency if frequency
-
-      Manifestation.transaction do
-        manifestation.identifiers.delete_all if manifestation.identifiers.exists?
-        identifier.each do |k, v|
-          manifestation.identifiers << v if v.valid?
-        end
-      end
+      #manifestation.start_page = row[:start_page].to_i if row[:start_page]
+      #manifestation.end_page = row[:end_page].to_i if row[:end_page]
 
       if row['series_original_title'].to_s.strip.present?
         Manifestation.transaction do
@@ -647,6 +636,15 @@ class ResourceImportFile < ActiveRecord::Base
         classifications = import_classification(row)
         if classifications.present?
           manifestation.classifications << classifications
+        end
+      end
+
+      if manifestation.save
+        Manifestation.transaction do
+          manifestation.identifiers.delete_all if manifestation.identifiers.exists?
+          identifier.each do |k, v|
+            manifestation.identifiers << v if v.valid?
+          end
         end
       end
 

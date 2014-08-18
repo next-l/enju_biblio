@@ -302,8 +302,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   def number_of_pages
-    if self.start_page and self.end_page
-      page = self.end_page.to_i - self.start_page.to_i + 1
+    if start_page and end_page
+      end_page.to_i - start_page.to_i + 1
     end
   end
 

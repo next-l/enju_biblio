@@ -63,6 +63,11 @@ describe ResourceImportFile do
         item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         item_10102.manifestation.language.name.should eq 'Japanese'
+        item_10102.manifestation.height.should eq 257
+        item_10102.manifestation.width.should eq 182
+        item_10102.manifestation.depth.should eq 12
+        item_10102.manifestation.start_page.should eq 1
+        item_10102.manifestation.end_page.should eq 200
 
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(item_identifier: '11111').first
@@ -90,6 +95,7 @@ describe ResourceImportFile do
         item_10104.manifestation.edition_string.should eq '初版'
         item_10104.manifestation.edition.should eq 1
         item_10104.manifestation.serial_number.should eq 120
+        item_10104.manifestation.identifier_contents(:doi).should eq ['example/2014.08.18']
 
         manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
