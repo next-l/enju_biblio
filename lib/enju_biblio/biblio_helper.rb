@@ -59,11 +59,11 @@ module EnjuBiblio
     def identifier_link(identifier)
       case identifier.identifier_type.name
       when 'doi'
-        link_to "#{identifier.identifier_type.display_name.localize}: #{identifier.body}", "http://dx.doi.org/#{identifier.body}"
+        link_to identifier.body, "http://dx.doi.org/#{identifier.body}"
       when 'iss_itemno'
-        link_to "#{identifier.identifier_type.display_name.localize}: #{identifier.body}", "http://iss.ndl.go.jp/books/#{identifier.body}"
+        link_to identifier.body, "http://iss.ndl.go.jp/books/#{identifier.body}")
       else
-        "#{identifier.identifier_type.display_name.localize}: #{identifier.body}"
+        identifier.body
       end
     end
   end
