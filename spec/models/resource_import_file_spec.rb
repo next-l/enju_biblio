@@ -115,7 +115,7 @@ describe ResourceImportFile do
         @file.error_message.should eq "The follwing column(s) were ignored: invalid"
       end
 
-      it "should send message when import is completed" do
+      it "should send message when import is completed", vcr: true do
         old_message_count = Message.count
         @file.import_start
         Message.count.should eq old_message_count + 1

@@ -92,7 +92,7 @@ class AgentImportFilesController < ApplicationController
     @agent_import_file.destroy
 
     respond_to do |format|
-      format.html { redirect_to(agent_import_files_url) }
+      format.html { redirect_to agent_import_files_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.agent_import_file')) }
       format.json { head :no_content }
     end
   end

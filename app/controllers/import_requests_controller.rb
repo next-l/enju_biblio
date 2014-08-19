@@ -85,7 +85,7 @@ class ImportRequestsController < ApplicationController
     @import_request.destroy
 
     respond_to do |format|
-      format.html { redirect_to import_requests_url }
+      format.html { redirect_to import_requests_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.import_request')) }
       format.json { head :no_content }
     end
   end

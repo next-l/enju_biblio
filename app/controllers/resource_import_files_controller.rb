@@ -97,11 +97,12 @@ class ResourceImportFilesController < ApplicationController
     @resource_import_file.destroy
 
     respond_to do |format|
-      format.html { redirect_to resource_import_files_url }
+      format.html { redirect_to resource_import_files_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.resource_import_file')) }
       format.json { head :no_content }
     end
   end
 
+  private
   def prepare_options
     @libraries = Library.all
     library = Library.where(id: @resource_import_file.try(:library_id)).first
