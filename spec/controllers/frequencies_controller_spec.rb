@@ -76,7 +76,7 @@ describe FrequenciesController do
 
       it "redirects to the created frequency" do
         post :create, :frequency => valid_attributes
-        response.should redirect_to(Frequency.last)
+        expect(response).to redirect_to(Frequency.last)
       end
     end
 
@@ -92,7 +92,7 @@ describe FrequenciesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
         post :create, :frequency => {}
-        #response.should render_template("new")
+        #expect(response).to render_template("new")
       end
     end
   end
@@ -118,14 +118,14 @@ describe FrequenciesController do
       it "redirects to the frequency" do
         frequency = Frequency.create! valid_attributes
         put :update, :id => frequency.id, :frequency => valid_attributes
-        response.should redirect_to(frequency)
+        expect(response).to redirect_to(frequency)
       end
 
       it "moves its position when specified" do
         frequency = Frequency.create! valid_attributes
         position = frequency.position
         put :update, :id => frequency.id, :move => 'higher'
-        response.should redirect_to frequencies_url
+        expect(response).to redirect_to frequencies_url
         assigns(:frequency).position.should eq position - 1
       end
     end
@@ -144,7 +144,7 @@ describe FrequenciesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
         put :update, :id => frequency.id, :frequency => {}
-        #response.should render_template("edit")
+        #expect(response).to render_template("edit")
       end
     end
   end
@@ -160,7 +160,7 @@ describe FrequenciesController do
     it "redirects to the frequencies list" do
       frequency = Frequency.create! valid_attributes
       delete :destroy, :id => frequency.id
-      response.should redirect_to(frequencies_url)
+      expect(response).to redirect_to(frequencies_url)
     end
   end
 

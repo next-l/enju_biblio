@@ -33,7 +33,7 @@ describe LicensesController do
     it "assigns all licenses as @licenses" do
       license = License.create! valid_attributes
       get :index
-      assigns(:licenses).should eq(License.all)
+      expect(assigns(:licenses)).to eq(License.all)
     end
   end
 
@@ -41,14 +41,14 @@ describe LicensesController do
     it "assigns the requested license as @license" do
       license = License.create! valid_attributes
       get :show, :id => license.id
-      assigns(:license).should eq(license)
+      expect(assigns(:license)).to eq(license)
     end
   end
 
   describe "GET new" do
     it "assigns a new license as @license" do
       get :new
-      assigns(:license).should be_a_new(License)
+      expect(assigns(:license)).to be_a_new(License)
     end
   end
 
@@ -56,7 +56,7 @@ describe LicensesController do
     it "assigns the requested license as @license" do
       license = License.create! valid_attributes
       get :edit, :id => license.id
-      assigns(:license).should eq(license)
+      expect(assigns(:license)).to eq(license)
     end
   end
 
@@ -70,13 +70,13 @@ describe LicensesController do
 
       it "assigns a newly created license as @license" do
         post :create, :license => valid_attributes
-        assigns(:license).should be_a(License)
-        assigns(:license).should be_persisted
+        expect(assigns(:license)).to be_a(License)
+        expect(assigns(:license)).to be_persisted
       end
 
       it "redirects to the created license" do
         post :create, :license => valid_attributes
-        response.should redirect_to(License.last)
+        expect(response).to redirect_to(License.last)
       end
     end
 
@@ -85,14 +85,14 @@ describe LicensesController do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
         post :create, :license => {}
-        assigns(:license).should be_a_new(License)
+        expect(assigns(:license)).to be_a_new(License)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
         post :create, :license => {}
-        #response.should render_template("new")
+        #expect(response).to render_template("new")
       end
     end
   end
@@ -112,20 +112,20 @@ describe LicensesController do
       it "assigns the requested license as @license" do
         license = License.create! valid_attributes
         put :update, :id => license.id, :license => valid_attributes
-        assigns(:license).should eq(license)
+        expect(assigns(:license)).to eq(license)
       end
 
       it "redirects to the license" do
         license = License.create! valid_attributes
         put :update, :id => license.id, :license => valid_attributes
-        response.should redirect_to(license)
+        expect(response).to redirect_to(license)
       end
 
       it "moves its position when specified" do
         license = License.create! valid_attributes
         position = license.position
         put :update, :id => license.id, :move => 'higher'
-        response.should redirect_to licenses_url
+        expect(response).to redirect_to licenses_url
         assigns(:license).position.should eq position - 1
       end
     end
@@ -136,7 +136,7 @@ describe LicensesController do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
         put :update, :id => license.id, :license => {}
-        assigns(:license).should eq(license)
+        expect(assigns(:license)).to eq(license)
       end
 
       it "re-renders the 'edit' template" do
@@ -144,7 +144,7 @@ describe LicensesController do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
         put :update, :id => license.id, :license => {}
-        #response.should render_template("edit")
+        #expect(response).to render_template("edit")
       end
     end
   end
@@ -160,7 +160,7 @@ describe LicensesController do
     it "redirects to the licenses list" do
       license = License.create! valid_attributes
       delete :destroy, :id => license.id
-      response.should redirect_to(licenses_url)
+      expect(response).to redirect_to(licenses_url)
     end
   end
 

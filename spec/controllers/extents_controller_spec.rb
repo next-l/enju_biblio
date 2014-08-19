@@ -33,7 +33,7 @@ describe ExtentsController do
     it "assigns all extents as @extents" do
       extent = Extent.create! valid_attributes
       get :index
-      assigns(:extents).should eq(Extent.all)
+      expect(assigns(:extents)).to eq(Extent.all)
     end
   end
 
@@ -41,14 +41,14 @@ describe ExtentsController do
     it "assigns the requested extent as @extent" do
       extent = Extent.create! valid_attributes
       get :show, :id => extent.id
-      assigns(:extent).should eq(extent)
+      expect(assigns(:extent)).to eq(extent)
     end
   end
 
   describe "GET new" do
     it "assigns a new extent as @extent" do
       get :new
-      assigns(:extent).should be_a_new(Extent)
+      expect(assigns(:extent)).to be_a_new(Extent)
     end
   end
 
@@ -56,7 +56,7 @@ describe ExtentsController do
     it "assigns the requested extent as @extent" do
       extent = Extent.create! valid_attributes
       get :edit, :id => extent.id
-      assigns(:extent).should eq(extent)
+      expect(assigns(:extent)).to eq(extent)
     end
   end
 
@@ -70,13 +70,13 @@ describe ExtentsController do
 
       it "assigns a newly created extent as @extent" do
         post :create, :extent => valid_attributes
-        assigns(:extent).should be_a(Extent)
-        assigns(:extent).should be_persisted
+        expect(assigns(:extent)).to be_a(Extent)
+        expect(assigns(:extent)).to be_persisted
       end
 
       it "redirects to the created extent" do
         post :create, :extent => valid_attributes
-        response.should redirect_to(Extent.last)
+        expect(response).to redirect_to(Extent.last)
       end
     end
 
@@ -85,14 +85,14 @@ describe ExtentsController do
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
         post :create, :extent => {}
-        assigns(:extent).should be_a_new(Extent)
+        expect(assigns(:extent)).to be_a_new(Extent)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
         post :create, :extent => {}
-        #response.should render_template("new")
+        #expect(response).to render_template("new")
       end
     end
   end
@@ -112,20 +112,20 @@ describe ExtentsController do
       it "assigns the requested extent as @extent" do
         extent = Extent.create! valid_attributes
         put :update, :id => extent.id, :extent => valid_attributes
-        assigns(:extent).should eq(extent)
+        expect(assigns(:extent)).to eq(extent)
       end
 
       it "redirects to the extent" do
         extent = Extent.create! valid_attributes
         put :update, :id => extent.id, :extent => valid_attributes
-        response.should redirect_to(extent)
+        expect(response).to redirect_to(extent)
       end
 
       it "moves its position when specified" do
         extent = Extent.create! valid_attributes
         position = extent.position
         put :update, :id => extent.id, :move => 'higher'
-        response.should redirect_to extents_url
+        expect(response).to redirect_to extents_url
         assigns(:extent).position.should eq position - 1
       end
     end
@@ -136,7 +136,7 @@ describe ExtentsController do
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
         put :update, :id => extent.id, :extent => {}
-        assigns(:extent).should eq(extent)
+        expect(assigns(:extent)).to eq(extent)
       end
 
       it "re-renders the 'edit' template" do
@@ -144,7 +144,7 @@ describe ExtentsController do
         # Trigger the behavior that occurs when invalid params are submitted
         Extent.any_instance.stub(:save).and_return(false)
         put :update, :id => extent.id, :extent => {}
-        #response.should render_template("edit")
+        #expect(response).to render_template("edit")
       end
     end
   end
@@ -160,7 +160,7 @@ describe ExtentsController do
     it "redirects to the extents list" do
       extent = Extent.create! valid_attributes
       delete :destroy, :id => extent.id
-      response.should redirect_to(extents_url)
+      expect(response).to redirect_to(extents_url)
     end
   end
 

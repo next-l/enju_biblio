@@ -10,7 +10,7 @@ describe AgentImportResultsController do
 
       it "assigns all agent_import_results as @agent_import_results" do
         get :index
-        assigns(:agent_import_results).should eq(AgentImportResult.page(1))
+        expect(assigns(:agent_import_results)).to eq(AgentImportResult.page(1))
       end
     end
 
@@ -19,7 +19,7 @@ describe AgentImportResultsController do
 
       it "assigns all agent_import_results as @agent_import_results" do
         get :index
-        assigns(:agent_import_results).should eq(AgentImportResult.page(1))
+        expect(assigns(:agent_import_results)).to eq(AgentImportResult.page(1))
       end
     end
 
@@ -28,16 +28,16 @@ describe AgentImportResultsController do
 
       it "assigns empty as @agent_import_results" do
         get :index
-        assigns(:agent_import_results).should be_empty
-        response.should be_forbidden
+        expect(assigns(:agent_import_results)).to be_empty
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "assigns empty as @agent_import_results" do
         get :index
-        assigns(:agent_import_results).should be_empty
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:agent_import_results)).to be_empty
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -48,7 +48,7 @@ describe AgentImportResultsController do
 
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
-        assigns(:agent_import_result).should eq(AgentImportResult.find(1))
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
       end
     end
 
@@ -57,7 +57,7 @@ describe AgentImportResultsController do
 
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
-        assigns(:agent_import_result).should eq(AgentImportResult.find(1))
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
       end
     end
 
@@ -66,15 +66,15 @@ describe AgentImportResultsController do
 
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
-        assigns(:agent_import_result).should eq(AgentImportResult.find(1))
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
-        assigns(:agent_import_result).should eq(AgentImportResult.find(1))
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

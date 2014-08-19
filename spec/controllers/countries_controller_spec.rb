@@ -96,7 +96,7 @@ describe CountriesController do
       it "assigns the requested country as @country" do
         get :new
         assigns(:country).should_not be_valid
-        response.should be_success
+        expect(response).to be_success
       end
     end
 
@@ -106,7 +106,7 @@ describe CountriesController do
       it "assigns the requested country as @country" do
         get :new
         assigns(:country).should_not be_valid
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -116,7 +116,7 @@ describe CountriesController do
       it "assigns the requested country as @country" do
         get :new
         assigns(:country).should_not be_valid
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -124,7 +124,7 @@ describe CountriesController do
       it "should not assign the requested country as @country" do
         get :new
         assigns(:country).should_not be_valid
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -164,7 +164,7 @@ describe CountriesController do
       it "should not assign the requested country as @country" do
         country = FactoryGirl.create(:country)
         get :edit, :id => country.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -186,7 +186,7 @@ describe CountriesController do
 
         it "redirects to the created country" do
           post :create, :country => @attrs
-          response.should redirect_to(assigns(:country))
+          expect(response).to redirect_to(assigns(:country))
         end
       end
 
@@ -198,7 +198,7 @@ describe CountriesController do
 
         it "re-renders the 'new' template" do
           post :create, :country => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -214,7 +214,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
@@ -226,7 +226,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -242,7 +242,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
@@ -254,7 +254,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -268,7 +268,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -280,7 +280,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -308,14 +308,14 @@ describe CountriesController do
 
         it "moves its position when specified" do
           put :update, :id => @country.id, :country => @attrs, :move => 'lower'
-          response.should redirect_to(countries_url)
+          expect(response).to redirect_to(countries_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested country as @country" do
           put :update, :id => @country.id, :country => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -335,14 +335,14 @@ describe CountriesController do
 
         it "moves its position when specified" do
           put :update, :id => @country.id, :country => @attrs, :move => 'lower'
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested country as @country" do
           put :update, :id => @country.id, :country => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -362,14 +362,14 @@ describe CountriesController do
 
         it "moves its position when specified" do
           put :update, :id => @country.id, :country => @attrs, :move => 'lower'
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested country as @country" do
           put :update, :id => @country.id, :country => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -382,14 +382,14 @@ describe CountriesController do
 
         it "should be forbidden" do
           put :update, :id => @country.id, :country => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested country as @country" do
           put :update, :id => @country.id, :country => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -409,7 +409,7 @@ describe CountriesController do
 
       it "redirects to the countries list" do
         delete :destroy, :id => @country.id
-        response.should redirect_to(countries_url)
+        expect(response).to redirect_to(countries_url)
       end
     end
 
@@ -422,7 +422,7 @@ describe CountriesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @country.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -435,7 +435,7 @@ describe CountriesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @country.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -446,7 +446,7 @@ describe CountriesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @country.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

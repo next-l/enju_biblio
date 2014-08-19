@@ -33,7 +33,7 @@ describe FormOfWorksController do
     it "assigns all form_of_works as @form_of_works" do
       form_of_work = FormOfWork.create! valid_attributes
       get :index
-      assigns(:form_of_works).should eq(FormOfWork.all)
+      expect(assigns(:form_of_works)).to eq(FormOfWork.all)
     end
   end
 
@@ -41,14 +41,14 @@ describe FormOfWorksController do
     it "assigns the requested form_of_work as @form_of_work" do
       form_of_work = FormOfWork.create! valid_attributes
       get :show, :id => form_of_work.id
-      assigns(:form_of_work).should eq(form_of_work)
+      expect(assigns(:form_of_work)).to eq(form_of_work)
     end
   end
 
   describe "GET new" do
     it "assigns a new form_of_work as @form_of_work" do
       get :new
-      assigns(:form_of_work).should be_a_new(FormOfWork)
+      expect(assigns(:form_of_work)).to be_a_new(FormOfWork)
     end
   end
 
@@ -56,7 +56,7 @@ describe FormOfWorksController do
     it "assigns the requested form_of_work as @form_of_work" do
       form_of_work = FormOfWork.create! valid_attributes
       get :edit, :id => form_of_work.id
-      assigns(:form_of_work).should eq(form_of_work)
+      expect(assigns(:form_of_work)).to eq(form_of_work)
     end
   end
 
@@ -70,13 +70,13 @@ describe FormOfWorksController do
 
       it "assigns a newly created form_of_work as @form_of_work" do
         post :create, :form_of_work => valid_attributes
-        assigns(:form_of_work).should be_a(FormOfWork)
-        assigns(:form_of_work).should be_persisted
+        expect(assigns(:form_of_work)).to be_a(FormOfWork)
+        expect(assigns(:form_of_work)).to be_persisted
       end
 
       it "redirects to the created form_of_work" do
         post :create, :form_of_work => valid_attributes
-        response.should redirect_to(FormOfWork.last)
+        expect(response).to redirect_to(FormOfWork.last)
       end
     end
 
@@ -85,14 +85,14 @@ describe FormOfWorksController do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
         post :create, :form_of_work => {}
-        assigns(:form_of_work).should be_a_new(FormOfWork)
+        expect(assigns(:form_of_work)).to be_a_new(FormOfWork)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
         post :create, :form_of_work => {}
-        #response.should render_template("new")
+        #expect(response).to render_template("new")
       end
     end
   end
@@ -112,20 +112,20 @@ describe FormOfWorksController do
       it "assigns the requested form_of_work as @form_of_work" do
         form_of_work = FormOfWork.create! valid_attributes
         put :update, :id => form_of_work.id, :form_of_work => valid_attributes
-        assigns(:form_of_work).should eq(form_of_work)
+        expect(assigns(:form_of_work)).to eq(form_of_work)
       end
 
       it "redirects to the form_of_work" do
         form_of_work = FormOfWork.create! valid_attributes
         put :update, :id => form_of_work.id, :form_of_work => valid_attributes
-        response.should redirect_to(form_of_work)
+        expect(response).to redirect_to(form_of_work)
       end
 
       it "moves its position when specified" do
         form_of_work = FormOfWork.create! valid_attributes
         position = form_of_work.position
         put :update, :id => form_of_work.id, :move => 'higher'
-        response.should redirect_to form_of_works_url
+        expect(response).to redirect_to form_of_works_url
         assigns(:form_of_work).position.should eq position - 1
       end
     end
@@ -136,7 +136,7 @@ describe FormOfWorksController do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
         put :update, :id => form_of_work.id, :form_of_work => {}
-        assigns(:form_of_work).should eq(form_of_work)
+        expect(assigns(:form_of_work)).to eq(form_of_work)
       end
 
       it "re-renders the 'edit' template" do
@@ -144,7 +144,7 @@ describe FormOfWorksController do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
         put :update, :id => form_of_work.id, :form_of_work => {}
-        #response.should render_template("edit")
+        #expect(response).to render_template("edit")
       end
     end
   end
@@ -160,7 +160,7 @@ describe FormOfWorksController do
     it "redirects to the form_of_works list" do
       form_of_work = FormOfWork.create! valid_attributes
       delete :destroy, :id => form_of_work.id
-      response.should redirect_to(form_of_works_url)
+      expect(response).to redirect_to(form_of_works_url)
     end
   end
 

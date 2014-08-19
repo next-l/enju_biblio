@@ -19,7 +19,7 @@ describe AgentRelationshipsController do
 
       it "assigns all agent_relationships as @agent_relationships" do
         get :index
-        assigns(:agent_relationships).should eq(AgentRelationship.all)
+        expect(assigns(:agent_relationships)).to eq(AgentRelationship.all)
       end
     end
 
@@ -28,7 +28,7 @@ describe AgentRelationshipsController do
 
       it "assigns all agent_relationships as @agent_relationships" do
         get :index
-        assigns(:agent_relationships).should eq(AgentRelationship.all)
+        expect(assigns(:agent_relationships)).to eq(AgentRelationship.all)
       end
     end
 
@@ -37,14 +37,14 @@ describe AgentRelationshipsController do
 
       it "assigns all agent_relationships as @agent_relationships" do
         get :index
-        assigns(:agent_relationships).should eq(AgentRelationship.all)
+        expect(assigns(:agent_relationships)).to eq(AgentRelationship.all)
       end
     end
 
     describe "When not logged in" do
       it "assigns all agent_relationships as @agent_relationships" do
         get :index
-        assigns(:agent_relationships).should eq(AgentRelationship.all)
+        expect(assigns(:agent_relationships)).to eq(AgentRelationship.all)
       end
     end
   end
@@ -56,7 +56,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :show, :id => agent_relationship.id
-        assigns(:agent_relationship).should eq(agent_relationship)
+        expect(assigns(:agent_relationship)).to eq(agent_relationship)
       end
     end
 
@@ -66,7 +66,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :show, :id => agent_relationship.id
-        assigns(:agent_relationship).should eq(agent_relationship)
+        expect(assigns(:agent_relationship)).to eq(agent_relationship)
       end
     end
 
@@ -76,7 +76,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :show, :id => agent_relationship.id
-        assigns(:agent_relationship).should eq(agent_relationship)
+        expect(assigns(:agent_relationship)).to eq(agent_relationship)
       end
     end
 
@@ -84,7 +84,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :show, :id => agent_relationship.id
-        assigns(:agent_relationship).should eq(agent_relationship)
+        expect(assigns(:agent_relationship)).to eq(agent_relationship)
       end
     end
   end
@@ -95,8 +95,8 @@ describe AgentRelationshipsController do
 
       it "assigns the requested agent_relationship as @agent_relationship" do
         get :new
-        assigns(:agent_relationship).should_not be_valid
-        response.should redirect_to agents_url
+        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(response).to redirect_to agents_url
       end
     end
 
@@ -105,8 +105,8 @@ describe AgentRelationshipsController do
 
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
-        assigns(:agent_relationship).should_not be_valid
-        response.should redirect_to agents_url
+        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(response).to redirect_to agents_url
       end
     end
 
@@ -115,16 +115,16 @@ describe AgentRelationshipsController do
 
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
-        assigns(:agent_relationship).should_not be_valid
-        response.should be_forbidden
+        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
-        assigns(:agent_relationship).should_not be_valid
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -136,7 +136,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :edit, :id => agent_relationship.id
-        assigns(:agent_relationship).should eq(agent_relationship)
+        expect(assigns(:agent_relationship)).to eq(agent_relationship)
       end
     end
 
@@ -146,7 +146,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :edit, :id => agent_relationship.id
-        assigns(:agent_relationship).should eq(agent_relationship)
+        expect(assigns(:agent_relationship)).to eq(agent_relationship)
       end
     end
 
@@ -156,7 +156,7 @@ describe AgentRelationshipsController do
       it "assigns the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :edit, :id => agent_relationship.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -164,7 +164,7 @@ describe AgentRelationshipsController do
       it "should not assign the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :edit, :id => agent_relationship.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -181,24 +181,24 @@ describe AgentRelationshipsController do
       describe "with valid params" do
         it "assigns a newly created agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @attrs
-          assigns(:agent_relationship).should be_valid
+          expect(assigns(:agent_relationship)).to be_valid
         end
 
         it "redirects to the created agent" do
           post :create, :agent_relationship => @attrs
-          response.should redirect_to(assigns(:agent_relationship))
+          expect(response).to redirect_to(assigns(:agent_relationship))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @invalid_attrs
-          assigns(:agent_relationship).should_not be_valid
+          expect(assigns(:agent_relationship)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
           post :create, :agent_relationship => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -209,24 +209,24 @@ describe AgentRelationshipsController do
       describe "with valid params" do
         it "assigns a newly created agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @attrs
-          assigns(:agent_relationship).should be_valid
+          expect(assigns(:agent_relationship)).to be_valid
         end
 
         it "redirects to the created agent" do
           post :create, :agent_relationship => @attrs
-          response.should redirect_to(assigns(:agent_relationship))
+          expect(response).to redirect_to(assigns(:agent_relationship))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @invalid_attrs
-          assigns(:agent_relationship).should_not be_valid
+          expect(assigns(:agent_relationship)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
           post :create, :agent_relationship => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -237,24 +237,24 @@ describe AgentRelationshipsController do
       describe "with valid params" do
         it "assigns a newly created agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @attrs
-          assigns(:agent_relationship).should be_valid
+          expect(assigns(:agent_relationship)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :agent_relationship => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @invalid_attrs
-          assigns(:agent_relationship).should_not be_valid
+          expect(assigns(:agent_relationship)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :agent_relationship => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -263,24 +263,24 @@ describe AgentRelationshipsController do
       describe "with valid params" do
         it "assigns a newly created agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @attrs
-          assigns(:agent_relationship).should be_valid
+          expect(assigns(:agent_relationship)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :agent_relationship => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @invalid_attrs
-          assigns(:agent_relationship).should_not be_valid
+          expect(assigns(:agent_relationship)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :agent_relationship => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -303,20 +303,20 @@ describe AgentRelationshipsController do
 
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @attrs
-          assigns(:agent_relationship).should eq(@agent_relationship)
-          response.should redirect_to(@agent_relationship)
+          expect(assigns(:agent_relationship)).to eq(@agent_relationship)
+          expect(response).to redirect_to(@agent_relationship)
         end
 
         it "moves its position when specified" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @attrs, :move => 'lower', agent_id: @agent_relationship.parent.id
-          response.should redirect_to(agent_relationships_url(agent_id: @agent_relationship.parent_id))
+          expect(response).to redirect_to(agent_relationships_url(agent_id: @agent_relationship.parent_id))
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -331,15 +331,15 @@ describe AgentRelationshipsController do
 
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @attrs
-          assigns(:agent_relationship).should eq(@agent_relationship)
-          response.should redirect_to(@agent_relationship)
+          expect(assigns(:agent_relationship)).to eq(@agent_relationship)
+          expect(response).to redirect_to(@agent_relationship)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -354,15 +354,15 @@ describe AgentRelationshipsController do
 
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @attrs
-          assigns(:agent_relationship).should eq(@agent_relationship)
-          response.should be_forbidden
+          expect(assigns(:agent_relationship)).to eq(@agent_relationship)
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -375,14 +375,14 @@ describe AgentRelationshipsController do
 
         it "should be forbidden" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -402,7 +402,7 @@ describe AgentRelationshipsController do
 
       it "redirects to the agent_relationships list" do
         delete :destroy, :id => @agent_relationship.id
-        response.should redirect_to(agent_relationships_url)
+        expect(response).to redirect_to(agent_relationships_url)
       end
     end
 
@@ -415,7 +415,7 @@ describe AgentRelationshipsController do
 
       it "redirects to the agent_relationships list" do
         delete :destroy, :id => @agent_relationship.id
-        response.should redirect_to(agent_relationships_url)
+        expect(response).to redirect_to(agent_relationships_url)
       end
     end
 
@@ -428,7 +428,7 @@ describe AgentRelationshipsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_relationship.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -439,7 +439,7 @@ describe AgentRelationshipsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_relationship.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

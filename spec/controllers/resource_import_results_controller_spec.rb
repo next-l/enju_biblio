@@ -10,7 +10,7 @@ describe ResourceImportResultsController do
 
       it "assigns all resource_import_results as @resource_import_results" do
         get :index
-        assigns(:resource_import_results).should eq(ResourceImportResult.page(1))
+        expect(assigns(:resource_import_results)).to eq(ResourceImportResult.page(1))
       end
     end
 
@@ -19,7 +19,7 @@ describe ResourceImportResultsController do
 
       it "assigns all resource_import_results as @resource_import_results" do
         get :index
-        assigns(:resource_import_results).should eq(ResourceImportResult.page(1))
+        expect(assigns(:resource_import_results)).to eq(ResourceImportResult.page(1))
       end
     end
 
@@ -28,16 +28,16 @@ describe ResourceImportResultsController do
 
       it "assigns empty as @resource_import_results" do
         get :index
-        assigns(:resource_import_results).should be_empty
-        response.should be_forbidden
+        expect(assigns(:resource_import_results)).to be_empty
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "assigns empty as @resource_import_results" do
         get :index
-        assigns(:resource_import_results).should be_empty
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:resource_import_results)).to be_empty
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -48,7 +48,7 @@ describe ResourceImportResultsController do
 
       it "assigns the requested resource_import_result as @resource_import_result" do
         get :show, :id => 1
-        assigns(:resource_import_result).should eq(ResourceImportResult.find(1))
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
       end
     end
 
@@ -57,7 +57,7 @@ describe ResourceImportResultsController do
 
       it "assigns the requested resource_import_result as @resource_import_result" do
         get :show, :id => 1
-        assigns(:resource_import_result).should eq(ResourceImportResult.find(1))
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
       end
     end
 
@@ -66,15 +66,15 @@ describe ResourceImportResultsController do
 
       it "assigns the requested resource_import_result as @resource_import_result" do
         get :show, :id => 1
-        assigns(:resource_import_result).should eq(ResourceImportResult.find(1))
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns the requested resource_import_result as @resource_import_result" do
         get :show, :id => 1
-        assigns(:resource_import_result).should eq(ResourceImportResult.find(1))
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -93,7 +93,7 @@ describe ResourceImportResultsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @resource_import_result.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -106,7 +106,7 @@ describe ResourceImportResultsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @resource_import_result.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -119,7 +119,7 @@ describe ResourceImportResultsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @resource_import_result.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -130,7 +130,7 @@ describe ResourceImportResultsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @resource_import_result.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

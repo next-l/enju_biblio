@@ -15,7 +15,7 @@ describe ProducesController do
 
       it "assigns all produces as @produces" do
         get :index
-        assigns(:produces).should eq(Produce.page(1))
+        expect(assigns(:produces)).to eq(Produce.page(1))
       end
     end
 
@@ -24,7 +24,7 @@ describe ProducesController do
 
       it "assigns all produces as @produces" do
         get :index
-        assigns(:produces).should eq(Produce.page(1))
+        expect(assigns(:produces)).to eq(Produce.page(1))
       end
     end
 
@@ -33,14 +33,14 @@ describe ProducesController do
 
       it "assigns all produces as @produces" do
         get :index
-        assigns(:produces).should eq(Produce.page(1))
+        expect(assigns(:produces)).to eq(Produce.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all produces as @produces" do
         get :index
-        assigns(:produces).should eq(Produce.page(1))
+        expect(assigns(:produces)).to eq(Produce.page(1))
       end
     end
   end
@@ -52,7 +52,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :show, :id => produce.id
-        assigns(:produce).should eq(produce)
+        expect(assigns(:produce)).to eq(produce)
       end
     end
 
@@ -62,7 +62,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :show, :id => produce.id
-        assigns(:produce).should eq(produce)
+        expect(assigns(:produce)).to eq(produce)
       end
     end
 
@@ -72,7 +72,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :show, :id => produce.id
-        assigns(:produce).should eq(produce)
+        expect(assigns(:produce)).to eq(produce)
       end
     end
 
@@ -80,7 +80,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :show, :id => produce.id
-        assigns(:produce).should eq(produce)
+        expect(assigns(:produce)).to eq(produce)
       end
     end
   end
@@ -91,7 +91,7 @@ describe ProducesController do
 
       it "assigns the requested produce as @produce" do
         get :new
-        assigns(:produce).should_not be_valid
+        expect(assigns(:produce)).not_to be_valid
       end
     end
 
@@ -100,7 +100,7 @@ describe ProducesController do
 
       it "assigns the requested produce as @produce" do
         get :new
-        assigns(:produce).should_not be_valid
+        expect(assigns(:produce)).not_to be_valid
       end
     end
 
@@ -109,16 +109,16 @@ describe ProducesController do
 
       it "should not assign the requested produce as @produce" do
         get :new
-        assigns(:produce).should_not be_valid
-        response.should be_forbidden
+        expect(assigns(:produce)).not_to be_valid
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not assign the requested produce as @produce" do
         get :new
-        assigns(:produce).should_not be_valid
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:produce)).not_to be_valid
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -130,7 +130,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :edit, :id => produce.id
-        assigns(:produce).should eq(produce)
+        expect(assigns(:produce)).to eq(produce)
       end
     end
 
@@ -140,7 +140,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :edit, :id => produce.id
-        assigns(:produce).should eq(produce)
+        expect(assigns(:produce)).to eq(produce)
       end
     end
 
@@ -150,7 +150,7 @@ describe ProducesController do
       it "assigns the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :edit, :id => produce.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -158,7 +158,7 @@ describe ProducesController do
       it "should not assign the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :edit, :id => produce.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -175,24 +175,24 @@ describe ProducesController do
       describe "with valid params" do
         it "assigns a newly created produce as @produce" do
           post :create, :produce => @attrs
-          assigns(:produce).should be_valid
+          expect(assigns(:produce)).to be_valid
         end
 
         it "redirects to the created produce" do
           post :create, :produce => @attrs
-          response.should redirect_to(produce_url(assigns(:produce)))
+          expect(response).to redirect_to(produce_url(assigns(:produce)))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved produce as @produce" do
           post :create, :produce => @invalid_attrs
-          assigns(:produce).should_not be_valid
+          expect(assigns(:produce)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
           post :create, :produce => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -203,24 +203,24 @@ describe ProducesController do
       describe "with valid params" do
         it "assigns a newly created produce as @produce" do
           post :create, :produce => @attrs
-          assigns(:produce).should be_valid
+          expect(assigns(:produce)).to be_valid
         end
 
         it "redirects to the created produce" do
           post :create, :produce => @attrs
-          response.should redirect_to(produce_url(assigns(:produce)))
+          expect(response).to redirect_to(produce_url(assigns(:produce)))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved produce as @produce" do
           post :create, :produce => @invalid_attrs
-          assigns(:produce).should_not be_valid
+          expect(assigns(:produce)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
           post :create, :produce => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -231,24 +231,24 @@ describe ProducesController do
       describe "with valid params" do
         it "assigns a newly created produce as @produce" do
           post :create, :produce => @attrs
-          assigns(:produce).should be_valid
+          expect(assigns(:produce)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :produce => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved produce as @produce" do
           post :create, :produce => @invalid_attrs
-          assigns(:produce).should_not be_valid
+          expect(assigns(:produce)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :produce => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -257,24 +257,24 @@ describe ProducesController do
       describe "with valid params" do
         it "assigns a newly created produce as @produce" do
           post :create, :produce => @attrs
-          assigns(:produce).should be_valid
+          expect(assigns(:produce)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :produce => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved produce as @produce" do
           post :create, :produce => @invalid_attrs
-          assigns(:produce).should_not be_valid
+          expect(assigns(:produce)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :produce => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -297,14 +297,14 @@ describe ProducesController do
 
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @attrs
-          assigns(:produce).should eq(@produce)
+          expect(assigns(:produce)).to eq(@produce)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -319,14 +319,14 @@ describe ProducesController do
 
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @attrs
-          assigns(:produce).should eq(@produce)
-          response.should redirect_to(@produce)
+          expect(assigns(:produce)).to eq(@produce)
+          expect(response).to redirect_to(@produce)
         end
 
         it "moves its position when specified" do
           position = @produce.position
           put :update, :id => @produce.id, :manifestation_id => @produce.manifestation.id, :move => 'lower'
-          response.should redirect_to produces_url(manifestation_id: @produce.manifestation_id)
+          expect(response).to redirect_to produces_url(manifestation_id: @produce.manifestation_id)
           assigns(:produce).position.should eq position + 1
         end
       end
@@ -334,12 +334,12 @@ describe ProducesController do
       describe "with invalid params" do
         it "assigns the produce as @produce" do
           put :update, :id => @produce, :produce => @invalid_attrs
-          assigns(:produce).should_not be_valid
+          expect(assigns(:produce)).not_to be_valid
         end
 
         it "re-renders the 'edit' template" do
           put :update, :id => @produce, :produce => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -354,15 +354,15 @@ describe ProducesController do
 
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @attrs
-          assigns(:produce).should eq(@produce)
-          response.should be_forbidden
+          expect(assigns(:produce)).to eq(@produce)
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -375,14 +375,14 @@ describe ProducesController do
 
         it "should be forbidden" do
           put :update, :id => @produce.id, :produce => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -402,7 +402,7 @@ describe ProducesController do
 
       it "redirects to the produces list" do
         delete :destroy, :id => @produce.id
-        response.should redirect_to(produces_url)
+        expect(response).to redirect_to(produces_url)
       end
     end
 
@@ -415,7 +415,7 @@ describe ProducesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @produce.id
-        response.should redirect_to(produces_url)
+        expect(response).to redirect_to(produces_url)
       end
     end
 
@@ -428,7 +428,7 @@ describe ProducesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @produce.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -439,7 +439,7 @@ describe ProducesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @produce.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

@@ -10,7 +10,7 @@ describe AgentImportFilesController do
 
       it "assigns all agent_import_files as @agent_import_files" do
         get :index
-        assigns(:agent_import_files).should eq(AgentImportFile.page(1))
+        expect(assigns(:agent_import_files)).to eq(AgentImportFile.page(1))
       end
     end
 
@@ -19,7 +19,7 @@ describe AgentImportFilesController do
 
       it "assigns all agent_import_files as @agent_import_files" do
         get :index
-        assigns(:agent_import_files).should eq(AgentImportFile.page(1))
+        expect(assigns(:agent_import_files)).to eq(AgentImportFile.page(1))
       end
     end
 
@@ -28,16 +28,16 @@ describe AgentImportFilesController do
 
       it "assigns empty as @agent_import_files" do
         get :index
-        assigns(:agent_import_files).should be_empty
-        response.should be_forbidden
+        expect(assigns(:agent_import_files)).to be_empty
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "assigns empty as @agent_import_files" do
         get :index
-        assigns(:agent_import_files).should be_empty
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:agent_import_files)).to be_empty
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -48,7 +48,7 @@ describe AgentImportFilesController do
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
-        assigns(:agent_import_file).should eq(AgentImportFile.find(1))
+        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
       end
     end
 
@@ -57,7 +57,7 @@ describe AgentImportFilesController do
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
-        assigns(:agent_import_file).should eq(AgentImportFile.find(1))
+        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
       end
     end
 
@@ -66,15 +66,15 @@ describe AgentImportFilesController do
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
-        assigns(:agent_import_file).should eq(AgentImportFile.find(1))
+        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :show, :id => 1
-        assigns(:agent_import_file).should eq(AgentImportFile.find(1))
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -85,8 +85,8 @@ describe AgentImportFilesController do
 
       it "assigns the requested agent_import_file as @agent_import_file" do
         get :new
-        assigns(:agent_import_file).should_not be_valid
-        response.should be_success
+        expect(assigns(:agent_import_file)).to_not be_valid
+        expect(response).to be_success
       end
     end
 
@@ -95,8 +95,8 @@ describe AgentImportFilesController do
 
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        assigns(:agent_import_file).should_not be_valid
-        response.should be_success
+        expect(assigns(:agent_import_file)).to_not be_valid
+        expect(response).to be_success
       end
     end
 
@@ -105,16 +105,16 @@ describe AgentImportFilesController do
 
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        assigns(:agent_import_file).should_not be_valid
-        response.should be_forbidden
+        expect(assigns(:agent_import_file)).to_not be_valid
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        assigns(:agent_import_file).should_not be_valid
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:agent_import_file)).to_not be_valid
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -125,9 +125,9 @@ describe AgentImportFilesController do
 
       it "should create agent_import_file" do
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../../examples/agent_import_file_sample1.tsv", 'text/csv') }
-        assigns(:agent_import_file).should be_valid
+        expect(assigns(:agent_import_file)).to be_valid
         assigns(:agent_import_file).user.username.should eq @user.username
-        response.should redirect_to agent_import_file_url(assigns(:agent_import_file))
+        expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
 
       it "should import user" do
@@ -135,7 +135,7 @@ describe AgentImportFilesController do
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../../examples/agent_import_file_sample2.tsv", 'text/csv') }
         assigns(:agent_import_file).import_start
         Agent.count.should eq old_agents_count + 6
-        response.should redirect_to agent_import_file_url(assigns(:agent_import_file))
+        expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
 
@@ -144,14 +144,14 @@ describe AgentImportFilesController do
 
       it "should be forbidden" do
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../..//examples/agent_import_file_sample1.tsv", 'text/csv') }
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should be redirect to new session url" do
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../../examples/agent_import_file_sample1.tsv", 'text/csv') }
-        response.should redirect_to new_user_session_url
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end
@@ -163,7 +163,7 @@ describe AgentImportFilesController do
       it "assigns the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
         get :edit, :id => agent_import_file.id
-        assigns(:agent_import_file).should eq(agent_import_file)
+        expect(assigns(:agent_import_file)).to eq(agent_import_file)
       end
     end
 
@@ -173,7 +173,7 @@ describe AgentImportFilesController do
       it "assigns the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
         get :edit, :id => agent_import_file.id
-        assigns(:agent_import_file).should eq(agent_import_file)
+        expect(assigns(:agent_import_file)).to eq(agent_import_file)
       end
     end
 
@@ -183,7 +183,7 @@ describe AgentImportFilesController do
       it "assigns the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
         get :edit, :id => agent_import_file.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -191,7 +191,7 @@ describe AgentImportFilesController do
       it "should not assign the requested agent_import_file as @agent_import_file" do
         agent_import_file = agent_import_files(:agent_import_file_00001)
         get :edit, :id => agent_import_file.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -202,7 +202,7 @@ describe AgentImportFilesController do
 
       it "should update agent_import_file" do
         put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
-        response.should redirect_to agent_import_file_url(assigns(:agent_import_file))
+        expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
 
@@ -211,14 +211,14 @@ describe AgentImportFilesController do
 
       it "should not update agent_import_file" do
         put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not update agent_import_file" do
         put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
-        response.should redirect_to new_user_session_url
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end
@@ -237,7 +237,7 @@ describe AgentImportFilesController do
 
       it "redirects to the agent_import_files list" do
         delete :destroy, :id => @agent_import_file.id
-        response.should redirect_to(agent_import_files_url)
+        expect(response).to redirect_to(agent_import_files_url)
       end
     end
 
@@ -250,7 +250,7 @@ describe AgentImportFilesController do
 
       it "redirects to the agent_import_files list" do
         delete :destroy, :id => @agent_import_file.id
-        response.should redirect_to(agent_import_files_url)
+        expect(response).to redirect_to(agent_import_files_url)
       end
     end
 
@@ -263,7 +263,7 @@ describe AgentImportFilesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_import_file.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -274,7 +274,7 @@ describe AgentImportFilesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_import_file.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
