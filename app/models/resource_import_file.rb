@@ -6,7 +6,7 @@ class ResourceImportFile < ActiveRecord::Base
     :default_shelf_id, :library_id
   default_scope {order('resource_import_files.id DESC')}
   scope :not_imported, -> {in_state(:pending)}
-  scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
+  scope :stucked, -> {in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago)}
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :resource_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
