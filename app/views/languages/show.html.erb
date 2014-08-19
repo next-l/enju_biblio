@@ -4,18 +4,33 @@
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong><%= t('activerecord.attributes.language.native_name') -%>:</strong>
-  <%= @language.native_name -%>
-</p>
-
-<p>
   <strong><%= t('activerecord.attributes.language.name') -%>:</strong>
   <%= @language.name -%>
 </p>
 
 <p>
+  <strong><%= t('activerecord.attributes.language.native_name') -%>:</strong>
+  <%= @language.native_name -%>
+</p>
+
+<p>
   <strong><%= t('activerecord.attributes.language.display_name') -%>:</strong>
   <%= @language.display_name.localize -%>
+</p>
+
+<p>
+  <strong>ISO 639-1:</strong>
+  <td><%= language.iso_639_1 -%></td>
+</p>
+
+<p>
+  <strong>ISO 639-2:</strong>
+  <td><%= language.iso_639_2 -%></td>
+</p>
+
+<p>
+  <strong>ISO 639-3:</strong>
+  <td><%= language.iso_639_3 -%></td>
 </p>
 
 <p>
