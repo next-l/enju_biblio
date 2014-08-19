@@ -630,18 +630,18 @@ class ResourceImportFile < ActiveRecord::Base
         end
       end
 
-      if defined?(EnjuSubject)
-        classifications = import_classification(row)
-        if classifications.present?
-          manifestation.classifications << classifications
-        end
-      end
-
       if manifestation.save
         Manifestation.transaction do
           manifestation.identifiers.delete_all if manifestation.identifiers.exists?
           identifier.each do |k, v|
             manifestation.identifiers << v if v.valid?
+          end
+        end
+
+        if defined?(EnjuSubject)
+          classifications = import_classification(row)
+          if classifications.present?
+            manifestation.classifications << classifications
           end
         end
       end
