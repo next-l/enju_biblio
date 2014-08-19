@@ -4,7 +4,7 @@ describe "manifestations/show" do
   fixtures :all
 
   before(:each) do
-    @manifestation = assign(:manifestation, FactoryGirl.create(:manifestation))
+    assign(:manifestation, FactoryGirl.create(:manifestation))
     @ability = Object.new
     @ability.extend(CanCan::Ability)
     controller.stub(:current_ability) { @ability }
