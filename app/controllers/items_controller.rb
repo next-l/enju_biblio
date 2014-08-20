@@ -206,6 +206,7 @@ class ItemsController < ApplicationController
         format.html { redirect_to(@item, notice: t('controller.successfully_created', model: t('activerecord.models.item'))) }
         format.json { render json: @item, status: :created, location: @item }
       else
+        raise @item.item_has_use_restriction.use_restriction_id.to_s
         prepare_options
         format.html { render action: "new" }
         format.json { render json: @item.errors, status: :unprocessable_entity }

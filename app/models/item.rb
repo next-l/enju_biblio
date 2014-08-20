@@ -13,15 +13,15 @@ class Item < ActiveRecord::Base
     :binding_item_identifier, :binding_call_number, :binded_at
   scope :on_shelf, where('shelf_id != 1')
   scope :on_web, where(:shelf_id => 1)
-  belongs_to :manifestation, touch: true
+  delegate :display_name, :to => :shelf, :prefix => true
   has_many :owns
   has_many :agents, through: :owns
-  delegate :display_name, :to => :shelf, :prefix => true
-  belongs_to :bookstore, validate: true
   has_many :donates
   has_many :donors, through: :donates, source: :agent
-  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   has_one :resource_import_result
+  belongs_to :manifestation, touch: true
+  belongs_to :bookstore, validate: true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   belongs_to :budget_type
 
   validates_associated :bookstore
@@ -49,6 +49,13 @@ class Item < ActiveRecord::Base
     time :created_at
     time :updated_at
     time :acquired_at
+  end
+
+  after_save do
+    manifestation.index!
+  end
+  after_destroy do
+    manifestation.index!
   end
 
   attr_accessor :library_id
