@@ -405,26 +405,51 @@ class ResourceImportFile < ActiveRecord::Base
 
   def import_subject(row)
     subjects = []
-    row['subject'].to_s.split('//').each do |s|
-      # TODO: Subject typeの設定
-      subject = Subject.new(:term => s.to_s.strip)
-      subject.subject_type = SubjectType.where(name: 'concept').first
-      subject.subject_heading_type = SubjectHeadingType.where(name: 'unknown').first
-      subjects << subject
-    end
+    subject_list = YAML.load(row['subject'].to_s)
+    # TODO: Subject typeの設定
+    return subjects unless subject_list
+    subject_list.map{|k, v|
+      subject_heading_type = SubjectHeadingType.where(name: k.downcase).first
+      next unless subject_heading_type
+      if v.is_a?(Array)
+        v.each do |term|
+          subject = Subject.new(term: term)
+          subject.subject_heading_type = subject_heading_type
+          subject.subject_type = SubjectType.where(name: 'concept').first
+          subject.save!
+          subjects << subject
+        end
+      else
+        subject = Subject.new(term: term)
+        subject.subject_heading_type = subject_heading_type
+        subject.subject_type = SubjectType.where(name: 'concept').first
+        subject.save!
+        subjects << subject
+      end
+    }
     subjects
   end
 
   def import_classification(row)
     classifications = []
     classification_number = YAML.load(row['classification'].to_s)
-    return nil unless classification_number
+    return classifications unless classification_number
     classification_number.map{|k, v|
       classification_type = ClassificationType.where(name: k.downcase).first
-      classification = Classification.new(:category => v.to_s)
-      classification.classification_type = classification_type
-      classification.save!
-      classifications << classification
+      next unless classification_type
+      if v.is_a?(Array)
+        v.each do |category|
+          classification = Classification.new(category: category)
+          classification.classification_type = classification_type
+          classification.save!
+          classifications << classification
+        end
+      else
+        classification = Classification.new(category: v.to_s)
+        classification.classification_type = classification_type
+        classification.save!
+        classifications << classification
+      end
     }
     classifications
   end
@@ -632,16 +657,22 @@ class ResourceImportFile < ActiveRecord::Base
 
       if manifestation.save
         Manifestation.transaction do
-          manifestation.identifiers.delete_all if manifestation.identifiers.exists?
-          identifier.each do |k, v|
-            manifestation.identifiers << v if v.valid?
+          if options[:edit_mode] == 'update'
+            unless identifier.empty?
+              identifier.map{|k, v|
+                v.manifestation = manifestation
+                v.save!
+              }
+            end
+          else
+            manifestation.identifiers << identifier.map{|k,v| v}
           end
         end
 
         if defined?(EnjuSubject)
           classifications = import_classification(row)
           if classifications.present?
-            manifestation.classifications << classifications
+            manifestation.classifications = classifications
           end
         end
       end
@@ -665,8 +696,9 @@ class ResourceImportFile < ActiveRecord::Base
     identifier = {}
     %w(isbn issn doi jpno).each do |id_type|
       if row["#{id_type}"].present?
-        identifier[:"#{id_type}"] = Identifier.new(body: row["#{id_type}"])
-        identifier[:"#{id_type}"].identifier_type = IdentifierType.where(name: id_type).first_or_create
+        import_id = Identifier.new(body: row["#{id_type}"])
+        import_id.identifier_type = IdentifierType.where(name: id_type).first_or_create
+        identifier[:"#{id_type}"] = import_id if import_id.valid?
       end
     end
     identifier

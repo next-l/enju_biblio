@@ -101,6 +101,8 @@ describe ResourceImportFile do
         item_10104.manifestation.height.should be_nil
         item_10104.manifestation.width.should be_nil
         item_10104.manifestation.depth.should be_nil
+        item_10104.manifestation.subjects.map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
+        item_10104.manifestation.classifications.map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
 
         manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
@@ -185,6 +187,8 @@ describe ResourceImportFile do
       item_00001.binding_item_identifier.should eq '900001'
       item_00001.binding_call_number.should eq '336|A'
       item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
+      item_00001.manifestation.subjects.map{|subject| {subject.subject_heading_type.name => subject.term}}.should eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
+      item_00001.manifestation.identifier_contents(:isbn).should eq ["4798002062", "12345678"]
       Item.where(item_identifier: '00002').first.manifestation.publishers.collect(&:full_name).should eq ['test2']
 
       item_00003 = Item.where(item_identifier: '00003').first
