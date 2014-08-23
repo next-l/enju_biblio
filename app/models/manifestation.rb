@@ -49,14 +49,14 @@ class Manifestation < ActiveRecord::Base
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   belongs_to :nii_type if defined?(EnjuNii)
-  accepts_nested_attributes_for :creators, :allow_destroy => true, reject_if: :all_blank
-  accepts_nested_attributes_for :contributors, :allow_destroy => true, reject_if: :all_blank
-  accepts_nested_attributes_for :publishers, :allow_destroy => true, reject_if: :all_blank
-  accepts_nested_attributes_for :series_statements, :allow_destroy => true, reject_if: :all_blank
-  accepts_nested_attributes_for :identifiers, :allow_destroy => true, reject_if: :all_blank
+  accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
 
   searchable do
-    text :title, :default_boost => 2 do
+    text :title, default_boost: 2 do
       titles
     end
     text :fulltext, :note, :creator, :contributor, :publisher, :description,
@@ -225,8 +225,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :attachment, :storage => :s3, :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
-      :s3_permissions => :private
+    has_attached_file :attachment, storage: :s3, s3_credentials: "#{Rails.root.to_s}/config/s3.yml",
+      s3_permissions: :private
   else
     has_attached_file :attachment,
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
@@ -241,11 +241,11 @@ class Manifestation < ActiveRecord::Base
   validates :depth, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :manifestation_identifier, uniqueness: true, allow_blank: true
   validates :pub_date, format: {with: /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, allow_blank: true
-  validates :access_address, url: true, allow_blank: true, length: {:maximum => 255}
-  validates :issue_number, :numericality => {:greater_than => 0}, allow_blank: true
-  validates :volume_number, :numericality => {:greater_than => 0}, allow_blank: true
-  validates :serial_number, :numericality => {:greater_than => 0}, allow_blank: true
-  validates :edition, :numericality => {:greater_than => 0}, allow_blank: true
+  validates :access_address, url: true, allow_blank: true, length: {maximum: 255}
+  validates :issue_number, numericality: {greater_than: 0}, allow_blank: true
+  validates :volume_number, numericality: {greater_than: 0}, allow_blank: true
+  validates :serial_number, numericality: {greater_than: 0}, allow_blank: true
+  validates :edition, numericality: {greater_than: 0}, allow_blank: true
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement
@@ -352,10 +352,10 @@ class Manifestation < ActiveRecord::Base
     return nil if self.cached_numdocs < 5
     manifestation = nil
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
-    response = Manifestation.search(:include => [:creators, :contributors, :publishers, :items]) do
+    response = Manifestation.search(include: [:creators, :contributors, :publishers, :items]) do
       fulltext keyword if keyword
       order_by(:random)
-      paginate :page => 1, :per_page => 1
+      paginate page: 1, per_page: 1
     end
     manifestation = response.results.first
   end
@@ -399,7 +399,7 @@ class Manifestation < ActiveRecord::Base
   def self.find_by_isbn(isbn)
     identifier_type = IdentifierType.where(name: 'isbn').first
     return nil unless identifier_type
-    Manifestation.includes(:identifiers => :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
+    Manifestation.includes(identifiers: :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
   end
 
   def index_series_statement
@@ -416,16 +416,16 @@ class Manifestation < ActiveRecord::Base
   end
 
   def web_item
-    items.where(:shelf_id => Shelf.web.id).first
+    items.where(shelf_id: Shelf.web.id).first
   end
 
   def set_agent_role_type(agent_lists, options = {scope: :creator})
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(:agent_identifier => agent_list[:agent_identifier]).first
+        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       end
-      agent = Agent.where(:full_name => name_and_role[0]).first unless agent
+      agent = Agent.where(full_name: name_and_role[0]).first unless agent
       next unless agent
       type = name_and_role[1].to_s.strip
 
@@ -433,14 +433,14 @@ class Manifestation < ActiveRecord::Base
       when :creator
         type = 'author' if type.blank?
         role_type = CreateType.where(name: type).first
-        create = Create.where(:work_id => self.id, agent_id: agent.id).first
+        create = Create.where(work_id: id, agent_id: agent.id).first
         if create
           create.create_type = role_type
           create.save(validate: false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
-        produce = Produce.where(:manifestation_id => self.id, agent_id: agent.id).first
+        produce = Produce.where(manifestation_id: id, agent_id: agent.id).first
         if produce
           produce.produce_type = ProduceType.where(name: type).first
           produce.save(validate: false)
