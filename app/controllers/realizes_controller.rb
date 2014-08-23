@@ -33,10 +33,10 @@ class RealizesController < ApplicationController
 
   # GET /realizes/new
   def new
-    if @expression and @agent.blank?
+    if @expression && @agent.blank?
       redirect_to expression_agents_url(@expression)
       return
-    elsif @agent and @expression.blank?
+    elsif @agent && @expression.blank?
       redirect_to agent_expressions_url(@agent)
       return
     else
@@ -71,7 +71,7 @@ class RealizesController < ApplicationController
   # PUT /realizes/1.json
   def update
     # 並べ替え
-    if @expression and params[:move]
+    if @expression && params[:move]
       move_position(@realize, params[:move], false)
       redirect_to realizes_url(expression_id: @realize.expression_id)
       return

@@ -10,7 +10,7 @@ class Agent < ActiveRecord::Base
     :full_name_alternative_transcription, :title,
     :agent_identifier
 
-  scope :readable_by, lambda{|user| {:conditions => ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(name: 'Guest').select(:id).first.id]}}
+  scope :readable_by, lambda{|user| {conditions: ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(name: 'Guest').select(:id).first.id]}}
   has_many :creates, dependent: :destroy
   has_many :works, through: :creates
   has_many :realizes, dependent: :destroy
@@ -38,10 +38,10 @@ class Agent < ActiveRecord::Base
 
   validates_presence_of :language, :agent_type, :country
   validates_associated :language, :agent_type, :country
-  validates :full_name, presence: true, length: {:maximum => 255}
-  validates :birth_date, format: {with: /\A\d+(-\d{0,2}){0,2}\z/}, allow_blank: true
-  validates :death_date, format: {with: /\A\d+(-\d{0,2}){0,2}\z/}, allow_blank: true
-  validates :email, format: {with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i}, allow_blank: true
+  validates :full_name, presence: true, length: { maximum: 255 }
+  validates :birth_date, format: { with: /\A\d+(-\d{0,2}){0,2}\z/ }, allow_blank: true
+  validates :death_date, format: { with: /\A\d+(-\d{0,2}){0,2}\z/ }, allow_blank: true
+  validates :email, format: { with: /\A([\w\.%\+\-]+)@([\w\-]+\.)+([\w]{2,})\z/i }, allow_blank: true
   validate :check_birth_date
   before_validation :set_role_and_name, on: :create
   before_save :set_date_of_birth, :set_date_of_death
@@ -80,22 +80,22 @@ class Agent < ActiveRecord::Base
   paginates_per 10
 
   def set_role_and_name
-    self.required_role = Role.where(name: 'Librarian').first if self.required_role_id.nil?
+    self.required_role = Role.where(name: 'Librarian').first if required_role_id.nil?
     set_full_name
   end
 
   def set_full_name
-    if self.full_name.blank?
-      if self.last_name.to_s.strip and self.first_name.to_s.strip and Setting.family_name_first == true
+    if full_name.blank?
+      if last_name.to_s.strip && first_name.to_s.strip && Setting.family_name_first == true
         self.full_name = [last_name, middle_name, first_name].compact.join(" ").to_s.strip
       else
         self.full_name = [first_name, last_name, middle_name].compact.join(" ").to_s.strip
       end
     end
-    if self.full_name_transcription.blank?
+    if full_name_transcription.blank?
       self.full_name_transcription = [last_name_transcription, middle_name_transcription, first_name_transcription].join(" ").to_s.strip
     end
-    [self.full_name, self.full_name_transcription]
+    [full_name, full_name_transcription]
   end
 
   def set_date_of_birth
@@ -136,7 +136,7 @@ class Agent < ActiveRecord::Base
   end
 
   def check_birth_date
-    if date_of_birth.present? and date_of_death.present?
+    if date_of_birth.present? && date_of_death.present?
       if date_of_birth > date_of_death
         errors.add(:birth_date)
         errors.add(:death_date)
@@ -206,19 +206,19 @@ class Agent < ActiveRecord::Base
   end
 
   def created(work)
-    creates.where(:work_id => work.id).first
+    creates.where(work_id: work.id).first
   end
 
   def realized(expression)
-    realizes.where(:expression_id => expression.id).first
+    realizes.where(expression_id: expression.id).first
   end
 
   def produced(manifestation)
-    produces.where(:manifestation_id => manifestation.id).first
+    produces.where(manifestation_id: manifestation.id).first
   end
 
   def owned(item)
-    owns.where(:item_id => item.id)
+    owns.where(item_id: item.id)
   end
 
   def self.import_agents(agent_lists)
@@ -226,17 +226,17 @@ class Agent < ActiveRecord::Base
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(:agent_identifier => agent_list[:agent_identifier]).first
+        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       else
-        agent = Agent.where(:full_name => name_and_role[0]).first
+        agent = Agent.where(full_name: name_and_role[0]).first
       end
       role_type = name_and_role[1].to_s.strip
       unless agent
         agent = Agent.new(
-          :full_name => name_and_role[0],
-          :full_name_transcription => agent_list[:full_name_transcription],
-          :agent_identifier => agent_list[:agent_identifier],
-          :language_id => 1
+          full_name: name_and_role[0],
+          full_name_transcription: agent_list[:full_name_transcription],
+          agent_identifier: agent_list[:agent_identifier],
+          language_id: 1
         )
         agent.required_role = Role.where(name: 'Guest').first
         agent.save

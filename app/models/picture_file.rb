@@ -2,20 +2,20 @@ class PictureFile < ActiveRecord::Base
   attr_accessible :picture, :picture_attachable_id,
     :picture_attachable_type
   scope :attached, where('picture_attachable_id IS NOT NULL')
-  belongs_to :picture_attachable, :polymorphic => true, validate: true
+  belongs_to :picture_attachable, polymorphic: true, validate: true
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :picture, :storage => :s3, :styles => { :medium => "600x600>", :thumb => "100x100>" },
-      :s3_credentials => "#{Rails.root.to_s}/config/s3.yml",
-      :s3_permissions => :private
+    has_attached_file :picture, storage: :s3, styles: { medium: "600x600>", thumb: "100x100>" },
+      s3_credentials: "#{Rails.root}/config/s3.yml",
+      s3_permissions: :private
   else
-    has_attached_file :picture, :styles => { :medium => "600x600>", :thumb => "100x100>" },
+    has_attached_file :picture, styles: { medium: "600x600>", thumb: "100x100>" },
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_presence :picture
-  validates_attachment_content_type :picture, :content_type => ["image/jpeg", "image/pjpeg", "image/png", "image/gif", "image/svg+xml"], on: :create
+  validates_attachment_content_type :picture, content_type: ["image/jpeg", "image/pjpeg", "image/png", "image/gif", "image/svg+xml"], on: :create
 
-  validates :picture_attachable_type, presence: true, :inclusion => {:in => ['Event', 'Manifestation', 'Agent', 'Shelf']}
+  validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates_associated :picture_attachable
   default_scope order: 'picture_files.position'
   # http://railsforum.com/viewtopic.php?id=11615

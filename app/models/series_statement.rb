@@ -35,7 +35,7 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   def create_root_series_statement
-    if series_master? and root_manifestation.nil?
+    if series_master? && root_manifestation.nil?
       self.root_manifestation = manifestation
     else
       self.root_manifestation = nil

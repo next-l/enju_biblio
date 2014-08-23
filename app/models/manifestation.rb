@@ -172,7 +172,7 @@ class Manifestation < ActiveRecord::Base
       creator
     end
     text :atitle do
-      if serial? and root_series_statement.nil?
+      if serial? && root_series_statement.nil?
         titles
       end
     end
@@ -305,7 +305,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def number_of_pages
-    if start_page and end_page
+    if start_page && end_page
       end_page.to_i - start_page.to_i + 1
     end
   end
@@ -350,7 +350,6 @@ class Manifestation < ActiveRecord::Base
   # TODO: よりよい推薦方法
   def self.pickup(keyword = nil)
     return nil if self.cached_numdocs < 5
-    manifestation = nil
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
     response = Manifestation.search(include: [:creators, :contributors, :publishers, :items]) do
       fulltext keyword if keyword
@@ -452,9 +451,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def set_number
-    self.volume_number = volume_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if volume_number_string and !volume_number?
-    self.issue_number = issue_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if issue_number_string and !issue_number?
-    self.edition = edition_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if edition_string and !edition?
+    self.volume_number = volume_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if volume_number_string && !volume_number?
+    self.issue_number = issue_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if issue_number_string && !issue_number?
+    self.edition = edition_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if edition_string && !edition?
   end
 
   def pub_dates

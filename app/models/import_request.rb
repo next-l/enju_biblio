@@ -60,6 +60,7 @@ class ImportRequest < ActiveRecord::Base
   end
 
   private
+
   def self.transition_class
     ImportRequestTransition
   end

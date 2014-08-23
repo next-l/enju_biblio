@@ -48,7 +48,7 @@ class ManifestationsController < ApplicationController
           end
           page ||= 1
 
-          if params[:verb] == 'GetRecord' and params[:identifier]
+          if params[:verb] == 'GetRecord' && params[:identifier]
             begin
               @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
             rescue ActiveRecord::RecordNotFound
@@ -416,7 +416,7 @@ class ManifestationsController < ApplicationController
           if Setting.uploaded_file.storage == :s3
             send_data @manifestation.attachment.data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
-            if File.exist?(file) and File.file?(file)
+            if File.exist?(file) && File.file?(file)
               send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
             end
           end
@@ -545,7 +545,7 @@ class ManifestationsController < ApplicationController
     #end
 
     #unless options[:library].blank?
-    #  library_list = options[:library].split.uniq.join(' and ')
+    #  library_list = options[:library].split.uniq.join(' && ')
     #  query = "#{query} library_sm:#{library_list}"
     #end
 
@@ -601,7 +601,7 @@ class ManifestationsController < ApplicationController
       query = "#{query} item_identifier_sm:#{options[:item_identifier]}"
     end
 
-    unless options[:number_of_pages_at_least].blank? and options[:number_of_pages_at_most].blank?
+    unless options[:number_of_pages_at_least].blank? && options[:number_of_pages_at_most].blank?
       number_of_pages = {}
       number_of_pages[:at_least] = options[:number_of_pages_at_least].to_i
       number_of_pages[:at_most] = options[:number_of_pages_at_most].to_i
@@ -745,7 +745,7 @@ class ManifestationsController < ApplicationController
   end
 
   def set_pub_date(query, options)
-    unless options[:pub_date_from].blank? and options[:pub_date_to].blank?
+    unless options[:pub_date_from].blank? && options[:pub_date_to].blank?
       options[:pub_date_from].to_s.gsub!(/\D/, '')
       options[:pub_date_to].to_s.gsub!(/\D/, '')
       pub_date = parse_pub_date(options)
@@ -755,7 +755,7 @@ class ManifestationsController < ApplicationController
   end
 
   def set_acquisition_date(query, options)
-    unless options[:acquired_from].blank? and options[:acquired_to].blank?
+    unless options[:acquired_from].blank? && options[:acquired_to].blank?
       options[:acquired_from].to_s.gsub!(/\D/, '')
       options[:acquired_to].to_s.gsub!(/\D/, '')
 

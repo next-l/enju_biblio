@@ -19,7 +19,7 @@ module EnjuBiblio
         end
         can [:read, :create, :update], Manifestation
         can [:destroy, :delete], Manifestation do |manifestation|
-          manifestation.items.empty? and !manifestation.series_master?
+          manifestation.items.empty? && !manifestation.series_master?
         end
         can :manage, [
           Create,
@@ -72,7 +72,7 @@ module EnjuBiblio
         can :index, Manifestation
         can [:show, :create, :update], Manifestation
         can [:destroy, :delete], Manifestation do |manifestation|
-          manifestation.items.empty? and !manifestation.series_master?
+          manifestation.items.empty? && !manifestation.series_master?
         end
         can [:index, :create], Agent
         can :show, Agent do |agent|

@@ -65,7 +65,7 @@ class AgentRelationshipsController < ApplicationController
   # PUT /agent_relationships/1.json
   def update
     # 並べ替え
-    if @agent and params[:move]
+    if @agent && params[:move]
       move_position(@agent_relationship, params[:move], false)
       redirect_to agent_relationships_url(agent_id: @agent_relationship.parent_id)
       return

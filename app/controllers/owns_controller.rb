@@ -31,10 +31,10 @@ class OwnsController < ApplicationController
 
   # GET /owns/new
   def new
-    if @item and @agent.blank?
+    if @item && @agent.blank?
       redirect_to item_agents_url(@item)
       return
-    elsif @agent and @item.blank?
+    elsif @agent && @item.blank?
       redirect_to agent_items_url(@agent)
       return
     else
@@ -67,7 +67,7 @@ class OwnsController < ApplicationController
   # PUT /owns/1
   # PUT /owns/1.json
   def update
-    if @item and params[:move]
+    if @item && params[:move]
       move_position(@own, params[:move], false)
       redirect_to owns_url(item_id: @own.item_id)
       return

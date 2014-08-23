@@ -192,7 +192,7 @@ class PictureFilesController < ApplicationController
       if Setting.uploaded_file.storage == :s3
         send_data file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, :disposition => disposition
       else
-        if File.exist?(file) and File.file?(file)
+        if File.exist?(file) && File.file?(file)
           send_file file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, :disposition => disposition
         end
       end

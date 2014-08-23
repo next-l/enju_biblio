@@ -38,10 +38,10 @@ class ProducesController < ApplicationController
 
   # GET /produces/new
   def new
-    if @agent and @manifestation.blank?
+    if @agent && @manifestation.blank?
       redirect_to agent_manifestations_url(@agent)
       return
-    elsif @manifestation and @agent.blank?
+    elsif @manifestation && @agent.blank?
       redirect_to manifestation_agents_url(@manifestation)
       return
     else
@@ -75,7 +75,7 @@ class ProducesController < ApplicationController
   # PUT /produces/1
   # PUT /produces/1.json
   def update
-    if @manifestation and params[:move]
+    if @manifestation && params[:move]
       move_position(@produce, params[:move], false)
       redirect_to produces_url(manifestation_id: @produce.manifestation_id)
       return

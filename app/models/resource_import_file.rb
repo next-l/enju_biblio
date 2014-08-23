@@ -4,9 +4,9 @@ class ResourceImportFile < ActiveRecord::Base
   include ImportFile
   attr_accessible :resource_import, :edit_mode, :user_encoding, :mode,
     :default_shelf_id, :library_id
-  default_scope {order('resource_import_files.id DESC')}
-  scope :not_imported, -> {in_state(:pending)}
-  scope :stucked, -> {in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago)}
+  default_scope { order('resource_import_files.id DESC') }
+  scope :not_imported, -> { in_state(:pending) }
+  scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :resource_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
@@ -66,8 +66,8 @@ class ResourceImportFile < ActiveRecord::Base
     row_num = 1
 
     field = rows.first
-    if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|field|
-      field.to_s.strip == ""
+    if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
+      f.to_s.strip == ''
     }.empty?
       raise "You should specify isbn or original_title in the first line"
     end
@@ -154,7 +154,7 @@ class ResourceImportFile < ActiveRecord::Base
       end
       import_result.manifestation = manifestation
 
-      if manifestation and item_identifier.present?
+      if manifestation && item_identifier.present?
         import_result.item = create_item(row, manifestation)
         manifestation.index
       else
@@ -376,7 +376,7 @@ class ResourceImportFile < ActiveRecord::Base
         manifestation = Manifestation.where(id: row['manifestation_id'].to_s.strip).first
       end
 
-      if item and manifestation
+      if item && manifestation
         item.manifestation = manifestation
         item.save!
       end
@@ -523,7 +523,6 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def fetch(row, options = {edit_mode: 'create'})
-    shelf = Shelf.where(name: row['shelf'].to_s.strip).first || Shelf.web
     case options[:edit_mode]
     when 'create'
       manifestation = nil
@@ -548,13 +547,8 @@ class ResourceImportFile < ActiveRecord::Base
       title[:title_alternative_transcription] = manifestation.title_alternative_transcription if row['title_alternative_transcription'].to_s.strip.blank?
     end
     #title[:title_transcription_alternative] = row['title_transcription_alternative']
-    if title[:original_title].blank? and options[:edit_mode] == 'create'
+    if title[:original_title].blank? && options[:edit_mode] == 'create'
       return nil
-    end
-
-    lisbn = Lisbn.new(row['isbn'].to_s.strip)
-    if lisbn.isbn.valid?
-      isbn = lisbn.isbn
     end
 
     # TODO: 小数点以下の表現
@@ -566,6 +560,7 @@ class ResourceImportFile < ActiveRecord::Base
     content_type = ContentType.where(name: row['content_type'].to_s.strip).first
     frequency = Frequency.where(name: row['frequency'].to_s.strip).first
 
+    fulltext_content = serial = nil
     if %w(t true).include?(row['fulltext_content'].to_s.downcase.strip)
       fulltext_content = true
     end
@@ -628,13 +623,12 @@ class ResourceImportFile < ActiveRecord::Base
         :statement_of_responsibility => row['statement_of_responsibility'],
         :access_address => row['access_address'],
         :manifestation_identifier => row['manifestation_identifier'],
-        :fulltext_content => fulltext_content,
         :publication_place => row['publication_place'],
         :extent => row['extent'],
         :dimensions => row['dimensions'],
         :start_page => row['start_page'],
-        :end_page => row['end_page']
-      }.delete_if{|key, value| value.nil?}
+        :end_page => row['end_page'],
+      }.delete_if{|_key, value| value.nil?}
 
       manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,
       {
@@ -642,13 +636,13 @@ class ResourceImportFile < ActiveRecord::Base
       })
 
       required_role = Role.where(name: row['required_role_name'].to_s.strip.camelize).first
-      if required_role and row['required_role_name'].present?
+      if required_role && row['required_role_name'].present?
         manifestation.required_role = required_role
       else
         manifestation.required_role = Role.where(name: 'Guest').first unless manifestation.required_role
       end
 
-      if language and row['language'].present?
+      if language && row['language'].present?
         manifestation.language = language
       else
         manifestation.language = Language.where(name: 'unknown').first unless manifestation.language
@@ -659,6 +653,8 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.frequency = frequency if frequency
       #manifestation.start_page = row[:start_page].to_i if row[:start_page]
       #manifestation.end_page = row[:end_page].to_i if row[:end_page]
+      manifestation.serial = serial if row['serial']
+      manifestation.fulltext_content = fulltext_content if row['fulltext_content']
 
       if row['series_original_title'].to_s.strip.present?
         Manifestation.transaction do
@@ -686,13 +682,13 @@ class ResourceImportFile < ActiveRecord::Base
         Manifestation.transaction do
           if options[:edit_mode] == 'update'
             unless identifier.empty?
-              identifier.map{|k, v|
+              identifier.map{|_k, v|
                 v.manifestation = manifestation
                 v.save!
               }
             end
           else
-            manifestation.identifiers << identifier.map{|k,v| v}
+            manifestation.identifiers << identifier.map{|_k, v| v}
           end
         end
 

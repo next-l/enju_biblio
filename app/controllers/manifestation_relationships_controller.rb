@@ -65,7 +65,7 @@ class ManifestationRelationshipsController < ApplicationController
   # PUT /manifestation_relationships/1.json
   def update
     # 並べ替え
-    if @manifestation and params[:move]
+    if @manifestation && params[:move]
       move_position(@manifestation_relationship, params[:move], false)
       redirect_to manifestation_relationships_url(manifestation_id: @manifestation_relationship.parent_id)
       return

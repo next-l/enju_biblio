@@ -33,10 +33,10 @@ class CreatesController < ApplicationController
 
   # GET /creates/new
   def new
-    if @agent and @work.blank?
+    if @agent && @work.blank?
       redirect_to agent_works_url(@patorn)
       return
-    elsif @work and @agent.blank?
+    elsif @work && @agent.blank?
       redirect_to work_agents_url(@work)
       return
     else
@@ -71,7 +71,7 @@ class CreatesController < ApplicationController
   # PUT /creates/1.json
   def update
     # 並べ替え
-    if @work and params[:move]
+    if @work && params[:move]
       move_position(@create, params[:move], false)
       redirect_to creates_url(work_id: @create.work_id)
       return
