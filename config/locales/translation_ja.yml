@@ -7,7 +7,6 @@ ja:
       create_type: 著作の関係
       embody: 具体化
       exemplify: 書誌と所蔵の関係
-      extent: 大きさ
       form_of_work: 著作の形態
       frequency: 発行頻度
       item: 所蔵情報
@@ -90,6 +89,8 @@ ja:
         statement_of_responsibility: 責任表示
         publication_place: 出版地
         parent_id: 親書誌
+        extent: ページ数
+        fulltext_content: 全文あり
       manifestation/subjects:
           term: 件名
       manifestation/classifications:
@@ -201,11 +202,6 @@ ja:
         note: 注記
         position: 位置
       medium_of_performance:
-        name: 名前
-        display_name: 表示名
-        note: 注記
-        position: 位置
-      extent:
         name: 名前
         display_name: 表示名
         note: 注記
