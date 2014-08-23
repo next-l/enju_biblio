@@ -1,7 +1,7 @@
 class RealizeType < ActiveRecord::Base
   attr_accessible :name, :display_name, :note, :position
   include MasterModel
-  default_scope order: 'realize_types.position'
+  default_scope { order('realize_types.position') }
 end
 
 # == Schema Information

@@ -1,11 +1,8 @@
 class Country < ActiveRecord::Base
   attr_accessible :name, :display_name, :alpha_2, :alpha_3, :numeric_3, :note
   include MasterModel
-  default_scope order: "countries.position"
+  default_scope { order('countries.position') }
   has_many :agents
-  #has_many :people
-  #has_many :corporate_bodies
-  #has_many :families
   has_many :libraries
   has_one :library_group
 

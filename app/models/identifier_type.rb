@@ -1,9 +1,9 @@
 class IdentifierType < ActiveRecord::Base
   attr_accessible :display_name, :name, :note, :position
   include MasterModel
-  default_scope order: "identifier_types.position"
+  default_scope { order('identifier_types.position') }
   has_many :identifiers
-  validates :name, format: {with: /\A[0-9a-z][0-9a-z_\-]*[0-9a-z]\Z/}
+  validates :name, format: { with: /\A[0-9a-z][0-9a-z_\-]*[0-9a-z]\Z/ }
 end
 
 # == Schema Information

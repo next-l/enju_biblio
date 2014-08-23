@@ -2,9 +2,9 @@ class AgentImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordModel
   include ImportFile
   attr_accessible :agent_import, :edit_mode, :user_encoding, :mode
-  default_scope {order('agent_import_files.id DESC')}
-  scope :not_imported, -> {in_state(:pending)}
-  scope :stucked, -> {in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago)}
+  default_scope {i order('agent_import_files.id DESC') }
+  scope :not_imported, -> { in_state(:pending) }
+  scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :agent_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",

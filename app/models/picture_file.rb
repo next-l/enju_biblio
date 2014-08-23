@@ -1,7 +1,7 @@
 class PictureFile < ActiveRecord::Base
   attr_accessible :picture, :picture_attachable_id,
     :picture_attachable_type
-  scope :attached, where('picture_attachable_id IS NOT NULL')
+  scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true, validate: true
 
   if Setting.uploaded_file.storage == :s3
@@ -17,7 +17,7 @@ class PictureFile < ActiveRecord::Base
 
   validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates_associated :picture_attachable
-  default_scope order: 'picture_files.position'
+  default_scope { order('picture_files.position') }
   # http://railsforum.com/viewtopic.php?id=11615
   acts_as_list scope: 'picture_attachable_type=\'#{picture_attachable_type}\''
   normalize_attributes :picture_attachable_type
