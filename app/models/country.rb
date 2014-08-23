@@ -13,6 +13,7 @@ class Country < ActiveRecord::Base
 
   # Validations
   validates_presence_of :alpha_2, :alpha_3, :numeric_3
+  validates :name, presence: true, format: { with: /\A[0-9A-Za-z][0-9A-Za-z_\-\s,]*[0-9a-z]\Z/ }
 
   after_save :clear_all_cache
   after_destroy :clear_all_cache
@@ -23,6 +24,12 @@ class Country < ActiveRecord::Base
 
   def clear_all_cache
     Rails.cache.delete('country_all')
+  end
+
+  private
+
+  def valid_name?
+    true
   end
 end
 
