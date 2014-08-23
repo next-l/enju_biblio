@@ -11,9 +11,9 @@ class Item < ActiveRecord::Base
     :acquired_at, :bookstore_id, :missing_since, :budget_type_id, :lock_version,
     :manifestation_id, :library_id, :required_role_id,
     :binding_item_identifier, :binding_call_number, :binded_at
-  scope :on_shelf, where('shelf_id != 1')
-  scope :on_web, where(:shelf_id => 1)
-  delegate :display_name, :to => :shelf, :prefix => true
+  scope :on_shelf, -> { where('shelf_id != 1') }
+  scope :on_web, -> { where(:shelf_id => 1) }
+  delegate :display_name, :to => :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns
   has_many :donates
