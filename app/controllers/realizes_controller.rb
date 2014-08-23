@@ -76,7 +76,7 @@ class RealizesController < ApplicationController
     # 並べ替え
     if @expression and params[:move]
       move_position(@realize, params[:move], false)
-      redirect_to expression_realizes_url(@expression)
+      redirect_to realizes_url(expression_id: @realize.expression_id)
       return
     end
 

@@ -9,7 +9,7 @@ manifestation_identifier	original_title	note	title_transcription	title_alternati
 102	test6	× identifier重複、item_identifier重複							test		test3											10101									
 	test7	○ ISBN不正、タイトルあり、所蔵情報あり											2001-1-1			9000000000000					first_shelf	10104				Public fund					
 		× ISBN不正、タイトルなし														22222222						10105									
-	test8	○ ISBNなし、所蔵情報あり							test		test4//test5	てすと4//てすと5						1000	0		first_shelf	11111									
+	test8	○ ISBNなし、所蔵情報あり							test		test4//test5	てすと4//てすと5						1000	0			11111									
 	test9	× item_identifier重複																				11111									
 		○ ISBN重複（シリーズ情報あり）、item_identifierなし														4798002062															
 		△ ISBN重複（シリーズ情報なし）、item_identifier非重複														4798002062						11112									

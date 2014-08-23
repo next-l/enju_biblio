@@ -11,30 +11,34 @@ class SeriesStatementsController < ApplicationController
   # GET /series_statements.json
   def index
     authorize SeriesStatement
-    search = Sunspot.new_search(SeriesStatement)
-    query = params[:query].to_s.strip
     page = params[:page] || 1
+    @query = params[:query]
+    order = nil
 
-    unless query.blank?
-      @query = query.dup
-      query = query.gsub('　', ' ')
+    if params[:query].to_s.strip == ''
+      user_query = '*'
+    else
+      user_query = params[:query]
     end
-    search.build do
-      fulltext query if query.present?
-      paginate :page => page.to_i, :per_page => SeriesStatement.default_per_page
-      order_by :position, :asc
-    end
+
+    #search.build do
+    #  fulltext query if query.present?
+    #  paginate :page => page.to_i, :per_page => SeriesStatement.default_per_page
+    #  order_by :position, :asc
+    #end
     #work = @work
     manifestation = @manifestation
     series_statement_merge_list = @series_statement_merge_list
-    search.build do
-      with(:manifestation_id).equal_to manifestation.id if manifestation
-      with(:series_statement_merge_list_ids).equal_to series_statement_merge_list.id if series_statement_merge_list
-    end
+    #search.build do
+    #  with(:manifestation_id).equal_to manifestation.id if manifestation
+    #  with(:series_statement_merge_list_ids).equal_to series_statement_merge_list.id if series_statement_merge_list
+    #end
     page = params[:page] || 1
-    search.query.paginate(page.to_i, SeriesStatement.default_per_page)
-    search_result = search.execute!
-    @series_statements = search_result.results
+    #search.query.paginate(page.to_i, SeriesStatement.default_per_page)
+    #search_result = search.execute!
+    #@series_statements = search_result.results
+    search = SeriesStatement.search(user_query)
+    @series_statements = search.page(page).records
 
     respond_to do |format|
       format.html # index.html.erb

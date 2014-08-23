@@ -37,6 +37,8 @@ en:
       donate: Donate
       identifier: Identifier
       identifier_type: Identifier type
+      resource_export_file: Resource export
+      agent_export_file: Agent export
 
     attributes:
       manifestation:
@@ -103,6 +105,9 @@ en:
         lock_version: Lock version
         acquired_at: Acquired at
         donation: Donation
+        binding_item_identifier: Binding item identifier
+        binding_call_number: Binding call number
+        binded_at: Binded at
       agent:
         last_name: Last name
         middle_name: Middle name
@@ -170,6 +175,7 @@ en:
         edit_mode: Edit mode
         error_message: Error message
         user_encoding: Encoding
+        default_shelf_id: Default shelf
       series_statement:
         original_title: Title
         numbering: Numbering
@@ -181,7 +187,7 @@ en:
         issn: ISSN
         title_transcription: Title transcription
         note: Note
-        series_master: Maseter
+        series_master: Master
         volume_nunber_string: Volume number
         creator_string: Creator
       country:

@@ -38,6 +38,7 @@ ja:
       identifier: 識別子
       identifier_type: 識別子の種類
       resource_export_file: 書誌と所蔵のエクスポート
+      agent_export_file: 人物・団体情報のエクスポート
 
     attributes:
       manifestation:
@@ -104,6 +105,9 @@ ja:
         lock_version: ロックバージョン
         acquired_at: 受入日
         donation: 寄贈情報
+        binding_item_identifier: 製本後の所蔵情報ID
+        binding_call_number: 製本後の請求記号
+        binded_at: 製本日
       agent:
         last_name: 姓
         middle_name: ミドルネーム
@@ -171,6 +175,7 @@ ja:
         edit_mode: 編集モード
         error_message: エラーメッセージ
         user_encoding: 文字コード
+        default_shelf_id: 既定の本棚
       series_statement:
         original_title: シリーズ名
         numbering: シリーズ番号
@@ -309,6 +314,10 @@ ja:
       resource_export_file:
         resource_export_file_name: ファイル名
         resource_export_file_size: ファイルサイズ
+        state: 状態
+      agent_export_file:
+        agent_export_file_name: ファイル名
+        agent_export_file_size: ファイルサイズ
         state: 状態
 
   resource_import_file:

@@ -72,7 +72,7 @@ class OwnsController < ApplicationController
   def update
     if @item and params[:move]
       move_position(@own, params[:move], false)
-      redirect_to item_owns_url(@item)
+      redirect_to owns_url(item_id: @own.item_id)
       return
     end
 

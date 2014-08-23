@@ -6,12 +6,12 @@ carrier_type_00001:
   id: 1
   position: 1
 carrier_type_00002: 
-  name: CD
+  name: cd
   display_name: CD
   id: 2
   position: 2
 carrier_type_00003: 
-  name: DVD
+  name: dvd
   display_name: DVD
   id: 3
   position: 3

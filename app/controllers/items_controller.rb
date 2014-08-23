@@ -20,7 +20,7 @@ class ItemsController < ApplicationController
     @count = {}
     if user_signed_in?
       if current_user.has_role?('Librarian')
-        if params[:format] == 'csv'
+        if params[:format] == 'txt'
           per_page = 65534
         elsif params[:mode] == 'barcode'
           per_page = 40
@@ -125,7 +125,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render :json => @items }
-      format.csv  { render :layout => false }
+      format.txt  { render :layout => false }
       format.atom
     end
   end
@@ -231,7 +231,7 @@ class ItemsController < ApplicationController
 
     flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     if @item.manifestation
-      redirect_to manifestation_items_url(@item.manifestation), notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
+      redirect_to items_url(manifestation_id: @item.manifestation_id), notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     else
       redirect_to items_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
     end

@@ -13,6 +13,6 @@
     <% if policy(@item).destroy? %>
       <li><%= link_to t('page.destroy'), @item, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
     <% end %>
-    <li><%= link_to t('page.back'), manifestation_items_path(@item.manifestation) -%></li>
+    <li><%= link_to t('page.back'), items_path(@item.manifestation.id) -%></li>
   </ul>
 </div>

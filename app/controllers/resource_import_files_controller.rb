@@ -1,6 +1,7 @@
 class ResourceImportFilesController < ApplicationController
   before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
+  after_action :prepare_options, only: [:new, :edit]
 
   # GET /resource_import_files
   # GET /resource_import_files.json
@@ -36,6 +37,8 @@ class ResourceImportFilesController < ApplicationController
   def new
     @resource_import_file = ResourceImportFile.new
     authorize @resource_import_file
+    @resource_import_file.library_id = current_user.library_id
+    @shelves = Library.find(@resource_import_file.library_id).shelves
   end
 
   # GET /resource_import_files/1/edit
@@ -53,8 +56,9 @@ class ResourceImportFilesController < ApplicationController
       if @resource_import_file.mode == 'import'
         Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
       end
-      redirect_to @resource_import_file, notice: t('controller.successfully_created', :model => t('activerecord.models.resource_import_file'))
+      redirect_to @resource_import_file, notice: t('import.successfully_created', model: t('activerecord.models.resource_import_file'))
     else
+      prepare_options
       render action: 'new'
     end
   end
@@ -68,6 +72,7 @@ class ResourceImportFilesController < ApplicationController
       end
       redirect_to @resource_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file'))
     else
+      prepare_options
       render :edit
     end
   end
@@ -87,7 +92,18 @@ class ResourceImportFilesController < ApplicationController
 
   def resource_import_file_params
     params.require(:resource_import_file).permit(
-      :resource_import, :edit_mode, :user_encoding, :mode
+      :resource_import, :edit_mode, :user_encoding, :mode, :default_shelf_id,
+      :library_id
     )
+  end
+
+  def prepare_options
+    @libraries = Library.all
+    library = Library.where(id: @resource_import_file.try(:library_id)).first
+    if library
+      @shelves = library.shelves
+    else
+      @shelves = current_user.library.shelves
+    end
   end
 end

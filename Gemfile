@@ -19,7 +19,6 @@ gem "enju_ndl", github: "next-l/enju_ndl"
 gem "enju_bookmark", github: "next-l/enju_bookmark"
 gem "enju_message", github: "next-l/enju_message"
 gem "enju_inventory", github: "next-l/enju_inventory"
-gem "enju_export", github: "next-l/enju_export"
 
 # To use debugger
 # gem 'debugger'

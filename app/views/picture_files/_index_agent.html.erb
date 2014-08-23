@@ -34,7 +34,7 @@
           <%= link_to t('page.edit'), edit_picture_file_path(picture_file) -%>
         <% end %>
         <%- if policy(picture_file).destroy? -%>
-          <%= link_to t('page.destroy'), picture_file, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+          <%= link_to t('page.destroy'), picture_file_path(picture_file, agent_id: agent.id), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
         <%- end -%>
       </td>
     </tr>
@@ -48,7 +48,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <%- if policy(PictureFile).create? -%>
     <ul>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_agent_picture_file_path(agent) -%></li>
+      <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_picture_file_path(agent_id: agent.id) -%></li>
       <li><%= link_to t('picture_file.all_picture'), picture_files_path -%></li>
     </ul>
   <%- end -%>

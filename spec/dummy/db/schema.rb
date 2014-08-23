@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140628073535) do
+ActiveRecord::Schema.define(version: 20140721151416) do
 
   create_table "accepts", force: true do |t|
     t.integer  "basket_id"
@@ -607,21 +607,25 @@ ActiveRecord::Schema.define(version: 20140628073535) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
-    t.integer  "shelf_id",              default: 1,     null: false
-    t.boolean  "include_supplements",   default: false, null: false
+    t.integer  "shelf_id",                default: 1,     null: false
+    t.boolean  "include_supplements",     default: false, null: false
     t.text     "note"
     t.string   "url"
     t.integer  "price"
-    t.integer  "lock_version",          default: 0,     null: false
-    t.integer  "required_role_id",      default: 1,     null: false
-    t.integer  "required_score",        default: 0,     null: false
+    t.integer  "lock_version",            default: 0,     null: false
+    t.integer  "required_role_id",        default: 1,     null: false
+    t.integer  "required_score",          default: 0,     null: false
     t.datetime "acquired_at"
     t.integer  "bookstore_id"
     t.integer  "budget_type_id"
-    t.integer  "circulation_status_id", default: 5,     null: false
-    t.integer  "checkout_type_id",      default: 1,     null: false
+    t.integer  "circulation_status_id",   default: 5,     null: false
+    t.integer  "checkout_type_id",        default: 1,     null: false
+    t.string   "binding_item_identifier"
+    t.string   "binding_call_number"
+    t.datetime "binded_at"
   end
 
+  add_index "items", ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
   add_index "items", ["bookstore_id"], name: "index_items_on_bookstore_id"
   add_index "items", ["checkout_type_id"], name: "index_items_on_checkout_type_id"
   add_index "items", ["circulation_status_id"], name: "index_items_on_circulation_status_id"
@@ -1086,6 +1090,7 @@ ActiveRecord::Schema.define(version: 20140628073535) do
     t.string   "resource_import_fingerprint"
     t.text     "error_message"
     t.string   "user_encoding"
+    t.integer  "default_shelf_id"
   end
 
   add_index "resource_import_files", ["parent_id"], name: "index_resource_import_files_on_parent_id"

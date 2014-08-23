@@ -4,7 +4,7 @@
   <%= f.hidden_field :manifestation_id if @item.manifestation_id %>
 
   <div class="field">
-    <%= f.label t('activerecord.models.library') -%> / <%= t('activerecord.models.shelf') -%><br />
+    <%= f.label "#{t('activerecord.models.library')} / #{t('activerecord.models.shelf')}" -%>
     <%= f.select :library_id, @libraries.map{|l| [l.display_name.localize, l.id]} %>
     <%= f.select :shelf_id, @shelves.map{|s| [s.display_name.localize, s.id]} %>
     <%= render 'observe_field' %>
@@ -30,18 +30,21 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :include_supplements -%>
+    <%= f.check_box :include_supplements -%>
+  </div>
+
+  <div class="field">
     <%= f.label :call_number -%>
     <%= f.text_field :call_number -%>
   </div>
 
   <div class="field">
     <%= f.label t('activerecord.models.budget_type') -%>
-    <%= f.select(:budget_type_id, @budget_types.collect{|b| [b.name, b.id]}, :include_blank => true) -%>
-  </div>
+    <%= f.select(:budget_type_id, @budget_types.collect{|b| [b.display_name.localize, b.id]}, include_blank: true) -%>
 
-  <div class="field">
     <%= f.label t('activerecord.models.bookstore') -%>
-    <%= f.select(:bookstore_id, @bookstores.collect{|b| [b.name, b.id]}, :include_blank => true) -%>
+    <%= f.select(:bookstore_id, @bookstores.collect{|b| [b.name, b.id]}, include_blank: true) -%>
   </div>
 
   <div class="field">
@@ -50,13 +53,8 @@
   </div>
 
   <div class="field">
-    <%= f.label :url -%><br />
-    <%= f.url_field :url, :class => 'resource_url' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :include_supplements -%>
-    <%= f.check_box :include_supplements -%>
+    <%= f.label :url -%>
+    <%= f.url_field :url, class: 'resource_url' -%>
   </div>
 
   <div class="field">
@@ -66,17 +64,30 @@
 
   <div class="field">
     <%= f.label :acquired_at -%>
-    <%= f.text_field :acquired_at, :value => @item.acquired_at.try(:strftime, "%Y-%m-%d"), :class => 'date_field', :placeholder => "#{t('page.example')}: 2011-04-12"-%>
+    <%= f.text_field :acquired_at, value: @item.acquired_at.try(:strftime, "%Y-%m-%d"), class: 'date_text_field', placeholder: "#{t('page.example')}: 2011-04-12"-%>
+  </div>
+
+  <div class="field">
+    <%= f.label :binding_call_number -%>
+    <%= f.text_field :binding_call_number -%>
+
+    <%= f.label :binded_at -%>
+    <%= f.text_field :binded_at, value: @item.binded_at.try(:strftime, "%Y-%m-%d"), class: 'date_text_field', placeholder: "#{t('page.example')}: 2014-07-20"-%>
+  </div>
+
+  <div class="field">
+    <%= f.label :binding_item_identifier -%>
+    <%= f.text_field :binding_item_identifier, class: 'resource_identifier' -%>
   </div>
 
   <div class="field">
     <%= f.label :note -%><br />
-    <%= f.text_area :note, :class => 'resource_textarea' -%>
+    <%= f.text_area :note, class: 'resource_textarea' -%>
   </div>
 
   <div class="field">
     <%= f.label :item_identifier -%>
-    <%= f.text_field :item_identifier, :class => 'resource_identifier' -%>
+    <%= f.text_field :item_identifier, class: 'resource_identifier' -%>
   </div>
 
   <div class="actions">

@@ -95,8 +95,8 @@ class ManifestationsController < ApplicationController
               ranges: pub_ranges
             }
           }
-        }
-#        filter: {and: [{}]},
+        },
+        filter: {and: [{}]},
       }
       if params[:carrier_type]
         carrier_type = CarrierType.where(name: params[:carrier_type]).first

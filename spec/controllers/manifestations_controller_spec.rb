@@ -52,8 +52,8 @@ describe ManifestationsController do
         assigns(:manifestations).should_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations in csv format without operation" do
-        get :index, :format => 'csv'
+      it "assigns all manifestations as @manifestations in txt format without operation" do
+        get :index, :format => 'txt'
         response.should be_success
         assigns(:manifestations).should_not be_nil
         response.should render_template('manifestations/index')
@@ -134,14 +134,14 @@ describe ManifestationsController do
       it "should get index with pub_date_from" do
         get :index, :query => '2005', :pub_date_from => '2000'
         response.should be_success
-        assigns(:manifestations).should be_true
+        assigns(:manifestations).should be_truty
         assigns(:query).should eq '2005 date_of_publication_d:[1999-12-31T15:00:00Z TO *]'
       end
 
       it "should get index with pub_date_to" do
         get :index, :query => '2005', :pub_date_to => '2000'
         response.should be_success
-        assigns(:manifestations).should be_true
+        assigns(:manifestations).should be_truty
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T14:59:59Z]'
       end
 
@@ -384,7 +384,7 @@ describe ManifestationsController do
         it "assigns a series_statement" do
           post :create, :manifestation => @attrs.merge(:series_statements_attributes => {"0" => {:original_title => SeriesStatement.find(1).original_title}})
           assigns(:manifestation).reload
-          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_true
+          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_truty
         end
 
         it "redirects to the created manifestation" do
@@ -510,7 +510,7 @@ describe ManifestationsController do
             :series_statements_attributes => {"0" => {:original_title => series_statements(:two).original_title, "_destroy"=>"false"}}
           )
           assigns(:manifestation).reload
-          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:two).original_title).should be_true
+          assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:two).original_title).should be_truty
         end
 
         it "assigns the requested manifestation as @manifestation" do

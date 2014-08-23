@@ -8,10 +8,10 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if @realize.agent -%>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), contributor_manifestations_path(@realize.agent) -%></li>
+      <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path(contributor_id: @realize.agent_id) -%></li>
     <%- end -%>
     <%- if @realize.expression -%>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), expression_agents_path(@realize.expression) -%></li>
+      <li><%= link_to t('page.listing', :model => t('activerecord.models.agent')), agents_path(expression_id: @realize.expression_id) -%></li>
     <%- end -%>
   </ul>
 </div>

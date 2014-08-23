@@ -7,10 +7,10 @@ describe ResourceImportFile do
   describe "when its mode is 'create'" do
     describe "when it is written in utf-8" do
       before(:each) do
-        @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
+        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
       end
 
-      it "should be imported", :vcr => true do
+      it "should be imported", vcr: true do
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
         old_agents_count = Agent.count
@@ -55,7 +55,7 @@ describe ResourceImportFile do
         Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(:item_identifier => '11111').first
-        Shelf.where(:name => 'first_shelf').first.should eq item.shelf
+        item.shelf.name.should eq Shelf.find(3).name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
@@ -84,7 +84,7 @@ describe ResourceImportFile do
         @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
       end
 
-      it "should be imported", :vcr => true do
+      it "should be imported", vcr: true do
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
         old_agents_count = Agent.count
@@ -104,7 +104,7 @@ describe ResourceImportFile do
         Item.where(:item_identifier => '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(:item_identifier => '11111').first
-        Shelf.where(:name => 'first_shelf').first.should eq item.shelf
+        item.shelf.name.should eq Shelf.where(:name => 'first_shelf').first.name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
@@ -119,7 +119,7 @@ describe ResourceImportFile do
         @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
       end
 
-      it "should be imported", :vcr => true do
+      it "should be imported", vcr: true do
         old_manifestations_count = Manifestation.count
         old_agents_count = Agent.count
         @file.import_start
@@ -130,7 +130,7 @@ describe ResourceImportFile do
   end
 
   describe "when its mode is 'update'" do
-    it "should update items", :vcr => true do
+    it "should update items", vcr: true do
       @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), :edit_mode => 'update'
       @file.modify
       Item.where(:item_identifier => '00001').first.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
@@ -139,7 +139,7 @@ describe ResourceImportFile do
       Item.where(:item_identifier => '00003').first.acquired_at.should eq Time.zone.parse('2012-01-01')
     end
 
-    it "should update series_statement", :vcr => true do
+    it "should update series_statement", vcr: true do
       manifestation = Manifestation.find(10)
       file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), :edit_mode => 'update'
       file.modify
@@ -149,7 +149,7 @@ describe ResourceImportFile do
   end
 
   describe "when its mode is 'destroy'" do
-    it "should remove items", :vcr => true do
+    it "should remove items", vcr: true do
       old_count = Item.count
       @file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), :edit_mode => 'destroy'
       @file.remove
@@ -157,7 +157,7 @@ describe ResourceImportFile do
     end
   end
 
-  it "should import in background" do
+  it "should import in background", vcr: true do
     file = ResourceImportFile.create :resource_import => File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
@@ -186,4 +186,5 @@ end
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
 #  user_encoding                :string(255)
+#  default_shelf_id             :integer
 #
