@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140823083524) do
+ActiveRecord::Schema.define(:version => 20140823094847) do
 
   create_table "agent_import_file_transitions", :force => true do |t|
     t.string   "to_state"
@@ -829,6 +829,7 @@ ActiveRecord::Schema.define(:version => 20140823083524) do
     t.text     "statement_of_responsibility"
     t.text     "publication_place"
     t.text     "extent"
+    t.text     "dimensions"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

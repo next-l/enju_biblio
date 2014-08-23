@@ -23,7 +23,7 @@ class Manifestation < ActiveRecord::Base
     :content_type_id, :attachment, :lock_version,
     :series_statements_attributes, :periodical, :statement_of_responsibility,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
-    :identifiers_attributes
+    :identifiers_attributes, :dimensions
   attr_accessible :fulltext_content, :extent,
     :number_of_page_string, :parent_id
 
@@ -621,4 +621,5 @@ end
 #  statement_of_responsibility     :text
 #  publication_place               :text
 #  extent                          :text
+#  dimensions                      :text
 #

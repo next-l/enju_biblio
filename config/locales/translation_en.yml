@@ -7,7 +7,6 @@ en:
       create_type: Create type
       embody: Embody
       exemplify: Exemplify
-      extent: Extent
       form_of_work: Form of works
       frequency: Frequency of issue
       import_request: Import request
@@ -91,6 +90,7 @@ en:
         publication_place: Publication place
         parent_id: Parent
         extent: Extent
+        dimensions: Dimensions
         fulltext_content: Fulltext content
       manifestation/subjects:
           term: Subject
@@ -208,11 +208,6 @@ en:
         note: Note
         position: Position
       content_type:
-        name: Name
-        display_name: Display name
-        note: Note
-        position: Position
-      extent:
         name: Name
         display_name: Display name
         note: Note

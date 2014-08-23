@@ -90,6 +90,7 @@ ja:
         publication_place: 出版地
         parent_id: 親書誌
         extent: ページ数
+        dimensions: 大きさ
         fulltext_content: 全文あり
       manifestation/subjects:
           term: 件名

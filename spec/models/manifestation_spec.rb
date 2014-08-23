@@ -293,4 +293,5 @@ end
 #  statement_of_responsibility     :text
 #  publication_place               :text
 #  extent                          :text
+#  dimensions                      :text
 #

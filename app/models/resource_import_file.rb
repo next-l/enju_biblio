@@ -10,7 +10,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   if Setting.uploaded_file.storage == :s3
     has_attached_file :resource_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
-      :s3_permissions => :private
+      s3_permissions: :private
   else
     has_attached_file :resource_import,
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
@@ -55,7 +55,13 @@ class ResourceImportFile < ActiveRecord::Base
 
   def import
     transition_to!(:started)
-    num = {:manifestation_imported => 0, :item_imported => 0, :manifestation_found => 0, :item_found => 0, :failed => 0}
+    num = {
+      manifestation_imported: 0,
+      item_imported: 0,
+      manifestation_found: 0,
+      item_found: 0,
+      failed: 0
+    }
     rows = open_import_file(create_import_temp_file(resource_import))
     row_num = 1
 
@@ -66,7 +72,7 @@ class ResourceImportFile < ActiveRecord::Base
 
     rows.each do |row|
       row_num += 1
-      import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, body: row.fields.join("\t"))
+      import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
       if row['dummy'].to_s.strip.present?
         import_result.error_message = "line #{row_num}: #{I18n.t('import.dummy')}"
         import_result.save!
@@ -222,16 +228,16 @@ class ResourceImportFile < ActiveRecord::Base
 
     # TODO
     for record in reader
-      manifestation = Manifestation.new(:original_title => expression.original_title)
+      manifestation = Manifestation.new(original_title: expression.original_title)
       manifestation.carrier_type = CarrierType.find(1)
       manifestation.frequency = Frequency.find(1)
       manifestation.language = Language.find(1)
       manifestation.save
 
       full_name = record['700']['a']
-      publisher = Agent.where(:full_name => record['700']['a']).first
+      publisher = Agent.where(full_name: record['700']['a']).first
       unless publisher
-        publisher = Agent.new(:full_name => full_name)
+        publisher = Agent.new(full_name: full_name)
         publisher.save
       end
       manifestation.publishers << publisher
@@ -305,7 +311,7 @@ class ResourceImportFile < ActiveRecord::Base
         item.save!
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
-        manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier.present?
+        manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first if manifestation_identifier.present?
         unless manifestation
           manifestation = Manifestation.where(id: row['manifestation_id']).first
         end
@@ -354,7 +360,7 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       manifestation_identifier = row['manifestation_identifier'].to_s.strip
-      manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first
+      manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first
       unless manifestation
         manifestation = Manifestation.where(id: row['manifestation_id'].to_s.strip).first
       end
@@ -364,7 +370,7 @@ class ResourceImportFile < ActiveRecord::Base
         item.save!
       end
 
-      import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, body: row.fields.join("\t"))
+      import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
       import_result.item = item
       import_result.manifestation = manifestation
       import_result.save!
@@ -390,7 +396,7 @@ class ResourceImportFile < ActiveRecord::Base
       edition edition_string serial_number isbn issn manifestation_price
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
-      extent start_page end_page
+      extent start_page end_page dimensions
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at item_price
       use_restriction include_supplements item_note item_url
@@ -406,7 +412,7 @@ class ResourceImportFile < ActiveRecord::Base
       save!
     end
     rows = CSV.open(tempfile, headers: header, col_sep: "\t")
-    ResourceImportResult.create!(:resource_import_file_id => self.id, body: header.join("\t"))
+    ResourceImportResult.create!(resource_import_file_id: id, body: header.join("\t"))
     tempfile.close(true)
     file.close
     rows
@@ -454,7 +460,7 @@ class ResourceImportFile < ActiveRecord::Base
           classifications << classification
         end
       else
-        classification = Classification.new(category: v.to_s)
+        classification = Classification.new(category: v)
         classification.classification_type = classification_type
         classification.save!
         classifications << classification
@@ -514,7 +520,7 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation = Item.where(item_identifier: row['item_identifier'].to_s.strip).first.try(:manifestation)
       unless manifestation
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
-        manifestation = Manifestation.where(:manifestation_identifier => manifestation_identifier).first if manifestation_identifier
+        manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first if manifestation_identifier
         manifestation = Manifestation.where(id: row['manifestation_id']).first unless manifestation
       end
     end
@@ -559,13 +565,13 @@ class ResourceImportFile < ActiveRecord::Base
 
     creators = row['creator'].to_s.split('//')
     creator_transcriptions = row['creator_transcription'].to_s.split('//')
-    creators_list = creators.zip(creator_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
+    creators_list = creators.zip(creator_transcriptions).map{|f,t| {full_name: f.to_s.strip, full_name_transcription: t.to_s.strip}}
     contributors = row['contributor'].to_s.split('//')
     contributor_transcriptions = row['contributor_transcription'].to_s.split('//')
-    contributors_list = contributors.zip(contributor_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
+    contributors_list = contributors.zip(contributor_transcriptions).map{|f,t| {full_name: f.to_s.strip, full_name_transcription: t.to_s.strip}}
     publishers = row['publisher'].to_s.split('//')
     publisher_transcriptions = row['publisher_transcription'].to_s.split('//')
-    publishers_list = publishers.zip(publisher_transcriptions).map{|f,t| {:full_name => f.to_s.strip, :full_name_transcription => t.to_s.strip}}
+    publishers_list = publishers.zip(publisher_transcriptions).map{|f,t| {full_name: f.to_s.strip, full_name_transcription: t.to_s.strip}}
     ResourceImportFile.transaction do
       creator_agents = Agent.import_agents(creators_list)
       contributor_agents = Agent.import_agents(contributors_list)
@@ -614,6 +620,7 @@ class ResourceImportFile < ActiveRecord::Base
         :fulltext_content => fulltext_content,
         :publication_place => row['publication_place'],
         :extent => row['extent'],
+        :dimensions => row['dimensions'],
         :start_page => row['start_page'],
         :end_page => row['end_page']
       }.delete_if{|key, value| value.nil?}
