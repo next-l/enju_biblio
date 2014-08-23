@@ -249,7 +249,6 @@ end
 #  access_address                  :string(255)
 #  language_id                     :integer          default(1), not null
 #  carrier_type_id                 :integer          default(1), not null
-#  extent_id                       :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -293,4 +292,5 @@ end
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
+#  extent                          :text
 #

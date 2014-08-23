@@ -12,7 +12,7 @@ class Manifestation < ActiveRecord::Base
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
   attr_accessible :original_title, :title_alternative, :title_transcription,
     :manifestation_identifier, :date_copyrighted,
-    :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
+    :access_address, :language_id, :carrier_type_id, :extent, :start_page,
     :end_page, :height, :width, :depth, :publication_place,
     :price, :fulltext, :volume_number_string,
     :issue_number_string, :serial_number_string, :edition, :note,
@@ -24,7 +24,7 @@ class Manifestation < ActiveRecord::Base
     :series_statements_attributes, :periodical, :statement_of_responsibility,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes
-  attr_accessible :fulltext_content, :extent_of_text,
+  attr_accessible :fulltext_content, :extent,
     :number_of_page_string, :parent_id
 
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
@@ -577,7 +577,6 @@ end
 #  access_address                  :string(255)
 #  language_id                     :integer          default(1), not null
 #  carrier_type_id                 :integer          default(1), not null
-#  extent_id                       :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -621,4 +620,5 @@ end
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
+#  extent                          :text
 #

@@ -390,7 +390,7 @@ class ResourceImportFile < ActiveRecord::Base
       edition edition_string serial_number isbn issn manifestation_price
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
-      extent_of_text start_page end_page
+      extent start_page end_page
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at item_price
       use_restriction include_supplements item_note item_url
@@ -429,7 +429,7 @@ class ResourceImportFile < ActiveRecord::Base
           subjects << subject
         end
       else
-        subject = Subject.new(term: term)
+        subject = Subject.new(term: v)
         subject.subject_heading_type = subject_heading_type
         subject.subject_type = SubjectType.where(name: 'concept').first
         subject.save!
@@ -613,7 +613,7 @@ class ResourceImportFile < ActiveRecord::Base
         :manifestation_identifier => row['manifestation_identifier'],
         :fulltext_content => fulltext_content,
         :publication_place => row['publication_place'],
-        :extent_of_text => row['extent_of_text'],
+        :extent => row['extent'],
         :start_page => row['start_page'],
         :end_page => row['end_page']
       }.delete_if{|key, value| value.nil?}

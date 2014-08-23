@@ -60,10 +60,7 @@
     }
     xml.physicalDescription{
       xml.form manifestation.carrier_type.name, 'authority' => 'marcform'
-      extent = []
-      extent << manifestation.number_of_pages if manifestation.number_of_pages
-      extent << manifestation.height if manifestation.height
-      xml.extent extent.join("; ")
+      xml.extent manifestation.extent
     }
     if defined?(EnjuSubject)
       xml.subject{

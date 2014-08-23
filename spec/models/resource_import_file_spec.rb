@@ -59,7 +59,7 @@ describe ResourceImportFile do
         item_10101.manifestation.carrier_type.name.should eq 'volume'
         item_10101.manifestation.manifestation_content_type.name.should eq 'text'
         item_10101.manifestation.frequency.name.should eq 'monthly'
-        item_10101.manifestation.extent_of_text.should eq 'xv, 213 pages'
+        item_10101.manifestation.extent.should eq 'xv, 213 pages'
 
         item_10102 = Item.where(item_identifier: '10102').first
         item_10102.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')

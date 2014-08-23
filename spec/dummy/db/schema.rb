@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140822114527) do
+ActiveRecord::Schema.define(:version => 20140823083524) do
 
   create_table "agent_import_file_transitions", :force => true do |t|
     t.string   "to_state"
@@ -478,15 +478,6 @@ ActiveRecord::Schema.define(:version => 20140822114527) do
   add_index "exemplifies", ["item_id"], :name => "index_exemplifies_on_item_id", :unique => true
   add_index "exemplifies", ["manifestation_id"], :name => "index_exemplifies_on_manifestation_id"
 
-  create_table "extents", :force => true do |t|
-    t.string   "name",         :null => false
-    t.text     "display_name"
-    t.text     "note"
-    t.integer  "position"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
-  end
-
   create_table "form_of_works", :force => true do |t|
     t.string   "name",         :null => false
     t.text     "display_name"
@@ -794,7 +785,6 @@ ActiveRecord::Schema.define(:version => 20140822114527) do
     t.string   "access_address"
     t.integer  "language_id",                     :default => 1,     :null => false
     t.integer  "carrier_type_id",                 :default => 1,     :null => false
-    t.integer  "extent_id",                       :default => 1,     :null => false
     t.integer  "start_page"
     t.integer  "end_page"
     t.integer  "height"
@@ -838,6 +828,7 @@ ActiveRecord::Schema.define(:version => 20140822114527) do
     t.boolean  "periodical"
     t.text     "statement_of_responsibility"
     t.text     "publication_place"
+    t.text     "extent"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

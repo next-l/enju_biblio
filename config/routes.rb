@@ -72,7 +72,6 @@ Rails.application.routes.draw do
   resources :medium_of_performances
   resources :carrier_types
   resources :content_types
-  resources :extents
   resources :agent_types
 
   resources :agent_relationship_types
