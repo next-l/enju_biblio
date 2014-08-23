@@ -17,3 +17,4 @@ manifestation_identifier	original_title	note	title_transcription	title_alternati
 		× ISBN重複（13桁）、item_identifierなし																							978-4798002064																																	
 103	"ダブル""クォート""を含む資料"	○ ダブルクォートを含む資料																																																								
 104	test10	○ TSV中にタイトルがあれば他の項目もTSVファイル優先									test3			test4											4797327030																																	
+104		△ identifier重複、item_identifier非重複、タイトルなし																																							11113																	

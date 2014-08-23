@@ -66,7 +66,7 @@ class ResourceImportFile < ActiveRecord::Base
     row_num = 1
 
     field = rows.first
-    if [field['isbn'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
+    if [field['isbn'], field['manifestation_identifier'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify isbn or original_title in the first line"
     end
 
@@ -182,6 +182,7 @@ class ResourceImportFile < ActiveRecord::Base
     num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
+    save
     transition_to!(:failed)
     raise e
   end
@@ -323,6 +324,7 @@ class ResourceImportFile < ActiveRecord::Base
     transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
+    save
     transition_to!(:failed)
     raise e
   end
@@ -343,6 +345,7 @@ class ResourceImportFile < ActiveRecord::Base
     transition_to!(:completed)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
+    save
     transition_to!(:failed)
     raise e
   end

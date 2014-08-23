@@ -16,7 +16,7 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 7, :manifestation_found => 4, :item_found => 3, :failed => 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -25,11 +25,11 @@ describe ResourceImportFile do
         manifestation.creates.first.create_type.name.should eq 'author'
         manifestation.identifier_contents(:issn).should eq ['03875806']
         Manifestation.count.should eq old_manifestations_count + 9
-        Item.count.should eq old_items_count + 6
+        Item.count.should eq old_items_count + 7
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 19
+        ResourceImportResult.count.should eq old_import_results_count + 20
 
-        manifestation_101 = Manifestation.where(:manifestation_identifier => '101').first
+        manifestation_101 = Manifestation.where(manifestation_identifier: '101').first
         manifestation_101.series_statements.count.should eq 1
         manifestation_101.series_statements.first.original_title.should eq '主シリーズ'
         manifestation_101.series_statements.first.title_transcription.should eq 'しゅしりーず'
@@ -72,7 +72,7 @@ describe ResourceImportFile do
         item_10102.manifestation.series_statements.first.creator_string.should eq 'シリーズの著者'
         item_10102.manifestation.series_statements.first.volume_number_string.should eq 'シリーズ1号'
 
-        Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
+        Manifestation.where(manifestation_identifier: '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(item_identifier: '11111').first
         item.shelf.name.should eq Shelf.find(3).name
         item.manifestation.price.should eq 1000
@@ -105,7 +105,7 @@ describe ResourceImportFile do
         item_10104.manifestation.subjects.map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
         item_10104.manifestation.classifications.map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
 
-        manifestation_104 = Manifestation.where(:manifestation_identifier => '104').first
+        manifestation_104 = Manifestation.where(manifestation_identifier: '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
         manifestation_104.original_title.should eq 'test10'
         manifestation_104.creators.collect(&:full_name).should eq ['test3']
@@ -113,6 +113,8 @@ describe ResourceImportFile do
 
         ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 8: #{I18n.t('import.manifestation_found')}"
         ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
+
+        Item.where(item_identifier: '11113').first.manifestation.original_title.should eq 'test10'
 
         @file.resource_import_fingerprint.should be_truthy
         @file.executed_at.should be_truthy
@@ -140,20 +142,20 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 6, :manifestation_found => 3, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 7, :manifestation_found => 4, :item_found => 3, :failed => 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
         Manifestation.count.should eq old_manifestations_count + 9
-        Item.count.should eq old_items_count + 6
+        Item.count.should eq old_items_count + 7
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 19
+        ResourceImportResult.count.should eq old_import_results_count + 20
         Item.where(item_identifier: '10101').first.manifestation.creators.size.should eq 2
         Item.where(item_identifier: '10101').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.where(item_identifier: '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.where(item_identifier: '10104').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
-        Manifestation.where(:manifestation_identifier => '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
+        Manifestation.where(manifestation_identifier: '103').first.original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.where(item_identifier: '11111').first
         item.shelf.name.should eq Shelf.where(name: 'web').first.name
         item.manifestation.price.should eq 1000
