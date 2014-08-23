@@ -10,7 +10,7 @@ class Agent < ActiveRecord::Base
     :full_name_alternative_transcription, :title,
     :agent_identifier
 
-  scope :readable_by, lambda{|user| {conditions: ['required_role_id <= ?', user.try(:user_has_role).try(:role_id) || Role.where(name: 'Guest').select(:id).first.id]}}
+  scope :readable_by, lambda{ |user| where('required_role_id <= ?', user.try(:user_has_role).try(:role_id)) || Role.where(name: 'Guest').select(:id).first.id }
   has_many :creates, dependent: :destroy
   has_many :works, through: :creates
   has_many :realizes, dependent: :destroy
