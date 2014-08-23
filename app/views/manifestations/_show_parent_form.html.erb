@@ -1,6 +1,6 @@
 <%= link_to manifestation.original_title, manifestation %>
 
-<% if manifestation.periodical? %>
+<% if manifestation.serial? %>
   <%= image_tag('icons/newspaper.png', size: '16x16', alt: t('manifestation.serial')) -%>
 <%- end -%>
 

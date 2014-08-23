@@ -137,17 +137,17 @@ class ManifestationsController < ApplicationController
           with(:subject_ids).equal_to subject.id if subject
         end
         unless parent
-          if params[:periodical].to_s.downcase == "true"
+          if params[:serial].to_s.downcase == "true"
             with(:series_master).equal_to true unless parent
-            with(:periodical).equal_to true
-            #if series_statement.periodical?
+            with(:serial).equal_to true
+            #if series_statement.serial?
             #  if mode != 'add'
             #    order_by :volume_number, sort[:order]
             #    order_by :issue_number, sort[:order]
             #    order_by :serial_number, sort[:order]
             #  end
             #else
-            #  with(:periodical).equal_to false
+            #  with(:serial).equal_to false
             #end
           else
             if mode != 'add'
@@ -181,7 +181,7 @@ class ManifestationsController < ApplicationController
         :serial_number,
         :edition_string,
         :edition,
-        :periodical,
+        :serial,
         :statement_of_responsibility
       ] if params[:format] == 'html' or params[:format].nil?
       all_result = search.execute
@@ -440,7 +440,7 @@ class ManifestationsController < ApplicationController
       @manifestation.parent_id = @parent.id
       @manifestation.original_title = @parent.original_title
       @manifestation.title_transcription = @parent.title_transcription
-      @manifestation.periodical = true if @parent.periodical
+      @manifestation.serial = true if @parent.serial
     end
 
     respond_to do |format|

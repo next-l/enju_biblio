@@ -81,7 +81,7 @@ en:
         contributor_string: Contributor
         publisher_string: Publisher
         series_statement_string: Series statement
-        periodical: Serial publication
+        serial: Serial publication
         series_master: Series master
         subject: Subject
         classification: Classification

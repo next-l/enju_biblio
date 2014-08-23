@@ -385,7 +385,7 @@ class ResourceImportFile < ActiveRecord::Base
     header_columns = %w(
       original_title manifestation_identifier item_identifier shelf note
       title_transcription title_alternative title_alternative_transcription
-      periodical manifestation_id publication_place carrier_type
+      serial manifestation_id publication_place carrier_type
       series_statement_identifier series_original_title series_creator_string
       series_title_transcription series_volume_number_string
       series_title_subseries series_title_subseries_transcription
@@ -559,8 +559,8 @@ class ResourceImportFile < ActiveRecord::Base
       fulltext_content = true
     end
 
-    if %w(t true).include?(row['periodical'].to_s.downcase.strip)
-      periodical = true
+    if %w(t true).include?(row['serial'].to_s.downcase.strip)
+      serial = true
     end
 
     creators = row['creator'].to_s.split('//')

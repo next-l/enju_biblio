@@ -205,7 +205,7 @@ describe Manifestation, :solr => true do
   end
 
   it "should be periodical if its series_statement is periodical" do
-    manifestations(:manifestation_00202).periodical?.should be_truthy
+    manifestations(:manifestation_00202).serial?.should be_truthy
   end
 
   it "should validate access_address" do
@@ -289,7 +289,7 @@ end
 #  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
-#  periodical                      :boolean
+#  serial                          :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
 #  extent                          :text

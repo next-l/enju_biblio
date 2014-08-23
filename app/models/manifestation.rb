@@ -21,7 +21,7 @@ class Manifestation < ActiveRecord::Base
     :valid_until, :date_submitted, :date_accepted, :date_captured, :ndl_bib_id,
     :pub_date, :edition_string, :volume_number, :issue_number, :serial_number,
     :content_type_id, :attachment, :lock_version,
-    :series_statements_attributes, :periodical, :statement_of_responsibility,
+    :series_statements_attributes, :serial, :statement_of_responsibility,
     :creators_attributes, :contributors_attributes, :publishers_attributes,
     :identifiers_attributes, :dimensions
   attr_accessible :fulltext_content, :extent,
@@ -172,15 +172,15 @@ class Manifestation < ActiveRecord::Base
       creator
     end
     text :atitle do
-      if periodical? and root_series_statement.nil?
+      if serial? and root_series_statement.nil?
         titles
       end
     end
     text :btitle do
-      title unless periodical?
+      title unless serial?
     end
     text :jtitle do
-      if periodical?
+      if serial?
         if root_series_statement
           root_series_statement.titles
         else
@@ -204,14 +204,14 @@ class Manifestation < ActiveRecord::Base
     string :doi, multiple: true do
       identifier_contents(:doi)
     end
-    boolean :periodical do
-      periodical?
+    boolean :serial do
+      serial?
     end
     boolean :series_master do
       series_master?
     end
     boolean :resource_master do
-      if periodical?
+      if serial?
         if series_master?
           true
         else
@@ -617,7 +617,7 @@ end
 #  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
-#  periodical                      :boolean
+#  serial                          :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
 #  extent                          :text
