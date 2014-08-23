@@ -838,7 +838,6 @@ ActiveRecord::Schema.define(:version => 20140822114527) do
     t.boolean  "periodical"
     t.text     "statement_of_responsibility"
     t.text     "publication_place"
-    t.text     "extent_of_text"
   end
 
   add_index "manifestations", ["access_address"], :name => "index_manifestations_on_access_address"

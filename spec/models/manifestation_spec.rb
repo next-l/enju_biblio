@@ -293,5 +293,4 @@ end
 #  periodical                      :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
-#  extent_of_text                  :text
 #
