@@ -16,7 +16,7 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 7, :manifestation_found => 4, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 8, :manifestation_found => 5, :item_found => 3, :failed => 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -25,9 +25,9 @@ describe ResourceImportFile do
         manifestation.creates.first.create_type.name.should eq 'author'
         manifestation.identifier_contents(:issn).should eq ['03875806']
         Manifestation.count.should eq old_manifestations_count + 9
-        Item.count.should eq old_items_count + 7
+        Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 20
+        ResourceImportResult.count.should eq old_import_results_count + 21
 
         manifestation_101 = Manifestation.where(manifestation_identifier: '101').first
         manifestation_101.series_statements.count.should eq 1
@@ -115,6 +115,7 @@ describe ResourceImportFile do
         ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
 
         Item.where(item_identifier: '11113').first.manifestation.original_title.should eq 'test10'
+        Item.where(item_identifier: '11114').first.manifestation.id.should eq 1
 
         @file.resource_import_fingerprint.should be_truthy
         @file.executed_at.should be_truthy
@@ -142,15 +143,15 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 7, :manifestation_found => 4, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 8, :manifestation_found => 5, :item_found => 3, :failed => 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
         Manifestation.count.should eq old_manifestations_count + 9
-        Item.count.should eq old_items_count + 7
+        Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 20
+        ResourceImportResult.count.should eq old_import_results_count + 21
         Item.where(item_identifier: '10101').first.manifestation.creators.size.should eq 2
         Item.where(item_identifier: '10101').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.where(item_identifier: '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')

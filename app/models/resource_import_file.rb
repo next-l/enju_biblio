@@ -66,7 +66,9 @@ class ResourceImportFile < ActiveRecord::Base
     row_num = 1
 
     field = rows.first
-    if [field['isbn'], field['manifestation_identifier'], field['original_title']].reject{|field| field.to_s.strip == ""}.empty?
+    if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|field|
+      field.to_s.strip == ""
+    }.empty?
       raise "You should specify isbn or original_title in the first line"
     end
 
@@ -92,6 +94,12 @@ class ResourceImportFile < ActiveRecord::Base
 
       if row['manifestation_identifier'].present?
         manifestation = Manifestation.where(manifestation_identifier: row['manifestation_identifier'].to_s.strip).first
+      end
+
+      unless manifestation
+        if row['manifestation_id'].present?
+          manifestation = Manifestation.where(id: row['manifestation_id'].to_s.strip).first
+        end
       end
 
       unless manifestation
