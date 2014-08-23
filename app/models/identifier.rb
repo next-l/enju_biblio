@@ -6,6 +6,7 @@ class Identifier < ActiveRecord::Base
   validates_presence_of :body
   validates_uniqueness_of :body, scope: [:identifier_type_id, :manifestation_id]
   validate :check_identifier
+  before_validation :normalize
   before_save :convert_isbn
 
   acts_as_list scope: :manifestation_id
@@ -50,6 +51,17 @@ class Identifier < ActiveRecord::Base
     if identifier_type.name == 'isbn'
       lisbn = Lisbn.new(body)
       lisbn.parts.join('-')
+    end
+  end
+
+  def normalize
+    case identifier_type.try(:name)
+    when 'isbn'
+      self.body = StdNum::ISBN.normalize(body)
+    when 'issn'
+      self.body = StdNum::ISSN.normalize(body)
+    when 'lccn'
+      self.body = StdNum::LCCN.normalize(body)
     end
   end
 end

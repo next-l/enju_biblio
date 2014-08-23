@@ -63,6 +63,14 @@
   <%= @resource_import_file.error_message -%>
 </p>
 
+<div>
+<ul>
+  <% @resource_import_file.resource_import_results.skipped.each do |resource_import_result| %>
+    <li><%= resource_import_result.error_message %></li>
+  <% end %>
+</ul>
+</div>
+
 <p>
   <strong><%= t('activerecord.models.user') -%>:</strong>
   <%= link_to @resource_import_file.user.username, @resource_import_file.user.profile if @resource_import_file.user.try(:profile) -%>

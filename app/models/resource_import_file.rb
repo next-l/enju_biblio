@@ -66,21 +66,26 @@ class ResourceImportFile < ActiveRecord::Base
 
     rows.each do |row|
       row_num += 1
-      next if row['dummy'].to_s.strip.present?
       import_result = ResourceImportResult.create!(:resource_import_file_id => self.id, body: row.fields.join("\t"))
+      if row['dummy'].to_s.strip.present?
+        import_result.error_message = "line #{row_num}: #{I18n.t('import.dummy')}"
+        import_result.save!
+        next
+      end
 
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(item_identifier: item_identifier).first
       if item
         import_result.item = item
         import_result.manifestation = item.manifestation
+        import_result.error_message = "line #{row_num}: #{I18n.t('import.item_found')}"
         import_result.save!
         num[:item_found] += 1
         next
       end
 
       if row['manifestation_identifier'].present?
-        manifestation = Manifestation.where(:manifestation_identifier => row['manifestation_identifier'].to_s.strip).first
+        manifestation = Manifestation.where(manifestation_identifier: row['manifestation_identifier'].to_s.strip).first
       end
 
       unless manifestation
@@ -108,7 +113,11 @@ class ResourceImportFile < ActiveRecord::Base
           end
         end
       end
-      num[:manifestation_found] += 1 if manifestation
+
+      if manifestation
+        import_result.error_message = "line #{row_num}: #{I18n.t('import.manifestation_found')}"
+        num[:manifestation_found] += 1
+      end
 
       if row['original_title'].blank?
         unless manifestation
@@ -540,8 +549,6 @@ class ResourceImportFile < ActiveRecord::Base
     content_type = ContentType.where(name: row['content_type'].to_s.strip).first
     frequency = Frequency.where(name: row['frequency'].to_s.strip).first
 
-    identifier = set_identifier(row)
-
     if %w(t true).include?(row['fulltext_content'].to_s.downcase.strip)
       fulltext_content = true
     end
@@ -654,6 +661,8 @@ class ResourceImportFile < ActiveRecord::Base
           end
         end
       end
+
+      identifier = set_identifier(row)
 
       if manifestation.save
         Manifestation.transaction do

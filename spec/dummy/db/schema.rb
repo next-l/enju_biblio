@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20140817155043) do
+ActiveRecord::Schema.define(:version => 20140822114527) do
 
   create_table "agent_import_file_transitions", :force => true do |t|
     t.string   "to_state"
@@ -1167,6 +1167,7 @@ ActiveRecord::Schema.define(:version => 20140817155043) do
     t.text     "body"
     t.datetime "created_at",              :null => false
     t.datetime "updated_at",              :null => false
+    t.text     "error_message"
   end
 
   add_index "resource_import_results", ["item_id"], :name => "index_resource_import_results_on_item_id"

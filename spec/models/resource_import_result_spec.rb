@@ -17,5 +17,5 @@ end
 #  body                    :text
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
+#  error_message           :text
 #
-

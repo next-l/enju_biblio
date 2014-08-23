@@ -291,6 +291,7 @@ ja:
         position: 位置
       resource_import_result:
         body: 本文
+        error_message: エラーメッセージ
       agent_import_result:
         body: 本文
       create_type:
@@ -404,3 +405,7 @@ ja:
     add: 追加
     remove: 削除
     add_series_statement: 別のシリーズ情報を追加する
+
+  import:
+    manifestation_found: すでに登録されている個別資料が見つかりました。
+    item_found: すでに登録されている個別資料が見つかりました。
