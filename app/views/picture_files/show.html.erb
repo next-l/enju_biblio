@@ -51,7 +51,7 @@
   <ul>
     <li><%= link_to t('page.edit'), edit_picture_file_path(@picture_file) -%></li>
     <% if @picture_file.picture_attachable_type? %>
-      <%- case @picture_attachale.picture_attachable.class.name when "Shelf" -%>
+      <%- case @picture_file.picture_attachable.class.name when "Shelf" -%>
         <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(shelf_id: @picture_file.picture_attachable_id) -%></li>
      <%- when "Manifestation" -%>
         <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @picture_file.picture_attachable_id) -%></li>
