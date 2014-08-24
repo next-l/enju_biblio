@@ -404,5 +404,5 @@ ja:
     add_series_statement: 別のシリーズ情報を追加する
 
   import:
-    manifestation_found: "インポート省略: すでに登録されている書誌が見つかりました。"
-    item_found: "インポート省略: すでに登録されている個別資料が見つかりました。"
+    manifestation_found: "書誌インポート省略: すでに登録されている書誌が見つかりました。"
+    item_found: "所蔵インポート省略: すでに登録されている個別資料が見つかりました。"
