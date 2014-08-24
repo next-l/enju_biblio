@@ -65,12 +65,12 @@ class ResourceImportFile < ActiveRecord::Base
     rows = open_import_file(create_import_temp_file(resource_import))
     row_num = 1
 
-    field = rows.first
-    if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
-      f.to_s.strip == ''
-    }.empty?
-      raise "You should specify isbn or original_title in the first line"
-    end
+    #field = rows.first
+    #if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
+    #  f.to_s.strip == ''
+    #}.empty?
+    #  raise "You should specify isbn or original_title in the first line"
+    #end
 
     rows.each do |row|
       row_num += 1
