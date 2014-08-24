@@ -400,5 +400,5 @@ en:
     add_series_statement: Add another series statement
 
   import:
-    manifestation_found: This manifestation is already created.
-    item_found: This item is already created.
+    manifestation_found: 'Skipped: This manifestation is already created.'
+    item_found: 'Skipped: This item is already created.'
