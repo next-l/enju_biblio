@@ -27,6 +27,7 @@ namespace :enju_biblio do
   task :upgrade => :environment do
     Item.transaction do
       update_item
+      update_agent_type
       update_carrier_type
       update_content_type
       update_identifier_type
