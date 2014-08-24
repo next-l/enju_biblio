@@ -38,6 +38,10 @@ ja:
       identifier_type: 識別子の種類
       resource_export_file: 書誌と所蔵のエクスポート
       agent_export_file: 人物・団体情報のエクスポート
+      patron_merge_list: 人物・団体の統合リスト
+      patron_merge: 人物・団体の統合
+      series_statement_merge_list: シリーズ情報統合リスト
+      series_statement_merge: シリーズ情報の統合
 
     attributes:
       manifestation:
@@ -319,6 +323,12 @@ ja:
         agent_export_file_name: ファイル名
         agent_export_file_size: ファイルサイズ
         state: 状態
+      patron_merge_list:
+        title: タイトル
+      patron_merge:
+      series_statement_merge_list:
+        title: タイトル
+      series_statement_merge:
 
   resource_import_file:
     update_relationship: 関連を更新
@@ -402,6 +412,12 @@ ja:
     add: 追加
     remove: 削除
     add_series_statement: 別のシリーズ情報を追加する
+    merge: "統合する（取り消しはできません）"
+    merge_resource: "%{model}を統合する"
+
+  merge_list:
+    successfully_merged: "%{model}は正常に統合されました。"
+    specify_id: "%{model}のIDを指定してください。"
 
   import:
     manifestation_found: "書誌インポート省略: すでに登録されている書誌が見つかりました。"
