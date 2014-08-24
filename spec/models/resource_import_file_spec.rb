@@ -27,7 +27,7 @@ describe ResourceImportFile do
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 21
+        ResourceImportResult.count.should eq old_import_results_count + 22
 
         manifestation_101 = Manifestation.where(manifestation_identifier: '101').first
         manifestation_101.series_statements.count.should eq 1
@@ -151,7 +151,7 @@ describe ResourceImportFile do
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 21
+        ResourceImportResult.count.should eq old_import_results_count + 22
         Item.where(item_identifier: '10101').first.manifestation.creators.size.should eq 2
         Item.where(item_identifier: '10101').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.where(item_identifier: '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
