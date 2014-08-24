@@ -3,9 +3,7 @@ class AgentsController < ApplicationController
   load_and_authorize_resource except: :index
   authorize_resource only: :index
   before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, except: [:update, :destroy]
-  if defined?(EnjuResourceMerge)
-    before_filter :get_agent_merge_list, except: [:create, :update, :destroy]
-  end
+  before_filter :get_agent_merge_list, except: [:create, :update, :destroy]
   before_filter :prepare_options, only: [:new, :edit]
   before_filter :store_location
   before_filter :get_version, only: [:show]

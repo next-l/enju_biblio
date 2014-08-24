@@ -6,6 +6,8 @@ class SeriesStatement < ActiveRecord::Base
     :title_subseries_transcription, :creator_string, :volume_number_string
   attr_accessible :series_master
 
+  has_many :series_statement_merges, dependent: :destroy
+  has_many :series_statement_merge_lists, through: :series_statement_merges
   belongs_to :manifestation, touch: true
   belongs_to :root_manifestation, foreign_key: :root_manifestation_id, class_name: 'Manifestation', touch: true
   validates_presence_of :original_title
@@ -19,7 +21,7 @@ class SeriesStatement < ActiveRecord::Base
     text :numbering, :title_subseries, :numbering_subseries
     integer :manifestation_id
     integer :position
-    integer :series_statement_merge_list_ids, multiple: true if defined?(EnjuResourceMerge)
+    integer :series_statement_merge_list_ids, multiple: true
   end
 
   attr_accessor :selected
@@ -40,11 +42,6 @@ class SeriesStatement < ActiveRecord::Base
     else
       self.root_manifestation = nil
     end
-  end
-
-  if defined?(EnjuResourceMerge)
-    has_many :series_statement_merges, dependent: :destroy
-    has_many :series_statement_merge_lists, through: :series_statement_merges
   end
 end
 

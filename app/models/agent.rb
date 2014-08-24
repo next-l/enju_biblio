@@ -26,10 +26,8 @@ class Agent < ActiveRecord::Base
   has_many :donated_items, through: :donates, source: :item
   has_many :owns, dependent: :destroy
   has_many :items, through: :owns
-  if defined?(EnjuResourceMerge)
-    has_many :agent_merges, dependent: :destroy
-    has_many :agent_merge_lists, through: :agent_merges
-  end
+  has_many :agent_merges, dependent: :destroy
+  has_many :agent_merge_lists, through: :agent_merges
   belongs_to :agent_type
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   belongs_to :language
@@ -71,7 +69,7 @@ class Agent < ActiveRecord::Base
     integer :work_ids, multiple: true
     integer :expression_ids, multiple: true
     integer :manifestation_ids, multiple: true
-    integer :agent_merge_list_ids, multiple: true if defined?(EnjuResourceMerge)
+    integer :agent_merge_list_ids, multiple: true
     integer :original_agent_ids, multiple: true
     integer :required_role_id
     integer :agent_type_id

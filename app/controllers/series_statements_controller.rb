@@ -3,9 +3,7 @@ class SeriesStatementsController < ApplicationController
   load_and_authorize_resource
   before_filter :get_manifestation, except: [:create, :update, :destroy]
   after_filter :solr_commit, only: [:create, :update, :destroy]
-  if defined?(EnjuResourceMerge)
-    before_filter :get_series_statement_merge_list, except: [:create, :update, :destroy]
-  end
+  before_filter :get_series_statement_merge_list, except: [:create, :update, :destroy]
 
   # GET /series_statements
   # GET /series_statements.json

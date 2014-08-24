@@ -55,6 +55,22 @@ ActiveRecord::Schema.define(:version => 20140823095740) do
     t.datetime "updated_at",           :null => false
   end
 
+  create_table "agent_merge_lists", :force => true do |t|
+    t.string   "title"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  create_table "agent_merges", :force => true do |t|
+    t.integer  "agent_id",            :null => false
+    t.integer  "agent_merge_list_id", :null => false
+    t.datetime "created_at",          :null => false
+    t.datetime "updated_at",          :null => false
+  end
+
+  add_index "agent_merges", ["agent_id"], :name => "index_agent_merges_on_agent_id"
+  add_index "agent_merges", ["agent_merge_list_id"], :name => "index_agent_merges_on_agent_merge_list_id"
+
   create_table "agent_relationship_types", :force => true do |t|
     t.string   "name",         :null => false
     t.text     "display_name"

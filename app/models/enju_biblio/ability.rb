@@ -22,6 +22,8 @@ module EnjuBiblio
           manifestation.items.empty? && !manifestation.series_master?
         end
         can :manage, [
+          AgentMerge,
+          AgentMergeList,
           Create,
           CreateType,
           Donate,
@@ -42,7 +44,9 @@ module EnjuBiblio
           RealizeType,
           ResourceImportFile,
           ResourceExportFile,
-          SeriesStatement
+          SeriesStatement,
+          SeriesStatementMerge,
+          SeriesStatementMergeList
         ]
         can :manage, [
           ContentType,
@@ -82,6 +86,8 @@ module EnjuBiblio
           agent.required_role_id <= 3
         end
         can :manage, [
+          AgentMerge,
+          AgentMergeList,
           Create,
           Donate,
           Identifier,
@@ -95,7 +101,9 @@ module EnjuBiblio
           Realize,
           ResourceImportFile,
           ResourceExportFile,
-          SeriesStatement
+          SeriesStatement,
+          SeriesStatementMerge,
+          SeriesStatementMergeList
         ]
         can :read, [
           CarrierType,

@@ -28,9 +28,7 @@
   <ul>
     <%- if can? :create, Agent -%>
       <li><%= link_to t('agent.add'), new_agent_path -%></li>
-      <% if defined?(EnjuResourceMerge) %>
-        <li><%= link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path -%></li>
-      <% end %>
+      <li><%= link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path -%></li>
     <%- end -%>
   </ul>
 </div>
