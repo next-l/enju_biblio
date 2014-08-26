@@ -38,8 +38,8 @@ en:
       identifier_type: Identifier type
       resource_export_file: Resource export
       agent_export_file: Agent export
-      patron_merge_list: Patron merge list
-      patron_merge: Patrom merge
+      agent_merge_list: Patron merge list
+      agent_merge: Patrom merge
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
 
@@ -319,9 +319,9 @@ en:
         resource_export_file_name: Filename
         resource_export_file_size: Size
         state: State
-      patron_merge_list:
+      agent_merge_list:
         title: Title
-      patron_merge:
+      agent_merge:
       series_statement_merge_list:
         title: Title
       series_statement_merge:

@@ -12,10 +12,6 @@ class AgentsController < ApplicationController
   # GET /agents
   # GET /agents.json
   def index
-    #session[:params] = {} unless session[:params]
-    #session[:params][:agent] = params
-    # 最近追加されたパトロン
-    #@query = params[:query] ||= "[* TO *]"
     if params[:mode] == 'add'
       unless current_user.try(:has_role?, 'Librarian')
         access_denied; return
@@ -217,7 +213,7 @@ class AgentsController < ApplicationController
     @countries = Country.all_cache
     @agent_types = AgentType.all
     @roles = Role.all
-    @languages = Language.all_cache
-    @agent_type = AgentType.where(name: 'Person').first
+    @languages = Language.all
+    @agent_type = AgentType.where(name: 'person').first
   end
 end

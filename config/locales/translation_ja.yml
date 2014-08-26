@@ -38,8 +38,8 @@ ja:
       identifier_type: 識別子の種類
       resource_export_file: 書誌と所蔵のエクスポート
       agent_export_file: 人物・団体情報のエクスポート
-      patron_merge_list: 人物・団体の統合リスト
-      patron_merge: 人物・団体の統合
+      agent_merge_list: 人物・団体の統合リスト
+      agent_merge: 人物・団体の統合
       series_statement_merge_list: シリーズ情報統合リスト
       series_statement_merge: シリーズ情報の統合
 
@@ -323,9 +323,9 @@ ja:
         agent_export_file_name: ファイル名
         agent_export_file_size: ファイルサイズ
         state: 状態
-      patron_merge_list:
+      agent_merge_list:
         title: タイトル
-      patron_merge:
+      agent_merge:
       series_statement_merge_list:
         title: タイトル
       series_statement_merge:
