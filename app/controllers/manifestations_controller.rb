@@ -53,10 +53,10 @@ class ManifestationsController < ApplicationController
               @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
             rescue ActiveRecord::RecordNotFound
               @oai[:errors] << "idDoesNotExist"
-              render :formats => :oai, layout: false
+              render formats: :oai, layout: false
               return
             end
-            render template: 'manifestations/show', :formats => :oai, layout: false
+            render template: 'manifestations/show', formats: :oai, layout: false
             return
           end
         end
@@ -98,7 +98,7 @@ class ManifestationsController < ApplicationController
 
       includes = [:carrier_type, :series_statements]
       includes << :bookmarks if defined?(EnjuBookmark)
-      search = Manifestation.search(:include => includes)
+      search = Manifestation.search(include: includes)
       role = current_user.try(:role) || Role.default_role
       case @reservable
       when 'true'
@@ -113,7 +113,7 @@ class ManifestationsController < ApplicationController
       @index_agent = agent
       manifestation = @manifestation if @manifestation
       series_statement = @series_statement if @series_statement
-      parent = @parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
+      parent = @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
 
       if defined?(EnjuSubject)
         subject = @subject if @subject
@@ -209,7 +209,7 @@ class ManifestationsController < ApplicationController
           else
             flash[:search_query] = @search_query
             @manifestation_ids = search.build do
-              paginate :page => 1, :per_page => Setting.max_number_of_results
+              paginate page: 1, per_page: Setting.max_number_of_results
             end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
           end
         end
@@ -218,11 +218,11 @@ class ManifestationsController < ApplicationController
           if params[:view] == 'tag_cloud'
             unless @manifestation_ids
               @manifestation_ids = search.build do
-                paginate :page => 1, :per_page => Setting.max_number_of_results
+                paginate page: 1, per_page: Setting.max_number_of_results
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
-            #bookmark_ids = Bookmark.where(:manifestation_id => flash[:manifestation_ids]).limit(1000).pluck(:id)
-            bookmark_ids = Bookmark.where(:manifestation_id => @manifestation_ids).limit(1000).pluck(:id)
+            #bookmark_ids = Bookmark.where(manifestation_id: flash[:manifestation_ids]).limit(1000).pluck(:id)
+            bookmark_ids = Bookmark.where(manifestation_id: @manifestation_ids).limit(1000).pluck(:id)
             @tags = Tag.bookmarked(bookmark_ids)
             render partial: 'manifestations/tag_cloud'
             return
@@ -258,9 +258,9 @@ class ManifestationsController < ApplicationController
           facet :carrier_type
           facet :library
           facet :language
-          facet :pub_year, :range => pub_date_range[:from]..pub_date_range[:to], :range_interval => pub_year_range_interval
+          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:to], range_interval: pub_year_range_interval
           facet :subject_ids if defined?(EnjuSubject)
-          paginate :page => page.to_i, :per_page => per_page
+          paginate page: page.to_i, per_page: per_page
         end
       end
       search_result = search.execute
@@ -270,7 +270,7 @@ class ManifestationsController < ApplicationController
         max_count = @count[:query_result]
       end
       @manifestations = Kaminari.paginate_array(
-        search_result.results, :total_count => max_count
+        search_result.results, total_count: max_count
       ).page(page)
 
       if params[:format].blank? or params[:format] == 'html'
@@ -318,7 +318,7 @@ class ManifestationsController < ApplicationController
     respond_to do |format|
       format.html
       format.mobile
-      format.xml  { render :xml => @manifestations }
+      format.xml  { render xml: @manifestations }
       format.sru  { render layout: false }
       format.rss  { render layout: false }
       format.txt  { render layout: false }
@@ -374,17 +374,17 @@ class ManifestationsController < ApplicationController
     if @manifestation.series_master?
       flash.keep(:notice) if flash[:notice]
       flash[:manifestation_id] = @manifestation.id
-      redirect_to manifestations_url(:parent_id => @manifestation.id)
+      redirect_to manifestations_url(parent_id: @manifestation.id)
       return
     end
 
     if defined?(EnjuCirculation)
-      @reserved_count = Reserve.waiting.where(:manifestation_id => @manifestation.id, :checked_out_at => nil).count
-      @reserve = current_user.reserves.where(:manifestation_id => @manifestation.id).first if user_signed_in?
+      @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id, checked_out_at: nil).count
+      @reserve = current_user.reserves.where(manifestation_id: @manifestation.id).first if user_signed_in?
     end
 
     if defined?(EnjuQuestion)
-      @questions = @manifestation.questions(:user => current_user, :page => params[:question_page])
+      @questions = @manifestation.questions(user: current_user, page: params[:question_page])
     end
 
     if @manifestation.attachment.path
@@ -403,7 +403,7 @@ class ManifestationsController < ApplicationController
         when 'related'
           render template: 'manifestations/related'
         else
-          render :xml => @manifestation
+          render xml: @manifestation
         end
       }
       format.rdf
@@ -434,8 +434,8 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
-    @manifestation.language = Language.where(:iso_639_1 => @locale).first
-    @parent = Manifestation.where(:id => params[:parent_id]).first if params[:parent_id].present?
+    @manifestation.language = Language.where(iso_639_1: @locale).first
+    @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
     if @parent
       @manifestation.parent_id = @parent.id
       @manifestation.original_title = @parent.original_title
@@ -458,7 +458,7 @@ class ManifestationsController < ApplicationController
     end
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
-        @bookmark = current_user.bookmarks.where(:manifestation_id => @manifestation.id).first if @manifestation rescue nil
+        @bookmark = current_user.bookmarks.where(manifestation_id: @manifestation.id).first if @manifestation rescue nil
         render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
       store_location unless params[:mode] == 'tag_edit'
@@ -469,7 +469,7 @@ class ManifestationsController < ApplicationController
   # POST /manifestations.json
   def create
     @manifestation = Manifestation.new(params[:manifestation])
-    parent = Manifestation.where(:id => @manifestation.parent_id).first
+    parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
     end
@@ -654,7 +654,7 @@ class ManifestationsController < ApplicationController
     when 'barcode'
       if defined?(EnjuBarcode)
         barcode = Barby::QrCode.new(@manifestation.id)
-        send_data(barcode.to_svg, :disposition => 'inline', type: 'image/svg+xml')
+        send_data(barcode.to_svg, disposition: 'inline', type: 'image/svg+xml')
       end
     when 'tag_edit'
       if defined?(EnjuBookmark)

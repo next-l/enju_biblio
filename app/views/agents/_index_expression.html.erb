@@ -35,7 +35,7 @@
       <td>
         <%- if can? :delete, agent -%>
           <%- if params[:mode] == 'add' -%>
-            <%= link_to t('page.add'), new_expression_realize_path(expression, :agent_id => agent.id) unless expression.contributors.include?(agent) -%>
+            <%= link_to t('page.add'), new_expression_realize_path(expression, agent_id: agent.id) unless expression.contributors.include?(agent) -%>
           <%- else -%>
             <%= link_to t('page.destroy'), expression_realize_path(expression, expression.realized(agent)), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
           <%- end -%>

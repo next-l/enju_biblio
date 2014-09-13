@@ -116,7 +116,7 @@ class ItemsController < ApplicationController
       end
     end
 
-    flash[:page_info] = {:page => page, :query => query}
+    flash[:page_info] = { page: page, query: query }
 
     respond_to do |format|
       format.html # index.html.erb
@@ -250,7 +250,7 @@ class ItemsController < ApplicationController
   def prepare_options
     @libraries = Library.real << Library.web
     if @item.new_record?
-      @library = Library.real.first(:order => :position, :include => :shelves)
+      @library = Library.real.includes(:shelves).order(:position).first
     else
       @library = @item.shelf.library
     end

@@ -39,7 +39,7 @@
       <td>
         <%- if can? :delete, agent -%>
           <%- if params[:mode] == 'add' -%>
-            <%= link_to t('page.add'), new_work_create_path(work, :agent_id => agent.id) unless work.creators.include?(agent) -%>
+            <%= link_to t('page.add'), new_work_create_path(work, agent_id: agent.id) unless work.creators.include?(agent) -%>
           <%- else -%>
             <% if work.created(agent) %>
               <%= link_to t('page.edit'), edit_create_path(work.created(agent)) -%>

@@ -5,7 +5,7 @@
 <%- when @manifestation -%>
   <%= render 'index_manifestation', manifestation: @manifestation -%>
 <%- when @agent -%>
-  <%= render 'index_agent', :agent => @agent -%>
+  <%= render 'index_agent', agent: @agent -%>
 <%- when @agent_merge_list -%>
   <%= render 'index_agent_merge_list', :agent_merge_list => @agent_merge_list -%>
 <%- else -%>
