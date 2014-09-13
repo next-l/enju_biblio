@@ -9,7 +9,6 @@ Rails.application.routes.draw do
     resources :agents
     resources :produces
     resources :series_statements
-    resources :items
     resources :picture_files
     resources :manifestations
     resources :manifestation_relationships
