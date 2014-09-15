@@ -28,7 +28,7 @@ class AgentsController < ApplicationController
     order = nil
     @count = {}
 
-    search = Agent.search(:include => [:agent_type, :required_role])
+    search = Agent.search(include: [:agent_type, :required_role])
     search.data_accessor_for(Agent).select = [
       :id,
       :full_name,
@@ -75,11 +75,11 @@ class AgentsController < ApplicationController
     search.query.paginate(page, Agent.default_per_page)
     @agents = search.execute!.results
 
-    flash[:page_info] = {:page => page, :query => query}
+    flash[:page_info] = { page: page, query: query }
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @agents }
+      format.xml  { render xml: @agents }
       format.rss  { render layout: false }
       format.atom
       format.json { render json: @agents }
@@ -108,17 +108,17 @@ class AgentsController < ApplicationController
     @works = Manifestation.search do
       with(:creator_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
-      paginate :page => params[:work_list_page], :per_page => Manifestation.default_per_page
+      paginate page: params[:work_list_page], per_page: Manifestation.default_per_page
     end.results
     @expressions = Manifestation.search do
       with(:contributor_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
-      paginate :page => params[:expression_list_page], :per_page => Manifestation.default_per_page
+      paginate page: params[:expression_list_page], per_page: Manifestation.default_per_page
     end.results
     @manifestations = Manifestation.search do
       with(:publisher_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
-      paginate :page => params[:manifestation_list_page], :per_page => Manifestation.default_per_page
+      paginate page: params[:manifestation_list_page], per_page: Manifestation.default_per_page
     end.results
 
     respond_to do |format|
@@ -134,7 +134,7 @@ class AgentsController < ApplicationController
   def new
     @agent = Agent.new
     @agent.required_role = Role.where(name: 'Guest').first
-    @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
+    @agent.language = Language.where(iso_639_1: I18n.default_locale.to_s).first || Language.first
     @agent.country = current_user.profile.library.country
     prepare_options
 

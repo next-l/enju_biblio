@@ -63,15 +63,15 @@ class ResourceImportFile < ActiveRecord::Base
       failed: 0
     }
     rows = open_import_file(create_import_temp_file(resource_import))
-    row_num = 1
-
-    #field = rows.first
+    rows.shift
     #if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
     #  f.to_s.strip == ''
     #}.empty?
     #  raise "You should specify isbn or original_title in the first line"
     #end
+    row_num = 1
 
+    ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
       row_num += 1
       import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
@@ -270,6 +270,7 @@ class ResourceImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file(create_import_temp_file(resource_import))
+    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -340,6 +341,7 @@ class ResourceImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file(create_import_temp_file(resource_import))
+    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -361,7 +363,8 @@ class ResourceImportFile < ActiveRecord::Base
   def update_relationship
     transition_to!(:started)
     rows = open_import_file(create_import_temp_file(resource_import))
-    row_num = 2
+    rows.shift
+    row_num = 1
 
     rows.each do |row|
       item_identifier = row['item_identifier'].to_s.strip
@@ -423,7 +426,7 @@ class ResourceImportFile < ActiveRecord::Base
       save!
     end
     rows = CSV.open(tempfile, headers: header, col_sep: "\t")
-    ResourceImportResult.create!(resource_import_file_id: id, body: header.join("\t"))
+    #ResourceImportResult.create!(resource_import_file_id: id, body: header.join("\t"))
     tempfile.close(true)
     file.close
     rows

@@ -12,8 +12,8 @@ class Item < ActiveRecord::Base
     :manifestation_id, :library_id, :required_role_id,
     :binding_item_identifier, :binding_call_number, :binded_at
   scope :on_shelf, -> { where('shelf_id != 1') }
-  scope :on_web, -> { where(:shelf_id => 1) }
-  delegate :display_name, :to => :shelf, prefix: true
+  scope :on_web, -> { where(shelf_id: 1) }
+  delegate :display_name, to: :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns
   has_many :donates
@@ -30,7 +30,7 @@ class Item < ActiveRecord::Base
     format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :binding_item_identifier, allow_blank: true,
     format: {with: /\A[0-9A-Za-z_]+\Z/}
-  validates :url, url: true, allow_blank: true, length: {:maximum => 255}
+  validates :url, url: true, allow_blank: true, length: { maximum: 255 }
   validates_date :acquired_at, allow_blank: true
 
   normalize_attributes :item_identifier, :binding_item_identifier,

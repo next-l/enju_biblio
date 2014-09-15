@@ -1,8 +1,5 @@
-full_name	note	dummy
-æ—¥æœ¬èªã®åå‰		t
-kosuke	user_numberé‡è¤‡	
-tanabe	usernameé‡è¤‡	
-tanabe2	emailãªã—	
-tanabe	full_nameé‡è¤‡	
-tanabe	emailé‡è¤‡	
-tanabe	user_numberãªã—	
+full_name	first_name	last_name	middle_name	language	country	address_1	address_2	zip_code_1	zip_code_2	telephone_number_1	telephone_number_2	fax_number_1	fax_number_2	birth_date	note	dummy
+ƒtƒ‹ƒl[ƒ€	–¼	©	ƒ~ƒhƒ‹ƒl[ƒ€	Œ¾Œê–¼	‘–¼	ZŠ1	ZŠ2	—X•Ö”Ô†1	—X•Ö”Ô†2	“d˜b”Ô†1	“d˜b”Ô†2	ƒtƒ@ƒbƒNƒX”Ô†1	ƒtƒ@ƒbƒNƒX”Ô†2	’a¶“ú	”õl	ƒCƒ“ƒ|[ƒgÈ—ª
+hogehoge														1978		
+“c•Ó_‰î				Japanese	Japan	“Œ‹“s`‹æ	“Œ‹“s`‹æ	108-8345	108-8345	03-xxxx-xxxx	03-xxxx-xxxx	03-xxxx-xxxx	03-xxxx-xxxx	1978-4-12	”õl	
+	—²j	Œ´“c	ushi	English	Japan										”õl	

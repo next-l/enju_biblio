@@ -28,7 +28,7 @@ class Language < ActiveRecord::Base
   end
 
   def self.available_languages
-    Language.where(:iso_639_1 => I18n.available_locales.map{|l| l.to_s}).order(:position)
+    Language.where(iso_639_1: I18n.available_locales.map{|l| l.to_s}).order(:position)
   end
 
   private

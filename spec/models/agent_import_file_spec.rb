@@ -18,7 +18,8 @@ describe AgentImportFile do
       Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
       Agent.order('id DESC')[2].date_of_birth.should eq Time.zone.parse('1978-01-01')
       Agent.count.should eq old_agents_count + 3
-      AgentImportResult.count.should eq old_import_results_count + 4
+      @file.agent_import_results.order(:id).first.body.split("\t").first.should eq 'full_name'
+      AgentImportResult.count.should eq old_import_results_count + 5
 
       @file.agent_import_fingerprint.should be_truthy
       @file.executed_at.should be_truthy

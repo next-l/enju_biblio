@@ -27,7 +27,8 @@ describe ResourceImportFile do
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 22
+        @file.resource_import_results.order(:id).first.body.split("\t").first.should eq 'manifestation_identifier'
+        ResourceImportResult.count.should eq old_import_results_count + 21
 
         manifestation_101 = Manifestation.where(manifestation_identifier: '101').first
         manifestation_101.series_statements.count.should eq 1
@@ -111,8 +112,8 @@ describe ResourceImportFile do
         manifestation_104.creators.collect(&:full_name).should eq ['test3']
         manifestation_104.publishers.collect(&:full_name).should eq ['test4']
 
-        ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.manifestation_found')}"
-        ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 10: #{I18n.t('import.item_found')}"
+        ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 8: #{I18n.t('import.manifestation_found')}"
+        ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
 
         Item.where(item_identifier: '11113').first.manifestation.original_title.should eq 'test10'
         Item.where(item_identifier: '11114').first.manifestation.id.should eq 1
@@ -151,7 +152,7 @@ describe ResourceImportFile do
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 22
+        ResourceImportResult.count.should eq old_import_results_count + 21
         Item.where(item_identifier: '10101').first.manifestation.creators.size.should eq 2
         Item.where(item_identifier: '10101').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.where(item_identifier: '10102').first.manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')

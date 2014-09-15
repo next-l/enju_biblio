@@ -7,13 +7,13 @@ class AgentImportFile < ActiveRecord::Base
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :agent_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
-      :s3_permissions => :private
+    has_attached_file :agent_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
+      s3_permissions: :private
   else
     has_attached_file :agent_import,
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
-  validates_attachment_content_type :agent_import, :content_type => [
+  validates_attachment_content_type :agent_import, content_type: [
     'text/csv',
     'text/plain',
     'text/tab-separated-values',
@@ -51,19 +51,20 @@ class AgentImportFile < ActiveRecord::Base
 
   def import
     transition_to!(:started)
-    num = {:agent_imported => 0, :user_imported => 0, :failed => 0}
-    row_num = 1
+    num = { agent_imported: 0, user_imported: 0, failed: 0 }
     rows = open_import_file
     field = rows.first
+    row_num = 1
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
     #rows.shift
 
+    AgentImportResult.create!(agent_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
       row_num += 1
+      import_result = AgentImportResult.create!(agent_import_file_id: id, body: row.fields.join("\t"))
       next if row['dummy'].to_s.strip.present?
-      import_result = AgentImportResult.create!(:agent_import_file_id => self.id, body: row.fields.join("\t"))
 
       agent = Agent.new
       agent = set_agent_value(agent, row)
@@ -100,6 +101,7 @@ class AgentImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file
+    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -130,6 +132,7 @@ class AgentImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file
+    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -171,7 +174,6 @@ class AgentImportFile < ActiveRecord::Base
     file = CSV.open(tempfile, col_sep: "\t")
     header = file.first
     rows = CSV.open(tempfile, headers: header, col_sep: "\t")
-    AgentImportResult.create!(:agent_import_file_id => self.id, body: header.join("\t"))
     tempfile.close(true)
     file.close
     rows
@@ -207,8 +209,8 @@ class AgentImportFile < ActiveRecord::Base
     #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
     #end
     language = Language.where(name: row['language'].to_s.strip.camelize).first
-    language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(:iso_639_1 => row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
     agent.language = language if language
     country = Country.where(name: row['country'].to_s.strip).first
     agent.country = country if country
