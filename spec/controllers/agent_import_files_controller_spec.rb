@@ -134,7 +134,7 @@ describe AgentImportFilesController do
         old_agents_count = Agent.count
         post :create, :agent_import_file => {:agent_import => fixture_file_upload("/../../examples/agent_import_file_sample2.tsv", 'text/csv') }
         assigns(:agent_import_file).import_start
-        Agent.count.should eq old_agents_count + 6
+        Agent.count.should eq old_agents_count + 3
         expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
