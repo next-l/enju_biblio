@@ -14,6 +14,7 @@ begin
   require 'charlock_holmes/string'
 rescue LoadError
 end
+require "protected_attributes" if Rails::VERSION::MAJOR == 4
 
 module EnjuBiblio
   class Engine < ::Rails::Engine
