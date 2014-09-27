@@ -357,6 +357,17 @@ ActiveRecord::Schema.define(:version => 20140823095740) do
   add_index "classifications", ["manifestation_id"], :name => "index_classifications_on_manifestation_id"
   add_index "classifications", ["parent_id"], :name => "index_classifications_on_parent_id"
 
+  create_table "colors", :force => true do |t|
+    t.integer  "library_group_id"
+    t.string   "property"
+    t.string   "code"
+    t.integer  "position"
+    t.datetime "created_at",       :null => false
+    t.datetime "updated_at",       :null => false
+  end
+
+  add_index "colors", ["library_group_id"], :name => "index_colors_on_library_group_id"
+
   create_table "content_types", :force => true do |t|
     t.string   "name",         :null => false
     t.text     "display_name"
