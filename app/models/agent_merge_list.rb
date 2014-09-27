@@ -8,10 +8,10 @@ class AgentMergeList < ActiveRecord::Base
 
   def merge_agents(selected_agent)
     self.agents.each do |agent|
-      Create.update_all(['agent_id = ?', selected_agent.id], ['agent_id = ?', agent.id])
-      Produce.update_all(['agent_id = ?', selected_agent.id], ['agent_id = ?', agent.id])
-      Own.update_all(['agent_id = ?', selected_agent.id], ['agent_id = ?', agent.id])
-      Donate.update_all(['agent_id = ?', selected_agent.id], ['agent_id = ?', agent.id])
+      Create.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
+      Produce.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
+      Own.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
+      Donate.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
       agent.destroy unless agent == selected_agent
     end
   end
