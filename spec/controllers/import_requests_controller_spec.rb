@@ -11,7 +11,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.all)
+        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
       end
     end
 
@@ -20,7 +20,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.all)
+        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
       end
     end
 

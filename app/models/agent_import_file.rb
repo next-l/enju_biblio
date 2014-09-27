@@ -204,9 +204,9 @@ class AgentImportFile < ActiveRecord::Base
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Guest')
+      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where(name: 'Guest').first
     #else
-    #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.find('Librarian')
+    #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where('Librarian').first
     #end
     language = Language.where(name: row['language'].to_s.strip.camelize).first
     language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language

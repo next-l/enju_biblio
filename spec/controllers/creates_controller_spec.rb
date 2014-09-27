@@ -19,7 +19,7 @@ describe CreatesController do
 
       it "assigns all creates as @creates" do
         get :index
-        expect(assigns(:creates)).to eq(Create.all)
+        expect(assigns(:creates)).to eq(Create.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe CreatesController do
 
       it "assigns all creates as @creates" do
         get :index
-        expect(assigns(:creates)).to eq(Create.all)
+        expect(assigns(:creates)).to eq(Create.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe CreatesController do
 
       it "assigns all creates as @creates" do
         get :index
-        expect(assigns(:creates)).to eq(Create.all)
+        expect(assigns(:creates)).to eq(Create.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all creates as @creates" do
         get :index
-        expect(assigns(:creates)).to eq(Create.all)
+        expect(assigns(:creates)).to eq(Create.page(1))
       end
     end
   end

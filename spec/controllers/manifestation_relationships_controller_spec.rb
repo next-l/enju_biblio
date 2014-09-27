@@ -19,7 +19,7 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.all)
+        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.all)
+        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe ManifestationRelationshipsController do
 
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.all)
+        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all manifestation_relationships as @manifestation_relationships" do
         get :index
-        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.all)
+        expect(assigns(:manifestation_relationships)).to eq(ManifestationRelationship.page(1))
       end
     end
   end

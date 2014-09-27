@@ -11,7 +11,7 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        expect(assigns(:picture_files)).to eq(PictureFile.all)
+        expect(assigns(:picture_files)).to eq(PictureFile.attached.page(1))
       end
     end
 
@@ -20,7 +20,7 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        expect(assigns(:picture_files)).to eq(PictureFile.all)
+        expect(assigns(:picture_files)).to eq(PictureFile.attached.page(1))
       end
     end
 
@@ -29,14 +29,14 @@ describe PictureFilesController do
 
       it "assigns all picture_files as @picture_files" do
         get :index
-        expect(assigns(:picture_files)).to eq(PictureFile.all)
+        expect(assigns(:picture_files)).to eq(PictureFile.attached.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all picture_files as @picture_files" do
         get :index
-        expect(assigns(:picture_files)).to eq(PictureFile.all)
+        expect(assigns(:picture_files)).to eq(PictureFile.attached.page(1))
       end
     end
   end

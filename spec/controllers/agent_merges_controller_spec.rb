@@ -13,7 +13,7 @@ describe AgentMergesController do
 
       it "assigns all agent_merges as @agent_merges" do
         get :index
-        assigns(:agent_merges).should eq(AgentMerge.all)
+        assigns(:agent_merges).should eq(AgentMerge.page(1))
       end
     end
 
@@ -22,7 +22,7 @@ describe AgentMergesController do
 
       it "assigns all agent_merges as @agent_merges" do
         get :index
-        assigns(:agent_merges).should eq(AgentMerge.all)
+        assigns(:agent_merges).should eq(AgentMerge.page(1))
       end
     end
 

@@ -9,7 +9,7 @@ describe SeriesStatementMergesController do
 
       it "assigns all series_statement_merges as @series_statement_merges" do
         get :index
-        assigns(:series_statement_merges).should eq(SeriesStatementMerge.all)
+        assigns(:series_statement_merges).should eq(SeriesStatementMerge.page(1))
       end
     end
 
@@ -18,7 +18,7 @@ describe SeriesStatementMergesController do
 
       it "assigns all series_statement_merges as @series_statement_merges" do
         get :index
-        assigns(:series_statement_merges).should eq(SeriesStatementMerge.all)
+        assigns(:series_statement_merges).should eq(SeriesStatementMerge.page(1))
       end
     end
 
