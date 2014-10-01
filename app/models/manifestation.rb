@@ -503,6 +503,7 @@ class Manifestation < ActiveRecord::Base
       pub_date
       price
       isbn
+      issn
       item_identifier
       call_number
       item_price

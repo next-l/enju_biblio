@@ -280,7 +280,7 @@ class ManifestationsController < ApplicationController
         @pub_year_facet = search_result.facet(:pub_year).rows.reverse
       end
 
-      @search_engines = Rails.cache.fetch('search_engine_all'){SearchEngine.all}
+      @search_engines = SearchEngine.order(:position)
 
       if defined?(EnjuBookmark)
         # TODO: 検索結果が少ない場合にも表示させる
@@ -389,7 +389,7 @@ class ManifestationsController < ApplicationController
 
     if @manifestation.attachment.path
       if Setting.uploaded_file.storage == :s3
-        data = open(@manifestation.attachment.url).read.force_encoding('UTF-8')
+        data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
       end
@@ -414,7 +414,7 @@ class ManifestationsController < ApplicationController
       format.download {
         if @manifestation.attachment.path
           if Setting.uploaded_file.storage == :s3
-            send_data @manifestation.attachment.data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
+            send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
             if File.exist?(file) && File.file?(file)
               send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'

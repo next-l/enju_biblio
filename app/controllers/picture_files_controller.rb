@@ -31,7 +31,7 @@ class PictureFilesController < ApplicationController
 
     if @picture_file.picture.path
       if Setting.uploaded_file.storage == :s3
-        file = open(@picture_file.picture.expiring_url).read.force_encoding('UTF-8')
+        file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
       else
         file = @picture_file.picture.path(size)
       end

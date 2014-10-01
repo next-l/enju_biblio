@@ -2,53 +2,51 @@
 http_interactions:
 - request:
     method: get
-    uri: http://iss.ndl.go.jp/api/opensearch?dpid=iss-ndl-opac&isbn=9784798002064&cnt=10&idx=1&mediatype=1
+    uri: http://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=9784798002064&mediatype=1
     body:
       encoding: US-ASCII
       string: ''
     headers:
-      accept-encoding:
+      Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      accept:
+      Accept:
       - "*/*"
-      user-agent:
+      User-Agent:
       - Ruby
   response:
     status:
       code: 200
       message: OK
     headers:
-      date:
-      - Sat, 16 Aug 2014 12:21:56 GMT
-      server:
+      Date:
+      - Wed, 01 Oct 2014 10:44:31 GMT
+      Server:
       - Apache
-      etag:
+      Etag:
       - '"f6ed27b8e85a20ba45b23d8f4f32af76"'
-      x-ua-compatible:
+      X-Ua-Compatible:
       - IE=Edge,chrome=1
-      x-runtime:
-      - '0.141345'
-      cache-control:
+      X-Runtime:
+      - '0.141698'
+      Cache-Control:
       - max-age=0, private, must-revalidate
-      status:
+      Status:
       - '200'
-      content-type:
+      Content-Type:
       - application/xml; charset=utf-8
-      set-cookie:
-      - _front_session_id=83b938f44f6898714e98136a1a6949ed; domain=.iss.ndl.go.jp;
-        path=/; expires=Sat, 16-Aug-2014 13:21:56 GMT; HttpOnly
-      - serverid=1102; path=/
-      vary:
+      Set-Cookie:
+      - _front_session_id=e22179b6459537f7176708ed1b006d11; domain=.iss.ndl.go.jp;
+        path=/; expires=Wed, 01-Oct-2014 11:44:31 GMT; HttpOnly
+      - serverid=1101; path=/
+      Vary:
       - Accept-Encoding,User-Agent
-      content-encoding:
-      - gzip
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - SAMEORIGIN
-      content-length:
+      Content-Length:
       - '1312'
-      connection:
+      Connection:
       - close
     body:
       encoding: ASCII-8BIT
@@ -129,8 +127,8 @@ http_interactions:
         c2VlQWxzbyByZGY6cmVzb3VyY2U9Imh0dHA6Ly93ZWIub21sLmNpdHkub3Nh
         a2EubGcuanAvd2Vib3BhY19pX2phLzAwMTAxOTY3NzkiLz4KICAgIDwvaXRl
         bT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
-    http_version: '1.0'
-  recorded_at: Sat, 16 Aug 2014 12:21:58 GMT
+    http_version: 
+  recorded_at: Wed, 01 Oct 2014 10:44:31 GMT
 - request:
     method: get
     uri: http://iss.ndl.go.jp/books/R100000002-I000003046546-00.rdf
@@ -138,46 +136,44 @@ http_interactions:
       encoding: US-ASCII
       string: ''
     headers:
-      accept-encoding:
+      Accept-Encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      accept:
+      Accept:
       - "*/*"
-      user-agent:
+      User-Agent:
       - Ruby
   response:
     status:
       code: 200
       message: OK
     headers:
-      date:
-      - Sat, 16 Aug 2014 12:21:56 GMT
-      server:
+      Date:
+      - Wed, 01 Oct 2014 10:44:31 GMT
+      Server:
       - Apache
-      etag:
+      Etag:
       - '"41a6933c22204b3114e09965941cc0c3"'
-      x-ua-compatible:
+      X-Ua-Compatible:
       - IE=Edge,chrome=1
-      x-runtime:
-      - '0.670016'
-      cache-control:
+      X-Runtime:
+      - '0.522346'
+      Cache-Control:
       - max-age=0, private, must-revalidate
-      status:
+      Status:
       - '200'
-      content-type:
+      Content-Type:
       - application/rdf+xml; charset=utf-8
-      set-cookie:
-      - _front_session_id=b3f30780f2ce55c68d3934382e746c7b; domain=.iss.ndl.go.jp;
-        path=/; expires=Sat, 16-Aug-2014 13:21:57 GMT; HttpOnly
-      - serverid=1105; path=/
-      vary:
+      Set-Cookie:
+      - _front_session_id=9579a7c7d5604f84615855324db0192a; domain=.iss.ndl.go.jp;
+        path=/; expires=Wed, 01-Oct-2014 11:44:31 GMT; HttpOnly
+      - serverid=1101; path=/
+      Vary:
       - Accept-Encoding,User-Agent
-      content-encoding:
-      - gzip
-      x-content-type-options:
+      X-Content-Type-Options:
       - nosniff
-      x-frame-options:
+      X-Frame-Options:
       - SAMEORIGIN
-      connection:
+      Connection:
       - close
     body:
       encoding: ASCII-8BIT
@@ -428,6 +424,6 @@ http_interactions:
         c29tb2t1QmliSUQiPjAwMTAxOTY3Nzk8L2RjdGVybXM6aWRlbnRpZmllcj4K
         ICAgIDxkY25kbDpjYWxsTnVtYmVyPjU0Ny44NHx844Oo44KvfHwyMDAxPC9k
         Y25kbDpjYWxsTnVtYmVyPgogIDwvZGNuZGw6SXRlbT4KPC9yZGY6UkRGPg==
-    http_version: '1.0'
-  recorded_at: Sat, 16 Aug 2014 12:21:58 GMT
-recorded_with: VCR 2.9.2
+    http_version: 
+  recorded_at: Wed, 01 Oct 2014 10:44:32 GMT
+recorded_with: VCR 2.9.3

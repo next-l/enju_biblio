@@ -9,6 +9,7 @@ require 'resque_mailer'
 require 'library_stdnums'
 require 'lisbn'
 require 'statesman'
+require 'faraday'
 require 'nkf'
 begin
   require 'charlock_holmes/string'
