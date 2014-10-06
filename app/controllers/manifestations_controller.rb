@@ -129,12 +129,6 @@ class ManifestationsController < ApplicationController
         end
       end
 
-      if user_signed_in?
-        current_role_id = current_user.role.id
-      else
-        current_role_id = 1
-      end
-
       search.build do
         fulltext query unless query.blank?
         order_by sort[:sort_by], sort[:order] unless oai_search
