@@ -348,8 +348,14 @@ class Manifestation < ActiveRecord::Base
   end
 
   # TODO: よりよい推薦方法
-  def self.pickup(keyword = nil)
+  def self.pickup(keyword = nil, current_user = nil)
     return nil if self.cached_numdocs < 5
+    if current_user.try(:role)
+      current_role_id = current_user.role.id
+    else
+      current_role_id = 1
+    end
+
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
     response = Manifestation.search(include: [:creators, :contributors, :publishers, :items]) do
       fulltext keyword if keyword
