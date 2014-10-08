@@ -75,12 +75,13 @@ class Manifestation < ActiveRecord::Base
       #}
     ).merge(
       title: titles,
-      item_identifier:
+      item_identifier: (
         if series_master?
           root_series_statement.root_manifestation.items.pluck(:item_identifier)
         else
           items.pluck(:item_identifier)
-        end,
+        end
+      ),
       creator: creator,
       contributor: contributor,
       publisher: publisher,
@@ -88,24 +89,26 @@ class Manifestation < ActiveRecord::Base
         identifier_contents(:isbn).map{|i|
           [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
         }.flatten,
-      issn:
+      issn: (
         if series_statements.exists?
           [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
         else
           identifier_contents(:issn)
-        end,
+        end
+      ),
       lccn: identifier_contents(:lccn),
       jpno: identifier_contents(:jpno),
       carrier_type: carrier_type.name,
       library: items.map{|i| i.shelf.library.name},
       language: language.try(:name),
       shelf: items.collect{|i| "#{i.shelf.library.name}_#{i.shelf.name}"},
-      pub_date: 
+      pub_date: (
         if series_master?
           root_series_statement.root_manifestation.pub_dates
         else
           pub_dates
-        end,
+        end
+      ),
       pub_year: date_of_publication.try(:year),
       doi: identifier_contents(:doi),
       periodical: periodical?,
