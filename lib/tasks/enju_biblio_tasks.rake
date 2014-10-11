@@ -1,4 +1,10 @@
 require 'active_record/fixtures'
+require 'tasks/agent_type'
+require 'tasks/carrier_type'
+require 'tasks/content_type'
+require 'tasks/identifier_type'
+require 'tasks/item'
+
 namespace :enju_biblio do
   desc "create initial records for enju_biblio"
   task :setup => :environment do
@@ -15,5 +21,17 @@ namespace :enju_biblio do
   desc "import manifestations and items from a TSV file"
   task :agent_import => :environment do
     AgentImportFile.import
+  end
+
+  desc "upgrade enju_biblio"
+  task :upgrade => :environment do
+    Item.transaction do
+      update_item
+      update_agent_type
+      update_carrier_type
+      update_content_type
+      update_identifier_type
+    end
+    puts 'enju_biblio: The upgrade completed successfully.'
   end
 end

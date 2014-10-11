@@ -9,30 +9,30 @@ class Item < ActiveRecord::Base
   enju_question_item_model if defined?(EnjuQuestion)
   enju_inventory_item_model if defined?(EnjuInventory)
   enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
-  scope :on_shelf, -> {where('shelf_id != 1')}
-  scope :on_web, -> {where(:shelf_id => 1)}
-  belongs_to :manifestation, touch: true
+  scope :on_shelf, -> { where('shelf_id != 1') }
+  scope :on_web, -> { where(shelf_id: 1) }
+  delegate :display_name, to: :shelf, prefix: true
   has_many :owns
-  has_many :agents, :through => :owns
-  delegate :display_name, :to => :shelf, :prefix => true
-  belongs_to :bookstore, :validate => true
-  #has_many :donates
-  #has_many :donors, :through => :donates, :source => :agent
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
+  has_many :agents, through: :owns
+  has_many :donates
+  has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
+  belongs_to :manifestation, touch: true
+  belongs_to :bookstore, validate: true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   belongs_to :budget_type
-  #before_save :create_manifestation
 
   validates_associated :bookstore
-  validates :manifestation_id, :presence => true #, :on => :create
-  validates :item_identifier, :allow_blank => true, :uniqueness => true,
-    :format => {:with => /\A[0-9A-Za-z_]+\Z/}
-  validates :binding_item_identifier, :allow_blank => true,
-    :format => {:with => /\A[0-9A-Za-z_]+\Z/}
-  validates :url, :url => true, :allow_blank => true, :length => {:maximum => 255}
-  validates_date :acquired_at, :allow_blank => true
+  validates :manifestation_id, presence: true
+  validates :item_identifier, allow_blank: true, uniqueness: true,
+    format: {with: /\A[0-9A-Za-z_]+\Z/}
+  validates :binding_item_identifier, allow_blank: true,
+    format: {with: /\A[0-9A-Za-z_]+\Z/}
+  validates :url, url: true, allow_blank: true, length: { maximum: 255 }
+  validates_date :acquired_at, allow_blank: true
 
-  normalize_attributes :item_identifier
+  normalize_attributes :item_identifier, :binding_item_identifier,
+    :call_number, :binding_call_number, :url
 
   index_name "#{name.downcase.pluralize}-#{Rails.env}"
 
@@ -77,7 +77,14 @@ class Item < ActiveRecord::Base
     )
   end
 
-  attr_accessor :library_id #, :manifestation_id
+  after_save do
+  #  manifestation.index!
+  end
+  after_destroy do
+  #  manifestation.index!
+  end
+
+  attr_accessor :library_id
 
   paginates_per 10
 
@@ -98,7 +105,7 @@ class Item < ActiveRecord::Base
   end
 
   def owned(agent)
-    owns.where(:agent_id => agent.id).first
+    owns.where(agent_id: agent.id).first
   end
 
   def manifestation_url
@@ -114,12 +121,6 @@ class Item < ActiveRecord::Base
       true
     end
   end
-
-  def create_manifestation
-    if manifestation_id
-      self.manifestation = Manifestation.find(manifestation_id)
-    end
-  end
 end
 
 # == Schema Information
@@ -127,11 +128,10 @@ end
 # Table name: items
 #
 #  id                      :integer          not null, primary key
-#  manifestation_id        :integer
 #  call_number             :string(255)
 #  item_identifier         :string(255)
-#  created_at              :datetime
-#  updated_at              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #  deleted_at              :datetime
 #  shelf_id                :integer          default(1), not null
 #  include_supplements     :boolean          default(FALSE), not null
@@ -149,4 +149,5 @@ end
 #  binding_item_identifier :string(255)
 #  binding_call_number     :string(255)
 #  binded_at               :datetime
+#  manifestation_id        :integer
 #

@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.new', :model => t('activerecord.models.import_request')) -%></h1>
+<h1 class="title"><%= t('page.new', model: t('activerecord.models.import_request')) -%></h1>
 <div id="content_list">
 <p id="notice"><%= notice %></p>
 
@@ -7,7 +7,7 @@
   <%= f.error_messages -%>
   <div class="field">
     <%= f.label :isbn -%><br />
-    <%= f.search_field :isbn, :class => 'resource_isbn_issn' -%>
+    <%= f.search_field :isbn, class: 'resource_isbn_issn' -%>
 
     <%= f.submit 'data-disable-with' => t('page.saving') %>
   </div>
@@ -20,7 +20,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.back'), :back -%></li>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.import_request')), import_requests_path -%></li>
+    <li><%= link_to t('page.listing', model: t('activerecord.models.import_request')), import_requests_path -%></li>
     <li><%= link_to t('manifestation.add'), new_manifestation_path -%></li>
     <li><%= link_to t('page.import_from_file'), page_import_path -%></li>
   </ul>

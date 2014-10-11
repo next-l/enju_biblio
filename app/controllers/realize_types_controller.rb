@@ -41,6 +41,7 @@ class RealizeTypesController < ApplicationController
       move_position(@realize_type, params[:move])
       return
     end
+
     if @realize_type.update(realize_type_params)
       redirect_to @realize_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.realize_type'))
     else

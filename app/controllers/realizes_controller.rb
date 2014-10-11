@@ -1,8 +1,8 @@
 class RealizesController < ApplicationController
   before_action :set_realize, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
   before_action :get_agent, :get_expression
   before_action :prepare_options, :only => [:new, :edit]
+  after_action :verify_authorized
 
   # GET /realizes
   # GET /realizes.json
@@ -19,7 +19,7 @@ class RealizesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @realizes }
+      format.json { render json: @realizes }
     end
   end
 
@@ -28,16 +28,16 @@ class RealizesController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @realize }
+      format.json { render json: @realize }
     end
   end
 
   # GET /realizes/new
   def new
-    if @expression and @agent.blank?
+    if @expression && @agent.blank?
       redirect_to expression_agents_url(@expression)
       return
-    elsif @agent and @expression.blank?
+    elsif @agent && @expression.blank?
       redirect_to agent_expressions_url(@agent)
       return
     else
@@ -60,12 +60,12 @@ class RealizesController < ApplicationController
 
     respond_to do |format|
       if @realize.save
-        format.html { redirect_to @realize, :notice => t('controller.successfully_created', :model => t('activerecord.models.realize')) }
-        format.json { render :json => @realize, :status => :created, :location => @realize }
+        format.html { redirect_to @realize, notice: t('controller.successfully_created', model: t('activerecord.models.realize')) }
+        format.json { render json: @realize, status: :created, location: @realize }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @realize.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @realize.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -74,7 +74,7 @@ class RealizesController < ApplicationController
   # PUT /realizes/1.json
   def update
     # 並べ替え
-    if @expression and params[:move]
+    if @expression && params[:move]
       move_position(@realize, params[:move], false)
       redirect_to realizes_url(expression_id: @realize.expression_id)
       return
@@ -82,12 +82,12 @@ class RealizesController < ApplicationController
 
     respond_to do |format|
       if @realize.update_attributes(realize_params)
-        format.html { redirect_to @realize, :notice => t('controller.successfully_updated', :model => t('activerecord.models.realize')) }
+        format.html { redirect_to @realize, notice: t('controller.successfully_updated', model: t('activerecord.models.realize')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @realize.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @realize.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -99,7 +99,7 @@ class RealizesController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.realize'))
+        flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.realize'))
         case
         when @expression
           redirect_to expression_agents_url(@expression)

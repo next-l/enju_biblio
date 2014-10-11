@@ -10,7 +10,7 @@ class ImportRequestsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @import_requests }
+      format.json { render json: @import_requests }
     end
   end
 
@@ -42,15 +42,15 @@ class ImportRequestsController < ApplicationController
         @import_request.import!
         format.html {
           if @import_request.manifestation
-            redirect_to @import_request.manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.import_request'))
+            redirect_to @import_request.manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.import_request'))
           else
-            redirect_to new_import_request_url, :notice => t('import_request.record_not_found')
+            redirect_to new_import_request_url, notice: t('import_request.record_not_found')
           end
         }
-        format.json { render :json => @import_request, :status => :created, :location => @import_request }
+        format.json { render json: @import_request, status: :created, location: @import_request }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @import_request.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @import_request.errors, status: :unprocessable_entity }
       end
     end
   rescue Timeout::Error
@@ -63,7 +63,7 @@ class ImportRequestsController < ApplicationController
   # PUT /import_requests/1.json
   def update
     if @import_request.update(import_request_params)
-      redirect_to @import_request, notice: t('controller.successfully_updated', :model => t('activerecord.models.import_request'))
+      redirect_to @import_request, notice: t('controller.successfully_updated', model: t('activerecord.models.import_request'))
     else
       render :edit
     end
@@ -73,7 +73,7 @@ class ImportRequestsController < ApplicationController
   # DELETE /import_requests/1.json
   def destroy
     @import_request.destroy
-    redirect_to import_requests_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.import_request'))
+    redirect_to import_requests_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.import_request'))
   end
 
   private

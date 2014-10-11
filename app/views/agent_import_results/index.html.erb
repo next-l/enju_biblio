@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.agent_import_result')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.agent_import_result')) -%></h1>
 <div id="content_list">
   <% if @agent_import_file %>
     <h2 class="agent_title">
@@ -11,7 +11,6 @@
   <tr>
     <th><%= t('activerecord.models.agent_import_file') %></th>
     <th><%= t('activerecord.models.agent') %></th>
-    <th><%= t('activerecord.models.user') %></th>
     <th></th>
   </tr>
 
@@ -23,10 +22,9 @@
       <%=l agent_import_result.created_at %>
     </td>
     <td><%= link_to agent_import_result.agent.full_name, agent_import_result.agent if agent_import_result.agent %></td>
-    <td><%= link_to agent_import_result.user.username, agent_import_result.user if agent_import_result.user %></td>
     <td>
       <%= link_to t('page.show'), agent_import_result %>
-      <%= link_to t('page.destroy'), agent_import_result, :data => {:confirm => t('page.are_you_sure')}, :method => :delete %>
+      <%= link_to t('page.destroy'), agent_import_result, data: {confirm: t('page.are_you_sure')}, method: :delete %>
     </td>
   </tr>
 <% end %>
@@ -41,10 +39,10 @@
   <ul>
     <li>
     <% if @agent_import_file %>
-      <%= link_to((image_tag 'icons/page_white_excel.png', :size => '16x16', :alt => 'TSV', :class => 'icon'), agent_import_file_agent_import_results_path(@agent_import_file, format: :txt, locale: @locale.to_s)) -%>
-      (<%= link_to 'TSV', agent_import_file_agent_import_results_path(format: :txt, locale: @locale.to_s) -%>)
+      <%= link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), agent_import_results_path(agent_import_file_id: @agent_import_file.id, format: :txt)) -%>
+      (<%= link_to 'TSV', agent_import_results_path(agent_import_file_ud: @agent_import_file.id, format: :txt) -%>)
     <% else %>
-      <%= link_to((image_tag 'icons/page_white_excel.png', :size => '16x16', :alt => 'TSV', :class => 'icon'), agent_import_results_path(format: :txt, locale: @locale.to_s)) -%>
+      <%= link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), agent_import_results_path(format: :txt, locale: @locale.to_s)) -%>
       (<%= link_to 'TSV', agent_import_results_path(format: :txt, locale: @locale.to_s) -%>)
     <% end %>
     </li>

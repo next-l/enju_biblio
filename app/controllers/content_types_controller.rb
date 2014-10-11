@@ -1,12 +1,11 @@
 class ContentTypesController < ApplicationController
   before_action :set_content_type, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /content_types
   def index
     authorize ContentType
-    @content_types = policy_scope(ContentType).order(:position)
+    @content_types = ContentType.order(:position)
   end
 
   # GET /content_types/1
@@ -41,6 +40,7 @@ class ContentTypesController < ApplicationController
       move_position(@content_type, params[:move])
       return
     end
+
     if @content_type.update(content_type_params)
       redirect_to @content_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.content_type'))
     else

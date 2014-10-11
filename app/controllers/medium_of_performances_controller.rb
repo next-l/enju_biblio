@@ -29,7 +29,7 @@ class MediumOfPerformancesController < ApplicationController
     authorize @medium_of_performance
 
     if @medium_of_performance.save
-      redirect_to @medium_of_performance, notice:  t('controller.successfully_created', :model => t('activerecord.models.medium_of_performance'))
+      redirect_to @medium_of_performance, notice: t('controller.successfully_created', model: t('activerecord.models.medium_of_performance'))
     else
       render action: 'new'
     end
@@ -41,8 +41,9 @@ class MediumOfPerformancesController < ApplicationController
       move_position(@medium_of_performance, params[:move])
       return
     end
+
     if @medium_of_performance.update(medium_of_performance_params)
-      redirect_to @medium_of_performance, notice:  t('controller.successfully_updated', :model => t('activerecord.models.medium_of_performance'))
+      redirect_to @medium_of_performance, notice: t('controller.successfully_updated', model: t('activerecord.models.medium_of_performance'))
     else
       render action: 'edit'
     end
@@ -51,7 +52,7 @@ class MediumOfPerformancesController < ApplicationController
   # DELETE /medium_of_performances/1
   def destroy
     @medium_of_performance.destroy
-    redirect_to medium_of_performances_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.medium_of_performance'))
+    redirect_to medium_of_performances_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.medium_of_performance'))
   end
 
   private

@@ -73,14 +73,14 @@ class AgentsController < ApplicationController
     #search.query.paginate(page, Agent.default_per_page)
     #@agents = search.execute!.results
 
-    flash[:page_info] = {:page => page, :query => @query}
+    flash[:page_info] = { page: page, query: query }
 
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @agents }
-      format.rss  { render :layout => false }
+      format.xml  { render xml: @agents }
+      format.rss  { render layout: false }
       format.atom
-      format.json { render :json => @agents }
+      format.json { render json: @agents }
       format.html.phone
     end
   end
@@ -121,7 +121,7 @@ class AgentsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @agent }
+      format.json { render json: @agent }
       format.js
       format.html.phone
     end
@@ -132,9 +132,9 @@ class AgentsController < ApplicationController
   def new
     @agent = Agent.new
     authorize @agent
-    @agent.required_role = Role.where(:name => 'Guest').first
-    @agent.language = Language.where(:iso_639_1 => I18n.default_locale.to_s).first || Language.first
-    @agent.country = current_user.library.country
+    @agent.required_role = Role.where(name: 'Guest').first
+    @agent.language = Language.where(iso_639_1: I18n.default_locale.to_s).first || Language.first
+    @agent.country = current_user.profile.library.country
     prepare_options
   end
 
@@ -159,12 +159,12 @@ class AgentsController < ApplicationController
         when @item
           @agent.items << @item
         end
-        format.html { redirect_to @agent, :notice => t('controller.successfully_created', :model => t('activerecord.models.agent')) }
-        format.json { render :json => @agent, :status => :created, :location => @agent }
+        format.html { redirect_to @agent, notice: t('controller.successfully_created', model: t('activerecord.models.agent')) }
+        format.json { render json: @agent, status: :created, location: @agent }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @agent.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @agent.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -174,12 +174,12 @@ class AgentsController < ApplicationController
   def update
     respond_to do |format|
       if @agent.update_attributes(agent_params)
-        format.html { redirect_to @agent, :notice => t('controller.successfully_updated', :model => t('activerecord.models.agent')) }
+        format.html { redirect_to @agent, notice: t('controller.successfully_updated', model: t('activerecord.models.agent')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @agent.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @agent.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -188,7 +188,7 @@ class AgentsController < ApplicationController
   # DELETE /agents/1.json
   def destroy
     @agent.destroy
-    redirect_to agents_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.agent'))
+    redirect_to agents_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.agent'))
   end
 
   private
@@ -214,7 +214,7 @@ class AgentsController < ApplicationController
     @countries = Country.all_cache
     @agent_types = AgentType.all
     @roles = Role.all
-    @languages = Language.all_cache
-    @agent_type = AgentType.where(:name => 'Person').first
+    @languages = Language.all
+    @agent_type = AgentType.where(name: 'person').first
   end
 end

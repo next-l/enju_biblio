@@ -14,12 +14,22 @@ class ResourceImportResultsController < ApplicationController
     else
       @resource_import_results = ResourceImportResult.page(params[:page])
     end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @resource_import_results }
+      format.txt
+    end
   end
 
+  # GET /resource_import_results/1
   def show
   end
 
+  # DELETE /resource_import_results/1
   def destroy
+    @resource_import_result.destroy
+    redirect_to resource_import_results_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.resource_import_result'))
   end
 
   private

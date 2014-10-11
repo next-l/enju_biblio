@@ -7,7 +7,7 @@ describe SeriesStatementsController do
     FactoryGirl.attributes_for(:series_statement)
   end
 
-  describe "GET index" do
+  describe "GET index", :solr => true do
     before do
       SeriesStatement.__elasticsearch__.create_index!
       SeriesStatement.import
@@ -18,7 +18,7 @@ describe SeriesStatementsController do
 
       it "assigns all series_statements as @series_statements" do
         get :index
-        assigns(:series_statements).should_not be_nil
+        expect(assigns(:series_statements)).not_to be_nil
       end
     end
 
@@ -27,7 +27,7 @@ describe SeriesStatementsController do
 
       it "assigns all series_statements as @series_statements" do
         get :index
-        assigns(:series_statements).should_not be_nil
+        expect(assigns(:series_statements)).not_to be_nil
       end
     end
 
@@ -36,14 +36,14 @@ describe SeriesStatementsController do
 
       it "assigns all series_statements as @series_statements" do
         get :index
-        assigns(:series_statements).should_not be_nil
+        expect(assigns(:series_statements)).not_to be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns all series_statements as @series_statements" do
         get :index
-        assigns(:series_statements).should_not be_nil
+        expect(assigns(:series_statements)).not_to be_nil
       end
     end
   end
@@ -55,8 +55,8 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :show, :id => series_statement.id
-        assigns(:series_statement).should eq(series_statement)
-        response.should be_success
+        expect(assigns(:series_statement)).to eq(series_statement)
+        expect(response).to be_success
       end
     end
 
@@ -66,8 +66,8 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :show, :id => series_statement.id
-        assigns(:series_statement).should eq(series_statement)
-        response.should be_success
+        expect(assigns(:series_statement)).to eq(series_statement)
+        expect(response).to be_success
       end
     end
 
@@ -77,8 +77,8 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :show, :id => series_statement.id
-        assigns(:series_statement).should eq(series_statement)
-        response.should be_success
+        expect(assigns(:series_statement)).to eq(series_statement)
+        expect(response).to be_success
       end
     end
 
@@ -86,8 +86,8 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :show, :id => series_statement.id
-        assigns(:series_statement).should eq(series_statement)
-        response.should be_success
+        expect(assigns(:series_statement)).to eq(series_statement)
+        expect(response).to be_success
       end
     end
   end
@@ -98,7 +98,7 @@ describe SeriesStatementsController do
 
       it "assigns the requested series_statement as @series_statement" do
         get :new
-        assigns(:series_statement).should_not be_valid
+        expect(assigns(:series_statement)).not_to be_valid
       end
     end
 
@@ -107,7 +107,7 @@ describe SeriesStatementsController do
 
       it "assigns the requested series_statement as @series_statement" do
         get :new
-        assigns(:series_statement).should_not be_valid
+        expect(assigns(:series_statement)).not_to be_valid
       end
     end
 
@@ -116,16 +116,16 @@ describe SeriesStatementsController do
 
       it "should not assign the requested series_statement as @series_statement" do
         get :new
-        assigns(:series_statement).should_not be_valid
-        response.should be_forbidden
+        expect(assigns(:series_statement)).not_to be_valid
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not assign the requested series_statement as @series_statement" do
         get :new
-        assigns(:series_statement).should_not be_valid
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:series_statement)).not_to be_valid
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -137,7 +137,7 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :edit, :id => series_statement.id
-        assigns(:series_statement).should eq(series_statement)
+        expect(assigns(:series_statement)).to eq(series_statement)
       end
     end
 
@@ -147,7 +147,7 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :edit, :id => series_statement.id
-        assigns(:series_statement).should eq(series_statement)
+        expect(assigns(:series_statement)).to eq(series_statement)
       end
     end
 
@@ -157,7 +157,7 @@ describe SeriesStatementsController do
       it "assigns the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :edit, :id => series_statement.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -165,7 +165,7 @@ describe SeriesStatementsController do
       it "should not assign the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :edit, :id => series_statement.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -182,24 +182,24 @@ describe SeriesStatementsController do
       describe "with valid params" do
         it "assigns a newly created series_statement as @series_statement" do
           post :create, :series_statement => @attrs
-          assigns(:series_statement).should be_valid
+          expect(assigns(:series_statement)).to be_valid
         end
 
         it "redirects to the created series_statement" do
           post :create, :series_statement => @attrs
-          response.should redirect_to(series_statement_url(assigns(:series_statement)))
+          expect(response).to redirect_to(series_statement_url(assigns(:series_statement)))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement as @series_statement" do
           post :create, :series_statement => @invalid_attrs
-          assigns(:series_statement).should_not be_valid
+          expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
           post :create, :series_statement => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -210,24 +210,24 @@ describe SeriesStatementsController do
       describe "with valid params" do
         it "assigns a newly created series_statement as @series_statement" do
           post :create, :series_statement => @attrs
-          assigns(:series_statement).should be_valid
+          expect(assigns(:series_statement)).to be_valid
         end
 
         it "redirects to the created series_statement" do
           post :create, :series_statement => @attrs
-          response.should redirect_to(series_statement_url(assigns(:series_statement)))
+          expect(response).to redirect_to(series_statement_url(assigns(:series_statement)))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement as @series_statement" do
           post :create, :series_statement => @invalid_attrs
-          assigns(:series_statement).should_not be_valid
+          expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
           post :create, :series_statement => @invalid_attrs
-          response.should render_template("new")
+          expect(response).to render_template("new")
         end
       end
     end
@@ -238,24 +238,24 @@ describe SeriesStatementsController do
       describe "with valid params" do
         it "assigns a newly created series_statement as @series_statement" do
           post :create, :series_statement => @attrs
-          assigns(:series_statement).should be_valid
+          expect(assigns(:series_statement)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :series_statement => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement as @series_statement" do
           post :create, :series_statement => @invalid_attrs
-          assigns(:series_statement).should_not be_valid
+          expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :series_statement => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -264,24 +264,24 @@ describe SeriesStatementsController do
       describe "with valid params" do
         it "assigns a newly created series_statement as @series_statement" do
           post :create, :series_statement => @attrs
-          assigns(:series_statement).should be_valid
+          expect(assigns(:series_statement)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :series_statement => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement as @series_statement" do
           post :create, :series_statement => @invalid_attrs
-          assigns(:series_statement).should_not be_valid
+          expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :series_statement => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -304,19 +304,19 @@ describe SeriesStatementsController do
 
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @attrs
-          assigns(:series_statement).should eq(@series_statement)
+          expect(assigns(:series_statement)).to eq(@series_statement)
         end
 
         it "moves its position when specified" do
           put :update, :id => @series_statement.id, :move => 'lower'
-          response.should redirect_to(series_statements_url)
+          expect(response).to redirect_to(series_statements_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -331,20 +331,20 @@ describe SeriesStatementsController do
 
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @attrs
-          assigns(:series_statement).should eq(@series_statement)
-          response.should redirect_to(@series_statement)
+          expect(assigns(:series_statement)).to eq(@series_statement)
+          expect(response).to redirect_to(@series_statement)
         end
       end
 
       describe "with invalid params" do
         it "assigns the series_statement as @series_statement" do
           put :update, :id => @series_statement, :series_statement => @invalid_attrs
-          assigns(:series_statement).should_not be_valid
+          expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "re-renders the 'edit' template" do
           put :update, :id => @series_statement, :series_statement => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
@@ -359,15 +359,15 @@ describe SeriesStatementsController do
 
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @attrs
-          assigns(:series_statement).should eq(@series_statement)
-          response.should be_forbidden
+          expect(assigns(:series_statement)).to eq(@series_statement)
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -380,14 +380,14 @@ describe SeriesStatementsController do
 
         it "should be forbidden" do
           put :update, :id => @series_statement.id, :series_statement => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -407,7 +407,7 @@ describe SeriesStatementsController do
 
       it "redirects to the series_statements list" do
         delete :destroy, :id => @series_statement.id
-        response.should redirect_to(series_statements_url)
+        expect(response).to redirect_to(series_statements_url)
       end
     end
 
@@ -420,7 +420,7 @@ describe SeriesStatementsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @series_statement.id
-        response.should redirect_to(series_statements_url)
+        expect(response).to redirect_to(series_statements_url)
       end
     end
 
@@ -433,7 +433,7 @@ describe SeriesStatementsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @series_statement.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -444,7 +444,7 @@ describe SeriesStatementsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @series_statement.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

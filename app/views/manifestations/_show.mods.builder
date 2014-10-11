@@ -6,7 +6,7 @@
     }
     manifestation.creators.readable_by(current_user).each do |creator|
       case creator.agent_type.name
-      when "Person"
+      when "person"
         xml.name('type' => 'personal'){
           xml.namePart creator.full_name
           xml.namePart creator.date if creator.date
@@ -14,14 +14,14 @@
             xml.roleTerm "creator", 'type' => 'text', 'authority' => 'marcrelator'
           end
         }
-      when "CorporateBody"
+      when "corporate_body"
         xml.name('type' => 'corporate'){
           xml.namePart creator.full_name
           xml.role do
             xml.roleTerm "creator", 'type' => 'text', 'authority' => 'marcrelator'
           end
         }
-      when "Conference"
+      when "conference"
         xml.name('type' => 'conference'){
           xml.namePart creator.full_name
           xml.role do
@@ -32,16 +32,16 @@
     end
     manifestation.contributors.readable_by(current_user).each do |contributor|
       case contributor.agent_type.name
-      when "Person"
+      when "person"
         xml.name('type' => 'personal'){
           xml.namePart contributor.full_name
           xml.namePart contributor.date if contributor.date
         }
-      when "CorporateBody"
+      when "corporate_body"
         xml.name('type' => 'corporate'){
           xml.namePart contributor.full_name
         }
-      when "Conference"
+      when "conference"
         xml.name('type' => 'conference'){
           xml.namePart contributor.full_name
         }
@@ -60,10 +60,7 @@
     }
     xml.physicalDescription{
       xml.form manifestation.carrier_type.name, 'authority' => 'marcform'
-      extent = []
-      extent << manifestation.number_of_pages if manifestation.number_of_pages
-      extent << manifestation.height if manifestation.height
-      xml.extent extent.join("; ")
+      xml.extent manifestation.extent
     }
     if defined?(EnjuSubject)
       xml.subject{
@@ -78,10 +75,10 @@
     xml.abstract manifestation.description
     xml.note manifestation.note
     manifestation.identifier_contents(:isbn).each do |i|
-      xml.identifier i, :type => 'isbn'
+      xml.identifier i, type: 'isbn'
     end
     manifestation.identifier_contents(:lccn).each do |l|
-      xml.identifier l, :type => 'lccn'
+      xml.identifier l, type: 'lccn'
     end
     xml.recordInfo{
       xml.recordCreationDate manifestation.created_at

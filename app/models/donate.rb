@@ -1,6 +1,6 @@
 class Donate < ActiveRecord::Base
-  belongs_to :agent, :validate => true
-  belongs_to :item, :validate => true
+  belongs_to :agent
+  belongs_to :item
   validates_associated :agent, :item
   validates_presence_of :agent, :item
 end

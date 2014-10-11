@@ -17,8 +17,8 @@ end
 #  title                   :text
 #  thumbnail               :string(255)
 #  position                :integer
-#  created_at              :datetime
-#  updated_at              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #  picture_file_name       :string(255)
 #  picture_content_type    :string(255)
 #  picture_file_size       :integer
@@ -26,3 +26,4 @@ end
 #  picture_meta            :text
 #  picture_fingerprint     :string(255)
 #
+

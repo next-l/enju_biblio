@@ -39,10 +39,13 @@ class ManifestationRelationshipsController < ApplicationController
 
   # PATCH/PUT /manifestation_relationships/1
   def update
-    if params[:move]
-      move_position(@manifestation_relationship, params[:move])
+    # 並べ替え
+    if @manifestation && params[:move]
+      move_position(@manifestation_relationship, params[:move], false)
+      redirect_to manifestation_relationships_url(manifestation_id: @manifestation_relationship.parent_id)
       return
     end
+
     if @manifestation_relationship.update(manifestation_relationship_params)
       redirect_to @manifestation_relationship, notice:  t('controller.successfully_updated', :model => t('activerecord.models.manifestation_relationship'))
     else
@@ -53,7 +56,18 @@ class ManifestationRelationshipsController < ApplicationController
   # DELETE /manifestation_relationships/1
   def destroy
     @manifestation_relationship.destroy
-    redirect_to manifestation_relationships_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.manifestation_relationship'))
+
+    respond_to do |format|
+      format.html {
+        flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.manifestation_relationship'))
+        if @manifestation
+          redirect_to manifestations_url(manifestation_id: @manifestation.id)
+        else
+          redirect_to manifestation_relationships_url
+        end
+      }
+      format.json { head :no_content }
+    end
   end
 
   private

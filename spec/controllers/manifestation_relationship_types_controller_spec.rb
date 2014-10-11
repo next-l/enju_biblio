@@ -13,68 +13,68 @@ describe ManifestationRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.order(:position))
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should eq(ManifestationRelationshipType.order(:position))
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
-      it "assigns nil as @manifestation_relationship_types" do
+      it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should be_nil
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
 
     describe "When not logged in" do
-      it "assigns nil as @manifestation_relationship_types" do
+      it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        assigns(:manifestation_relationship_types).should be_nil
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
   end
 
   describe "GET show" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :show, :id => manifestation_relationship_type.id
-        assigns(:manifestation_relationship_type).should eq(manifestation_relationship_type)
+        expect(assigns(:manifestation_relationship_type)).to eq(manifestation_relationship_type)
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :show, :id => manifestation_relationship_type.id
-        assigns(:manifestation_relationship_type).should eq(manifestation_relationship_type)
+        expect(assigns(:manifestation_relationship_type)).to eq(manifestation_relationship_type)
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :show, :id => manifestation_relationship_type.id
-        assigns(:manifestation_relationship_type).should eq(manifestation_relationship_type)
+        expect(assigns(:manifestation_relationship_type)).to eq(manifestation_relationship_type)
       end
     end
 
@@ -82,79 +82,79 @@ describe ManifestationRelationshipTypesController do
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :show, :id => manifestation_relationship_type.id
-        assigns(:manifestation_relationship_type).should eq(manifestation_relationship_type)
+        expect(assigns(:manifestation_relationship_type)).to eq(manifestation_relationship_type)
       end
     end
   end
 
   describe "GET new" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        assigns(:manifestation_relationship_type).should_not be_valid
-        response.should be_success
+        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(response).to be_success
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        assigns(:manifestation_relationship_type).should_not be_valid
-        response.should be_forbidden
+        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(response).to be_forbidden
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        assigns(:manifestation_relationship_type).should_not be_valid
-        response.should be_forbidden
+        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        assigns(:manifestation_relationship_type).should_not be_valid
-        response.should redirect_to(new_user_session_url)
+        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
 
   describe "GET edit" do
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :edit, :id => manifestation_relationship_type.id
-        assigns(:manifestation_relationship_type).should eq(manifestation_relationship_type)
+        expect(assigns(:manifestation_relationship_type)).to eq(manifestation_relationship_type)
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :edit, :id => manifestation_relationship_type.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :edit, :id => manifestation_relationship_type.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -162,7 +162,7 @@ describe ManifestationRelationshipTypesController do
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         manifestation_relationship_type = FactoryGirl.create(:manifestation_relationship_type)
         get :edit, :id => manifestation_relationship_type.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -174,85 +174,85 @@ describe ManifestationRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_valid
         end
 
         it "redirects to the created agent" do
           post :create, :manifestation_relationship_type => @attrs
-          response.should redirect_to(assigns(:manifestation_relationship_type))
+          expect(response).to redirect_to(assigns(:manifestation_relationship_type))
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          assigns(:manifestation_relationship_type).should_not be_valid
+          expect(assigns(:manifestation_relationship_type)).not_to be_valid
         end
 
         it "should be successful" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          response.should be_success
+          expect(response).to be_success
         end
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :manifestation_relationship_type => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          assigns(:manifestation_relationship_type).should_not be_valid
+          expect(assigns(:manifestation_relationship_type)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :manifestation_relationship_type => @attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          assigns(:manifestation_relationship_type).should_not be_valid
+          expect(assigns(:manifestation_relationship_type)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -261,24 +261,24 @@ describe ManifestationRelationshipTypesController do
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_valid
         end
 
         it "should be forbidden" do
           post :create, :manifestation_relationship_type => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          assigns(:manifestation_relationship_type).should_not be_valid
+          expect(assigns(:manifestation_relationship_type)).not_to be_valid
         end
 
         it "should be forbidden" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -292,7 +292,7 @@ describe ManifestationRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       describe "with valid params" do
         it "updates the requested manifestation_relationship_type" do
@@ -301,25 +301,25 @@ describe ManifestationRelationshipTypesController do
 
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should eq(@manifestation_relationship_type)
+          expect(assigns(:manifestation_relationship_type)).to eq(@manifestation_relationship_type)
         end
 
         it "moves its position when specified" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @attrs, :move => 'lower'
-          response.should redirect_to(manifestation_relationship_types_url)
+          expect(response).to redirect_to(manifestation_relationship_types_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @invalid_attrs
-          response.should render_template("edit")
+          expect(response).to render_template("edit")
         end
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       describe "with valid params" do
         it "updates the requested manifestation_relationship_type" do
@@ -328,21 +328,21 @@ describe ManifestationRelationshipTypesController do
 
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should eq(@manifestation_relationship_type)
-          response.should be_forbidden
+          expect(assigns(:manifestation_relationship_type)).to eq(@manifestation_relationship_type)
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       describe "with valid params" do
         it "updates the requested manifestation_relationship_type" do
@@ -351,15 +351,15 @@ describe ManifestationRelationshipTypesController do
 
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @attrs
-          assigns(:manifestation_relationship_type).should eq(@manifestation_relationship_type)
-          response.should be_forbidden
+          expect(assigns(:manifestation_relationship_type)).to eq(@manifestation_relationship_type)
+          expect(response).to be_forbidden
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @invalid_attrs
-          response.should be_forbidden
+          expect(response).to be_forbidden
         end
       end
     end
@@ -372,14 +372,14 @@ describe ManifestationRelationshipTypesController do
 
         it "should be forbidden" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested manifestation_relationship_type as @manifestation_relationship_type" do
           put :update, :id => @manifestation_relationship_type.id, :manifestation_relationship_type => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -391,7 +391,7 @@ describe ManifestationRelationshipTypesController do
     end
 
     describe "When logged in as Administrator" do
-      login_admin
+      login_fixture_admin
 
       it "destroys the requested manifestation_relationship_type" do
         delete :destroy, :id => @manifestation_relationship_type.id
@@ -399,12 +399,12 @@ describe ManifestationRelationshipTypesController do
 
       it "redirects to the manifestation_relationship_types list" do
         delete :destroy, :id => @manifestation_relationship_type.id
-        response.should redirect_to(manifestation_relationship_types_url)
+        expect(response).to redirect_to(manifestation_relationship_types_url)
       end
     end
 
     describe "When logged in as Librarian" do
-      login_librarian
+      login_fixture_librarian
 
       it "destroys the requested manifestation_relationship_type" do
         delete :destroy, :id => @manifestation_relationship_type.id
@@ -412,12 +412,12 @@ describe ManifestationRelationshipTypesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @manifestation_relationship_type.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
     describe "When logged in as User" do
-      login_user
+      login_fixture_user
 
       it "destroys the requested manifestation_relationship_type" do
         delete :destroy, :id => @manifestation_relationship_type.id
@@ -425,7 +425,7 @@ describe ManifestationRelationshipTypesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @manifestation_relationship_type.id
-        response.should be_forbidden
+        expect(response).to be_forbidden
       end
     end
 
@@ -436,7 +436,7 @@ describe ManifestationRelationshipTypesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @manifestation_relationship_type.id
-        response.should redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

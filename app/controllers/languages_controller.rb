@@ -29,7 +29,7 @@ class LanguagesController < ApplicationController
     authorize @language
 
     if @language.save
-      redirect_to @language, notice:  t('controller.successfully_created', :model => t('activerecord.models.language'))
+      redirect_to @language, notice:  t('controller.successfully_created', model: t('activerecord.models.language'))
     else
       render action: 'new'
     end
@@ -41,8 +41,9 @@ class LanguagesController < ApplicationController
       move_position(@language, params[:move])
       return
     end
+
     if @language.update(language_params)
-      redirect_to @language, notice:  t('controller.successfully_updated', :model => t('activerecord.models.language'))
+      redirect_to @language, notice:  t('controller.successfully_updated', model: t('activerecord.models.language'))
     else
       render action: 'edit'
     end
@@ -51,7 +52,7 @@ class LanguagesController < ApplicationController
   # DELETE /languages/1
   def destroy
     @language.destroy
-    redirect_to languages_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.language'))
+    redirect_to languages_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.language'))
   end
 
   private

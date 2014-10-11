@@ -26,19 +26,19 @@ describe Agent do
   end
 
   it "should be creator" do
-    agents(:agent_00001).creator?(manifestations(:manifestation_00001)).should be_true
+    agents(:agent_00001).creator?(manifestations(:manifestation_00001)).should be_truthy
   end
 
   it "should not be creator" do
-    agents(:agent_00010).creator?(manifestations(:manifestation_00001)).should be_false
+    agents(:agent_00010).creator?(manifestations(:manifestation_00001)).should be_falsy
   end
 
   it "should be publisher" do
-    agents(:agent_00001).publisher?(manifestations(:manifestation_00001)).should be_true
+    agents(:agent_00001).publisher?(manifestations(:manifestation_00001)).should be_truthy
   end
 
   it "should not be publisher" do
-    agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_false
+    agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_falsy
   end
 end
 
@@ -47,7 +47,6 @@ end
 # Table name: agents
 #
 #  id                                  :integer          not null, primary key
-#  user_id                             :integer
 #  last_name                           :string(255)
 #  middle_name                         :string(255)
 #  first_name                          :string(255)
@@ -59,8 +58,8 @@ end
 #  full_name                           :string(255)
 #  full_name_transcription             :text
 #  full_name_alternative               :text
-#  created_at                          :datetime
-#  updated_at                          :datetime
+#  created_at                          :datetime         not null
+#  updated_at                          :datetime         not null
 #  deleted_at                          :datetime
 #  zip_code_1                          :string(255)
 #  zip_code_2                          :string(255)

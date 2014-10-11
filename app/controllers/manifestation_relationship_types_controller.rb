@@ -1,12 +1,11 @@
 class ManifestationRelationshipTypesController < ApplicationController
   before_action :set_manifestation_relationship_type, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /manifestation_relationship_types
   def index
     authorize ManifestationRelationshipType
-    @manifestation_relationship_types = policy_scope(ManifestationRelationshipType).order(:position)
+    @manifestation_relationship_types = ManifestationRelationshipType.order(:position)
   end
 
   # GET /manifestation_relationship_types/1
@@ -29,7 +28,7 @@ class ManifestationRelationshipTypesController < ApplicationController
     authorize @manifestation_relationship_type
 
     if @manifestation_relationship_type.save
-      redirect_to @manifestation_relationship_type, notice:  t('controller.successfully_created', :model => t('activerecord.models.manifestation_relationship_type'))
+      redirect_to @manifestation_relationship_type, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation_relationship_type'))
     else
       render action: 'new'
     end
@@ -41,8 +40,9 @@ class ManifestationRelationshipTypesController < ApplicationController
       move_position(@manifestation_relationship_type, params[:move])
       return
     end
+
     if @manifestation_relationship_type.update(manifestation_relationship_type_params)
-      redirect_to @manifestation_relationship_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.manifestation_relationship_type'))
+      redirect_to @manifestation_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship_type'))
     else
       render action: 'edit'
     end
@@ -51,7 +51,7 @@ class ManifestationRelationshipTypesController < ApplicationController
   # DELETE /manifestation_relationship_types/1
   def destroy
     @manifestation_relationship_type.destroy
-    redirect_to manifestation_relationship_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.manifestation_relationship_type'))
+    redirect_to manifestation_relationship_types_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.manifestation_relationship_type'))
   end
 
   private

@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.resource_import_result')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.resource_import_result')) -%></h1>
 <div id="content_list">
   <% if @resource_import_file %>
     <h2 class="resource_title">
@@ -21,12 +21,14 @@
       <%= link_to resource_import_result.resource_import_file.resource_import_file_name, resource_import_result.resource_import_file %>
       <br />
       <%=l resource_import_result.created_at %>
+      <br />
+      <%= resource_import_result.error_message %>
     </td>
     <td><%= link_to resource_import_result.manifestation.original_title, resource_import_result.manifestation if resource_import_result.manifestation %></td>
     <td><%= link_to resource_import_result.item.item_identifier, resource_import_result.item if resource_import_result.item %></td>
     <td>
       <%= link_to t('page.show'), resource_import_result %>
-      <%= link_to t('page.destroy'), resource_import_result, :data => {:confirm => t('page.are_you_sure')}, :method => :delete %>
+      <%= link_to t('page.destroy'), resource_import_result, data: {confirm: t('page.are_you_sure')}, method: :delete %>
     </td>
   </tr>
 <% end %>
@@ -41,11 +43,11 @@
   <ul>
     <li>
     <% if @resource_import_file %>
-      <%= link_to((image_tag 'icons/page_white_excel.png', :size => '16x16', :alt => 'TSV', :class => 'icon'), resource_import_file_resource_import_results_path(@resource_import_file, format: :txt, locale: @locale.to_s)) -%>
-      (<%= link_to 'TSV', resource_import_file_resource_import_results_path(format: :txt, locale: @locale.to_s) -%>)
+      <%= link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), resource_import_results_path(resource_import_file_id: @resource_import_file.id, format: :txt)) -%>
+      (<%= link_to 'TSV', resource_import_results_path(resource_imporf_file_id: @resource_import_file.id, format: :txt) -%>)
     <% else %>
-      <%= link_to((image_tag 'icons/page_white_excel.png', :size => '16x16', :alt => 'TSV', :class => 'icon'), resource_import_results_path(format: :txt, locale: @locale.to_s)) -%>
-      (<%= link_to 'TSV', resource_import_results_path(format: :txt, locale: @locale.to_s) -%>)
+      <%= link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), resource_import_results_path(format: :txt)) -%>
+      (<%= link_to 'TSV', resource_import_results_path(format: :txt) -%>)
     <% end %>
     </li>
   </ul>

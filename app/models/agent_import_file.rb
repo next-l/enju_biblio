@@ -1,18 +1,18 @@
 class AgentImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordModel
   include ImportFile
-  default_scope {order('agent_import_files.id DESC')}
-  scope :not_imported, -> {in_state(:pending)}
-  scope :stucked, -> {in_state(:pending).where('created_at < ?', 1.hour.ago)}
+  default_scope { order('agent_import_files.id DESC') }
+  scope :not_imported, -> { in_state(:pending) }
+  scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :agent_import, :storage => :s3, :s3_credentials => "#{Setting.amazon}",
-      :s3_permissions => :private
+    has_attached_file :agent_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
+      s3_permissions: :private
   else
     has_attached_file :agent_import,
-      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
-  validates_attachment_content_type :agent_import, :content_type => [
+  validates_attachment_content_type :agent_import, content_type: [
     'text/csv',
     'text/plain',
     'text/tab-separated-values',
@@ -20,7 +20,7 @@ class AgentImportFile < ActiveRecord::Base
     'application/vnd.ms-excel'
   ]
   validates_attachment_presence :agent_import
-  belongs_to :user, :validate => true
+  belongs_to :user, validate: true
   has_many :agent_import_results
 
   has_many :agent_import_file_transitions
@@ -36,7 +36,6 @@ class AgentImportFile < ActiveRecord::Base
     to: :state_machine
 
   def import_start
-    transition_to!(:started)
     case edit_mode
     when 'create'
       import
@@ -50,18 +49,20 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def import
-    num = {:agent_imported => 0, :user_imported => 0, :failed => 0}
-    row_num = 1
+    transition_to!(:started)
+    num = { agent_imported: 0, user_imported: 0, failed: 0 }
     rows = open_import_file
     field = rows.first
+    row_num = 1
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
 
+    AgentImportResult.create!(agent_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
       row_num += 1
+      import_result = AgentImportResult.create!(agent_import_file_id: id, body: row.fields.join("\t"))
       next if row['dummy'].to_s.strip.present?
-      import_result = AgentImportResult.create!(:agent_import_file_id => self.id, :body => row.fields.join("\t"))
 
       agent = Agent.new
       agent = set_agent_value(agent, row)
@@ -70,19 +71,6 @@ class AgentImportFile < ActiveRecord::Base
         import_result.agent = agent
         num[:agent_imported] += 1
       end
-
-      #unless row['username'].to_s.strip.blank?
-      #  user = User.new
-      #  user.agent = agent
-      #  set_user_value(user, row)
-      #  if user.password.blank?
-      #    user.set_auto_generated_password
-      #  end
-      #  if user.save!
-      #    import_result.user = user
-      #  end
-      #  num[:user_imported] += 1
-      #end
 
       import_result.save!
     end
@@ -106,19 +94,13 @@ class AgentImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file
+    rows.shift
     row_num = 1
 
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      #user = User.where(:user_number => row['user_number'].to_s.strip).first
-      #if user.try(:agent)
-      #  set_agent_value(user.agent, row)
-      #  user.agent.save!
-      #  set_user_value(user, row)
-      #  user.save!
-      #end
-      agent = Agent.where(:id => row['id']).first
+      agent = Agent.where(id: row['id']).first
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
         agent.full_name_transcription = row['full_name_transcription'] if row['full_name_transcription'].to_s.strip.present?
@@ -143,12 +125,13 @@ class AgentImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file
+    rows.shift
     row_num = 1
 
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.where(:id => row['id'].to_s.strip).first
+      agent = Agent.where(id: row['id'].to_s.strip).first
       if agent
         agent.picture_files.destroy_all
         agent.reload
@@ -181,10 +164,9 @@ class AgentImportFile < ActiveRecord::Base
     }
     tempfile.close
 
-    file = CSV.open(tempfile, :col_sep => "\t")
+    file = CSV.open(tempfile, col_sep: "\t")
     header = file.first
-    rows = CSV.open(tempfile, :headers => header, :col_sep => "\t")
-    AgentImportResult.create!(:agent_import_file_id => self.id, :body => header.join("\t"))
+    rows = CSV.open(tempfile, headers: header, col_sep: "\t")
     tempfile.close(true)
     file.close
     rows
@@ -215,44 +197,18 @@ class AgentImportFile < ActiveRecord::Base
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Guest')
+      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where(name: 'Guest').first
     #else
-    #  agent.required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Librarian')
+    #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where('Librarian').first
     #end
-    language = Language.where(:name => row['language'].to_s.strip.camelize).first
-    language = Language.where(:iso_639_2 => row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(:iso_639_1 => row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(name: row['language'].to_s.strip.camelize).first
+    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
     agent.language = language if language
-    country = Country.where(:name => row['country'].to_s.strip).first
+    country = Country.where(name: row['country'].to_s.strip).first
     agent.country = country if country
     agent
   end
-
-  #def set_user_value(user, row)
-  #  user.operator = User.find(1)
-  #  email = row['email'].to_s.strip
-  #  if email.present?
-  #    user.email = email
-  #    user.email_confirmation = email
-  #  end
-  #  password = row['password'].to_s.strip
-  #  if password.present?
-  #    user.password = password
-  #    user.password_confirmation = password
-  #  end
-  #  user.username = row['username'] if row['username']
-  #  user.user_number = row['user_number'] if row['user_number']
-  #  library = Library.where(:name => row['library_short_name'].to_s.strip).first || Library.web
-  #  user_group = UserGroup.where(:name => row['user_group_name']).first || UserGroup.first
-  #  user.library = library
-  #  role = Role.where(:name => row['role_name'].to_s.strip.camelize).first || Role.friendly.find('User')
-  #  user.role = role
-  #  required_role = Role.where(:name => row['required_role_name'].to_s.strip.camelize).first || Role.friendly.find('Librarian')
-  #  user.required_role = required_role
-  #  locale = Language.where(:iso_639_1 => row['locale'].to_s.strip).first
-  #  user.locale = locale || I18n.default_locale.to_s
-  #  user
-  #end
 end
 
 # == Schema Information

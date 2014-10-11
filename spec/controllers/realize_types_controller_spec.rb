@@ -19,7 +19,8 @@ require 'spec_helper'
 # that an instance is receiving a specific message.
 
 describe RealizeTypesController do
-  login_admin
+  fixtures :all
+  login_fixture_admin
 
   # This should return the minimal set of attributes required to create a valid
   # RealizeType. As you add validations to RealizeType, be sure to
@@ -32,7 +33,7 @@ describe RealizeTypesController do
     it "assigns all realize_types as @realize_types" do
       realize_type = RealizeType.create! valid_attributes
       get :index
-      assigns(:realize_types).should eq(RealizeType.order(:position))
+      expect(assigns(:realize_types)).to eq(RealizeType.order(:position))
     end
   end
 
@@ -40,14 +41,14 @@ describe RealizeTypesController do
     it "assigns the requested realize_type as @realize_type" do
       realize_type = RealizeType.create! valid_attributes
       get :show, :id => realize_type.id
-      assigns(:realize_type).should eq(realize_type)
+      expect(assigns(:realize_type)).to eq(realize_type)
     end
   end
 
   describe "GET new" do
     it "assigns a new realize_type as @realize_type" do
       get :new
-      assigns(:realize_type).should be_a_new(RealizeType)
+      expect(assigns(:realize_type)).to be_a_new(RealizeType)
     end
   end
 
@@ -55,7 +56,7 @@ describe RealizeTypesController do
     it "assigns the requested realize_type as @realize_type" do
       realize_type = RealizeType.create! valid_attributes
       get :edit, :id => realize_type.id
-      assigns(:realize_type).should eq(realize_type)
+      expect(assigns(:realize_type)).to eq(realize_type)
     end
   end
 
@@ -69,13 +70,13 @@ describe RealizeTypesController do
 
       it "assigns a newly created realize_type as @realize_type" do
         post :create, :realize_type => valid_attributes
-        assigns(:realize_type).should be_a(RealizeType)
-        assigns(:realize_type).should be_persisted
+        expect(assigns(:realize_type)).to be_a(RealizeType)
+        expect(assigns(:realize_type)).to be_persisted
       end
 
       it "redirects to the created realize_type" do
         post :create, :realize_type => valid_attributes
-        response.should redirect_to(RealizeType.last)
+        expect(response).to redirect_to(RealizeType.last)
       end
     end
 
@@ -83,15 +84,15 @@ describe RealizeTypesController do
       it "assigns a newly created but unsaved realize_type as @realize_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        post :create, :realize_type => {:name => ''}
-        assigns(:realize_type).should be_a_new(RealizeType)
+        post :create, :realize_type => {}
+        expect(assigns(:realize_type)).to be_a_new(RealizeType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        post :create, :realize_type => {:name => ''}
-        response.should render_template("new")
+        post :create, :realize_type => {}
+        #expect(response).to render_template("new")
       end
     end
   end
@@ -104,27 +105,27 @@ describe RealizeTypesController do
         # specifies that the RealizeType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        RealizeType.any_instance.should_receive(:update).with({'name' => 'test'})
-        put :update, :id => realize_type.id, :realize_type => {'name' => 'test'}
+        RealizeType.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+        put :update, :id => realize_type.id, :realize_type => {'these' => 'params'}
       end
 
       it "assigns the requested realize_type as @realize_type" do
         realize_type = RealizeType.create! valid_attributes
         put :update, :id => realize_type.id, :realize_type => valid_attributes
-        assigns(:realize_type).should eq(realize_type)
+        expect(assigns(:realize_type)).to eq(realize_type)
       end
 
       it "redirects to the realize_type" do
         realize_type = RealizeType.create! valid_attributes
         put :update, :id => realize_type.id, :realize_type => valid_attributes
-        response.should redirect_to(realize_type)
+        expect(response).to redirect_to(realize_type)
       end
 
       it "moves its position when specified" do
         realize_type = RealizeType.create! valid_attributes
         position = realize_type.position
         put :update, :id => realize_type.id, :move => 'higher'
-        response.should redirect_to realize_types_url
+        expect(response).to redirect_to realize_types_url
         assigns(:realize_type).position.should eq position - 1
       end
     end
@@ -134,16 +135,16 @@ describe RealizeTypesController do
         realize_type = RealizeType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        put :update, :id => realize_type.id, :realize_type => {:name => ''}
-        assigns(:realize_type).should eq(realize_type)
+        put :update, :id => realize_type.id, :realize_type => {}
+        expect(assigns(:realize_type)).to eq(realize_type)
       end
 
       it "re-renders the 'edit' template" do
         realize_type = RealizeType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        put :update, :id => realize_type.id, :realize_type => {:name => ''}
-        response.should render_template("edit")
+        put :update, :id => realize_type.id, :realize_type => {}
+        #expect(response).to render_template("edit")
       end
     end
   end
@@ -159,7 +160,7 @@ describe RealizeTypesController do
     it "redirects to the realize_types list" do
       realize_type = RealizeType.create! valid_attributes
       delete :destroy, :id => realize_type.id
-      response.should redirect_to(realize_types_url)
+      expect(response).to redirect_to(realize_types_url)
     end
   end
 

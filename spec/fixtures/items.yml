@@ -258,11 +258,10 @@ item_00023:
 # Table name: items
 #
 #  id                      :integer          not null, primary key
-#  manifestation_id        :integer
 #  call_number             :string(255)
 #  item_identifier         :string(255)
-#  created_at              :datetime
-#  updated_at              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #  deleted_at              :datetime
 #  shelf_id                :integer          default(1), not null
 #  include_supplements     :boolean          default(FALSE), not null
@@ -280,4 +279,5 @@ item_00023:
 #  binding_item_identifier :string(255)
 #  binding_call_number     :string(255)
 #  binded_at               :datetime
+#  manifestation_id        :integer
 #

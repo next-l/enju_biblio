@@ -18,10 +18,11 @@ describe AgentImportFile do
       Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
       Agent.order('id DESC')[2].date_of_birth.should eq Time.zone.parse('1978-01-01')
       Agent.count.should eq old_agents_count + 3
-      AgentImportResult.count.should eq old_import_results_count + 4
+      @file.agent_import_results.order(:id).first.body.split("\t").first.should eq 'full_name'
+      AgentImportResult.count.should eq old_import_results_count + 5
 
-      @file.agent_import_fingerprint.should be_true
-      @file.executed_at.should be_true
+      @file.agent_import_fingerprint.should be_truthy
+      @file.executed_at.should be_truthy
     end
   end
 
@@ -38,13 +39,10 @@ describe AgentImportFile do
       Agent.count.should eq old_agents_count + 4
       Agent.order('id DESC')[0].full_name.should eq '原田 ushi 隆史'
       Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
-      Agent.order('id DESC')[2].email.should eq 'fugafuga@example.jp'
-      Agent.order('id DESC')[3].required_role.should eq Role.find_by_name('Guest')
-      Agent.order('id DESC')[1].email.should eq 'tanabe@library.example.jp'
       AgentImportResult.count.should eq old_import_results_count + 5
 
-      @file.agent_import_fingerprint.should be_true
-      @file.executed_at.should be_true
+      @file.agent_import_fingerprint.should be_truthy
+      @file.executed_at.should be_truthy
     end
   end
 
@@ -74,7 +72,7 @@ describe AgentImportFile do
     file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
-    AgentImportFileQueue.perform(file.id).should be_true
+    AgentImportFileQueue.perform(file.id).should be_truthy
   end
 end
 
@@ -93,8 +91,8 @@ end
 #  agent_import_content_type :string(255)
 #  agent_import_file_size    :integer
 #  agent_import_updated_at   :datetime
-#  created_at                :datetime
-#  updated_at                :datetime
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
 #  agent_import_fingerprint  :string(255)
 #  error_message             :text
 #  edit_mode                 :string(255)

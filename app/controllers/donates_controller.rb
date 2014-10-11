@@ -10,7 +10,7 @@ class DonatesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @donates }
+      format.json { render json: @donates }
     end
   end
 
@@ -19,7 +19,7 @@ class DonatesController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @donate }
+      format.json { render json: @donate }
     end
   end
 
@@ -31,7 +31,7 @@ class DonatesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @donate }
+      format.json { render json: @donate }
     end
   end
 
@@ -47,11 +47,11 @@ class DonatesController < ApplicationController
 
     respond_to do |format|
       if @donate.save
-        format.html { redirect_to @donate, :notice => t('controller.successfully_created', :model => t('activerecord.models.donate')) }
-        format.json { render :json => @donate, :status => :created, :location => @donate }
+        format.html { redirect_to @donate, notice: t('controller.successfully_created', model: t('activerecord.models.donate')) }
+        format.json { render json: @donate, status: :created, location: @donate }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @donate.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @donate.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -61,11 +61,11 @@ class DonatesController < ApplicationController
   def update
     respond_to do |format|
       if @donate.update_attributes(donate_params)
-        format.html { redirect_to @donate, :notice => t('controller.successfully_updated', :model => t('activerecord.models.donate')) }
+        format.html { redirect_to @donate, notice: t('controller.successfully_updated', model: t('activerecord.models.donate')) }
         format.json { head :no_content }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @donate.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @donate.errors, status: :unprocessable_entity }
       end
     end
   end

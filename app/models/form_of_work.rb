@@ -1,7 +1,6 @@
 class FormOfWork < ActiveRecord::Base
-  #attr_accessible :name, :display_name, :note
   include MasterModel
-  default_scope {order("form_of_works.position")}
+  default_scope { order('form_of_works.position') }
   has_many :works
 end
 

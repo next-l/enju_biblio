@@ -3,11 +3,12 @@ class Identifier < ActiveRecord::Base
   belongs_to :manifestation, touch: true
 
   validates_presence_of :body
-  validates_uniqueness_of :body, :scope => [:identifier_type_id, :manifestation_id]
+  validates_uniqueness_of :body, scope: [:identifier_type_id, :manifestation_id]
   validate :check_identifier
+  before_validation :normalize
   before_save :convert_isbn
 
-  acts_as_list :scope => :manifestation_id
+  acts_as_list scope: :manifestation_id
   normalize_attributes :body
 
   def check_identifier
@@ -24,6 +25,11 @@ class Identifier < ActiveRecord::Base
 
     when 'lccn'
       unless StdNum::LCCN.valid?(body)
+        errors.add(:body)
+      end
+
+    when 'doi'
+      if URI.parse(body).scheme
         errors.add(:body)
       end
     end
@@ -44,6 +50,17 @@ class Identifier < ActiveRecord::Base
     if identifier_type.name == 'isbn'
       lisbn = Lisbn.new(body)
       lisbn.parts.join('-')
+    end
+  end
+
+  def normalize
+    case identifier_type.try(:name)
+    when 'isbn'
+      self.body = StdNum::ISBN.normalize(body)
+    when 'issn'
+      self.body = StdNum::ISSN.normalize(body)
+    when 'lccn'
+      self.body = StdNum::LCCN.normalize(body)
     end
   end
 end

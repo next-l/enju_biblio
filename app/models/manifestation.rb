@@ -59,7 +59,7 @@ class Manifestation < ActiveRecord::Base
       indexes :price, type: 'integer'
       indexes :repository_content, type: 'boolean'
       indexes :doi
-      indexes :periodical, type: 'boolean'
+      indexes :serial, type: 'boolean'
       indexes :series_master, type: 'boolean'
       indexes :acquired_at
       #indexes :creators, type: 'nested' do
@@ -111,7 +111,7 @@ class Manifestation < ActiveRecord::Base
       ),
       pub_year: date_of_publication.try(:year),
       doi: identifier_contents(:doi),
-      periodical: periodical?,
+      serial: serial?,
       series_master: series_master?,
       acquired_at: acquired_at
     )
@@ -121,46 +121,58 @@ class Manifestation < ActiveRecord::Base
   enju_subject_manifestation_model if defined?(EnjuSubject)
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)
   enju_ndl_ndl_search if defined?(EnjuNdl)
+  enju_loc_search if defined?(EnjuLoc)
   enju_nii_cinii_books if defined?(EnjuNii)
   enju_export if defined?(EnjuExport)
   enju_oai if defined?(EnjuOai)
   enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
 
-  has_many :creates, :dependent => :destroy, :foreign_key => 'work_id'
-  has_many :creators, -> {order('creates.position')}, :through => :creates, :source => :agent
-  has_many :realizes, :dependent => :destroy, :foreign_key => 'expression_id'
-  has_many :contributors, -> {order('realizes.position')}, :through => :realizes, :source => :agent
-  has_many :produces, :dependent => :destroy, :foreign_key => 'manifestation_id'
-  has_many :publishers, -> {order('produces.position')}, :through => :produces, :source => :agent
-  #has_many :exemplifies, :dependent => :destroy
-  #has_many :items, :through => :exemplifies
-  has_many :items #, :dependent => :destroy
-  has_many :children, :foreign_key => 'parent_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
-  has_many :parents, :foreign_key => 'child_id', :class_name => 'ManifestationRelationship', :dependent => :destroy
-  has_many :derived_manifestations, :through => :children, :source => :child
-  has_many :original_manifestations, :through => :parents, :source => :parent
-  has_many :picture_files, :as => :picture_attachable, :dependent => :destroy
+  has_many :creates, dependent: :destroy, foreign_key: 'work_id'
+  has_many :creators, through: :creates, source: :agent #, order: 'creates.position'
+  has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'
+  has_many :contributors, through: :realizes, source: :agent #, order: 'realizes.position'
+  has_many :produces, dependent: :destroy, foreign_key: 'manifestation_id'
+  has_many :publishers, through: :produces, source: :agent #, order: 'produces.position'
+  has_many :items, dependent: :destroy
+  has_many :children, foreign_key: 'parent_id', class_name: 'ManifestationRelationship', dependent: :destroy
+  has_many :parents, foreign_key: 'child_id', class_name: 'ManifestationRelationship', dependent: :destroy
+  has_many :derived_manifestations, through: :children, source: :child
+  has_many :original_manifestations, through: :parents, source: :parent
+  has_many :picture_files, as: :picture_attachable, dependent: :destroy
   belongs_to :language
   belongs_to :carrier_type
-  belongs_to :manifestation_content_type, :class_name => 'ContentType', :foreign_key => 'content_type_id'
+  belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
   has_many :series_statements
-  has_one :root_series_statement, :foreign_key => 'root_manifestation_id', :class_name => 'SeriesStatement'
+  has_one :root_series_statement, foreign_key: 'root_manifestation_id', class_name: 'SeriesStatement'
   belongs_to :frequency
-  belongs_to :required_role, :class_name => 'Role', :foreign_key => 'required_role_id', :validate => true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   has_one :resource_import_result
-  has_many :identifiers, :dependent => :destroy
+  has_many :identifiers, dependent: :destroy
   belongs_to :nii_type if defined?(EnjuNii)
-  accepts_nested_attributes_for :creators, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :contributors, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :publishers, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :series_statements, :allow_destroy => true, :reject_if => :all_blank
-  accepts_nested_attributes_for :identifiers, :allow_destroy => true, :reject_if => :all_blank
+  accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
 
   #searchable do
-    # text フィールドだと区切りのない文字列の index が上手く作成
-    #できなかったので。 downcase することにした。
-    #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
+  #  text :title, default_boost: 2 do
+  #    titles
+  #  end
+  #  text :fulltext, :note, :creator, :contributor, :publisher, :description,
+  #    :statement_of_responsibility
+  #  text :item_identifier do
+  #    if series_master?
+  #      root_series_statement.root_manifestation.items.pluck(:item_identifier)
+  #    else
+  #      items.pluck(:item_identifier)
+  #    end
+  #  end
+  #  string :title, multiple: true
+  #  # text フィールドだと区切りのない文字列の index が上手く作成
+  #  #できなかったので。 downcase することにした。
+  #  #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
   #  string :connect_title do
   #    title.join('').gsub(/\s/, '').downcase
   #  end
@@ -170,16 +182,82 @@ class Manifestation < ActiveRecord::Base
   #  string :connect_publisher do
   #    publisher.join('').gsub(/\s/, '').downcase
   #  end
-  #  integer :creator_ids, :multiple => true
-  #  integer :contributor_ids, :multiple => true
-  #  integer :publisher_ids, :multiple => true
-  #  integer :item_ids, :multiple => true
-  #  integer :original_manifestation_ids, :multiple => true
-  #  integer :parent_ids, :multiple => true do
+  #  string :isbn, multiple: true do
+  #    identifier_contents(:isbn).map{|i|
+  #      [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
+  #    }.flatten
+  #  end
+  #  string :issn, multiple: true do
+  #    if series_statements.exists?
+  #      [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+  #    else
+  #      identifier_contents(:issn)
+  #    end
+  #  end
+  #  string :lccn, multiple: true do
+  #    identifier_contents(:lccn)
+  #  end
+  #  string :jpno, multiple: true do
+  #    identifier_contents(:jpno)
+  #  end
+  #  string :carrier_type do
+  #    carrier_type.name
+  #  end
+  #  string :library, multiple: true do
+  #    if series_master?
+  #      root_series_statement.root_manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
+  #    else
+  #      items.map{|i| i.shelf.library.name}
+  #    end
+  #  end
+  #  string :language do
+  #    language.try(:name)
+  #  end
+  #  string :item_identifier, multiple: true do
+  #    if series_master?
+  #      root_series_statement.root_manifestation.items.pluck(:item_identifier)
+  #    else
+  #      items.collect(&:item_identifier)
+  #    end
+  #  end
+  #  string :shelf, multiple: true do
+  #    items.collect{|i| "#{i.shelf.library.name}_#{i.shelf.name}"}
+  #  end
+  #  time :created_at
+  #  time :updated_at
+  #  time :deleted_at
+  #  time :pub_date, multiple: true do
+  #    if series_master?
+  #      root_series_statement.root_manifestation.pub_dates
+  #    else
+  #      pub_dates
+  #    end
+  #  end
+  #  time :date_of_publication
+  #  integer :pub_year do
+  #    date_of_publication.try(:year)
+  #  end
+  #  integer :creator_ids, multiple: true
+  #  integer :contributor_ids, multiple: true
+  #  integer :publisher_ids, multiple: true
+  #  integer :item_ids, multiple: true
+  #  integer :original_manifestation_ids, multiple: true
+  #  integer :parent_ids, multiple: true do
   #    original_manifestations.pluck(:id)
   #  end
   #  integer :required_role_id
-  #  integer :series_statement_ids, :multiple => true
+  #  integer :height
+  #  integer :width
+  #  integer :depth
+  #  integer :volume_number
+  #  integer :issue_number
+  #  integer :serial_number
+  #  integer :start_page
+  #  integer :end_page
+  #  integer :number_of_pages
+  #  float :price
+  #  integer :series_statement_ids, multiple: true
+  #  boolean :repository_content
   #  # for OpenURL
   #  text :aulast do
   #    creators.pluck(:last_name)
@@ -187,19 +265,23 @@ class Manifestation < ActiveRecord::Base
   #  text :aufirst do
   #    creators.pluck(:first_name)
   #  end
+  #  # OTC start
+  #  string :creator, multiple: true do
+  #    creator.map{|au| au.gsub(' ', '')}
+  #  end
   #  text :au do
   #    creator
   #  end
   #  text :atitle do
-  #    if periodical? and root_series_statement.nil?
+  #    if serial? && root_series_statement.nil?
   #      titles
   #    end
   #  end
   #  text :btitle do
-  #    title unless periodical?
+  #    title unless serial?
   #  end
   #  text :jtitle do
-  #    if periodical?
+  #    if serial?
   #      if root_series_statement
   #        root_series_statement.titles
   #      else
@@ -207,9 +289,30 @@ class Manifestation < ActiveRecord::Base
   #      end
   #    end
   #  end
+  #  text :isbn do  # 前方一致検索のためtext指定を追加
+  #    identifier_contents(:isbn).map{|i|
+  #      [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
+  #    }.flatten
+  #  end
+  #  text :issn do # 前方一致検索のためtext指定を追加
+  #    if series_statements.exists?
+  #      [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+  #    else
+  #      identifier_contents(:issn)
+  #    end
+  #  end
   #  string :sort_title
+  #  string :doi, multiple: true do
+  #    identifier_contents(:doi)
+  #  end
+  #  boolean :serial do
+  #    serial?
+  #  end
+  #  boolean :series_master do
+  #    series_master?
+  #  end
   #  boolean :resource_master do
-  #    if periodical?
+  #    if serial?
   #      if series_master?
   #        true
   #      else
@@ -219,32 +322,42 @@ class Manifestation < ActiveRecord::Base
   #      true
   #    end
   #  end
+  #  time :acquired_at
   #end
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :attachment, :storage => :s3,
-      :s3_credentials => "#{Setting.amazon}",
-      :s3_permissions => :private
+    has_attached_file :attachment,
+      storage: :s3,
+      s3_credentials: "#{Rails.root.to_s}/config/s3.yml",
+      s3_permissions: :private
   else
     has_attached_file :attachment,
-      :path => ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
-  validates :start_page, :numericality => true, :allow_blank => true
-  validates :end_page, :numericality => true, :allow_blank => true
-  validates :manifestation_identifier, :uniqueness => true, :allow_blank => true
-  validates :pub_date, :format => {:with => /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, :allow_blank => true
-  validates :access_address, :url => true, :allow_blank => true, :length => {:maximum => 255}
-  validates :issue_number, :numericality => {:greater_than => 0}, :allow_blank => true
-  validates :volume_number, :numericality => {:greater_than => 0}, :allow_blank => true
-  validates :serial_number, :numericality => {:greater_than => 0}, :allow_blank => true
-  validates :edition, :numericality => {:greater_than => 0}, :allow_blank => true
+  validates :start_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :end_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :height, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :width, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :depth, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :manifestation_identifier, uniqueness: true, allow_blank: true
+  validates :pub_date, format: {with: /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, allow_blank: true
+  validates :access_address, url: true, allow_blank: true, length: {maximum: 255}
+  validates :issue_number, numericality: {greater_than: 0}, allow_blank: true
+  validates :volume_number, numericality: {greater_than: 0}, allow_blank: true
+  validates :serial_number, numericality: {greater_than: 0}, allow_blank: true
+  validates :edition, numericality: {greater_than: 0}, allow_blank: true
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
-  before_update :touch
-  before_destroy :touch, :reload
+  #after_save :index_series_statement
+  #after_destroy :index_series_statement
+  after_touch do |manifestation|
+    #manifestation.index
+    #manifestation.index_series_statement
+    #Sunspot.commit
+  end
   normalize_attributes :manifestation_identifier, :pub_date, :original_title
   paginates_per 10
 
@@ -295,8 +408,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   def number_of_pages
-    if self.start_page and self.end_page
-      page = self.end_page.to_i - self.start_page.to_i + 1
+    if start_page && end_page
+      end_page.to_i - start_page.to_i + 1
     end
   end
 
@@ -338,9 +451,14 @@ class Manifestation < ActiveRecord::Base
   end
 
   # TODO: よりよい推薦方法
-  def self.pickup(keyword = nil)
+  def self.pickup(keyword = nil, current_user = nil)
     return nil if self.cached_numdocs < 5
-    manifestation = nil
+    if current_user.try(:role)
+      current_role_id = current_user.role.id
+    else
+      current_role_id = 1
+    end
+
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
     response = Manifestation.search(
       query: {
@@ -358,19 +476,19 @@ class Manifestation < ActiveRecord::Base
     # TODO: S3 support
     response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=ruby" --data-binary @#{attachment.path} -H "Content-type:text/html"`
     self.fulltext = eval(response)[""]
-    save(:validate => false)
+    save(validate: false)
   end
 
   def created(agent)
-    creates.where(:agent_id => agent.id).first
+    creates.where(agent_id: agent.id).first
   end
 
   def realized(agent)
-    realizes.where(:agent_id => agent.id).first
+    realizes.where(agent_id: agent.id).first
   end
 
   def produced(agent)
-    produces.where(:agent_id => agent.id).first
+    produces.where(agent_id: agent.id).first
   end
 
   def sort_title
@@ -391,9 +509,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    identifier_type = IdentifierType.where(:name => 'isbn').first
+    identifier_type = IdentifierType.where(name: 'isbn').first
     return nil unless identifier_type
-    Manifestation.includes(:identifiers => :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
+    Manifestation.includes(identifiers: :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
   end
 
   def index_series_statement
@@ -410,34 +528,34 @@ class Manifestation < ActiveRecord::Base
   end
 
   def web_item
-    items.where(:shelf_id => Shelf.web.id).first
+    items.where(shelf_id: Shelf.web.id).first
   end
 
-  def set_agent_role_type(agent_lists, options = {:scope => :creator})
+  def set_agent_role_type(agent_lists, options = {scope: :creator})
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(:agent_identifier => agent_list[:agent_identifier]).first
+        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       end
-      agent = Agent.where(:full_name => name_and_role[0]).first unless agent
+      agent = Agent.where(full_name: name_and_role[0]).first unless agent
       next unless agent
       type = name_and_role[1].to_s.strip
 
       case options[:scope]
       when :creator
         type = 'author' if type.blank?
-        role_type = CreateType.where(:name => type).first
-        create = Create.where(:work_id => self.id, :agent_id => agent.id).first
+        role_type = CreateType.where(name: type).first
+        create = Create.where(work_id: id, agent_id: agent.id).first
         if create
           create.create_type = role_type
-          create.save(:validate => false)
+          create.save(validate: false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
-        produce = Produce.where(:manifestation_id => self.id, :agent_id => agent.id).first
+        produce = Produce.where(manifestation_id: id, agent_id: agent.id).first
         if produce
-          produce.produce_type = ProduceType.where(:name => type).first
-          produce.save(:validate => false)
+          produce.produce_type = ProduceType.where(name: type).first
+          produce.save(validate: false)
         end
       else
         raise "#{options[:scope]} is not supported!"
@@ -446,9 +564,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def set_number
-    self.volume_number = volume_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if volume_number_string and !volume_number?
-    self.issue_number = issue_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if issue_number_string and !issue_number?
-    self.edition = edition_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if edition_string and !edition?
+    self.volume_number = volume_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if volume_number_string && !volume_number?
+    self.issue_number = issue_number_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if issue_number_string && !issue_number?
+    self.edition = edition_string.scan(/\d*/).map{|s| s.to_i if s =~ /\d/}.compact.first if edition_string && !edition?
   end
 
   def pub_dates
@@ -482,8 +600,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    if IdentifierType.where(:name => name.to_s).exists?
-      identifiers.where(:identifier_type_id => IdentifierType.where(:name => name).first.id).pluck(:body)
+    if IdentifierType.where(name: name.to_s).exists?
+      identifiers.where(identifier_type_id: IdentifierType.where(name: name).first.id).pluck(:body)
     else
       []
     end
@@ -498,6 +616,7 @@ class Manifestation < ActiveRecord::Base
       pub_date
       price
       isbn
+      issn
       item_identifier
       call_number
       item_price
@@ -571,7 +690,6 @@ end
 #  access_address                  :string(255)
 #  language_id                     :integer          default(1), not null
 #  carrier_type_id                 :integer          default(1), not null
-#  extent_id                       :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -612,7 +730,9 @@ end
 #  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
-#  doi                             :string(255)
-#  periodical                      :boolean
+#  serial                          :boolean
 #  statement_of_responsibility     :text
+#  publication_place               :text
+#  extent                          :text
+#  dimensions                      :text
 #

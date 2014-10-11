@@ -115,17 +115,17 @@ class ItemsController < ApplicationController
 
     if defined?(EnjuBarcode)
       if params[:mode] == 'barcode'
-        render :action => 'barcode', :layout => false
+        render action: 'barcode', layout: false
         return
       end
     end
 
-    flash[:page_info] = {:page => page, :query => query}
+    flash[:page_info] = { page: page, query: query }
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @items }
-      format.txt  { render :layout => false }
+      format.json { render json: @items }
+      format.txt  { render layout: false }
       format.atom
     end
   end
@@ -154,7 +154,7 @@ class ItemsController < ApplicationController
     @item.manifestation = @manifestation
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.where(
-        :name => [
+        name: [
           'In Process',
           'Available For Pickup',
           'Available On Shelf',
@@ -164,7 +164,7 @@ class ItemsController < ApplicationController
       @item.circulation_status = CirculationStatus.where(name: 'In Process').first
       @item.checkout_type = @manifestation.carrier_type.checkout_types.first
       @item.item_has_use_restriction = ItemHasUseRestriction.new
-      @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
+      @item.item_has_use_restriction.use_restriction = UseRestriction.where(name: 'Not For Loan').first
     end
   end
 
@@ -177,7 +177,7 @@ class ItemsController < ApplicationController
     if defined?(EnjuCirculation)
       unless @item.use_restriction
         @item.build_item_has_use_restriction
-        @item.item_has_use_restriction.use_restriction = UseRestriction.where(:name => 'Not For Loan').first
+        @item.item_has_use_restriction.use_restriction = UseRestriction.where(name: 'Not For Loan').first
       end
     end
   end
@@ -200,12 +200,12 @@ class ItemsController < ApplicationController
             end
           end
         end
-        format.html { redirect_to(@item, notice: t('controller.successfully_created', :model => t('activerecord.models.item'))) }
-        format.json { render :json => @item, :status => :created, :location => @item }
+        format.html { redirect_to(@item, notice: t('controller.successfully_created', model: t('activerecord.models.item'))) }
+        format.json { render json: @item, status: :created, location: @item }
       else
         prepare_options
-        format.html { render action: 'new' }
-        format.json { render json: @item.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -215,12 +215,12 @@ class ItemsController < ApplicationController
   def update
     respond_to do |format|
       if @item.update_attributes(item_params)
-        format.html { redirect_to @item, notice: t('controller.successfully_updated', :model => t('activerecord.models.item')) }
+        format.html { redirect_to @item, notice: t('controller.successfully_updated', model: t('activerecord.models.item')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render action: 'edit' }
-        format.json { render json: @item.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @item.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -229,11 +229,11 @@ class ItemsController < ApplicationController
   def destroy
     @item.destroy
 
-    flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
+    flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.item'))
     if @item.manifestation
-      redirect_to items_url(manifestation_id: @item.manifestation_id), notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
+      redirect_to items_url(manifestation_id: @item.manifestation_id), notice: t('controller.successfully_destroyed', model: t('activerecord.models.item'))
     else
-      redirect_to items_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.item'))
+      redirect_to items_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.item'))
     end
   end
 
@@ -245,12 +245,8 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.real << Library.web
-    if @item
-      if @item.new_record?
-        @library = Library.real.order(:position).includes(:shelves).first
-      else
-        @library = @item.shelf.library
-      end
+    if @item.new_record?
+      @library = Library.real.includes(:shelves).order(:position).first
     else
       @library = Library.real.order(:position).includes(:shelves).first
     end
@@ -274,8 +270,7 @@ class ItemsController < ApplicationController
       :call_number, :item_identifier, :circulation_status_id,
       :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
       :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
-      :lock_version, :manifestation_id, :library_id, :required_role_id #,
-      # :exemplify_attributes
+      :lock_version, :manifestation_id, :library_id, :required_role_id
     )
   end
 end

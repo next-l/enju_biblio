@@ -29,7 +29,7 @@ class FormOfWorksController < ApplicationController
     authorize @form_of_work
 
     if @form_of_work.save
-      redirect_to @form_of_work, notice:  t('controller.successfully_created', :model => t('activerecord.models.form_of_work'))
+      redirect_to @form_of_work, notice: t('controller.successfully_created', model: t('activerecord.models.form_of_work'))
     else
       render action: 'new'
     end
@@ -41,8 +41,9 @@ class FormOfWorksController < ApplicationController
       move_position(@form_of_work, params[:move])
       return
     end
+
     if @form_of_work.update(form_of_work_params)
-      redirect_to @form_of_work, notice:  t('controller.successfully_updated', :model => t('activerecord.models.form_of_work'))
+      redirect_to @form_of_work, notice: t('controller.successfully_updated', model: t('activerecord.models.form_of_work'))
     else
       render action: 'edit'
     end
@@ -51,7 +52,7 @@ class FormOfWorksController < ApplicationController
   # DELETE /form_of_works/1
   def destroy
     @form_of_work.destroy
-    redirect_to form_of_works_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.form_of_work'))
+    redirect_to form_of_works_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.form_of_work'))
   end
 
   private

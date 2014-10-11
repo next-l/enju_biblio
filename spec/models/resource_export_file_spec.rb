@@ -5,10 +5,13 @@ describe ResourceExportFile do
   fixtures :all
   
   it "should export in background" do
+    message_count = Message.count
     file = ResourceExportFile.new
     file.user = users(:admin)
     file.save
-    ResourceExportFileQueue.perform(file.id).should be_true
+    ResourceExportFileQueue.perform(file.id).should be_truthy
+    Message.count.should eq message_count + 1
+    Message.order(:id).last.subject.should eq 'エクスポートが完了しました'
   end
 end
 
@@ -23,6 +26,6 @@ end
 #  resource_export_file_size    :integer
 #  resource_export_updated_at   :datetime
 #  executed_at                  :datetime
-#  created_at                   :datetime
-#  updated_at                   :datetime
+#  created_at                   :datetime         not null
+#  updated_at                   :datetime         not null
 #

@@ -26,6 +26,8 @@ class ResourceExportFilesController < ApplicationController
   # POST /resource_export_files
   def create
     @resource_export_file = ResourceExportFile.new(resource_export_file_params)
+    @resource_export_file.user = current_user
+
     if @resource_export_file.save
       if @resource_export_file.mode == 'export'
         Resque.enqueue(ResourceExportFileQueue, @resource_export_file.id)

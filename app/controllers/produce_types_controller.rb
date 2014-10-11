@@ -1,12 +1,11 @@
 class ProduceTypesController < ApplicationController
   before_action :set_produce_type, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /produce_types
   def index
     authorize ProduceType
-    @produce_types = policy_scope(ProduceType).order(:position)
+    @produce_types = ProduceType.order(:position)
   end
 
   # GET /produce_types/1
@@ -41,6 +40,7 @@ class ProduceTypesController < ApplicationController
       move_position(@produce_type, params[:move])
       return
     end
+
     if @produce_type.update(produce_type_params)
       redirect_to @produce_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.produce_type'))
     else

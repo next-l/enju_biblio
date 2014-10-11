@@ -2,12 +2,11 @@ ja:
   activerecord:
     models:
       carrier_type: 資料の形態
-      content_type: 資料の内容の形態
+      content_type: 資料の内容の種別
       create: 著作関係
       create_type: 著作の関係
       embody: 具体化
       exemplify: 書誌と所蔵の関係
-      extent: 大きさ
       form_of_work: 著作の形態
       frequency: 発行頻度
       item: 所蔵情報
@@ -39,12 +38,16 @@ ja:
       identifier_type: 識別子の種類
       resource_export_file: 書誌と所蔵のエクスポート
       agent_export_file: 人物・団体情報のエクスポート
+      agent_merge_list: 人物・団体の統合リスト
+      agent_merge: 人物・団体の統合
+      series_statement_merge_list: シリーズ情報統合リスト
+      series_statement_merge: シリーズ情報の統合
 
     attributes:
       manifestation:
         original_title: 原題
         title_alternative: 代替タイトル
-        title_transcription: タイトルよみ
+        title_transcription: タイトルのヨミ
         classification_number: 分類番号
         manifestation_identifier: 識別子
         date_of_publication: 出版日
@@ -82,12 +85,17 @@ ja:
         contributor_string: 協力者・編者
         publisher_string: 出版者
         series_statement_string: シリーズ情報
-        periodical: 逐次刊行物
+        serial: 逐次刊行物
         series_master: シリーズ情報マスタ
         subject: 件名
         classification: 分類
         identifier: 識別子
         statement_of_responsibility: 責任表示
+        publication_place: 出版地
+        parent_id: 親書誌
+        extent: ページ数
+        dimensions: 大きさ
+        fulltext_content: 全文あり
       manifestation/subjects:
           term: 件名
       manifestation/classifications:
@@ -112,13 +120,13 @@ ja:
         last_name: 姓
         middle_name: ミドルネーム
         first_name: 名
-        last_name_transcription: 姓（よみ）
-        middle_name_transcription: ミドルネーム（よみ）
-        first_name_transcription: 名（よみ）
+        last_name_transcription: 姓（ヨミ）
+        middle_name_transcription: ミドルネーム（ヨミ）
+        first_name_transcription: 名（ヨミ）
         corporate_name: 会社名
-        corporate_name_transcription: 企業名（よみ）
+        corporate_name_transcription: 企業名（ヨミ）
         full_name: フルネーム
-        full_name_transcription: フルネーム（よみ）
+        full_name_transcription: フルネーム（ヨミ）
         full_name_alternative: フルネーム代替
         deleted_at: 削除時刻
         zip_code_1: 郵便番号1
@@ -175,17 +183,17 @@ ja:
         edit_mode: 編集モード
         error_message: エラーメッセージ
         user_encoding: 文字コード
-        default_shelf_id: 既定の本棚
+        default_shelf_id: 既定の書棚
       series_statement:
         original_title: シリーズ名
         numbering: シリーズ番号
         title_subseries: 副シリーズ名
-        title_subseries_transcription: 副シリーズ名よみ
+        title_subseries_transcription: 副シリーズ名のヨミ
         numbering_subseries: 副シリーズ番号
         work: 著作
         series_statement_identifier: シリーズ識別子
         issn: ISSN
-        title_transcription: シリーズ名よみ
+        title_transcription: シリーズ名のヨミ
         note: 注記
         series_master: マスタ
         volume_number_string: シリーズ巻号
@@ -193,17 +201,12 @@ ja:
       country:
         name: 名前
         display_name: 表示名
-        alpha_2: アルファ2
-        alpha_3: アルファ3
-        numeric_3: 数値3
+        alpha_2: ISO 3166-1 alpha-2
+        alpha_3: ISO 3166-1 alpha-3
+        numeric_3: ISO 3166-1 numeric
         note: 注記
         position: 位置
       medium_of_performance:
-        name: 名前
-        display_name: 表示名
-        note: 注記
-        position: 位置
-      extent:
         name: 名前
         display_name: 表示名
         note: 注記
@@ -289,6 +292,7 @@ ja:
         position: 位置
       resource_import_result:
         body: 本文
+        error_message: エラーメッセージ
       agent_import_result:
         body: 本文
       create_type:
@@ -319,21 +323,102 @@ ja:
         agent_export_file_name: ファイル名
         agent_export_file_size: ファイルサイズ
         state: 状態
+      agent_merge_list:
+        title: タイトル
+      agent_merge:
+      series_statement_merge_list:
+        title: タイトル
+      series_statement_merge:
 
   resource_import_file:
     update_relationship: 関連を更新
+    default_shelf: TSVファイルで"shelf"列が指定されていない場合、この書棚が登録されます。
 
   agent:
     creator: 著者
     contributor: 協力者・編者
     publisher: 出版社
+    library_group_agent: "%{library_group_name} の人物・団体"
+    work_agent: "%{work_title} の著作者"
+    expression_agent: "%{expression_title} の編者"
+    manifestation_agent: "%{manifestation_title} の出版者"
+    activate_as_user: "利用者として登録する"
+    deactivate: "利用者登録を解除する"
+    add: "人物・団体を追加する"
+    publication: "出版物"
+    recent_publication: "最近の出版物"
+    all_publication: "全ての出版物"
+    other_address: "他の住所"
+    add_derivation: "派生人物・団体を追加"
+    creator: "著者"
+    contributor: "協力者・編者"
+    publisher: "出版者"
+    owner: "所有者"
+
+  manifestation:
+    date_of_acquisition: "受入日"
+    physical_description: "ページ数と大きさ"
+    add_next_issue: "次の号を追加"
+    edit_creator: "著者を編集"
+    edit_contributor: "編者を編集"
+    edit_publisher: "出版者を編集"
+    edit_expression: "協力した資料を編集"
+    edit_item: "所蔵を編集"
+    agent_manifestation: "%{agent_name} の資料"
+    expressions_manifestation: "%{expression_title} の出版した資料"
+    library_group_manifestation: "%{library_group_name} にある資料"
+    reserve_this: "この資料を予約する"
+    cancel_reservation: "この資料の予約を解除する"
+    user_who_bookmark_this_resource: "この資料をブックマークしている利用者"
+    query_search_result: "検索語 %{query} による %{library_group_name} の資料の検索結果"
+    serial: "定期刊行物"
+    number: "巻号"
+    invalid_isbn: "無効なISBNです。"
+    already_imported: "すでにインポートされています。"
+    record_not_found: "資料が見つかりませんでした。"
+    add: "資料を追加する"
+    specify_expression: "協力した資料を指定してください。"
+    pickup: "ピックアップ"
+    showing_all_record: "すべての資料を表示しています。"
+    showing_reservable_record: "予約可能な資料のみを表示しています。"
+    reservable: "予約可能"
+    all_result: "すべての検索結果"
+    reservable_list: "予約可能な資料の一覧"
+    post_to_twitter: "Twitterに送信する"
+    web: "Web"
+    send_email: "書誌情報を電子メールで送信する"
+    attachment_file: "添付ファイル"
+    add_derivation: "派生資料を追加"
+    new_item: "新規作成"
+
+  item:
+    current_checkout: "現在の貸出"
+    donor: "寄贈者"
+    library_group_item: "%{library_group_name}にある所蔵情報"
+    add: "所蔵情報を追加する"
+    specify_manifestation: "資料を指定してください。"
+    this_item_is_reserved: "この資料は予約されています！"
+    create_shelf_first: "最初に書棚を作成してください。"
+    this_item_include_supplement: "この資料は付録を含んでいます。"
+    all_item: "全ての所蔵情報"
+    add_new_copy: "複本を追加"
+    no_manifestation: "資料なし"
+    no_number: "番号なし"
+    add_lending_policy: "貸出規則の追加"
+    edit_exemplification: "書誌の付け替え"
+    accepted_at: "検収時刻"
 
   page:
     add: 追加
     remove: 削除
     add_series_statement: 別のシリーズ情報を追加する
+    merge: "統合する（取り消しはできません）"
+    merge_resource: "%{model}を統合する"
 
-  export:
-    export_completed: エクスポートが完了しました。
-    are_you_sure_to_export: エクスポートに時間がかかることがあります。本当にエクスポートしますか？
-    export_task_created: エクスポートのタスクが設定されました。エクスポートが完了しましたらメッセージでお知らせします。現在の状態は「エクスポートの一覧」でも確認できます。
+  merge_list:
+    successfully_merged: "%{model}は正常に統合されました。"
+    specify_id: "%{model}のIDを指定してください。"
+
+  import:
+    manifestation_found: "書誌インポート省略: すでに登録されている書誌が見つかりました。"
+    item_found: "所蔵インポート省略: すでに登録されている個別資料が見つかりました。"

@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', :model => t('activerecord.models.produce')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.produce')) -%></h1>
 <div id="content_list">
   <h2 class="resource_title">
     <%= link_to agent.full_name, agent -%>
@@ -19,7 +19,7 @@
     <td><%= l(produce.updated_at) -%></td>
     <td>
       <%- if policy(produce).destroy? -%>
-        <%= link_to t('page.destroy'), produce_path(produce, agent_id: agent.id), :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+        <%= link_to t('page.destroy'), produce_path(produce, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
   </tr>
@@ -34,7 +34,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <%- if policy(Produce).create? -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.produce')), new_produce_path(agent_id: agent.id) -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.produce')), new_produce_path(agent_id: agent.id) -%></li>
     <%- end -%>
   </ul>
 </div>

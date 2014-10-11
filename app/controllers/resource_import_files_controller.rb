@@ -4,14 +4,12 @@ class ResourceImportFilesController < ApplicationController
   after_action :prepare_options, only: [:new, :edit]
 
   # GET /resource_import_files
-  # GET /resource_import_files.json
   def index
     authorize ResourceImportFile
     @resource_import_files = ResourceImportFile.page(params[:page])
   end
 
   # GET /resource_import_files/1
-  # GET /resource_import_files/1.json
   def show
     if @resource_import_file.resource_import.path
       unless Setting.uploaded_file.storage == :s3
@@ -21,23 +19,22 @@ class ResourceImportFilesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @resource_import_file }
+      format.json { render json: @resource_import_file }
       format.download {
         if Setting.uploaded_file.storage == :s3
           redirect_to @resource_import_file.resource_import.expiring_url(10)
         else
-          send_file file, :filename => @resource_import_file.resource_import_file_name, :type => 'application/octet-stream'
+          send_file file, filename: @resource_import_file.resource_import_file_name, type: 'application/octet-stream'
         end
       }
     end
   end
 
   # GET /resource_import_files/new
-  # GET /resource_import_files/new.json
   def new
     @resource_import_file = ResourceImportFile.new
     authorize @resource_import_file
-    @resource_import_file.library_id = current_user.library_id
+    @resource_import_file.library_id = current_user.profile.library_id
     @shelves = Library.find(@resource_import_file.library_id).shelves
   end
 
@@ -46,7 +43,6 @@ class ResourceImportFilesController < ApplicationController
   end
 
   # POST /resource_import_files
-  # POST /resource_import_files.json
   def create
     authorize ResourceImportFile
     @resource_import_file = ResourceImportFile.new(resource_import_file_params)
@@ -70,7 +66,7 @@ class ResourceImportFilesController < ApplicationController
       if @resource_import_file.mode == 'import'
         Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
       end
-      redirect_to @resource_import_file, notice: t('controller.successfully_updated', :model => t('activerecord.models.resource_import_file'))
+      redirect_to @resource_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.resource_import_file'))
     else
       prepare_options
       render :edit
@@ -81,7 +77,7 @@ class ResourceImportFilesController < ApplicationController
   # DELETE /resource_import_files/1.json
   def destroy
     @resource_import_file.destroy
-    redirect_to resource_import_files_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.resource_import_file'))
+    redirect_to resource_import_files_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.resource_import_file'))
   end
 
   private
@@ -103,7 +99,7 @@ class ResourceImportFilesController < ApplicationController
     if library
       @shelves = library.shelves
     else
-      @shelves = current_user.library.shelves
+      @shelves = current_user.profile.library.shelves
     end
   end
 end

@@ -2,22 +2,35 @@
 http_interactions:
 - request:
     method: get
+<<<<<<< HEAD
     uri: http://iss.ndl.go.jp/api/opensearch?dpid=iss-ndl-opac&isbn=9784798002064&cnt=10&idx=1&mediatype=1
+=======
+    uri: http://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=9784798002064&mediatype=1
+>>>>>>> 1.1
     body:
       encoding: US-ASCII
       string: ''
     headers:
+<<<<<<< HEAD
       accept-encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       accept:
       - "*/*"
       user-agent:
+=======
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+>>>>>>> 1.1
       - Ruby
   response:
     status:
       code: 200
       message: OK
     headers:
+<<<<<<< HEAD
       date:
       - Wed, 23 Jul 2014 09:41:38 GMT
       server:
@@ -49,6 +62,37 @@ http_interactions:
       content-length:
       - '1314'
       connection:
+=======
+      Date:
+      - Wed, 01 Oct 2014 10:44:19 GMT
+      Server:
+      - Apache
+      Etag:
+      - '"f6ed27b8e85a20ba45b23d8f4f32af76"'
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      X-Runtime:
+      - '0.138243'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Status:
+      - '200'
+      Content-Type:
+      - application/xml; charset=utf-8
+      Set-Cookie:
+      - _front_session_id=2c104954445be2af8dcecb4b7645055d; domain=.iss.ndl.go.jp;
+        path=/; expires=Wed, 01-Oct-2014 11:44:19 GMT; HttpOnly
+      - serverid=1102; path=/
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Content-Length:
+      - '1312'
+      Connection:
+>>>>>>> 1.1
       - close
     body:
       encoding: ASCII-8BIT
@@ -66,9 +110,15 @@ http_interactions:
         ZS8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4NDc5ODAwMjA2NCBp
         c3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4Eg
         T3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5n
+<<<<<<< HEAD
         by5qcC9hcGkvb3BlbnNlYXJjaD9jbnQ9MTAmYW1wO2lkeD0xJmFtcDttZWRp
         YXR5cGU9MSZhbXA7aXNibj05Nzg0Nzk4MDAyMDY0JmFtcDtkcGlkPWlzcy1u
         ZGwtb3BhYzwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0
+=======
+        by5qcC9hcGkvb3BlbnNlYXJjaD9tZWRpYXR5cGU9MSZhbXA7aWR4PTEmYW1w
+        O2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTAmYW1wO2lzYm49OTc4NDc5
+        ODAwMjA2NDwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0
+>>>>>>> 1.1
         cyBmb3IgaXNibj05Nzg0Nzk4MDAyMDY0IG1lZGlhdHlwZT0xIGNudD0xMCBk
         cGlkPWlzcy1uZGwtb3BhYyA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdl
         PmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4x
@@ -129,8 +179,13 @@ http_interactions:
         c2VlQWxzbyByZGY6cmVzb3VyY2U9Imh0dHA6Ly93ZWIub21sLmNpdHkub3Nh
         a2EubGcuanAvd2Vib3BhY19pX2phLzAwMTAxOTY3NzkiLz4KICAgIDwvaXRl
         bT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
+<<<<<<< HEAD
     http_version: '1.0'
   recorded_at: Wed, 23 Jul 2014 09:41:38 GMT
+=======
+    http_version: 
+  recorded_at: Wed, 01 Oct 2014 10:44:19 GMT
+>>>>>>> 1.1
 - request:
     method: get
     uri: http://iss.ndl.go.jp/books/R100000002-I000003046546-00.rdf
@@ -138,17 +193,26 @@ http_interactions:
       encoding: US-ASCII
       string: ''
     headers:
+<<<<<<< HEAD
       accept-encoding:
       - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
       accept:
       - "*/*"
       user-agent:
+=======
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+>>>>>>> 1.1
       - Ruby
   response:
     status:
       code: 200
       message: OK
     headers:
+<<<<<<< HEAD
       date:
       - Wed, 23 Jul 2014 09:41:39 GMT
       server:
@@ -178,6 +242,35 @@ http_interactions:
       x-frame-options:
       - SAMEORIGIN
       connection:
+=======
+      Date:
+      - Wed, 01 Oct 2014 10:44:19 GMT
+      Server:
+      - Apache
+      Etag:
+      - '"41a6933c22204b3114e09965941cc0c3"'
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      X-Runtime:
+      - '0.584887'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      Status:
+      - '200'
+      Content-Type:
+      - application/rdf+xml; charset=utf-8
+      Set-Cookie:
+      - _front_session_id=d9bbe138024ccfe8e8d497e6e15021d6; domain=.iss.ndl.go.jp;
+        path=/; expires=Wed, 01-Oct-2014 11:44:20 GMT; HttpOnly
+      - serverid=1105; path=/
+      Vary:
+      - Accept-Encoding,User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      Connection:
+>>>>>>> 1.1
       - close
     body:
       encoding: ASCII-8BIT
@@ -428,6 +521,12 @@ http_interactions:
         c29tb2t1QmliSUQiPjAwMTAxOTY3Nzk8L2RjdGVybXM6aWRlbnRpZmllcj4K
         ICAgIDxkY25kbDpjYWxsTnVtYmVyPjU0Ny44NHx844Oo44KvfHwyMDAxPC9k
         Y25kbDpjYWxsTnVtYmVyPgogIDwvZGNuZGw6SXRlbT4KPC9yZGY6UkRGPg==
+<<<<<<< HEAD
     http_version: '1.0'
   recorded_at: Wed, 23 Jul 2014 09:41:39 GMT
 recorded_with: VCR 2.9.2
+=======
+    http_version: 
+  recorded_at: Wed, 01 Oct 2014 10:44:20 GMT
+recorded_with: VCR 2.9.3
+>>>>>>> 1.1

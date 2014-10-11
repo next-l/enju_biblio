@@ -9,6 +9,9 @@ describe "realizes/edit" do
       :agent_id => 1
     ))
     @realize_types = RealizeType.all
+    @ability = Object.new
+    @ability.extend(CanCan::Ability)
+    controller.stub(:current_ability) { @ability }
   end
 
   it "renders the edit realize form" do

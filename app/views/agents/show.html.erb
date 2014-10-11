@@ -1,5 +1,5 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.showing', :model => t('activerecord.models.agent')) -%></h1>
+<h1 class="title"><%= t('page.showing', model: t('activerecord.models.agent')) -%></h1>
 <div id="content_list">
   <p id="notice"><%= notice %></p>
 
@@ -27,12 +27,6 @@
         <td><strong><%= t('activerecord.attributes.agent.full_name_transcription') -%>:</strong></td>
         <td><%= @agent.full_name_transcription -%></td>
       </tr>
-      <%- if @agent.user -%>
-        <tr>
-          <td><strong><%= t('activerecord.attributes.user.username') -%>:</strong></td>
-          <td><%= link_to @agent.user.username, @agent.user -%></td>
-        </tr>
-      <%- end -%>
       <tr>
         <td><strong><%= t('activerecord.models.agent_type') -%>:</strong></td>
         <td><%= @agent.agent_type.display_name.localize -%></td>
@@ -40,13 +34,13 @@
       <tr>
         <td><strong><%= t('activerecord.attributes.agent.email') -%>:</strong></td>
         <td>
-          <%= mail_to @agent.email, nil, :class => 'email' -%>
+          <%= mail_to @agent.email, nil, class: 'email' -%>
         </td>
       </tr>
       <tr>
         <td><strong><%= t('activerecord.attributes.agent.url') -%>:</strong></td>
         <td>
-          <%= link_to @agent.url, @agent.url, :class => 'url' if @agent.url? -%>
+          <%= link_to @agent.url, @agent.url, class: 'url' if @agent.url? -%>
         </td>
       </tr>
       <tr>
@@ -88,8 +82,8 @@
   </div>
   <ul>
     <%- if @agent.picture_files.exists? -%>
-      <li><%= t('page.total') %>: <%= @agent.picture_files.count %> <%= t('page.number_of_pictures', :count => @agent.picture_files.count) %></li>
-      <li><%= link_to t('page.listing', :model => t('activerecord.models.picture_file')), agent_picture_files_path(@agent) -%></li>
+      <li><%= t('page.total') %>: <%= @agent.picture_files.count %> <%= t('page.number_of_pictures', count: @agent.picture_files.count) %></li>
+      <li><%= link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @agent.id) -%></li>
       <script type="text/javascript">
         $(document).ready(function(){
           $("a[rel='agent_<%= @agent.id -%>']").colorbox({transition:"none", photo:true});
@@ -98,19 +92,21 @@
       </script>
     <% end %>
     <%- if policy(PictureFile).create? -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_agent_picture_file_path(@agent) -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id) -%></li>
     <%- end -%>
   </ul>
   <ul>
     <li><%= back_to_index(flash[:page_info]) -%></li>
-    <li><%= link_to t('page.edit'), edit_agent_path(@agent) -%></li>
-    <li><%= link_to t('agent.add_derivation'), agent_agents_path(@agent, :mode => 'add') -%></li>
+    <%- if policy(Agent).create? -%>
+      <li><%= link_to t('page.edit'), edit_agent_path(@agent) -%></li>
+      <li><%= link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add') -%></li>
+    <%- end -%>
     <%- if policy(@agent).destroy? -%>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.agent')), new_agent_path -%></li>
-      <li><%= link_to t('page.destroy'), @agent, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path -%></li>
+      <li><%= link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete -%></li>
     <%- end -%>
   </ul>
   <ul>
-    <li><%= link_to t('page.listing', :model => t('activerecord.models.manifestation')), manifestations_path(:query => "\"#{@agent.full_name}\"") -%></li>
+    <li><%= link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path(query: "\"#{@agent.full_name}\"") -%></li>
   </ul>
 </div>

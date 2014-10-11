@@ -9,7 +9,6 @@ Rails.application.routes.draw do
     resources :agents
     resources :produces
     resources :series_statements
-    resources :items
     resources :picture_files
     resources :manifestations
     resources :manifestation_relationships
@@ -26,12 +25,8 @@ Rails.application.routes.draw do
     resources :expressions, :controller => 'manifestations'
     resources :manifestations
     resources :items
-    resources :picture_files
     resources :agents
     resources :agent_relationships
-    resources :creates
-    resources :realizes
-    resources :produces
   end
 
   resources :works, :controller => 'manifestations', :except => [:index, :new, :create] do
@@ -76,7 +71,6 @@ Rails.application.routes.draw do
   resources :medium_of_performances
   resources :carrier_types
   resources :content_types
-  resources :extents
   resources :agent_types
 
   resources :agent_relationship_types
@@ -84,18 +78,34 @@ Rails.application.routes.draw do
   resources :manifestation_relationship_types
   resources :manifestation_relationships
 
-  resources :resource_import_files do
-    resources :resource_import_results, :only => [:index, :show, :destroy]
-  end
-  resources :resource_import_results
-  resources :agent_import_files do
-    resources :agent_import_results, :only => [:index, :show, :destroy]
-  end
+  resources :resource_import_files
+  resources :resource_import_results, :only => [:index, :show, :destroy]
+  resources :agent_import_files
   resources :agent_import_results, :only => [:index, :show, :destroy]
 
   resources :import_requests
 
   resources :picture_files
+
+  resources :agents do
+    resources :agent_merges
+    resources :agent_merge_lists
+  end
+  resources :agent_merge_lists do
+    resources :agents
+    resources :agent_merges
+  end
+  resources :agent_merges
+
+  resources :series_statements do
+    resources :series_statement_merges
+    resources :series_statement_merge_lists
+  end
+  resources :series_statement_merge_lists do
+    resources :series_statements
+    resources :series_statement_merges
+  end
+  resources :series_statement_merges
 
   get '/isbn/:isbn_id' => 'manifestations#index'
   get '/page/advanced_search' => 'page#advanced_search'

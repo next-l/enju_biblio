@@ -7,6 +7,12 @@ class AgentRelationshipsController < ApplicationController
   def index
     authorize AgentRelationship
     @agent_relationships = AgentRelationship.page(params[:page])
+    case
+    when @agent
+      @agent_relationships = @agent.agent_relationships.order('agent_relationships.position').page(params[:page])
+    else
+      @agent_relationships = AgentRelationship.page(params[:page])
+    end
   end
 
   # GET /agent_relationships/1
@@ -17,8 +23,12 @@ class AgentRelationshipsController < ApplicationController
   def new
     @agent_relationship = AgentRelationship.new
     authorize @agent_relationship
-    @agent_relationship.parent = Agent.find(params[:agent_id]) rescue nil
-    @agent_relationship.child = Agent.find(params[:child_id]) rescue nil
+    if @agent.blank?
+      redirect_to agents_url
+      return
+    else
+      @agent_relationship.agent = @agent
+    end
   end
 
   # GET /agent_relationships/1/edit
@@ -31,7 +41,7 @@ class AgentRelationshipsController < ApplicationController
     authorize @agent_relationship
 
     if @agent_relationship.save
-      redirect_to @agent_relationship, notice:  t('controller.successfully_created', :model => t('activerecord.models.agent_relationship'))
+      redirect_to @agent_relationship, notice: t('controller.successfully_created', model: t('activerecord.models.agent_relationship'))
     else
       render action: 'new'
     end
@@ -39,21 +49,28 @@ class AgentRelationshipsController < ApplicationController
 
   # PATCH/PUT /agent_relationships/1
   def update
-    if params[:move]
-      move_position(@agent_relationship, params[:move])
+    # 並べ替え
+    if @agent && params[:move]
+      move_position(@agent_relationship, params[:move], false)
+      redirect_to agent_relationships_url(agent_id: @agent_relationship.parent_id)
       return
     end
     if @agent_relationship.update(agent_relationship_params)
-      redirect_to @agent_relationship, notice:  t('controller.successfully_updated', :model => t('activerecord.models.agent_relationship'))
+      redirect_to @agent_relationship, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_relationship'))
     else
       render action: 'edit'
+      return
     end
   end
 
   # DELETE /agent_relationships/1
   def destroy
     @agent_relationship.destroy
-    redirect_to agent_relationships_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.agent_relationship'))
+    if @agent
+      redirect_to agents_url(agent_id: @agent.id), notice: t('controller.successfully_destroyed', model: t('activerecord.models.agent_relationship'))
+    else
+      redirect_to agent_relationships_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.agent_relationship'))
+    end
   end
 
   private

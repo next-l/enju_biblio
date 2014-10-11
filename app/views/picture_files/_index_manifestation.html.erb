@@ -1,6 +1,7 @@
 <div id="content_detail" class="ui-corner-all ui-widget-content">
-  <h1 class="title"><%= t('page.listing', :model => t('activerecord.models.picture_file')) -%></h1>
+<h1 class="title"><%= t('page.listing', model: t('activerecord.models.picture_file')) -%></h1>
 <div id="content_list">
+<p id="notice"><%= notice %></p>
 
 <h2 class="resource_title">
   [M] <%= link_to manifestation.original_title, manifestation -%>
@@ -27,14 +28,14 @@
       </td>
       <td><%= picture_file.picture_file_size -%></td>
       <td><%= picture_file.picture_content_type -%></td>
-      <td><%= link_to picture_file.picture_file_name, picture_file_path(picture_file, :format => :download, :size => 'original') -%></td>
+      <td><%= link_to picture_file.picture_file_name, picture_file_path(picture_file, format: :download, size: 'original') -%></td>
       <td>
         <%= link_to t('page.show'), picture_file -%>
         <%- if policy(picture_file).update? -%>
           <%= link_to t('page.edit'), edit_picture_file_path(picture_file) -%>
         <% end %>
         <%- if policy(picture_file).destroy? -%>
-          <%= link_to t('page.destroy'), picture_file, :data => {:confirm => t('page.are_you_sure')}, :method => :delete -%>
+          <%= link_to t('page.destroy'), picture_file, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
         <%- end -%>
       </td>
     </tr>
@@ -48,7 +49,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <%- if policy(PictureFile).create? -%>
     <ul>
-      <li><%= link_to t('page.new', :model => t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: manifestation) -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: manifestation) -%></li>
       <li><%= link_to t('picture_file.all_picture'), picture_files_path -%></li>
     </ul>
   <%- end -%>

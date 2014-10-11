@@ -1,11 +1,12 @@
 --- 
 carrier_type_00001: 
-  name: print
-  display_name: "en: print\r\n\
-    ja: 印刷物"
+  name: volume
+  display_name: "en: Volume\r\n\
+    ja: 冊子体"
   id: 1
   position: 1
 carrier_type_00002: 
+<<<<<<< HEAD
   name: cd
   display_name: CD
   id: 2
@@ -13,12 +14,23 @@ carrier_type_00002:
 carrier_type_00003: 
   name: dvd
   display_name: DVD
+=======
+  name: audio_disc
+  display_name: "en: Audio disc\r\n\
+    ja: オーディオディスク"
+  id: 2
+  position: 2
+carrier_type_00003: 
+  name: videodisc
+  display_name: "en: Videodisc\r\n\
+    ja: ビデオディスク"
+>>>>>>> 1.1
   id: 3
   position: 3
 carrier_type_00004: 
-  name: file
-  display_name: "en: file\r\n\
-    ja: コンピュータファイル"
+  name: online_resource
+  display_name: "en: Online resource\r\n\
+    ja: オンラインリソース"
   id: 4
   position: 4
 

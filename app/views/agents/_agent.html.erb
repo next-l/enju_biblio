@@ -7,7 +7,7 @@
       <td>
         <%- if policy(agent).destroy? -%>
           <%= link_to t('page.edit'), edit_agent_path(agent) -%>
-          <%= link_to t('agent.add_derivation'), agent_agents_path(agent, :mode => 'add') -%>
+          <%= link_to t('agent.add_derivation'), agent_agents_path(agent, mode: 'add') -%>
         <%- end -%>
       </td>
     </tr>

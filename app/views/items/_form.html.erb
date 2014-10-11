@@ -1,7 +1,7 @@
 <%= render 'page/required_field' %>
 <%= simple_form_for(@item) do |f| -%>
   <%= f.error_messages -%>
-  <%= f.hidden_field :manifestation_id if @item.manifestation_id %>
+  <%= f.hidden_field :manifestation_id, value: @item.manifestation_id if @item.manifestation_id %>
 
   <div class="field">
     <%= f.label "#{t('activerecord.models.library')} / #{t('activerecord.models.shelf')}" -%>
@@ -92,7 +92,7 @@
 
   <div class="actions">
     <%= f.hidden_field :lock_version %>
-    <%= f.submit %>
+    <%= f.submit data: {disable_with: t('page.saving')} -%>
   </div>
   <%= javascript_tag("$(function(){$('#library_id').focus()})") %>
 <%- end -%>

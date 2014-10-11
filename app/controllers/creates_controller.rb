@@ -1,8 +1,8 @@
 class CreatesController < ApplicationController
   before_action :set_create, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
   before_action :get_agent, :get_work
   before_action :prepare_options, :only => [:new, :edit]
+  after_action :verify_authorized
 
   # GET /creates
   # GET /creates.json
@@ -19,7 +19,7 @@ class CreatesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @creates }
+      format.json { render json: @creates }
     end
   end
 
@@ -28,16 +28,16 @@ class CreatesController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @create }
+      format.json { render json: @create }
     end
   end
 
   # GET /creates/new
   def new
-    if @agent and @work.blank?
+    if @agent && @work.blank?
       redirect_to agent_works_url(@patorn)
       return
-    elsif @work and @agent.blank?
+    elsif @work && @agent.blank?
       redirect_to work_agents_url(@work)
       return
     else
@@ -60,12 +60,12 @@ class CreatesController < ApplicationController
 
     respond_to do |format|
       if @create.save
-        format.html { redirect_to @create, :notice => t('controller.successfully_created', :model => t('activerecord.models.create')) }
-        format.json { render :json => @create, :status => :created, :location => @create }
+        format.html { redirect_to @create, notice: t('controller.successfully_created', model: t('activerecord.models.create')) }
+        format.json { render json: @create, status: :created, location: @create }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @create.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @create.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -74,7 +74,7 @@ class CreatesController < ApplicationController
   # PUT /creates/1.json
   def update
     # 並べ替え
-    if @work and params[:move]
+    if @work && params[:move]
       move_position(@create, params[:move], false)
       redirect_to creates_url(work_id: @create.work_id)
       return
@@ -82,12 +82,12 @@ class CreatesController < ApplicationController
 
     respond_to do |format|
       if @create.update_attributes(create_params)
-        format.html { redirect_to @create, :notice => t('controller.successfully_updated', :model => t('activerecord.models.create')) }
+        format.html { redirect_to @create, notice: t('controller.successfully_updated', model: t('activerecord.models.create')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @create.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @create.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -98,7 +98,7 @@ class CreatesController < ApplicationController
     @create.destroy
 
     respond_to do |format|
-      flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.create'))
+      flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.create'))
       case
       when @agent
         format.html { redirect_to agent_works_url(@agent) }

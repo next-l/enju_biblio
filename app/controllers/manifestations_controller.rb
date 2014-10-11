@@ -113,19 +113,37 @@ class ManifestationsController < ApplicationController
       if params[:pub_date_from] and params[:pub_date_to]
         body[:filter][:and] << {range: {pub_year: {gte: params[:pub_date_from].to_i, lt: params[:pub_date_to].to_i + 1}}}
       end
-      search = Manifestation.search(query.merge(body), routing: role_ids)
-      @manifestations = search.page(params[:page]).records
-      @manifestation_ids = search.results.map(&:id).join(',')
-      @count[:total] = search.results.total
-      @count[:query_result] = search.results.total
-      @query = params[:query]
-      flash[:search_query] = Digest::SHA1.hexdigest(Marshal.dump(params[:query]))
-      @search_query = flash[:search_query]
-      @carrier_type_facet = search.response["facets"]["carrier_type"]["terms"]
-      @library_facet = search.response["facets"]["library"]["terms"]
-      @language_facet = search.response["facets"]["language"]["terms"]
-      @pub_year_facet = search.response["facets"]["pub_year"]["ranges"]
-      @search_engines = SearchEngine.all
+    end
+
+    respond_to do |format|
+      format.html
+      format.html+phone
+      format.xml  { render xml: @manifestations }
+      format.sru  { render layout: false }
+      format.rss  { render layout: false }
+      format.txt  { render layout: false }
+      format.rdf  { render layout: false }
+      format.atom
+      format.mods
+      format.json { render json: @manifestations }
+      format.js
+      if defined?(EnjuOai)
+        format.oai {
+          case params[:verb]
+          when 'Identify'
+            render template: 'manifestations/identify'
+          when 'ListMetadataFormats'
+            render template: 'manifestations/list_metadata_formats'
+          when 'ListSets'
+            @series_statements = SeriesStatement.select([:id, :original_title])
+            render template: 'manifestations/list_sets'
+          when 'ListIdentifiers'
+            render template: 'manifestations/list_identifiers'
+          when 'ListRecords'
+            render template: 'manifestations/list_records'
+          end
+        }
+      end
     end
   end
 
@@ -156,22 +174,22 @@ class ManifestationsController < ApplicationController
     if @manifestation.series_master?
       flash.keep(:notice) if flash[:notice]
       flash[:manifestation_id] = @manifestation.id
-      redirect_to manifestations_url(:parent_id => @manifestation.id)
+      redirect_to manifestations_url(parent_id: @manifestation.id)
       return
     end
 
     if defined?(EnjuCirculation)
-      @reserved_count = Reserve.waiting.where(:manifestation_id => @manifestation.id, :checked_out_at => nil).count
-      @reserve = current_user.reserves.where(:manifestation_id => @manifestation.id).first if user_signed_in?
+      @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id, checked_out_at: nil).count
+      @reserve = current_user.reserves.where(manifestation_id: @manifestation.id).first if user_signed_in?
     end
 
     if defined?(EnjuQuestion)
-      @questions = @manifestation.questions(:user => current_user, :page => params[:question_page])
+      @questions = @manifestation.questions(user: current_user, page: params[:question_page])
     end
 
     if @manifestation.attachment.path
       if Setting.uploaded_file.storage == :s3
-        data = open(@manifestation.attachment.url).read.force_encoding('UTF-8')
+        data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
       end
@@ -185,27 +203,27 @@ class ManifestationsController < ApplicationController
       format.xml  {
         case params[:mode]
         when 'related'
-          render :template => 'manifestations/related'
+          render template: 'manifestations/related'
         else
-          render :xml => @manifestation
+          render xml: @manifestation
         end
       }
       format.rdf
       format.mods
-      format.json { render :json => @manifestation }
-      #format.atom { render :template => 'manifestations/oai_ore' }
+      format.json { render json: @manifestation }
+      #format.atom { render template: 'manifestations/oai_ore' }
       #format.js
       format.download {
         if @manifestation.attachment.path
           if Setting.uploaded_file.storage == :s3
-            send_data @manifestation.attachment.data, :filename => File.basename(@manifestation.attachment_file_name), :type => 'application/octet-stream'
+            send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
-            if File.exist?(file) and File.file?(file)
-              send_file file, :filename => File.basename(@manifestation.attachment_file_name), :type => 'application/octet-stream'
+            if File.exist?(file) && File.file?(file)
+              send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
             end
           end
         else
-          render :template => 'page/404', :status => 404
+          render template: 'page/404', status: 404
         end
       }
       if defined?(EnjuOai)
@@ -219,20 +237,18 @@ class ManifestationsController < ApplicationController
   def new
     @manifestation = Manifestation.new
     authorize @manifestation
-    @manifestation.language = Language.where(:iso_639_1 => @locale).first
-    if params[:parent_id].present?
-    parent = Manifestation.where(:id => params[:parent_id]).first
-      if parent
-        @manifestation.parent_id = parent.id
-        @manifestation.original_title = parent.original_title
-        @manifestation.title_transcription = parent.title_transcription
-        @manifestation.periodical = true if parent.periodical
-      end
+    @manifestation.language = Language.where(iso_639_1: @locale).first
+    @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
+    if @parent
+      @manifestation.parent_id = @parent.id
+      @manifestation.original_title = @parent.original_title
+      @manifestation.title_transcription = @parent.title_transcription
+      @manifestation.serial = true if @parent.serial
     end
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @manifestation }
+      format.json { render json: @manifestation }
     end
   end
 
@@ -245,8 +261,8 @@ class ManifestationsController < ApplicationController
     end
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
-        @bookmark = current_user.bookmarks.where(:manifestation_id => @manifestation.id).first if @manifestation rescue nil
-        render :partial => 'manifestations/tag_edit', :locals => {:manifestation => @manifestation}
+        @bookmark = current_user.bookmarks.where(manifestation_id: @manifestation.id).first if @manifestation rescue nil
+        render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
       store_location unless params[:mode] == 'tag_edit'
     end
@@ -257,7 +273,7 @@ class ManifestationsController < ApplicationController
   def create
     @manifestation = Manifestation.new(manifestation_params)
     authorize @manifestation
-    parent = Manifestation.where(:id => @manifestation.parent_id).first
+    parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
     end
@@ -268,12 +284,12 @@ class ManifestationsController < ApplicationController
           parent.derived_manifestations << @manifestation
         end
 
-        format.html { redirect_to @manifestation, :notice => t('controller.successfully_created', :model => t('activerecord.models.manifestation')) }
-        format.json { render :json => @manifestation, :status => :created, :location => @manifestation }
+        format.html { redirect_to @manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation')) }
+        format.json { render json: @manifestation, status: :created, location: @manifestation }
       else
         prepare_options
-        format.html { render :action => "new" }
-        format.json { render :json => @manifestation.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @manifestation.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -283,12 +299,13 @@ class ManifestationsController < ApplicationController
   def update
     respond_to do |format|
       if @manifestation.update_attributes(manifestation_params)
-        format.html { redirect_to @manifestation, :notice => t('controller.successfully_updated', :model => t('activerecord.models.manifestation')) }
+        #Sunspot.commit
+        format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
         prepare_options
-        format.html { render :action => "edit" }
-        format.json { render :json => @manifestation.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @manifestation.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -296,8 +313,14 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1
   # DELETE /manifestations/1.json
   def destroy
+    # workaround
+    @manifestation.identifiers.destroy_all
+    @manifestation.creators.destroy_all
+    @manifestation.publishers.destroy_all
+    @manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
+    @manifestation.reload
     @manifestation.destroy
-    redirect_to manifestations_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.manifestation'))
+    redirect_to manifestations_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.manifestation'))
   end
 
   private
@@ -323,7 +346,7 @@ class ManifestationsController < ApplicationController
     #end
 
     #unless options[:library].blank?
-    #  library_list = options[:library].split.uniq.join(' and ')
+    #  library_list = options[:library].split.uniq.join(' && ')
     #  query = "#{query} library_sm:#{library_list}"
     #end
 
@@ -379,7 +402,7 @@ class ManifestationsController < ApplicationController
       query = "#{query} item_identifier_sm:#{options[:item_identifier]}"
     end
 
-    unless options[:number_of_pages_at_least].blank? and options[:number_of_pages_at_most].blank?
+    unless options[:number_of_pages_at_least].blank? && options[:number_of_pages_at_most].blank?
       number_of_pages = {}
       number_of_pages[:at_least] = options[:number_of_pages_at_least].to_i
       number_of_pages[:at_most] = options[:number_of_pages_at_most].to_i
@@ -428,31 +451,31 @@ class ManifestationsController < ApplicationController
   def render_mode(mode)
     case mode
     when 'holding'
-      render :partial => 'manifestations/show_holding', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_holding', locals: {manifestation: @manifestation}
     when 'barcode'
       if defined?(EnjuBarcode)
         barcode = Barby::QrCode.new(@manifestation.id)
-        send_data(barcode.to_svg, :disposition => 'inline', :type => 'image/svg+xml')
+        send_data(barcode.to_svg, disposition: 'inline', type: 'image/svg+xml')
       end
     when 'tag_edit'
       if defined?(EnjuBookmark)
-        render :partial => 'manifestations/tag_edit', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
     when 'tag_list'
       if defined?(EnjuBookmark)
-        render :partial => 'manifestations/tag_list', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/tag_list', locals: {manifestation: @manifestation}
       end
     when 'show_index'
-      render :partial => 'manifestations/show_index', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_index', locals: {manifestation: @manifestation}
     when 'show_creators'
-      render :partial => 'manifestations/show_creators', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_creators', locals: {manifestation: @manifestation}
     when 'show_all_creators'
-      render :partial => 'manifestations/show_creators', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/show_creators', locals: {manifestation: @manifestation}
     when 'pickup'
-      render :partial => 'manifestations/pickup', :locals => {:manifestation => @manifestation}
+      render partial: 'manifestations/pickup', locals: {manifestation: @manifestation}
     when 'calil_list'
       if defined?(EnjuCalil)
-        render :partial => 'manifestations/calil_list', :locals => {:manifestation => @manifestation}
+        render partial: 'manifestations/calil_list', locals: {manifestation: @manifestation}
       end
     else
       false
@@ -523,7 +546,7 @@ class ManifestationsController < ApplicationController
   end
 
   def set_pub_date(query, options)
-    unless options[:pub_date_from].blank? and options[:pub_date_to].blank?
+    unless options[:pub_date_from].blank? && options[:pub_date_to].blank?
       options[:pub_date_from].to_s.gsub!(/\D/, '')
       options[:pub_date_to].to_s.gsub!(/\D/, '')
       pub_date = parse_pub_date(options)
@@ -533,7 +556,7 @@ class ManifestationsController < ApplicationController
   end
 
   def set_acquisition_date(query, options)
-    unless options[:acquired_from].blank? and options[:acquired_to].blank?
+    unless options[:acquired_from].blank? && options[:acquired_to].blank?
       options[:acquired_from].to_s.gsub!(/\D/, '')
       options[:acquired_to].to_s.gsub!(/\D/, '')
 

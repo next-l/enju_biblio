@@ -9,6 +9,9 @@ describe "realizes/new" do
       :agent_id => 1
     ).as_new_record)
     @realize_types = RealizeType.all
+    @ability = Object.new
+    @ability.extend(CanCan::Ability)
+    controller.stub(:current_ability) { @ability }
   end
 
   it "renders new realize form" do

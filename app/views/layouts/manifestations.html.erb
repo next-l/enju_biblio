@@ -5,15 +5,16 @@
   <title><%= resource_title(@manifestation, controller.action_name) %></title>
   <%= render 'page/include' %>
   <%- if controller.action_name == 'index' -%>
-    <%= auto_discovery_link_tag(:rss, url_for(params.merge(:format => :rss, :page => nil, :commit => nil, :only_path => true)), :title => (t('manifestation.library_group_manifestation', :library_group_name => @library_group.display_name.localize) + " (RSS)")) %>
-    <%= auto_discovery_link_tag(:atom, url_for(params.merge(:format => :atom, :page => nil, :commit => nil, :only_path => true)), :title => (t('manifestation.library_group_manifestation', :library_group_name => @library_group.display_name.localize) + " (Atom)")) %>
+    <%= auto_discovery_link_tag(:rss, url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (RSS)")) %>
+    <%= auto_discovery_link_tag(:atom, url_for(params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (Atom)")) %>
   <%- end -%>
-  <% if controller.action_name == 'show' %>
+  <% if %w(show edit).include?(controller.action_name) %>
     <% if Setting.book_jacket.source == :google %>
       <script type="text/javascript" src="https://www.google.com/jsapi"></script>
       <%= render 'manifestations/google_book_thumbnail_header' %>
     <% end %>
   <% end %>
+  <link rel="search" type="application/opensearchdescription+xml" title="<%= LibraryGroup.site_config.display_name.localize %>" href="<%= page_opensearch_url(format: :xml) %>" />
 </head>
 <body>
 

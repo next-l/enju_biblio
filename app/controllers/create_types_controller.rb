@@ -1,12 +1,11 @@
 class CreateTypesController < ApplicationController
   before_action :set_create_type, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /create_types
   def index
     authorize CreateType
-    @create_types = policy_scope(CreateType).order(:position)
+    @create_types = CreateType.order(:position)
   end
 
   # GET /create_types/1
@@ -41,8 +40,9 @@ class CreateTypesController < ApplicationController
       move_position(@create_type, params[:move])
       return
     end
+
     if @create_type.update(create_type_params)
-      redirect_to @create_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.create_type'))
+      redirect_to @create_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.create_type'))
     else
       render action: 'edit'
     end
@@ -51,7 +51,7 @@ class CreateTypesController < ApplicationController
   # DELETE /create_types/1
   def destroy
     @create_type.destroy
-    redirect_to create_types_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.create_type'))
+    redirect_to create_types_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.create_type'))
   end
 
   private

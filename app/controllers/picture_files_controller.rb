@@ -1,7 +1,7 @@
 class PictureFilesController < ApplicationController
   before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
   before_action :get_attachable, :only => [:index, :new]
+  after_action :verify_authorized
 
   # GET /picture_files
   # GET /picture_files.json
@@ -15,7 +15,7 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @picture_files }
+      format.json { render json: @picture_files }
     end
   end
 
@@ -33,7 +33,7 @@ class PictureFilesController < ApplicationController
 
     if @picture_file.picture.path
       if Setting.uploaded_file.storage == :s3
-        file = open(@picture_file.picture.expiring_url).read.force_encoding('UTF-8')
+        file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
       else
         file = @picture_file.picture.path(size)
       end
@@ -41,7 +41,7 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @picture_file }
+      format.json { render json: @picture_file }
       format.html.phone {
         if params[:format] == 'download'
           render_image(file)
@@ -67,7 +67,7 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.json { render :json => @picture_file }
+      format.json { render json: @picture_file }
     end
   end
 
@@ -83,11 +83,11 @@ class PictureFilesController < ApplicationController
 
     respond_to do |format|
       if @picture_file.save
-        format.html { redirect_to @picture_file, :notice => t('controller.successfully_created', :model => t('activerecord.models.picture_file')) }
-        format.json { render :json => @picture_file, :status => :created, :location => @picture_file }
+        format.html { redirect_to @picture_file, notice: t('controller.successfully_created', model: t('activerecord.models.picture_file')) }
+        format.json { render json: @picture_file, status: :created, location: @picture_file }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @picture_file.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @picture_file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -100,22 +100,30 @@ class PictureFilesController < ApplicationController
       move_position(@picture_file, params[:move], false)
       case
       when @picture_file.picture_attachable.is_a?(Shelf)
-        redirect_to shelf_picture_files_url(@picture_file.picture_attachable)
+        redirect_to picture_files_url(shelf_id: @picture_file.picture_attachable_id)
       when @picture_file.picture_attachable.is_a?(Manifestation)
-        redirect_to manifestation_picture_files_url(@picture_file.picture_attachable)
+        redirect_to picture_files_url(manifestation_id: @picture_file.picture_attachable_id)
       else
-        redirect_to picture_files_url
+        if defined?(EnjuEvent)
+          if @picture_file.picture_attachable.is_a?(Event)
+            redirect_to picture_files_url(manifestation_id: @picture_file.picture_attachable_id)
+          else
+            redirect_to picture_files_url
+          end
+        else
+          redirect_to picture_files_url
+        end
       end
       return
     end
 
     respond_to do |format|
       if @picture_file.update_attributes(picture_file_params)
-        format.html { redirect_to @picture_file, :notice => t('controller.successfully_updated', :model => t('activerecord.models.picture_file')) }
+        format.html { redirect_to @picture_file, notice: t('controller.successfully_updated', model: t('activerecord.models.picture_file')) }
         format.json { head :no_content }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @picture_file.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @picture_file.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -123,17 +131,33 @@ class PictureFilesController < ApplicationController
   # DELETE /picture_files/1
   # DELETE /picture_files/1.json
   def destroy
+    attachable = @picture_file.picture_attachable
     @picture_file.destroy
     flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.picture_file'))
 
     respond_to do |format|
-      if @shelf
-        format.html { redirect_to shelf_picture_files_url(@shelf) }
-        format.json { head :no_content }
-      else
-        format.html { redirect_to picture_files_url }
-        format.json { head :no_content }
-      end
+      flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.picture_file'))
+      format.html {
+        case attachable.class.name
+        when 'Manifestation'
+          redirect_to picture_files_url(manifestation_id: attachable.id)
+        when 'Agent'
+          redirect_to picture_files_url(agent_id: attachable.id)
+        when 'Shelf'
+          redirect_to picture_files_url(shelf_id: attachable.id)
+        else
+          if defined?(EnjuEvent)
+            if attachable.class.name == 'Event'
+              redirect_to picture_files_url(event_id: attachable.id)
+            else
+              redirect_to picture_files_url
+            end
+          else
+            redirect_to picture_files_url
+          end
+        end
+      }
+      format.json { head :no_content }
     end
   end
 
@@ -176,10 +200,10 @@ class PictureFilesController < ApplicationController
 
     if @picture_file.picture.path
       if Setting.uploaded_file.storage == :s3
-        send_data file, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition
+        send_data file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
       else
-        if File.exist?(file) and File.file?(file)
-          send_file file, :filename => File.basename(@picture_file.picture_file_name), :type => @picture_file.picture_content_type, :disposition => disposition
+        if File.exist?(file) && File.file?(file)
+          send_file file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
         end
       end
     end

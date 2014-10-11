@@ -29,7 +29,7 @@ class CountriesController < ApplicationController
     authorize @country
 
     if @country.save
-      redirect_to @country, notice:  t('controller.successfully_created', :model => t('activerecord.models.country'))
+      redirect_to @country, notice: t('controller.successfully_created', model: t('activerecord.models.country'))
     else
       render action: 'new'
     end
@@ -41,8 +41,9 @@ class CountriesController < ApplicationController
       move_position(@country, params[:move])
       return
     end
+
     if @country.update(country_params)
-      redirect_to @country, notice:  t('controller.successfully_updated', :model => t('activerecord.models.country'))
+      redirect_to @country, notice: t('controller.successfully_updated', model: t('activerecord.models.country'))
     else
       render action: 'edit'
     end
@@ -51,7 +52,7 @@ class CountriesController < ApplicationController
   # DELETE /countries/1
   def destroy
     @country.destroy
-    redirect_to countries_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.country'))
+    redirect_to countries_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.country'))
   end
 
   private

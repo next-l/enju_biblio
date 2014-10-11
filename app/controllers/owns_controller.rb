@@ -17,7 +17,7 @@ class OwnsController < ApplicationController
 
     respond_to do |format|
       format.html # index.html.erb
-      format.json { render :json => @owns }
+      format.json { render json: @owns }
     end
   end
 
@@ -26,16 +26,16 @@ class OwnsController < ApplicationController
   def show
     respond_to do |format|
       format.html # show.html.erb
-      format.json { render :json => @own }
+      format.json { render json: @own }
     end
   end
 
   # GET /owns/new
   def new
-    if @item and @agent.blank?
+    if @item && @agent.blank?
       redirect_to item_agents_url(@item)
       return
-    elsif @agent and @item.blank?
+    elsif @agent && @item.blank?
       redirect_to agent_items_url(@agent)
       return
     else
@@ -58,11 +58,11 @@ class OwnsController < ApplicationController
 
     respond_to do |format|
       if @own.save
-        format.html { redirect_to @own, :notice => t('controller.successfully_created', :model => t('activerecord.models.own')) }
-        format.json { render :json => @own, :status => :created, :location => @own }
+        format.html { redirect_to @own, notice: t('controller.successfully_created', model: t('activerecord.models.own')) }
+        format.json { render json: @own, status: :created, location: @own }
       else
-        format.html { render :action => "new" }
-        format.json { render :json => @own.errors, :status => :unprocessable_entity }
+        format.html { render action: "new" }
+        format.json { render json: @own.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -70,7 +70,7 @@ class OwnsController < ApplicationController
   # PUT /owns/1
   # PUT /owns/1.json
   def update
-    if @item and params[:move]
+    if @item && params[:move]
       move_position(@own, params[:move], false)
       redirect_to owns_url(item_id: @own.item_id)
       return
@@ -78,11 +78,11 @@ class OwnsController < ApplicationController
 
     respond_to do |format|
       if @own.update_attributes(own_params)
-        format.html { redirect_to @own, :notice => t('controller.successfully_updated', :model => t('activerecord.models.own')) }
+        format.html { redirect_to @own, notice: t('controller.successfully_updated', model: t('activerecord.models.own')) }
         format.json { head :no_content }
       else
-        format.html { render :action => "edit" }
-        format.json { render :json => @own.errors, :status => :unprocessable_entity }
+        format.html { render action: "edit" }
+        format.json { render json: @own.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -94,7 +94,7 @@ class OwnsController < ApplicationController
 
     respond_to do |format|
       format.html {
-        flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.own'))
+        flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.own'))
         case
         when @agent
           redirect_to agent_owns_url(@agent)

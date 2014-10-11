@@ -41,6 +41,7 @@ class LicensesController < ApplicationController
       move_position(@license, params[:move])
       return
     end
+
     if @license.update(license_params)
       redirect_to @license, notice:  t('controller.successfully_updated', :model => t('activerecord.models.license'))
     else

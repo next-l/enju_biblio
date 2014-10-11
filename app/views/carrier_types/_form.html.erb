@@ -1,5 +1,5 @@
 <%= simple_nested_form_for(@carrier_type) do |f| %>
-  <%= f.error_notification %>
+  <%= f.error_messages -%>
 
   <div class="field">
     <%= f.label :name %><br />
@@ -9,7 +9,7 @@
     <%= f.label :display_name %><br />
     <%= f.text_area :display_name %>
   </div>
-  <% if defined?(EnjuCirculation) %>
+  <% if defined?(EnjuCirculation) and !@carrier_type.new_record? %>
     <%= render 'carrier_types/checkout_form', :f => f %>
   <% end %>
   <div class="field">

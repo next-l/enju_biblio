@@ -6,6 +6,9 @@ describe "owns/new" do
       :item_id => 1,
       :agent_id => 1
     ).as_new_record)
+    @ability = Object.new
+    @ability.extend(CanCan::Ability)
+    controller.stub(:current_ability) { @ability }
   end
 
   it "renders new own form" do

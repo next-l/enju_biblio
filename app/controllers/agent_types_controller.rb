@@ -29,7 +29,7 @@ class AgentTypesController < ApplicationController
     authorize @agent_type
 
     if @agent_type.save
-      redirect_to @agent_type, notice:  t('controller.successfully_created', :model => t('activerecord.models.agent_type'))
+      redirect_to @agent_type, notice: t('controller.successfully_created', model: t('activerecord.models.agent_type'))
     else
       render action: 'new'
     end
@@ -41,8 +41,9 @@ class AgentTypesController < ApplicationController
       move_position(@agent_type, params[:move])
       return
     end
+
     if @agent_type.update(agent_type_params)
-      redirect_to @agent_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.agent_type'))
+      redirect_to @agent_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_type'))
     else
       render action: 'edit'
     end
@@ -51,7 +52,7 @@ class AgentTypesController < ApplicationController
   # DELETE /agent_types/1
   def destroy
     @agent_type.destroy
-    redirect_to agent_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.agent_type'))
+    redirect_to agent_types_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.agent_type'))
   end
 
   private

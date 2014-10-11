@@ -29,7 +29,7 @@ class IdentifierTypesController < ApplicationController
     authorize @identifier_type
 
     if @identifier_type.save
-      redirect_to @identifier_type, notice:  t('controller.successfully_created', :model => t('activerecord.models.identifier_type'))
+      redirect_to @identifier_type, notice: t('controller.successfully_created', model: t('activerecord.models.identifier_type'))
     else
       render action: 'new'
     end
@@ -41,8 +41,9 @@ class IdentifierTypesController < ApplicationController
       move_position(@identifier_type, params[:move])
       return
     end
+
     if @identifier_type.update(identifier_type_params)
-      redirect_to @identifier_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.identifier_type'))
+      redirect_to @identifier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.identifier_type'))
     else
       render action: 'edit'
     end
@@ -51,7 +52,7 @@ class IdentifierTypesController < ApplicationController
   # DELETE /identifier_types/1
   def destroy
     @identifier_type.destroy
-    redirect_to identifier_types_url, notice: t('controller.successfully_destroyed', :model => t('activerecord.models.identifier_type'))
+    redirect_to identifier_types_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.identifier_type'))
   end
 
   private

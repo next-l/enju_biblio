@@ -1,8 +1,8 @@
 class IdentifierType < ActiveRecord::Base
   include MasterModel
-  default_scope {order("identifier_types.position")}
+  default_scope { order('identifier_types.position') }
   has_many :identifiers
-  validates :name, :format => {:with => /\A[0-9a-z][0-9a-z_\-]*[0-9a-z]\Z/}
+  validates :name, format: { with: /\A[0-9a-z][0-9a-z_\-]*[0-9a-z]\Z/ }
 end
 
 # == Schema Information

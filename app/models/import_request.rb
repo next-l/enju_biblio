@@ -1,11 +1,11 @@
 class ImportRequest < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordModel
-  default_scope {order('import_requests.id DESC')}
+  default_scope { order('import_requests.id DESC') }
   belongs_to :manifestation
   belongs_to :user
   validates_presence_of :isbn
   validate :check_isbn
-  #validate :check_imported, :on => :create
+  #validate :check_imported, on: :create
   #validates_uniqueness_of :isbn, :if => Proc.new{|request| ImportRequest.where("created_at > ?", 1.day.ago).collect(&:isbn).include?(request.isbn)}
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_nii_cinii_books if defined?(EnjuNii)
@@ -27,7 +27,7 @@ class ImportRequest < ActiveRecord::Base
 
   def check_imported
     if isbn.present?
-      if Manifestation.where(:isbn => isbn).first
+      if Identifier.where(body: isbn, identifier_type_id: IdentifierType.where(name: 'isbn').first_or_create.id).first.try(:manifestation)
         errors.add(:isbn, I18n.t('import_request.isbn_taken'))
       end
     end

@@ -10,7 +10,8 @@ class CreateReserves < ActiveRecord::Migration
       t.datetime :canceled_at
       t.datetime :expired_at
       t.datetime :deleted_at
-      t.boolean :expiration_notice_to_patron, :default => false
+      t.string :state
+      t.boolean :expiration_notice_to_agent, :default => false
       t.boolean :expiration_notice_to_library, :default => false
     end
 

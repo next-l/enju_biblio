@@ -2,8 +2,10 @@ class SeriesStatement < ActiveRecord::Base
   include Elasticsearch::Model
   include Elasticsearch::Model::Callbacks
 
+  has_many :series_statement_merges, dependent: :destroy
+  has_many :series_statement_merge_lists, through: :series_statement_merges
   belongs_to :manifestation, touch: true
-  belongs_to :root_manifestation, :foreign_key => :root_manifestation_id, :class_name => 'Manifestation'
+  belongs_to :root_manifestation, foreign_key: :root_manifestation_id, class_name: 'Manifestation', touch: true
   validates_presence_of :original_title
   before_save :create_root_series_statement
 
@@ -31,7 +33,7 @@ class SeriesStatement < ActiveRecord::Base
       indexes :numbering_subseries
       indexes :manifestation_id, type: 'integer'
       indexes :position, type: 'integer'
-      indexes :series_statement_merge_list_ids, type: 'integer' if defined?(EnjuResourceMerge)
+      indexes :series_statement_merge_list_ids, type: 'integer'
     end
   end
 
@@ -54,16 +56,11 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   def create_root_series_statement
-    if series_master? and root_manifestation.nil?
+    if series_master? && root_manifestation.nil?
       self.root_manifestation = manifestation
     else
       self.root_manifestation = nil
     end
-  end
-
-  if defined?(EnjuResourceMerge)
-    has_many :series_statement_merges, :dependent => :destroy
-    has_many :series_statement_merge_lists, :through => :series_statement_merges
   end
 end
 

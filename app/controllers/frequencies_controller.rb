@@ -1,12 +1,11 @@
 class FrequenciesController < ApplicationController
   before_action :set_frequency, only: [:show, :edit, :update, :destroy]
   after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
 
   # GET /frequencies
   def index
     authorize Frequency
-    @frequencies = policy_scope(Frequency).order(:position)
+    @frequencies = Frequency.order(:position)
   end
 
   # GET /frequencies/1
@@ -29,7 +28,7 @@ class FrequenciesController < ApplicationController
     authorize @frequency
 
     if @frequency.save
-      redirect_to @frequency, notice:  t('controller.successfully_created', :model => t('activerecord.models.frequency'))
+      redirect_to @frequency, notice: t('controller.successfully_created', model: t('activerecord.models.frequency'))
     else
       render action: 'new'
     end
@@ -41,8 +40,9 @@ class FrequenciesController < ApplicationController
       move_position(@frequency, params[:move])
       return
     end
+
     if @frequency.update(frequency_params)
-      redirect_to @frequency, notice:  t('controller.successfully_updated', :model => t('activerecord.models.frequency'))
+      redirect_to @frequency, notice: t('controller.successfully_updated', model: t('activerecord.models.frequency'))
     else
       render action: 'edit'
     end
@@ -51,7 +51,7 @@ class FrequenciesController < ApplicationController
   # DELETE /frequencies/1
   def destroy
     @frequency.destroy
-    redirect_to frequencies_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.frequency'))
+    redirect_to frequencies_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.frequency'))
   end
 
   private

@@ -7,7 +7,6 @@ en:
       create_type: Create type
       embody: Embody
       exemplify: Exemplify
-      extent: Extent
       form_of_work: Form of works
       frequency: Frequency of issue
       import_request: Import request
@@ -39,6 +38,10 @@ en:
       identifier_type: Identifier type
       resource_export_file: Resource export
       agent_export_file: Agent export
+      agent_merge_list: Patron merge list
+      agent_merge: Patrom merge
+      series_statement_merge: Series statement merge
+      series_statement_merge_list: Series statement merge list
 
     attributes:
       manifestation:
@@ -82,12 +85,17 @@ en:
         contributor_string: Contributor
         publisher_string: Publisher
         series_statement_string: Series statement
-        periodical: Serial publication
+        serial: Serial publication
         series_master: Series master
         subject: Subject
         classification: Classification
         identifier: Identifier
         statement_of_responsibility: Statement of responsibility
+        publication_place: Publication place
+        parent_id: Parent
+        extent: Extent
+        dimensions: Dimensions
+        fulltext_content: Fulltext content
       manifestation/subjects:
           term: Subject
       manifestation/classifications:
@@ -188,14 +196,14 @@ en:
         title_transcription: Title transcription
         note: Note
         series_master: Master
-        volume_nunber_string: Volume number
+        volume_number_string: Volume number
         creator_string: Creator
       country:
         name: Name
         display_name: Display name
-        alpha_2: Alpha 2
-        alpha_3: Alpha 3
-        numeric_3: Numeric 3
+        alpha_2: ISO 3166-1 alpha-2
+        alpha_3: ISO 3166-1 alpha-3
+        numeric_3: ISO 3166-1 numeric
         note: Note
         position: Position
       medium_of_performance:
@@ -204,11 +212,6 @@ en:
         note: Note
         position: Position
       content_type:
-        name: Name
-        display_name: Display name
-        note: Note
-        position: Position
-      extent:
         name: Name
         display_name: Display name
         note: Note
@@ -289,6 +292,7 @@ en:
         position: Position
       resource_import_result:
         body: Body
+        error_message: Error message
       agent_import_result:
         body: Body
       create_type:
@@ -315,21 +319,102 @@ en:
         resource_export_file_name: Filename
         resource_export_file_size: Size
         state: State
+      agent_merge_list:
+        title: Title
+      agent_merge:
+      series_statement_merge_list:
+        title: Title
+      series_statement_merge:
 
   resource_import_file:
     update_relationship: Update relationship
+    default_shelf: If "shelf" column is not set in the TSV file, this shelf is set to the new item.
  
   agent:
     creator: Creator
     contributor: Contributor
     publisher: Publisher
+    library_group_agent: "Agents of %{library_group_name}"
+    work_agent: "Creaters of %{work_title}"
+    expression_agent: "Realizers of %{expression_title}"
+    manifestation_agent: "Producers of %{manifestation_title}"
+    activate_as_user: "Activate as an user"
+    deactivate: "Deactivate this user"
+    add: "Add a agent"
+    publication: "Publications"
+    recent_publication: "Recent publications"
+    all_publication: "All publications"
+    other_address: "The other address"
+    add_derivation: "Add derivatation"
+    creator: "Creator"
+    contributor: "Contributor"
+    publisher: "Publisher"
+    owner: "Owner"
+
+  manifestation:
+    date_of_acquisition: "Date of acquisition"
+    physical_description: "Physical description"
+    edit: "Edit this manifestation"
+    add_next_issue: "Add a next issue"
+    edit_creator: "Edit creators"
+    edit_contributor: "Edit contributors"
+    edit_publisher: "Edit publishers"
+    edit_expression: "Edit expressions"
+    edit_item: "Edit items"
+    expressions_manifestation: "Manifestations for %{expression_title}"
+    library_group_manifestation: "Manifestations in %{library_group_name}"
+    reserve_this: "Reserve this manifestation"
+    cancel_reservation: "Cancel this reservation"
+    user_who_bookmark_this_resource: "Users who bookmark this resource"
+    query_search_result: "Search results for %{query} in %{library_group_name}"
+    serial: "Serial"
+    number: "Number"
+    invalid_isbn: "Invalid ISBN."
+    already_imported: "This manifestation is already imporeted."
+    record_not_found: "Record not found."
+    add: "Add a manifestation"
+    specify_expression: "Specify the expression."
+    pickup: "Pick up"
+    showing_all_record: "Showing all records."
+    showing_reservable_record: "Showing reservable records."
+    reservable: "Reservable"
+    all_result: "All results"
+    reservable_list: "Reservable list"
+    post_to_twitter: "post to Twitter"
+    web: "Web"
+    send_email: "Email this information"
+    attachment_file: "Attachment file"
+    add_derivation: "Add a derivation"
+    new_item: "New item"
+
+  item:
+    current_checkout: "Current checkout"
+    donor: "Donors"
+    library_group_item: "Items in %{library_group_name}"
+    add: "Add an item"
+    specify_manifestation: "Specify the manifestation."
+    this_item_is_reserved: "This item is reserved!"
+    create_shelf_first: "You should create a shelf first."
+    this_item_include_supplement: "This item includes supplements."
+    all_item: "All items"
+    add_new_copy: "Add a new copy"
+    no_manifestation: "No manifestation"
+    no_number: "No number"
+    add_lending_policy: "Add a new lending policy"
+    edit_exemplification: "Edit exemplification"
+    accepted_at: "Accepted at"
 
   page:
     add: Add
     remove: Remove
     add_series_statement: Add another series statement
+    merge: "Merge!"
+    merge_resource: "Merge %{model}"
 
-  export:
-    export_completed: Export completed.
-    are_you_sure_to_export: It may take some time to complete. Are you sure to export?
-    export_task_created: Export task created.
+  merge_list:
+    successfully_merged: "%{model} were merged successfully."
+    specify_id: "Specify %{model} ID."
+
+  import:
+    manifestation_found: 'Manifestation skipped: This manifestation is already created.'
+    item_found: 'Item skipped: This item is already created.'
