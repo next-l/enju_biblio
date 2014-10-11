@@ -7,7 +7,7 @@ describe ManifestationsController do
     FactoryGirl.attributes_for(:manifestation)
   end
 
-  describe "GET index", :solr => true do
+  describe "GET index", :elasticsearch => true do
     before do
       Manifestation.__elasticsearch__.create_index!
       Manifestation.import
@@ -151,13 +151,13 @@ describe ManifestationsController do
         expect(response).to render_template("manifestations/_tag_cloud")
       end
 
-      it "should show manifestation with isbn", :solr => true do
+      it "should show manifestation with isbn", :elasticsearch => true do
         get :index, :isbn => "4798002062"
         expect(response).to be_success
         expect(assigns(:manifestations).count).to eq 1
       end
 
-      it "should not show missing manifestation with isbn", :solr => true do
+      it "should not show missing manifestation with isbn", :elasticsearch => true do
         get :index, :isbn => "47980020620"
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_empty

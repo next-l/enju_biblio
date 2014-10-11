@@ -4,12 +4,8 @@ class AgentMergeListsController < ApplicationController
 
   # GET /agent_merge_lists
   def index
+    authorize AgentMergeList
     @agent_merge_lists = AgentMergeList.page(params[:page])
-
-    respond_to do |format|
-      format.html # index.html.erb
-      format.json { render json: @agent_merge_lists }
-    end
   end
 
   # GET /agent_merge_lists/1
@@ -19,6 +15,7 @@ class AgentMergeListsController < ApplicationController
   # GET /agent_merge_lists/new
   def new
     @agent_merge_list = AgentMergeList.new
+    authorize @agent_merge_list
   end
 
   # GET /agent_merge_lists/1/edit
@@ -26,9 +23,8 @@ class AgentMergeListsController < ApplicationController
   end
 
   # POST /agent_merge_lists
-  # POST /agent_merge_lists.json
   def create
-    @agent_merge_list = AgentMergeList.new(params[:agent_merge_list])
+    @agent_merge_list = AgentMergeList.new(agent_merge_list_params)
 
     respond_to do |format|
       if @agent_merge_list.save
@@ -43,10 +39,9 @@ class AgentMergeListsController < ApplicationController
   end
 
   # PUT /agent_merge_lists/1
-  # PUT /agent_merge_lists/1.json
   def update
     respond_to do |format|
-      if @agent_merge_list.update_attributes(params[:agent_merge_list])
+      if @agent_merge_list.update_attributes(agent_merge_list_params)
         if params[:mode] == 'merge'
           selected_agent = Agent.where(id: params[:selected_agent_id]).first
           if selected_agent
@@ -70,7 +65,6 @@ class AgentMergeListsController < ApplicationController
   end
 
   # DELETE /agent_merge_lists/1
-  # DELETE /agent_merge_lists/1.json
   def destroy
     @agent_merge_list.destroy
 
@@ -84,5 +78,9 @@ class AgentMergeListsController < ApplicationController
   def set_agent_merge_list
     @agent_merge_list = AgentMergeList.find(params[:id])
     authorize @agent_merge_list
+  end
+
+  def agent_merge_list_params
+    params.require(:agent_merge_list).permit(:title)
   end
 end

@@ -7,7 +7,7 @@ describe AgentsController do
     FactoryGirl.attributes_for(:agent)
   end
 
-  describe "GET index", :solr => true do
+  describe "GET index", :elasticsearch => true do
     before do
       Agent.__elasticsearch__.create_index!
       Agent.import

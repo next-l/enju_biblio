@@ -7,7 +7,7 @@ describe SeriesStatementsController do
     FactoryGirl.attributes_for(:series_statement)
   end
 
-  describe "GET index", :solr => true do
+  describe "GET index", :elasticsearch => true do
     before do
       SeriesStatement.__elasticsearch__.create_index!
       SeriesStatement.import

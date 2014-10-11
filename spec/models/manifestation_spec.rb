@@ -1,7 +1,7 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Manifestation, :solr => true do
+describe Manifestation, :elasticsearch => true do
   fixtures :all
   before do
     Manifestation.__elasticsearch__.create_index!

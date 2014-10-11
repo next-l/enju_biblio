@@ -16,7 +16,7 @@ class ManifestationPolicy < AdminPolicy
   end
 
   def update?
-    user.try(:has_role?, 'Librarian')
+    user.try(:has_role?, 'User')
   end
 
   def destroy?

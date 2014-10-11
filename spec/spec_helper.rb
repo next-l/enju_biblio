@@ -40,7 +40,7 @@ RSpec.configure do |config|
   config.extend ControllerMacros, :type => :controller
 
   unless ENV['TRAVIS']
-    config.before :suite do
+    config.before(:suite, elasticsearch: true) do
       Elasticsearch::Extensions::Test::Cluster.start(port: 9200) unless Elasticsearch::Extensions::Test::Cluster.running?(on: 9200)
     end
 

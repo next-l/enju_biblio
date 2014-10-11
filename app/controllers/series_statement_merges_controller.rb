@@ -37,12 +37,12 @@ class SeriesStatementMergesController < ApplicationController
   # POST /series_statement_merges
   # POST /series_statement_merges.json
   def create
-    @series_statement_merge = SeriesStatementMerge.new(params[:series_statement_merge])
+    @series_statement_merge = SeriesStatementMerge.new(series_statement_merge_params)
+    authorize @series_statement_merge
 
     respond_to do |format|
       if @series_statement_merge.save
-        flash[:notice] = t('controller.successfully_created', model: t('activerecord.models.series_statement_merge'))
-        format.html { redirect_to(@series_statement_merge) }
+        format.html { redirect_to @series_statement_merge, notice: t('controller.successfully_created', model: t('activerecord.models.series_statement_merge')) }
         format.json { render json: @series_statement_merge, status: :created, location: @series_statement_merge }
       else
         format.html { render action: "new" }
@@ -55,9 +55,8 @@ class SeriesStatementMergesController < ApplicationController
   # PUT /series_statement_merges/1.json
   def update
     respond_to do |format|
-      if @series_statement_merge.update_attributes(params[:series_statement_merge])
-        flash[:notice] = t('controller.successfully_updated', model: t('activerecord.models.series_statement_merge'))
-        format.html { redirect_to(@series_statement_merge) }
+      if @series_statement_merge.update_attributes(series_statement_merge_params)
+        format.html { redirect_to @series_statement_merge, notice: t('controller.successfully_updated', model: t('activerecord.models.series_statement_merge')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }
@@ -77,5 +76,9 @@ class SeriesStatementMergesController < ApplicationController
   def set_series_statement_merge
     @series_statement_merge = SeriesStatementMerge.find(params[:id])
     authorize @series_statement_merge
+  end
+
+  def series_statement_merge_params
+    params.require(:series_statement_merge_list).permit()
   end
 end

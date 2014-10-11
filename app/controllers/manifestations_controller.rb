@@ -117,7 +117,7 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.html+phone
+      format.html.phone
       format.xml  { render xml: @manifestations }
       format.sru  { render layout: false }
       format.rss  { render layout: false }
