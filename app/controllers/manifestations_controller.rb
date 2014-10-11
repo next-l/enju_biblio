@@ -96,7 +96,7 @@ class ManifestationsController < ApplicationController
       @query = query.dup
       query = query.gsub('　', ' ')
 
-      includes = [:items, :root_series_statements]
+      includes = [:items, :root_series_statement]
       includes << :bookmarks if defined?(EnjuBookmark)
       search = Manifestation.search(include: includes)
       case @reservable
