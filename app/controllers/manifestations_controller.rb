@@ -64,7 +64,7 @@ class ManifestationsController < ApplicationController
 
       set_reservable if defined?(EnjuCirculation)
 
-      manifestations, sort, @count = {}, {}, {}
+      sort, @count = {}, {}
       query = ""
 
       if params[:format] == 'txt'
@@ -96,10 +96,9 @@ class ManifestationsController < ApplicationController
       @query = query.dup
       query = query.gsub('　', ' ')
 
-      includes = [:carrier_type, :series_statements]
+      includes = [:items, :root_series_statements]
       includes << :bookmarks if defined?(EnjuBookmark)
       search = Manifestation.search(include: includes)
-      role = current_user.try(:role) || Role.default_role
       case @reservable
       when 'true'
         reservable = true

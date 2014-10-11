@@ -357,7 +357,7 @@ class Manifestation < ActiveRecord::Base
     end
 
     # TODO: ヒット件数が0件のキーワードがあるときに指摘する
-    response = Manifestation.search(include: [:creators, :contributors, :publishers, :items]) do
+    response = Manifestation.search do
       fulltext keyword if keyword
       with(:required_role_id).less_than_or_equal_to current_role_id
       order_by(:random)
