@@ -1,5 +1,6 @@
 <div data-role="header">
-<h1 class="title"><%= t('page.showing', model: t('activerecord.models.item')) -%></h1>
+  <a href="javascript:history.back()" data-icon="back" data-iconpos="notext" class="ui-btn-left"><%= t('page.back') %></a>
+  <h1 class="title"><%= t('page.showing', model: t('activerecord.models.item')) -%></h1>
 </div>
 <div data-role="content">
   <%- if @item.manifestation -%>
@@ -16,26 +17,24 @@
 <% if defined?(EnjuCirculation) %>
   <p>
     <strong><%= t('activerecord.attributes.item.checkout_type') -%>:</strong>
-    <%= link_to @item.checkout_type.display_name.localize, @item.checkout_type -%>
+    <%= @item.checkout_type.display_name.localize -%>
   </p>
 
   <p>
     <strong><%= t('activerecord.models.lending_policy') -%>:</strong>
     <ul>
       <%- @item.lending_policies.each do |lending_policy| -%>
-        <li><%= link_to lending_policy.user_group.display_name.localize, lending_policy -%></li>
+        <li><%= lending_policy.user_group.display_name.localize -%></li>
       <%- end -%>
     </ul>
   </p>
 
   <p>
     <strong><%= t('activerecord.models.circulation_status') -%>:</strong>
-    <%= link_to @item.circulation_status.display_name.localize, @item.circulation_status -%>
-    <%- if user_signed_in? -%>
-      <%- if current_user.has_role?('Librarian') -%>
-        <%- unless @item.checkouts.not_returned.blank? -%>
-          (<%= link_to t('item.current_checkout'), checkout_path(@item.checkouts.not_returned.first) -%>)
-        <%- end -%>
+    <%= @item.circulation_status.display_name.localize -%>
+    <%- if current_user.try(:has_role?, 'Librarian') -%>
+      <%- unless @item.checkouts.not_returned.blank? -%>
+        (<%= link_to t('item.current_checkout'), checkout_path(@item.checkouts.not_returned.first) -%>)
       <%- end -%>
     <%- end -%>
   </p>
@@ -44,7 +43,7 @@
     <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
     <% if @item.use_restriction %>
       <ul>
-        <li><%= link_to @item.use_restriction.display_name.localize, @item.use_restriction -%></li>
+        <li><%= @item.use_restriction.display_name.localize -%></li>
       </ul>
     <% end %>
   </p>
