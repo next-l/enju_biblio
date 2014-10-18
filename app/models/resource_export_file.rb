@@ -4,7 +4,7 @@ class ResourceExportFile < ActiveRecord::Base
   include ExportFile
   enju_export_file_model
   has_attached_file :resource_export
-  validates_attachment_content_type :resource_export, :content_type => /\Atext\/plain\Z/
+  validates_attachment_content_type :resource_export, content_type: /\Atext\/plain\Z/
 
   has_many :resource_export_file_transitions
 

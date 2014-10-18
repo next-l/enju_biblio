@@ -10,7 +10,7 @@
     <%= f.text_area :display_name %>
   </div>
   <% if defined?(EnjuCirculation) and !@carrier_type.new_record? %>
-    <%= render 'carrier_types/checkout_form', :f => f %>
+    <%= render 'carrier_types/checkout_form', f: f %>
   <% end %>
   <div class="field">
     <%= f.label :note %><br />

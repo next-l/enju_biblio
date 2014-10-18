@@ -48,7 +48,6 @@ class Manifestation < ActiveRecord::Base
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
-  belongs_to :nii_type if defined?(EnjuNii)
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank

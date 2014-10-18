@@ -18,7 +18,7 @@ class SeriesStatementsController < ApplicationController
     end
     search.build do
       fulltext query if query.present?
-      paginate :page => page.to_i, :per_page => SeriesStatement.default_per_page
+      paginate page: page.to_i, per_page: SeriesStatement.default_per_page
       order_by :position, :asc
     end
     #work = @work

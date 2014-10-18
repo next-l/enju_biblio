@@ -1,6 +1,5 @@
 # -*- encoding: utf-8 -*-
 class Agent < ActiveRecord::Base
-  enju_export if defined?(EnjuExport)
   attr_accessible :last_name, :middle_name, :first_name,
     :last_name_transcription, :middle_name_transcription,
     :first_name_transcription, :corporate_name, :corporate_name_transcription,
