@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140823095740) do
+ActiveRecord::Schema.define(version: 20141014065831) do
 
   create_table "agent_import_file_transitions", force: true do |t|
     t.string   "to_state"
@@ -270,11 +270,12 @@ ActiveRecord::Schema.define(version: 20140823095740) do
   add_index "checked_items", ["item_id"], name: "index_checked_items_on_item_id"
 
   create_table "checkins", force: true do |t|
-    t.integer  "item_id",      null: false
+    t.integer  "item_id",                  null: false
     t.integer  "librarian_id"
     t.integer  "basket_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "lock_version", default: 0, null: false
   end
 
   add_index "checkins", ["basket_id"], name: "index_checkins_on_basket_id"
@@ -325,6 +326,7 @@ ActiveRecord::Schema.define(version: 20140823095740) do
     t.integer  "lock_version",           default: 0, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "shelf_id"
   end
 
   add_index "checkouts", ["basket_id"], name: "index_checkouts_on_basket_id"
@@ -332,6 +334,7 @@ ActiveRecord::Schema.define(version: 20140823095740) do
   add_index "checkouts", ["item_id", "basket_id"], name: "index_checkouts_on_item_id_and_basket_id", unique: true
   add_index "checkouts", ["item_id"], name: "index_checkouts_on_item_id"
   add_index "checkouts", ["librarian_id"], name: "index_checkouts_on_librarian_id"
+  add_index "checkouts", ["shelf_id"], name: "index_checkouts_on_shelf_id"
   add_index "checkouts", ["user_id"], name: "index_checkouts_on_user_id"
 
   create_table "circulation_statuses", force: true do |t|
@@ -1104,11 +1107,11 @@ ActiveRecord::Schema.define(version: 20140823095740) do
     t.datetime "canceled_at"
     t.datetime "expired_at"
     t.datetime "deleted_at"
-    t.string   "state"
-    t.boolean  "expiration_notice_to_agent",   default: false
+    t.boolean  "expiration_notice_to_patron",  default: false
     t.boolean  "expiration_notice_to_library", default: false
     t.datetime "retained_at"
     t.datetime "postponed_at"
+    t.integer  "lock_version",                 default: 0,     null: false
   end
 
   add_index "reserves", ["item_id"], name: "index_reserves_on_item_id"
