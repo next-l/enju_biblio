@@ -103,7 +103,7 @@ describe ResourceImportFile do
         item_10104.manifestation.height.should be_nil
         item_10104.manifestation.width.should be_nil
         item_10104.manifestation.depth.should be_nil
-        item_10104.manifestation.subjects.map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
+        item_10104.manifestation.subjects.order(:id).map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
         item_10104.manifestation.classifications.map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
 
         manifestation_104 = Manifestation.where(manifestation_identifier: '104').first
@@ -206,13 +206,13 @@ describe ResourceImportFile do
       Item.where(item_identifier: '00004').first.include_supplements.should be_falsy
     end
 
-    it "should update series_statement", vcr: true do
-      manifestation = Manifestation.find(10)
-      file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
-      file.modify
-      #manifestation.reload
-      #manifestation.series_statements.should eq [SeriesStatement.find(2)]
-    end
+    #it "should update series_statement", vcr: true do
+    #  manifestation = Manifestation.find(10)
+    #  file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
+    #  file.modify
+    #  manifestation.reload
+    #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
+    #end
   end
 
   describe "when its mode is 'destroy'" do
@@ -231,7 +231,7 @@ describe ResourceImportFile do
     ResourceImportFileQueue.perform(file.id).should be_truthy
   end
 end
-  
+
 # == Schema Information
 #
 # Table name: resource_import_files
@@ -247,36 +247,11 @@ end
 #  resource_import_content_type :string(255)
 #  resource_import_file_size    :integer
 #  resource_import_updated_at   :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #  edit_mode                    :string(255)
 #  resource_import_fingerprint  :string(255)
 #  error_message                :text
 #  user_encoding                :string(255)
 #  default_shelf_id             :integer
 #
-
-# == Schema Information
-#
-# Table name: resource_import_files
-#
-#  id                           :integer          not null, primary key
-#  parent_id                    :integer
-#  content_type                 :string(255)
-#  size                         :integer
-#  user_id                      :integer
-#  note                         :text
-#  executed_at                  :datetime
-#  state                        :string(255)
-#  resource_import_file_name    :string(255)
-#  resource_import_content_type :string(255)
-#  resource_import_file_size    :integer
-#  resource_import_updated_at   :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
-#  edit_mode                    :string(255)
-#  resource_import_fingerprint  :string(255)
-#  error_message                :text
-#  user_encoding                :string(255)
-#
-

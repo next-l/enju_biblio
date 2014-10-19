@@ -48,6 +48,6 @@ end
 #  resource_export_file_size    :integer
 #  resource_export_updated_at   :datetime
 #  executed_at                  :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #

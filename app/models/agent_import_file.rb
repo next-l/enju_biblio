@@ -233,8 +233,8 @@ end
 #  agent_import_content_type :string(255)
 #  agent_import_file_size    :integer
 #  agent_import_updated_at   :datetime
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  created_at                :datetime
+#  updated_at                :datetime
 #  agent_import_fingerprint  :string(255)
 #  error_message             :text
 #  edit_mode                 :string(255)
