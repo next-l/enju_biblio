@@ -13,6 +13,17 @@
 
 ActiveRecord::Schema.define(version: 20141014065831) do
 
+  create_table "accepts", force: true do |t|
+    t.integer  "basket_id"
+    t.integer  "item_id"
+    t.integer  "librarian_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "accepts", ["basket_id"], name: "index_accepts_on_basket_id"
+  add_index "accepts", ["item_id"], name: "index_accepts_on_item_id"
+
   create_table "agent_import_file_transitions", force: true do |t|
     t.string   "to_state"
     t.text     "metadata",             default: "{}"
@@ -447,6 +458,41 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.datetime "updated_at"
   end
 
+  create_table "event_export_file_transitions", force: true do |t|
+    t.string   "to_state"
+    t.text     "metadata",             default: "{}"
+    t.integer  "sort_key"
+    t.integer  "event_export_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "event_export_file_transitions", ["event_export_file_id"], name: "index_event_export_file_transitions_on_file_id"
+  add_index "event_export_file_transitions", ["sort_key", "event_export_file_id"], name: "index_event_export_file_transitions_on_sort_key_and_file_id", unique: true
+
+  create_table "event_export_files", force: true do |t|
+    t.integer  "user_id"
+    t.string   "event_export_file_name"
+    t.string   "event_export_content_type"
+    t.integer  "event_export_file_size"
+    t.datetime "event_export_updated_at"
+    t.datetime "executed_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "event_import_file_transitions", force: true do |t|
+    t.string   "to_state"
+    t.text     "metadata",             default: "{}"
+    t.integer  "sort_key"
+    t.integer  "event_import_file_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "event_import_file_transitions", ["event_import_file_id"], name: "index_event_import_file_transitions_on_event_import_file_id"
+  add_index "event_import_file_transitions", ["sort_key", "event_import_file_id"], name: "index_event_import_file_transitions_on_sort_key_and_file_id", unique: true
+
   create_table "event_import_files", force: true do |t|
     t.integer  "parent_id"
     t.string   "content_type"
@@ -463,6 +509,9 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.datetime "updated_at"
     t.string   "event_import_fingerprint"
     t.text     "error_message"
+    t.string   "user_encoding"
+    t.integer  "default_library_id"
+    t.integer  "default_event_category_id"
   end
 
   add_index "event_import_files", ["parent_id"], name: "index_event_import_files_on_parent_id"
@@ -477,8 +526,8 @@ ActiveRecord::Schema.define(version: 20141014065831) do
   end
 
   create_table "events", force: true do |t|
-    t.integer  "library_id",        default: 1,     null: false
-    t.integer  "event_category_id", default: 1,     null: false
+    t.integer  "library_id",                        null: false
+    t.integer  "event_category_id",                 null: false
     t.string   "name"
     t.text     "note"
     t.datetime "start_at"
@@ -692,7 +741,10 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.datetime "deleted_at"
+    t.text     "opening_hour"
     t.string   "isil"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   add_index "libraries", ["library_group_id"], name: "index_libraries_on_library_group_id"
@@ -702,7 +754,6 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.string   "name",                                                           null: false
     t.text     "display_name"
     t.string   "short_name",                                                     null: false
-    t.string   "email"
     t.text     "my_networks"
     t.text     "login_banner"
     t.text     "note"
@@ -1017,6 +1068,8 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.boolean  "save_checkout_history",    default: false, null: false
     t.datetime "expired_at"
     t.boolean  "share_bookmarks"
+    t.text     "full_name_transcription"
+    t.datetime "date_of_birth"
   end
 
   add_index "profiles", ["checkout_icalendar_token"], name: "index_profiles_on_checkout_icalendar_token", unique: true
@@ -1192,12 +1245,13 @@ ActiveRecord::Schema.define(version: 20141014065831) do
   add_index "resource_import_results", ["resource_import_file_id"], name: "index_resource_import_results_on_resource_import_file_id"
 
   create_table "roles", force: true do |t|
-    t.string   "name"
-    t.text     "display_name"
+    t.string   "name",                     null: false
+    t.string   "display_name"
     t.text     "note"
-    t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "score",        default: 0, null: false
+    t.integer  "position"
   end
 
   create_table "search_engines", force: true do |t|
@@ -1270,16 +1324,6 @@ ActiveRecord::Schema.define(version: 20141014065831) do
 
   add_index "shelves", ["library_id"], name: "index_shelves_on_library_id"
 
-  create_table "subject_heading_type_has_subjects", force: true do |t|
-    t.integer  "subject_id",              null: false
-    t.string   "subject_type"
-    t.integer  "subject_heading_type_id", null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "subject_heading_type_has_subjects", ["subject_id"], name: "index_subject_heading_type_has_subjects_on_subject_id"
-
   create_table "subject_heading_types", force: true do |t|
     t.string   "name",         null: false
     t.text     "display_name"
@@ -1322,6 +1366,32 @@ ActiveRecord::Schema.define(version: 20141014065831) do
   add_index "subjects", ["subject_type_id"], name: "index_subjects_on_subject_type_id"
   add_index "subjects", ["term"], name: "index_subjects_on_term"
   add_index "subjects", ["use_term_id"], name: "index_subjects_on_use_term_id"
+
+  create_table "subscribes", force: true do |t|
+    t.integer  "subscription_id", null: false
+    t.integer  "work_id",         null: false
+    t.datetime "start_at",        null: false
+    t.datetime "end_at",          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscribes", ["subscription_id"], name: "index_subscribes_on_subscription_id"
+  add_index "subscribes", ["work_id"], name: "index_subscribes_on_work_id"
+
+  create_table "subscriptions", force: true do |t|
+    t.text     "title",                        null: false
+    t.text     "note"
+    t.integer  "user_id"
+    t.integer  "order_list_id"
+    t.datetime "deleted_at"
+    t.integer  "subscribes_count", default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "subscriptions", ["order_list_id"], name: "index_subscriptions_on_order_list_id"
+  add_index "subscriptions", ["user_id"], name: "index_subscriptions_on_user_id"
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"
@@ -1422,7 +1492,6 @@ ActiveRecord::Schema.define(version: 20141014065831) do
 
   create_table "user_groups", force: true do |t|
     t.string   "name"
-    t.text     "string"
     t.text     "display_name"
     t.text     "note"
     t.integer  "position"
@@ -1442,6 +1511,9 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "user_has_roles", ["role_id"], name: "index_user_has_roles_on_role_id"
+  add_index "user_has_roles", ["user_id"], name: "index_user_has_roles_on_user_id"
 
   create_table "user_import_file_transitions", force: true do |t|
     t.string   "to_state"
@@ -1512,7 +1584,7 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.string   "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
-    t.integer  "sign_in_count",            default: 0,     null: false
+    t.integer  "sign_in_count",            default: 0
     t.datetime "current_sign_in_at"
     t.datetime "last_sign_in_at"
     t.string   "current_sign_in_ip"
@@ -1522,16 +1594,8 @@ ActiveRecord::Schema.define(version: 20141014065831) do
     t.boolean  "save_checkout_history",    default: false, null: false
     t.string   "checkout_icalendar_token"
     t.string   "username"
-    t.string   "user_number"
-    t.string   "state"
-    t.string   "locale"
     t.datetime "deleted_at"
     t.datetime "expired_at"
-    t.integer  "library_id",               default: 1,     null: false
-    t.integer  "required_role_id",         default: 1,     null: false
-    t.integer  "user_group_id",            default: 1,     null: false
-    t.text     "note"
-    t.text     "keyword_list"
     t.integer  "failed_attempts",          default: 0
     t.string   "unlock_token"
     t.datetime "locked_at"
@@ -1542,8 +1606,6 @@ ActiveRecord::Schema.define(version: 20141014065831) do
   add_index "users", ["email"], name: "index_users_on_email"
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   add_index "users", ["unlock_token"], name: "index_users_on_unlock_token", unique: true
-  add_index "users", ["user_group_id"], name: "index_users_on_user_group_id"
-  add_index "users", ["user_number"], name: "index_users_on_user_number", unique: true
   add_index "users", ["username"], name: "index_users_on_username", unique: true
 
   create_table "versions", force: true do |t|
@@ -1556,17 +1618,5 @@ ActiveRecord::Schema.define(version: 20141014065831) do
   end
 
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
-
-  create_table "work_has_subjects", force: true do |t|
-    t.integer  "subject_id"
-    t.string   "subject_type"
-    t.integer  "work_id"
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "work_has_subjects", ["subject_id"], name: "index_work_has_subjects_on_subject_id"
-  add_index "work_has_subjects", ["work_id"], name: "index_work_has_subjects_on_work_id"
 
 end
