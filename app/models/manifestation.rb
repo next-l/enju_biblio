@@ -230,6 +230,7 @@ class Manifestation < ActiveRecord::Base
     has_attached_file :attachment,
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
+  do_not_validate_attachment_file_type :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
