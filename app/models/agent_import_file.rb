@@ -1,5 +1,5 @@
 class AgentImportFile < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordModel
+  include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   attr_accessible :agent_import, :edit_mode, :user_encoding, :mode
   default_scope { order('agent_import_files.id DESC') }

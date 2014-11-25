@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency "library_stdnums"
   s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"
-  s.add_dependency "statesman"
+  s.add_dependency "statesman", "~> 1.0"
   s.add_dependency "faraday"
   # s.add_dependency "jquery-rails"
 

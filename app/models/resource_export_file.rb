@@ -1,6 +1,6 @@
 class ResourceExportFile < ActiveRecord::Base
   attr_accessible
-  include Statesman::Adapters::ActiveRecordModel
+  include Statesman::Adapters::ActiveRecordQueries
   include ExportFile
   enju_export_file_model
   has_attached_file :resource_export

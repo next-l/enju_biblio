@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordModel
+  include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   attr_accessible :resource_import, :edit_mode, :user_encoding, :mode,
     :default_shelf_id, :library_id
