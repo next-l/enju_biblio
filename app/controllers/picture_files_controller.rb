@@ -157,6 +157,12 @@ class PictureFilesController < ApplicationController
   end
 
   private
+  def picture_file_params
+    params.require(:picture_file).permit(
+      :picture, :picture_attachable_id, :picture_attachable_type
+    )
+  end
+
   def get_attachable
     get_manifestation
     if @manifestation

@@ -80,4 +80,9 @@ class LicensesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def license_params
+    params.require(:license).permit(:name, :display_name, :note)
+  end
 end

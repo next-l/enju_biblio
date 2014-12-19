@@ -526,6 +526,26 @@ class ManifestationsController < ApplicationController
   end
 
   private
+  def manifestation_params
+    params.require(:manifestation).permit(
+      :original_title, :title_alternative, :title_transcription,
+      :manifestation_identifier, :date_copyrighted,
+      :access_address, :language_id, :carrier_type_id, :extent, :start_page,
+      :end_page, :height, :width, :depth, :publication_place,
+      :price, :fulltext, :volume_number_string,
+      :issue_number_string, :serial_number_string, :edition, :note,
+      :repository_content, :required_role_id, :frequency_id,
+      :title_alternative_transcription, :description, :abstract, :available_at,
+      :valid_until, :date_submitted, :date_accepted, :date_captured,
+      :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
+      :serial_number, :content_type_id, :attachment, :lock_version,
+      :series_statements_attributes, :serial, :statement_of_responsibility,
+      :creators_attributes, :contributors_attributes, :publishers_attributes,
+      :identifiers_attributes, :dimensions, :fulltext_content, :extent,
+      :number_of_page_string, :parent_id,
+      :subjects_attributes, :classifications_attributes # EnjuSubject
+    )
+  end
 
   def make_query(query, options = {})
     # TODO: integerやstringもqfに含める

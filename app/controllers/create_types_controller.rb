@@ -80,4 +80,9 @@ class CreateTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def create_type_params
+    params.require(:create_type).permit(:name, :display_name, :note, :position)
+  end
 end

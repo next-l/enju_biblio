@@ -1,5 +1,4 @@
 class AgentMergeList < ActiveRecord::Base
-  attr_accessible :title
   has_many :agent_merges, dependent: :destroy
   has_many :agents, through: :agent_merges
   validates_presence_of :title

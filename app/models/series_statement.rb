@@ -1,11 +1,4 @@
 class SeriesStatement < ActiveRecord::Base
-  attr_accessible :original_title, :numbering, :title_subseries,
-    :numbering_subseries, :title_transcription, :title_alternative,
-    :series_statement_identifier, :note,
-    :root_manifestation_id, :url,
-    :title_subseries_transcription, :creator_string, :volume_number_string
-  attr_accessible :series_master
-
   has_many :series_statement_merges, dependent: :destroy
   has_many :series_statement_merge_lists, through: :series_statement_merges
   belongs_to :manifestation, touch: true

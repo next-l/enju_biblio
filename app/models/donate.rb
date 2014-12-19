@@ -1,5 +1,4 @@
 class Donate < ActiveRecord::Base
-  attr_accessible :agent_id, :item_id
   belongs_to :agent
   belongs_to :item
   validates_associated :agent, :item

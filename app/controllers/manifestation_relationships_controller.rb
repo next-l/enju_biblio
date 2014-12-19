@@ -102,6 +102,12 @@ class ManifestationRelationshipsController < ApplicationController
   end
 
   private
+  def manifestation_relationship_params
+    params.require(:manifestation_relationship).permit(
+      :parent_id, :child_id, :manifestation_relationship_type_id
+    )
+  end
+
   def prepare_options
     @manifestation_relationship_types = ManifestationRelationshipType.all
   end

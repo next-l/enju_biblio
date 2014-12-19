@@ -36,4 +36,11 @@ class AgentImportResultsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def agent_import_result_params
+    params.require(:agent_import_result).permit(
+      :agent_import_file_id, :agent_id, :body
+    )
+  end
 end

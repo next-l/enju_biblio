@@ -111,6 +111,12 @@ class CreatesController < ApplicationController
   end
 
   private
+  def create_params
+    params.require(:create).permit(
+      :agent_id, :work_id, :create_type_id, :position
+    )
+  end
+
   def prepare_options
     @create_types = CreateType.all
   end

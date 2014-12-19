@@ -115,6 +115,12 @@ class ProducesController < ApplicationController
   end
 
   private
+  def produce_params
+    params.require(:produce).permit(
+      :agent_id, :manifestation_id, :produce_type_id, :position
+    )
+  end
+
   def prepare_options
     @produce_types = ProduceType.all
   end

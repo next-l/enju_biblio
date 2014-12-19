@@ -1,5 +1,4 @@
 class SeriesStatementMerge < ActiveRecord::Base
-  attr_accessible :series_statement_id, :series_statement_merge_list_id
   belongs_to :series_statement, validate: true
   belongs_to :series_statement_merge_list, validate: true
   validates_presence_of :series_statement, :series_statement_merge_list

@@ -80,4 +80,9 @@ class AgentTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def agent_type_params
+    params.require(:agent_type).permit(:name, :display_name, :note)
+  end
 end

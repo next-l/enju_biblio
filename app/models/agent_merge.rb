@@ -1,5 +1,4 @@
 class AgentMerge < ActiveRecord::Base
-  attr_accessible :agent_id, :agent_merge_list_id
   belongs_to :agent, validate: true
   belongs_to :agent_merge_list, validate: true
   validates_presence_of :agent, :agent_merge_list

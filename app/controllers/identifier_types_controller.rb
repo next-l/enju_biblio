@@ -80,4 +80,11 @@ class IdentifierTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def identifier_type_params
+    params.require(:identifier_type).permit(
+      :display_name, :name, :note, :position
+    )
+  end
 end

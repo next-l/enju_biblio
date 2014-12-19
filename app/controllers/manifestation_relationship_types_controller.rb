@@ -80,4 +80,11 @@ class ManifestationRelationshipTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def manifestation_relationship_type_params
+    params.require(:manifestation_relationship_type).permit(
+      :name, :display_name, :note
+    )
+  end
 end

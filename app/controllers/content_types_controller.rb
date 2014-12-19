@@ -80,4 +80,9 @@ class ContentTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def content_type_params
+    params.require(:content_type).permit(:name, :display_name, :note)
+  end
 end

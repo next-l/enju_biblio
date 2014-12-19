@@ -1,5 +1,4 @@
 class SeriesStatementMergeList < ActiveRecord::Base
-  attr_accessible :title
   has_many :series_statement_merges, dependent: :destroy
   has_many :series_statements, through: :series_statement_merges
   validates_presence_of :title

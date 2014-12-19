@@ -80,4 +80,11 @@ class RealizeTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def realize_type_params
+    params.require(:realize_type).permit(
+      :name, :display_name, :note, :position
+    )
+  end
 end

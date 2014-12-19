@@ -76,4 +76,9 @@ class DonatesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def donate_params
+    params.require(:donate).permit(:agent_id, :item_id)
+  end
 end

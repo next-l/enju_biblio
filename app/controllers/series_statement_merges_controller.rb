@@ -87,4 +87,11 @@ class SeriesStatementMergesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def series_statement_merge_params
+    params.require(:series_statement_merge).permit(
+      :series_statement_id, :series_statement_merge_list_id
+    )
+  end
 end

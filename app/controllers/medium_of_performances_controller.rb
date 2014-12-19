@@ -80,4 +80,9 @@ class MediumOfPerformancesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def medium_of_performance_params
+    params.require(:medium_of_performance).permit(:name, :display_name, :note)
+  end
 end

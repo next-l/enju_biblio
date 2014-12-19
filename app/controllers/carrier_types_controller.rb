@@ -86,6 +86,13 @@ class CarrierTypesController < ApplicationController
   end
 
   private
+  def carrier_type_params
+    params.require(:carrier_type).permit(
+      :name, :display_name, :note, :position,
+      :carrier_type_has_checkout_types_attributes # EnjuCirculation
+    )
+  end
+
   def prepare_options
     if defined?(EnjuCirculation)
       @checkout_types = CheckoutType.select([:id, :display_name, :position])

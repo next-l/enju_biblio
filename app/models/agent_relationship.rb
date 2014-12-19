@@ -1,5 +1,4 @@
 class AgentRelationship < ActiveRecord::Base
-  attr_accessible :parent_id, :child_id, :agent_relationship_type_id
   belongs_to :parent, foreign_key: 'parent_id', class_name: 'Agent'
   belongs_to :child, foreign_key: 'child_id', class_name: 'Agent'
   belongs_to :agent_relationship_type

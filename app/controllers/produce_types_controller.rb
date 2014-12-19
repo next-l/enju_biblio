@@ -80,4 +80,9 @@ class ProduceTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def produce_type_params
+    params.permit(:produce_type).permit(:name, :display_name, :note, :position)
+  end
 end

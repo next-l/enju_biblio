@@ -102,6 +102,12 @@ class AgentRelationshipsController < ApplicationController
   end
 
   private
+  def agent_relationship_params
+    params.require(:agent_relationship).permit(
+      :parent_id, :child_id, :agent_relationship_type_id
+    )
+  end
+
   def prepare_options
     @agent_relationship_types = AgentRelationshipType.all
   end

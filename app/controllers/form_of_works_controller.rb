@@ -80,4 +80,9 @@ class FormOfWorksController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def form_of_work_params
+    params.require(:form_of_work).permit(:name, :display_name, :note)
+  end
 end

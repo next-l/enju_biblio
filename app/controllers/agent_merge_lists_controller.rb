@@ -90,4 +90,9 @@ class AgentMergeListsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def agent_merge_list_params
+    params.require(:agent_merge_list).permit(:title)
+  end
 end

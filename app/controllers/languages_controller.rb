@@ -80,4 +80,12 @@ class LanguagesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def language_params
+    params.require(:language).permit(
+      :name, :native_name, :display_name, :iso_639_1, :iso_639_2, :iso_639_3,
+      :note
+    )
+  end
 end

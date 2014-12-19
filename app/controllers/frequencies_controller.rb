@@ -80,4 +80,9 @@ class FrequenciesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def frequency_params
+    params.require(:frequency).permit(:name, :display_name, :note)
+  end
 end

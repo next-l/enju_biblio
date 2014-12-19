@@ -111,6 +111,12 @@ class RealizesController < ApplicationController
   end
 
   private
+  def realize_params
+    params.require(:realize).permit(
+      :agent_id, :expression_id, :realize_type_id, :position
+    )
+  end
+
   def prepare_options
     @realize_types = RealizeType.all
   end

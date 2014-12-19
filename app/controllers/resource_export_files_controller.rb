@@ -97,4 +97,11 @@ class ResourceExportFilesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def resource_export_file_params
+    params.require(:resource_export_file).permit(
+      :mode
+    )
+  end
 end

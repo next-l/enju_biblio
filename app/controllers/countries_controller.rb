@@ -80,4 +80,11 @@ class CountriesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def country_params
+    params.require(:country).permit(
+      :name, :display_name, :alpha_2, :alpha_3, :numeric_3, :note
+    )
+  end
 end

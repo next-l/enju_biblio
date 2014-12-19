@@ -209,6 +209,19 @@ class AgentsController < ApplicationController
   end
 
   private
+  def agent_params
+    params.require(:agent).permit(
+      :last_name, :middle_name, :first_name,
+      :last_name_transcription, :middle_name_transcription,
+      :first_name_transcription, :corporate_name, :corporate_name_transcription,
+      :full_name, :full_name_transcription, :full_name_alternative,
+      :other_designation, :language_id,
+      :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+      :full_name_alternative_transcription, :title,
+      :agent_identifier
+    )
+  end
+
   def prepare_options
     @countries = Country.all_cache
     @agent_types = AgentType.all

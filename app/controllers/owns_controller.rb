@@ -104,4 +104,9 @@ class OwnsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def own_params
+    params.require(:own).permit(:agent_id, :item_id)
+  end
 end

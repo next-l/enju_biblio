@@ -114,4 +114,15 @@ class SeriesStatementsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def series_statement_params
+    params.require(:series_statement).permit(
+      :original_title, :numbering, :title_subseries,:numbering_subseries,
+      :title_transcription, :title_alternative, :series_statement_identifier,
+      :note, :root_manifestation_id, :url,
+      :title_subseries_transcription, :creator_string, :volume_number_string,
+      :series_master
+    )
+  end
 end

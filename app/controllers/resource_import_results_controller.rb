@@ -36,4 +36,11 @@ class ResourceImportResultsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def resource_import_result_files
+    params.require(:resource_import_result).permit(
+      :resource_import_file_id, :manifestation_id, :item_id, :body
+    )
+  end
 end

@@ -80,4 +80,9 @@ class AgentRelationshipTypesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def agent_relationship_type_params
+    params.require(:agent_relationship_type).permit(:name, :display_name, :note)
+  end
 end

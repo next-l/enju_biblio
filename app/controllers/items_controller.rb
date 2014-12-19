@@ -247,6 +247,17 @@ class ItemsController < ApplicationController
   end
 
   private
+  def item_params
+    params.require(:item).permit(
+      :call_number, :item_identifier, :circulation_status_id,
+      :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
+      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
+      :lock_version, :manifestation_id, :library_id, :required_role_id,
+      :binding_item_identifier, :binding_call_number, :binded_at,
+      :item_has_use_restriction_attributes # EnjuCirculation
+    )
+  end
+
   def prepare_options
     @libraries = Library.real << Library.web
     if @item.new_record?

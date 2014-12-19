@@ -97,4 +97,9 @@ class ImportRequestsController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  private
+  def import_request_params
+    params.require(:import_request).permit(:isbn, :manifestation_id, :user_id)
+  end
 end
