@@ -189,7 +189,7 @@ class ItemsController < ApplicationController
   # POST /items
   # POST /items.json
   def create
-    @item = Item.new(params[:item])
+    @item = Item.new(item_params)
     manifestation = Manifestation.find(@item.manifestation_id)
 
     respond_to do |format|
@@ -217,7 +217,7 @@ class ItemsController < ApplicationController
   # PUT /items/1.json
   def update
     respond_to do |format|
-      if @item.update_attributes(params[:item])
+      if @item.update_attributes(item_params)
         format.html { redirect_to @item, notice: t('controller.successfully_updated', model: t('activerecord.models.item')) }
         format.json { head :no_content }
       else

@@ -467,7 +467,7 @@ class ManifestationsController < ApplicationController
   # POST /manifestations
   # POST /manifestations.json
   def create
-    @manifestation = Manifestation.new(params[:manifestation])
+    @manifestation = Manifestation.new(manifestation_params)
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
@@ -496,7 +496,7 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1.json
   def update
     respond_to do |format|
-      if @manifestation.update_attributes(params[:manifestation])
+      if @manifestation.update_attributes(manifestation_params)
         Sunspot.commit
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }

@@ -55,7 +55,7 @@ class ResourceImportFilesController < ApplicationController
   # POST /resource_import_files
   # POST /resource_import_files.json
   def create
-    @resource_import_file = ResourceImportFile.new(params[:resource_import_file])
+    @resource_import_file = ResourceImportFile.new(resource_import_file_params)
     @resource_import_file.user = current_user
 
     respond_to do |format|
@@ -77,7 +77,7 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1.json
   def update
     respond_to do |format|
-      if @resource_import_file.update_attributes(params[:resource_import_file])
+      if @resource_import_file.update_attributes(resource_import_file_params)
         if @resource_import_file.mode == 'import'
           Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
         end

@@ -38,7 +38,7 @@ class IdentifierTypesController < ApplicationController
   # POST /identifier_types
   # POST /identifier_types.json
   def create
-    @identifier_type = IdentifierType.new(params[:identifier_type])
+    @identifier_type = IdentifierType.new(identifier_type_params)
 
     respond_to do |format|
       if @identifier_type.save
@@ -60,7 +60,7 @@ class IdentifierTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @identifier_type.update_attributes(params[:identifier_type])
+      if @identifier_type.update_attributes(identifier_type_params)
         format.html { redirect_to @identifier_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.identifier_type')) }
         format.json { head :no_content }
       else
