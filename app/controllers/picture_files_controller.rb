@@ -75,7 +75,7 @@ class PictureFilesController < ApplicationController
   # POST /picture_files
   # POST /picture_files.json
   def create
-    @picture_file = PictureFile.new(params[:picture_file])
+    @picture_file = PictureFile.new(picture_file_params)
 
     respond_to do |format|
       if @picture_file.save
@@ -114,7 +114,7 @@ class PictureFilesController < ApplicationController
     end
 
     respond_to do |format|
-      if @picture_file.update_attributes(params[:picture_file])
+      if @picture_file.update_attributes(picture_file_params)
         format.html { redirect_to @picture_file, notice: t('controller.successfully_updated', model: t('activerecord.models.picture_file')) }
         format.json { head :no_content }
       else

@@ -38,7 +38,7 @@ class AgentRelationshipTypesController < ApplicationController
   # POST /agent_relationship_types
   # POST /agent_relationship_types.json
   def create
-    @agent_relationship_type = AgentRelationshipType.new(params[:agent_relationship_type])
+    @agent_relationship_type = AgentRelationshipType.new(agent_relationship_type_params)
 
     respond_to do |format|
       if @agent_relationship_type.save
@@ -60,7 +60,7 @@ class AgentRelationshipTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_relationship_type.update_attributes(params[:agent_relationship_type])
+      if @agent_relationship_type.update_attributes(agent_relationship_type_params)
         format.html { redirect_to @agent_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_relationship_type')) }
         format.json { head :no_content }
       else

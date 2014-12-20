@@ -38,7 +38,7 @@ class ProduceTypesController < ApplicationController
   # POST /produce_types
   # POST /produce_types.json
   def create
-    @produce_type = ProduceType.new(params[:produce_type])
+    @produce_type = ProduceType.new(produce_type_params)
 
     respond_to do |format|
       if @produce_type.save
@@ -60,7 +60,7 @@ class ProduceTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @produce_type.update_attributes(params[:produce_type])
+      if @produce_type.update_attributes(produce_type_params)
         format.html { redirect_to @produce_type, notice: t('controller.successfully_updated', model: t('activerecord.models.produce_type')) }
         format.json { head :no_content }
       else

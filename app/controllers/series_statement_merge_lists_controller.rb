@@ -39,7 +39,7 @@ class SeriesStatementMergeListsController < ApplicationController
   # POST /series_statement_merge_lists
   # POST /series_statement_merge_lists.json
   def create
-    @series_statement_merge_list = SeriesStatementMergeList.new(params[:series_statement_merge_list])
+    @series_statement_merge_list = SeriesStatementMergeList.new(series_statement_merge_list_params)
 
     respond_to do |format|
       if @series_statement_merge_list.save
@@ -57,7 +57,7 @@ class SeriesStatementMergeListsController < ApplicationController
   # PUT /series_statement_merge_lists/1.json
   def update
     respond_to do |format|
-      if @series_statement_merge_list.update_attributes(params[:series_statement_merge_list])
+      if @series_statement_merge_list.update_attributes(series_statement_merge_list_params)
         if params[:mode] == 'merge'
           selected_series_statement = SeriesStatement.find(params[:selected_series_statement_id]) rescue nil
           if selected_series_statement

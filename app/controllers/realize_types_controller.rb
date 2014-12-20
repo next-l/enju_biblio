@@ -38,7 +38,7 @@ class RealizeTypesController < ApplicationController
   # POST /realize_types
   # POST /realize_types.json
   def create
-    @realize_type = RealizeType.new(params[:realize_type])
+    @realize_type = RealizeType.new(realize_type_params)
 
     respond_to do |format|
       if @realize_type.save
@@ -60,7 +60,7 @@ class RealizeTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize_type.update_attributes(params[:realize_type])
+      if @realize_type.update_attributes(realize_type_params)
         format.html { redirect_to @realize_type, notice: t('controller.successfully_updated', model: t('activerecord.models.realize_type')) }
         format.json { head :no_content }
       else

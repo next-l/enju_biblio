@@ -544,7 +544,7 @@ class ManifestationsController < ApplicationController
       :series_statements_attributes, :serial, :statement_of_responsibility,
       :creators_attributes, :contributors_attributes, :publishers_attributes,
       :subjects_attributes, :classifications_attributes, # EnjuSubject
-      {:identifiers_attributes => [:body, :identifier_type_id]}
+      {:identifiers_attributes => [:id, :body, :identifier_type_id]}
     )
   end
 

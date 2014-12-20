@@ -47,7 +47,7 @@ class ManifestationRelationshipsController < ApplicationController
   # POST /manifestation_relationships
   # POST /manifestation_relationships.json
   def create
-    @manifestation_relationship = ManifestationRelationship.new(params[:manifestation_relationship])
+    @manifestation_relationship = ManifestationRelationship.new(manifestation_relationship_params)
 
     respond_to do |format|
       if @manifestation_relationship.save
@@ -72,7 +72,7 @@ class ManifestationRelationshipsController < ApplicationController
     end
 
     respond_to do |format|
-      if @manifestation_relationship.update_attributes(params[:manifestation_relationship])
+      if @manifestation_relationship.update_attributes(manifestation_relationship_params)
         format.html { redirect_to @manifestation_relationship, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship')) }
         format.json { head :no_content }
       else

@@ -48,7 +48,7 @@ class SeriesStatementMergesController < ApplicationController
   # POST /series_statement_merges
   # POST /series_statement_merges.json
   def create
-    @series_statement_merge = SeriesStatementMerge.new(params[:series_statement_merge])
+    @series_statement_merge = SeriesStatementMerge.new(series_statement_merge_params)
 
     respond_to do |format|
       if @series_statement_merge.save
@@ -66,7 +66,7 @@ class SeriesStatementMergesController < ApplicationController
   # PUT /series_statement_merges/1.json
   def update
     respond_to do |format|
-      if @series_statement_merge.update_attributes(params[:series_statement_merge])
+      if @series_statement_merge.update_attributes(series_statement_merge_params)
         flash[:notice] = t('controller.successfully_updated', model: t('activerecord.models.series_statement_merge'))
         format.html { redirect_to(@series_statement_merge) }
         format.json { head :no_content }

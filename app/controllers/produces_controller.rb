@@ -58,7 +58,7 @@ class ProducesController < ApplicationController
   # POST /produces
   # POST /produces.json
   def create
-    @produce = Produce.new(params[:produce])
+    @produce = Produce.new(produce_params)
 
     respond_to do |format|
       if @produce.save
@@ -82,7 +82,7 @@ class ProducesController < ApplicationController
     end
 
     respond_to do |format|
-      if @produce.update_attributes(params[:produce])
+      if @produce.update_attributes(produce_params)
         format.html { redirect_to @produce, notice: t('controller.successfully_updated', model: t('activerecord.models.produce')) }
         format.json { head :no_content }
       else
