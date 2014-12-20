@@ -68,7 +68,7 @@ class SeriesStatementsController < ApplicationController
   # POST /series_statements
   # POST /series_statements.json
   def create
-    @series_statement = SeriesStatement.new(params[:series_statement])
+    @series_statement = SeriesStatement.new(series_statement_params)
     manifestation = Manifestation.find(@series_statement.manifestation_id) rescue nil
 
     respond_to do |format|
@@ -93,7 +93,7 @@ class SeriesStatementsController < ApplicationController
     end
 
     respond_to do |format|
-      if @series_statement.update_attributes(params[:series_statement])
+      if @series_statement.update_attributes(series_statement_params)
         format.html { redirect_to @series_statement, notice: t('controller.successfully_updated', model: t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else

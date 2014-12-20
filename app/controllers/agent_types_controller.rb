@@ -38,7 +38,7 @@ class AgentTypesController < ApplicationController
   # POST /agent_types
   # POST /agent_types.json
   def create
-    @agent_type = AgentType.new(params[:agent_type])
+    @agent_type = AgentType.new(agent_type_params)
 
     respond_to do |format|
       if @agent_type.save
@@ -60,7 +60,7 @@ class AgentTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_type.update_attributes(params[:agent_type])
+      if @agent_type.update_attributes(agent_type_params)
         format.html { redirect_to @agent_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_type')) }
         format.json { head :no_content }
       else

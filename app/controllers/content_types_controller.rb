@@ -38,7 +38,7 @@ class ContentTypesController < ApplicationController
   # POST /content_types
   # POST /content_types.json
   def create
-    @content_type = ContentType.new(params[:content_type])
+    @content_type = ContentType.new(content_type_params)
 
     respond_to do |format|
       if @content_type.save
@@ -60,7 +60,7 @@ class ContentTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @content_type.update_attributes(params[:content_type])
+      if @content_type.update_attributes(content_type_params)
         format.html { redirect_to @content_type, notice: t('controller.successfully_updated', model: t('activerecord.models.content_type')) }
         format.json { head :no_content }
       else

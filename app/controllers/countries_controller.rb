@@ -38,7 +38,7 @@ class CountriesController < ApplicationController
   # POST /countries
   # POST /countries.json
   def create
-    @country = Country.new(params[:country])
+    @country = Country.new(country_params)
 
     respond_to do |format|
       if @country.save
@@ -60,7 +60,7 @@ class CountriesController < ApplicationController
     end
 
     respond_to do |format|
-      if @country.update_attributes(params[:country])
+      if @country.update_attributes(country_params)
         format.html { redirect_to @country, notice: t('controller.successfully_updated', model: t('activerecord.models.country')) }
         format.json { head :no_content }
       else

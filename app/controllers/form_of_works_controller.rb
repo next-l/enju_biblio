@@ -38,7 +38,7 @@ class FormOfWorksController < ApplicationController
   # POST /form_of_works
   # POST /form_of_works.json
   def create
-    @form_of_work = FormOfWork.new(params[:form_of_work])
+    @form_of_work = FormOfWork.new(form_of_work_params)
 
     respond_to do |format|
       if @form_of_work.save
@@ -60,7 +60,7 @@ class FormOfWorksController < ApplicationController
     end
 
     respond_to do |format|
-      if @form_of_work.update_attributes(params[:form_of_work])
+      if @form_of_work.update_attributes(form_of_work_params)
         format.html { redirect_to @form_of_work, notice: t('controller.successfully_updated', model: t('activerecord.models.form_of_work')) }
         format.json { head :no_content }
       else

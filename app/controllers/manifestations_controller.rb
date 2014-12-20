@@ -539,11 +539,12 @@ class ManifestationsController < ApplicationController
       :valid_until, :date_submitted, :date_accepted, :date_captured,
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
+      :dimensions, :fulltext_content, :extent,
+      :number_of_page_string, :parent_id,
       :series_statements_attributes, :serial, :statement_of_responsibility,
       :creators_attributes, :contributors_attributes, :publishers_attributes,
-      :identifiers_attributes, :dimensions, :fulltext_content, :extent,
-      :number_of_page_string, :parent_id,
-      :subjects_attributes, :classifications_attributes # EnjuSubject
+      :subjects_attributes, :classifications_attributes, # EnjuSubject
+      {:identifiers_attributes => [:body, :identifier_type_id]}
     )
   end
 
