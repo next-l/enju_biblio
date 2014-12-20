@@ -42,7 +42,7 @@ class ProduceTypesController < ApplicationController
 
     respond_to do |format|
       if @produce_type.save
-        format.html { redirect_to @produce_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.produce_type')) }
+        format.html { redirect_to @produce_type, notice: t('controller.successfully_created', model: t('activerecord.models.produce_type')) }
         format.json { render json: @produce_type, status: :created, location: @produce_type }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class ProduceTypesController < ApplicationController
 
     respond_to do |format|
       if @produce_type.update_attributes(params[:produce_type])
-        format.html { redirect_to @produce_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.produce_type')) }
+        format.html { redirect_to @produce_type, notice: t('controller.successfully_updated', model: t('activerecord.models.produce_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

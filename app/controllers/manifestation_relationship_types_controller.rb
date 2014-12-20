@@ -42,7 +42,7 @@ class ManifestationRelationshipTypesController < ApplicationController
 
     respond_to do |format|
       if @manifestation_relationship_type.save
-        format.html { redirect_to @manifestation_relationship_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.manifestation_relationship_type')) }
+        format.html { redirect_to @manifestation_relationship_type, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation_relationship_type')) }
         format.json { render json: @manifestation_relationship_type, status: :created, location: @manifestation_relationship_type }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class ManifestationRelationshipTypesController < ApplicationController
 
     respond_to do |format|
       if @manifestation_relationship_type.update_attributes(params[:manifestation_relationship_type])
-        format.html { redirect_to @manifestation_relationship_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.manifestation_relationship_type')) }
+        format.html { redirect_to @manifestation_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

@@ -53,7 +53,7 @@ class ResourceExportFilesController < ApplicationController
   # POST /resource_export_files
   # POST /resource_export_files.json
   def create
-    @resource_export_file = ResourceExportFile.new(params[:resource_export_file])
+    @resource_export_file = ResourceExportFile.new(resource_export_file_params)
     @resource_export_file.user = current_user
 
     respond_to do |format|
@@ -74,7 +74,7 @@ class ResourceExportFilesController < ApplicationController
   # PUT /resource_export_files/1.json
   def update
     respond_to do |format|
-      if @resource_export_file.update_attributes(params[:resource_export_file])
+      if @resource_export_file.update_attributes(resource_export_file_params)
         if @resource_export_file.mode == 'export'
           ResourceExportFileQueue.perform(@resource_export_file.id)
         end

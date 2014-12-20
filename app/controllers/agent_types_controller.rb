@@ -42,7 +42,7 @@ class AgentTypesController < ApplicationController
 
     respond_to do |format|
       if @agent_type.save
-        format.html { redirect_to @agent_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.agent_type')) }
+        format.html { redirect_to @agent_type, notice: t('controller.successfully_created', model: t('activerecord.models.agent_type')) }
         format.json { render json: @agent_type, status: :created, location: @agent_type }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class AgentTypesController < ApplicationController
 
     respond_to do |format|
       if @agent_type.update_attributes(params[:agent_type])
-        format.html { redirect_to @agent_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.agent_type')) }
+        format.html { redirect_to @agent_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

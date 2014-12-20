@@ -42,7 +42,7 @@ class AgentRelationshipTypesController < ApplicationController
 
     respond_to do |format|
       if @agent_relationship_type.save
-        format.html { redirect_to @agent_relationship_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.agent_relationship_type')) }
+        format.html { redirect_to @agent_relationship_type, notice: t('controller.successfully_created', model: t('activerecord.models.agent_relationship_type')) }
         format.json { render json: @agent_relationship_type, status: :created, location: @agent_relationship_type }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class AgentRelationshipTypesController < ApplicationController
 
     respond_to do |format|
       if @agent_relationship_type.update_attributes(params[:agent_relationship_type])
-        format.html { redirect_to @agent_relationship_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.agent_relationship_type')) }
+        format.html { redirect_to @agent_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_relationship_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

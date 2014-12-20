@@ -38,11 +38,11 @@ class FrequenciesController < ApplicationController
   # POST /frequencies
   # POST /frequencies.json
   def create
-    @frequency = Frequency.new(params[:frequency])
+    @frequency = Frequency.new(frequency_params)
 
     respond_to do |format|
       if @frequency.save
-        format.html { redirect_to @frequency, notice:  t('controller.successfully_created', model:  t('activerecord.models.frequency')) }
+        format.html { redirect_to @frequency, notice: t('controller.successfully_created', model: t('activerecord.models.frequency')) }
         format.json { render json: @frequency, status: :created, location: @frequency }
       else
         format.html { render action: "new" }
@@ -60,8 +60,8 @@ class FrequenciesController < ApplicationController
     end
 
     respond_to do |format|
-      if @frequency.update_attributes(params[:frequency])
-        format.html { redirect_to @frequency, notice:  t('controller.successfully_updated', model:  t('activerecord.models.frequency')) }
+      if @frequency.update_attributes(frequency_params)
+        format.html { redirect_to @frequency, notice: t('controller.successfully_updated', model: t('activerecord.models.frequency')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

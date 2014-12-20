@@ -152,15 +152,7 @@ class AgentsController < ApplicationController
   # POST /agents
   # POST /agents.json
   def create
-    @agent = Agent.new(params[:agent])
-    #if @agent.user_username
-    #  @agent.user = User.find(@agent.user_username) rescue nil
-    #end
-    #unless current_user.has_role?('Librarian')
-    #  if @agent.user != current_user
-    #    access_denied; return
-    #  end
-    #end
+    @agent = Agent.new(agent_params)
 
     respond_to do |format|
       if @agent.save
@@ -186,7 +178,7 @@ class AgentsController < ApplicationController
   # PUT /agents/1.json
   def update
     respond_to do |format|
-      if @agent.update_attributes(params[:agent])
+      if @agent.update_attributes(agent_params)
         format.html { redirect_to @agent, notice: t('controller.successfully_updated', model: t('activerecord.models.agent')) }
         format.json { head :no_content }
       else

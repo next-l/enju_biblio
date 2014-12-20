@@ -42,7 +42,7 @@ class ContentTypesController < ApplicationController
 
     respond_to do |format|
       if @content_type.save
-        format.html { redirect_to @content_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.content_type')) }
+        format.html { redirect_to @content_type, notice: t('controller.successfully_created', model: t('activerecord.models.content_type')) }
         format.json { render json: @content_type, status: :created, location: @content_type }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class ContentTypesController < ApplicationController
 
     respond_to do |format|
       if @content_type.update_attributes(params[:content_type])
-        format.html { redirect_to @content_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.content_type')) }
+        format.html { redirect_to @content_type, notice: t('controller.successfully_updated', model: t('activerecord.models.content_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

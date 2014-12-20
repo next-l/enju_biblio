@@ -39,7 +39,7 @@ class DonatesController < ApplicationController
   # POST /donates
   # POST /donates.json
   def create
-    @donate = Donate.new(params[:donate])
+    @donate = Donate.new(donate_params)
 
     respond_to do |format|
       if @donate.save
@@ -56,7 +56,7 @@ class DonatesController < ApplicationController
   # PUT /donates/1.json
   def update
     respond_to do |format|
-      if @donate.update_attributes(params[:donate])
+      if @donate.update_attributes(donate_params)
         format.html { redirect_to @donate, notice: t('controller.successfully_updated', model: t('activerecord.models.donate')) }
         format.json { head :no_content }
       else

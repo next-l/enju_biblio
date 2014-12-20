@@ -51,7 +51,7 @@ class OwnsController < ApplicationController
   # POST /owns
   # POST /owns.json
   def create
-    @own = Own.new(params[:own])
+    @own = Own.new(own_params)
 
     respond_to do |format|
       if @own.save
@@ -74,7 +74,7 @@ class OwnsController < ApplicationController
     end
 
     respond_to do |format|
-      if @own.update_attributes(params[:own])
+      if @own.update_attributes(own_params)
         format.html { redirect_to @own, notice: t('controller.successfully_updated', model: t('activerecord.models.own')) }
         format.json { head :no_content }
       else

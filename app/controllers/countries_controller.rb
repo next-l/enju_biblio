@@ -42,7 +42,7 @@ class CountriesController < ApplicationController
 
     respond_to do |format|
       if @country.save
-        format.html { redirect_to @country, notice:  t('controller.successfully_created', model:  t('activerecord.models.country')) }
+        format.html { redirect_to @country, notice: t('controller.successfully_created', model: t('activerecord.models.country')) }
         format.json { render json: @country, status: :created, location: @country }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class CountriesController < ApplicationController
 
     respond_to do |format|
       if @country.update_attributes(params[:country])
-        format.html { redirect_to @country, notice:  t('controller.successfully_updated', model:  t('activerecord.models.country')) }
+        format.html { redirect_to @country, notice: t('controller.successfully_updated', model: t('activerecord.models.country')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

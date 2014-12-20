@@ -38,11 +38,11 @@ class LicensesController < ApplicationController
   # POST /licenses
   # POST /licenses.json
   def create
-    @license = License.new(params[:license])
+    @license = License.new(license_params)
 
     respond_to do |format|
       if @license.save
-        format.html { redirect_to @license, notice:  t('controller.successfully_created', model:  t('activerecord.models.license')) }
+        format.html { redirect_to @license, notice: t('controller.successfully_created', model: t('activerecord.models.license')) }
         format.json { render json: @license, status: :created, location: @license }
       else
         format.html { render action: "new" }
@@ -60,8 +60,8 @@ class LicensesController < ApplicationController
     end
 
     respond_to do |format|
-      if @license.update_attributes(params[:license])
-        format.html { redirect_to @license, notice:  t('controller.successfully_updated', model:  t('activerecord.models.license')) }
+      if @license.update_attributes(license_params)
+        format.html { redirect_to @license, notice: t('controller.successfully_updated', model: t('activerecord.models.license')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

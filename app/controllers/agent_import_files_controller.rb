@@ -52,7 +52,7 @@ class AgentImportFilesController < ApplicationController
   # POST /agent_import_files
   # POST /agent_import_files.json
   def create
-    @agent_import_file = AgentImportFile.new(params[:agent_import_file])
+    @agent_import_file = AgentImportFile.new(agent_import_file_params)
     @agent_import_file.user = current_user
 
     respond_to do |format|
@@ -73,7 +73,7 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1.json
   def update
     respond_to do |format|
-      if @agent_import_file.update_attributes(params[:agent_import_file])
+      if @agent_import_file.update_attributes(agent_import_file_params)
         if @agent_import_file.mode == 'import'
           Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
         end

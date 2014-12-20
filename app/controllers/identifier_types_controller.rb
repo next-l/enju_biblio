@@ -42,7 +42,7 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       if @identifier_type.save
-        format.html { redirect_to @identifier_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.identifier_type')) }
+        format.html { redirect_to @identifier_type, notice: t('controller.successfully_created', model: t('activerecord.models.identifier_type')) }
         format.json { render json: @identifier_type, status: :created, location: @identifier_type }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class IdentifierTypesController < ApplicationController
 
     respond_to do |format|
       if @identifier_type.update_attributes(identifier_type_params)
-        format.html { redirect_to @identifier_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.identifier_type')) }
+        format.html { redirect_to @identifier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.identifier_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

@@ -42,7 +42,7 @@ class FormOfWorksController < ApplicationController
 
     respond_to do |format|
       if @form_of_work.save
-        format.html { redirect_to @form_of_work, notice:  t('controller.successfully_created', model:  t('activerecord.models.form_of_work')) }
+        format.html { redirect_to @form_of_work, notice: t('controller.successfully_created', model: t('activerecord.models.form_of_work')) }
         format.json { render json: @form_of_work, status: :created, location: @form_of_work }
       else
         format.html { render action: "new" }
@@ -61,7 +61,7 @@ class FormOfWorksController < ApplicationController
 
     respond_to do |format|
       if @form_of_work.update_attributes(params[:form_of_work])
-        format.html { redirect_to @form_of_work, notice:  t('controller.successfully_updated', model:  t('activerecord.models.form_of_work')) }
+        format.html { redirect_to @form_of_work, notice: t('controller.successfully_updated', model: t('activerecord.models.form_of_work')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

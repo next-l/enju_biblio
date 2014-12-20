@@ -53,7 +53,7 @@ class CreatesController < ApplicationController
   # POST /creates
   # POST /creates.json
   def create
-    @create = Create.new(params[:create])
+    @create = Create.new(create_params)
 
     respond_to do |format|
       if @create.save
@@ -78,7 +78,7 @@ class CreatesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create.update_attributes(params[:create])
+      if @create.update_attributes(create_params)
         format.html { redirect_to @create, notice: t('controller.successfully_updated', model: t('activerecord.models.create')) }
         format.json { head :no_content }
       else

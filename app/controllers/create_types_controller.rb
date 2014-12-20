@@ -38,11 +38,11 @@ class CreateTypesController < ApplicationController
   # POST /create_types
   # POST /create_types.json
   def create
-    @create_type = CreateType.new(params[:create_type])
+    @create_type = CreateType.new(create_type_params)
 
     respond_to do |format|
       if @create_type.save
-        format.html { redirect_to @create_type, notice:  t('controller.successfully_created', model:  t('activerecord.models.create_type')) }
+        format.html { redirect_to @create_type, notice: t('controller.successfully_created', model: t('activerecord.models.create_type')) }
         format.json { render json: @create_type, status: :created, location: @create_type }
       else
         format.html { render action: "new" }
@@ -60,8 +60,8 @@ class CreateTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create_type.update_attributes(params[:create_type])
-        format.html { redirect_to @create_type, notice:  t('controller.successfully_updated', model:  t('activerecord.models.create_type')) }
+      if @create_type.update_attributes(create_type_params)
+        format.html { redirect_to @create_type, notice: t('controller.successfully_updated', model: t('activerecord.models.create_type')) }
         format.json { head :no_content }
       else
         format.html { render action: "edit" }

@@ -53,7 +53,7 @@ class RealizesController < ApplicationController
   # POST /realizes
   # POST /realizes.json
   def create
-    @realize = Realize.new(params[:realize])
+    @realize = Realize.new(realize_params)
 
     respond_to do |format|
       if @realize.save
@@ -78,7 +78,7 @@ class RealizesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize.update_attributes(params[:realize])
+      if @realize.update_attributes(realize_params)
         format.html { redirect_to @realize, notice: t('controller.successfully_updated', model: t('activerecord.models.realize')) }
         format.json { head :no_content }
       else
