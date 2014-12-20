@@ -47,7 +47,7 @@ class AgentMergesController < ApplicationController
   # POST /agent_merges
   # POST /agent_merges.json
   def create
-    @agent_merge = AgentMerge.new(params[:agent_merge])
+    @agent_merge = AgentMerge.new(agent_merge_params)
 
     respond_to do |format|
       if @agent_merge.save
@@ -64,7 +64,7 @@ class AgentMergesController < ApplicationController
   # PUT /agent_merges/1.json
   def update
     respond_to do |format|
-      if @agent_merge.update_attributes(params[:agent_merge])
+      if @agent_merge.update_attributes(agent_merge_params)
         format.html { redirect_to(@agent_merge, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_merge'))) }
         format.json { head :no_content }
       else

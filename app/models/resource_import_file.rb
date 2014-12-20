@@ -1,6 +1,10 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordQueries
+  if Rails::VERSION::MAJOR >= 4
+    include Statesman::Adapters::ActiveRecordQueries
+  else
+    include Statesman::Adapters::ActiveRecordModel
+  end
   include ImportFile
   default_scope { order('resource_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
@@ -303,7 +307,7 @@ class ResourceImportFile < ActiveRecord::Base
           binding_item_identifier binding_call_number binded_at
         )
         item_columns.each do |column|
-          item.assign_attributes(:"#{column}" => row[column], as: :admin)
+          item.assign_attributes(:"#{column}" => row[column])
         end
 
         item.note = row['item_note'] if row['item_note'].present?

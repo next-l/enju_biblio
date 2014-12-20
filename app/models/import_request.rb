@@ -1,5 +1,9 @@
 class ImportRequest < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordQueries
+  if Rails::VERSION::MAJOR >= 4
+    include Statesman::Adapters::ActiveRecordQueries
+  else
+    include Statesman::Adapters::ActiveRecordModel
+  end
   default_scope { order('import_requests.id DESC') }
   belongs_to :manifestation
   belongs_to :user
