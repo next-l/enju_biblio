@@ -1,10 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
-  if Rails::VERSION::MAJOR >= 4
-    include Statesman::Adapters::ActiveRecordQueries
-  else
-    include Statesman::Adapters::ActiveRecordModel
-  end
+  include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   default_scope { order('resource_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
