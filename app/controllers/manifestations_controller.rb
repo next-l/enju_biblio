@@ -541,9 +541,21 @@ class ManifestationsController < ApplicationController
       :serial_number, :content_type_id, :attachment, :lock_version,
       :dimensions, :fulltext_content, :extent,
       :number_of_page_string, :parent_id,
-      :series_statements_attributes, :serial, :statement_of_responsibility,
+      :serial, :statement_of_responsibility,
       :creators_attributes, :contributors_attributes, :publishers_attributes,
-      :subjects_attributes, :classifications_attributes, # EnjuSubject
+      {:series_statements_attributes => [
+        :id, :original_title, :numbering, :title_subseries,
+        :numbering_subseries, :title_transcription, :title_alternative,
+        :title_subseries_transcription, :creator_string, :volume_number_string,
+        :volume_number_transcription_string, :series_master
+      ]},
+      {:subjects_attributes => [
+        :parent_id, :use_term_id, :term, :term_transcription,
+        :subject_type_id, :note, :required_role_id, :subject_heading_type_id
+      ]},
+      {:classifications_attributes => [
+        :parent_id, :category, :note, :classification_type_id
+      ]},
       {:identifiers_attributes => [:id, :body, :identifier_type_id]}
     )
   end
