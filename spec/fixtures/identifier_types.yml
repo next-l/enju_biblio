@@ -21,6 +21,13 @@ three:
   position: 3
   id: 3
 
+four:
+  name: ncid
+  display_name: NCID
+  note: 
+  position: 4
+  id: 4
+
 # == Schema Information
 #
 # Table name: identifier_types
