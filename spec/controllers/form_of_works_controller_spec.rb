@@ -84,14 +84,14 @@ describe FormOfWorksController do
       it "assigns a newly created but unsaved form_of_work as @form_of_work" do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        post :create, :form_of_work => {}
+        post :create, :form_of_work => {name: "test"}
         expect(assigns(:form_of_work)).to be_a_new(FormOfWork)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        post :create, :form_of_work => {}
+        post :create, :form_of_work => {name: "test"}
         #expect(response).to render_template("new")
       end
     end
@@ -135,7 +135,7 @@ describe FormOfWorksController do
         form_of_work = FormOfWork.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        put :update, :id => form_of_work.id, :form_of_work => {}
+        put :update, :id => form_of_work.id, :form_of_work => {name: "test"}
         expect(assigns(:form_of_work)).to eq(form_of_work)
       end
 
@@ -143,7 +143,7 @@ describe FormOfWorksController do
         form_of_work = FormOfWork.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         FormOfWork.any_instance.stub(:save).and_return(false)
-        put :update, :id => form_of_work.id, :form_of_work => {}
+        put :update, :id => form_of_work.id, :form_of_work => {name: "test"}
         #expect(response).to render_template("edit")
       end
     end

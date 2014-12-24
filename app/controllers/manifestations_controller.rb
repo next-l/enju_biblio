@@ -542,7 +542,39 @@ class ManifestationsController < ApplicationController
       :dimensions, :fulltext_content, :extent,
       :number_of_page_string, :parent_id,
       :serial, :statement_of_responsibility,
-      :creators_attributes, :contributors_attributes, :publishers_attributes,
+      {:creators_attributes => [
+        :id, :last_name, :middle_name, :first_name,
+        :last_name_transcription, :middle_name_transcription,
+        :first_name_transcription, :corporate_name,
+        :corporate_name_transcription,
+        :full_name, :full_name_transcription, :full_name_alternative,
+        :other_designation, :language_id,
+        :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+        :full_name_alternative_transcription, :title,
+        :agent_identifier
+      ]},
+      {:contributors_attributes => [
+        :id, :last_name, :middle_name, :first_name,
+        :last_name_transcription, :middle_name_transcription,
+        :first_name_transcription, :corporate_name,
+        :corporate_name_transcription,
+        :full_name, :full_name_transcription, :full_name_alternative,
+        :other_designation, :language_id,
+        :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+        :full_name_alternative_transcription, :title,
+        :agent_identifier
+      ]},
+      {:publishers_attributes => [
+        :id, :last_name, :middle_name, :first_name,
+        :last_name_transcription, :middle_name_transcription,
+        :first_name_transcription, :corporate_name,
+        :corporate_name_transcription,
+        :full_name, :full_name_transcription, :full_name_alternative,
+        :other_designation, :language_id,
+        :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+        :full_name_alternative_transcription, :title,
+        :agent_identifier
+      ]}
       {:series_statements_attributes => [
         :id, :original_title, :numbering, :title_subseries,
         :numbering_subseries, :title_transcription, :title_alternative,
