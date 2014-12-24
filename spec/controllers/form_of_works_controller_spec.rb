@@ -105,8 +105,8 @@ describe FormOfWorksController do
         # specifies that the FormOfWork created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        FormOfWork.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => form_of_work.id, :form_of_work => {'these' => 'params'}
+        FormOfWork.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => form_of_work.id, :form_of_work => {'name' => 'test'}
       end
 
       it "assigns the requested form_of_work as @form_of_work" do

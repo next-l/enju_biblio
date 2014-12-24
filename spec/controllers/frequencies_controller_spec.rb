@@ -84,15 +84,15 @@ describe FrequenciesController do
       it "assigns a newly created but unsaved frequency as @frequency" do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        post :create, :frequency => {}
+        post :create, :frequency => {name: "test"}
         assigns(:frequency).should be_a_new(Frequency)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        post :create, :frequency => {}
-        #expect(response).to render_template("new")
+        post :create, :frequency => {name: "test"}
+        expect(response).to render_template("new")
       end
     end
   end
@@ -105,8 +105,8 @@ describe FrequenciesController do
         # specifies that the Frequency created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Frequency.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => frequency.id, :frequency => {'these' => 'params'}
+        Frequency.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => frequency.id, :frequency => {'name' => 'test'}
       end
 
       it "assigns the requested frequency as @frequency" do
@@ -135,7 +135,7 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        put :update, :id => frequency.id, :frequency => {}
+        put :update, :id => frequency.id, :frequency => {name: "test"}
         assigns(:frequency).should eq(frequency)
       end
 
@@ -143,8 +143,8 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        put :update, :id => frequency.id, :frequency => {}
-        #expect(response).to render_template("edit")
+        put :update, :id => frequency.id, :frequency => {name: "test"}
+        expect(response).to render_template("edit")
       end
     end
   end

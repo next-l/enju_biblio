@@ -84,14 +84,14 @@ describe MediumOfPerformancesController do
       it "assigns a newly created but unsaved medium_of_performance as @medium_of_performance" do
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        post :create, :medium_of_performance => {}
+        post :create, :medium_of_performance => {name: "test"}
         expect(assigns(:medium_of_performance)).to be_a_new(MediumOfPerformance)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        post :create, :medium_of_performance => {}
+        post :create, :medium_of_performance => {name: "test"}
         #expect(response).to render_template("new")
       end
     end
@@ -105,8 +105,8 @@ describe MediumOfPerformancesController do
         # specifies that the MediumOfPerformance created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        MediumOfPerformance.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => medium_of_performance.id, :medium_of_performance => {'these' => 'params'}
+        MediumOfPerformance.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => medium_of_performance.id, :medium_of_performance => {'name' => 'test'}
       end
 
       it "assigns the requested medium_of_performance as @medium_of_performance" do
@@ -135,7 +135,7 @@ describe MediumOfPerformancesController do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        put :update, :id => medium_of_performance.id, :medium_of_performance => {}
+        put :update, :id => medium_of_performance.id, :medium_of_performance => {name: "test"}
         expect(assigns(:medium_of_performance)).to eq(medium_of_performance)
       end
 
@@ -143,7 +143,7 @@ describe MediumOfPerformancesController do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        put :update, :id => medium_of_performance.id, :medium_of_performance => {}
+        put :update, :id => medium_of_performance.id, :medium_of_performance => {name: "test"}
         #expect(response).to render_template("edit")
       end
     end

@@ -86,6 +86,6 @@ class AgentMergesController < ApplicationController
   end
 
   def agent_merge_params
-    params.require(:agemt_merge).permit(:agent_id, :agent_merge_list_id)
+    params.require(:agent_merge).permit(:agent_id, :agent_merge_list_id)
   end
 end

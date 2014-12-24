@@ -83,6 +83,6 @@ class ProduceTypesController < ApplicationController
 
   private
   def produce_type_params
-    params.permit(:produce_type).permit(:name, :display_name, :note, :position)
+    params.require(:produce_type).permit(:name, :display_name, :note, :position)
   end
 end
