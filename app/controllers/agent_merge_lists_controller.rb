@@ -93,6 +93,6 @@ class AgentMergeListsController < ApplicationController
 
   private
   def agent_merge_list_params
-    params.require(:agent_merge_list).permit(:title)
+    params.fetch(:agent_merge_list, {}).permit(:title)
   end
 end

@@ -201,7 +201,7 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it "should update agent_import_file" do
-        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
+        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => {mode: "modify"}
         expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
@@ -210,14 +210,14 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it "should not update agent_import_file" do
-        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
+        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => {mode: "modify"}
         expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not update agent_import_file" do
-        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => { }
+        put :update, :id => agent_import_files(:agent_import_file_00003).id, :agent_import_file => {mode: "modify"}
         expect(response).to redirect_to new_user_session_url
       end
     end

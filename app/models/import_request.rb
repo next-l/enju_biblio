@@ -54,8 +54,8 @@ class ImportRequest < ActiveRecord::Base
     transition_to!(:failed)
   rescue EnjuNdl::RecordNotFound
     transition_to!(:failed)
-  #rescue EnjuNii::RecordNotFound
-  #  transition_to!(:failed)
+  rescue EnjuNii::RecordNotFound
+    transition_to!(:failed)
   end
 
   private

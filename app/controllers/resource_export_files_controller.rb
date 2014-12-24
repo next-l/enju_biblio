@@ -100,8 +100,6 @@ class ResourceExportFilesController < ApplicationController
 
   private
   def resource_export_file_params
-    params.require(:resource_export_file).permit(
-      :mode
-    )
+    params.permit(:mode)
   end
 end

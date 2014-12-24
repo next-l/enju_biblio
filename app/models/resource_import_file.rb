@@ -299,13 +299,14 @@ class ResourceImportFile < ActiveRecord::Base
         item.binded_at = binded_at if binded_at
 
         item_columns = %w(
-          call_number item_price
+          call_number
           binding_item_identifier binding_call_number binded_at
         )
         item_columns.each do |column|
           item.assign_attributes(:"#{column}" => row[column])
         end
 
+        item.price = row['item_price'] if row['item_price'].present?
         item.note = row['item_note'] if row['item_note'].present?
         item.url = row['item_url'] if row['item_url'].present?
 
