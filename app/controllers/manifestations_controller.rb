@@ -574,7 +574,7 @@ class ManifestationsController < ApplicationController
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
         :agent_identifier
-      ]}
+      ]},
       {:series_statements_attributes => [
         :id, :original_title, :numbering, :title_subseries,
         :numbering_subseries, :title_transcription, :title_alternative,
