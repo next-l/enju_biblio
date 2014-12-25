@@ -46,7 +46,7 @@ describe ResourceExportFilesController do
       login_fixture_admin
 
       it "assigns the requested resource_export_file as @resource_export_file" do
-        get :show, :id => resource_export_files(:resource_export_file_00003).id
+        get :show, id: resource_export_files(:resource_export_file_00003).id
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to be_success
       end
@@ -56,7 +56,7 @@ describe ResourceExportFilesController do
       login_fixture_librarian
 
       it "assigns the requested resource_export_file as @resource_export_file" do
-        get :show, :id => resource_export_files(:resource_export_file_00003).id
+        get :show, id: resource_export_files(:resource_export_file_00003).id
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to be_success
       end
@@ -66,7 +66,7 @@ describe ResourceExportFilesController do
       login_fixture_user
 
       it "assigns the requested resource_export_file as @resource_export_file" do
-        get :show, :id => resource_export_files(:resource_export_file_00003).id
+        get :show, id: resource_export_files(:resource_export_file_00003).id
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to be_forbidden
       end
@@ -74,7 +74,7 @@ describe ResourceExportFilesController do
 
     describe "When not logged in" do
       it "assigns the requested resource_export_file as @resource_export_file" do
-        get :show, :id => resource_export_files(:resource_export_file_00003).id
+        get :show, id: resource_export_files(:resource_export_file_00003).id
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -129,7 +129,7 @@ describe ResourceExportFilesController do
       end
 
       it "should create agent_export_file" do
-        post :create, :resource_export_file => { }
+        post :create, resource_export_file: {mode: 'export'}
         expect(assigns(:resource_export_file)).to be_valid
         assigns(:resource_export_file).user.username.should eq @user.username
         expect(response).to redirect_to resource_export_file_url(assigns(:resource_export_file))
@@ -143,7 +143,7 @@ describe ResourceExportFilesController do
       end
 
       it "should be forbidden" do
-        post :create, :resource_export_file => { }
+        post :create, resource_export_file: {mode: 'export'}
         assigns(:resource_export_file).user.should be_nil
         expect(response).to be_forbidden
       end
@@ -151,7 +151,7 @@ describe ResourceExportFilesController do
 
     describe "When not logged in" do
       it "should be redirected to new session url" do
-        post :create, :resource_export_file => { }
+        post :create, resource_export_file: {mode: 'export'}
         assigns(:resource_export_file).user.should be_nil
         expect(response).to redirect_to new_user_session_url
       end
@@ -164,7 +164,7 @@ describe ResourceExportFilesController do
 
       it "assigns the requested resource_export_file as @resource_export_file" do
         resource_export_file = resource_export_files(:resource_export_file_00001)
-        get :edit, :id => resource_export_file.id
+        get :edit, id: resource_export_file.id
         expect(assigns(:resource_export_file)).to eq(resource_export_file)
       end
     end
@@ -174,7 +174,7 @@ describe ResourceExportFilesController do
 
       it "assigns the requested resource_export_file as @resource_export_file" do
         resource_export_file = resource_export_files(:resource_export_file_00001)
-        get :edit, :id => resource_export_file.id
+        get :edit, id: resource_export_file.id
         expect(assigns(:resource_export_file)).to eq(resource_export_file)
       end
     end
@@ -184,7 +184,7 @@ describe ResourceExportFilesController do
 
       it "assigns the requested resource_export_file as @resource_export_file" do
         resource_export_file = resource_export_files(:resource_export_file_00001)
-        get :edit, :id => resource_export_file.id
+        get :edit, id: resource_export_file.id
         expect(response).to be_forbidden
       end
     end
@@ -192,7 +192,7 @@ describe ResourceExportFilesController do
     describe "When not logged in" do
       it "should not assign the requested resource_export_file as @resource_export_file" do
         resource_export_file = resource_export_files(:resource_export_file_00001)
-        get :edit, :id => resource_export_file.id
+        get :edit, id: resource_export_file.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -203,7 +203,7 @@ describe ResourceExportFilesController do
       login_fixture_admin
 
       it "should update resource_export_file" do
-        put :update, :id => resource_export_files(:resource_export_file_00003).id, :resource_export_file => { }
+        put :update, id: resource_export_files(:resource_export_file_00003).id, resource_export_file: {mode: 'export'}
         expect(response).to redirect_to resource_export_file_url(assigns(:resource_export_file))
       end
     end
@@ -212,7 +212,7 @@ describe ResourceExportFilesController do
       login_fixture_librarian
 
       it "should update resource_export_file" do
-        put :update, :id => resource_export_files(:resource_export_file_00003).id, :resource_export_file => { }
+        put :update, id: resource_export_files(:resource_export_file_00003).id, resource_export_file: {mode: 'export'}
         expect(response).to redirect_to resource_export_file_url(assigns(:resource_export_file))
       end
     end
@@ -221,14 +221,14 @@ describe ResourceExportFilesController do
       login_fixture_user
 
       it "should not update resource_export_file" do
-        put :update, :id => resource_export_files(:resource_export_file_00003).id, :resource_export_file => { }
+        put :update, id: resource_export_files(:resource_export_file_00003).id, resource_export_file: {mode: 'export'}
         expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not update resource_export_file" do
-        put :update, :id => resource_export_files(:resource_export_file_00003).id, :resource_export_file => { }
+        put :update, id: resource_export_files(:resource_export_file_00003).id, resource_export_file: {mode: 'export'}
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -243,11 +243,11 @@ describe ResourceExportFilesController do
       login_fixture_admin
 
       it "destroys the requested resource_export_file" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
       end
 
       it "redirects to the resource_export_files list" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
         expect(response).to redirect_to(resource_export_files_url)
       end
     end
@@ -256,11 +256,11 @@ describe ResourceExportFilesController do
       login_fixture_librarian
 
       it "destroys the requested resource_export_file" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
       end
 
       it "redirects to the resource_export_files list" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
         expect(response).to redirect_to(resource_export_files_url)
       end
     end
@@ -269,22 +269,22 @@ describe ResourceExportFilesController do
       login_fixture_user
 
       it "destroys the requested resource_export_file" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
       end
 
       it "should be forbidden" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
         expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "destroys the requested resource_export_file" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
       end
 
       it "should be forbidden" do
-        delete :destroy, :id => @resource_export_file.id
+        delete :destroy, id: @resource_export_file.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end
