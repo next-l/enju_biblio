@@ -27,7 +27,9 @@ class ImportRequest < ActiveRecord::Base
 
   def check_imported
     if isbn.present?
-      if Identifier.where(body: isbn, identifier_type_id: IdentifierType.where(name: 'isbn').first_or_create.id).first.try(:manifestation)
+      identifier_type = IdentifierType.where(name: 'isbn').first
+      identifier_type = IdentifierType.where(name: 'isbn').create! unless identifier_type
+      if Identifier.where(body: isbn, identifier_type_id: identifier_type.id).first.try(:manifestation)
         errors.add(:isbn, I18n.t('import_request.isbn_taken'))
       end
     end
@@ -44,8 +46,8 @@ class ImportRequest < ActiveRecord::Base
       else
         transition_to!(:failed)
       end
-    else
-      transition_to!(:failed)
+    #else
+    #  transition_to!(:failed)
     end
     save
   rescue ActiveRecord::RecordInvalid
