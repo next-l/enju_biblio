@@ -479,7 +479,7 @@ class Manifestation < ActiveRecord::Base
 
   def identifier_contents(name)
     if IdentifierType.where(name: name.to_s).exists?
-      identifiers.where(identifier_type_id: IdentifierType.where(name: name).first.id).pluck(:body)
+      identifiers.where(identifier_type_id: IdentifierType.where(name: name).first.id).order(:position).pluck(:body)
     else
       []
     end
