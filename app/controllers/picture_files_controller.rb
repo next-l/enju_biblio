@@ -30,7 +30,7 @@ class PictureFilesController < ApplicationController
     end
 
     if @picture_file.picture.path
-      if Setting.uploaded_file.storage == :s3
+      if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
         file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
       else
         file = @picture_file.picture.path(size)
@@ -195,7 +195,7 @@ class PictureFilesController < ApplicationController
     end
 
     if @picture_file.picture.path
-      if Setting.uploaded_file.storage == :s3
+      if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
         send_data file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
       else
         if File.exist?(file) && File.file?(file)
