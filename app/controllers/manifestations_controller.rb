@@ -316,7 +316,7 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.mobile
+      format.html.phone
       format.xml  { render xml: @manifestations }
       format.sru  { render layout: false }
       format.rss  { render layout: false }
@@ -396,7 +396,7 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.mobile
+      format.html.phone
       format.xml  {
         case params[:mode]
         when 'related'

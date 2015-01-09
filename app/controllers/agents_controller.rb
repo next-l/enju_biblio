@@ -83,7 +83,7 @@ class AgentsController < ApplicationController
       format.rss  { render layout: false }
       format.atom
       format.json { render json: @agents }
-      format.mobile
+      format.html.phone
     end
   end
 
@@ -125,7 +125,7 @@ class AgentsController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @agent }
       format.js
-      format.mobile
+      format.html.phone
     end
   end
 

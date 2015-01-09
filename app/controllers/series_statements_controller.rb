@@ -46,7 +46,7 @@ class SeriesStatementsController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @series_statement }
       #format.js
-      #format.mobile
+      #format.html.phone
     end
   end
 
