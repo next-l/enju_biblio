@@ -134,14 +134,14 @@ describe ManifestationsController do
         get :index, :query => '2005', :pub_date_from => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
-        assigns(:query).should eq '2005 date_of_publication_d:[1999-12-31T00:00:00Z TO *]'
+        assigns(:query).should eq '2005 date_of_publication_d:[2000-01-01T00:00:00Z TO *]'
       end
 
       it "should get index with pub_date_to" do
         get :index, :query => '2005', :pub_date_to => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
-        assigns(:query).should eq '2005 date_of_publication_d:[* TO 1999-12-31T23:59:59Z]'
+        assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T23:59:59Z]'
       end
 
       it "should get tag_cloud" do
