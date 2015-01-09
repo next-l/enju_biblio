@@ -1,9 +1,5 @@
 # -*- encoding: utf-8 -*-
 class Agent < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-  enju_export if defined?(EnjuExport)
-
   scope :readable_by, lambda{ |user|
     if user
       where('required_role_id <= ?', user.try(:user_has_role).try(:role_id))
@@ -43,55 +39,37 @@ class Agent < ActiveRecord::Base
   validate :check_birth_date
   before_validation :set_role_and_name, on: :create
   before_save :set_date_of_birth, :set_date_of_death
-
-  index_name "#{name.downcase.pluralize}-#{Rails.env}"
-
-  settings do
-    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
-      indexes :name
-      indexes :place
-      indexes :address_1
-      indexes :address_2
-      indexes :other_designation
-      indexes :note
-      indexes :zip_code_1
-      indexes :zip_code_2
-      indexes :created_at
-      indexes :updated_at
-      indexes :date_of_birth
-      indexes :date_of_death
-    end
-  #after_save do |agent|
-  #  agent.works.map{|work| work.touch; work.index}
-  #  agent.expressions.map{|expression| expression.touch; expression.index}
-  #  agent.manifestations.map{|manifestation| manifestation.touch; manifestation.index}
-  #  agent.items.map{|item| item.touch; item.index}
-  #  Sunspot.commit
-  #end
-  #after_destroy do |agent|
-  #  agent.works.map{|work| work.touch; work.index}
-  #  agent.expressions.map{|expression| expression.touch; expression.index}
-  #  agent.manifestations.map{|manifestation| manifestation.touch; manifestation.index}
-  #  agent.items.map{|item| item.touch; item.index}
-  #  Sunspot.commit
+  after_save do |agent|
+    agent.works.map{|work| work.touch; work.index}
+    agent.expressions.map{|expression| expression.touch; expression.index}
+    agent.manifestations.map{|manifestation| manifestation.touch; manifestation.index}
+    agent.items.map{|item| item.touch; item.index}
+    Sunspot.commit
+  end
+  after_destroy do |agent|
+    agent.works.map{|work| work.touch; work.index}
+    agent.expressions.map{|expression| expression.touch; expression.index}
+    agent.manifestations.map{|manifestation| manifestation.touch; manifestation.index}
+    agent.items.map{|item| item.touch; item.index}
+    Sunspot.commit
   end
 
-  #searchable do
-  #  text :name, :place, :address_1, :address_2, :other_designation, :note
-  #  string :zip_code_1
-  #  string :zip_code_2
-  #  time :created_at
-  #  time :updated_at
-  #  time :date_of_birth
-  #  time :date_of_death
-  #  integer :work_ids, multiple: true
-  #  integer :expression_ids, multiple: true
-  #  integer :manifestation_ids, multiple: true
-  #  integer :agent_merge_list_ids, multiple: true
-  #  integer :original_agent_ids, multiple: true
-  #  integer :required_role_id
-  #  integer :agent_type_id
-  #end
+  searchable do
+    text :name, :place, :address_1, :address_2, :other_designation, :note
+    string :zip_code_1
+    string :zip_code_2
+    time :created_at
+    time :updated_at
+    time :date_of_birth
+    time :date_of_death
+    integer :work_ids, multiple: true
+    integer :expression_ids, multiple: true
+    integer :manifestation_ids, multiple: true
+    integer :agent_merge_list_ids, multiple: true
+    integer :original_agent_ids, multiple: true
+    integer :required_role_id
+    integer :agent_type_id
+  end
 
   paginates_per 10
 

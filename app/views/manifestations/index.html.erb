@@ -74,7 +74,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <% if @parent and policy(@parent).update? %>
+  <% if @parent and can?(:update, @parent) %>
     <%= render 'submenu_parent' %>
   <% end %>
 </div>

@@ -26,7 +26,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(Agent).create? -%>
+    <%- if can? :create, Agent -%>
       <li><%= link_to t('agent.add'), new_agent_path -%></li>
       <li><%= link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path -%></li>
     <%- end -%>

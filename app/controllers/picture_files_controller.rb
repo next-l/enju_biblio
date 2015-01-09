@@ -1,12 +1,10 @@
 class PictureFilesController < ApplicationController
-  before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
-  before_action :get_attachable, :only => [:index, :new]
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :get_attachable, only: [:index, :new]
 
   # GET /picture_files
   # GET /picture_files.json
   def index
-    authorize PictureFile
     if @attachable
       @picture_files = @attachable.picture_files.attached.page(params[:page])
     else
@@ -42,7 +40,7 @@ class PictureFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @picture_file }
-      format.html.phone {
+      format.mobile {
         if params[:format] == 'download'
           render_image(file)
         end
@@ -56,13 +54,12 @@ class PictureFilesController < ApplicationController
   # GET /picture_files/new
   # GET /picture_files/new.json
   def new
-    #raise unless @event or @manifestation or @shelf or @agent
-    @picture_file = PictureFile.new
-    authorize @picture_file
     unless @attachable
       redirect_to picture_files_url
       return
     end
+    #raise unless @event or @manifestation or @shelf or @agent
+    @picture_file = PictureFile.new
     @picture_file.picture_attachable = @attachable
 
     respond_to do |format|
@@ -78,7 +75,6 @@ class PictureFilesController < ApplicationController
   # POST /picture_files
   # POST /picture_files.json
   def create
-    authorize PictureFile
     @picture_file = PictureFile.new(picture_file_params)
 
     respond_to do |format|
@@ -133,7 +129,6 @@ class PictureFilesController < ApplicationController
   def destroy
     attachable = @picture_file.picture_attachable
     @picture_file.destroy
-    flash[:notice] = t('controller.successfully_destroyed', :model => t('activerecord.models.picture_file'))
 
     respond_to do |format|
       flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.picture_file'))
@@ -162,9 +157,10 @@ class PictureFilesController < ApplicationController
   end
 
   private
-  def set_picture_file
-    @picture_file = PictureFile.find(params[:id])
-    authorize @picture_file
+  def picture_file_params
+    params.require(:picture_file).permit(
+      :picture, :picture_attachable_id, :picture_attachable_type
+    )
   end
 
   def get_attachable
@@ -207,11 +203,5 @@ class PictureFilesController < ApplicationController
         end
       end
     end
-  end
-
-  def picture_file_params
-    params.require(:picture_file).permit(
-      :picture, :picture_attachable_id, :picture_attachable_type
-    )
   end
 end

@@ -1,14 +1,19 @@
 class AgentImportFilesController < ApplicationController
-  before_action :set_agent_import_file, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
+  load_and_authorize_resource
 
   # GET /agent_import_files
+  # GET /agent_import_files.json
   def index
-    authorize AgentImportFile
     @agent_import_files = AgentImportFile.page(params[:page])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @agent_import_files }
+    end
   end
 
   # GET /agent_import_files/1
+  # GET /agent_import_files/1.json
   def show
     if @agent_import_file.agent_import.path
       unless Setting.uploaded_file.storage == :s3
@@ -30,9 +35,14 @@ class AgentImportFilesController < ApplicationController
   end
 
   # GET /agent_import_files/new
+  # GET /agent_import_files/new.json
   def new
     @agent_import_file = AgentImportFile.new
-    authorize @agent_import_file
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @agent_import_file }
+    end
   end
 
   # GET /agent_import_files/1/edit
@@ -40,45 +50,54 @@ class AgentImportFilesController < ApplicationController
   end
 
   # POST /agent_import_files
+  # POST /agent_import_files.json
   def create
-    authorize AgentImportFile
     @agent_import_file = AgentImportFile.new(agent_import_file_params)
     @agent_import_file.user = current_user
 
-    if @agent_import_file.save
-      if @agent_import_file.mode == 'import'
-        Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
+    respond_to do |format|
+      if @agent_import_file.save
+        if @agent_import_file.mode == 'import'
+          Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
+        end
+        format.html { redirect_to @agent_import_file, notice: t('controller.successfully_created', model: t('activerecord.models.agent_import_file')) }
+        format.json { render json: @agent_import_file, status: :created, location: @agent_import_file }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @agent_import_file.errors, status: :unprocessable_entity }
       end
-      redirect_to @agent_import_file, notice: t('controller.successfully_created', model: t('activerecord.models.agent_import_file'))
-    else
-      render action: 'new'
     end
   end
 
   # PUT /agent_import_files/1
+  # PUT /agent_import_files/1.json
   def update
-    if @agent_import_file.update(agent_import_file_params)
-      if @agent_import_file.mode == 'import'
-        Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
+    respond_to do |format|
+      if @agent_import_file.update_attributes(agent_import_file_params)
+        if @agent_import_file.mode == 'import'
+          Resque.enqueue(AgentImportFileQueue, @agent_import_file.id)
+        end
+        format.html { redirect_to @agent_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_import_file')) }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @agent_import_file.errors, status: :unprocessable_entity }
       end
-      redirect_to @agent_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_import_file'))
-    else
-      render :edit
     end
   end
 
   # DELETE /agent_import_files/1
+  # DELETE /agent_import_files/1.json
   def destroy
     @agent_import_file.destroy
-    redirect_to agent_import_files_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.agent_import_file'))
+
+    respond_to do |format|
+      format.html { redirect_to agent_import_files_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.agent_import_file')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-  def set_agent_import_file
-    @agent_import_file = AgentImportFile.find(params[:id])
-    authorize @agent_import_file
-  end
-
   def agent_import_file_params
     params.require(:agent_import_file).permit(
       :agent_import, :edit_mode, :user_encoding, :mode

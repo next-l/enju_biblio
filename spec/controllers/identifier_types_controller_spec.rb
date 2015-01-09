@@ -33,7 +33,7 @@ describe IdentifierTypesController do
     it "assigns all identifier_types as @identifier_types" do
       identifier_type = IdentifierType.create! valid_attributes
       get :index
-      expect(assigns(:identifier_types)).to eq(IdentifierType.order(:position))
+      expect(assigns(:identifier_types)).to eq(IdentifierType.all)
     end
   end
 
@@ -84,15 +84,15 @@ describe IdentifierTypesController do
       it "assigns a newly created but unsaved identifier_type as @identifier_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        post :create, :identifier_type => {}
+        post :create, :identifier_type => {name: "test"}
         expect(assigns(:identifier_type)).to be_a_new(IdentifierType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        post :create, :identifier_type => {}
-        #expect(response).to render_template("new")
+        post :create, :identifier_type => {name: "test"}
+        expect(response).to render_template("new")
       end
     end
   end
@@ -105,8 +105,8 @@ describe IdentifierTypesController do
         # specifies that the IdentifierType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        IdentifierType.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => identifier_type.id, :identifier_type => {'these' => 'params'}
+        IdentifierType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => identifier_type.id, :identifier_type => {'name' => 'test'}
       end
 
       it "assigns the requested identifier_type as @identifier_type" do
@@ -135,7 +135,7 @@ describe IdentifierTypesController do
         identifier_type = IdentifierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        put :update, :id => identifier_type.id, :identifier_type => {}
+        put :update, :id => identifier_type.id, :identifier_type => {name: "test"}
         expect(assigns(:identifier_type)).to eq(identifier_type)
       end
 
@@ -143,8 +143,8 @@ describe IdentifierTypesController do
         identifier_type = IdentifierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        put :update, :id => identifier_type.id, :identifier_type => {}
-        #expect(response).to render_template("edit")
+        put :update, :id => identifier_type.id, :identifier_type => {name: "test"}
+        expect(response).to render_template("edit")
       end
     end
   end

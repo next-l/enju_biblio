@@ -168,7 +168,7 @@ describe AgentMergesController do
   describe "POST create" do
     before(:each) do
       @attrs = FactoryGirl.attributes_for(:agent_merge)
-      @invalid_attrs = {:agent_merge_list_id => ''}
+      @invalid_attrs = {agent_id: 'invalid', agent_merge_list_id: 'invalid'}
     end
 
     describe "When logged in as Administrator" do

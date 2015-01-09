@@ -1,11 +1,9 @@
 class DonatesController < ApplicationController
-  before_action :set_donate, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
+  load_and_authorize_resource
 
   # GET /donates
   # GET /donates.json
   def index
-    authorize Donate
     @donates = Donate.order('id DESC').page(params[:page])
 
     respond_to do |format|
@@ -27,7 +25,6 @@ class DonatesController < ApplicationController
   # GET /donates/new.json
   def new
     @donate = Donate.new
-    authorize @donate
 
     respond_to do |format|
       format.html # new.html.erb
@@ -43,7 +40,6 @@ class DonatesController < ApplicationController
   # POST /donates.json
   def create
     @donate = Donate.new(donate_params)
-    authorize @donate
 
     respond_to do |format|
       if @donate.save
@@ -82,11 +78,6 @@ class DonatesController < ApplicationController
   end
 
   private
-  def set_donate
-    @donate = Donate.find(params[:id])
-    authorize @donate
-  end
-
   def donate_params
     params.require(:donate).permit(:agent_id, :item_id)
   end

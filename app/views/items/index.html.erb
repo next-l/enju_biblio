@@ -72,7 +72,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <%= render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation -%>
   <ul>
-    <%- if policy(Item).create? and @manifestation -%>
+    <%- if can?(:create, Item) and @manifestation -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id) -%></li>
     <%- end -%>
   </ul>

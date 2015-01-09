@@ -14,7 +14,7 @@
     <td><%= link_to realize.agent.full_name, realize.agent -%></td>
     <td><%= link_to realize.expression.original_title, realize.expression -%></td>
     <td>
-      <%- if policy(realize).destroy? -%>
+      <%- if can? :delete, realize -%>
         <%= link_to t('page.show'), realize -%>
         <%= link_to t('page.destroy'), realize, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
@@ -28,7 +28,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <%- if policy(Realize).create? -%>
+  <%- if can? :create, Realize -%>
     <ul>
       <li><%= link_to t('page.new', model: t('activerecord.models.realize')), new_realize_path -%></li>
     </ul>

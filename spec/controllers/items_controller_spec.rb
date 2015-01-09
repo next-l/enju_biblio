@@ -8,10 +8,9 @@ describe ItemsController do
     FactoryGirl.attributes_for(:item)
   end
 
-  describe "GET index", :elasticsearch => true do
+  describe "GET index", :solr => true do
     before do
-      Item.__elasticsearch__.create_index!
-      Item.import
+      Item.reindex
     end
 
     describe "When logged in as Administrator" do

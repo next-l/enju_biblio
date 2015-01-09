@@ -1,7 +1,9 @@
 require 'spec_helper'
+require 'sunspot/rails/spec_helper'
 
 describe OwnsController do
   fixtures :all
+  disconnect_sunspot
 
   def valid_attributes
     FactoryGirl.attributes_for(:own)

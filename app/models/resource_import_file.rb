@@ -1,6 +1,6 @@
 # -*- encoding: utf-8 -*-
 class ResourceImportFile < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordModel
+  include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   default_scope { order('resource_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
@@ -103,21 +103,27 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          manifestation = Identifier.where(body: doi, identifier_type_id: IdentifierType.where(name: 'doi').first_or_create.id).first.try(:manifestation)
+          identifier_type_doi = IdentifierType.where(name: 'doi').first
+          identifier_type_doi = IdentifierType.where(name: 'doi').create! unless identifier_type_doi
+          manifestation = Identifier.where(body: doi, identifier_type_id: identifier_type_doi.id).first.try(:manifestation)
         end
       end
 
       unless manifestation
         if row['jpno'].present?
           jpno = row['jpno'].to_s.strip
-          manifestation = Identifier.where(body: jpno, identifier_type_id: IdentifierType.where(name: 'jpno').first_or_create.id).first.try(:manifestation)
+          identifier_type_jpno = IdentifierType.where(name: 'jpno').first
+          identifier_type_jpno = IdentifierType.where(name: 'jpno').create! unless identifier_type_jpno
+          manifestation = Identifier.where(body: jpno, identifier_type_id: identifier_type_jpno.id).first.try(:manifestation)
         end
       end
 
       unless manifestation
         if row['isbn'].present?
           isbn = StdNum::ISBN.normalize(row['isbn'])
-          m = Identifier.where(body: isbn, identifier_type_id: IdentifierType.where(name: 'isbn').first_or_create.id).first.try(:manifestation)
+          identifier_type_isbn = IdentifierType.where(name: 'isbn').first
+          identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
+          m = Identifier.where(body: isbn, identifier_type_id: identifier_type_isbn.id).first.try(:manifestation)
         end
         if m
           if m.series_statements.exists?
@@ -154,7 +160,7 @@ class ResourceImportFile < ActiveRecord::Base
 
       if manifestation && item_identifier.present?
         import_result.item = create_item(row, manifestation)
-        manifestation.__elasticsearch__.update_document
+        manifestation.index
       else
         if manifestation.try(:fulltext_content?)
           item = Item.new
@@ -173,8 +179,14 @@ class ResourceImportFile < ActiveRecord::Base
 
       import_result.save!
       num[:item_imported] +=1 if import_result.item
+
+      if row_num % 50 == 0
+        Sunspot.commit
+        GC.start
+      end
     end
 
+    Sunspot.commit
     rows.close
     transition_to!(:completed)
     send_message
@@ -293,13 +305,14 @@ class ResourceImportFile < ActiveRecord::Base
         item.binded_at = binded_at if binded_at
 
         item_columns = %w(
-          call_number item_price
+          call_number
           binding_item_identifier binding_call_number binded_at
         )
         item_columns.each do |column|
           item.assign_attributes(:"#{column}" => row[column])
         end
 
+        item.price = row['item_price'] if row['item_price'].present?
         item.note = row['item_note'] if row['item_note'].present?
         item.url = row['item_url'] if row['item_url'].present?
 
@@ -715,7 +728,9 @@ class ResourceImportFile < ActiveRecord::Base
     %w(isbn issn doi jpno).each do |id_type|
       if row["#{id_type}"].present?
         import_id = Identifier.new(body: row["#{id_type}"])
-        import_id.identifier_type = IdentifierType.where(name: id_type).first_or_create
+        identifier_type = IdentifierType.where(name: id_type).first
+        identifier_type = IdentifierType.where(name: id_type).create! unless identifier_type
+        import_id.identifier_type = identifier_type
         identifier[:"#{id_type}"] = import_id if import_id.valid?
       end
     end

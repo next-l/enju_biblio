@@ -1,7 +1,9 @@
 require 'spec_helper'
+require 'sunspot/rails/spec_helper'
 
 describe AgentRelationshipTypesController do
   fixtures :all
+  disconnect_sunspot
 
   def valid_attributes
     FactoryGirl.attributes_for(:agent_relationship_type)
@@ -17,7 +19,7 @@ describe AgentRelationshipTypesController do
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
-        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.order(:position))
+        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.all)
       end
     end
 
@@ -26,7 +28,7 @@ describe AgentRelationshipTypesController do
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
-        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.order(:position))
+        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.all)
       end
     end
 
@@ -35,14 +37,14 @@ describe AgentRelationshipTypesController do
 
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
-        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.order(:position))
+        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.all)
       end
     end
 
     describe "When not logged in" do
       it "assigns all agent_relationship_types as @agent_relationship_types" do
         get :index
-        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.order(:position))
+        expect(assigns(:agent_relationship_types)).to eq(AgentRelationshipType.all)
       end
     end
   end

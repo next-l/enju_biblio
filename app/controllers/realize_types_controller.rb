@@ -1,22 +1,34 @@
 class RealizeTypesController < ApplicationController
-  before_action :set_realize_type, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
-
+  load_and_authorize_resource
   # GET /realize_types
+  # GET /realize_types.json
   def index
-    authorize RealizeType
-    @realize_types = policy_scope(RealizeType).order(:position)
+    @realize_types = RealizeType.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @realize_types }
+    end
   end
 
   # GET /realize_types/1
+  # GET /realize_types/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @realize_type }
+    end
   end
 
   # GET /realize_types/new
+  # GET /realize_types/new.json
   def new
     @realize_type = RealizeType.new
-    authorize @realize_type
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @realize_type }
+    end
   end
 
   # GET /realize_types/1/edit
@@ -24,46 +36,55 @@ class RealizeTypesController < ApplicationController
   end
 
   # POST /realize_types
+  # POST /realize_types.json
   def create
     @realize_type = RealizeType.new(realize_type_params)
-    authorize @realize_type
 
-    if @realize_type.save
-      redirect_to @realize_type, notice:  t('controller.successfully_created', :model => t('activerecord.models.realize_type'))
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @realize_type.save
+        format.html { redirect_to @realize_type, notice: t('controller.successfully_created', model: t('activerecord.models.realize_type')) }
+        format.json { render json: @realize_type, status: :created, location: @realize_type }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @realize_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /realize_types/1
+  # PUT /realize_types/1
+  # PUT /realize_types/1.json
   def update
     if params[:move]
       move_position(@realize_type, params[:move])
       return
     end
 
-    if @realize_type.update(realize_type_params)
-      redirect_to @realize_type, notice:  t('controller.successfully_updated', :model => t('activerecord.models.realize_type'))
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @realize_type.update_attributes(realize_type_params)
+        format.html { redirect_to @realize_type, notice: t('controller.successfully_updated', model: t('activerecord.models.realize_type')) }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @realize_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /realize_types/1
+  # DELETE /realize_types/1.json
   def destroy
     @realize_type.destroy
-    redirect_to realize_types_url, :notice => t('controller.successfully_destroyed', :model => t('activerecord.models.realize_type'))
+
+    respond_to do |format|
+      format.html { redirect_to realize_types_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.realize_type')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_realize_type
-      @realize_type = RealizeType.find(params[:id])
-      authorize @realize_type
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def realize_type_params
-      params.require(:realize_type).permit(:name, :display_name, :note)
-    end
+  def realize_type_params
+    params.require(:realize_type).permit(
+      :name, :display_name, :note, :position
+    )
+  end
 end

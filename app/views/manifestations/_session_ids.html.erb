@@ -2,8 +2,8 @@
   $(function(){
     if(typeof sessionStorage === "undefined"){
       return;
-      }else{
-      var ids = [<%= @manifestation_ids %>];
+    }else{
+      var ids = <%= @manifestation_ids %>;
       sessionStorage.setItem("<%= @search_query %>", JSON.stringify(ids));
     };
   });

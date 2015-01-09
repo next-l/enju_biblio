@@ -1,12 +1,11 @@
 class OwnsController < ApplicationController
-  before_action :set_own, only: [:show, :edit, :update, :destroy]
-  before_action :get_agent, :get_item
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :get_agent, :get_item
+  after_filter :solr_commit, only: [:create, :update, :destroy]
 
   # GET /owns
   # GET /owns.json
   def index
-    authorize Own
     if @agent
       @owns = @agent.owns.order('owns.position').page(params[:page])
     elsif @item
@@ -40,7 +39,6 @@ class OwnsController < ApplicationController
       return
     else
       @own = Own.new
-      authorize @own
       @own.item = @item
       @own.agent = @agent
     end
@@ -54,7 +52,6 @@ class OwnsController < ApplicationController
   # POST /owns.json
   def create
     @own = Own.new(own_params)
-    authorize @own
 
     respond_to do |format|
       if @own.save
@@ -109,14 +106,7 @@ class OwnsController < ApplicationController
   end
 
   private
-  def set_own
-    @own = Own.find(params[:id])
-    authorize @own
-  end
-
   def own_params
-    params.require(:own).permit(
-      :agent_id, :item_id
-    )
+    params.require(:own).permit(:agent_id, :item_id)
   end
 end

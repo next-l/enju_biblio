@@ -18,7 +18,7 @@
 <%- @agent_types.each do |agent_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(agent_type).update? -%>
+      <%- if can? :update, agent_type -%>
         <%= move_position(agent_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= agent_type.note %>
     </td>
     <td>
-      <%- if policy(agent_type).update? -%>
+      <%- if can? :update, agent_type -%>
         <%= link_to t('page.edit'), edit_agent_type_path(agent_type) -%>
       <% end %>
-      <%- if policy(agent_type).destroy? -%>
+      <%- if can? :delete, agent_type -%>
         <%= link_to t('page.destroy'), agent_type_path(agent_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>

@@ -1,13 +1,12 @@
 class RealizesController < ApplicationController
-  before_action :set_realize, only: [:show, :edit, :update, :destroy]
-  before_action :get_agent, :get_expression
-  before_action :prepare_options, :only => [:new, :edit]
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :get_agent, :get_expression
+  before_filter :prepare_options, only: [:new, :edit]
+  after_filter :solr_commit, only: [:create, :update, :destroy]
 
   # GET /realizes
   # GET /realizes.json
   def index
-    authorize Realize
     case
     when @agent
       @realizes = @agent.realizes.order('realizes.position').page(params[:page])
@@ -42,7 +41,6 @@ class RealizesController < ApplicationController
       return
     else
       @realize = Realize.new
-      authorize @realize
       @realize.expression = @expression
       @realize.agent = @agent
     end
@@ -56,7 +54,6 @@ class RealizesController < ApplicationController
   # POST /realizes.json
   def create
     @realize = Realize.new(realize_params)
-    authorize @realize
 
     respond_to do |format|
       if @realize.save
@@ -114,18 +111,13 @@ class RealizesController < ApplicationController
   end
 
   private
-  def set_realize
-    @realize = Realize.find(params[:id])
-    authorize @realize
+  def realize_params
+    params.require(:realize).permit(
+      :agent_id, :expression_id, :realize_type_id, :position
+    )
   end
 
   def prepare_options
     @realize_types = RealizeType.all
-  end
-
-  def realize_params
-    params.require(:realize).permit(
-      :agent_id, :expression_id, :realize_type_id
-    )
   end
 end

@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'sunspot/rails/spec_helper'
 
 describe SeriesStatementMergeListsController do
+  disconnect_sunspot
 
   describe "GET index" do
     describe "When logged in as Administrator" do

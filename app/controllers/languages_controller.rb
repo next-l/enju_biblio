@@ -1,22 +1,34 @@
 class LanguagesController < ApplicationController
-  before_action :set_language, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
-
+  load_and_authorize_resource
   # GET /languages
+  # GET /languages.json
   def index
-    authorize Language
-    @languages = policy_scope(Language).page(params[:page])
+    @languages = Language.page(params[:page])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @languages }
+    end
   end
 
   # GET /languages/1
+  # GET /languages/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @language }
+    end
   end
 
   # GET /languages/new
+  # GET /languages/new.json
   def new
     @language = Language.new
-    authorize @language
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @language }
+    end
   end
 
   # GET /languages/1/edit
@@ -24,49 +36,56 @@ class LanguagesController < ApplicationController
   end
 
   # POST /languages
+  # POST /languages.json
   def create
     @language = Language.new(language_params)
-    authorize @language
 
-    if @language.save
-      redirect_to @language, notice:  t('controller.successfully_created', model: t('activerecord.models.language'))
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @language.save
+        format.html { redirect_to @language, notice: t('controller.successfully_created', model: t('activerecord.models.language')) }
+        format.json { render json: @language, status: :created, location: @language }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @language.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /languages/1
+  # PUT /languages/1
+  # PUT /languages/1.json
   def update
     if params[:move]
       move_position(@language, params[:move])
       return
     end
 
-    if @language.update(language_params)
-      redirect_to @language, notice:  t('controller.successfully_updated', model: t('activerecord.models.language'))
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @language.update_attributes(language_params)
+        format.html { redirect_to @language, notice: t('controller.successfully_updated', model: t('activerecord.models.language')) }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @language.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /languages/1
+  # DELETE /languages/1.json
   def destroy
     @language.destroy
-    redirect_to languages_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.language'))
+
+    respond_to do |format|
+      format.html { redirect_to languages_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.language')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_language
-      @language = Language.find(params[:id])
-      authorize @language
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def language_params
-      params.require(:language).permit(
-        :name, :native_name, :display_name, :iso_639_1, :iso_639_2, :iso_639_3,
-        :note
-      )
-    end
+  def language_params
+    params.require(:language).permit(
+      :name, :native_name, :display_name, :iso_639_1, :iso_639_2, :iso_639_3,
+      :note
+    )
+  end
 end

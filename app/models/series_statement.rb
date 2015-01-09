@@ -1,7 +1,4 @@
 class SeriesStatement < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
   has_many :series_statement_merges, dependent: :destroy
   has_many :series_statement_merge_lists, through: :series_statement_merges
   belongs_to :manifestation, touch: true
@@ -10,37 +7,14 @@ class SeriesStatement < ActiveRecord::Base
   before_save :create_root_series_statement
 
   acts_as_list
-
-  index_name "#{name.downcase.pluralize}-#{Rails.env}"
-
-  after_commit on: :create do
-    index_document
-  end
-
-  after_commit on: :update do
-    update_document
-  end
-
-  after_commit on: :destroy do
-    delete_document
-  end
-
-  settings do
-    mappings dynamic: 'false', _routing: {required: false} do
-      indexes :title
-      indexes :numbering
-      indexes :title_subseries
-      indexes :numbering_subseries
-      indexes :manifestation_id, type: 'integer'
-      indexes :position, type: 'integer'
-      indexes :series_statement_merge_list_ids, type: 'integer'
+  searchable do
+    text :title do
+      titles
     end
-  end
-
-  def as_indexed_json(options={})
-    as_json.merge(
-      title: titles
-    )
+    text :numbering, :title_subseries, :numbering_subseries
+    integer :manifestation_id
+    integer :position
+    integer :series_statement_merge_list_ids, multiple: true
   end
 
   attr_accessor :selected

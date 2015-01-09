@@ -22,7 +22,7 @@
     </td>
     <td><%= link_to t('page.show'), donate -%></td>
     <td>
-      <%- if policy(donate).destroy? -%>
+      <%- if can? :delete, donate -%>
         <%= link_to t('page.edit'), edit_donate_path(donate) -%>
         <%= link_to t('page.destroy'), donate, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
@@ -38,7 +38,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(Donate).create? -%>
+    <%- if can? :create, Donate -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.donate')), new_donate_path -%></li>
     <%- end -%>
   </ul>

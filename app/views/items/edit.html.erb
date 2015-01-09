@@ -10,7 +10,7 @@
   <%= render 'manifestations/book_jacket', manifestation: @item.manifestation -%>
   <ul>
     <li><%= link_to t('page.show'), @item -%></li>
-    <% if policy(@item).destroy? %>
+    <% if can? :delete, @item %>
       <li><%= link_to t('page.destroy'), @item, data: {confirm: t('page.are_you_sure')}, method: :delete -%></li>
     <% end %>
     <li><%= link_to t('page.back'), items_path(@item.manifestation.id) -%></li>

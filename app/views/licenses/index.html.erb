@@ -18,7 +18,7 @@
 <%- @licenses.each do |license| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(license).update? -%>
+      <%- if can? :update, license -%>
         <%= move_position(license) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= license.note %>
     </td>
     <td>
-      <%- if policy(license).update? -%>
+      <%- if can? :update, license -%>
         <%= link_to t('page.edit'), edit_license_path(license) -%>
       <% end %>
-      <%- if policy(license).destroy? -%>
+      <%- if can? :delete, license -%>
         <%= link_to t('page.destroy'), license_path(license), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(License).create? -%>
+    <%- if can? :create, License -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.license')), new_license_path -%></li>
     <%- end -%>
   </ul>

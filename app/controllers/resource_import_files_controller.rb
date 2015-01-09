@@ -1,15 +1,20 @@
 class ResourceImportFilesController < ApplicationController
-  before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :prepare_options, only: [:new, :edit]
+  load_and_authorize_resource
+  before_filter :prepare_options, only: [:new, :edit]
 
   # GET /resource_import_files
+  # GET /resource_import_files.json
   def index
-    authorize ResourceImportFile
     @resource_import_files = ResourceImportFile.page(params[:page])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @resource_import_files }
+    end
   end
 
   # GET /resource_import_files/1
+  # GET /resource_import_files/1.json
   def show
     if @resource_import_file.resource_import.path
       unless Setting.uploaded_file.storage == :s3
@@ -31,11 +36,16 @@ class ResourceImportFilesController < ApplicationController
   end
 
   # GET /resource_import_files/new
+  # GET /resource_import_files/new.json
   def new
     @resource_import_file = ResourceImportFile.new
-    authorize @resource_import_file
     @resource_import_file.library_id = current_user.profile.library_id
     @shelves = Library.find(@resource_import_file.library_id).shelves
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @resource_import_file }
+    end
   end
 
   # GET /resource_import_files/1/edit
@@ -43,33 +53,41 @@ class ResourceImportFilesController < ApplicationController
   end
 
   # POST /resource_import_files
+  # POST /resource_import_files.json
   def create
-    authorize ResourceImportFile
     @resource_import_file = ResourceImportFile.new(resource_import_file_params)
     @resource_import_file.user = current_user
 
-    if @resource_import_file.save
-      if @resource_import_file.mode == 'import'
-        Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
+    respond_to do |format|
+      if @resource_import_file.save
+        if @resource_import_file.mode == 'import'
+          Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
+        end
+        format.html { redirect_to @resource_import_file, notice: t('import.successfully_created', model: t('activerecord.models.resource_import_file')) }
+        format.json { render json: @resource_import_file, status: :created, location: @resource_import_file }
+      else
+        prepare_options
+        format.html { render action: "new" }
+        format.json { render json: @resource_import_file.errors, status: :unprocessable_entity }
       end
-      redirect_to @resource_import_file, notice: t('import.successfully_created', model: t('activerecord.models.resource_import_file'))
-    else
-      prepare_options
-      render action: 'new'
     end
   end
 
   # PUT /resource_import_files/1
   # PUT /resource_import_files/1.json
   def update
-    if @resource_import_file.update(resource_import_file_params)
-      if @resource_import_file.mode == 'import'
-        Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
+    respond_to do |format|
+      if @resource_import_file.update_attributes(resource_import_file_params)
+        if @resource_import_file.mode == 'import'
+          Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
+        end
+        format.html { redirect_to @resource_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.resource_import_file')) }
+        format.json { head :no_content }
+      else
+        prepare_options
+        format.html { render action: "edit" }
+        format.json { render json: @resource_import_file.errors, status: :unprocessable_entity }
       end
-      redirect_to @resource_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.resource_import_file'))
-    else
-      prepare_options
-      render :edit
     end
   end
 
@@ -77,19 +95,18 @@ class ResourceImportFilesController < ApplicationController
   # DELETE /resource_import_files/1.json
   def destroy
     @resource_import_file.destroy
-    redirect_to resource_import_files_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.resource_import_file'))
+
+    respond_to do |format|
+      format.html { redirect_to resource_import_files_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.resource_import_file')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-  def set_resource_import_file
-    @resource_import_file = ResourceImportFile.find(params[:id])
-    authorize @resource_import_file
-  end
-
   def resource_import_file_params
     params.require(:resource_import_file).permit(
-      :resource_import, :edit_mode, :user_encoding, :mode, :default_shelf_id,
-      :library_id
+      :resource_import, :edit_mode, :user_encoding, :mode,
+      :default_shelf_id, :library_id
     )
   end
 

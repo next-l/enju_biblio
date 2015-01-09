@@ -1,22 +1,34 @@
 class MediumOfPerformancesController < ApplicationController
-  before_action :set_medium_of_performance, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-  after_action :verify_policy_scoped, :only => :index
-
+  load_and_authorize_resource
   # GET /medium_of_performances
+  # GET /medium_of_performances.json
   def index
-    authorize MediumOfPerformance
-    @medium_of_performances = policy_scope(MediumOfPerformance).order(:position)
+    @medium_of_performances = MediumOfPerformance.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @medium_of_performances }
+    end
   end
 
   # GET /medium_of_performances/1
+  # GET /medium_of_performances/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @medium_of_performance }
+    end
   end
 
   # GET /medium_of_performances/new
+  # GET /medium_of_performances/new.json
   def new
     @medium_of_performance = MediumOfPerformance.new
-    authorize @medium_of_performance
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @medium_of_performance }
+    end
   end
 
   # GET /medium_of_performances/1/edit
@@ -24,46 +36,53 @@ class MediumOfPerformancesController < ApplicationController
   end
 
   # POST /medium_of_performances
+  # POST /medium_of_performances.json
   def create
     @medium_of_performance = MediumOfPerformance.new(medium_of_performance_params)
-    authorize @medium_of_performance
 
-    if @medium_of_performance.save
-      redirect_to @medium_of_performance, notice: t('controller.successfully_created', model: t('activerecord.models.medium_of_performance'))
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @medium_of_performance.save
+        format.html { redirect_to @medium_of_performance, notice: t('controller.successfully_created', model: t('activerecord.models.medium_of_performance')) }
+        format.json { render json: @medium_of_performance, status: :created, location: @medium_of_performance }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @medium_of_performance.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /medium_of_performances/1
+  # PUT /medium_of_performances/1
+  # PUT /medium_of_performances/1.json
   def update
     if params[:move]
       move_position(@medium_of_performance, params[:move])
       return
     end
 
-    if @medium_of_performance.update(medium_of_performance_params)
-      redirect_to @medium_of_performance, notice: t('controller.successfully_updated', model: t('activerecord.models.medium_of_performance'))
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @medium_of_performance.update_attributes(medium_of_performance_params)
+        format.html { redirect_to @medium_of_performance, notice: t('controller.successfully_updated', model: t('activerecord.models.medium_of_performance')) }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @medium_of_performance.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /medium_of_performances/1
+  # DELETE /medium_of_performances/1.json
   def destroy
     @medium_of_performance.destroy
-    redirect_to medium_of_performances_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.medium_of_performance'))
+
+    respond_to do |format|
+      format.html { redirect_to medium_of_performances_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.medium_of_performance')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_medium_of_performance
-      @medium_of_performance = MediumOfPerformance.find(params[:id])
-      authorize @medium_of_performance
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def medium_of_performance_params
-      params.require(:medium_of_performance).permit(:name, :display_name, :note)
-    end
+  def medium_of_performance_params
+    params.require(:medium_of_performance).permit(:name, :display_name, :note)
+  end
 end

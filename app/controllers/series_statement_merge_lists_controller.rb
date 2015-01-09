@@ -1,21 +1,35 @@
 class SeriesStatementMergeListsController < ApplicationController
-  before_action :set_series_statement_merge_list, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
+  load_and_authorize_resource
 
   # GET /series_statement_merge_lists
+  # GET /series_statement_merge_lists.json
   def index
-    authorize SeriesStatementMergeList
     @series_statement_merge_lists = SeriesStatementMergeList.page(params[:page])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @series_statement_merge_lists }
+    end
   end
 
   # GET /series_statement_merge_lists/1
+  # GET /series_statement_merge_lists/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @series_statement_merge_list }
+    end
   end
 
   # GET /series_statement_merge_lists/new
+  # GET /series_statement_merge_lists/new.json
   def new
     @series_statement_merge_list = SeriesStatementMergeList.new
-    authorize @series_statement_merge
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @series_statement_merge_list }
+    end
   end
 
   # GET /series_statement_merge_lists/1/edit
@@ -26,7 +40,6 @@ class SeriesStatementMergeListsController < ApplicationController
   # POST /series_statement_merge_lists.json
   def create
     @series_statement_merge_list = SeriesStatementMergeList.new(series_statement_merge_list_params)
-    authorize @series_statement_merge_list
 
     respond_to do |format|
       if @series_statement_merge_list.save
@@ -70,15 +83,14 @@ class SeriesStatementMergeListsController < ApplicationController
   # DELETE /series_statement_merge_lists/1.json
   def destroy
     @series_statement_merge_list.destroy
-    redirect_to(series_statement_merge_lists_url)
+
+    respond_to do |format|
+      format.html { redirect_to(series_statement_merge_lists_url) }
+      format.json { head :no_content }
+    end
   end
 
   private
-  def set_series_statement_merge_list
-    @series_statement_merge_list = SeriesStatementMergeList.find(params[:id])
-    authorize @series_statement_merge_list
-  end
-
   def series_statement_merge_list_params
     params.require(:series_statement_merge_list).permit(:title)
   end

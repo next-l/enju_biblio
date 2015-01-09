@@ -1,11 +1,10 @@
 # -*- encoding: utf-8 -*-
 require 'spec_helper'
 
-describe Manifestation, :elasticsearch => true do
+describe Manifestation, :solr => true do
   fixtures :all
   before do
-    Manifestation.__elasticsearch__.create_index!
-    Manifestation.import
+    Manifestation.reindex
   end
 
   it "should set year_of_publication" do
@@ -244,8 +243,8 @@ end
 #  manifestation_identifier        :string(255)
 #  date_of_publication             :datetime
 #  date_copyrighted                :datetime
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
+#  created_at                      :datetime
+#  updated_at                      :datetime
 #  deleted_at                      :datetime
 #  access_address                  :string(255)
 #  language_id                     :integer          default(1), not null

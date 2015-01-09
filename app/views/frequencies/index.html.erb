@@ -18,7 +18,7 @@
 <%- @frequencies.each do |frequency| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(frequency).update? -%>
+      <%- if can? :update, frequency -%>
         <%= move_position(frequency) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= frequency.note %>
     </td>
     <td>
-      <%- if policy(frequency).update? -%>
+      <%- if can? :update, frequency -%>
         <%= link_to t('page.edit'), edit_frequency_path(frequency) -%>
       <% end %>
-      <%- if policy(frequency).destroy? -%>
+      <%- if can? :delete, frequency -%>
         <%= link_to t('page.destroy'), frequency_path(frequency), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(Frequency).create? -%>
+    <%- if can? :create, Frequency -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.frequency')), new_frequency_path -%></li>
     <%- end -%>
   </ul>

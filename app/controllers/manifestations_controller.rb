@@ -1,123 +1,322 @@
 # -*- encoding: utf-8 -*-
 class ManifestationsController < ApplicationController
-  before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, :only => :edit
-  before_action :get_agent, :get_manifestation, :except => [:create, :update, :destroy]
-  before_action :get_expression, :only => :new
+  load_and_authorize_resource except: :index
+  authorize_resource only: :index
+  before_filter :authenticate_user!, only: :edit
+  before_filter :get_agent, :get_manifestation, except: [:create, :update, :destroy]
+  before_filter :get_expression, only: :new
   if defined?(EnjuSubject)
-    before_action :get_subject, :except => [:create, :update, :destroy]
+    before_filter :get_subject, except: [:create, :update, :destroy]
   end
-  before_action :get_series_statement, :only => [:index, :new, :edit]
-  before_action :get_item, :get_libraries, :only => :index
-  before_action :prepare_options, :only => [:new, :edit]
-  before_action :get_version, :only => [:show]
-  after_action :verify_authorized
-  after_action :convert_charset, :only => :index
+  before_filter :get_series_statement, only: [:index, :new, :edit]
+  before_filter :get_item, :get_libraries, only: :index
+  before_filter :prepare_options, only: [:new, :edit]
+  before_filter :get_version, only: [:show]
+  after_filter :solr_commit, only: :destroy
+  after_filter :convert_charset, only: :index
   include EnjuOai::OaiController if defined?(EnjuOai)
   include EnjuSearchLog if defined?(EnjuSearchLog)
 
   # GET /manifestations
   # GET /manifestations.json
   def index
-    authorize Manifestation
-
-    @seconds = Benchmark.realtime do
-      agent = get_index_agent
-      @index_agent = agent
-      @count = {}
-      if params[:query].to_s.strip == ''
-        user_query = '*'
-      else
-        user_query = params[:query]
-      end
-      if user_signed_in?
-        role_ids = Role.where('id <= ?', current_user.role.id).pluck(:id)
-      else
-        role_ids = [1]
-      end
-
-      oldest_pub_date = Manifestation.order(date_of_publication: :asc).where.not(date_of_publication: nil).limit(1).pluck(:date_of_publication).first
-      latest_pub_date = Manifestation.order(date_of_publication: :desc).where.not(date_of_publication: nil).limit(1).pluck(:date_of_publication).first
-      pub_ranges = []
-      if oldest_pub_date and latest_pub_date
-        oldest_pub_year = oldest_pub_date.year / 10 * 10
-        latest_pub_year = latest_pub_date.year / 10 * 10 + 10
-        while(oldest_pub_year < latest_pub_year) do
-          pub_ranges << {from: oldest_pub_year, to: oldest_pub_year + 10}
-          oldest_pub_year += 10
-        end
-      end
-
-      query = {
-        query: {
-          filtered: {
-            query: {
-              query_string: {
-                query: user_query, fields: ['_all']
-              }
-            },
-            #filter: {
-            #  term: {
-            #    carrier_type: 'dvd'
-            #  }
-            #}
-          }
-        },
-        #filter: {
-        #  and: [
-        #    term: {
-        #      carrier_type: 'dvd'
-        #    }
-        #  ]
-        #}
-      }
-
-      body = {
-        facets: {
-          carrier_type: {
-            terms: {
-              field: :carrier_type
-            }
-          },
-          library: {
-            terms: {
-              field: :library
-            }
-          },
-          language: {
-            terms: {
-              field: :language
-            }
-          },
-          pub_year: {
-            range: {
-              field: :pub_year,
-              ranges: pub_ranges
-            }
-          }
-        },
-        filter: {and: [{}]},
-      }
-      if params[:carrier_type]
-        carrier_type = CarrierType.where(name: params[:carrier_type]).first
-        body[:filter][:and] << {term: {carrier_type: carrier_type.name}} if carrier_type
-      end
-      if params[:library]
-        library = Library.where(name: params[:library]).first
-        body[:filter][:and] << {term: {library: library.name}} if library
-      end
-      if params[:language]
-        language = Language.where(name: params[:language]).first
-        body[:filter][:and] << {term: {language: language.name}} if language
-      end
-      if params[:pub_date_from] and params[:pub_date_to]
-        body[:filter][:and] << {range: {pub_year: {gte: params[:pub_date_from].to_i, lt: params[:pub_date_to].to_i + 1}}}
+    mode = params[:mode]
+    if mode == 'add'
+      unless current_user.try(:has_role?, 'Librarian')
+        access_denied; return
       end
     end
 
+    @seconds = Benchmark.realtime do
+      if defined?(EnjuOai)
+        @oai = check_oai_params(params)
+        next if @oai[:need_not_to_search]
+        if params[:format] == 'oai'
+          oai_search = true
+          from_and_until_times = set_from_and_until(Manifestation, params[:from], params[:until])
+          from_time = @from_time = from_and_until_times[:from]
+          until_time = @until_time = from_and_until_times[:until]
+          # OAI-PMHのデフォルトの件数
+          per_page = 200
+          if params[:resumptionToken]
+            current_token = get_resumption_token(params[:resumptionToken])
+            if current_token
+              page = (current_token[:cursor].to_i + per_page).div(per_page) + 1
+            else
+              @oai[:errors] << 'badResumptionToken'
+            end
+          end
+          page ||= 1
+
+          if params[:verb] == 'GetRecord' && params[:identifier]
+            begin
+              @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
+            rescue ActiveRecord::RecordNotFound
+              @oai[:errors] << "idDoesNotExist"
+              render formats: :oai, layout: false
+              return
+            end
+            render template: 'manifestations/show', formats: :oai, layout: false
+            return
+          end
+        end
+      end
+
+      set_reservable if defined?(EnjuCirculation)
+
+      sort, @count = {}, {}
+      query = ""
+
+      if params[:format] == 'txt'
+        per_page = 65534
+      end
+
+      if params[:format] == 'sru'
+        if params[:operation] == 'searchRetrieve'
+          sru = Sru.new(params)
+          query = sru.cql.to_sunspot
+          sort = sru.sort_by
+        else
+          render template: 'manifestations/explain', layout: false
+          return
+        end
+      else
+        if params[:api] == 'openurl'
+          openurl = Openurl.new(params)
+          @manifestations = openurl.search
+          query = openurl.query_text
+          sort = set_search_result_order(params[:sort_by], params[:order])
+        else
+          query = make_query(params[:query], params)
+          sort = set_search_result_order(params[:sort_by], params[:order])
+        end
+      end
+
+      # 絞り込みを行わない状態のクエリ
+      @query = query.dup
+      query = query.gsub('　', ' ')
+
+      includes = [:items, :root_series_statement]
+      includes << :bookmarks if defined?(EnjuBookmark)
+      search = Manifestation.search(include: includes)
+      case @reservable
+      when 'true'
+        reservable = true
+      when 'false'
+        reservable = false
+      else
+        reservable = nil
+      end
+
+      agent = get_index_agent
+      @index_agent = agent
+      manifestation = @manifestation if @manifestation
+      series_statement = @series_statement if @series_statement
+      parent = @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
+
+      if defined?(EnjuSubject)
+        subject = @subject if @subject
+      end
+
+      unless mode == 'add'
+        search.build do
+          with(:creator_ids).equal_to agent[:creator].id if agent[:creator]
+          with(:contributor_ids).equal_to agent[:contributor].id if agent[:contributor]
+          with(:publisher_ids).equal_to agent[:publisher].id if agent[:publisher]
+          with(:series_statement_ids).equal_to series_statement.id if series_statement
+          with(:parent_ids).equal_to parent.id if parent
+        end
+      end
+
+      search.build do
+        fulltext query unless query.blank?
+        order_by sort[:sort_by], sort[:order] unless oai_search
+        order_by :updated_at, :desc if oai_search
+        if defined?(EnjuSubject)
+          with(:subject_ids).equal_to subject.id if subject
+        end
+        unless parent
+          if params[:serial].to_s.downcase == "true"
+            with(:series_master).equal_to true unless parent
+            with(:serial).equal_to true
+            #if series_statement.serial?
+            #  if mode != 'add'
+            #    order_by :volume_number, sort[:order]
+            #    order_by :issue_number, sort[:order]
+            #    order_by :serial_number, sort[:order]
+            #  end
+            #else
+            #  with(:serial).equal_to false
+            #end
+          else
+            if mode != 'add'
+              with(:resource_master).equal_to true
+            end
+          end
+        end
+        order_by sort[:sort_by], sort[:order] unless oai_search
+        facet :reservable if defined?(EnjuCirculation)
+      end
+      search = make_internal_query(search)
+      search.data_accessor_for(Manifestation).select = [
+        :id,
+        :original_title,
+        :title_transcription,
+        :required_role_id,
+        :carrier_type_id,
+        :access_address,
+        :volume_number_string,
+        :issue_number_string,
+        :serial_number_string,
+        :date_of_publication,
+        :pub_date,
+        :language_id,
+        :created_at,
+        :updated_at,
+        :volume_number_string,
+        :volume_number,
+        :issue_number_string,
+        :issue_number,
+        :serial_number,
+        :edition_string,
+        :edition,
+        :serial,
+        :statement_of_responsibility
+      ] if params[:format] == 'html' or params[:format].nil?
+      all_result = search.execute
+      @count[:query_result] = all_result.total
+      @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
+
+      if session[:search_params]
+        unless search.query.to_params == session[:search_params]
+          clear_search_sessions
+        end
+      else
+        clear_search_sessions
+        session[:params] = params
+        session[:search_params] == search.query.to_params
+        session[:query] = @query
+      end
+
+      if params[:format] == 'html' or params[:format].nil?
+        @search_query = Digest::SHA1.hexdigest(Marshal.dump(search.query.to_params).force_encoding('UTF-8'))
+        if flash[:search_query] == @search_query
+          flash.keep(:search_query)
+        else
+          if @series_statement
+            flash.keep(:search_query)
+          else
+            flash[:search_query] = @search_query
+            @manifestation_ids = search.build do
+              paginate page: 1, per_page: Setting.max_number_of_results
+            end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
+          end
+        end
+
+        if defined?(EnjuBookmark)
+          if params[:view] == 'tag_cloud'
+            unless @manifestation_ids
+              @manifestation_ids = search.build do
+                paginate page: 1, per_page: Setting.max_number_of_results
+              end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
+            end
+            #bookmark_ids = Bookmark.where(manifestation_id: flash[:manifestation_ids]).limit(1000).pluck(:id)
+            bookmark_ids = Bookmark.where(manifestation_id: @manifestation_ids).limit(1000).pluck(:id)
+            @tags = Tag.bookmarked(bookmark_ids)
+            render partial: 'manifestations/tag_cloud'
+            return
+          end
+        end
+      end
+
+      page ||= params[:page] || 1
+      per_page ||= Manifestation.default_per_page
+      if params[:format] == 'sru'
+        search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
+      else
+        pub_dates = parse_pub_date(params)
+        pub_date_range = {}
+        if pub_dates[:from] == '*'
+          pub_date_range[:from] = 0
+        else
+          pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
+        end
+        if pub_dates[:to] == '*'
+          pub_date_range[:to] = 10000
+        else
+          pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
+        end
+        if params[:pub_year_range_interval]
+          pub_year_range_interval = params[:pub_year_range_interval].to_i
+        else
+          pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
+        end
+
+        search.build do
+          facet :reservable if defined?(EnjuCirculation)
+          facet :carrier_type
+          facet :library
+          facet :language
+          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:to], range_interval: pub_year_range_interval
+          facet :subject_ids if defined?(EnjuSubject)
+          paginate page: page.to_i, per_page: per_page
+        end
+      end
+      search_result = search.execute
+      if @count[:query_result] > Setting.max_number_of_results
+        max_count = Setting.max_number_of_results
+      else
+        max_count = @count[:query_result]
+      end
+      @manifestations = Kaminari.paginate_array(
+        search_result.results, total_count: max_count
+      ).page(page)
+
+      if params[:format].blank? or params[:format] == 'html'
+        @carrier_type_facet = search_result.facet(:carrier_type).rows
+        @language_facet = search_result.facet(:language).rows
+        @library_facet = search_result.facet(:library).rows
+        @pub_year_facet = search_result.facet(:pub_year).rows.reverse
+      end
+
+      @search_engines = SearchEngine.order(:position)
+
+      if defined?(EnjuBookmark)
+        # TODO: 検索結果が少ない場合にも表示させる
+        if @manifestation_ids.blank?
+          if query.respond_to?(:suggest_tags)
+            @suggested_tag = query.suggest_tags.first
+          end
+        end
+      end
+
+      if defined?(EnjuSearchLog)
+        if current_user.try(:save_search_history)
+          current_user.save_history(query, @manifestations.offset_value + 1, @count[:query_result], params[:format])
+        end
+      end
+
+      if defined?(EnjuOai)
+        if params[:format] == 'oai'
+          unless @manifestations.empty?
+            @resumption = set_resumption_token(
+              params[:resumptionToken],
+              @from_time || Manifestation.last.updated_at,
+              @until_time || Manifestation.first.updated_at,
+              @manifestations.limit_value
+            )
+          else
+            @oai[:errors] << 'noRecordsMatch'
+          end
+        end
+      end
+    end
+
+    store_location # before_filter ではファセット検索のURLを記憶してしまう
+
     respond_to do |format|
       format.html
-      format.html.phone
+      format.mobile
       format.xml  { render xml: @manifestations }
       format.sru  { render layout: false }
       format.rss  { render layout: false }
@@ -196,10 +395,8 @@ class ManifestationsController < ApplicationController
     end
 
     respond_to do |format|
-      format.html {|html|
-        html
-        html.phone
-      }
+      format.html # show.html.erb
+      format.mobile
       format.xml  {
         case params[:mode]
         when 'related'
@@ -236,7 +433,6 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
-    authorize @manifestation
     @manifestation.language = Language.where(iso_639_1: @locale).first
     @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
     if @parent
@@ -272,7 +468,6 @@ class ManifestationsController < ApplicationController
   # POST /manifestations.json
   def create
     @manifestation = Manifestation.new(manifestation_params)
-    authorize @manifestation
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
@@ -282,7 +477,10 @@ class ManifestationsController < ApplicationController
       if @manifestation.save
         if parent
           parent.derived_manifestations << @manifestation
+          parent.index
+          @manifestation.index
         end
+        Sunspot.commit
 
         format.html { redirect_to @manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation')) }
         format.json { render json: @manifestation, status: :created, location: @manifestation }
@@ -299,7 +497,7 @@ class ManifestationsController < ApplicationController
   def update
     respond_to do |format|
       if @manifestation.update_attributes(manifestation_params)
-        #Sunspot.commit
+        Sunspot.commit
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
@@ -320,13 +518,78 @@ class ManifestationsController < ApplicationController
     @manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
     @manifestation.reload
     @manifestation.destroy
-    redirect_to manifestations_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.manifestation'))
+
+    respond_to do |format|
+      format.html { redirect_to manifestations_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.manifestation')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-  def set_manifestation
-    @manifestation = Manifestation.find(params[:id])
-    authorize @manifestation
+  def manifestation_params
+    params.require(:manifestation).permit(
+      :original_title, :title_alternative, :title_transcription,
+      :manifestation_identifier, :date_copyrighted,
+      :access_address, :language_id, :carrier_type_id, :extent, :start_page,
+      :end_page, :height, :width, :depth, :publication_place,
+      :price, :fulltext, :volume_number_string,
+      :issue_number_string, :serial_number_string, :edition, :note,
+      :repository_content, :required_role_id, :frequency_id,
+      :title_alternative_transcription, :description, :abstract, :available_at,
+      :valid_until, :date_submitted, :date_accepted, :date_captured,
+      :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
+      :serial_number, :content_type_id, :attachment, :lock_version,
+      :dimensions, :fulltext_content, :extent,
+      :number_of_page_string, :parent_id,
+      :serial, :statement_of_responsibility,
+      {:creators_attributes => [
+        :id, :last_name, :middle_name, :first_name,
+        :last_name_transcription, :middle_name_transcription,
+        :first_name_transcription, :corporate_name,
+        :corporate_name_transcription,
+        :full_name, :full_name_transcription, :full_name_alternative,
+        :other_designation, :language_id,
+        :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+        :full_name_alternative_transcription, :title,
+        :agent_identifier
+      ]},
+      {:contributors_attributes => [
+        :id, :last_name, :middle_name, :first_name,
+        :last_name_transcription, :middle_name_transcription,
+        :first_name_transcription, :corporate_name,
+        :corporate_name_transcription,
+        :full_name, :full_name_transcription, :full_name_alternative,
+        :other_designation, :language_id,
+        :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+        :full_name_alternative_transcription, :title,
+        :agent_identifier
+      ]},
+      {:publishers_attributes => [
+        :id, :last_name, :middle_name, :first_name,
+        :last_name_transcription, :middle_name_transcription,
+        :first_name_transcription, :corporate_name,
+        :corporate_name_transcription,
+        :full_name, :full_name_transcription, :full_name_alternative,
+        :other_designation, :language_id,
+        :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
+        :full_name_alternative_transcription, :title,
+        :agent_identifier
+      ]},
+      {:series_statements_attributes => [
+        :id, :original_title, :numbering, :title_subseries,
+        :numbering_subseries, :title_transcription, :title_alternative,
+        :title_subseries_transcription, :creator_string, :volume_number_string,
+        :volume_number_transcription_string, :series_master
+      ]},
+      {:subjects_attributes => [
+        :parent_id, :use_term_id, :term, :term_transcription,
+        :subject_type_id, :note, :required_role_id, :subject_heading_type_id
+      ]},
+      {:classifications_attributes => [
+        :parent_id, :category, :note, :classification_type_id
+      ]},
+      {:identifiers_attributes => [:id, :body, :identifier_type_id]}
+    )
   end
 
   def make_query(query, options = {})
@@ -530,7 +793,7 @@ class ManifestationsController < ApplicationController
     else
       pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
       unless pub_date[:from]
-        pub_date[:from] = Time.zone.parse(Time.mktime(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
+        pub_date[:from] = Time.zone.parse(Time.utc(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
       end
     end
 
@@ -539,7 +802,7 @@ class ManifestationsController < ApplicationController
     else
       pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
       unless pub_date[:to]
-        pub_date[:to] = Time.zone.parse(Time.mktime(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
+        pub_date[:to] = Time.zone.parse(Time.utc(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
       end
     end
     pub_date
@@ -566,7 +829,7 @@ class ManifestationsController < ApplicationController
       else
         acquisition_date[:from] = Time.zone.parse(options[:acquired_from]).beginning_of_day.utc.iso8601 rescue nil
         unless acquisition_date[:from]
-          acquisition_date[:from] = Time.zone.parse(Time.mktime(options[:acquired_from]).to_s).beginning_of_day.utc.iso8601
+          acquisition_date[:from] = Time.zone.parse(Time.utc(options[:acquired_from]).to_s).beginning_of_day.utc.iso8601
         end
       end
 
@@ -575,60 +838,11 @@ class ManifestationsController < ApplicationController
       else
         acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
         unless acquisition_date[:to]
-          acquisition_date[:to] = Time.zone.parse(Time.mktime(options[:acquired_to]).to_s).end_of_year.utc.iso8601
+          acquisition_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
         end
       end
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query
-  end
-
-  def set_pub_date_query
-    pub_dates = parse_pub_date(params)
-    pub_date_range = {}
-    if pub_dates[:from] == '*'
-      pub_date_range[:from] = 0
-    else
-      pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
-    end
-    if pub_dates[:to] == '*'
-      pub_date_range[:to] = 10000
-    else
-      pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
-    end
-    if params[:pub_year_range_interval]
-      pub_year_range_interval = params[:pub_year_range_interval].to_i
-    else
-      pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
-    end
-    return pub_date_range, pub_year_range_interval
-  end
-
-  def manifestation_params
-    params.require(:manifestation).permit(
-      :original_title, :title_alternative, :title_transcription,
-      :manifestation_identifier, :date_copyrighted,
-      :access_address, :language_id, :carrier_type_id, :extent_id, :start_page,
-      :end_page, :height, :width, :depth,
-      :price, :fulltext, :volume_number_string,
-      :issue_number_string, :serial_number_string, :edition, :note,
-      :repository_content, :required_role_id, :frequency_id,
-      :title_alternative_transcription, :description, :abstract, :available_at,
-      :valid_until, :date_submitted, :date_accepted, :date_captured,
-      :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
-      :serial_number, :content_type_id, :attachment, :lock_version,
-      :periodical, :statement_of_responsibility,
-      :creators_attributes, :contributors_attributes, :publishers_attributes,
-      :identifiers_attributes, :fulltext_content,
-      :number_of_page_string, :parent_id,
-      :series_statements_attributes => [
-        :id, :original_title, :numbering, :title_subseries,
-        :numbering_subseries, :title_transcription, :title_alternative,
-        :series_statement_identifier, :note,
-        :root_manifestation_id, :url, :series_master,
-        :title_subseries_transcription, :creator_string, :volume_number_string,
-        :_destroy
-      ]
-    )
   end
 end

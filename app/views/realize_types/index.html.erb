@@ -18,7 +18,7 @@
 <%- @realize_types.each do |realize_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(realize_type).update? -%>
+      <%- if can? :update, realize_type -%>
         <%= move_position(realize_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= realize_type.note %>
     </td>
     <td>
-      <%- if policy(realize_type).update? -%>
+      <%- if can? :update, realize_type -%>
         <%= link_to t('page.edit'), edit_realize_type_path(realize_type) -%>
       <% end %>
-      <%- if policy(realize_type).destroy? -%>
+      <%- if can? :delete, realize_type -%>
         <%= link_to t('page.destroy'), realize_type_path(realize_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(RealizeType).create? -%>
+    <%- if can? :create, RealizeType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.realize_type')), new_realize_type_path -%></li>
     <%- end -%>
   </ul>

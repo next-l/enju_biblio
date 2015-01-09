@@ -1,24 +1,43 @@
 class ManifestationRelationshipsController < ApplicationController
-  before_action :set_manifestation_relationship, only: [:show, :edit, :update, :destroy]
-  before_action :prepare_options, :except => [:index, :destroy]
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :get_manifestation
+  before_filter :prepare_options, only: [:new, :edit]
+  after_filter :solr_commit, only: [:create, :update, :destroy]
 
   # GET /manifestation_relationships
+  # GET /manifestation_relationships.json
   def index
-    authorize ManifestationRelationship
-    @manifestation_relationships = ManifestationRelationship.page(params[:page])
+    case
+    when @manifestation
+      @manifestation_relationships = @manifestation.manifestation_relationships.order('manifestation_relationships.position').page(params[:page])
+    else
+      @manifestation_relationships = ManifestationRelationship.page(params[:page])
+    end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @manifestation_relationships }
+    end
   end
 
   # GET /manifestation_relationships/1
+  # GET /manifestation_relationships/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @manifestation_relationship }
+    end
   end
 
   # GET /manifestation_relationships/new
   def new
-    @manifestation_relationship = ManifestationRelationship.new
-    authorize @manifestation_relationship
-    @manifestation_relationship.parent = Manifestation.find(params[:manifestation_id]) rescue nil
-    @manifestation_relationship.child = Manifestation.find(params[:child_id]) rescue nil
+    if @manifestation.blank?
+      redirect_to manifestations_url
+      return
+    else
+      @manifestation_relationship = ManifestationRelationship.new
+      @manifestation_relationship.manifestation = @manifestation
+    end
   end
 
   # GET /manifestation_relationships/1/edit
@@ -26,18 +45,24 @@ class ManifestationRelationshipsController < ApplicationController
   end
 
   # POST /manifestation_relationships
+  # POST /manifestation_relationships.json
   def create
     @manifestation_relationship = ManifestationRelationship.new(manifestation_relationship_params)
-    authorize @manifestation_relationship
 
-    if @manifestation_relationship.save
-      redirect_to @manifestation_relationship, notice:  t('controller.successfully_created', :model => t('activerecord.models.manifestation_relationship'))
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @manifestation_relationship.save
+        format.html { redirect_to @manifestation_relationship, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation_relationship')) }
+        format.json { render json: @manifestation_relationship, status: :created, location: @manifestation_relationship }
+      else
+        prepare_options
+        format.html { render action: "new" }
+        format.json { render json: @manifestation_relationship.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /manifestation_relationships/1
+  # PUT /manifestation_relationships/1
+  # PUT /manifestation_relationships/1.json
   def update
     # 並べ替え
     if @manifestation && params[:move]
@@ -46,14 +71,20 @@ class ManifestationRelationshipsController < ApplicationController
       return
     end
 
-    if @manifestation_relationship.update(manifestation_relationship_params)
-      redirect_to @manifestation_relationship, notice:  t('controller.successfully_updated', :model => t('activerecord.models.manifestation_relationship'))
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @manifestation_relationship.update_attributes(manifestation_relationship_params)
+        format.html { redirect_to @manifestation_relationship, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship')) }
+        format.json { head :no_content }
+      else
+        prepare_options
+        format.html { render action: "edit" }
+        format.json { render json: @manifestation_relationship.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /manifestation_relationships/1
+  # DELETE /manifestation_relationships/1.json
   def destroy
     @manifestation_relationship.destroy
 
@@ -71,18 +102,13 @@ class ManifestationRelationshipsController < ApplicationController
   end
 
   private
-  def set_manifestation_relationship
-    @manifestation_relationship = ManifestationRelationship.find(params[:id])
-    authorize @manifestation_relationship
-  end
-
-  def prepare_options
-    @manifestation_relationship_types = ManifestationRelationshipType.all
-  end
-
   def manifestation_relationship_params
     params.require(:manifestation_relationship).permit(
       :parent_id, :child_id, :manifestation_relationship_type_id
     )
+  end
+
+  def prepare_options
+    @manifestation_relationship_types = ManifestationRelationshipType.all
   end
 end

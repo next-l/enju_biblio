@@ -1,7 +1,9 @@
 require 'spec_helper'
+require 'sunspot/rails/spec_helper'
 
 describe AgentMergeListsController do
   fixtures :all
+  disconnect_sunspot
 
   describe "GET index" do
     describe "When logged in as Administrator" do
@@ -341,13 +343,13 @@ describe AgentMergeListsController do
 
       it "should not merge agents without selected_agent_id" do
         put :update, :id => agent_merge_lists(:agent_merge_list_00001).id, :mode => 'merge'
-        flash[:notice].should eq I18n.t('merge_list.specify_id', :model => I18n.t('activerecord.models.agent'))
+        flash[:notice].should eq I18n.t('merge_list.specify_id', model: I18n.t('activerecord.models.agent'))
         response.should redirect_to agent_merge_list_url(assigns(:agent_merge_list))
       end
 
       it "should merge agents with selected_agent_idand merge_mode" do
         put :update, :id => agent_merge_lists(:agent_merge_list_00001).id, :selected_agent_id => 3, :mode => 'merge'
-        flash[:notice].should eq I18n.t('merge_list.successfully_merged', :model => I18n.t('activerecord.models.agent'))
+        flash[:notice].should eq I18n.t('merge_list.successfully_merged', model: I18n.t('activerecord.models.agent'))
         response.should redirect_to agent_merge_list_url(assigns(:agent_merge_list))
       end
     end

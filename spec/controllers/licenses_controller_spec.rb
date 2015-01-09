@@ -84,14 +84,14 @@ describe LicensesController do
       it "assigns a newly created but unsaved license as @license" do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        post :create, :license => {}
+        post :create, :license => {name: "test"}
         expect(assigns(:license)).to be_a_new(License)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        post :create, :license => {}
+        post :create, :license => {name: "test"}
         #expect(response).to render_template("new")
       end
     end
@@ -105,8 +105,8 @@ describe LicensesController do
         # specifies that the License created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        License.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => license.id, :license => {'these' => 'params'}
+        License.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => license.id, :license => {'name' => 'test'}
       end
 
       it "assigns the requested license as @license" do
@@ -135,7 +135,7 @@ describe LicensesController do
         license = License.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        put :update, :id => license.id, :license => {}
+        put :update, :id => license.id, :license => {name: "test"}
         expect(assigns(:license)).to eq(license)
       end
 
@@ -143,7 +143,7 @@ describe LicensesController do
         license = License.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        put :update, :id => license.id, :license => {}
+        put :update, :id => license.id, :license => {name: "test"}
         #expect(response).to render_template("edit")
       end
     end

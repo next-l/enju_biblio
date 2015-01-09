@@ -91,17 +91,17 @@
         })
       </script>
     <% end %>
-    <%- if policy(PictureFile).create? -%>
+    <%- if can? :create, PictureFile -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id) -%></li>
     <%- end -%>
   </ul>
   <ul>
     <li><%= back_to_index(flash[:page_info]) -%></li>
-    <%- if policy(Agent).create? -%>
+    <%- if can? :create, Agent -%>
       <li><%= link_to t('page.edit'), edit_agent_path(@agent) -%></li>
       <li><%= link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add') -%></li>
     <%- end -%>
-    <%- if policy(@agent).destroy? -%>
+    <%- if can? :delete, @agent -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path -%></li>
       <li><%= link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete -%></li>
     <%- end -%>

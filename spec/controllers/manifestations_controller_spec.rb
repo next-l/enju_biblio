@@ -7,10 +7,9 @@ describe ManifestationsController do
     FactoryGirl.attributes_for(:manifestation)
   end
 
-  describe "GET index", :elasticsearch => true do
+  describe "GET index", :solr => true do
     before do
-      Manifestation.__elasticsearch__.create_index!
-      Manifestation.import
+      Manifestation.reindex
     end
 
     describe "When logged in as Administrator" do
@@ -85,18 +84,18 @@ describe ManifestationsController do
 
       it "assigns all manifestations as @manifestations when pub_date_from and pub_date_to are specified" do
         get :index, :pub_date_from => '2000', :pub_date_to => '2007'
-        assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('2000-01-01').utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
+        assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('2000-01-01').beginning_of_day.utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
       it "assigns all manifestations as @manifestations when acquired_from and pub_date_to are specified" do
         get :index, :acquired_from => '2000', :acquired_to => '2007'
-        assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('2000-01-01').utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_day.utc.iso8601}]"
+        assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('2000-01-01').beginning_of_day.utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
       it "assigns all manifestations as @manifestations when number_of_pages_at_least and number_of_pages_at_most are specified" do
-        get :index, :number_of_pages_at_least => '100', :number_of_pages_at_least => '200'
+        get :index, :number_of_pages_at_least => '100', :number_of_pages_at_most => '200'
         expect(assigns(:manifestations)).to_not be_nil
       end
 
@@ -135,14 +134,14 @@ describe ManifestationsController do
         get :index, :query => '2005', :pub_date_from => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
-        assigns(:query).should eq '2005 date_of_publication_d:[1999-12-31T15:00:00Z TO *]'
+        assigns(:query).should eq '2005 date_of_publication_d:[1999-12-31T00:00:00Z TO *]'
       end
 
       it "should get index with pub_date_to" do
         get :index, :query => '2005', :pub_date_to => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
-        assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T14:59:59Z]'
+        assigns(:query).should eq '2005 date_of_publication_d:[* TO 1999-12-31T23:59:59Z]'
       end
 
       it "should get tag_cloud" do
@@ -151,13 +150,13 @@ describe ManifestationsController do
         expect(response).to render_template("manifestations/_tag_cloud")
       end
 
-      it "should show manifestation with isbn", :elasticsearch => true do
+      it "should show manifestation with isbn", :solr => true do
         get :index, :isbn => "4798002062"
         expect(response).to be_success
         expect(assigns(:manifestations).count).to eq 1
       end
 
-      it "should not show missing manifestation with isbn", :elasticsearch => true do
+      it "should not show missing manifestation with isbn", :solr => true do
         get :index, :isbn => "47980020620"
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_empty
@@ -382,7 +381,7 @@ describe ManifestationsController do
         end
 
         it "assigns a series_statement" do
-          post :create, :manifestation => @attrs.merge(:series_statements_attributes => {[0] => {:original_title => SeriesStatement.find(1).original_title}})
+          post :create, :manifestation => @attrs.merge(:series_statements_attributes => {"0" => {:original_title => SeriesStatement.find(1).original_title}})
           assigns(:manifestation).reload
           assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_truthy
         end
@@ -418,6 +417,11 @@ describe ManifestationsController do
         it "redirects to the created manifestation" do
           post :create, :manifestation => @attrs
           expect(response).to redirect_to(manifestation_url(assigns(:manifestation)))
+        end
+
+        it "accepts an attachment file" do
+          post :create, :manifestation => @attrs.merge(attachment: fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv'))
+          expect(assigns(:manifestation)).to be_valid
         end
       end
 
@@ -506,7 +510,7 @@ describe ManifestationsController do
         end
 
         it "assigns a series_statement" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(:series_statements_attributes => {[0] => {:original_title => series_statements(:two).original_title, "_destroy"=>"false"}})
+          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(:series_statements_attributes => {"0" => {:original_title => series_statements(:two).original_title, "_destroy"=>"false"}})
           assigns(:manifestation).reload
           assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:two).original_title).should be_truthy
         end

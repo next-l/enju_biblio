@@ -1,6 +1,8 @@
 require 'spec_helper'
+require 'sunspot/rails/spec_helper'
 
 describe LanguagesController do
+  disconnect_sunspot
   fixtures :all
 
   def valid_attributes

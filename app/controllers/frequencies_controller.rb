@@ -1,21 +1,34 @@
 class FrequenciesController < ApplicationController
-  before_action :set_frequency, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-
+  load_and_authorize_resource
   # GET /frequencies
+  # GET /frequencies.json
   def index
-    authorize Frequency
-    @frequencies = Frequency.order(:position)
+    @frequencies = Frequency.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @frequencies }
+    end
   end
 
   # GET /frequencies/1
+  # GET /frequencies/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @frequency }
+    end
   end
 
   # GET /frequencies/new
+  # GET /frequencies/new.json
   def new
     @frequency = Frequency.new
-    authorize @frequency
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @frequency }
+    end
   end
 
   # GET /frequencies/1/edit
@@ -23,46 +36,53 @@ class FrequenciesController < ApplicationController
   end
 
   # POST /frequencies
+  # POST /frequencies.json
   def create
     @frequency = Frequency.new(frequency_params)
-    authorize @frequency
 
-    if @frequency.save
-      redirect_to @frequency, notice: t('controller.successfully_created', model: t('activerecord.models.frequency'))
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @frequency.save
+        format.html { redirect_to @frequency, notice: t('controller.successfully_created', model: t('activerecord.models.frequency')) }
+        format.json { render json: @frequency, status: :created, location: @frequency }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @frequency.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /frequencies/1
+  # PUT /frequencies/1
+  # PUT /frequencies/1.json
   def update
     if params[:move]
       move_position(@frequency, params[:move])
       return
     end
 
-    if @frequency.update(frequency_params)
-      redirect_to @frequency, notice: t('controller.successfully_updated', model: t('activerecord.models.frequency'))
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @frequency.update_attributes(frequency_params)
+        format.html { redirect_to @frequency, notice: t('controller.successfully_updated', model: t('activerecord.models.frequency')) }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @frequency.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /frequencies/1
+  # DELETE /frequencies/1.json
   def destroy
     @frequency.destroy
-    redirect_to frequencies_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.frequency'))
+
+    respond_to do |format|
+      format.html { redirect_to frequencies_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.frequency')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_frequency
-      @frequency = Frequency.find(params[:id])
-      authorize @frequency
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def frequency_params
-      params.require(:frequency).permit(:name, :display_name, :note)
-    end
+  def frequency_params
+    params.require(:frequency).permit(:name, :display_name, :note)
+  end
 end

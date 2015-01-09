@@ -18,7 +18,7 @@
 <%- @produce_types.each do |produce_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(produce_type).update? -%>
+      <%- if can? :update, produce_type -%>
         <%= move_position(produce_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= produce_type.note %>
     </td>
     <td>
-      <%- if policy(produce_type).update? -%>
+      <%- if can? :update, produce_type -%>
         <%= link_to t('page.edit'), edit_produce_type_path(produce_type) -%>
       <% end %>
-      <%- if policy(produce_type).destroy? -%>
+      <%- if can? :delete, produce_type -%>
         <%= link_to t('page.destroy'), produce_type_path(produce_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(ProduceType).create? -%>
+    <%- if can? :create, ProduceType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.produce_type')), new_produce_type_path -%></li>
     <%- end -%>
   </ul>

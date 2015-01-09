@@ -6,15 +6,6 @@ carrier_type_00001:
   id: 1
   position: 1
 carrier_type_00002: 
-<<<<<<< HEAD
-  name: cd
-  display_name: CD
-  id: 2
-  position: 2
-carrier_type_00003: 
-  name: dvd
-  display_name: DVD
-=======
   name: audio_disc
   display_name: "en: Audio disc\r\n\
     ja: オーディオディスク"
@@ -24,7 +15,6 @@ carrier_type_00003:
   name: videodisc
   display_name: "en: Videodisc\r\n\
     ja: ビデオディスク"
->>>>>>> 1.1
   id: 3
   position: 3
 carrier_type_00004: 

@@ -203,7 +203,7 @@ describe ResourceImportFilesController do
       login_fixture_admin
 
       it "should update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {mode: "update"}
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
     end
@@ -212,7 +212,7 @@ describe ResourceImportFilesController do
       login_fixture_librarian
 
       it "should update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {mode: "update"}
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
     end
@@ -221,14 +221,14 @@ describe ResourceImportFilesController do
       login_fixture_user
 
       it "should not update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {mode: "update"}
         expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "should not update resource_import_file" do
-        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => { }
+        put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {mode: "update"}
         expect(response).to redirect_to new_user_session_url
       end
     end

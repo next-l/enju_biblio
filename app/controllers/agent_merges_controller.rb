@@ -1,7 +1,6 @@
 class AgentMergesController < ApplicationController
-  before_action :set_agent_merge, only: [:show, :edit, :update, :destroy]
-  before_action :get_agent, :get_agent_merge_list
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :get_agent, :get_agent_merge_list
 
   # GET /agent_merges
   # GET /agent_merges.json
@@ -13,17 +12,32 @@ class AgentMergesController < ApplicationController
     else
       @agent_merges = AgentMerge.page(params[:page])
     end
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @agent_merges }
+    end
   end
 
   # GET /agent_merges/1
+  # GET /agent_merges/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @agent_merge }
+    end
   end
 
   # GET /agent_merges/new
+  # GET /agent_merges/new.json
   def new
     @agent_merge = AgentMerge.new
     @agent_merge.agent = @agent
-    authorize @agent_merge
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @agent_merge }
+    end
   end
 
   # GET /agent_merges/1/edit
@@ -71,13 +85,7 @@ class AgentMergesController < ApplicationController
     end
   end
 
-  private
-  def set_agent_merge
-    @agent_merge = AgentMerge.find(params[:id])
-    authorize @agent_merge
-  end
-
   def agent_merge_params
-    params.require(:agent_merge_list).permit()
+    params.require(:agent_merge).permit(:agent_id, :agent_merge_list_id)
   end
 end

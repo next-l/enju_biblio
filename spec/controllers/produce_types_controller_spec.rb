@@ -33,7 +33,7 @@ describe ProduceTypesController do
     it "assigns all produce_types as @produce_types" do
       produce_type = ProduceType.create! valid_attributes
       get :index
-      expect(assigns(:produce_types)).to eq(ProduceType.order(:position))
+      expect(assigns(:produce_types)).to eq(ProduceType.all)
     end
   end
 
@@ -84,14 +84,14 @@ describe ProduceTypesController do
       it "assigns a newly created but unsaved produce_type as @produce_type" do
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        post :create, :produce_type => {}
+        post :create, :produce_type => {name: "test"}
         expect(assigns(:produce_type)).to be_a_new(ProduceType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        post :create, :produce_type => {}
+        post :create, :produce_type => {name: "test"}
         #expect(response).to render_template("new")
       end
     end
@@ -105,8 +105,8 @@ describe ProduceTypesController do
         # specifies that the ProduceType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        ProduceType.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
-        put :update, :id => produce_type.id, :produce_type => {'these' => 'params'}
+        ProduceType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
+        put :update, :id => produce_type.id, :produce_type => {'name' => 'test'}
       end
 
       it "assigns the requested produce_type as @produce_type" do
@@ -135,7 +135,7 @@ describe ProduceTypesController do
         produce_type = ProduceType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        put :update, :id => produce_type.id, :produce_type => {}
+        put :update, :id => produce_type.id, :produce_type => {name: "test"}
         expect(assigns(:produce_type)).to eq(produce_type)
       end
 
@@ -143,7 +143,7 @@ describe ProduceTypesController do
         produce_type = ProduceType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        put :update, :id => produce_type.id, :produce_type => {}
+        put :update, :id => produce_type.id, :produce_type => {name: "test"}
         #expect(response).to render_template("edit")
       end
     end

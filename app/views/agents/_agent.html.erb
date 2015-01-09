@@ -5,7 +5,7 @@
       </td>
       <td><%= agent.agent_type.display_name.localize -%></td>
       <td>
-        <%- if policy(agent).destroy? -%>
+        <%- if can? :delete, agent -%>
           <%= link_to t('page.edit'), edit_agent_path(agent) -%>
           <%= link_to t('agent.add_derivation'), agent_agents_path(agent, mode: 'add') -%>
         <%- end -%>

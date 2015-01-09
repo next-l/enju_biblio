@@ -7,7 +7,4 @@ class ApplicationController < ActionController::Base
   enju_inventory
   enju_event
   enju_subject
-
-  include Pundit
-  rescue_from Pundit::NotAuthorizedError, with: :render_403
 end

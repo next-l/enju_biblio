@@ -1,16 +1,11 @@
 class AgentImportResultsController < ApplicationController
-  before_action :set_agent_import_result, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-
+  load_and_authorize_resource
+  # GET /agent_import_results
+  # GET /agent_import_results.json
   def index
-    authorize AgentImportResult
     @agent_import_file = AgentImportFile.where(id: params[:agent_import_file_id]).first
     if @agent_import_file
-      if params[:format] == 'txt'
-        @agent_import_results = @agent_import_file.agent_import_results
-      else
-        @agent_import_results = @agent_import_file.agent_import_results.page(params[:page])
-      end
+      @agent_import_results = @agent_import_file.agent_import_results.page(params[:page])
     else
       @agent_import_results = AgentImportResult.page(params[:page])
     end
@@ -23,10 +18,16 @@ class AgentImportResultsController < ApplicationController
   end
 
   # GET /agent_import_results/1
+  # GET /agent_import_results/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @agent_import_result }
+    end
   end
 
   # DELETE /agent_import_results/1
+  # DELETE /agent_import_results/1.json
   def destroy
     @agent_import_result.destroy
 
@@ -36,18 +37,10 @@ class AgentImportResultsController < ApplicationController
     end
   end
 
-  def show
-  end
-
-  def destroy
-    @agent_import_result.destroy
-    redirect_to agent_import_results_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.agent_import_result'))
-  end
-
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_agent_import_result
-      @agent_import_result = AgentImportResult.find(params[:id])
-      authorize @agent_import_result
-    end
+  def agent_import_result_params
+    params.require(:agent_import_result).permit(
+      :agent_import_file_id, :agent_id, :body
+    )
+  end
 end

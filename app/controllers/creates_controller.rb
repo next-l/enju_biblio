@@ -1,13 +1,12 @@
 class CreatesController < ApplicationController
-  before_action :set_create, only: [:show, :edit, :update, :destroy]
-  before_action :get_agent, :get_work
-  before_action :prepare_options, :only => [:new, :edit]
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :get_agent, :get_work
+  before_filter :prepare_options, only: [:new, :edit]
+  after_filter :solr_commit, only: [:create, :update, :destroy]
 
   # GET /creates
   # GET /creates.json
   def index
-    authorize Create
     case
     when @agent
       @creates = @agent.creates.order('creates.position').page(params[:page])
@@ -42,7 +41,6 @@ class CreatesController < ApplicationController
       return
     else
       @create = Create.new
-      authorize @create
       @create.work = @work
       @create.agent = @agent
     end
@@ -56,7 +54,6 @@ class CreatesController < ApplicationController
   # POST /creates.json
   def create
     @create = Create.new(create_params)
-    authorize @create
 
     respond_to do |format|
       if @create.save
@@ -114,18 +111,13 @@ class CreatesController < ApplicationController
   end
 
   private
-  def set_create
-    @create = Create.find(params[:id])
-    authorize @create
+  def create_params
+    params.require(:create).permit(
+      :agent_id, :work_id, :create_type_id, :position
+    )
   end
 
   def prepare_options
     @create_types = CreateType.all
-  end
-
-  def create_params
-    params.require(:create).permit(
-      :agent_id, :work_id, :create_type_id
-    )
   end
 end

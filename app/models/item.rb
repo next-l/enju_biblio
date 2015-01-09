@@ -1,8 +1,5 @@
 # -*- encoding: utf-8 -*-
 class Item < ActiveRecord::Base
-  include Elasticsearch::Model
-  include Elasticsearch::Model::Callbacks
-
   enju_library_item_model if defined?(EnjuLibrary)
   enju_circulation_item_model if defined?(EnjuCirculation)
   enju_export if defined?(EnjuExport)
@@ -34,54 +31,26 @@ class Item < ActiveRecord::Base
   normalize_attributes :item_identifier, :binding_item_identifier,
     :call_number, :binding_call_number, :url
 
-  index_name "#{name.downcase.pluralize}-#{Rails.env}"
-
-  after_commit on: :create do
-    index_document
-  end
-
-  after_commit on: :update do
-    update_document
-  end
-
-  after_commit on: :destroy do
-    delete_document
-  end
-
-  settings do
-    mappings dynamic: 'false', _routing: {required: true, path: :required_role_id} do
-      indexes :item_identifier
-      indexes :note
-      indexes :title
-      indexes :creator
-      indexes :contributor
-      indexes :publisher
-      indexes :manifestation_id, type: 'integer'
-      indexes :shelf_id, type: 'integer'
-      indexes :created_at
-      indexes :updated_at
-      indexes :acquired_at
-      indexes :agent_ids
+  searchable do
+    text :item_identifier, :note, :title, :creator, :contributor, :publisher,
+      :binding_item_identifier
+    string :item_identifier, multiple: true do
+      [item_identifier, binding_item_identifier]
     end
-  end
-
-  def as_indexed_json(options={})
-    as_json.merge(
-      item_identifier: [item_identifier, binding_item_identifier],
-      title: title,
-      creator: creator,
-      contributor: contributor,
-      publisher: publisher,
-      manifestation_id: manifestation.try(:id),
-      agent_ids: agent_ids
-    )
+    integer :required_role_id
+    integer :manifestation_id
+    integer :shelf_id
+    integer :agent_ids, multiple: true
+    time :created_at
+    time :updated_at
+    time :acquired_at
   end
 
   after_save do
-  #  manifestation.index!
+    manifestation.index!
   end
   after_destroy do
-  #  manifestation.index!
+    manifestation.index!
   end
 
   attr_accessor :library_id
@@ -130,8 +99,8 @@ end
 #  id                      :integer          not null, primary key
 #  call_number             :string(255)
 #  item_identifier         :string(255)
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #  deleted_at              :datetime
 #  shelf_id                :integer          default(1), not null
 #  include_supplements     :boolean          default(FALSE), not null

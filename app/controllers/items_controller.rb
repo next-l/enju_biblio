@@ -1,20 +1,20 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
-  before_action :set_item, only: [:show, :edit, :update, :destroy]
-  before_action :get_agent, :get_manifestation, :get_shelf, :except => [:create, :update, :destroy]
+  load_and_authorize_resource
+  before_filter :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_action :get_inventory_file
+    before_filter :get_inventory_file
   end
-  before_action :get_library, :get_item, :except => [:create, :update, :destroy]
-  before_action :prepare_options, :only => [:new, :edit]
-  before_action :get_version, :only => [:show]
-  after_action :verify_authorized
-  after_action :convert_charset, :only => :index
+  before_filter :get_library, :get_item, except: [:create, :update, :destroy]
+  before_filter :prepare_options, only: [:new, :edit]
+  before_filter :get_version, only: [:show]
+  #before_filter :store_location
+  after_filter :solr_commit, only: [:create, :update, :destroy]
+  after_filter :convert_charset, only: :index
 
   # GET /items
   # GET /items.json
   def index
-    authorize Item
     query = params[:query].to_s.strip
     per_page = Item.default_per_page
     @count = {}
@@ -51,39 +51,35 @@ class ItemsController < ApplicationController
       end
     end
 
-    if params[:query].to_s.strip == ''
-      user_query = '*'
-    else
-      user_query = params[:query]
-    end
-
-    if user_signed_in?
-      role_ids = Role.where('id <= ?', current_user.role.id).pluck(:id)
-    else
-      role_ids = [1]
-    end
-
     unless @inventory_file
-      @query = params[:query]
-      query = {
-        query: {
-          filtered: {
-            query: {
-              query_string: {
-                query: user_query, fields: ['_all']
-              }
-            }
-          }
-        },
-        sort: {
-          created_at: 'desc'
-        }
-      }
+      search = Sunspot.new_search(Item)
+      set_role_query(current_user, search)
 
+      @query = query.dup
+      unless query.blank?
+        search.build do
+          fulltext query
+        end
+      end
+
+      agent = @agent
+      manifestation = @manifestation
+      shelf = @shelf
       unless params[:mode] == 'add'
-        query[:query][:filtered][:query][:term] = {agent_id: @agent.id} if @agent
-        query[:query][:filtered][:query][:term] = {manifestation_id: @manifestation.id} if @manifestation
-        query[:query][:filtered][:query][:term] = {shelf_id: @shelf.id} if @shelf
+        search.build do
+          with(:agent_ids).equal_to agent.id if agent
+          with(:manifestation_id).equal_to manifestation.id if manifestation
+          with(:shelf_id).equal_to shelf.id if shelf
+        end
+      end
+
+      search.build do
+        order_by(:created_at, :desc)
+      end
+
+      role = current_user.try(:role) || Role.default_role
+      search.build do
+        with(:required_role_id).less_than_or_equal_to role.id
       end
 
       if params[:acquired_from].present?
@@ -108,8 +104,8 @@ class ItemsController < ApplicationController
       end
 
       page = params[:page] || 1
-      search = Item.search(query, routing: role_ids)
-      @items = search.page(params[:page]).records
+      search.query.paginate(page.to_i, per_page)
+      @items = search.execute!.results
       @count[:total] = @items.total_entries
     end
 
@@ -133,13 +129,18 @@ class ItemsController < ApplicationController
   # GET /items/1
   # GET /items/1.json
   def show
+    #@item = Item.find(params[:id])
+    @item = @item.versions.find(@version).item if @version
+
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @item }
+    end
   end
 
   # GET /items/new
   # GET /items/new.json
   def new
-    @item = Item.new
-    authorize @item
     if Shelf.real.blank?
       flash[:notice] = t('item.create_shelf_first')
       redirect_to libraries_url
@@ -150,8 +151,9 @@ class ItemsController < ApplicationController
       redirect_to manifestations_url
       return
     end
+    @item = Item.new
     @item.shelf = @library.shelves.first
-    @item.manifestation = @manifestation
+    @item.manifestation_id = @manifestation.id
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.where(
         name: [
@@ -166,13 +168,15 @@ class ItemsController < ApplicationController
       @item.item_has_use_restriction = ItemHasUseRestriction.new
       @item.item_has_use_restriction.use_restriction = UseRestriction.where(name: 'Not For Loan').first
     end
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @item }
+    end
   end
 
   # GET /items/1/edit
   def edit
-    if @manifestation
-      @item.manifestation = @manifestation
-    end
     @item.library_id = @item.shelf.library_id
     if defined?(EnjuCirculation)
       unless @item.use_restriction
@@ -186,7 +190,6 @@ class ItemsController < ApplicationController
   # POST /items.json
   def create
     @item = Item.new(item_params)
-    authorize @item
     manifestation = Manifestation.find(@item.manifestation_id)
 
     respond_to do |format|
@@ -226,21 +229,33 @@ class ItemsController < ApplicationController
   end
 
   # DELETE /items/1
+  # DELETE /items/1.json
   def destroy
+    manifestation = @item.manifestation
     @item.destroy
 
-    flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.item'))
-    if @item.manifestation
-      redirect_to items_url(manifestation_id: @item.manifestation_id), notice: t('controller.successfully_destroyed', model: t('activerecord.models.item'))
-    else
-      redirect_to items_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.item'))
+    respond_to do |format|
+      flash[:notice] = t('controller.successfully_deleted', model: t('activerecord.models.item'))
+      if @item.manifestation
+        format.html { redirect_to items_url(manifestation_id: manifestation.id) }
+        format.json { head :no_content }
+      else
+        format.html { redirect_to items_url }
+        format.json { head :no_content }
+      end
     end
   end
 
   private
-  def set_item
-    @item = Item.find(params[:id])
-    authorize @item
+  def item_params
+    params.require(:item).permit(
+      :call_number, :item_identifier, :circulation_status_id,
+      :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
+      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
+      :lock_version, :manifestation_id, :library_id, :required_role_id,
+      :binding_item_identifier, :binding_call_number, :binded_at,
+      :item_has_use_restriction_attributes # EnjuCirculation
+    )
   end
 
   def prepare_options
@@ -248,7 +263,7 @@ class ItemsController < ApplicationController
     if @item.new_record?
       @library = Library.real.includes(:shelves).order(:position).first
     else
-      @library = Library.real.order(:position).includes(:shelves).first
+      @library = @item.shelf.library
     end
     @shelves = @library.shelves
     @bookstores = Bookstore.all
@@ -263,14 +278,5 @@ class ItemsController < ApplicationController
         @checkout_types = CheckoutType.all
       end
     end
-  end
-
-  def item_params
-    params.require(:item).permit(
-      :call_number, :item_identifier, :circulation_status_id,
-      :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
-      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
-      :lock_version, :manifestation_id, :library_id, :required_role_id
-    )
   end
 end

@@ -1,12 +1,11 @@
 class CarrierTypesController < ApplicationController
-  before_action :set_carrier_type, only: [:show, :edit, :update, :destroy]
-  before_action :prepare_options, :only => [:new, :edit]
-  after_action :verify_authorized
+  load_and_authorize_resource
+  before_filter :prepare_options, only: [:new, :edit]
 
   # GET /carrier_types
+  # GET /carrier_types.json
   def index
-    authorize CarrierType
-    @carrier_types = CarrierType.order(:position)
+    @carrier_types = CarrierType.order(:position).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -15,13 +14,23 @@ class CarrierTypesController < ApplicationController
   end
 
   # GET /carrier_types/1
+  # GET /carrier_types/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @carrier_type }
+    end
   end
 
   # GET /carrier_types/new
+  # GET /carrier_types/new.json
   def new
     @carrier_type = CarrierType.new
-    authorize @carrier_type
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @carrier_type }
+    end
   end
 
   # GET /carrier_types/1/edit
@@ -32,7 +41,6 @@ class CarrierTypesController < ApplicationController
   # POST /carrier_types.json
   def create
     @carrier_type = CarrierType.new(carrier_type_params)
-    authorize @carrier_type
 
     respond_to do |format|
       if @carrier_type.save
@@ -54,10 +62,15 @@ class CarrierTypesController < ApplicationController
       return
     end
 
-    if @carrier_type.update(carrier_type_params)
-      redirect_to @carrier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.carrier_type'))
-    else
-      render :edit
+    respond_to do |format|
+      if @carrier_type.update_attributes(carrier_type_params)
+        format.html { redirect_to @carrier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.carrier_type')) }
+        format.json { head :no_content }
+      else
+        prepare_options
+        format.html { render action: "edit" }
+        format.json { render json: @carrier_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 
@@ -65,24 +78,24 @@ class CarrierTypesController < ApplicationController
   # DELETE /carrier_types/1.json
   def destroy
     @carrier_type.destroy
-    redirect_to carrier_types_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.carrier_type'))
+
+    respond_to do |format|
+      format.html { redirect_to carrier_types_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.carrier_type')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-  def set_carrier_type
-    @carrier_type = CarrierType.find(params[:id])
-    authorize @carrier_type
+  def carrier_type_params
+    params.require(:carrier_type).permit(
+      :name, :display_name, :note, :position,
+      :carrier_type_has_checkout_types_attributes # EnjuCirculation
+    )
   end
 
   def prepare_options
     if defined?(EnjuCirculation)
       @checkout_types = CheckoutType.select([:id, :display_name, :position])
     end
-  end
-
-  def carrier_type_params
-    params.require(:carrier_type).permit(
-      :name, :display_name, :note, :position
-    )
   end
 end

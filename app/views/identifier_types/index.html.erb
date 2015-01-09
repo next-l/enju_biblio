@@ -18,7 +18,7 @@
 <%- @identifier_types.each do |identifier_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(identifier_type).update? -%>
+      <%- if can? :update, identifier_type -%>
         <%= move_position(identifier_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= identifier_type.note %>
     </td>
     <td>
-      <%- if policy(identifier_type).update? -%>
+      <%- if can? :update, identifier_type -%>
         <%= link_to t('page.edit'), edit_identifier_type_path(identifier_type) -%>
       <% end %>
-      <%- if policy(identifier_type).destroy? -%>
+      <%- if can? :delete, identifier_type -%>
         <%= link_to t('page.destroy'), identifier_type_path(identifier_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(IdentifierType).create? -%>
+    <%- if can? :create, IdentifierType -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.identifier_type')), new_identifier_type_path -%></li>
     <%- end -%>
   </ul>

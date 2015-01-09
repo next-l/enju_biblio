@@ -1,5 +1,5 @@
 class AgentImportFile < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordModel
+  include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   default_scope { order('agent_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
@@ -57,6 +57,7 @@ class AgentImportFile < ActiveRecord::Base
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
+    #rows.shift
 
     AgentImportResult.create!(agent_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
@@ -70,10 +71,15 @@ class AgentImportFile < ActiveRecord::Base
       if agent.save!
         import_result.agent = agent
         num[:agent_imported] += 1
+        if row_num % 50 == 0
+          Sunspot.commit
+          GC.start
+        end
       end
 
       import_result.save!
     end
+    Sunspot.commit
     rows.close
     transition_to!(:completed)
     return num

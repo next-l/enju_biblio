@@ -1,4 +1,5 @@
 class Exemplify < ActiveRecord::Base
+  #attr_accessible :manifestation_id, :item_id, :position
   belongs_to :manifestation
   belongs_to :item
   #accepts_nested_attributes_for :item
@@ -25,7 +26,6 @@ end
 #  manifestation_id :integer          not null
 #  item_id          :integer          not null
 #  position         :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #
-

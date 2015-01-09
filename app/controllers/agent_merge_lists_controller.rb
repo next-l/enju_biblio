@@ -1,21 +1,35 @@
 class AgentMergeListsController < ApplicationController
-  before_action :set_agent_merge_list, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
+  load_and_authorize_resource
 
   # GET /agent_merge_lists
+  # GET /agent_merge_lists.json
   def index
-    authorize AgentMergeList
     @agent_merge_lists = AgentMergeList.page(params[:page])
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @agent_merge_lists }
+    end
   end
 
   # GET /agent_merge_lists/1
+  # GET /agent_merge_lists/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @agent_merge_list }
+    end
   end
 
   # GET /agent_merge_lists/new
+  # GET /agent_merge_lists/new.json
   def new
     @agent_merge_list = AgentMergeList.new
-    authorize @agent_merge_list
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @agent_merge_list }
+    end
   end
 
   # GET /agent_merge_lists/1/edit
@@ -23,6 +37,7 @@ class AgentMergeListsController < ApplicationController
   end
 
   # POST /agent_merge_lists
+  # POST /agent_merge_lists.json
   def create
     @agent_merge_list = AgentMergeList.new(agent_merge_list_params)
 
@@ -39,6 +54,7 @@ class AgentMergeListsController < ApplicationController
   end
 
   # PUT /agent_merge_lists/1
+  # PUT /agent_merge_lists/1.json
   def update
     respond_to do |format|
       if @agent_merge_list.update_attributes(agent_merge_list_params)
@@ -65,6 +81,7 @@ class AgentMergeListsController < ApplicationController
   end
 
   # DELETE /agent_merge_lists/1
+  # DELETE /agent_merge_lists/1.json
   def destroy
     @agent_merge_list.destroy
 
@@ -75,12 +92,7 @@ class AgentMergeListsController < ApplicationController
   end
 
   private
-  def set_agent_merge_list
-    @agent_merge_list = AgentMergeList.find(params[:id])
-    authorize @agent_merge_list
-  end
-
   def agent_merge_list_params
-    params.require(:agent_merge_list).permit(:title)
+    params.fetch(:agent_merge_list, {}).permit(:title)
   end
 end

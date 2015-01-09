@@ -1,21 +1,34 @@
 class ManifestationRelationshipTypesController < ApplicationController
-  before_action :set_manifestation_relationship_type, only: [:show, :edit, :update, :destroy]
-  after_action :verify_authorized
-
+  load_and_authorize_resource
   # GET /manifestation_relationship_types
+  # GET /manifestation_relationship_types.json
   def index
-    authorize ManifestationRelationshipType
-    @manifestation_relationship_types = ManifestationRelationshipType.order(:position)
+    @manifestation_relationship_types = ManifestationRelationshipType.all
+
+    respond_to do |format|
+      format.html # index.html.erb
+      format.json { render json: @manifestation_relationship_types }
+    end
   end
 
   # GET /manifestation_relationship_types/1
+  # GET /manifestation_relationship_types/1.json
   def show
+    respond_to do |format|
+      format.html # show.html.erb
+      format.json { render json: @manifestation_relationship_type }
+    end
   end
 
   # GET /manifestation_relationship_types/new
+  # GET /manifestation_relationship_types/new.json
   def new
     @manifestation_relationship_type = ManifestationRelationshipType.new
-    authorize @manifestation_relationship_type
+
+    respond_to do |format|
+      format.html # new.html.erb
+      format.json { render json: @manifestation_relationship_type }
+    end
   end
 
   # GET /manifestation_relationship_types/1/edit
@@ -23,46 +36,55 @@ class ManifestationRelationshipTypesController < ApplicationController
   end
 
   # POST /manifestation_relationship_types
+  # POST /manifestation_relationship_types.json
   def create
     @manifestation_relationship_type = ManifestationRelationshipType.new(manifestation_relationship_type_params)
-    authorize @manifestation_relationship_type
 
-    if @manifestation_relationship_type.save
-      redirect_to @manifestation_relationship_type, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation_relationship_type'))
-    else
-      render action: 'new'
+    respond_to do |format|
+      if @manifestation_relationship_type.save
+        format.html { redirect_to @manifestation_relationship_type, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation_relationship_type')) }
+        format.json { render json: @manifestation_relationship_type, status: :created, location: @manifestation_relationship_type }
+      else
+        format.html { render action: "new" }
+        format.json { render json: @manifestation_relationship_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 
-  # PATCH/PUT /manifestation_relationship_types/1
+  # PUT /manifestation_relationship_types/1
+  # PUT /manifestation_relationship_types/1.json
   def update
     if params[:move]
       move_position(@manifestation_relationship_type, params[:move])
       return
     end
 
-    if @manifestation_relationship_type.update(manifestation_relationship_type_params)
-      redirect_to @manifestation_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship_type'))
-    else
-      render action: 'edit'
+    respond_to do |format|
+      if @manifestation_relationship_type.update_attributes(manifestation_relationship_type_params)
+        format.html { redirect_to @manifestation_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship_type')) }
+        format.json { head :no_content }
+      else
+        format.html { render action: "edit" }
+        format.json { render json: @manifestation_relationship_type.errors, status: :unprocessable_entity }
+      end
     end
   end
 
   # DELETE /manifestation_relationship_types/1
+  # DELETE /manifestation_relationship_types/1.json
   def destroy
     @manifestation_relationship_type.destroy
-    redirect_to manifestation_relationship_types_url, notice: t('controller.successfully_destroyed', model: t('activerecord.models.manifestation_relationship_type'))
+
+    respond_to do |format|
+      format.html { redirect_to manifestation_relationship_types_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.manifestation_relationship_type')) }
+      format.json { head :no_content }
+    end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_manifestation_relationship_type
-      @manifestation_relationship_type = ManifestationRelationshipType.find(params[:id])
-      authorize @manifestation_relationship_type
-    end
-
-    # Only allow a trusted parameter "white list" through.
-    def manifestation_relationship_type_params
-      params.require(:manifestation_relationship_type).permit(:name, :display_name, :note)
-    end
+  def manifestation_relationship_type_params
+    params.require(:manifestation_relationship_type).permit(
+      :name, :display_name, :note
+    )
+  end
 end

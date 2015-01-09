@@ -3,6 +3,7 @@ class ResourceImportFileTransition < ActiveRecord::Base
 
   
   belongs_to :resource_import_file, inverse_of: :resource_import_file_transitions
+  #attr_accessible :to_state, :sort_key, :metadata
 end
 
 # == Schema Information
@@ -14,6 +15,6 @@ end
 #  metadata                :text             default("{}")
 #  sort_key                :integer
 #  resource_import_file_id :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #

@@ -18,7 +18,7 @@
 <%- @languages.each do |language| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(language).update? -%>
+      <%- if can? :update, language -%>
         <%= move_position(language) -%>
       <%- end -%>
     </td>
@@ -29,7 +29,7 @@
     <td><%= language.iso_639_2 -%></td>
     <td><%= language.iso_639_3 -%></td>
     <td>
-      <%- if policy(language).update? -%>
+      <%- if can? :update, language -%>
         <%= link_to t('page.edit'), edit_language_path(language) -%>
       <%- end -%>
     </td>
@@ -42,7 +42,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <%- if policy(Language).create? -%>
+  <%- if can? :create, Language -%>
     <ul>
       <li><%= link_to t('page.new', model: t('activerecord.models.language')), new_language_path -%></li>
     </ul>

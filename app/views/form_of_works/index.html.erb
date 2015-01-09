@@ -18,7 +18,7 @@
 <%- @form_of_works.each do |form_of_work| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if policy(form_of_work).update? -%>
+      <%- if can? :update, form_of_work -%>
         <%= move_position(form_of_work) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= form_of_work.note %>
     </td>
     <td>
-      <%- if policy(form_of_work).update? -%>
+      <%- if can? :update, form_of_work -%>
         <%= link_to t('page.edit'), edit_form_of_work_path(form_of_work) -%>
       <% end %>
-      <%- if policy(form_of_work).destroy? -%>
+      <%- if can? :delete, form_of_work -%>
         <%= link_to t('page.destroy'), form_of_work_path(form_of_work), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if policy(FormOfWork).create? -%>
+    <%- if can? :create, FormOfWork -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.form_of_work')), new_form_of_work_path -%></li>
     <%- end -%>
   </ul>
