@@ -16,7 +16,7 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files/1.json
   def show
     if @agent_import_file.agent_import.path
-      unless Setting.uploaded_file.storage == :s3
+      unless Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
         file = @agent_import_file.agent_import.path
       end
     end
@@ -25,7 +25,7 @@ class AgentImportFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @agent_import_file }
       format.download {
-        if Setting.uploaded_file.storage == :s3
+        if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
           redirect_to @agent_import_file.agent_import.expiring_url(10)
         else
           send_file file, filename: @agent_import_file.agent_import_file_name, type: 'application/octet-stream'

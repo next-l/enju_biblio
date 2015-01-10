@@ -1,4 +1,3 @@
-require 'enju_seed'
 require 'paper_trail'
 require 'paperclip'
 require 'paperclip-meta'
