@@ -1,5 +1,5 @@
 = EnjuBiblio
-{<img src="https://travis-ci.org/next-l/enju_biblio.png?branch=master" alt="Build Status" />}[http://travis-ci.org/next-l/enju_biblio]
+{<img src="https://travis-ci.org/next-l/enju_biblio.svg?branch=master" alt="Build Status" />}[http://travis-ci.org/next-l/enju_biblio]
 {<img src="https://img.shields.io/coveralls/next-l/enju_biblio.svg" alt="Coverage Status" />}[https://coveralls.io/r/next-l/enju_biblio?branch=master]
 {<img src="https://hakiri.io/github/next-l/enju_biblio/master.svg" alt="security" />}[https://hakiri.io/github/next-l/enju_biblio/master]
 
