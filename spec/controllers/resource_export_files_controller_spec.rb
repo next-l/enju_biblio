@@ -123,10 +123,7 @@ describe ResourceExportFilesController do
 
   describe "POST create" do
     describe "When logged in as Librarian" do
-      before(:each) do
-        @user = FactoryGirl.create(:librarian)
-        sign_in @user
-      end
+      login_fixture_librarian
 
       it "should create agent_export_file" do
         post :create, resource_export_file: {mode: 'export'}
@@ -137,10 +134,7 @@ describe ResourceExportFilesController do
     end
 
     describe "When logged in as User" do
-      before(:each) do
-        @user = FactoryGirl.create(:user)
-        sign_in @user
-      end
+      login_fixture_user
 
       it "should be forbidden" do
         post :create, resource_export_file: {mode: 'export'}

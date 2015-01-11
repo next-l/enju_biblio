@@ -25,7 +25,6 @@ Gem::Specification.new do |s|
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
-  s.add_dependency "resque_mailer"
   s.add_dependency "lisbn"
   s.add_dependency "statesman", "~> 1.1"
   s.add_dependency "faraday"
@@ -51,4 +50,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sunspot-rails-tester"
   s.add_development_dependency "annotate"
   s.add_development_dependency "rspec-activemodel-mocks"
+  s.add_development_dependency "redis-rails"
+  s.add_development_dependency "resque_mailer"
+  s.add_development_dependency "resque-scheduler", "~> 3.1"
 end
