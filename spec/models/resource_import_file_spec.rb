@@ -112,7 +112,7 @@ describe ResourceImportFile do
         manifestation_104.creators.collect(&:full_name).should eq ['test3']
         manifestation_104.publishers.collect(&:full_name).should eq ['test4']
 
-        ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 8: #{I18n.t('import.manifestation_found')}"
+        ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 8: 書誌インポート省略: すでに登録されている書誌が見つかりました。"
         ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
 
         Item.where(item_identifier: '11113').first.manifestation.original_title.should eq 'test10'
@@ -228,7 +228,7 @@ describe ResourceImportFile do
     file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
-    ResourceImportFileQueue.perform(file.id).should be_truthy
+    ResourceImportFileJob.perform_later(file).should be_truthy
   end
 end
 

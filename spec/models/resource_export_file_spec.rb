@@ -9,7 +9,7 @@ describe ResourceExportFile do
     file = ResourceExportFile.new
     file.user = users(:admin)
     file.save
-    ResourceExportFileQueue.perform(file.id).should be_truthy
+    ResourceExportFileJob.perform_later(file).should be_truthy
     Message.count.should eq message_count + 1
     Message.order(:id).last.subject.should eq 'エクスポートが完了しました'
   end

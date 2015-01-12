@@ -72,7 +72,7 @@ describe AgentImportFile do
     file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
-    AgentImportFileQueue.perform(file.id).should be_truthy
+    AgentImportFileJob.perform_later(file).should be_truthy
   end
 end
 
