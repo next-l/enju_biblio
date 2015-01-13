@@ -517,6 +517,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.pub_date
           item_lines << m.price
           item_lines << m.identifier_contents(:isbn).first
+          item_lines << m.identifier_contents(:issn).first
           item_lines << i.item_identifier
           item_lines << i.call_number
           item_lines << i.price
@@ -526,7 +527,6 @@ class Manifestation < ActiveRecord::Base
           item_lines << i.circulation_status.try(:name)
           item_lines << i.shelf.name
           item_lines << i.shelf.library.name
-          #raise item_lines.to_s if i.item_identifier == '10202'
         lines << item_lines
         end
         lines
