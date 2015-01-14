@@ -70,6 +70,8 @@ class ItemsController < ApplicationController
           with(:agent_ids).equal_to agent.id if agent
           with(:manifestation_id).equal_to manifestation.id if manifestation
           with(:shelf_id).equal_to shelf.id if shelf
+          with(:circulation_status).equal_to params[:circulation_status] if params[:circulation_status].present?
+          facet :circulation_status if defined?(EnjuCirculation)
         end
       end
 
@@ -105,7 +107,9 @@ class ItemsController < ApplicationController
 
       page = params[:page] || 1
       search.query.paginate(page.to_i, per_page)
-      @items = search.execute!.results
+      result = search.execute
+      @circulation_status_facet = result.facet(:circulation_status).rows if defined?(EnjuCirculation)
+      @items = result.results
       @count[:total] = @items.total_entries
     end
 

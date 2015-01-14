@@ -71,6 +71,16 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <%= render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation -%>
+  <% if defined?(EnjuCirculation) %>
+    <ul>
+      <%- @circulation_status_facet.each do |facet| -%>
+        <li><%= circulation_status_facet(facet) %></li>
+      <%- end -%>
+      <%- if params[:circulation_status] -%>
+        <li><%= link_to t('page.remove_this_facet'), url_for(params.merge(circulation_status: nil, page: nil, view: nil, only_path: true)) -%></li>
+      <%- end -%>
+    </ul>
+  <% end %>
   <ul>
     <%- if can?(:create, Item) and @manifestation -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id) -%></li>
