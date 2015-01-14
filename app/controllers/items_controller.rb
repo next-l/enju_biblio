@@ -135,6 +135,7 @@ class ItemsController < ApplicationController
   def show
     #@item = Item.find(params[:id])
     @item = @item.versions.find(@version).item if @version
+    @manifestation = @item.manifestation unless @manifestation
 
     respond_to do |format|
       format.html # show.html.erb
@@ -182,6 +183,7 @@ class ItemsController < ApplicationController
   # GET /items/1/edit
   def edit
     @item.library_id = @item.shelf.library_id
+    @manifestation = @item.manifestation
     if defined?(EnjuCirculation)
       unless @item.use_restriction
         @item.build_item_has_use_restriction
