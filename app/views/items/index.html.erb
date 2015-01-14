@@ -71,6 +71,11 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <%= render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation -%>
+  <ul>
+    <%- if can?(:create, Item) and @manifestation -%>
+      <li><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id) -%></li>
+    <%- end -%>
+  </ul>
   <% if defined?(EnjuCirculation) %>
     <h4><%= t('activerecord.models.circulation_status') -%></h4>
     <ul>
@@ -82,9 +87,4 @@
       <%- end -%>
     </ul>
   <% end %>
-  <ul>
-    <%- if can?(:create, Item) and @manifestation -%>
-      <li><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id) -%></li>
-    <%- end -%>
-  </ul>
 </div>
