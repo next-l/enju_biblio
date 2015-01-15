@@ -5,4 +5,7 @@
     <% if can? :update, @parent %>
       <li><%= link_to t('page.edit'), edit_manifestation_path(@parent) %></li>
     <% end %>
+    <% if can? :delete, @parent %>
+      <li><%= link_to t('page.destroy'), manifestation_path(@parent), data: {confirm: t('page.are_you_sure')}, method: :delete %></li>
+    <% end %>
   </ul>
