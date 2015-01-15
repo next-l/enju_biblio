@@ -2,7 +2,13 @@ class ResourceExportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   include ExportFile
   enju_export_file_model
-  has_attached_file :resource_export
+  if Setting.uploaded_file.storage == :s3
+    has_attached_file :resource_export, storage: :s3,
+      s3_credentials: "#{Setting.amazon}",
+      s3_permissions: :private
+  else
+    has_attached_file :resource_export
+  end
   validates_attachment_content_type :resource_export, content_type: /\Atext\/plain\Z/
 
   has_many :resource_export_file_transitions
