@@ -23,13 +23,13 @@ module EnjuBiblio
             if manifestation.series_master?
               if manifestation.children.empty?
                 return true
-	      else
+              else
                 return false
-	      end
-	    else
+              end
+            else
               true
-	    end
-	  end
+            end
+          end
         end
         can :manage, [
           AgentMerge,
@@ -90,13 +90,13 @@ module EnjuBiblio
             if manifestation.series_master?
               if manifestation.children.empty?
                 return true
-	      else
+              else
                 return false
-	      end
-	    else
+              end
+            else
               true
-	    end
-	  end
+            end
+          end
         end
         can [:index, :create], Agent
         can :show, Agent do |agent|
