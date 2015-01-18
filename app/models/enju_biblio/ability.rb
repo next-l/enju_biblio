@@ -83,6 +83,9 @@ module EnjuBiblio
         ]
       when 'Librarian'
         can :manage, Item
+        can [:destroy, :delete], Item do |item|
+          item.removable?
+        end
         can :index, Manifestation
         can [:show, :create, :update], Manifestation
         can [:destroy, :delete], Manifestation do |manifestation|
