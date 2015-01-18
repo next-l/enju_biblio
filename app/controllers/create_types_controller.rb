@@ -5,7 +5,7 @@ class CreateTypesController < ApplicationController
   # GET /create_types
   # GET /create_types.json
   def index
-    @create_types = CreateType.all
+    @create_types = CreateType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb

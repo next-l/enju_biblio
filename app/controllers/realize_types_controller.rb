@@ -5,7 +5,7 @@ class RealizeTypesController < ApplicationController
   # GET /realize_types
   # GET /realize_types.json
   def index
-    @realize_types = RealizeType.all
+    @realize_types = RealizeType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb

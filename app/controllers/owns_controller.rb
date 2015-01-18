@@ -1,5 +1,6 @@
 class OwnsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_own, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
   before_filter :get_agent, :get_item
   after_filter :solr_commit, only: [:create, :update, :destroy]
 
@@ -106,6 +107,15 @@ class OwnsController < ApplicationController
   end
 
   private
+  def set_own
+    @own = Own.find(params[:id])
+    authorize @own
+  end
+
+  def check_policy
+    authorize Own
+  end
+
   def own_params
     params.require(:own).permit(:agent_id, :item_id)
   end

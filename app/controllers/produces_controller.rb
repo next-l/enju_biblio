@@ -1,8 +1,9 @@
 class ProducesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_manifestation
-  before_filter :prepare_options, only: [:new, :edit]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
+  before_action :set_produce, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_agent, :get_manifestation
+  before_action :prepare_options, only: [:new, :edit]
+  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /produces
   # GET /produces.json
@@ -115,6 +116,15 @@ class ProducesController < ApplicationController
   end
 
   private
+  def set_produce
+    @produce = Produce.find(params[:id])
+    authorize @produce
+  end
+
+  def check_policy
+    authorize Produce
+  end
+
   def produce_params
     params.require(:produce).permit(
       :agent_id, :manifestation_id, :produce_type_id, :position

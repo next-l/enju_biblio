@@ -1,10 +1,11 @@
 class ImportRequestsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_import_request, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
 
   # GET /import_requests
   # GET /import_requests.json
   def index
-    @import_requests = ImportRequest.page(params[:page])
+    @import_requests = ImportRequest.order(id: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -91,6 +92,15 @@ class ImportRequestsController < ApplicationController
   end
 
   private
+  def set_import_request
+    @import_request = ImportRequest.find(params[:id])
+    authorize @import_request
+  end
+
+  def check_policy
+    authorize ImportRequest
+  end
+
   def import_request_params
     params.require(:import_request).permit(:isbn, :manifestation_id, :user_id)
   end

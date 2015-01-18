@@ -11,7 +11,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
+        expect(assigns(:import_requests)).to eq(ImportRequest.order(id: :desc).page(1))
       end
     end
 
@@ -20,7 +20,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
+        expect(assigns(:import_requests)).to eq(ImportRequest.order(id: :desc).page(1))
       end
     end
 
@@ -29,14 +29,14 @@ describe ImportRequestsController do
 
       it "assigns empty as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to be_empty
+        expect(assigns(:import_requests)).to be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns empty as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to be_empty
+        expect(assigns(:import_requests)).to be_nil
       end
     end
   end
@@ -105,7 +105,7 @@ describe ImportRequestsController do
 
       it "should not assign the requested import_request as @import_request" do
         get :new
-        expect(assigns(:import_request)).to_not be_valid
+        expect(assigns(:import_request)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -113,7 +113,7 @@ describe ImportRequestsController do
     describe "When not logged in" do
       it "should not assign the requested import_request as @import_request" do
         get :new
-        expect(assigns(:import_request)).to_not be_valid
+        expect(assigns(:import_request)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -239,7 +239,7 @@ describe ImportRequestsController do
       describe "with valid params" do
         it "assigns a newly created import_request as @import_request" do
           post :create, :import_request => @attrs
-          expect(assigns(:import_request)).to be_valid
+          expect(assigns(:import_request)).to be_nil
         end
 
         it "should be forbidden" do
@@ -251,7 +251,7 @@ describe ImportRequestsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved import_request as @import_request" do
           post :create, :import_request => @invalid_attrs
-          expect(assigns(:import_request)).to_not be_valid
+          expect(assigns(:import_request)).to be_nil
         end
 
         it "should be forbidden" do
@@ -265,7 +265,7 @@ describe ImportRequestsController do
       describe "with valid params" do
         it "assigns a newly created import_request as @import_request" do
           post :create, :import_request => @attrs
-          expect(assigns(:import_request)).to be_valid
+          expect(assigns(:import_request)).to be_nil
         end
 
         it "should be forbidden" do
@@ -277,7 +277,7 @@ describe ImportRequestsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved import_request as @import_request" do
           post :create, :import_request => @invalid_attrs
-          expect(assigns(:import_request)).to_not be_valid
+          expect(assigns(:import_request)).to be_nil
         end
 
         it "should be forbidden" do

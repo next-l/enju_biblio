@@ -1,4 +1,4 @@
-class ProduceTypePolicy < ApplicationPolicy
+class IdentifierTypePolicy < ApplicationPolicy
   def index?
     true if user.try(:has_role?, 'Librarian')
   end
@@ -16,6 +16,8 @@ class ProduceTypePolicy < ApplicationPolicy
   end
 
   def destroy?
-    true if user.try(:has_role?, 'Administrator')
+    if user.try(:has_role?, 'Administrator')
+      true unless record.identifiers.exists?
+    end
   end
 end

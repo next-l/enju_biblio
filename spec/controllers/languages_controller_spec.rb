@@ -19,7 +19,7 @@ describe LanguagesController do
 
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.page(1))
+        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe LanguagesController do
 
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.page(1))
+        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe LanguagesController do
 
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.page(1))
+        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.page(1))
+        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
       end
     end
   end
@@ -84,7 +84,7 @@ describe LanguagesController do
     describe "When not logged in" do
       it "should not assign the requested language as @language" do
         get :new
-        expect(assigns(:language)).to_not be_valid
+        expect(assigns(:language)).to be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -152,7 +152,7 @@ describe LanguagesController do
       describe "with valid params" do
         it "assigns a newly created language as @language" do
           post :create, :language => @attrs
-          expect(assigns(:language)).to be_valid
+          expect(assigns(:language)).to be_nil
         end
 
         it "should be forbidden" do
@@ -164,7 +164,7 @@ describe LanguagesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved language as @language" do
           post :create, :language => @invalid_attrs
-          expect(assigns(:language)).to_not be_valid
+          expect(assigns(:language)).to be_nil
         end
 
         it "should be forbidden" do
@@ -180,7 +180,7 @@ describe LanguagesController do
       describe "with valid params" do
         it "assigns a newly created language as @language" do
           post :create, :language => @attrs
-          expect(assigns(:language)).to be_valid
+          expect(assigns(:language)).to be_nil
         end
 
         it "should be forbidden" do
@@ -192,7 +192,7 @@ describe LanguagesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved language as @language" do
           post :create, :language => @invalid_attrs
-          expect(assigns(:language)).to_not be_valid
+          expect(assigns(:language)).to be_nil
         end
 
         it "should be forbidden" do
@@ -206,7 +206,7 @@ describe LanguagesController do
       describe "with valid params" do
         it "assigns a newly created language as @language" do
           post :create, :language => @attrs
-          expect(assigns(:language)).to be_valid
+          expect(assigns(:language)).to be_nil
         end
 
         it "should be forbidden" do
@@ -218,7 +218,7 @@ describe LanguagesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved language as @language" do
           post :create, :language => @invalid_attrs
-          expect(assigns(:language)).to_not be_valid
+          expect(assigns(:language)).to be_nil
         end
 
         it "should be forbidden" do

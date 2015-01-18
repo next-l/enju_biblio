@@ -20,22 +20,22 @@ module EnjuBiblio
 
     def get_work
       @work = Manifestation.find(params[:work_id]) if params[:work_id]
-      authorize! :show, @work if @work
+      authorize @manifestation, :show? if @manifestation
     end
 
     def get_expression
       @expression = Manifestation.find(params[:expression_id]) if params[:expression_id]
-      authorize! :show, @expression if @expression
+      authorize @manifestation, :show? if @manifestation
     end
 
     def get_manifestation
       @manifestation = Manifestation.find(params[:manifestation_id]) if params[:manifestation_id]
-      authorize! :show, @manifestation if @manifestation
+      authorize @manifestation, :show? if @manifestation
     end
 
     def get_item
       @item = Item.find(params[:item_id]) if params[:item_id]
-      authorize! :show, @item if @item
+      authorize @item, :show? if @item
     end
 
     def get_carrier_type

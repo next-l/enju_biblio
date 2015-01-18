@@ -1,5 +1,6 @@
 class ResourceImportFilesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_resource_import_file, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
   before_filter :prepare_options, only: [:new, :edit]
 
   # GET /resource_import_files
@@ -103,6 +104,16 @@ class ResourceImportFilesController < ApplicationController
   end
 
   private
+  def set_resource_import_file
+    @resource_import_file = ResourceImportFile.find(params[:id])
+    authorize @resource_import_file
+    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
+  end
+
+  def check_policy
+    authorize ResourceImportFile
+  end
+
   def resource_import_file_params
     params.require(:resource_import_file).permit(
       :resource_import, :edit_mode, :user_encoding, :mode,

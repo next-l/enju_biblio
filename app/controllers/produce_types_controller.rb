@@ -5,7 +5,7 @@ class ProduceTypesController < ApplicationController
   # GET /produce_types
   # GET /produce_types.json
   def index
-    @produce_types = ProduceType.all
+    @produce_types = ProduceType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb

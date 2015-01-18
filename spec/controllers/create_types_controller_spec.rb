@@ -33,7 +33,7 @@ describe CreateTypesController do
     it "assigns all create_types as @create_types" do
       create_type = CreateType.create! valid_attributes
       get :index
-      expect(assigns(:create_types)).to eq(CreateType.all)
+      expect(assigns(:create_types)).to eq(CreateType.order(:position))
     end
   end
 

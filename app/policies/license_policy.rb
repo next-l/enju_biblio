@@ -1,10 +1,10 @@
-class ProduceTypePolicy < ApplicationPolicy
+class LicensePolicy < ApplicationPolicy
   def index?
-    true if user.try(:has_role?, 'Librarian')
+    true
   end
 
   def show?
-    true if user.try(:has_role?, 'Librarian')
+    true
   end
 
   def create?

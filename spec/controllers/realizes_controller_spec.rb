@@ -105,7 +105,7 @@ describe RealizesController do
 
       it "should not assign the requested realize as @realize" do
         get :new
-        expect(assigns(:realize)).not_to be_valid
+        expect(assigns(:realize)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -113,7 +113,7 @@ describe RealizesController do
     describe "When not logged in" do
       it "should not assign the requested realize as @realize" do
         get :new
-        expect(assigns(:realize)).not_to be_valid
+        expect(assigns(:realize)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -227,7 +227,7 @@ describe RealizesController do
       describe "with valid params" do
         it "assigns a newly created realize as @realize" do
           post :create, :realize => @attrs
-          expect(assigns(:realize)).to be_valid
+          expect(assigns(:realize)).to be_nil
         end
 
         it "should be forbidden" do
@@ -239,7 +239,7 @@ describe RealizesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved realize as @realize" do
           post :create, :realize => @invalid_attrs
-          expect(assigns(:realize)).not_to be_valid
+          expect(assigns(:realize)).to be_nil
         end
 
         it "should be forbidden" do
@@ -253,7 +253,7 @@ describe RealizesController do
       describe "with valid params" do
         it "assigns a newly created realize as @realize" do
           post :create, :realize => @attrs
-          expect(assigns(:realize)).to be_valid
+          expect(assigns(:realize)).to be_nil
         end
 
         it "should redirect to new_user_session_url" do
@@ -265,7 +265,7 @@ describe RealizesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved realize as @realize" do
           post :create, :realize => @invalid_attrs
-          expect(assigns(:realize)).not_to be_valid
+          expect(assigns(:realize)).to be_nil
         end
 
         it "should redirect to new_user_session_url" do

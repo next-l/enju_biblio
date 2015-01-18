@@ -1,6 +1,7 @@
 # -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
   before_filter :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
     before_filter :get_inventory_file
@@ -157,6 +158,7 @@ class ItemsController < ApplicationController
       return
     end
     @item = Item.new
+    set_library
     @item.shelf = @library.shelves.first
     @item.manifestation_id = @manifestation.id
     if defined?(EnjuCirculation)
@@ -182,6 +184,7 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
+    set_library
     @item.library_id = @item.shelf.library_id
     @manifestation = @item.manifestation
     if defined?(EnjuCirculation)
@@ -213,6 +216,7 @@ class ItemsController < ApplicationController
         format.json { render json: @item, status: :created, location: @item }
       else
         prepare_options
+        set_library
         format.html { render action: "new" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -228,6 +232,7 @@ class ItemsController < ApplicationController
         format.json { head :no_content }
       else
         prepare_options
+        set_library
         format.html { render action: "edit" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -253,6 +258,15 @@ class ItemsController < ApplicationController
   end
 
   private
+  def set_item
+    @item = Item.find(params[:id])
+    authorize @item
+  end
+
+  def check_policy
+    authorize Item
+  end
+
   def item_params
     params.require(:item).permit(
       :call_number, :item_identifier, :circulation_status_id,
@@ -267,23 +281,26 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.real << Library.web
+    @bookstores = Bookstore.order(:position)
+    @budget_types = BudgetType.order(:position)
+    @roles = Role.all
+    if defined?(EnjuCirculation)
+      @circulation_statuses = CirculationStatus.order(:position)
+      @use_restrictions = UseRestriction.available
+      if @manifestation
+        @checkout_types = CheckoutType.available_for_carrier_type(@manifestation.carrier_type)
+      else
+        @checkout_types = CheckoutType.order(:position)
+      end
+    end
+  end
+
+  def set_library
     if @item.new_record?
       @library = Library.real.includes(:shelves).order(:position).first
     else
       @library = @item.shelf.library
     end
     @shelves = @library.shelves
-    @bookstores = Bookstore.all
-    @budget_types = BudgetType.all
-    @roles = Role.all
-    if defined?(EnjuCirculation)
-      @circulation_statuses = CirculationStatus.all
-      @use_restrictions = UseRestriction.available
-      if @manifestation
-        @checkout_types = CheckoutType.available_for_carrier_type(@manifestation.carrier_type)
-      else
-        @checkout_types = CheckoutType.all
-      end
-    end
   end
 end

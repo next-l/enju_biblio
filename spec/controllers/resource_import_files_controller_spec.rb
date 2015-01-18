@@ -27,7 +27,7 @@ describe ResourceImportFilesController do
 
       it "assigns empty as @resource_import_files" do
         get :index
-        expect(assigns(:resource_import_files)).to be_empty
+        expect(assigns(:resource_import_files)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -35,7 +35,7 @@ describe ResourceImportFilesController do
     describe "When not logged in" do
       it "assigns empty as @resource_import_files" do
         get :index
-        expect(assigns(:resource_import_files)).to be_empty
+        expect(assigns(:resource_import_files)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -107,7 +107,7 @@ describe ResourceImportFilesController do
 
       it "should not assign the requested resource_import_file as @resource_import_file" do
         get :new
-        expect(assigns(:resource_import_file)).not_to be_valid
+        expect(assigns(:resource_import_file)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -115,7 +115,7 @@ describe ResourceImportFilesController do
     describe "When not logged in" do
       it "should not assign the requested resource_import_file as @resource_import_file" do
         get :new
-        expect(assigns(:resource_import_file)).not_to be_valid
+        expect(assigns(:resource_import_file)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -144,7 +144,7 @@ describe ResourceImportFilesController do
 
       it "should be forbidden" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
-        assigns(:resource_import_file).user.should be_nil
+        assigns(:resource_import_file).should be_nil
         expect(response).to be_forbidden
       end
     end
@@ -152,7 +152,7 @@ describe ResourceImportFilesController do
     describe "When not logged in" do
       it "should be redirected to new session url" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
-        assigns(:resource_import_file).user.should be_nil
+        assigns(:resource_import_file).should be_nil
         expect(response).to redirect_to new_user_session_url
       end
     end

@@ -1,8 +1,9 @@
 class CreatesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_work
-  before_filter :prepare_options, only: [:new, :edit]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
+  before_action :set_create, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_agent, :get_work
+  before_action :prepare_options, only: [:new, :edit]
+  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /creates
   # GET /creates.json
@@ -111,6 +112,15 @@ class CreatesController < ApplicationController
   end
 
   private
+  def set_create
+    @create = Create.find(params[:id])
+    authorize @create
+  end
+
+  def check_policy
+    authorize Create
+  end
+
   def create_params
     params.require(:create).permit(
       :agent_id, :work_id, :create_type_id, :position

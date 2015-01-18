@@ -1,4 +1,4 @@
-class ProduceTypePolicy < ApplicationPolicy
+class ResourceImportResultPolicy < ApplicationPolicy
   def index?
     true if user.try(:has_role?, 'Librarian')
   end
@@ -8,14 +8,14 @@ class ProduceTypePolicy < ApplicationPolicy
   end
 
   def create?
-    true if user.try(:has_role?, 'Administrator')
+    false
   end
 
   def update?
-    true if user.try(:has_role?, 'Administrator')
+    false
   end
 
   def destroy?
-    true if user.try(:has_role?, 'Administrator')
+    false
   end
 end

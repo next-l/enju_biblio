@@ -1,5 +1,7 @@
 class ResourceImportResultsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_resource_import_result, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /resource_import_results
   # GET /resource_import_results.json
   def index
@@ -38,7 +40,16 @@ class ResourceImportResultsController < ApplicationController
   end
 
   private
-  def resource_import_result_files
+  def set_resource_import_result
+    @resource_import_result = ResourceImportResult.find(params[:id])
+    authorize @resource_import_result
+  end
+
+  def check_policy
+    authorize ResourceImportResult
+  end
+
+  def resource_import_result_params
     params.require(:resource_import_result).permit(
       :resource_import_file_id, :manifestation_id, :item_id, :body
     )

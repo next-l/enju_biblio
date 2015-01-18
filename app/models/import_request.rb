@@ -1,6 +1,5 @@
 class ImportRequest < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
-  default_scope { order('import_requests.id DESC') }
   belongs_to :manifestation
   belongs_to :user
   validates_presence_of :isbn

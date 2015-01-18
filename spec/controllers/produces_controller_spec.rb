@@ -109,7 +109,7 @@ describe ProducesController do
 
       it "should not assign the requested produce as @produce" do
         get :new
-        expect(assigns(:produce)).not_to be_valid
+        expect(assigns(:produce)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -117,7 +117,7 @@ describe ProducesController do
     describe "When not logged in" do
       it "should not assign the requested produce as @produce" do
         get :new
-        expect(assigns(:produce)).not_to be_valid
+        expect(assigns(:produce)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -231,7 +231,7 @@ describe ProducesController do
       describe "with valid params" do
         it "assigns a newly created produce as @produce" do
           post :create, :produce => @attrs
-          expect(assigns(:produce)).to be_valid
+          expect(assigns(:produce)).to be_nil
         end
 
         it "should be forbidden" do
@@ -243,7 +243,7 @@ describe ProducesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved produce as @produce" do
           post :create, :produce => @invalid_attrs
-          expect(assigns(:produce)).not_to be_valid
+          expect(assigns(:produce)).to be_nil
         end
 
         it "should be forbidden" do
@@ -257,7 +257,7 @@ describe ProducesController do
       describe "with valid params" do
         it "assigns a newly created produce as @produce" do
           post :create, :produce => @attrs
-          expect(assigns(:produce)).to be_valid
+          expect(assigns(:produce)).to be_nil
         end
 
         it "should be forbidden" do
@@ -269,7 +269,7 @@ describe ProducesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved produce as @produce" do
           post :create, :produce => @invalid_attrs
-          expect(assigns(:produce)).not_to be_valid
+          expect(assigns(:produce)).to be_nil
         end
 
         it "should be forbidden" do

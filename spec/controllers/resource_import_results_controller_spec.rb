@@ -28,7 +28,7 @@ describe ResourceImportResultsController do
 
       it "assigns empty as @resource_import_results" do
         get :index
-        expect(assigns(:resource_import_results)).to be_empty
+        expect(assigns(:resource_import_results)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -36,7 +36,7 @@ describe ResourceImportResultsController do
     describe "When not logged in" do
       it "assigns empty as @resource_import_results" do
         get :index
-        expect(assigns(:resource_import_results)).to be_empty
+        expect(assigns(:resource_import_results)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
