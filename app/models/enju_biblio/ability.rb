@@ -17,25 +17,10 @@ module EnjuBiblio
         can [:destroy, :delete], Item do |item|
           item.removable?
         end
-        can [:read, :create, :update], Manifestation
-        can [:destroy, :delete], Manifestation do |manifestation|
-          if  manifestation.items.empty?
-            if manifestation.series_master?
-              if manifestation.children.empty?
-                return true
-              else
-                return false
-              end
-            else
-              true
-            end
-          end
-        end
         can :manage, [
           AgentMerge,
           AgentMergeList,
           Create,
-          CreateType,
           Donate,
           Identifier,
           ImportRequest,
@@ -49,9 +34,7 @@ module EnjuBiblio
           FormOfWork,
           PictureFile,
           Produce,
-          ProduceType,
           Realize,
-          RealizeType,
           ResourceImportFile,
           ResourceExportFile,
           SeriesStatement,
@@ -59,7 +42,6 @@ module EnjuBiblio
           SeriesStatementMergeList
         ]
         can :manage, [
-          ContentType,
           Country,
           Frequency,
           Language,
@@ -69,7 +51,6 @@ module EnjuBiblio
         ] if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can :read, [
           CarrierType,
-          ContentType,
           Country,
           Frequency,
           FormOfWork,
@@ -83,21 +64,6 @@ module EnjuBiblio
         ]
       when 'Librarian'
         can :manage, Item
-        can :index, Manifestation
-        can [:show, :create, :update], Manifestation
-        can [:destroy, :delete], Manifestation do |manifestation|
-          if  manifestation.items.empty?
-            if manifestation.series_master?
-              if manifestation.children.empty?
-                return true
-              else
-                return false
-              end
-            else
-              true
-            end
-          end
-        end
         can [:index, :create], Agent
         can :show, Agent do |agent|
           agent.required_role_id <= 3
@@ -127,7 +93,6 @@ module EnjuBiblio
         ]
         can :read, [
           CarrierType,
-          ContentType,
           Country,
           Frequency,
           FormOfWork,
@@ -146,10 +111,6 @@ module EnjuBiblio
         can :show, Item do |item|
           item.required_role_id <= 2
         end
-        can :index, Manifestation
-        can [:show, :edit], Manifestation do |manifestation|
-          manifestation.required_role_id <= 2
-        end
         can :index, Agent
         can :show, Agent do |agent|
           true if agent.required_role_id <= 2 #name == 'Administrator'
@@ -164,7 +125,6 @@ module EnjuBiblio
         end
         can :read, [
           CarrierType,
-          ContentType,
           Country,
           Create,
           Frequency,
@@ -184,17 +144,12 @@ module EnjuBiblio
           SeriesStatement
         ]
       else
-        can :index, Manifestation
-        can :show, Manifestation do |manifestation|
-          manifestation.required_role_id == 1
-        end
         can :index, Agent
         can :show, Agent do |agent|
           agent.required_role_id == 1 #name == 'Guest'
         end
         can :read, [
           CarrierType,
-          ContentType,
           Country,
           Create,
           Frequency,

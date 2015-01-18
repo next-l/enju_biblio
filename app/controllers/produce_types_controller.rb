@@ -1,5 +1,7 @@
 class ProduceTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_produce_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /produce_types
   # GET /produce_types.json
   def index
@@ -82,6 +84,16 @@ class ProduceTypesController < ApplicationController
   end
 
   private
+  def set_produce_type
+    @produce_type = ProduceType.find(params[:id])
+    authorize @produce_type
+    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
+  end
+
+  def check_policy
+    authorize ProduceType
+  end
+
   def produce_type_params
     params.require(:produce_type).permit(:name, :display_name, :note, :position)
   end

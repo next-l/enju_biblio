@@ -1,5 +1,7 @@
 class RealizeTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_realize_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /realize_types
   # GET /realize_types.json
   def index
@@ -82,6 +84,16 @@ class RealizeTypesController < ApplicationController
   end
 
   private
+  def set_realize_type
+    @realize_type = RealizeType.find(params[:id])
+    authorize @realize_type
+    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
+  end
+
+  def check_policy
+    authorize RealizeType
+  end
+
   def realize_type_params
     params.require(:realize_type).permit(
       :name, :display_name, :note, :position

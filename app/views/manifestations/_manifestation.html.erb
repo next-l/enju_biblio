@@ -25,7 +25,7 @@
                     <br />
                   <% end %>
                 <% end %>
-                <%- if can? :update, manifestation -%>
+                <%- if policy(manifestation).update? -%>
                   <% unless params[:mode] == 'add' %>
                     <%= link_to image_tag('icons/book_edit.png', size: '16x16', alt: t('page.edit')), edit_manifestation_path(manifestation) -%>
                   <% else %>

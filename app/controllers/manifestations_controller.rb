@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 class ManifestationsController < ApplicationController
-  load_and_authorize_resource except: :index
-  authorize_resource only: :index
-  before_filter :authenticate_user!, only: :edit
-  before_filter :get_agent, :get_manifestation, except: [:create, :update, :destroy]
-  before_filter :get_expression, only: :new
+  before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :authenticate_user!, only: :edit
+  before_action :get_agent, :get_manifestation, except: [:create, :update, :destroy]
+  before_action :get_expression, only: :new
   if defined?(EnjuSubject)
-    before_filter :get_subject, except: [:create, :update, :destroy]
+    before_action :get_subject, except: [:create, :update, :destroy]
   end
-  before_filter :get_series_statement, only: [:index, :new, :edit]
-  before_filter :get_item, :get_libraries, only: :index
-  before_filter :prepare_options, only: [:new, :edit]
-  before_filter :get_version, only: [:show]
+  before_action :get_series_statement, only: [:index, :new, :edit]
+  before_action :get_item, :get_libraries, only: :index
+  before_action :prepare_options, only: [:new, :edit]
+  before_action :get_version, only: [:show]
   after_filter :solr_commit, only: :destroy
   after_filter :convert_charset, only: :index
   include EnjuOai::OaiController if defined?(EnjuOai)
@@ -312,7 +312,7 @@ class ManifestationsController < ApplicationController
       end
     end
 
-    store_location # before_filter ではファセット検索のURLを記憶してしまう
+    store_location # before_action ではファセット検索のURLを記憶してしまう
 
     respond_to do |format|
       format.html
@@ -526,6 +526,15 @@ class ManifestationsController < ApplicationController
   end
 
   private
+  def set_manifestation
+    @manifestation = Manifestation.find(params[:id])
+    authorize @manifestation
+  end
+
+  def check_policy
+    authorize Manifestation
+  end
+
   def manifestation_params
     params.require(:manifestation).permit(
       :original_title, :title_alternative, :title_transcription,

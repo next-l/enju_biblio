@@ -1,6 +1,5 @@
 class ContentType < ActiveRecord::Base
   include MasterModel
-  default_scope { order('content_types.position') }
   has_many :manifestations
 end
 
