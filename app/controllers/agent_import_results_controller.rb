@@ -1,5 +1,7 @@
 class AgentImportResultsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_agent_import_result, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /agent_import_results
   # GET /agent_import_results.json
   def index
@@ -38,6 +40,15 @@ class AgentImportResultsController < ApplicationController
   end
 
   private
+  def set_agent_import_result
+    @agent_import_result = AgentImportResult.find(params[:id])
+    authorize @agent_import_result
+  end
+
+  def check_policy
+    authorize AgentImportResult
+  end
+
   def agent_import_result_params
     params.require(:agent_import_result).permit(
       :agent_import_file_id, :agent_id, :body

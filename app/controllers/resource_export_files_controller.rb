@@ -1,10 +1,11 @@
 class ResourceExportFilesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_resource_export_file, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
 
   # GET /resource_export_files
   # GET /resource_export_files.json
   def index
-    @resource_export_files = ResourceExportFile.order('id DESC').page(params[:page])
+    @resource_export_files = ResourceExportFile.order(id: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -99,6 +100,15 @@ class ResourceExportFilesController < ApplicationController
   end
 
   private
+  def set_resource_export_file
+    @resource_export_file = ResourceExportFile.find(params[:id])
+    authorize @resource_export_file
+  end
+
+  def check_policy
+    authorize ResourceExportFile
+  end
+
   def resource_export_file_params
     params.require(:resource_export_file).permit(:mode)
   end

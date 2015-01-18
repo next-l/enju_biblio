@@ -18,7 +18,7 @@
 <%- @manifestation_relationship_types.each do |manifestation_relationship_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, manifestation_relationship_type -%>
+      <%- if policy(manifestation_relationship_type).update? -%>
         <%= move_position(manifestation_relationship_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= manifestation_relationship_type.note %>
     </td>
     <td>
-      <%- if can? :update, manifestation_relationship_type -%>
+      <%- if policy(manifestation_relationship_type).update? -%>
         <%= link_to t('page.edit'), edit_manifestation_relationship_type_path(manifestation_relationship_type) -%>
       <% end %>
-      <%- if can? :delete, manifestation_relationship_type -%>
+      <%- if policy(manifestation_relationship_type).destroy? -%>
         <%= link_to t('page.destroy'), manifestation_relationship_type_path(manifestation_relationship_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, ManifestationRelationshipType -%>
+    <%- if policy(ManifestationRelationshipType).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.manifestation_relationship_type')), new_manifestation_relationship_type_path -%></li>
     <%- end -%>
   </ul>

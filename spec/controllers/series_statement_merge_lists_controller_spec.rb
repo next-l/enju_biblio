@@ -28,14 +28,14 @@ describe SeriesStatementMergeListsController do
 
       it "assigns empty as @series_statement_merge_lists" do
         get :index
-        assigns(:series_statement_merge_lists).should be_empty
+        assigns(:series_statement_merge_lists).should be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns empty as @series_statement_merge_lists" do
         get :index
-        assigns(:series_statement_merge_lists).should be_empty
+        assigns(:series_statement_merge_lists).should be_nil
       end
     end
   end
@@ -104,7 +104,7 @@ describe SeriesStatementMergeListsController do
 
       it "should not assign the requested series_statement_merge_list as @series_statement_merge_list" do
         get :new
-        assigns(:series_statement_merge_list).should_not be_valid
+        assigns(:series_statement_merge_list).should be_nil
         response.should be_forbidden
       end
     end
@@ -112,7 +112,7 @@ describe SeriesStatementMergeListsController do
     describe "When not logged in" do
       it "should not assign the requested series_statement_merge_list as @series_statement_merge_list" do
         get :new
-        assigns(:series_statement_merge_list).should_not be_valid
+        assigns(:series_statement_merge_list).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -226,7 +226,7 @@ describe SeriesStatementMergeListsController do
       describe "with valid params" do
         it "assigns a newly created series_statement_merge_list as @series_statement_merge_list" do
           post :create, :series_statement_merge_list => @attrs
-          assigns(:series_statement_merge_list).should be_valid
+          assigns(:series_statement_merge_list).should be_nil
         end
 
         it "should be forbidden" do
@@ -238,7 +238,7 @@ describe SeriesStatementMergeListsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement_merge_list as @series_statement_merge_list" do
           post :create, :series_statement_merge_list => @invalid_attrs
-          assigns(:series_statement_merge_list).should_not be_valid
+          assigns(:series_statement_merge_list).should be_nil
         end
 
         it "should be forbidden" do
@@ -252,7 +252,7 @@ describe SeriesStatementMergeListsController do
       describe "with valid params" do
         it "assigns a newly created series_statement_merge_list as @series_statement_merge_list" do
           post :create, :series_statement_merge_list => @attrs
-          assigns(:series_statement_merge_list).should be_valid
+          assigns(:series_statement_merge_list).should be_nil
         end
 
         it "should be forbidden" do
@@ -264,7 +264,7 @@ describe SeriesStatementMergeListsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement_merge_list as @series_statement_merge_list" do
           post :create, :series_statement_merge_list => @invalid_attrs
-          assigns(:series_statement_merge_list).should_not be_valid
+          assigns(:series_statement_merge_list).should be_nil
         end
 
         it "should be forbidden" do

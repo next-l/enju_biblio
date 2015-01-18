@@ -31,7 +31,7 @@ describe AgentMergesController do
 
       it "should be forbidden" do
         get :index
-        assigns(:agent_merges).should be_empty
+        assigns(:agent_merges).should be_nil
         response.should be_forbidden
       end
     end
@@ -39,7 +39,7 @@ describe AgentMergesController do
     describe "When not logged in" do
       it "should be forbidden" do
         get :index
-        assigns(:agent_merges).should be_empty
+        assigns(:agent_merges).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -111,7 +111,7 @@ describe AgentMergesController do
 
       it "should not assign the requested agent_merge as @agent_merge" do
         get :new
-        assigns(:agent_merge).should_not be_valid
+        assigns(:agent_merge).should be_nil
         response.should be_forbidden
       end
     end
@@ -119,7 +119,7 @@ describe AgentMergesController do
     describe "When not logged in" do
       it "should not assign the requested agent_merge as @agent_merge" do
         get :new
-        assigns(:agent_merge).should_not be_valid
+        assigns(:agent_merge).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -233,7 +233,7 @@ describe AgentMergesController do
       describe "with valid params" do
         it "assigns a newly created agent_merge as @agent_merge" do
           post :create, :agent_merge => @attrs
-          assigns(:agent_merge).should be_valid
+          assigns(:agent_merge).should be_nil
         end
 
         it "should be forbidden" do
@@ -245,7 +245,7 @@ describe AgentMergesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_merge as @agent_merge" do
           post :create, :agent_merge => @invalid_attrs
-          assigns(:agent_merge).should_not be_valid
+          assigns(:agent_merge).should be_nil
         end
 
         it "should be forbidden" do
@@ -259,7 +259,7 @@ describe AgentMergesController do
       describe "with valid params" do
         it "assigns a newly created agent_merge as @agent_merge" do
           post :create, :agent_merge => @attrs
-          assigns(:agent_merge).should be_valid
+          assigns(:agent_merge).should be_nil
         end
 
         it "should be forbidden" do
@@ -271,7 +271,7 @@ describe AgentMergesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_merge as @agent_merge" do
           post :create, :agent_merge => @invalid_attrs
-          assigns(:agent_merge).should_not be_valid
+          assigns(:agent_merge).should be_nil
         end
 
         it "should be forbidden" do

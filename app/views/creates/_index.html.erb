@@ -14,7 +14,7 @@
     <td><%= link_to create.agent.full_name, create.agent -%></td>
     <td><%= link_to create.work.original_title, create.work -%></td>
     <td>
-      <%- if can? :delete, create -%>
+      <%- if policy(create).destroy? -%>
         <%= link_to t('page.show'), create -%>
         <%= link_to t('page.destroy'), create, data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
@@ -28,7 +28,7 @@
 </div>
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
-  <%- if can? :create, Create -%>
+  <%- if policy(Create).create? -%>
     <ul>
       <li><%= link_to t('page.new', model: t('activerecord.models.create')), new_create_path -%></li>
     </ul>

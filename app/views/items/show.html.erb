@@ -132,13 +132,13 @@
   <%= render 'manifestations/book_jacket', manifestation: @item.manifestation -%>
   <ul>
     <li><%= back_to_index(flash[:page_info]) -%></li>
-    <% if can? :update, @item %>
+    <% if policy(@item).update? %>
       <li><%= link_to t('page.edit'), edit_item_path(@item) -%></li>
     <% end %>
     <% if defined?(EnjuInterLibraryLoan) %>
       <li><%= link_to t('page.listing', model: t('activerecord.models.inter_library_loan')), item_inter_library_loans_path(@item) -%></li>
     <% end %>
-    <% if can? :delete, @item %>
+    <% if policy(@item).destroy? %>
       <li><%= link_to t('page.destroy'), @item, data: {confirm: t('page.are_you_sure')}, method: :delete -%></li>
     <% end %>
     <% if defined?(EnjuInterLibraryLoan) %>
@@ -153,6 +153,6 @@
   </ul>
 </div>
 
-<% if can? :update, @item %>
+<% if policy(@item).update? %>
   <%= render 'tooltip', item: @item %>
 <% end %>

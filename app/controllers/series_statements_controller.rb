@@ -1,9 +1,10 @@
 # -*- encoding: utf-8 -*-
 class SeriesStatementsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_manifestation, except: [:create, :update, :destroy]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
-  before_filter :get_series_statement_merge_list, except: [:create, :update, :destroy]
+  before_action :set_series_statement, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_manifestation, except: [:create, :update, :destroy]
+  after_action :solr_commit, only: [:create, :update, :destroy]
+  before_action :get_series_statement_merge_list, except: [:create, :update, :destroy]
 
   # GET /series_statements
   # GET /series_statements.json
@@ -77,7 +78,7 @@ class SeriesStatementsController < ApplicationController
         format.html { redirect_to @series_statement, notice: t('controller.successfully_created', model: t('activerecord.models.series_statement')) }
         format.json { render json: @series_statement, status: :created, location: @series_statement }
       else
-        @frequencies = Frequency.all
+        @frequencies = Frequency.order(:position)
         format.html { render action: "new" }
         format.json { render json: @series_statement.errors, status: :unprocessable_entity }
       end
@@ -97,7 +98,7 @@ class SeriesStatementsController < ApplicationController
         format.html { redirect_to @series_statement, notice: t('controller.successfully_updated', model: t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else
-        @frequencies = Frequency.all
+        @frequencies = Frequency.order(:position)
         format.html { render action: "edit" }
         format.json { render json: @series_statement.errors, status: :unprocessable_entity }
       end
@@ -116,6 +117,15 @@ class SeriesStatementsController < ApplicationController
   end
 
   private
+  def set_series_statement
+    @series_statement = SeriesStatement.find(params[:id])
+    authorize @series_statement
+  end
+
+  def check_policy
+    authorize SeriesStatement
+  end
+
   def series_statement_params
     params.require(:series_statement).permit(
       :original_title, :numbering, :title_subseries,:numbering_subseries,

@@ -1,9 +1,11 @@
 class AgentRelationshipTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_agent_relationship_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /agent_relationship_types
   # GET /agent_relationship_types.json
   def index
-    @agent_relationship_types = AgentRelationshipType.all
+    @agent_relationship_types = AgentRelationshipType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class AgentRelationshipTypesController < ApplicationController
   end
 
   private
+  def set_agent_relationship_type
+    @agent_relationship_type = AgentRelationshipType.find(params[:id])
+    authorize @agent_relationship_type
+    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
+  end
+
+  def check_policy
+    authorize AgentRelationshipType
+  end
   def agent_relationship_type_params
     params.require(:agent_relationship_type).permit(:name, :display_name, :note)
   end

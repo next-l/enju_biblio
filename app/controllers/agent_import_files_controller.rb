@@ -1,5 +1,6 @@
 class AgentImportFilesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_agent_import_file, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
 
   # GET /agent_import_files
   # GET /agent_import_files.json
@@ -98,6 +99,16 @@ class AgentImportFilesController < ApplicationController
   end
 
   private
+  def set_agent_import_file
+    @agent_import_file = AgentImportFile.find(params[:id])
+    authorize @agent_import_file
+    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
+  end
+
+  def check_policy
+    authorize AgentImportFile
+  end
+
   def agent_import_file_params
     params.require(:agent_import_file).permit(
       :agent_import, :edit_mode, :user_encoding, :mode

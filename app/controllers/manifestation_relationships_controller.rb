@@ -1,8 +1,9 @@
 class ManifestationRelationshipsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_manifestation
-  before_filter :prepare_options, only: [:new, :edit]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
+  before_action :set_manifestation_relationship, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_manifestation
+  before_action :prepare_options, only: [:new, :edit]
+  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /manifestation_relationships
   # GET /manifestation_relationships.json
@@ -102,6 +103,15 @@ class ManifestationRelationshipsController < ApplicationController
   end
 
   private
+  def set_manifestation_relationship
+    @manifestation_relationship = ManifestationRelationship.find(params[:id])
+    authorize @manifestation_relationship
+  end
+
+  def check_policy
+    authorize ManifestationRelationship
+  end
+
   def manifestation_relationship_params
     params.require(:manifestation_relationship).permit(
       :parent_id, :child_id, :manifestation_relationship_type_id

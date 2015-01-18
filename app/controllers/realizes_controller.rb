@@ -128,6 +128,6 @@ class RealizesController < ApplicationController
   end
 
   def prepare_options
-    @realize_types = RealizeType.all
+    @realize_types = RealizeType.order(:position)
   end
 end

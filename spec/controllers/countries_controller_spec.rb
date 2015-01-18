@@ -105,7 +105,7 @@ describe CountriesController do
 
       it "assigns the requested country as @country" do
         get :new
-        assigns(:country).should_not be_valid
+        assigns(:country).should be_nil
         expect(response).to be_forbidden
       end
     end
@@ -115,7 +115,7 @@ describe CountriesController do
 
       it "assigns the requested country as @country" do
         get :new
-        assigns(:country).should_not be_valid
+        assigns(:country).should be_nil
         expect(response).to be_forbidden
       end
     end
@@ -123,7 +123,7 @@ describe CountriesController do
     describe "When not logged in" do
       it "should not assign the requested country as @country" do
         get :new
-        assigns(:country).should_not be_valid
+        assigns(:country).should be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -209,7 +209,7 @@ describe CountriesController do
       describe "with valid params" do
         it "assigns a newly created country as @country" do
           post :create, :country => @attrs
-          assigns(:country).should be_valid
+          assigns(:country).should be_nil
         end
 
         it "should be forbidden" do
@@ -221,7 +221,7 @@ describe CountriesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved country as @country" do
           post :create, :country => @invalid_attrs
-          assigns(:country).should_not be_valid
+          assigns(:country).should be_nil
         end
 
         it "should be forbidden" do
@@ -237,7 +237,7 @@ describe CountriesController do
       describe "with valid params" do
         it "assigns a newly created country as @country" do
           post :create, :country => @attrs
-          assigns(:country).should be_valid
+          assigns(:country).should be_nil
         end
 
         it "should be forbidden" do
@@ -249,7 +249,7 @@ describe CountriesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved country as @country" do
           post :create, :country => @invalid_attrs
-          assigns(:country).should_not be_valid
+          assigns(:country).should be_nil
         end
 
         it "should be forbidden" do
@@ -263,7 +263,7 @@ describe CountriesController do
       describe "with valid params" do
         it "assigns a newly created country as @country" do
           post :create, :country => @attrs
-          assigns(:country).should be_valid
+          assigns(:country).should be_nil
         end
 
         it "should be forbidden" do
@@ -275,7 +275,7 @@ describe CountriesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved country as @country" do
           post :create, :country => @invalid_attrs
-          assigns(:country).should_not be_valid
+          assigns(:country).should be_nil
         end
 
         it "should be forbidden" do

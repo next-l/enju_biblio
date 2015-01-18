@@ -19,7 +19,7 @@
                       <%- if reserve -%>
                         <%= link_to t('reserve.show'), reserve -%>
                       <%- else -%>
-                        <%= link_to t('activerecord.models.reserve'), new_reserve_path(manifestation_id: manifestation.id) if can? :create, Reserve -%>
+                        <%= link_to t('activerecord.models.reserve'), new_reserve_path(manifestation_id: manifestation.id) if policy(Reserve).create? -%>
                       <%- end -%>
                     <% end %>
                     <br />

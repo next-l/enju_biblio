@@ -212,7 +212,7 @@ describe AgentsController do
 
       it "should not assign the requested agent as @agent" do
         get :new
-        expect(assigns(:agent)).not_to be_valid
+        expect(assigns(:agent)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -220,7 +220,7 @@ describe AgentsController do
     describe "When not logged in" do
       it "should not assign the requested agent as @agent" do
         get :new
-        expect(assigns(:agent)).not_to be_valid
+        expect(assigns(:agent)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -383,7 +383,7 @@ describe AgentsController do
       describe "with valid params" do
         it "assigns a newly created agent as @agent" do
           post :create, :agent => @attrs
-          expect(assigns(:agent)).to be_valid
+          expect(assigns(:agent)).to be_nil
         end
 
         it "should be forbidden" do
@@ -395,7 +395,7 @@ describe AgentsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent as @agent" do
           post :create, :agent => @invalid_attrs
-          expect(assigns(:agent)).not_to be_valid
+          expect(assigns(:agent)).to be_nil
         end
 
         it "should be forbidden" do
@@ -420,7 +420,7 @@ describe AgentsController do
       describe "with valid params" do
         it "assigns a newly created agent as @agent" do
           post :create, :agent => @attrs
-          expect(assigns(:agent)).to be_valid
+          expect(assigns(:agent)).to be_nil
         end
 
         it "should be forbidden" do
@@ -432,7 +432,7 @@ describe AgentsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent as @agent" do
           post :create, :agent => @invalid_attrs
-          expect(assigns(:agent)).not_to be_valid
+          expect(assigns(:agent)).to be_nil
         end
 
         it "should be forbidden" do

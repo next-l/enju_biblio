@@ -1,13 +1,13 @@
 # -*- encoding: utf-8 -*-
 class AgentsController < ApplicationController
-  load_and_authorize_resource except: :index
-  authorize_resource only: :index
-  before_filter :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, except: [:update, :destroy]
-  before_filter :get_agent_merge_list, except: [:create, :update, :destroy]
-  before_filter :prepare_options, only: [:new, :edit]
-  before_filter :store_location
-  before_filter :get_version, only: [:show]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
+  before_action :set_agent, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, except: [:update, :destroy]
+  before_action :get_agent_merge_list, except: [:create, :update, :destroy]
+  before_action :prepare_options, only: [:new, :edit]
+  before_action :store_location
+  before_action :get_version, only: [:show]
+  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /agents
   # GET /agents.json
@@ -201,6 +201,15 @@ class AgentsController < ApplicationController
   end
 
   private
+  def set_agent
+    @agent = Agent.find(params[:id])
+    authorize @agent
+  end
+
+  def check_policy
+    authorize Agent
+  end
+
   def agent_params
     params.require(:agent).permit(
       :last_name, :middle_name, :first_name,

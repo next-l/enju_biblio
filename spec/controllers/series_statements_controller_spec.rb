@@ -115,7 +115,7 @@ describe SeriesStatementsController do
 
       it "should not assign the requested series_statement as @series_statement" do
         get :new
-        expect(assigns(:series_statement)).not_to be_valid
+        expect(assigns(:series_statement)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -123,7 +123,7 @@ describe SeriesStatementsController do
     describe "When not logged in" do
       it "should not assign the requested series_statement as @series_statement" do
         get :new
-        expect(assigns(:series_statement)).not_to be_valid
+        expect(assigns(:series_statement)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -237,7 +237,7 @@ describe SeriesStatementsController do
       describe "with valid params" do
         it "assigns a newly created series_statement as @series_statement" do
           post :create, :series_statement => @attrs
-          expect(assigns(:series_statement)).to be_valid
+          expect(assigns(:series_statement)).to be_nil
         end
 
         it "should be forbidden" do
@@ -249,7 +249,7 @@ describe SeriesStatementsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement as @series_statement" do
           post :create, :series_statement => @invalid_attrs
-          expect(assigns(:series_statement)).not_to be_valid
+          expect(assigns(:series_statement)).to be_nil
         end
 
         it "should be forbidden" do
@@ -263,7 +263,7 @@ describe SeriesStatementsController do
       describe "with valid params" do
         it "assigns a newly created series_statement as @series_statement" do
           post :create, :series_statement => @attrs
-          expect(assigns(:series_statement)).to be_valid
+          expect(assigns(:series_statement)).to be_nil
         end
 
         it "should be forbidden" do
@@ -275,7 +275,7 @@ describe SeriesStatementsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement as @series_statement" do
           post :create, :series_statement => @invalid_attrs
-          expect(assigns(:series_statement)).not_to be_valid
+          expect(assigns(:series_statement)).to be_nil
         end
 
         it "should be forbidden" do

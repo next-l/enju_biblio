@@ -19,7 +19,8 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
+        expect(response).to be_success
       end
     end
 
@@ -28,7 +29,8 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
+        expect(response).to be_success
       end
     end
 
@@ -37,14 +39,16 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
+        expect(response).to be_success
       end
     end
 
     describe "When not logged in" do
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
+        expect(response).to be_success
       end
     end
   end
@@ -105,7 +109,7 @@ describe ManifestationRelationshipTypesController do
 
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(assigns(:manifestation_relationship_type)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -115,7 +119,7 @@ describe ManifestationRelationshipTypesController do
 
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(assigns(:manifestation_relationship_type)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -123,7 +127,7 @@ describe ManifestationRelationshipTypesController do
     describe "When not logged in" do
       it "should not assign the requested manifestation_relationship_type as @manifestation_relationship_type" do
         get :new
-        expect(assigns(:manifestation_relationship_type)).not_to be_valid
+        expect(assigns(:manifestation_relationship_type)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -209,7 +213,7 @@ describe ManifestationRelationshipTypesController do
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          expect(assigns(:manifestation_relationship_type)).to be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_nil
         end
 
         it "should be forbidden" do
@@ -221,7 +225,7 @@ describe ManifestationRelationshipTypesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          expect(assigns(:manifestation_relationship_type)).not_to be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_nil
         end
 
         it "should be forbidden" do
@@ -237,7 +241,7 @@ describe ManifestationRelationshipTypesController do
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          expect(assigns(:manifestation_relationship_type)).to be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_nil
         end
 
         it "should be forbidden" do
@@ -249,7 +253,7 @@ describe ManifestationRelationshipTypesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          expect(assigns(:manifestation_relationship_type)).not_to be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_nil
         end
 
         it "should be forbidden" do
@@ -263,7 +267,7 @@ describe ManifestationRelationshipTypesController do
       describe "with valid params" do
         it "assigns a newly created manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @attrs
-          expect(assigns(:manifestation_relationship_type)).to be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_nil
         end
 
         it "should be forbidden" do
@@ -275,7 +279,7 @@ describe ManifestationRelationshipTypesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation_relationship_type as @manifestation_relationship_type" do
           post :create, :manifestation_relationship_type => @invalid_attrs
-          expect(assigns(:manifestation_relationship_type)).not_to be_valid
+          expect(assigns(:manifestation_relationship_type)).to be_nil
         end
 
         it "should be forbidden" do

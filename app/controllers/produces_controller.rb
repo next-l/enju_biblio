@@ -132,6 +132,6 @@ class ProducesController < ApplicationController
   end
 
   def prepare_options
-    @produce_types = ProduceType.all
+    @produce_types = ProduceType.order(:position)
   end
 end

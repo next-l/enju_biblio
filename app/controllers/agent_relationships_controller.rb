@@ -1,8 +1,9 @@
 class AgentRelationshipsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent
-  before_filter :prepare_options, only: [:new, :edit]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
+  before_action :set_agent_relationship, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_agent
+  before_action :prepare_options, only: [:new, :edit]
+  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /agent_relationships
   # GET /agent_relationships.json
@@ -102,6 +103,15 @@ class AgentRelationshipsController < ApplicationController
   end
 
   private
+  def set_agent_relationship
+    @agent_relationship = AgentRelationship.find(params[:id])
+    authorize @agent_relationship
+  end
+
+  def check_policy
+    authorize AgentRelationship
+  end
+
   def agent_relationship_params
     params.require(:agent_relationship).permit(
       :parent_id, :child_id, :agent_relationship_type_id

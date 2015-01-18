@@ -5,8 +5,10 @@ class ManifestationPolicy < ApplicationPolicy
 
   def show?
     case user.try(:role).try(:name)
-    when 'Librarian'
+    when 'Administrator'
       true
+    when 'Librarian'
+      true if record.required_role_id <= 3
     when 'User'
       true if record.required_role_id <= 2
     else

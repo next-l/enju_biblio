@@ -33,7 +33,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <% if can? :update, @series_statement %>
+    <% if policy(@series_statement).update? %>
       <li><%= link_to t('page.edit'), edit_series_statement_path(@series_statement) %></li>
     <% end %>
     <li><%= back_to_index(flash[:page_info]) %></li>

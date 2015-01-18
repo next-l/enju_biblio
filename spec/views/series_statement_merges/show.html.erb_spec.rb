@@ -2,9 +2,6 @@ require 'spec_helper'
 describe "series_statement_merges/show" do
   before(:each) do
     @series_statement_merge = assign(:series_statement_merge, FactoryGirl.create(:series_statement_merge))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders attributes in <p>" do

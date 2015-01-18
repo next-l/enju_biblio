@@ -6,9 +6,6 @@ describe "owns/edit" do
       :item_id => 1,
       :agent_id => 1
     ))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders the edit own form" do

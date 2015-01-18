@@ -44,11 +44,12 @@ module EnjuBiblio
 
     def get_agent
       @agent = Agent.find(params[:agent_id]) if params[:agent_id]
-      authorize! :show, @agent if @agent
+      authorize @agent, :show? if @agent
     end
 
     def get_series_statement
       @series_statement = SeriesStatement.find(params[:series_statement_id]) if params[:series_statement_id]
+      authorize @series_statement, :show? if @series_statement
     end
 
     def get_basket

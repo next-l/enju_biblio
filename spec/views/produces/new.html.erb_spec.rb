@@ -9,9 +9,6 @@ describe "produces/new" do
       :agent_id => 1
     ).as_new_record)
     @produce_types = ProduceType.all
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders new produce form" do

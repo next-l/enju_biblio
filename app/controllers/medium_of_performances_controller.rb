@@ -1,9 +1,11 @@
 class MediumOfPerformancesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_medium_of_performance, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /medium_of_performances
   # GET /medium_of_performances.json
   def index
-    @medium_of_performances = MediumOfPerformance.all
+    @medium_of_performances = MediumOfPerformance.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,16 @@ class MediumOfPerformancesController < ApplicationController
   end
 
   private
+  def set_medium_of_performance
+    @medium_of_performance = MediumOfPerformance.find(params[:id])
+    authorize @medium_of_performance
+    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
+  end
+
+  def check_policy
+    authorize MediumOfPerformance
+  end
+
   def medium_of_performance_params
     params.require(:medium_of_performance).permit(:name, :display_name, :note)
   end

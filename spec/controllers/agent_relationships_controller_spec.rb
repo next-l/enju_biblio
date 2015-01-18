@@ -95,7 +95,7 @@ describe AgentRelationshipsController do
 
       it "assigns the requested agent_relationship as @agent_relationship" do
         get :new
-        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(assigns(:agent_relationship)).to be_nil
         expect(response).to redirect_to agents_url
       end
     end
@@ -105,7 +105,7 @@ describe AgentRelationshipsController do
 
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
-        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(assigns(:agent_relationship)).to be_nil
         expect(response).to redirect_to agents_url
       end
     end
@@ -115,7 +115,7 @@ describe AgentRelationshipsController do
 
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
-        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(assigns(:agent_relationship)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -123,7 +123,7 @@ describe AgentRelationshipsController do
     describe "When not logged in" do
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
-        expect(assigns(:agent_relationship)).not_to be_valid
+        expect(assigns(:agent_relationship)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -237,7 +237,7 @@ describe AgentRelationshipsController do
       describe "with valid params" do
         it "assigns a newly created agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @attrs
-          expect(assigns(:agent_relationship)).to be_valid
+          expect(assigns(:agent_relationship)).to be_nil
         end
 
         it "should be forbidden" do
@@ -249,7 +249,7 @@ describe AgentRelationshipsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @invalid_attrs
-          expect(assigns(:agent_relationship)).not_to be_valid
+          expect(assigns(:agent_relationship)).to be_nil
         end
 
         it "should be forbidden" do
@@ -263,7 +263,7 @@ describe AgentRelationshipsController do
       describe "with valid params" do
         it "assigns a newly created agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @attrs
-          expect(assigns(:agent_relationship)).to be_valid
+          expect(assigns(:agent_relationship)).to be_nil
         end
 
         it "should be forbidden" do
@@ -275,7 +275,7 @@ describe AgentRelationshipsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_relationship as @agent_relationship" do
           post :create, :agent_relationship => @invalid_attrs
-          expect(assigns(:agent_relationship)).not_to be_valid
+          expect(assigns(:agent_relationship)).to be_nil
         end
 
         it "should be forbidden" do

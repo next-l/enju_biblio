@@ -29,7 +29,7 @@
       <td><%= manifestation.produced(agent).produce_type.display_name.localize if params[:mode] != 'add' and manifestation.produced(agent).try(:produce_type) -%></td>
       <td><%= agent.agent_type.display_name.localize -%></td>
       <td>
-        <%- if can? :delete, agent -%>
+        <%- if policy(agent).destroy? -%>
           <%- if params[:mode] == 'add' -%>
             <%= link_to t('page.add'), new_produce_path(manifestation_id: manifestation.id, agent_id: agent.id) unless manifestation.publishers.include?(agent) -%>
           <%- else -%>
@@ -51,7 +51,7 @@
   <ul>
     <li><%= link_to t('activerecord.models.manifestation'), manifestations_path -%></li>
     <li><%= link_to t('page.listing', model: t('activerecord.models.item')), items_path(manifestation_id: manifestation.id) -%></li>
-    <%- if can? :create, Agent -%>
+    <%- if policy(Agent).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path(manifestation_id: manifestation.id) -%></li>
       <li><%= link_to t('page.rearrange_order'), produces_path(manifestation_id: manifestation.id) %></li>
     <%- end -%>

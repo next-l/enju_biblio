@@ -1,5 +1,6 @@
 class SeriesStatementMergeListsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_series_statement_merge_list, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
 
   # GET /series_statement_merge_lists
   # GET /series_statement_merge_lists.json
@@ -91,6 +92,15 @@ class SeriesStatementMergeListsController < ApplicationController
   end
 
   private
+  def set_series_statement_merge_list
+    @series_statement_merge_list = SeriesStatementMergeList.find(params[:id])
+    authorize @series_statement_merge_list
+  end
+
+  def check_policy
+    authorize SeriesStatementMergeList
+  end
+
   def series_statement_merge_list_params
     params.require(:series_statement_merge_list).permit(:title)
   end

@@ -27,7 +27,7 @@ describe SeriesStatementMergesController do
 
       it "should be forbidden" do
         get :index
-        assigns(:series_statement_merges).should be_empty
+        assigns(:series_statement_merges).should be_nil
         response.should be_forbidden
       end
     end
@@ -35,7 +35,7 @@ describe SeriesStatementMergesController do
     describe "When not logged in" do
       it "should be forbidden" do
         get :index
-        assigns(:series_statement_merges).should be_empty
+        assigns(:series_statement_merges).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -107,7 +107,7 @@ describe SeriesStatementMergesController do
 
       it "should not assign the requested series_statement_merge as @series_statement_merge" do
         get :new
-        assigns(:series_statement_merge).should_not be_valid
+        assigns(:series_statement_merge).should be_nil
         response.should be_forbidden
       end
     end
@@ -115,7 +115,7 @@ describe SeriesStatementMergesController do
     describe "When not logged in" do
       it "should not assign the requested series_statement_merge as @series_statement_merge" do
         get :new
-        assigns(:series_statement_merge).should_not be_valid
+        assigns(:series_statement_merge).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -229,7 +229,7 @@ describe SeriesStatementMergesController do
       describe "with valid params" do
         it "assigns a newly created series_statement_merge as @series_statement_merge" do
           post :create, :series_statement_merge => @attrs
-          assigns(:series_statement_merge).should be_valid
+          assigns(:series_statement_merge).should be_nil
         end
 
         it "should be forbidden" do
@@ -241,7 +241,7 @@ describe SeriesStatementMergesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement_merge as @series_statement_merge" do
           post :create, :series_statement_merge => @invalid_attrs
-          assigns(:series_statement_merge).should_not be_valid
+          assigns(:series_statement_merge).should be_nil
         end
 
         it "should be forbidden" do
@@ -255,7 +255,7 @@ describe SeriesStatementMergesController do
       describe "with valid params" do
         it "assigns a newly created series_statement_merge as @series_statement_merge" do
           post :create, :series_statement_merge => @attrs
-          assigns(:series_statement_merge).should be_valid
+          assigns(:series_statement_merge).should be_nil
         end
 
         it "should be forbidden" do
@@ -267,7 +267,7 @@ describe SeriesStatementMergesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved series_statement_merge as @series_statement_merge" do
           post :create, :series_statement_merge => @invalid_attrs
-          assigns(:series_statement_merge).should_not be_valid
+          assigns(:series_statement_merge).should be_nil
         end
 
         it "should be forbidden" do
