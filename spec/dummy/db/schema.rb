@@ -884,6 +884,7 @@ ActiveRecord::Schema.define(version: 20150117111136) do
     t.string   "attachment_content_type"
     t.integer  "attachment_file_size"
     t.datetime "attachment_updated_at"
+    t.integer  "nii_type_id"
     t.text     "title_alternative_transcription"
     t.text     "description"
     t.text     "abstract"
@@ -907,7 +908,6 @@ ActiveRecord::Schema.define(version: 20150117111136) do
     t.text     "publication_place"
     t.text     "extent"
     t.text     "dimensions"
-    t.integer  "nii_type_id"
   end
 
   add_index "manifestations", ["access_address"], name: "index_manifestations_on_access_address"
