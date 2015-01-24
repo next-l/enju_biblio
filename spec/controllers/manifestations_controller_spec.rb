@@ -627,6 +627,14 @@ describe ManifestationsController do
         delete :destroy, :id => 1
         expect(response).to be_forbidden
       end
+
+      it "should not destroy manifestation of series master with children" do
+        @series_statement = FactoryGirl.create(:series_statement_serial)
+	@manifestation = FactoryGirl.create(:manifestation_serial)
+        delete :destroy, :id => @manifestation.id
+        expect(response).to redirect_to(manifestations_url)
+      end
+
     end
 
     describe "When logged in as Librarian" do
