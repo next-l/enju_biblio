@@ -551,7 +551,8 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier
+        :agent_identifier,
+        :_destroy
       ]},
       {:contributors_attributes => [
         :id, :last_name, :middle_name, :first_name,
@@ -562,7 +563,8 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier
+        :agent_identifier,
+        :_destroy
       ]},
       {:publishers_attributes => [
         :id, :last_name, :middle_name, :first_name,
@@ -573,22 +575,29 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier
+        :agent_identifier,
+        :_destroy
       ]},
       {:series_statements_attributes => [
         :id, :original_title, :numbering, :title_subseries,
         :numbering_subseries, :title_transcription, :title_alternative,
         :title_subseries_transcription, :creator_string, :volume_number_string,
-        :volume_number_transcription_string, :series_master
+        :volume_number_transcription_string, :series_master,
+        :_destroy
       ]},
       {:subjects_attributes => [
         :parent_id, :use_term_id, :term, :term_transcription,
-        :subject_type_id, :note, :required_role_id, :subject_heading_type_id
+        :subject_type_id, :note, :required_role_id, :subject_heading_type_id,
+        :_destroy
       ]},
       {:classifications_attributes => [
-        :parent_id, :category, :note, :classification_type_id
+        :parent_id, :category, :note, :classification_type_id,
+        :_destroy
       ]},
-      {:identifiers_attributes => [:id, :body, :identifier_type_id]}
+      {:identifiers_attributes => [
+        :id, :body, :identifier_type_id,
+        :_destroy
+      ]}
     )
   end
 
