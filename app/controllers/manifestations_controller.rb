@@ -586,12 +586,12 @@ class ManifestationsController < ApplicationController
         :_destroy
       ]},
       {:subjects_attributes => [
-        :parent_id, :use_term_id, :term, :term_transcription,
+        :id, :parent_id, :use_term_id, :term, :term_transcription,
         :subject_type_id, :note, :required_role_id, :subject_heading_type_id,
         :_destroy
       ]},
       {:classifications_attributes => [
-        :parent_id, :category, :note, :classification_type_id,
+        :id, :parent_id, :category, :note, :classification_type_id,
         :_destroy
       ]},
       {:identifiers_attributes => [
