@@ -632,7 +632,7 @@ describe ManifestationsController do
         @series_statement = FactoryGirl.create(:series_statement_serial)
 	@manifestation = FactoryGirl.create(:manifestation_serial)
         delete :destroy, :id => @manifestation.id
-        expect(response).to redirect_to(manifestations_url)
+        expect(response).to be_forbidden
       end
 
     end
