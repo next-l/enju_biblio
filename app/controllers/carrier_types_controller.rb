@@ -101,7 +101,11 @@ class CarrierTypesController < ApplicationController
     params.require(:carrier_type).permit(
       :name, :display_name, :note, :position,
       # EnjuCirculation
-      :carrier_type_has_checkout_types_attributes => :checkout_type_id
+      {
+        :carrier_type_has_checkout_types_attributes => [
+          :id, :checkout_type_id, :_destroy
+        ]
+      }
     )
   end
 
