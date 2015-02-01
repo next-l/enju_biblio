@@ -410,6 +410,7 @@ en:
     add_series_statement: Add another series statement
     merge: "Merge!"
     merge_resource: "Merge %{model}"
+    new_acquisition: Acquisition
 
   merge_list:
     successfully_merged: "%{model} were merged successfully."
