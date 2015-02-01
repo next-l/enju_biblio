@@ -146,9 +146,9 @@
     <p><%= f.link_to_add t('page.add'), :identifiers %></p>
   </div>
 
-<% if defined?(EnjuSubject) %>
-  <%= render 'manifestations/subject_form', f: f %>
-<% end %>
+  <% if defined?(EnjuSubject) %>
+    <%= render 'manifestations/subject_form', f: f %>
+  <% end %>
 
 <!--
   <div class="field">
