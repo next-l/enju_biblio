@@ -7,7 +7,8 @@ class ResourceImportFile < ActiveRecord::Base
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :resource_import, storage: :s3, s3_credentials: "#{Setting.amazon}",
+    has_attached_file :resource_import, storage: :s3,
+      s3_credentials: Setting.amazon,
       s3_permissions: :private
   else
     has_attached_file :resource_import,
