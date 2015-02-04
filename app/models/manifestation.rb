@@ -208,7 +208,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
-    has_attached_file :attachment, storage: :s3, s3_credentials: "#{Rails.root.to_s}/config/s3.yml",
+    has_attached_file :attachment, storage: :s3,
+      s3_credentials: "#{Rails.application.config_for(:enju_leaf)["amazon"]}",
       s3_permissions: :private
   else
     has_attached_file :attachment,
@@ -258,7 +259,7 @@ class Manifestation < ActiveRecord::Base
 
     pub_date_string = pub_date.rjust(4, "0").split(';').first.gsub(/[\[\]]/, '')
     if pub_date_string.length == 4
-      date = Time.utc(pub_date_string)
+      date = Time.zone.parse(Time.utc(pub_date_string).to_s).beginning_of_day
     else
       while date.nil? do
         pub_date_string += '-01'
