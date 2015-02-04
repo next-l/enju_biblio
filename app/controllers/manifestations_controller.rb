@@ -809,7 +809,12 @@ class ManifestationsController < ApplicationController
     if options[:pub_date_from].blank?
       pub_date[:from] = "*"
     else
-      pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
+      year = options[:pub_date_from].rjust(4, "0")
+      if year.length == 4
+        pub_date[:from] = Time.zone.parse(Time.utc(year).to_s).beginning_of_year.utc.iso8601
+      else
+        pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
+      end
       unless pub_date[:from]
         pub_date[:from] = Time.zone.parse(Time.utc(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
       end
@@ -818,7 +823,12 @@ class ManifestationsController < ApplicationController
     if options[:pub_date_to].blank?
       pub_date[:to] = "*"
     else
-      pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+      year = options[:pub_date_to].rjust(4, "0")
+      if year.length == 4
+        pub_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+      else
+        pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+      end
       unless pub_date[:to]
         pub_date[:to] = Time.zone.parse(Time.utc(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
       end
@@ -845,7 +855,12 @@ class ManifestationsController < ApplicationController
       if options[:acquired_from].blank?
         acquisition_date[:from] = "*"
       else
-        acquisition_date[:from] = Time.zone.parse(options[:acquired_from]).beginning_of_day.utc.iso8601 rescue nil
+        year = options[:acquired_from].rjust(4, "0")
+        if year.length == 4
+          acquisition_date[:from] = Time.zone.parse(Time.utc(year).to_s).beginning_of_year.utc.iso8601
+        else
+          acquisition_date[:from] = Time.zone.parse(options[:acquired_from]).beginning_of_day.utc.iso8601 rescue nil
+        end
         unless acquisition_date[:from]
           acquisition_date[:from] = Time.zone.parse(Time.utc(options[:acquired_from]).to_s).beginning_of_day.utc.iso8601
         end
@@ -854,11 +869,17 @@ class ManifestationsController < ApplicationController
       if options[:acquired_to].blank?
         acquisition_date[:to] = "*"
       else
-        acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
+        year = options[:acquired_to].rjust(4, "0")
+        if year.length == 4
+          acquisition_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+        else
+          acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
+        end
         unless acquisition_date[:to]
           acquisition_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
         end
       end
+
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query
