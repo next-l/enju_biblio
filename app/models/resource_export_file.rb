@@ -4,7 +4,7 @@ class ResourceExportFile < ActiveRecord::Base
   enju_export_file_model
   if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
     has_attached_file :resource_export, storage: :s3,
-      s3_credentials: "#{Rails.application.config_for(:enju_leaf)["amazon"]}",
+      s3_credentials: Rails.application.config_for(:enju_leaf)["amazon"],
       s3_permissions: :private
   else
     has_attached_file :resource_export,

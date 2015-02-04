@@ -6,7 +6,8 @@ class AgentImportFile < ActiveRecord::Base
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
   if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
-    has_attached_file :agent_import, storage: :s3, s3_credentials: "#{Rails.application.config_for(:enju_leaf)["amazon"]}",
+    has_attached_file :agent_import, storage: :s3,
+      s3_credentials: Rails.application.config_for(:enju_leaf)["amazon"],
       s3_permissions: :private
   else
     has_attached_file :agent_import,
