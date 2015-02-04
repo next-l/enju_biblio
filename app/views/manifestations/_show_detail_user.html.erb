@@ -60,6 +60,14 @@
           <%= render 'manifestations/subject_detail', manifestation: manifestation %>
           <%= render 'manifestations/classification_detail', manifestation: manifestation %>
         <% end %>
+        <% if defined?(EnjuBookmark) %>
+          <tr>
+            <td><%= t('activerecord.models.tag') -%>:</td>
+            <td>
+              <%= render 'manifestations/tag_list', manifestation: manifestation -%>
+            </td>
+          </tr>
+        <% end %>
         <%- unless manifestation.serial? -%>
           <tr>
             <td><%= t('page.identifier') -%>:</td>

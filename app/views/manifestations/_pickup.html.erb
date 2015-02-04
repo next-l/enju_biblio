@@ -12,6 +12,14 @@
           <%- end -%>
         </p>
       <% end %>
+      <% if defined?(EnjuBookmark) %>
+        <p>
+          <strong><%= t('page.tag') -%>:</strong>
+          <%- manifestation.tags.each do |tag| -%>
+            <%= link_to tag.name, manifestations_path(tag: tag.name) -%>
+         <%- end -%>
+        </p>
+      <% end %>
     </div>
     <div style="clear: both"></div>
     <div style="margin-top: 5px">
