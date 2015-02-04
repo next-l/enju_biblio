@@ -246,31 +246,35 @@ class Manifestation < ActiveRecord::Base
 
   def set_date_of_publication
     return if pub_date.blank?
-    year = Time.utc(pub_date.rjust(4, "0")) rescue nil
+    year = Time.utc(pub_date.rjust(4, "0")).year rescue nil
     begin
       date = Time.zone.parse(pub_date.rjust(4, "0"))
-      if date.year != year.year
+      if date.year != year
         raise ArgumentError
       end
     rescue ArgumentError, TZInfo::AmbiguousTime
       date = nil
     end
-    pub_date_string = pub_date.rjust(4, "0").split(';').first.gsub(/[\[\]]/, '')
 
-    while date.nil? do
-      pub_date_string += '-01'
-      break if pub_date_string =~ /-01-01-01$/
-      begin
-        date = Time.zone.parse(pub_date_string)
-        if date.year != year.year
-          raise ArgumentError
+    pub_date_string = pub_date.rjust(4, "0").split(';').first.gsub(/[\[\]]/, '')
+    if pub_date_string.length == 4
+      date = Time.utc(pub_date_string)
+    else
+      while date.nil? do
+        pub_date_string += '-01'
+        break if pub_date_string =~ /-01-01-01$/
+        begin
+          date = Time.zone.parse(pub_date_string)
+          if date.year != year
+            raise ArgumentError
+          end
+        rescue ArgumentError
+          date = nil
+        rescue TZInfo::AmbiguousTime
+          date = nil
+          self.year_of_publication = pub_date_string.to_i if pub_date_string =~ /^\d+$/
+          break
         end
-      rescue ArgumentError
-        date = nil
-      rescue TZInfo::AmbiguousTime
-        date = nil
-        self.year_of_publication = pub_date_string.to_i if pub_date_string =~ /^\d+$/
-        break
       end
     end
 
