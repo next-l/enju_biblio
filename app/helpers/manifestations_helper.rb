@@ -112,73 +112,6 @@ module ManifestationsHelper
 
   def pub_year_facet(pub_date_from, pub_date_to, facet)
     string = ''
-    current = true if facet.value.first.to_i == pub_date_from.to_i && facet.value.last.to_i - 1 == pub_date_to.to_i
-    if current
-      content_tag :strong do
-        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_to: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
-      end
-    else
-      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_to: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
-    end
-  end
-
-  if defined?(EnjuBookmark)
-    def link_to_bookmark(manifestation)
-      if manifestation.bookmarked?(current_user)
-        link_to t('bookmark.remove_from_my_bookmark'), bookmark_path(Bookmark.where(user_id: current_user.id, manifestation_id: manifestation.id).first), confirm: t('page.are_you_sure'), method: :delete
-      else
-        link_to t('bookmark.add_to_my_bookmark'), new_bookmark_path(bookmark: {url: manifestation_url(manifestation)})
-      end
-    end
-  end
-
-  def language_facet(language, current_languages, facet)
-    string = ''
-    languages = current_languages.dup
-    current = true if languages.include?(language.name)
-    if current
-      content_tag :strong do
-        link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, language: language.name, view: nil, only_path: true)))
-      end
-    else
-      link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, language: language.name, view: nil, only_path: true)))
-    end
-  end
-
-  def library_facet(current_libraries, facet)
-    library = Library.where(name: facet.value).select([:name, :display_name]).first
-    return nil unless library
-    string = ''
-    current = true if current_libraries.include?(library.name)
-    content_tag :li do
-      if current
-        content_tag :strong do
-          link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
-        end
-      else
-        link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
-      end
-    end
-  end
-
-  def carrier_type_facet(facet)
-    string = ''
-    carrier_type = CarrierType.where(name: facet.value).select([:name, :display_name]).first
-    if carrier_type
-      string << form_icon(carrier_type)
-      current = true if params[:carrier_type] == carrier_type.name
-      if current
-        content_tag :strong do
-          link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
-        end
-      else
-        link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
-      end
-    end
-  end
-
-  def pub_year_facet(pub_date_from, pub_date_to, facet)
-    string = ''
     current = true if facet.value.first.to_i == pub_date_from.to_i and facet.value.last.to_i - 1 == pub_date_to.to_i
     if current
       content_tag :strong do
@@ -203,6 +136,12 @@ module ManifestationsHelper
       end
     end
     title
+  end
+
+  def holding_item_sort_criteria( item )
+    own_library = 2
+    own_library = 1 if (signed_in? and current_user.profile.library_id == item.shelf.library_id)
+    [ own_library, Library.find(item.shelf.library_id).position, item.shelf.position, item.id ]
   end
 
   if defined?(EnjuBookmark)
