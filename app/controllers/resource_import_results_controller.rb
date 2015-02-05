@@ -38,7 +38,7 @@ class ResourceImportResultsController < ApplicationController
   end
 
   private
-  def resource_import_result_files
+  def resource_import_result_params
     params.require(:resource_import_result).permit(
       :resource_import_file_id, :manifestation_id, :item_id, :body
     )

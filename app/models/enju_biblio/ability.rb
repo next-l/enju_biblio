@@ -19,7 +19,17 @@ module EnjuBiblio
         end
         can [:read, :create, :update], Manifestation
         can [:destroy, :delete], Manifestation do |manifestation|
-          manifestation.items.empty? && !manifestation.series_master?
+          if  manifestation.items.empty?
+            if manifestation.series_master?
+              if manifestation.children.empty?
+                true
+              else
+                false
+              end
+            else
+              true
+            end
+          end
         end
         can :manage, [
           AgentMerge,
@@ -73,10 +83,23 @@ module EnjuBiblio
         ]
       when 'Librarian'
         can :manage, Item
+        can [:destroy, :delete], Item do |item|
+          item.removable?
+        end
         can :index, Manifestation
         can [:show, :create, :update], Manifestation
         can [:destroy, :delete], Manifestation do |manifestation|
-          manifestation.items.empty? && !manifestation.series_master?
+          if  manifestation.items.empty?
+            if manifestation.series_master?
+              if manifestation.children.empty?
+                return true
+              else
+                return false
+              end
+            else
+              true
+            end
+          end
         end
         can [:index, :create], Agent
         can :show, Agent do |agent|

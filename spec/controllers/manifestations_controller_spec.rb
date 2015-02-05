@@ -88,9 +88,21 @@ describe ManifestationsController do
         expect(assigns(:manifestations)).to_not be_nil
       end
 
+      it "assigns all manifestations as @manifestations when old pub_date_from and pub_date_to are specified" do
+        get :index, :pub_date_from => '200', :pub_date_to => '207'
+        assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('200-01-01').utc.iso8601} TO #{Time.zone.parse('207-12-31').end_of_year.utc.iso8601}]"
+        expect(assigns(:manifestations)).to_not be_nil
+      end
+
       it "assigns all manifestations as @manifestations when acquired_from and pub_date_to are specified" do
         get :index, :acquired_from => '2000', :acquired_to => '2007'
         assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('2000-01-01').utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_day.utc.iso8601}]"
+        expect(assigns(:manifestations)).to_not be_nil
+      end
+
+      it "assigns all manifestations as @manifestations when old acquired_from and pub_date_to are specified" do
+        get :index, :acquired_from => '200', :acquired_to => '207'
+        assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('200-01-01').utc.iso8601} TO #{Time.zone.parse('207-12-31').end_of_day.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
@@ -627,6 +639,14 @@ describe ManifestationsController do
         delete :destroy, :id => 1
         expect(response).to be_forbidden
       end
+
+      it "should not destroy manifestation of series master with children" do
+        @series_statement = FactoryGirl.create(:series_statement_serial)
+	@manifestation = FactoryGirl.create(:manifestation_serial)
+        delete :destroy, :id => @manifestation.id
+        expect(response).to redirect_to(manifestations_url)
+      end
+
     end
 
     describe "When logged in as Librarian" do

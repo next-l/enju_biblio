@@ -551,7 +551,8 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier
+        :agent_identifier,
+        :_destroy
       ]},
       {:contributors_attributes => [
         :id, :last_name, :middle_name, :first_name,
@@ -562,7 +563,8 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier
+        :agent_identifier,
+        :_destroy
       ]},
       {:publishers_attributes => [
         :id, :last_name, :middle_name, :first_name,
@@ -573,22 +575,29 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier
+        :agent_identifier,
+        :_destroy
       ]},
       {:series_statements_attributes => [
         :id, :original_title, :numbering, :title_subseries,
         :numbering_subseries, :title_transcription, :title_alternative,
         :title_subseries_transcription, :creator_string, :volume_number_string,
-        :volume_number_transcription_string, :series_master
+        :volume_number_transcription_string, :series_master,
+        :_destroy
       ]},
       {:subjects_attributes => [
-        :parent_id, :use_term_id, :term, :term_transcription,
-        :subject_type_id, :note, :required_role_id, :subject_heading_type_id
+        :id, :parent_id, :use_term_id, :term, :term_transcription,
+        :subject_type_id, :note, :required_role_id, :subject_heading_type_id,
+        :_destroy
       ]},
       {:classifications_attributes => [
-        :parent_id, :category, :note, :classification_type_id
+        :id, :parent_id, :category, :note, :classification_type_id,
+        :_destroy
       ]},
-      {:identifiers_attributes => [:id, :body, :identifier_type_id]}
+      {:identifiers_attributes => [
+        :id, :body, :identifier_type_id,
+        :_destroy
+      ]}
     )
   end
 
@@ -791,18 +800,28 @@ class ManifestationsController < ApplicationController
     if options[:pub_date_from].blank?
       pub_date[:from] = "*"
     else
-      pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
+      year = options[:pub_date_from].rjust(4, "0")
+      if year.length == 4
+        pub_date[:from] = Time.zone.parse(Time.utc(year).to_s).beginning_of_year.utc.iso8601
+      else
+        pub_date[:from] = Time.zone.parse(options[:pub_date_from]).beginning_of_day.utc.iso8601 rescue nil
+      end
       unless pub_date[:from]
-        pub_date[:from] = Time.zone.parse(Time.mktime(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
+        pub_date[:from] = Time.zone.parse(Time.utc(options[:pub_date_from]).to_s).beginning_of_day.utc.iso8601
       end
     end
 
     if options[:pub_date_to].blank?
       pub_date[:to] = "*"
     else
-      pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+      year = options[:pub_date_to].rjust(4, "0")
+      if year.length == 4
+        pub_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+      else
+        pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+      end
       unless pub_date[:to]
-        pub_date[:to] = Time.zone.parse(Time.mktime(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
+        pub_date[:to] = Time.zone.parse(Time.utc(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
       end
     end
     pub_date
@@ -827,20 +846,31 @@ class ManifestationsController < ApplicationController
       if options[:acquired_from].blank?
         acquisition_date[:from] = "*"
       else
-        acquisition_date[:from] = Time.zone.parse(options[:acquired_from]).beginning_of_day.utc.iso8601 rescue nil
+        year = options[:acquired_from].rjust(4, "0")
+        if year.length == 4
+          acquisition_date[:from] = Time.zone.parse(Time.utc(year).to_s).beginning_of_year.utc.iso8601
+        else
+          acquisition_date[:from] = Time.zone.parse(options[:acquired_from]).beginning_of_day.utc.iso8601 rescue nil
+        end
         unless acquisition_date[:from]
-          acquisition_date[:from] = Time.zone.parse(Time.mktime(options[:acquired_from]).to_s).beginning_of_day.utc.iso8601
+          acquisition_date[:from] = Time.zone.parse(Time.utc(options[:acquired_from]).to_s).beginning_of_day.utc.iso8601
         end
       end
 
       if options[:acquired_to].blank?
         acquisition_date[:to] = "*"
       else
-        acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
+        year = options[:acquired_to].rjust(4, "0")
+        if year.length == 4
+          acquisition_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+        else
+          acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
+        end
         unless acquisition_date[:to]
-          acquisition_date[:to] = Time.zone.parse(Time.mktime(options[:acquired_to]).to_s).end_of_year.utc.iso8601
+          pub_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
         end
       end
+
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
     end
     query

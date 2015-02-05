@@ -208,7 +208,8 @@ class Manifestation < ActiveRecord::Base
   end
 
   if Setting.uploaded_file.storage == :s3
-    has_attached_file :attachment, storage: :s3, s3_credentials: "#{Rails.root.to_s}/config/s3.yml",
+    has_attached_file :attachment, storage: :s3,
+      s3_credentials: Setting.amazon,
       s3_permissions: :private
   else
     has_attached_file :attachment,
@@ -246,24 +247,35 @@ class Manifestation < ActiveRecord::Base
 
   def set_date_of_publication
     return if pub_date.blank?
+    year = Time.utc(pub_date.rjust(4, "0")).year rescue nil
     begin
-      date = Time.zone.parse(pub_date)
+      date = Time.zone.parse(pub_date.rjust(4, "0"))
+      if date.year != year
+        raise ArgumentError
+      end
     rescue ArgumentError, TZInfo::AmbiguousTime
       date = nil
     end
-    pub_date_string = pub_date.split(';').first.gsub(/[\[\]]/, '')
 
-    while date.nil? do
-      pub_date_string += '-01'
-      break if pub_date_string =~ /-01-01-01$/
-      begin
-        date = Time.zone.parse(pub_date_string)
-      rescue ArgumentError
-        date = nil
-      rescue TZInfo::AmbiguousTime
-        date = nil
-        self.year_of_publication = pub_date_string.to_i if pub_date_string =~ /^\d+$/
-        break
+    pub_date_string = pub_date.rjust(4, "0").split(';').first.gsub(/[\[\]]/, '')
+    if pub_date_string.length == 4
+      date = Time.zone.parse(Time.utc(pub_date_string).to_s).beginning_of_day
+    else
+      while date.nil? do
+        pub_date_string += '-01'
+        break if pub_date_string =~ /-01-01-01$/
+        begin
+          date = Time.zone.parse(pub_date_string)
+          if date.year != year
+            raise ArgumentError
+          end
+        rescue ArgumentError
+          date = nil
+        rescue TZInfo::AmbiguousTime
+          date = nil
+          self.year_of_publication = pub_date_string.to_i if pub_date_string =~ /^\d+$/
+          break
+        end
       end
     end
 

@@ -414,6 +414,7 @@ ja:
     add_series_statement: 別のシリーズ情報を追加する
     merge: "統合する（取り消しはできません）"
     merge_resource: "%{model}を統合する"
+    new_acquisition: 新規受入
 
   merge_list:
     successfully_merged: "%{model}は正常に統合されました。"
