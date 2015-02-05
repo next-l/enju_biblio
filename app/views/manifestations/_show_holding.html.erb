@@ -51,7 +51,26 @@
         </td>
       <% end %>
     </tr>
+    <% if policy(item).update? %>
+      <script>
+        $(function(){
+          $('a#item_identifier_item_<%= item.id %>').data(
+            'powertip',
+            'item_identifier: <%= item.item_identifier %>'
+          );
+          $('a#item_identifier_item_<%= item.id %>').powerTip({
+            placement: 'e',
+            mouseOnToPopup: true
+          });
+        });
+      </script>
+      <%= render 'items/tooltip', item: item %>
+    <% end %>
   <%- end -%>
 </table>
+
+<%- if policy(Item).create? -%>
+  <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
+<%- end -%>
 </div>
 <% end %>
