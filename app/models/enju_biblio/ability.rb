@@ -92,9 +92,9 @@ module EnjuBiblio
           if  manifestation.items.empty?
             if manifestation.series_master?
               if manifestation.children.empty?
-                return true
+                true
               else
-                return false
+                false
               end
             else
               true

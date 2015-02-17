@@ -157,6 +157,10 @@ class AgentImportFile < ActiveRecord::Base
     AgentImportFileTransition
   end
 
+  def self.initial_state
+    :pending
+  end
+
   def open_import_file
     tempfile = Tempfile.new(self.class.name.underscore)
     if Setting.uploaded_file.storage == :s3

@@ -724,6 +724,10 @@ class ResourceImportFile < ActiveRecord::Base
     ResourceImportFileTransition
   end
 
+  def self.initial_state
+    :pending
+  end
+
   def set_identifier(row)
     identifier = {}
     %w(isbn issn doi jpno).each do |id_type|
