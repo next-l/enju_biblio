@@ -12,7 +12,7 @@ class ImportRequest < ActiveRecord::Base
   has_many :import_request_transitions
 
   def state_machine
-    @state_machine ||= ImportRequestStateMachine.new(self, transition_class: ImportRequestTransition)
+    ImportRequestStateMachine.new(self, transition_class: ImportRequestTransition)
   end
 
   delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
@@ -60,9 +60,12 @@ class ImportRequest < ActiveRecord::Base
   end
 
   private
-
   def self.transition_class
     ImportRequestTransition
+  end
+
+  def self.initial_state
+    :pending
   end
 end
 
