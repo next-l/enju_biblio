@@ -387,7 +387,7 @@ class ManifestationsController < ApplicationController
     end
 
     if @manifestation.attachment.path
-      if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
+      if ENV['ENJU_STORAGE'] == 's3'
         data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
@@ -412,7 +412,7 @@ class ManifestationsController < ApplicationController
       #format.js
       format.download {
         if @manifestation.attachment.path
-          if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
+          if ENV['ENJU_STORAGE'] == 's3'
             send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
             if File.exist?(file) && File.file?(file)

@@ -2,7 +2,7 @@ class PictureFile < ActiveRecord::Base
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true, validate: true
 
-  if Rails.application.config_for(:enju_leaf)["uploaded_file"]["storage"] == :s3
+  if ENV['ENJU_STORAGE'] == 's3'
     has_attached_file :picture, storage: :s3, styles: { medium: "600x600>", thumb: "100x100>" },
       s3_credentials: {
         access_key: ENV['AWS_ACCESS_KEY_ID'],
