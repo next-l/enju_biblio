@@ -9,7 +9,7 @@
 
   <div class="field">
     <span id="name_person">
-      <%- if Rails.application.config_for(:enju_leaf)["family_name_first"] == true -%>
+      <%- if ENV['ENJU_FAMILY_NAME_FIRST'] -%>
         <%= render 'agents/form_family_name_first', f: f -%>
       <%- else -%>
         <%= render 'agents/form_family_name_last', f: f -%>

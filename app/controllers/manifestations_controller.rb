@@ -208,7 +208,7 @@ class ManifestationsController < ApplicationController
           else
             flash[:search_query] = @search_query
             @manifestation_ids = search.build do
-              paginate page: 1, per_page: Rails.application.config_for(:enju_leaf)["max_number_of_results"]
+              paginate page: 1, per_page: ENV['ENJU_MAX_NUMBER_OF_RESULTS']
             end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
           end
         end
@@ -217,7 +217,7 @@ class ManifestationsController < ApplicationController
           if params[:view] == 'tag_cloud'
             unless @manifestation_ids
               @manifestation_ids = search.build do
-                paginate page: 1, per_page: Rails.application.config_for(:enju_leaf)["max_number_of_results"]
+                paginate page: 1, per_page: ENV['ENJU_MAX_NUMBER_OF_RESULTS']
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
             #bookmark_ids = Bookmark.where(manifestation_id: flash[:manifestation_ids]).limit(1000).pluck(:id)
@@ -249,7 +249,7 @@ class ManifestationsController < ApplicationController
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
         else
-          pub_year_range_interval = Rails.application.config_for(:enju_leaf)["manifestation"]["facet"]["pub_year_range_interval"]
+          pub_year_range_interval = ENV['ENJU_PUB_YEAR_FACET_RANGE_INTERVAL']
         end
 
         search.build do
@@ -263,8 +263,8 @@ class ManifestationsController < ApplicationController
         end
       end
       search_result = search.execute
-      if @count[:query_result] > Rails.application.config_for(:enju_leaf)["max_number_of_results"]
-        max_count = Rails.application.config_for(:enju_leaf)["max_number_of_results"]
+      if @count[:query_result] > ENV['ENJU_MAX_NUMBER_OF_RESULTS']
+        max_count = ENV['ENJU_MAX_NUMBER_OF_RESULTS']
       else
         max_count = @count[:query_result]
       end

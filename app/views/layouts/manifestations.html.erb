@@ -9,7 +9,7 @@
     <%= auto_discovery_link_tag(:atom, url_for(params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (Atom)")) %>
   <%- end -%>
   <% if %w(show edit).include?(controller.action_name) %>
-    <%= book_jacket_header(Rails.application.config_for(:enju_leaf)["book_jacket"]["source"]) %>
+    <%= book_jacket_header(ENV['ENJU_BOOK_JACKET_SOURCE']) %>
   <% end %>
   <link rel="search" type="application/opensearchdescription+xml" title="<%= LibraryGroup.site_config.display_name.localize %>" href="<%= page_opensearch_url(format: :xml) %>" />
 </head>
