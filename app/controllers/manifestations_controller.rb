@@ -186,6 +186,7 @@ class ManifestationsController < ApplicationController
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
+      @max_number_of_results = ENV['ENJU_MAX_NUMBER_OF_RESULTS'] || 500
 
       if session[:search_params]
         unless search.query.to_params == session[:search_params]
@@ -208,7 +209,7 @@ class ManifestationsController < ApplicationController
           else
             flash[:search_query] = @search_query
             @manifestation_ids = search.build do
-              paginate page: 1, per_page: ENV['ENJU_MAX_NUMBER_OF_RESULTS']
+              paginate page: 1, per_page: @max_number_of_results
             end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
           end
         end
@@ -217,7 +218,7 @@ class ManifestationsController < ApplicationController
           if params[:view] == 'tag_cloud'
             unless @manifestation_ids
               @manifestation_ids = search.build do
-                paginate page: 1, per_page: ENV['ENJU_MAX_NUMBER_OF_RESULTS']
+                paginate page: 1, per_page: @max_number_of_results
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
             #bookmark_ids = Bookmark.where(manifestation_id: flash[:manifestation_ids]).limit(1000).pluck(:id)
@@ -263,8 +264,8 @@ class ManifestationsController < ApplicationController
         end
       end
       search_result = search.execute
-      if @count[:query_result] > ENV['ENJU_MAX_NUMBER_OF_RESULTS']
-        max_count = ENV['ENJU_MAX_NUMBER_OF_RESULTS']
+      if @count[:query_result] > @max_number_of_results
+        max_count = @max_number_of_results
       else
         max_count = @count[:query_result]
       end
