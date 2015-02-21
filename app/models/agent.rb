@@ -80,7 +80,7 @@ class Agent < ActiveRecord::Base
 
   def set_full_name
     if full_name.blank?
-      if last_name.to_s.strip && first_name.to_s.strip && Setting.family_name_first == true
+      if last_name.to_s.strip && first_name.to_s.strip && LibraryGroup.site_config.settings[:family_name_first]
         self.full_name = [last_name, middle_name, first_name].compact.join(" ").to_s.strip
       else
         self.full_name = [first_name, last_name, middle_name].compact.join(" ").to_s.strip

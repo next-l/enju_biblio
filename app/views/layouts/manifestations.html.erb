@@ -9,10 +9,7 @@
     <%= auto_discovery_link_tag(:atom, url_for(params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (Atom)")) %>
   <%- end -%>
   <% if %w(show edit).include?(controller.action_name) %>
-    <% if Setting.book_jacket.source == :google %>
-      <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-      <%= render 'manifestations/google_book_thumbnail_header' %>
-    <% end %>
+    <%= book_jacket_header(@library_group.settings[:book_jacket_source]) %>
   <% end %>
   <link rel="search" type="application/opensearchdescription+xml" title="<%= LibraryGroup.site_config.display_name.localize %>" href="<%= page_opensearch_url(format: :xml) %>" />
 </head>

@@ -186,6 +186,7 @@ class ManifestationsController < ApplicationController
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
+      @max_number_of_results = @library_group.settings[:max_number_of_results] || 500
 
       if session[:search_params]
         unless search.query.to_params == session[:search_params]
@@ -208,7 +209,7 @@ class ManifestationsController < ApplicationController
           else
             flash[:search_query] = @search_query
             @manifestation_ids = search.build do
-              paginate page: 1, per_page: Setting.max_number_of_results
+              paginate page: 1, per_page: @max_number_of_results
             end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
           end
         end
@@ -217,7 +218,7 @@ class ManifestationsController < ApplicationController
           if params[:view] == 'tag_cloud'
             unless @manifestation_ids
               @manifestation_ids = search.build do
-                paginate page: 1, per_page: Setting.max_number_of_results
+                paginate page: 1, per_page: @max_number_of_results
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
             #bookmark_ids = Bookmark.where(manifestation_id: flash[:manifestation_ids]).limit(1000).pluck(:id)
@@ -249,7 +250,7 @@ class ManifestationsController < ApplicationController
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
         else
-          pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
+          pub_year_range_interval = @library_group.settings[:pub_year_facet_range_interval] || 10
         end
 
         search.build do
@@ -263,8 +264,8 @@ class ManifestationsController < ApplicationController
         end
       end
       search_result = search.execute
-      if @count[:query_result] > Setting.max_number_of_results
-        max_count = Setting.max_number_of_results
+      if @count[:query_result] > @max_number_of_results
+        max_count = @max_number_of_results
       else
         max_count = @count[:query_result]
       end
@@ -387,7 +388,7 @@ class ManifestationsController < ApplicationController
     end
 
     if @manifestation.attachment.path
-      if Setting.uploaded_file.storage == :s3
+      if ENV['ENJU_STORAGE'] == 's3'
         data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
@@ -412,7 +413,7 @@ class ManifestationsController < ApplicationController
       #format.js
       format.download {
         if @manifestation.attachment.path
-          if Setting.uploaded_file.storage == :s3
+          if ENV['ENJU_STORAGE'] == 's3'
             send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
             if File.exist?(file) && File.file?(file)
@@ -867,7 +868,7 @@ class ManifestationsController < ApplicationController
           acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
         end
         unless acquisition_date[:to]
-          pub_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
+          acquisition_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
         end
       end
 

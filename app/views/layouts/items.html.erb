@@ -5,11 +5,7 @@
   <%= render 'page/include' %>
   <title><%= title(controller.controller_name) %></title>
   <% if %w(index show new edit).include?(controller.action_name) %>
-    <%= book_jacket_header(Setting.book_jacket.source) %>
-    <% if Setting.book_jacket.source == :google %>
-      <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-      <%= render 'manifestations/google_book_thumbnail_header', manifestation: @manifestation if @manifestation %>
-    <% end %>
+    <%= book_jacket_header(@library_group.settings[:book_jacket_source]) %>
   <% end %>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">

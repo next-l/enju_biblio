@@ -9,7 +9,7 @@
 
   <div class="field">
     <span id="name_person">
-      <%- if Setting.family_name_first == true -%>
+      <%- if @library_group.settings[:family_name_first] -%>
         <%= render 'agents/form_family_name_first', f: f -%>
       <%- else -%>
         <%= render 'agents/form_family_name_last', f: f -%>
