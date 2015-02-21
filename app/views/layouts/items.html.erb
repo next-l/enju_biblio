@@ -5,7 +5,7 @@
   <%= render 'page/include' %>
   <title><%= title(controller.controller_name) %></title>
   <% if %w(index show new edit).include?(controller.action_name) %>
-    <%= book_jacket_header(ENV['ENJU_BOOK_JACKET_SOURCE']) %>
+    <%= book_jacket_header(@library_group.settings[:book_jacket_source]) %>
   <% end %>
 </head>
 <body itemscope itemtype="http://schema.org/WebPage">

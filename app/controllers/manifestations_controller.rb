@@ -186,7 +186,7 @@ class ManifestationsController < ApplicationController
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
-      @max_number_of_results = ENV['ENJU_MAX_NUMBER_OF_RESULTS'] || 500
+      @max_number_of_results = @library_group.settings[:max_number_of_results] || 500
 
       if session[:search_params]
         unless search.query.to_params == session[:search_params]
