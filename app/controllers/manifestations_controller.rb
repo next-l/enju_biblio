@@ -250,7 +250,7 @@ class ManifestationsController < ApplicationController
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
         else
-          pub_year_range_interval = ENV['ENJU_PUB_YEAR_FACET_RANGE_INTERVAL']
+          pub_year_range_interval = @library_group.settings[:pub_year_facet_range_interval] || 10
         end
 
         search.build do
