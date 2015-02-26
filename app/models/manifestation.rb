@@ -244,7 +244,7 @@ class Manifestation < ActiveRecord::Base
     manifestation.index_series_statement
     Sunspot.commit
   end
-  normalize_attributes :manifestation_identifier, :pub_date, :original_title
+  strip_attributes only: [:manifestation_identifier, :pub_date, :original_title]
   paginates_per 10
 
   attr_accessor :during_import, :parent_id

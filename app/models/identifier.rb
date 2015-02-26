@@ -10,7 +10,8 @@ class Identifier < ActiveRecord::Base
   before_save :convert_isbn
 
   acts_as_list scope: :manifestation_id
-  normalize_attributes :body
+  #normalize_attributes :body
+  strip_attributes only: :body
 
   def check_identifier
     case identifier_type.try(:name)
