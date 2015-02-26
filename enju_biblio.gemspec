@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "paperclip"
   s.add_dependency "paperclip-meta"
-  s.add_dependency "aws-sdk"
+  #s.add_dependency "aws-sdk"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 3.0"
   s.add_dependency "jc-validates_timeliness"
