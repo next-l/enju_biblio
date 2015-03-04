@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221063719) do
+ActiveRecord::Schema.define(version: 20150304183215) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer  "basket_id"
@@ -1041,9 +1041,11 @@ ActiveRecord::Schema.define(version: 20150221063719) do
     t.datetime "picture_updated_at"
     t.text     "picture_meta"
     t.string   "picture_fingerprint"
+    t.string   "picture_id"
   end
 
   add_index "picture_files", ["picture_attachable_id", "picture_attachable_type"], name: "index_picture_files_on_picture_attachable_id_and_type"
+  add_index "picture_files", ["picture_id"], name: "index_picture_files_on_picture_id"
 
   create_table "produce_types", force: :cascade do |t|
     t.string   "name"

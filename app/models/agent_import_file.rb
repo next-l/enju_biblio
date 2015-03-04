@@ -232,19 +232,19 @@ end
 #
 #  id                        :integer          not null, primary key
 #  parent_id                 :integer
-#  content_type              :string(255)
+#  content_type              :string
 #  size                      :integer
 #  user_id                   :integer
 #  note                      :text
 #  executed_at               :datetime
-#  agent_import_file_name    :string(255)
-#  agent_import_content_type :string(255)
+#  agent_import_file_name    :string
+#  agent_import_content_type :string
 #  agent_import_file_size    :integer
 #  agent_import_updated_at   :datetime
 #  created_at                :datetime
 #  updated_at                :datetime
-#  agent_import_fingerprint  :string(255)
+#  agent_import_fingerprint  :string
 #  error_message             :text
-#  edit_mode                 :string(255)
-#  user_encoding             :string(255)
+#  edit_mode                 :string
+#  user_encoding             :string
 #

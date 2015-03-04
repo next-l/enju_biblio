@@ -387,14 +387,6 @@ class ManifestationsController < ApplicationController
       @questions = @manifestation.questions(user: current_user, page: params[:question_page])
     end
 
-    if @manifestation.attachment.path
-      if ENV['ENJU_STORAGE'] == 's3'
-        data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
-      else
-        file = @manifestation.attachment.path
-      end
-    end
-
     respond_to do |format|
       format.html # show.html.erb
       format.html.phone
@@ -412,17 +404,9 @@ class ManifestationsController < ApplicationController
       #format.atom { render template: 'manifestations/oai_ore' }
       #format.js
       format.download {
-        if @manifestation.attachment.path
-          if ENV['ENJU_STORAGE'] == 's3'
-            send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
-          else
-            if File.exist?(file) && File.file?(file)
-              send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
-            end
-          end
-        else
-          render template: 'page/404', status: 404
-        end
+        send_file @manifestation.attachment.download,
+          filename: File.basename(@manifestation.attachment_file_name),
+          type: 'application/octet-stream'
       }
       if defined?(EnjuOai)
         format.oai

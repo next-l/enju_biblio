@@ -6,7 +6,6 @@ class Manifestation < ActiveRecord::Base
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_loc_search if defined?(EnjuLoc)
   enju_nii_cinii_books if defined?(EnjuNii)
-  enju_export if defined?(EnjuExport)
   enju_oai if defined?(EnjuOai)
   enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
@@ -207,19 +206,7 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :attachment, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :attachment,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  do_not_validate_attachment_file_type :attachment
+  attachment :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
@@ -574,16 +561,16 @@ end
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
-#  classification_number           :string(255)
-#  manifestation_identifier        :string(255)
+#  classification_number           :string
+#  manifestation_identifier        :string
 #  date_of_publication             :datetime
 #  date_copyrighted                :datetime
 #  created_at                      :datetime
 #  updated_at                      :datetime
 #  deleted_at                      :datetime
-#  access_address                  :string(255)
-#  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          default(1), not null
+#  access_address                  :string
+#  language_id                     :integer          default("1"), not null
+#  carrier_type_id                 :integer          default("1"), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -591,21 +578,22 @@ end
 #  depth                           :integer
 #  price                           :integer
 #  fulltext                        :text
-#  volume_number_string            :string(255)
-#  issue_number_string             :string(255)
-#  serial_number_string            :string(255)
+#  volume_number_string            :string
+#  issue_number_string             :string
+#  serial_number_string            :string
 #  edition                         :integer
 #  note                            :text
-#  repository_content              :boolean          default(FALSE), not null
-#  lock_version                    :integer          default(0), not null
-#  required_role_id                :integer          default(1), not null
-#  required_score                  :integer          default(0), not null
-#  frequency_id                    :integer          default(1), not null
-#  subscription_master             :boolean          default(FALSE), not null
-#  attachment_file_name            :string(255)
-#  attachment_content_type         :string(255)
+#  repository_content              :boolean          default("f"), not null
+#  lock_version                    :integer          default("0"), not null
+#  required_role_id                :integer          default("1"), not null
+#  required_score                  :integer          default("0"), not null
+#  frequency_id                    :integer          default("1"), not null
+#  subscription_master             :boolean          default("f"), not null
+#  attachment_file_name            :string
+#  attachment_content_type         :string
 #  attachment_file_size            :integer
 #  attachment_updated_at           :datetime
+#  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text
 #  abstract                        :text
@@ -614,12 +602,12 @@ end
 #  date_submitted                  :datetime
 #  date_accepted                   :datetime
 #  date_caputured                  :datetime
-#  pub_date                        :string(255)
-#  edition_string                  :string(255)
+#  pub_date                        :string
+#  edition_string                  :string
 #  volume_number                   :integer
 #  issue_number                    :integer
 #  serial_number                   :integer
-#  content_type_id                 :integer          default(1)
+#  content_type_id                 :integer          default("1")
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer

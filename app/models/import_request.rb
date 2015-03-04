@@ -74,7 +74,7 @@ end
 # Table name: import_requests
 #
 #  id               :integer          not null, primary key
-#  isbn             :string(255)
+#  isbn             :string
 #  manifestation_id :integer
 #  user_id          :integer
 #  created_at       :datetime

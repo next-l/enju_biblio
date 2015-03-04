@@ -11,7 +11,7 @@ end
 # Table name: realize_types
 #
 #  id           :integer          not null, primary key
-#  name         :string(255)
+#  name         :string
 #  display_name :text
 #  note         :text
 #  position     :integer

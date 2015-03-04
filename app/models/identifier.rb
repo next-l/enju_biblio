@@ -72,7 +72,7 @@ end
 # Table name: identifiers
 #
 #  id                 :integer          not null, primary key
-#  body               :string(255)      not null
+#  body               :string           not null
 #  identifier_type_id :integer          not null
 #  manifestation_id   :integer
 #  primary            :boolean

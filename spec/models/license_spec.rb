@@ -11,8 +11,8 @@ end
 # Table name: licenses
 #
 #  id           :integer          not null, primary key
-#  name         :string(255)      not null
-#  display_name :string(255)
+#  name         :string           not null
+#  display_name :string
 #  note         :text
 #  position     :integer
 #  created_at   :datetime

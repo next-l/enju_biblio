@@ -11,7 +11,7 @@ end
 # Table name: resource_import_file_transitions
 #
 #  id                      :integer          not null, primary key
-#  to_state                :string(255)
+#  to_state                :string
 #  metadata                :text             default("{}")
 #  sort_key                :integer
 #  resource_import_file_id :integer
