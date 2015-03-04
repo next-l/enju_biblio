@@ -16,7 +16,7 @@
     <%= t('activerecord.attributes.item.acquired_at') %>:
     <%= t('advanced_search.from') %>
     <%= text_field_tag 'acquired_from', @acquired_from, {class: 'date_field', placeholder: "#{t('page.example')}: 2012-04-12"} -%>
-    <%= t('advanced_search.to') %> <%= text_field_tag 'acquired_to', @acquired_to, {class: 'date_field', placeholder: "#{t('page.example')}: 2012-05-11"} -%>
+    <%= t('advanced_search.to') %> <%= text_field_tag 'acquired_until', @acquired_until, {class: 'date_field', placeholder: "#{t('page.example')}: 2012-05-11"} -%>
   </p>
 <%- end -%>
 </div>
