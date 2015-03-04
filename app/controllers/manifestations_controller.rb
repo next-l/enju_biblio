@@ -242,10 +242,10 @@ class ManifestationsController < ApplicationController
         else
           pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
         end
-        if pub_dates[:to] == '*'
-          pub_date_range[:to] = 10000
+        if pub_dates[:until] == '*'
+          pub_date_range[:until] = 10000
         else
-          pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
+          pub_date_range[:until] = Time.zone.parse(pub_dates[:until]).year
         end
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
@@ -258,7 +258,7 @@ class ManifestationsController < ApplicationController
           facet :carrier_type
           facet :library
           facet :language
-          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:to], range_interval: pub_year_range_interval
+          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:until], range_interval: pub_year_range_interval
           facet :subject_ids if defined?(EnjuSubject)
           paginate page: page.to_i, per_page: per_page
         end
@@ -812,36 +812,36 @@ class ManifestationsController < ApplicationController
       end
     end
 
-    if options[:pub_date_to].blank?
-      pub_date[:to] = "*"
+    if options[:pub_date_until].blank?
+      pub_date[:until] = "*"
     else
-      year = options[:pub_date_to].rjust(4, "0")
+      year = options[:pub_date_until].rjust(4, "0")
       if year.length == 4
-        pub_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+        pub_date[:until] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
       else
-        pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+        pub_date[:until] = Time.zone.parse(options[:pub_date_until]).end_of_day.utc.iso8601 rescue nil
       end
-      unless pub_date[:to]
-        pub_date[:to] = Time.zone.parse(Time.utc(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
+      unless pub_date[:until]
+        pub_date[:until] = Time.zone.parse(Time.utc(options[:pub_date_until]).to_s).end_of_year.utc.iso8601
       end
     end
     pub_date
   end
 
   def set_pub_date(query, options)
-    unless options[:pub_date_from].blank? && options[:pub_date_to].blank?
+    unless options[:pub_date_from].blank? && options[:pub_date_until].blank?
       options[:pub_date_from].to_s.gsub!(/\D/, '')
-      options[:pub_date_to].to_s.gsub!(/\D/, '')
+      options[:pub_date_until].to_s.gsub!(/\D/, '')
       pub_date = parse_pub_date(options)
-      query = "#{query} date_of_publication_d:[#{pub_date[:from]} TO #{pub_date[:to]}]"
+      query = "#{query} date_of_publication_d:[#{pub_date[:from]} TO #{pub_date[:until]}]"
     end
     query
   end
 
   def set_acquisition_date(query, options)
-    unless options[:acquired_from].blank? && options[:acquired_to].blank?
+    unless options[:acquired_from].blank? && options[:acquired_until].blank?
       options[:acquired_from].to_s.gsub!(/\D/, '')
-      options[:acquired_to].to_s.gsub!(/\D/, '')
+      options[:acquired_until].to_s.gsub!(/\D/, '')
 
       acquisition_date = {}
       if options[:acquired_from].blank?
@@ -858,21 +858,21 @@ class ManifestationsController < ApplicationController
         end
       end
 
-      if options[:acquired_to].blank?
-        acquisition_date[:to] = "*"
+      if options[:acquired_until].blank?
+        acquisition_date[:until] = "*"
       else
-        year = options[:acquired_to].rjust(4, "0")
+        year = options[:acquired_until].rjust(4, "0")
         if year.length == 4
-          acquisition_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+          acquisition_date[:until] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
         else
-          acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
+          acquisition_date[:until] = Time.zone.parse(options[:acquired_until]).end_of_day.utc.iso8601 rescue nil
         end
-        unless acquisition_date[:to]
-          acquisition_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
+        unless acquisition_date[:until]
+          acquisition_date[:until] = Time.zone.parse(Time.utc(options[:acquired_until]).to_s).end_of_year.utc.iso8601
         end
       end
 
-      query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
+      query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:until]}]"
     end
     query
   end
