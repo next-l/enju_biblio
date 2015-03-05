@@ -6,6 +6,7 @@ class Manifestation < ActiveRecord::Base
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_loc_search if defined?(EnjuLoc)
   enju_nii_cinii_books if defined?(EnjuNii)
+  enju_export if defined?(EnjuExport)
   enju_oai if defined?(EnjuOai)
   enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
@@ -207,6 +208,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   attachment :attachment
+  #do_not_validate_attachment_file_type :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
@@ -222,8 +224,9 @@ class Manifestation < ActiveRecord::Base
   validates :volume_number, numericality: {greater_than: 0}, allow_blank: true
   validates :serial_number, numericality: {greater_than: 0}, allow_blank: true
   validates :edition, numericality: {greater_than: 0}, allow_blank: true
-  after_create :clear_cached_numdocs
+  before_create :set_fingerprint, if: Proc.new{|model| model.attachment}
   before_save :set_date_of_publication, :set_number
+  after_create :clear_cached_numdocs
   after_save :index_series_statement
   after_destroy :index_series_statement
   after_touch do |manifestation|
@@ -354,9 +357,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def extract_text
-    return nil unless attachment.path
+    return nil unless attachment
     # TODO: S3 support
-    response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=json" --data-binary @#{attachment.path} -H "Content-type:text/html"`
+    response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=json" --data-binary @#{attachment.download.path} -H "Content-type:text/html"`
     self.fulltext = JSON.parse(response)["responseHeader"][""]
     save(validate: false)
   end
@@ -551,6 +554,10 @@ class Manifestation < ActiveRecord::Base
       items
     end
   end
+
+  def set_fingerprint
+    self.attachment_fingerprint = Digest::SHA1.file(attachment.download.path).hexdigest
+  end
 end
 
 # == Schema Information
@@ -591,7 +598,7 @@ end
 #  subscription_master             :boolean          default("f"), not null
 #  attachment_file_name            :string
 #  attachment_content_type         :string
-#  attachment_file_size            :integer
+#  attachment_size                 :integer
 #  attachment_updated_at           :datetime
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
@@ -617,4 +624,6 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
+#  attachment_id                   :string
+#  attachment_fingerprint          :string
 #

@@ -5,31 +5,14 @@ class ResourceImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :resource_import, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :resource_import,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  validates_attachment_content_type :resource_import, content_type: [
-    'text/csv',
-    'text/plain',
-    'text/tab-separated-values',
-    'application/octet-stream',
-    'application/vnd.ms-excel'
-  ]
-  validates_attachment_presence :resource_import
+  attachment :resource_import
+  validates :resource_import, presence: true, on: :create
   belongs_to :user, validate: true
   belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
   has_many :resource_import_file_transitions
 
+  before_create :set_fingerprint
   enju_import_file_model
   attr_accessor :mode, :library_id
 
@@ -64,7 +47,7 @@ class ResourceImportFile < ActiveRecord::Base
       item_found: 0,
       failed: 0
     }
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file(create_import_temp_file(resource_import.download))
     rows.shift
     #if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
     #  f.to_s.strip == ''
@@ -277,7 +260,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def modify
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file(create_import_temp_file(resource_import.download))
     rows.shift
     row_num = 1
 
@@ -349,7 +332,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def remove
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file(create_import_temp_file(resource_import.download))
     rows.shift
     row_num = 1
 
@@ -371,7 +354,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def update_relationship
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file(create_import_temp_file(resource_import.download))
     rows.shift
     row_num = 1
 
@@ -744,6 +727,10 @@ class ResourceImportFile < ActiveRecord::Base
     end
     identifier
   end
+
+  def set_fingerprint
+    self.resource_import_fingerprint = Digest::SHA1.file(resource_import.download.path).hexdigest
+  end
 end
 
 # == Schema Information
@@ -759,7 +746,7 @@ end
 #  executed_at                  :datetime
 #  resource_import_file_name    :string
 #  resource_import_content_type :string
-#  resource_import_file_size    :integer
+#  resource_import_size         :integer
 #  resource_import_updated_at   :datetime
 #  created_at                   :datetime
 #  updated_at                   :datetime
@@ -768,4 +755,5 @@ end
 #  error_message                :text
 #  user_encoding                :string
 #  default_shelf_id             :integer
+#  resource_import_id           :string
 #

@@ -245,7 +245,7 @@ end
 #  executed_at                  :datetime
 #  resource_import_file_name    :string
 #  resource_import_content_type :string
-#  resource_import_file_size    :integer
+#  resource_import_size         :integer
 #  resource_import_updated_at   :datetime
 #  created_at                   :datetime
 #  updated_at                   :datetime
@@ -254,4 +254,5 @@ end
 #  error_message                :text
 #  user_encoding                :string
 #  default_shelf_id             :integer
+#  resource_import_id           :string
 #

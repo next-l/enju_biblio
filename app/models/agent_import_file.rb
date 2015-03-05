@@ -5,31 +5,14 @@ class AgentImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :agent_import, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :agent_import,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  validates_attachment_content_type :agent_import, content_type: [
-    'text/csv',
-    'text/plain',
-    'text/tab-separated-values',
-    'application/octet-stream',
-    'application/vnd.ms-excel'
-  ]
-  validates_attachment_presence :agent_import
+  attachment :agent_import
+  validates :agent_import, presence: true, on: :create
   belongs_to :user, validate: true
   has_many :agent_import_results
 
   has_many :agent_import_file_transitions
 
+  before_create :set_fingerprint
   enju_import_file_model
   attr_accessor :mode
 
@@ -167,12 +150,7 @@ class AgentImportFile < ActiveRecord::Base
 
   def open_import_file
     tempfile = Tempfile.new(self.class.name.underscore)
-    if ENV['ENJU_STORAGE'] == 's3'
-      uploaded_file_path = agent_import.expiring_url(10)
-    else
-      uploaded_file_path = agent_import.path
-    end
-    open(uploaded_file_path){|f|
+    open(agent_import.download.path){|f|
       f.each{|line|
         tempfile.puts(convert_encoding(line))
       }
@@ -224,6 +202,10 @@ class AgentImportFile < ActiveRecord::Base
     agent.country = country if country
     agent
   end
+
+  def set_fingerprint
+    self.agent_import_fingerprint = Digest::SHA1.file(agent_import.download.path).hexdigest
+  end
 end
 
 # == Schema Information
@@ -239,7 +221,7 @@ end
 #  executed_at               :datetime
 #  agent_import_file_name    :string
 #  agent_import_content_type :string
-#  agent_import_file_size    :integer
+#  agent_import_size         :integer
 #  agent_import_updated_at   :datetime
 #  created_at                :datetime
 #  updated_at                :datetime
@@ -247,4 +229,5 @@ end
 #  error_message             :text
 #  edit_mode                 :string
 #  user_encoding             :string
+#  agent_import_id           :string
 #

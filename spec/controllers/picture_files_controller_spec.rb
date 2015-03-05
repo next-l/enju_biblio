@@ -321,7 +321,9 @@ describe PictureFilesController do
         end
 
         it "assigns the requested picture_file as @picture_file" do
-          put :update, :id => @picture_file.id, :picture_file => @attrs
+          put :update, :id => @picture_file.id, :picture_file => {
+            :picture_attachable_type => 'Shelf', :picture_attachable_id => 1, :picture => fixture_file_upload("/../../examples/spinner.gif", 'image/gif')
+          }
           expect(assigns(:picture_file)).to eq(@picture_file)
           expect(response).to redirect_to(@picture_file)
         end

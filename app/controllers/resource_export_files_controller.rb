@@ -16,21 +16,13 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files/1
   # GET /resource_export_files/1.json
   def show
-    if @resource_export_file.resource_export.path
-      unless ENV['ENJU_STORAGE'] == 's3'
-        file = @resource_export_file.resource_export.path
-      end
-    end
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @resource_export_file }
       format.download {
-        if ENV['ENJU_STORAGE'] == 's3'
-          redirect_to @resource_export_file.resource_export.expiring_url(10)
-        else
-          send_file file, filename: @resource_export_file.resource_export_file_name, type: 'application/octet-stream'
-        end
+        send_file @resource_export_file.resource_export.download,
+          filename: @resource_export_file.resource_export_file_name,
+          type: 'application/octet-stream'
       }
     end
   end

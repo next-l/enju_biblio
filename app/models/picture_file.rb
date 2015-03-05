@@ -11,9 +11,14 @@ class PictureFile < ActiveRecord::Base
   default_scope { order('picture_files.position') }
   # http://railsforum.com/viewtopic.php?id=11615
   acts_as_list scope: 'picture_attachable_type=\'#{picture_attachable_type}\''
+  before_create :set_fingerprint
   strip_attributes only: :picture_attachable_type
 
   paginates_per 10
+
+  def set_fingerprint
+    self.picture_fingerprint = Digest::SHA1.file(picture.download.path).hexdigest
+  end
 end
 
 # == Schema Information

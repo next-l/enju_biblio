@@ -3,19 +3,8 @@ class ResourceExportFile < ActiveRecord::Base
   include ExportFile
   enju_export_file_model
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :resource_export, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :resource_export,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  validates_attachment_content_type :resource_export, content_type: /\Atext\/plain\Z/
+  #validates_attachment_content_type :resource_export, content_type: /\Atext\/plain\Z/
+  attachment :resource_export
 
   has_many :resource_export_file_transitions
 
@@ -58,11 +47,11 @@ end
 #
 #  id                           :integer          not null, primary key
 #  user_id                      :integer
-#  resource_export_file_name    :string
-#  resource_export_content_type :string
-#  resource_export_file_size    :integer
-#  resource_export_updated_at   :datetime
 #  executed_at                  :datetime
 #  created_at                   :datetime
 #  updated_at                   :datetime
+#  resource_export_id           :string
+#  resource_export_file_name    :string
+#  resource_export_size         :integer
+#  resource_export_content_type :integer
 #

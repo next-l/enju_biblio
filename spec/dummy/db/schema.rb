@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150304183215) do
+ActiveRecord::Schema.define(version: 20150305105231) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer  "basket_id"
@@ -45,7 +45,7 @@ ActiveRecord::Schema.define(version: 20150304183215) do
     t.datetime "executed_at"
     t.string   "agent_import_file_name"
     t.string   "agent_import_content_type"
-    t.integer  "agent_import_file_size"
+    t.integer  "agent_import_size"
     t.datetime "agent_import_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -53,8 +53,10 @@ ActiveRecord::Schema.define(version: 20150304183215) do
     t.text     "error_message"
     t.string   "edit_mode"
     t.string   "user_encoding"
+    t.string   "agent_import_id"
   end
 
+  add_index "agent_import_files", ["agent_import_id"], name: "index_agent_import_files_on_agent_import_id"
   add_index "agent_import_files", ["parent_id"], name: "index_agent_import_files_on_parent_id"
   add_index "agent_import_files", ["user_id"], name: "index_agent_import_files_on_user_id"
 
@@ -883,7 +885,7 @@ ActiveRecord::Schema.define(version: 20150304183215) do
     t.boolean  "subscription_master",             default: false, null: false
     t.string   "attachment_file_name"
     t.string   "attachment_content_type"
-    t.integer  "attachment_file_size"
+    t.integer  "attachment_size"
     t.datetime "attachment_updated_at"
     t.integer  "nii_type_id"
     t.text     "title_alternative_transcription"
@@ -909,9 +911,12 @@ ActiveRecord::Schema.define(version: 20150304183215) do
     t.text     "publication_place"
     t.text     "extent"
     t.text     "dimensions"
+    t.string   "attachment_id"
+    t.string   "attachment_fingerprint"
   end
 
   add_index "manifestations", ["access_address"], name: "index_manifestations_on_access_address"
+  add_index "manifestations", ["attachment_id"], name: "index_manifestations_on_attachment_id"
   add_index "manifestations", ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
   add_index "manifestations", ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier"
   add_index "manifestations", ["nii_type_id"], name: "index_manifestations_on_nii_type_id"
@@ -1202,14 +1207,16 @@ ActiveRecord::Schema.define(version: 20150304183215) do
 
   create_table "resource_export_files", force: :cascade do |t|
     t.integer  "user_id"
-    t.string   "resource_export_file_name"
-    t.string   "resource_export_content_type"
-    t.integer  "resource_export_file_size"
-    t.datetime "resource_export_updated_at"
     t.datetime "executed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "resource_export_id"
+    t.string   "resource_export_file_name"
+    t.integer  "resource_export_size"
+    t.integer  "resource_export_content_type"
   end
+
+  add_index "resource_export_files", ["resource_export_id"], name: "index_resource_export_files_on_resource_export_id"
 
   create_table "resource_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
@@ -1232,7 +1239,7 @@ ActiveRecord::Schema.define(version: 20150304183215) do
     t.datetime "executed_at"
     t.string   "resource_import_file_name"
     t.string   "resource_import_content_type"
-    t.integer  "resource_import_file_size"
+    t.integer  "resource_import_size"
     t.datetime "resource_import_updated_at"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -1241,9 +1248,11 @@ ActiveRecord::Schema.define(version: 20150304183215) do
     t.text     "error_message"
     t.string   "user_encoding"
     t.integer  "default_shelf_id"
+    t.string   "resource_import_id"
   end
 
   add_index "resource_import_files", ["parent_id"], name: "index_resource_import_files_on_parent_id"
+  add_index "resource_import_files", ["resource_import_id"], name: "index_resource_import_files_on_resource_import_id"
   add_index "resource_import_files", ["user_id"], name: "index_resource_import_files_on_user_id"
 
   create_table "resource_import_results", force: :cascade do |t|
