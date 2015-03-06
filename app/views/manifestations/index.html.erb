@@ -1,8 +1,12 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.search_resource', model: t('page.resource')) -%></h1>
-<div id="content_list">
-  <p id="notice"><%= notice %></p>
-  <%= render 'manifestations/title', manifestation: @manifestation if @manifestation -%>
+<div class="row">
+<div class="col-md-9" itemscope="itemscope" itemtype="http://schema.org/Book">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= t('page.search_resource', model: t('page.resource')) -%>
+    </div>
+    <div class="panel-body">
+      <p id="notice"><%= notice %></p>
+      <%= render 'manifestations/title', manifestation: @manifestation if @manifestation -%>
 
   <% case %>
   <% when @index_agent[:creator] %>
@@ -55,7 +59,7 @@
     </p>
 
     <div class="autopagerize_page_element" id="list">
-      <table class="table table-striped index" id="manifestation_list">
+      <table class="table table-striped" id="manifestation_list">
         <%= render @manifestations %>
       </table>
 
@@ -79,22 +83,28 @@
 
   </div>
 </div>
+</div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
-  <% if @parent and policy(@parent).update? %>
-    <%= render 'submenu_parent' %>
-  <% end %>
-  <h3><%= link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(params.merge(action: 'index', view: nil, carrier_type: nil, library: nil, language: nil, subject: nil, only_path: true))  -%></h3>
-    <%- if @manifestations.total_count > 0 -%>
-      <%= render 'manifestations/all_facet' -%>
-    <%- end -%>
-  <div>
-    <%- if params[:library_id].blank? -%>
-      <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, library_id: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true)) -%>
-    <%- else -%>
-      <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true)) -%>
-    <%- end -%>
+<div id="submenu" class="col-md-3">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <% if @parent and policy(@parent).update? %>
+        <%= render 'submenu_parent' %>
+      <% end %>
+      <h3><%= link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(params.merge(action: 'index', view: nil, carrier_type: nil, library: nil, language: nil, subject: nil, only_path: true))  -%></h3>
+      <%- if @manifestations.total_count > 0 -%>
+        <%= render 'manifestations/all_facet' -%>
+      <%- end -%>
+      <div>
+      <%- if params[:library_id].blank? -%>
+        <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, library_id: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true)) -%>
+      <%- else -%>
+        <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true)) -%>
+      <%- end -%>
+      </div>
+    </div>
   </div>
+</div>
 </div>
 
 <% if defined?(EnjuBookmark) %>

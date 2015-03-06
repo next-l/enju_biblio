@@ -1,6 +1,10 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content" itemscope="itemscope" itemtype="http://schema.org/Book">
-  <h1 class="title"><%= t('page.showing', model: t('activerecord.models.manifestation')) -%></h1>
-  <div id="content_list">
+<div class="row">
+<div class="col-md-9" itemscope="itemscope" itemtype="http://schema.org/Book">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <%= t('page.showing', model: t('activerecord.models.manifestation')) -%>
+    </div>
+    <div class="panel-body">
     <p id="notice"><%= notice %></p>
     <%= render 'paginate_id_link', manifestation: @manifestation, manifestation_ids: @manifestation_ids %>
 
@@ -13,11 +17,14 @@
     <% else %>
       <%= render 'manifestations/show_detail_user', manifestation: @manifestation %>
     <% end %>
+    </div>
   </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
-  <%= render 'manifestations/book_jacket', manifestation: @manifestation -%>
+<div id="submenu" class="col-md-3">
+  <div class="panel panel-default">
+    <div class="panel-body">
+    <%= render 'manifestations/book_jacket', manifestation: @manifestation -%>
   <ul>
     <%- if @manifestation.picture_files.exists? -%>
       <li><%= t('page.total') %>: <%= @manifestation.picture_files.count %> <%= t('page.number_of_pictures', count: @manifestation.picture_files.count) %></li>
@@ -42,7 +49,7 @@
     </div>
   <%- end -%>
 
-  <div id="resource_bookmark_buttons">
+     <div id="resource_bookmark_buttons">
       <ul>
         <%- if user_signed_in? -%>
           <%- if current_user.email.present? -%>
@@ -78,5 +85,8 @@
       <%- if current_user.try(:has_role?, 'Librarian') -%>
         <%= render 'manifestations/edit_detail' %>
       <% end %>
+      </div>
+    </div>
   </div>
+</div>
 </div>
