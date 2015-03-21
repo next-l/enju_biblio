@@ -26,7 +26,7 @@ Gem::Specification.new do |s|
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "lisbn"
-  s.add_dependency "statesman", "~> 1.1"
+  s.add_dependency "statesman", "~> 1.2"
   s.add_dependency "faraday"
   # s.add_dependency "jquery-rails"
 

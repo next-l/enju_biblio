@@ -1,0 +1,27 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.showing', model: t('activerecord.models.frequency'))
+  #content_list
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.frequency.name')
+        | :
+      = @frequency.name
+    p
+      strong
+        = t('activerecord.attributes.frequency.display_name')
+        | :
+      = @frequency.display_name.localize
+    p
+      strong
+        = t('activerecord.attributes.frequency.note')
+        | :
+      = @frequency.note
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.edit'), edit_frequency_path(@frequency)
+    li
+      = back_to_index(flash[:page_info])

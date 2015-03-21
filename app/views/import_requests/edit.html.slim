@@ -1,0 +1,18 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.editing', model: t('activerecord.models.import_request'))
+  #content_list
+    = form_for(@import_request) do |f|
+      = f.error_messages
+      .field
+        = f.label :isbn
+        br
+        = f.text_field :isbn, class: 'resource_isbn_issn'
+      .actions
+        = f.submit
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.show'), @import_request
+    li
+      = link_to t('page.back'), import_requests_path

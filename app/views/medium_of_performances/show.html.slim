@@ -1,0 +1,27 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.showing', model: t('activerecord.models.medium_of_performance'))
+  #content_list
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.medium_of_performance.name')
+        | :
+      = @medium_of_performance.name
+    p
+      strong
+        = t('activerecord.attributes.medium_of_performance.display_name')
+        | :
+      = @medium_of_performance.display_name.localize
+    p
+      strong
+        = t('activerecord.attributes.medium_of_performance.note')
+        | :
+      = @medium_of_performance.note
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.edit'), edit_medium_of_performance_path(@medium_of_performance)
+    li
+      = back_to_index(flash[:page_info])

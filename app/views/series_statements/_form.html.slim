@@ -1,0 +1,28 @@
+= form_for(@series_statement) do |f|
+  = f.error_messages
+  - if !@series_statement.new_record? and @manifestation
+    .field
+      = link_to @manifestation.original_title, @manifestation
+      = f.hidden_field :manifestation_id
+    .field
+      = f.label :original_title
+      br
+      = f.text_field :original_title
+    .field
+      = f.label :title_transcription
+      br
+      = f.text_field :title_transcription
+    .field
+      = f.label :title_subseries
+      br
+      = f.text_field :title_subseries
+    .field
+      = f.label :title_subseries_transcription
+      br
+      = f.text_field :title_subseries_transcription
+    .field
+      = f.label :note
+      br
+      = f.text_area :note, class: 'resource_textarea'
+    .actions
+      = f.submit

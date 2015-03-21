@@ -1,0 +1,27 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.showing', model: t('activerecord.models.create_type'))
+  #content_list
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.create_type.name')
+        | :
+      = @create_type.name
+    p
+      strong
+        = t('activerecord.attributes.create_type.display_name')
+        | :
+      = @create_type.display_name.localize
+    p
+      strong
+        = t('activerecord.attributes.create_type.note')
+        | :
+      = @create_type.note
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.edit'), edit_create_type_path(@create_type)
+    li
+      = back_to_index(flash[:page_info])

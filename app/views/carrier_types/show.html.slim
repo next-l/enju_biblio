@@ -1,0 +1,36 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.showing', model: t('activerecord.models.carrier_type'))
+  #content_list
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.carrier_type.name')
+        | :
+      = @carrier_type.name
+    p
+      strong
+        = t('activerecord.attributes.carrier_type.display_name')
+        | :
+      = @carrier_type.display_name.localize
+    - if defined?(EnjuCirculation)
+      p
+        strong
+          = t('activerecord.models.checkout_type')
+          | :
+      ul
+        - @carrier_type.checkout_types.each do |checkout_type|
+          li
+            = link_to checkout_type.display_name.localize, checkout_type
+    p
+      strong
+        = t('activerecord.attributes.carrier_type.note')
+        | :
+      = @carrier_type.note
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.edit'), edit_carrier_type_path(@carrier_type)
+    li
+      = back_to_index(flash[:page_info])

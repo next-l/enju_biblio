@@ -1,0 +1,11 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.editing', model: t('activerecord.models.medium_of_performance'))
+  #content_list
+    = render 'form'
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.show'), @medium_of_performance
+    li
+      = link_to t('page.back'), medium_of_performances_path

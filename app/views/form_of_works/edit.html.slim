@@ -1,0 +1,11 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.editing', model: t('activerecord.models.form_of_work'))
+  #content_list
+    = render 'form'
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.show'), @form_of_work
+    li
+      = link_to t('page.back'), form_of_works_path

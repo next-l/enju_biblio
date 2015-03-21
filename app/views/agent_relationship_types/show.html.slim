@@ -1,0 +1,27 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.showing', model: t('activerecord.models.agent_relationship_type'))
+  #content_list
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.agent_relationship_type.name')
+        | :
+      = @agent_relationship_type.name
+    p
+      strong
+        = t('activerecord.attributes.agent_relationship_type.display_name')
+        | :
+      = @agent_relationship_type.display_name.localize
+    p
+      strong
+        = t('activerecord.attributes.agent_relationship_type.note')
+        | :
+      = @agent_relationship_type.note
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.edit'), edit_agent_relationship_type_path(@agent_relationship_type)
+    li
+      = back_to_index(flash[:page_info])

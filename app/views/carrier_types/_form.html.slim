@@ -1,0 +1,18 @@
+= simple_nested_form_for(@carrier_type) do |f|
+  = f.error_messages
+  .field
+    = f.label :name
+    br
+    = f.text_field :name
+  .field
+    = f.label :display_name
+    br
+    = f.text_area :display_name
+  - if defined?(EnjuCirculation) and !@carrier_type.new_record?
+    = render 'carrier_types/checkout_form', f: f
+  .field
+    = f.label :note
+    br
+    = f.text_area :note
+  .actions
+    = f.submit
