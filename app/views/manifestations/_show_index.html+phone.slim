@@ -2,7 +2,7 @@ strong
   = link_to manifestation.original_title, manifestation
 - if manifestation.serial?
   = manifestation.volume_number_string
-  - - unless manifestation.issue_number_string.blank?
+  - unless manifestation.issue_number_string.blank?
   |  (
   = manifestation.issue_number_string
   | ) 

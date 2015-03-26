@@ -36,7 +36,7 @@ div[data-role="content"]
             | :
           = @item.circulation_status.display_name.localize
           - if current_user.try(:has_role?, 'Librarian')
-            - - unless @item.checkouts.not_returned.blank?
+            - unless @item.checkouts.not_returned.blank?
             |  (
             = link_to t('item.current_checkout'), checkout_path(@item.checkouts.not_returned.first)
             | ) 

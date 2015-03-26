@@ -47,7 +47,7 @@ div[style="color: red"]
             | :
           = link_to @item.circulation_status.display_name.localize, @item.circulation_status
           - if current_user.try(:has_role?, 'Librarian')
-            - - unless @item.checkouts.not_returned.blank?
+            - unless @item.checkouts.not_returned.blank?
             |  (
             = link_to t('item.current_checkout'), @item.checkouts.not_returned.first
             | ) 

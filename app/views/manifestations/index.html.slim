@@ -59,8 +59,7 @@
               h3.resource_title
                 = t('activerecord.models.tag')
               #tag_cloud_list
-              = image_tag 'spinner.gif', id: 'spinner_tag_cloud',
-              -           style: 'padding-bottom: 15px; padding-left: 40px;'
+              = image_tag 'spinner.gif', id: 'spinner_tag_cloud', style: 'padding-bottom: 15px; padding-left: 40px;'
         - else
           = render 'manifestations/not_found'
           .autopagerize_insert_before

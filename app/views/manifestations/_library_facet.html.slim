@@ -1,9 +1,9 @@
 h4
   = t('activerecord.models.library')
 ul
-  - - libraries = params[:library].to_s.split
+  - libraries = params[:library].to_s.split
   - @library_facet.each do |facet|
-    - - current_libraries = libraries.dup
+    - current_libraries = libraries.dup
     = library_facet(current_libraries, facet)
     - if params[:library]
       li

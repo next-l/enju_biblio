@@ -6,15 +6,15 @@
   p
     = manifestation.statement_of_responsibility
     br
-    - - unless manifestation.creators.readable_by(current_user).empty?
+    - unless manifestation.creators.readable_by(current_user).empty?
     = t('agent.creator')
     | : 
     = agents_list(manifestation.creators.readable_by(current_user), itemprop: 'author')
-    - - unless manifestation.contributors.readable_by(current_user).empty?
+    - unless manifestation.contributors.readable_by(current_user).empty?
     = t('agent.contributor')
     | : 
     = agents_list(manifestation.contributors.readable_by(current_user), itemprop: 'editor')
-    - - unless manifestation.publishers.readable_by(current_user).empty?
+    - unless manifestation.publishers.readable_by(current_user).empty?
     = t('agent.publisher')
     | : 
     = agents_list(manifestation.publishers.readable_by(current_user), itemprop: 'publisher')

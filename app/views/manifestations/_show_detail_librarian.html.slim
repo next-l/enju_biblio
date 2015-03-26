@@ -18,7 +18,7 @@
               | :
             td[style="width: 500px"]
               = render 'show_series_detail', manifestation: manifestation
-              - - unless manifestation.identifier_contents(:issn).empty?
+              - unless manifestation.identifier_contents(:issn).empty?
               |  (
               = t('activerecord.attributes.manifestation.issn')
               | : 
@@ -80,7 +80,7 @@
               | :
             td
               = render 'manifestations/tag_list', manifestation: manifestation
-        - - unless manifestation.serial?
+        - unless manifestation.serial?
         tr
           td
             = t('page.identifier')
@@ -92,7 +92,7 @@
                   = identifier.identifier_type.display_name.localize
                   | : 
                   = identifier_link(identifier)
-        - - unless manifestation.attachment_file_name.blank?
+        - unless manifestation.attachment_file_name.blank?
         = render 'manifestations/attachment_file', manifestation: manifestation
         tr
           td
