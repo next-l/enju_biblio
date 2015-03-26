@@ -1,0 +1,21 @@
+table.call_number_table
+  tr
+    td.call_number_table
+      = item.shelf.library.display_name.localize
+      br
+      = link_to item.shelf.display_name.localize, item.shelf
+      br
+      - if defined?(EnjuCirculation)
+        = item.circulation_status.display_name.localize if item.circulation_status
+    td.call_number_table
+      table#call_number_label
+        - - i = 0; while i < item.shelf.library.call_number_rows.to_i
+        tr
+          - if call_numbers[i].blank?
+            td.call_number_label
+              |  
+          - else
+            td.call_number_label
+              = call_numbers[i]
+            - - end
+        - - i += 1; end

@@ -1,0 +1,9 @@
+= form_for(@agent_merge_list) do |f|
+  = f.error_messages
+  .field
+    = f.label :title
+    br
+    = f.text_field :title
+  .actions
+    = f.submit
+  - - end

@@ -1,0 +1,15 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.editing', model: t('activerecord.models.agent'))
+  #content_list
+    = render 'form'
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.show'), @agent
+    - if policy(@agent).destroy?
+      li
+        = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
+      - - end
+      li
+        = link_to t('page.back'), agents_path

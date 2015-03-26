@@ -1,0 +1,7 @@
+= simple_form_for(@series_statement_merge) do |f|
+  = f.error_messages
+  .inputs
+    = f.input :series_statement_id
+    = f.input :series_statement_list_id
+  .actions
+    = f.button :submit

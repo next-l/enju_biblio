@@ -1,0 +1,13 @@
+= form_for(@own) do |f|
+  = f.error_messages
+  .field
+    = f.label t('activerecord.models.library')
+    br
+    = f.text_field :agent_id
+  .field
+    = f.label t('activerecord.models.item')
+    br
+    = f.text_field :item_id
+  .actions
+    = f.submit
+  - - end

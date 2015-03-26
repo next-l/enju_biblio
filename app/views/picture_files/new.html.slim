@@ -1,0 +1,23 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.new', model: t('activerecord.models.picture_file'))
+  #content_list
+    = form_for(@picture_file, url: picture_files_path, html: { multipart: true, method: :post }) do |f|
+      - if @picture_file.errors.any?
+        #error_explanation
+          ul
+            li
+              = t('picture_file.invalid_file')
+      = f.hidden_field :picture_attachable_id
+      = f.hidden_field :picture_attachable_type
+      .field
+        = f.label t('page.file')
+        br
+        = f.file_field :picture
+      .actions
+        = f.submit
+      - - end
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    li
+      = link_to t('page.back'), :back

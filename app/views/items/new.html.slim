@@ -1,0 +1,18 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.new', model: t('activerecord.models.item'))
+  #content_list
+    = render 'manifestations/title', manifestation: @manifestation if @manifestation
+    = render 'form'
+#submenu.ui-corner-all.ui-widget-content
+  - if @manifestation
+    = render 'manifestations/book_jacket', manifestation: @manifestation
+    - - end
+    ul
+      - if @manifestation
+        li
+          = link_to t('page.back'), items_path(manifestation_id: @manifestation.id)
+      - else
+        li
+          = link_to t('page.back'), items_path
+        - - end

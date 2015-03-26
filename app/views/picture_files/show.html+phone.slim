@@ -1,0 +1,48 @@
+div[data-role="header"]
+  a.ui-btn-left[href="javascript:history.back()" data-icon="back" data-iconpos="notext"]
+    = t('page.back')
+  h1.title
+    = t('page.showing', model: t('activerecord.models.shelf'))
+div[data-role="content"]
+  p
+    strong
+      = t('page.attachable')
+      | :
+    = link_to h("#{(@picture_file.picture_attachable_type)}/#{(@picture_file.picture_attachable_id)}"), @picture_file.picture_attachable if @picture_file.picture_attachable_type?
+  p
+    strong
+      = t('activerecord.attributes.picture_file.picture_file_size')
+      | :
+    = @picture_file.picture_file_size
+  p
+    strong
+      = t('activerecord.attributes.picture_file.picture_content_type')
+      | :
+    = @picture_file.picture_content_type
+  p
+    strong
+      = t('activerecord.attributes.picture_file.picture_file_name')
+      | :
+    = link_to @picture_file.picture_file_name, picture_file_path(@picture_file, format: :download, size: 'original')
+    br
+    = render 'picture_files/link', picture_file: @picture_file
+  p
+    strong
+      = t('activerecord.attributes.picture_file.width')
+      | :
+    = @picture_file.picture.width
+  p
+    strong
+      = t('activerecord.attributes.picture_file.height')
+      | :
+    = @picture_file.picture.height
+  p
+    strong
+      = t('activerecord.attributes.picture_file.picture_fingerprint')
+      | :
+    = @picture_file.picture_fingerprint
+  p
+    strong
+      = t('activerecord.attributes.picture_file.picture_updated_at')
+      | :
+    = l(@picture_file.picture_updated_at) if @picture_file.picture_updated_at

@@ -1,0 +1,16 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.editing', model: t('activerecord.models.item'))
+  #content_list
+    = render 'manifestations/title', manifestation: @item.manifestation
+    = render 'form'
+#submenu.ui-corner-all.ui-widget-content
+  = render 'manifestations/book_jacket', manifestation: @item.manifestation
+  ul
+    li
+      = link_to t('page.show'), @item
+    - if policy(@item).destroy?
+      li
+        = link_to t('page.destroy'), @item, data: {confirm: t('page.are_you_sure')}, method: :delete
+    li
+      = link_to t('page.back'), items_path(@item.manifestation.id)

@@ -1,0 +1,129 @@
+#tabs
+  = render 'manifestations/tab_menu', manifestation: manifestation
+  #detail
+    - cache([manifestation, fragment: 'show_detail_librarian_html', role: current_user_role_name, locale: @locale]) do
+      table#resource_detail.table.table-striped
+        = embed_content(manifestation)
+        - if manifestation.title_alternative?
+          tr
+            td[style="width: 200px"]
+              = t('activerecord.attributes.manifestation.title_alternative')
+              | :
+            td[style="width: 500px"]
+              = manifestation.title_alternative
+        - if manifestation.series_statements.exists?
+          tr
+            td[style="width: 200px"]
+              = t('activerecord.models.series_statement')
+              | :
+            td[style="width: 500px"]
+              = render 'show_series_detail', manifestation: manifestation
+              - - unless manifestation.identifier_contents(:issn).empty?
+              |  (
+              = t('activerecord.attributes.manifestation.issn')
+              | : 
+              = manifestation.identifier_contents(:issn).join(" ")
+              | ) 
+              - - end
+        = render 'edition_and_number', manifestation: manifestation
+        tr
+          td[style="width: 200px"]
+            = t('page.form')
+            | :
+          td[style="width: 500px"]
+            = form_icon(manifestation.carrier_type)
+            = manifestation.carrier_type.display_name.localize
+            |  / 
+            = content_type_icon(manifestation.manifestation_content_type)
+            = manifestation.manifestation_content_type.display_name.localize if manifestation.manifestation_content_type
+        tr
+          td
+            = t('activerecord.models.language')
+            | :
+          td
+            span[itemprop="inLanguage"]
+              = manifestation.language.display_name.localize
+        tr
+          td
+            = t('activerecord.attributes.manifestation.publication_place')
+            | :
+          td
+            = manifestation.publication_place
+        tr
+          td
+            = t('manifestation.physical_description')
+            | :
+          td
+            - if manifestation.number_of_pages
+              span[itemprop="numPages"]
+                = manifestation.number_of_pages
+              |  p. (
+              = manifestation.start_page
+              |  - 
+              = manifestation.end_page
+              | ) 
+              - - end
+              - if manifestation.height
+                = manifestation.height
+                |  cm. 
+                - - end
+        tr
+          td
+            = t('activerecord.attributes.manifestation.price')
+            | :
+          td
+            = manifestation.price
+        - if defined?(EnjuSubject)
+          = render 'manifestations/subject_detail', manifestation: manifestation
+          = render 'manifestations/classification_detail', manifestation: manifestation
+        - if defined?(EnjuBookmark)
+          tr
+            td
+              = t('activerecord.models.tag')
+              | :
+            td
+              = render 'manifestations/tag_list', manifestation: manifestation
+        - - unless manifestation.serial?
+        tr
+          td
+            = t('page.identifier')
+            | :
+          td
+            ul
+              - manifestation.identifiers.each do |identifier|
+                li
+                  = identifier.identifier_type.display_name.localize
+                  | : 
+                  = identifier_link(identifier)
+        - - end
+        - - unless manifestation.attachment_file_name.blank?
+        = render 'manifestations/attachment_file', manifestation: manifestation
+        - - end
+        tr
+          td
+            = t('page.created_at')
+            | :
+          td
+            =l manifestation.created_at if manifestation.created_at
+        tr
+          td
+            = t('page.updated_at')
+            | :
+          td
+            =l manifestation.updated_at if manifestation.updated_at
+        tr
+          td
+            = t('activerecord.attributes.manifestation.description')
+            | :
+          td
+            = raw simple_format(h(manifestation.description))
+        tr
+          td
+            = t('activerecord.attributes.manifestation.note')
+            | :
+          td
+            = raw simple_format(h(manifestation.note))
+    - if manifestation.items.on_shelf.exists?
+      = render 'manifestations/show_holding', manifestation: manifestation
+      - - end
+  = render 'manifestations/tab_list', manifestation: manifestation

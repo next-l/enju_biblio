@@ -1,0 +1,15 @@
+#content_detail.ui-corner-all.ui-widget-content
+  h1.title
+    = t('page.new', model: t('activerecord.models.produce'))
+  #content_list
+    = render 'form'
+#submenu.ui-corner-all.ui-widget-content
+  ul
+    - if @produce.agent
+      li
+        = link_to t('page.listing', model: t('activerecord.models.agent')), manifestations_path(publisher_id: @produce.agent_id)
+      - - end
+      - if @produce.manifestation
+        li
+          = link_to t('page.listing', model: t('activerecord.models.manifestation')), agents_path(manifestation_id: @produce.manifestation_id)
+        - - end

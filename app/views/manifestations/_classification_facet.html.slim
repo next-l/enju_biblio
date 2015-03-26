@@ -1,0 +1,19 @@
+h4
+  = t('activerecord.models.classification')
+- - unless @classification_facet.blank?
+ul
+  - @classification_facet.each do |category|
+    li
+      - if category.value == params[:classification].to_s.downcase
+        strong
+      = link_to "#{t('classification.category', number: category.value)} #{category_name(category.value)} (#{category.count})", url_for(params.merge(classification: category.value, page: nil, view: nil, only_path: true))
+      - if category.value == params[:classification].to_s.downcase
+
+  - if params[:classification]
+    li
+      = link_to t('page.remove_this_facet'), url_for(params.merge(classification: nil, page: nil, view: nil, only_path: true))
+    - - end
+- else
+  p
+    = t('page.no_subject')
+  - - end
