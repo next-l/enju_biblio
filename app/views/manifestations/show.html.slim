@@ -13,7 +13,6 @@
             | (
             = l(@manifestation.versions.find(@version).created_at)
             | )
-          - - end
           - if current_user.try(:has_role?, 'Librarian')
             = render 'manifestations/show_detail_librarian', manifestation: @manifestation
           - else
@@ -34,7 +33,6 @@
           - if policy(PictureFile).create?
             li
               = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: @manifestation.id)
-            - - end
         script[type="text/javascript"]
           |  $(document).ready(function(){ $("a[rel='manifestation_<ruby code="= @manifestation.id"></ruby>']").colorbox({transition:"none", photo:true}); }) 
         - if user_signed_in?
@@ -42,16 +40,12 @@
             - @manifestation.items.for_checkout.on_shelf.each do |item|
               - if item.hold?(current_user.profile.library)
                 = call_number_label(item)
-                - - end
-                - - end
-          - - end
           #resource_bookmark_buttons
             ul
               - if user_signed_in?
                 - if current_user.email.present?
                   li
                     = link_to t('manifestation.send_email'), manifestation_path(mode: 'send_email'), data: {confirm: t('page.are_you_sure')}
-                  - - end
                   - if defined?(EnjuBookmark)
                     li
                       = link_to_bookmark(@manifestation)
@@ -69,7 +63,6 @@
                       - if defined?(EnjuPurchaseRequest)
                         li
                           = link_to t('activerecord.models.purchase_request'), new_purchase_request_path(purchase_request: {url: manifestation_url(@manifestation)})
-                      - - end
                     - else
                       - unless @manifestation.items.for_checkout.empty?
                       li
@@ -78,6 +71,5 @@
                         |  (
                         = t('page.number_of_reservations', count: @reserved_count)
                         | )
-                - - end
             - if current_user.try(:has_role?, 'Librarian')
               = render 'manifestations/edit_detail'

@@ -4,7 +4,6 @@ h2.resource_title
   = link_to @parent.original_title, @parent, itemprop: 'name'
   - if @parent.serial?
     = image_tag('icons/newspaper.png', size: '16x16', alt: t('manifestation.serial'))
-    - - end
     = link_to form_icon(@parent.carrier_type), @parent
 .search_form
   = form_for :manifestations, url: manifestations_path, html: {method: 'get'} do
@@ -19,4 +18,3 @@ h2.resource_title
       = submit_tag t('page.search')
       br
       = link_to t('page.advanced_search'), page_advanced_search_path
-    - - end

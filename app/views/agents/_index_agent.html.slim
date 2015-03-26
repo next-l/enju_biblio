@@ -13,9 +13,7 @@
           = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           - if policy(agent).update?
             = render 'page/add'
-            - - end
             = submit_tag t('page.search')
-        - - end
     table.table.table-striped.index
       tr
         th
@@ -48,9 +46,6 @@
             - else
               - - agent_relationship = agent.to_agents.where(child_id: agent.id).first
               = link_to t('page.destroy'), agent_relationship, data: {confirm: t('page.are_you_sure')}, method: :delete if agent_relationship
-              - - end
-              - - end
-        - - end
     = paginate(@agents)
 #submenu.ui-corner-all.ui-widget-content
   ul
@@ -59,4 +54,3 @@
         = link_to t('agent.add'), new_agent_path
       li
         = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path
-      - - end

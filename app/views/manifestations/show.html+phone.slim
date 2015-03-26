@@ -18,4 +18,3 @@ div[data-role="content"]
         = @manifestation.price
   - if @manifestation.items.for_checkout.on_shelf.exists?
     = render 'manifestations/show_holding', manifestation: @manifestation
-    - - end

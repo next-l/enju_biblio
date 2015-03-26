@@ -21,12 +21,9 @@
           - if policy(realize).destroy?
             = link_to t('page.show'), realize
             = link_to t('page.destroy'), realize, data: {confirm: t('page.are_you_sure')}, method: :delete
-            - - end
-        - - end
     = paginate(@realizes)
 #submenu.ui-corner-all.ui-widget-content
   - if policy(Realize).create?
     ul
       li
         = link_to t('page.new', model: t('activerecord.models.realize')), new_realize_path
-    - - end

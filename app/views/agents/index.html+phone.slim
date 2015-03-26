@@ -9,10 +9,8 @@ div[data-role="content"]
         | : 
         = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
         = submit_tag t('page.search')
-      - - end
 ul[data-role="listview"]
   - @agents.each do |agent|
     li
       = link_to agent.full_name, agent
-    - - end
 = paginate(@agents)

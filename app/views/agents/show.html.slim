@@ -18,7 +18,6 @@
             a[href="#related"]
               em
                 = t('page.related')
-          - - end
       #detail
         table.table.table-striped.index.vcard
           tr
@@ -101,7 +100,6 @@
               = l(@agent.updated_at)
       - - unless @agent.derived_agents.empty? and @agent.original_agents.empty?
       = render 'agents/agent_list'
-      - - end
 #submenu.ui-corner-all.ui-widget-content
   #manifestation_book_jacket
     = agent_custom_book_jacket(@agent)
@@ -119,7 +117,6 @@
     - if policy(PictureFile).create?
       li
         = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id)
-      - - end
   ul
     li
       = back_to_index(flash[:page_info])
@@ -128,13 +125,11 @@
         = link_to t('page.edit'), edit_agent_path(@agent)
       li
         = link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add')
-      - - end
       - if policy(@agent).destroy?
         li
           = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path
         li
           = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
-        - - end
   ul
     li
       = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path(query: "\"#{@agent.full_name}\"")

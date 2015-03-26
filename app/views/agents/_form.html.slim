@@ -10,7 +10,6 @@
         = render 'agents/form_family_name_first', f: f
       - else
         = render 'agents/form_family_name_last', f: f
-        - - end
     = f.label :full_name
     br
     = f.text_field :full_name, class: 'resource_title'
@@ -64,4 +63,3 @@
   = hidden_field_tag 'manifestation_id', @manifestation.id if @manifestation
   = hidden_field_tag 'item_id', @item.id if @item
   = f.submit
-- - end

@@ -11,11 +11,9 @@ ul.hidden
           |  (
           = manifestation.original_manifestations.size + manifestation.derived_manifestations.size
           | )
-    - - end
     - if defined?(EnjuQuestion)
       - - unless manifestation.questions(user: current_user).empty?
       li
         a[href="#question"]
           em
             = t('resource.question')
-      - - end

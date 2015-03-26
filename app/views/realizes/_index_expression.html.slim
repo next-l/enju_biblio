@@ -21,14 +21,12 @@
           - if policy(realize).destroy?
             = realize.first? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_up.png', size: '16x16', alt: t('page.asc')), expression_realize_path(realize.expression, realize, move: 'higher'), method: :put)
             = realize.last? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_down.png', size: '16x16', alt: t('page.desc')), expression_realize_path(realize.expression, realize, move: 'lower'), method: :put)
-            - - end
         td
           = link_to realize.agent.try(:full_name), realize.agent
         td
           = l(realize.created_at)
         td
           = l(realize.updated_at)
-        - - end
     = paginate(@realizes)
 #submenu.ui-corner-all.ui-widget-content
   ul
@@ -37,4 +35,3 @@
     - if policy(Realize).create?
       li
         = link_to t('page.new', model: t('activerecord.models.realize')), new_realize_path(expression_id: expression.id)
-      - - end

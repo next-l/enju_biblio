@@ -9,7 +9,6 @@
           | : 
           = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           = submit_tag t('page.search')
-        - - end
     table.table.table-striped.index
       tr
         th
@@ -26,4 +25,3 @@
         = link_to t('agent.add'), new_agent_path
       li
         = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path
-      - - end

@@ -21,18 +21,15 @@
           - if policy(create).destroy?
             = create.first? ? image_tag('icons/stop.png') : link_to(image_tag('icons/arrow_up.png', size: '16x16', alt: t('page.asc')), work_create_path(create.work, create, move: 'higher'), method: :put)
             = create.last? ? image_tag('icons/stop.png') : link_to(image_tag('icons/arrow_down.png', size: '16x16', alt: t('page.desc')), work_create_path(create.work, create, move: 'lower'), method: :put)
-            - - end
         td
           = link_to create.agent.try(:full_name), create.agent
         td
           = l(create.created_at)
         td
           = l(create.updated_at)
-        - - end
     = paginate(@creates)
 #submenu.ui-corner-all.ui-widget-content
   ul
     - if policy(Create).create?
       li
         = link_to t('page.new', model: t('activerecord.models.create')), new_work_create_path(work)
-      - - end

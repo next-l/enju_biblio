@@ -21,14 +21,12 @@
           - if policy(produce).destroy?
             = produce.first? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_up.png', size: '16x16', alt: t('page.asc')), manifestation_produce_path(produce.manifestation, produce, move: 'higher'), method: :put)
             = produce.last? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_down.png', size: '16x16', alt: t('page.desc')), manifestation_produce_path(produce.manifestation, produce, move: 'lower'), method: :put)
-            - - end
         td
           = link_to produce.agent.try(:full_name), produce.agent
         td
           = l(produce.created_at)
         td
           = l(produce.updated_at)
-        - - end
     = paginate(@produces)
 #submenu.ui-corner-all.ui-widget-content
   ul
@@ -37,4 +35,3 @@
     - if policy(Produce).create?
       li
         = link_to t('page.new', model: t('activerecord.models.produce')), new_produce_path(manifestation_id: manifestation.id)
-      - - end

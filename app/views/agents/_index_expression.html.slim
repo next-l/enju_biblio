@@ -13,10 +13,8 @@
           = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           - if policy(expression).update?
             = render 'page/add'
-            - - end
             = submit_tag t('page.search')
             = link_to t('page.back_to_index'), expression_agents_path(expression)
-        - - end
     table.table.table-striped.index
       tr
         th
@@ -42,9 +40,6 @@
               = link_to t('page.add'), new_expression_realize_path(expression, agent_id: agent.id) unless expression.contributors.include?(agent)
             - else
               = link_to t('page.destroy'), expression_realize_path(expression, expression.realized(agent)), data: {confirm: t('page.are_you_sure')}, method: :delete
-              - - end
-              - - end
-        - - end
     = paginate(@agents)
 #submenu.ui-corner-all.ui-widget-content
   ul
@@ -53,4 +48,3 @@
         = link_to t('page.new', model: t('activerecord.models.agent')), new_expression_agent_path(expression)
       li
         = link_to t('page.rearrange_order'), expression_realizes_path(expression)
-      - - end

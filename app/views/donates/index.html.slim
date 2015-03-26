@@ -28,12 +28,9 @@
           - if policy(donate).destroy?
             = link_to t('page.edit'), edit_donate_path(donate)
             = link_to t('page.destroy'), donate, data: {confirm: t('page.are_you_sure')}, method: :delete
-            - - end
-        - - end
     = paginate(@donates)
 #submenu.ui-corner-all.ui-widget-content
   ul
     - if policy(Donate).create?
       li
         = link_to t('page.new', model: t('activerecord.models.donate')), new_donate_path
-      - - end

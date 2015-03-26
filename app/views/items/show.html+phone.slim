@@ -6,7 +6,6 @@ div[data-role="header"]
 div[data-role="content"]
   - if @item.manifestation
     = render 'manifestations/title', manifestation: @item.manifestation
-    - - end
     #detail
       p
         strong
@@ -31,7 +30,6 @@ div[data-role="content"]
           - @item.lending_policies.each do |lending_policy|
             li
               = lending_policy.user_group.display_name.localize
-            - - end
         p
           strong
             = t('activerecord.models.circulation_status')
@@ -42,8 +40,6 @@ div[data-role="content"]
             |  (
             = link_to t('item.current_checkout'), checkout_path(@item.checkouts.not_returned.first)
             | ) 
-            - - end
-            - - end
         p
           strong
             = t('activerecord.models.use_restriction')

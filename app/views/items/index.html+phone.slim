@@ -10,7 +10,6 @@ div[data-role="content"]
         | : 
         = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
         = submit_tag t('page.search')
-      - - end
       table.table.table-striped.index
         tr
           th
@@ -27,7 +26,6 @@ div[data-role="content"]
             = t('activerecord.models.circulation_status')
           - if user_signed_in?
             th
-            - - end
         - @items.each do |item|
           |  <tr class="line
           = cycle("0", "1")
@@ -39,7 +37,6 @@ div[data-role="content"]
             | ) 
         - else
           = link_to item.item_identifier, item
-          - - end
           td
             = item.call_number
           td
@@ -53,6 +50,4 @@ div[data-role="content"]
           - if policy(item).update?
             td
               = link_to t('page.edit'), edit_item_path(item)
-            - - end
-            - - end
       = paginate(@items)

@@ -5,7 +5,6 @@
       | :
     td
       = manifestation.edition_string
-  - - end
   tr
     td
       = t('page.number')
@@ -15,14 +14,11 @@
         = t('activerecord.attributes.manifestation.volume_number_string')
         | : 
         = manifestation.volume_number_string
-        - - end
         - if manifestation.issue_number_string?
           = t('activerecord.attributes.manifestation.issue_number_string')
           | : 
           = manifestation.issue_number_string
-          - - end
           - if manifestation.serial_number?
             = t('activerecord.attributes.manifestation.serial_number')
             | : 
             = manifestation.serial_number
-            - - end

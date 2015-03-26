@@ -12,7 +12,6 @@
           = f.hidden_field :series_statement_id
         - else
           = f.text_field :series_statement_id
-          - - end
       .field
         = f.label t('activerecord.models.series_statement_merge_list')
         br
@@ -21,10 +20,8 @@
           = f.hidden_field :series_statement_merge_list_id
         - else
           = f.text_field :series_statement_merge_list_id
-          - - end
       .actions
         = f.submit
-      - - end
 #submenu.ui-corner-all.ui-widget-content
   ul
     li

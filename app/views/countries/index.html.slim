@@ -19,7 +19,6 @@
         td
           - if policy(country).update?
             = move_position(country)
-            - - end
         td
           = country.name
         td
@@ -34,8 +33,6 @@
         td
           - if policy(country).update?
             = link_to t('page.edit'), edit_country_path(country)
-            - - end
-        - - end
     = paginate(@countries)
 #submenu.ui-corner-all.ui-widget-content
   ul

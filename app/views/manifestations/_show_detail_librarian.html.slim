@@ -24,7 +24,6 @@
               | : 
               = manifestation.identifier_contents(:issn).join(" ")
               | ) 
-              - - end
         = render 'edition_and_number', manifestation: manifestation
         tr
           td[style="width: 200px"]
@@ -62,11 +61,9 @@
               |  - 
               = manifestation.end_page
               | ) 
-              - - end
               - if manifestation.height
                 = manifestation.height
                 |  cm. 
-                - - end
         tr
           td
             = t('activerecord.attributes.manifestation.price')
@@ -95,10 +92,8 @@
                   = identifier.identifier_type.display_name.localize
                   | : 
                   = identifier_link(identifier)
-        - - end
         - - unless manifestation.attachment_file_name.blank?
         = render 'manifestations/attachment_file', manifestation: manifestation
-        - - end
         tr
           td
             = t('page.created_at')
@@ -125,5 +120,4 @@
             = raw simple_format(h(manifestation.note))
     - if manifestation.items.on_shelf.exists?
       = render 'manifestations/show_holding', manifestation: manifestation
-      - - end
   = render 'manifestations/tab_list', manifestation: manifestation

@@ -4,7 +4,6 @@
     = link_to title_with_volume_number(manifestation), manifestation, itemprop: 'name'
     - if manifestation.serial?
       = image_tag('icons/newspaper.png', size: '16x16', alt: t('manifestation.serial'))
-      - - end
       = link_to form_icon(manifestation.carrier_type), manifestation
   p
     = manifestation.statement_of_responsibility
@@ -13,12 +12,10 @@
     = t('agent.creator')
     | : 
     = agents_list(manifestation.creators.readable_by(current_user), itemprop: 'author')
-    - - end
     - - unless manifestation.contributors.readable_by(current_user).empty?
     = t('agent.contributor')
     | : 
     = agents_list(manifestation.contributors.readable_by(current_user), itemprop: 'editor')
-    - - end
     - - unless manifestation.publishers.readable_by(current_user).empty?
     = t('agent.publisher')
     | : 
@@ -31,9 +28,7 @@
   | : 
   = manifestation.pub_date
   | ) 
-  - - end
   - if manifestation.access_address?
     br
     = link_to manifestation.access_address, manifestation.access_address
     = link_to image_tag('icons/world_go.png', size: '16x16', alt: ('Web')), manifestation.access_address
-    - - end

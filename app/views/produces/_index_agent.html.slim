@@ -26,12 +26,9 @@
         td
           - if policy(produce).destroy?
             = link_to t('page.destroy'), produce_path(produce, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete
-            - - end
-        - - end
     = paginate(@produces)
 #submenu.ui-corner-all.ui-widget-content
   ul
     - if policy(Produce).create?
       li
         = link_to t('page.new', model: t('activerecord.models.produce')), new_produce_path(agent_id: agent.id)
-      - - end

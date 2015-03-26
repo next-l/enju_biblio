@@ -10,12 +10,10 @@
     = t('agent.creator')
     | : 
     = agents_list(manifestation.creators.readable_by(current_user), itemprop: 'author')
-    - - end
     - - unless manifestation.contributors.readable_by(current_user).empty?
     = t('agent.contributor')
     | : 
     = agents_list(manifestation.contributors.readable_by(current_user), itemprop: 'editor')
-    - - end
     - - unless manifestation.publishers.readable_by(current_user).empty?
     = t('agent.publisher')
     | : 
@@ -28,9 +26,7 @@
   | : 
   = manifestation.pub_date
   | ) 
-  - - end
   - if manifestation.access_address?
     br
     = link_to manifestation.access_address, manifestation.access_address
     = link_to image_tag('icons/world_go.png', size: '16x16', alt: ('Web')), manifestation.access_address
-    - - end

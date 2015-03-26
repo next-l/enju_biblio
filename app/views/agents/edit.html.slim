@@ -10,6 +10,5 @@
     - if policy(@agent).destroy?
       li
         = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
-      - - end
       li
         = link_to t('page.back'), agents_path

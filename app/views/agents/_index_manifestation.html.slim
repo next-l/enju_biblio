@@ -11,10 +11,8 @@
           = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           - if policy(manifestation).update?
             = render 'page/add'
-            - - end
             = submit_tag t('page.search')
             = link_to t('page.back_to_index'), agents_path(manifestation_id: manifestation.id)
-        - - end
     table.table.table-striped.index
       tr
         th
@@ -41,9 +39,6 @@
             - else
               = link_to t('page.edit'), edit_produce_path(manifestation.produced(agent))
               = link_to t('page.destroy'), produce_path(manifestation.produced(agent), manifestation_id: manifestation.id), data: {confirm: t('page.are_you_sure')}, method: :delete
-              - - end
-              - - end
-        - - end
     = paginate(@agents)
 #submenu.ui-corner-all.ui-widget-content
   = render 'manifestations/book_jacket', manifestation: manifestation
@@ -57,4 +52,3 @@
         = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path(manifestation_id: manifestation.id)
       li
         = link_to t('page.rearrange_order'), produces_path(manifestation_id: manifestation.id)
-      - - end

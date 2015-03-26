@@ -10,7 +10,6 @@
             | :
           - manifestation.subjects.each do |subject|
             = link_to subject.term, manifestations_path(query: "subject_sm:\"#{h(subject.term)}\"")
-            - - end
       - if defined?(EnjuBookmark)
         p
           strong
@@ -18,7 +17,6 @@
             | :
           - manifestation.tags.each do |tag|
             = link_to tag.name, manifestations_path(tag: tag.name)
-            - - end
     div[style="clear: both"]
     div[style="margin-top: 5px"]
       = render 'manifestations/show_index', manifestation: manifestation

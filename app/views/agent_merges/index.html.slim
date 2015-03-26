@@ -22,11 +22,9 @@
           = link_to t('page.edit'), edit_agent_merge_path(agent_merge)
         td
           = link_to t('page.destroy'), agent_merge, data: {confirm: t('page.are_you_sure')}, method: :delete
-        - - end
     = paginate(@agent_merges)
 #submenu.ui-corner-all.ui-widget-content
   ul
     - if @agent_merge_list
       li
         = link_to t('page.add', model: t('activerecord.models.agent')), agent_merge_list_agents_path(@agent_merge_list)
-      - - end
