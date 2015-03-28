@@ -360,8 +360,7 @@ class Manifestation < ActiveRecord::Base
     return nil unless attachment
     # TODO: S3 support
     response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=json" --data-binary @#{attachment.download.path} -H "Content-type:text/html"`
-    self.fulltext = JSON.parse(response)["responseHeader"][""]
-    save(validate: false)
+    self.fulltext = JSON.parse(response)[""]
   end
 
   def created(agent)
