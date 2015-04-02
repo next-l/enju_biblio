@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.form_of_work'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     p
@@ -19,7 +19,7 @@
         = t('activerecord.attributes.form_of_work.note')
         | :
       = @form_of_work.note
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     |  <li
     = link_to t('page.edit'), edit_form_of_work_path(@form_of_work)

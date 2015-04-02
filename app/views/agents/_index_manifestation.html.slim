@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('agent.publisher'))
-  #content_list
+  #content_list.col-md-9
     = render 'manifestations/title', manifestation: manifestation
     .search_form
       = form_for :agents, url: agents_path(manifestation_id: manifestation.id), html: {method: 'get'} do
@@ -40,7 +40,7 @@
               = link_to t('page.edit'), edit_produce_path(manifestation.produced(agent))
               = link_to t('page.destroy'), produce_path(manifestation.produced(agent), manifestation_id: manifestation.id), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agents)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   = render 'manifestations/book_jacket', manifestation: manifestation
   ul
     li

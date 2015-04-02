@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.item'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     = render 'manifestations/title', manifestation: @manifestation if @manifestation
@@ -62,7 +62,7 @@
               = l(item.checkouts.first.due_date, format: :short)
               |  ) 
     = paginate(@items)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   = render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation
   ul
     - if policy(Item).create? and @manifestation

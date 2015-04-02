@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
-  h1.title
-    = t('page.listing', model: t('activerecord.models.content_type'))
-  #content_list
+.row
+  #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.content_type'))
     p#notice
       = notice
     table.table.table-striped.index
@@ -32,8 +32,8 @@
             = link_to t('page.edit'), edit_content_type_path(content_type)
           - if policy(content_type).destroy?
             = link_to t('page.destroy'), content_type_path(content_type), data: {confirm: t('page.are_you_sure')}, method: :delete
-#submenu.ui-corner-all.ui-widget-content
-  ul
-    - if policy(ContentType).create?
-      li
-        = link_to t('page.new', model: t('activerecord.models.content_type')), new_content_type_path
+  #submenu.col-md-3
+    ul
+      - if policy(ContentType).create?
+        li
+          = link_to t('page.new', model: t('activerecord.models.content_type')), new_content_type_path

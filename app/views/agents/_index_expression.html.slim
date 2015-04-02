@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('agent.contributor'))
-  #content_list
+  #content_list.col-md-9
     h2.resource_title
       |  [E] 
       = link_to expression.original_title, expression
@@ -41,7 +41,7 @@
             - else
               = link_to t('page.destroy'), expression_realize_path(expression, expression.realized(agent)), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agents)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(Agent).create?
       li

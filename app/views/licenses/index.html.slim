@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.license'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     table.table.table-striped.index
@@ -32,7 +32,7 @@
             = link_to t('page.edit'), edit_license_path(license)
           - if policy(license).destroy?
             = link_to t('page.destroy'), license_path(license), data: {confirm: t('page.are_you_sure')}, method: :delete
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(License).create?
       li

@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.picture_file'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     p
@@ -46,7 +46,7 @@
         = t('activerecord.attributes.picture_file.picture_updated_at')
         | :
       = l(@picture_file.picture_updated_at) if @picture_file.picture_updated_at
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.edit'), edit_picture_file_path(@picture_file)

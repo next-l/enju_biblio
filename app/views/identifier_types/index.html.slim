@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.identifier_type'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     table.table.table-striped.index
@@ -32,7 +32,7 @@
             = link_to t('page.edit'), edit_identifier_type_path(identifier_type)
           - if policy(identifier_type).destroy?
             = link_to t('page.destroy'), identifier_type_path(identifier_type), data: {confirm: t('page.are_you_sure')}, method: :delete
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(IdentifierType).create?
       li

@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.realize'))
-  #content_list
+  #content_list.col-md-9
     h2.resource_title
       = link_to agent.full_name, agent
     table.table.table-striped.index
@@ -27,7 +27,7 @@
           - if policy(realize).destroy?
             = link_to t('page.destroy'), realize_path(realize, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@realizes)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(Realize).create?
       li

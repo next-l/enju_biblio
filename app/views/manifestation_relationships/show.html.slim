@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.manifestation_relationship'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     p
@@ -14,7 +14,7 @@
         = t('activerecord.attributes.manifestation_relationship.child')
         | :
       = link_to @manifestation_relationship.child.original_title, @manifestation_relationship.child
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.edit'), edit_manifestation_relationship_path(@manifestation_relationship)

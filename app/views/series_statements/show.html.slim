@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.series_statement'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     - if @series_statement.root_manifestation and @manifestation_ids
@@ -28,7 +28,7 @@
           = t('activerecord.attributes.series_statement.note')
         td
           = @series_statement.note
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(@series_statement).update?
       li

@@ -7,6 +7,6 @@ ul
       - if @reservable == facet_reservable
         strong
           = link_to "#{localized_boolean(facet.value)} (#{facet.count})", url_for(params.merge(page: nil, reservable: facet.value.to_s, view: nil, only_path: true))
-    - unless @reservable.nil?
+  - unless @reservable.nil?
     li
       = link_to t('page.remove_this_facet'), url_for(params.merge(reservable: nil, page: nil, view: nil, only_path: true))

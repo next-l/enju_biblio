@@ -1,9 +1,9 @@
 div[style="color: red"]
   = flash[:message]
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.item'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     - if @item.manifestation
@@ -124,7 +124,7 @@ div[style="color: red"]
           = t('page.updated_at')
           | :
         = l(@item.updated_at)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   = render 'manifestations/book_jacket', manifestation: @item.manifestation
   ul
     li

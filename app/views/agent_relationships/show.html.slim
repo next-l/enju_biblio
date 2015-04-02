@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.agent_relationship'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     p
@@ -14,7 +14,7 @@
         = t('activerecord.attributes.agent_relationship.child')
         | :
       = link_to @agent_relationship.child.full_name, @agent_relationship.child
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.edit'), edit_agent_relationship_path(@agent_relationship)

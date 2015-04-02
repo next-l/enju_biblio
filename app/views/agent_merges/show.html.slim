@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.agent_merge'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     p
@@ -14,7 +14,7 @@
         = t('activerecord.models.agent_merge_list')
         | :
       = link_to @agent_merge.agent_merge_list.title, @agent_merge.agent_merge_list
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.add', model: t('activerecord.models.agent')), @agent_merge.agent_merge_list

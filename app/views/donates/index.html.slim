@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.donate'))
-  #content_list
+  #content_list.col-md-9
     table.table.table-striped.index
       tr
         th
@@ -29,7 +29,7 @@
             = link_to t('page.edit'), edit_donate_path(donate)
             = link_to t('page.destroy'), donate, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@donates)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(Donate).create?
       li

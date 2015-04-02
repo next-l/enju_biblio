@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.language'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     table.table.table-striped.index
@@ -43,7 +43,7 @@
           - if policy(language).update?
             = link_to t('page.edit'), edit_language_path(language)
     = paginate(@languages)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   - if policy(Language).create?
     ul
       li

@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.produce'))
-  #content_list
+  #content_list.col-md-9
     table.table.table-striped.index
       tr
         th
@@ -22,7 +22,7 @@
             = link_to t('page.show'), produce
             = link_to t('page.destroy'), produce, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@produces)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   - if policy(Produce).create?
     ul
       li

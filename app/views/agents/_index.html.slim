@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.agent'))
-  #content_list
+  #content_list.col-md-9
     .search_form
       = form_for :agents, url: agents_path, html: {method: 'get'} do
         p
@@ -18,7 +18,7 @@
         th
       = render @agents
     = paginate(@agents)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(Agent).create?
       li

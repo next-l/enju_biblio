@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.series_statement'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     .search_form
@@ -37,7 +37,7 @@
               - - series_statement_merge = @series_statement_merge_list.series_statement_merges.where(series_statement_id: series_statement.id).first
               = link_to t('page.destroy'), series_statement_merge_list_series_statement_merge_path(@series_statement_merge_list, series_statement_merge), data: {confirm: t('page.are_you_sure')}, method: :delete if series_statement_merge
     = paginate(@series_statements)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.listing', model: t('activerecord.models.series_statement_merge_list')), @series_statement_merge_list

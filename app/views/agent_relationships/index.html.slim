@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.agent_relationship'))
-  #content_list
+  #content_list.col-md-9
     table.table.table-striped.index
       tr
         th
@@ -26,7 +26,7 @@
           td
             = link_to t('page.destroy'), agent_relationship, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agent_relationships)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.new', model: t('activerecord.models.agent_relationship')), new_agent_relationship_path

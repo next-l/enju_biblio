@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.create'))
-  #content_list
+  #content_list.col-md-9
     h2.resource_title
       = link_to work.original_title, work
     table.table.table-striped.index
@@ -28,7 +28,7 @@
         td
           = l(create.updated_at)
     = paginate(@creates)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(Create).create?
       li

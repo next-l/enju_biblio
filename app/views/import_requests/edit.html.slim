@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.editing', model: t('activerecord.models.import_request'))
-  #content_list
+  #content_list.col-md-9
     = form_for(@import_request) do |f|
       = f.error_messages
       .field
@@ -10,7 +10,7 @@
         = f.text_field :isbn, class: 'resource_isbn_issn'
       .actions
         = f.submit
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.show'), @import_request

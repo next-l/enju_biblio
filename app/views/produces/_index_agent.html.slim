@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.produce'))
-  #content_list
+  #content_list.col-md-9
     h2.resource_title
       = link_to agent.full_name, agent
     table.table.table-striped.index
@@ -27,7 +27,7 @@
           - if policy(produce).destroy?
             = link_to t('page.destroy'), produce_path(produce, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@produces)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(Produce).create?
       li

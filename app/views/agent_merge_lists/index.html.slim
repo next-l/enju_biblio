@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.agent_merge_list'))
-  #content_list
+  #content_list.col-md-9
     table.table.table-striped.index
       tr
         th
@@ -22,7 +22,7 @@
           = link_to t('page.edit'), edit_agent_merge_list_path(agent_merge_list)
           = link_to t('page.destroy'), agent_merge_list, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agent_merge_lists)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.new', model: t('activerecord.models.agent_merge_list')), new_agent_merge_list_path

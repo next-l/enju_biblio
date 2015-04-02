@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.listing', model: t('activerecord.models.series_statement'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     .search_form
@@ -32,7 +32,7 @@
           = link_to t('page.edit'), edit_series_statement_path(series_statement) if policy(series_statement).update?
           = link_to t('page.destroy'), series_statement, data: {confirm: t('page.are_you_sure')}, method: :delete if policy(series_statement).destroy?
     = paginate(@series_statements)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     - if policy(SeriesStatement).create?
       li

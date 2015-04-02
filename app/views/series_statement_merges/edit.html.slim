@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.editing', model: t('activerecord.models.series_statement_merge'))
-  #content_list
+  #content_list.col-md-9
     = form_for(@series_statement_merge) do |f|
       = f.error_messages
       .field
@@ -14,7 +14,7 @@
         = f.text_field :series_statement_merge_list_id
       .actions
         = f.submit
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   ul
     li
       = link_to t('page.show'), @series_statement_merge

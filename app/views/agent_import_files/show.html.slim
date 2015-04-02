@@ -1,7 +1,7 @@
-#content_detail.ui-corner-all.ui-widget-content
+.row
   h1.title
     = t('page.showing', model: t('activerecord.models.agent_import_file'))
-  #content_list
+  #content_list.col-md-9
     p#notice
       = notice
     p
@@ -63,7 +63,7 @@
         = t('activerecord.models.user')
         | :
       = link_to @agent_import_file.user.username, @agent_import_file.user.profile if @agent_import_file.user.try(:profile)
-#submenu.ui-corner-all.ui-widget-content
+  #submenu.col-md-3
   = form_for(@agent_import_file) do |f|
     ul
       li
