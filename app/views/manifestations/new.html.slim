@@ -1,13 +1,13 @@
 .row
-  h1.title
-    = t('page.new', model: t('activerecord.models.manifestation'))
   #content_list.col-md-9
+    h1.title
+      = t('page.new', model: t('activerecord.models.manifestation'))
     = render 'manifestations/form'
   #submenu.col-md-3
-  ul
-    - if @agent
-      li
-        = link_to t('page.back'), publisher_manifestations_path(@agent)
-    - else
-      li
-        = link_to t('page.back'), manifestations_path
+    ul
+      - if @agent
+        li
+          = link_to t('page.back'), publisher_manifestations_path(@agent)
+      - else
+        li
+          = link_to t('page.back'), manifestations_path

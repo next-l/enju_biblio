@@ -1,16 +1,16 @@
 .row
-  h1.title
-    = t('page.new', model: t('activerecord.models.item'))
   #content_list.col-md-9
+    h1.title
+      = t('page.new', model: t('activerecord.models.item'))
     = render 'manifestations/title', manifestation: @manifestation if @manifestation
     = render 'form'
   #submenu.col-md-3
-  - if @manifestation
-    = render 'manifestations/book_jacket', manifestation: @manifestation
-    ul
-      - if @manifestation
-        li
-          = link_to t('page.back'), items_path(manifestation_id: @manifestation.id)
-      - else
-        li
-          = link_to t('page.back'), items_path
+    - if @manifestation
+      = render 'manifestations/book_jacket', manifestation: @manifestation
+      ul
+        - if @manifestation
+          li
+            = link_to t('page.back'), items_path(manifestation_id: @manifestation.id)
+        - else
+          li
+            = link_to t('page.back'), items_path
