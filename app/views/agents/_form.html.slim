@@ -52,7 +52,7 @@
   = f.label t('role.required_role')
   = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]})
 .actions
-  = f.submit
+  = f.submit class: 'btn btn-default'
 .field
   = f.label :note
   br
@@ -62,4 +62,4 @@
   = hidden_field_tag 'expression_id', @expression.id if @expression
   = hidden_field_tag 'manifestation_id', @manifestation.id if @manifestation
   = hidden_field_tag 'item_id', @item.id if @item
-  = f.submit
+  = f.submit class: 'btn btn-default'

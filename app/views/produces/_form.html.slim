@@ -21,4 +21,4 @@
     br
     = f.select :produce_type_id, @produce_types.map{|p| [p.display_name.localize, p.id]}
   .actions
-    = f.submit
+    = f.submit class: 'btn btn-default'
