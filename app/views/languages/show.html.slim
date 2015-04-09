@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.showing', model: t('activerecord.models.language'))
   #content_list.col-md-9
+    h1.title
+      = t('page.showing', model: t('activerecord.models.language'))
     p#notice
       = notice
     p
@@ -23,25 +23,25 @@
       strong
         | ISO 639-1:
       td
-        = language.iso_639_1
+        = @language.iso_639_1
     p
       strong
         | ISO 639-2:
       td
-        = language.iso_639_2
+        = @language.iso_639_2
     p
       strong
         | ISO 639-3:
       td
-        = language.iso_639_3
+        = @language.iso_639_3
     p
       strong
         = t('activerecord.attributes.language.note')
         | :
       = @language.note
   #submenu.col-md-3
-  ul
-    li
-      = link_to t('page.edit'), edit_language_path(@language)
-    li
-      = back_to_index(flash[:page_info])
+    ul
+      li
+        = link_to t('page.edit'), edit_language_path(@language)
+      li
+        = back_to_index(flash[:page_info])

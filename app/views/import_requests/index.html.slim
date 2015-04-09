@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.import_request'))
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.import_request'))
     p#notice
       = notice
     table.table.table-striped.index
@@ -40,6 +40,6 @@
             = link_to t('page.destroy'), import_request, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@import_requests)
   #submenu.col-md-3
-  ul
-    li
-      = link_to t('page.new', model: t('activerecord.models.import_request')), new_import_request_path
+    ul
+      li
+        = link_to t('page.new', model: t('activerecord.models.import_request')), new_import_request_path

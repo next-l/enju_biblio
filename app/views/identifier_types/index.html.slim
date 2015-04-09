@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.identifier_type'))
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.identifier_type'))
     p#notice
       = notice
     table.table.table-striped.index
@@ -29,11 +29,11 @@
           = identifier_type.note
         td
           - if policy(identifier_type).update?
-            = link_to t('page.edit'), edit_identifier_type_path(identifier_type)
+            => link_to t('page.edit'), edit_identifier_type_path(identifier_type)
           - if policy(identifier_type).destroy?
-            = link_to t('page.destroy'), identifier_type_path(identifier_type), data: {confirm: t('page.are_you_sure')}, method: :delete
+            => link_to t('page.destroy'), identifier_type_path(identifier_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-  ul
-    - if policy(IdentifierType).create?
-      li
-        = link_to t('page.new', model: t('activerecord.models.identifier_type')), new_identifier_type_path
+    ul
+      - if policy(IdentifierType).create?
+        li
+          = link_to t('page.new', model: t('activerecord.models.identifier_type')), new_identifier_type_path
