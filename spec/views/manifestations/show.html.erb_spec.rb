@@ -16,7 +16,7 @@ describe "manifestations/show" do
 
   describe "identifier_link" do
     it "renders a link to CiNii Books" do
-      allow(view).to receive(:policy).and_return double(create?: true)
+      allow(view).to receive(:policy).and_return double(show?: true, create?: true)
       assign(:manifestation, manifestations(:manifestation_00217))
       render
       rendered.should include '<a href="http://ci.nii.ac.jp/ncid/BN15603730">BN15603730</a>'
