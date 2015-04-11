@@ -9,7 +9,7 @@ table.call_number_table
         = item.circulation_status.display_name.localize if item.circulation_status
     td.call_number_table
       table#call_number_label
-        - - i = 0; while i < item.shelf.library.call_number_rows.to_i
+        - i = 0; while i < item.shelf.library.call_number_rows.to_i
         tr
           - if call_numbers[i].blank?
             td.call_number_label
@@ -17,4 +17,4 @@ table.call_number_table
           - else
             td.call_number_label
               = call_numbers[i]
-        - - i += 1; end
+        - i += 1; end

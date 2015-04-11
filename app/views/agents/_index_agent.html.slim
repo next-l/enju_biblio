@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.agent'))
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.agent'))
     h2.resource_title
       |  [P] 
       = link_to agent.full_name, agent
@@ -44,13 +44,13 @@
             - if params[:mode] == "add"
               = link_to t('page.add'), new_agent_relationship_path(agent_id: agent.id, child_id: agent.id) unless agent.derived_agents.include?(agent) or agent == agent
             - else
-              - - agent_relationship = agent.to_agents.where(child_id: agent.id).first
+              - agent_relationship = agent.to_agents.where(child_id: agent.id).first
               = link_to t('page.destroy'), agent_relationship, data: {confirm: t('page.are_you_sure')}, method: :delete if agent_relationship
     = paginate(@agents)
   #submenu.col-md-3
-  ul
-    - if policy(Agent).create?
-      li
-        = link_to t('agent.add'), new_agent_path
-      li
-        = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path
+    ul
+      - if policy(Agent).create?
+        li
+          = link_to t('agent.add'), new_agent_path
+        li
+          = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path
