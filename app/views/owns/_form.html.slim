@@ -1,12 +1,12 @@
 = form_for(@own) do |f|
   = f.error_messages
-  .field
+  .form-group
     = f.label t('activerecord.models.library')
     br
     = f.text_field :agent_id
-  .field
+  .form-group
     = f.label t('activerecord.models.item')
     br
     = f.text_field :item_id
-  .actions
+  .form-control
     = f.submit class: 'btn btn-default'

@@ -4,35 +4,35 @@
   #content_list.col-md-9
     = form_for(@picture_file) do |f|
       = f.error_messages
-      .field
+      .form-group
         = f.label :picture_attachable_type
         br
         = f.text_field :picture_attachable_type
-      .field
+      .form-group
         = f.label t('page.attachable')
         br
         = f.text_field :picture_attachable_id
-      .field
+      .form-group
         = f.label :picture_file_size
         br
         = f.text_field :picture_file_size
-      .field
+      .form-group
         = f.label :picture_content_type
         br
         = f.text_field :picture_content_type
-      .field
+      .form-group
         = f.label :picture_file_name
         br
         = f.text_field :picture_file_name
-      .field
+      .form-group
         = f.label :width
         br
         = f.text_field :width
-      .field
+      .form-group
         = f.label :height
         br
         = f.text_field :height
-      .actions
+      .form-control
         = f.submit class: 'btn btn-default'
   #submenu.col-md-3
   ul

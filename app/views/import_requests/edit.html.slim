@@ -4,11 +4,11 @@
   #content_list.col-md-9
     = form_for(@import_request) do |f|
       = f.error_messages
-      .field
+      .form-group
         = f.label :isbn
         br
         = f.text_field :isbn, class: 'resource_isbn_issn'
-      .actions
+      .form-control
         = f.submit class: 'btn btn-default'
   #submenu.col-md-3
   ul

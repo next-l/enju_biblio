@@ -4,11 +4,11 @@
   #content_list.col-md-9
     = form_for(@agent_import_file, html: { multipart: true }) do |f|
       = f.error_messages
-      .field
+      .form-group
         = f.label t('page.file')
         br
         = f.file_field :agent_import
-      .field
+      .form-group
         = f.label :edit_mode
         br
         = f.radio_button :edit_mode, 'create', checked: 'checked'
@@ -17,7 +17,7 @@
         = f.label :edit_mode, t('page.update'), value: 'update'
         = f.radio_button :edit_mode, 'destroy'
         = f.label :edit_mode, t('page.destroy'), value: 'destroy'
-      .field
+      .form-group
         = f.label :user_encoding
         br
         = f.radio_button :user_encoding, 'auto_detect', checked: 'checked'
@@ -28,7 +28,7 @@
         = f.label :user_encoding, 'Shift_JIS', value: 'shift_jis'
         = f.radio_button :user_encoding, 'euc-jp'
         = f.label :user_encoding, 'EUC-JP', value: 'euc-jp'
-      .actions
+      .form-control
         = f.hidden_field :mode, value: 'import'
         = f.submit t('page.start_import')
   #submenu.col-md-3

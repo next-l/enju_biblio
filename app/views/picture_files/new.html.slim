@@ -10,11 +10,11 @@
               = t('picture_file.invalid_file')
       = f.hidden_field :picture_attachable_id
       = f.hidden_field :picture_attachable_type
-      .field
+      .form-group
         = f.label t('page.file')
         br
         = f.file_field :picture
-      .actions
+      .form-control
         = f.submit class: 'btn btn-default'
   #submenu.col-md-3
   ul
