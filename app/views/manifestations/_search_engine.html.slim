@@ -7,6 +7,5 @@
       = search_engine.note
       = hidden_field_tag search_engine.query_param, h(@query)
       - if search_engine.search_params(@query)
-        - search_engine.search_params(@query).each{|k, v|
+        - search_engine.search_params(@query).each do |k, v|
           = hidden_field_tag k, h(v)
-        - }

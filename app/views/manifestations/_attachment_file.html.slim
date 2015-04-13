@@ -4,4 +4,4 @@
       = t('manifestation.attachment_file')
       | :
     td
-      = link_to manifestation.attachment_file_name, manifestation_path(format: :download)
+      = link_to manifestation.attachment_file_name, manifestation_path(manifestation, format: :download)
