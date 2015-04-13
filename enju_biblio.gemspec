@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lisbn"
   s.add_dependency "statesman", "~> 1.2"
   s.add_dependency "faraday"
+  s.add_dependency "cocoon"
   # s.add_dependency "jquery-rails"
 
   s.add_development_dependency "sqlite3"

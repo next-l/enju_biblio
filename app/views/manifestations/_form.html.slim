@@ -1,5 +1,5 @@
 = render 'page/required_field'
-= simple_nested_form_for(@manifestation, html: { multipart: true }) do |f|
+= simple_form_for(@manifestation, html: { multipart: true }) do |f|
   = f.error_messages
   - if @manifestation.original_manifestations.exists? or @parent
     = f.label :parent_id
@@ -46,40 +46,27 @@
   .form-group
     = f.label :series_statement_string
     = f.fields_for :series_statements do |series_form|
-      = series_form.label :original_title
-      = series_form.text_field :original_title, class: 'form-control'
-      = series_form.link_to_remove t('page.remove'), confirm: t('page.are_you_sure')
-      = series_form.label :title_transcription
-      = series_form.text_field :title_transcription, class: 'form-control'
-      = series_form.label :volume_number_string
-      = series_form.text_field :volume_number_string, class: 'form-control'
-      = series_form.label :creator_string
-      = series_form.text_field :creator_string, class: 'form-control'
-      = series_form.label :series_master
-      = series_form.check_box :series_master
+      = render 'series_statement_fields', f: series_form
     p
-      = f.link_to_add t('page.add_series_statement'), :series_statements
+      = link_to_add_association t('page.add_series_statement'), f, :series_statements
   .form-group
     = f.label :creator_string
     = f.fields_for :creators do |creator_form|
-      = creator_form.text_field :full_name
-      = creator_form.link_to_remove t('page.remove'), confirm: t('page.are_you_sure')
+      = render 'creator_fields', f: creator_form
     p
-      = f.link_to_add t('page.add'), :creators
+      = link_to_add_association t('page.add'), f, :creators
   .form-group
     = f.label :contributor_string
     = f.fields_for :contributors do |contributor_form|
-      = contributor_form.text_field :full_name
-      = contributor_form.link_to_remove t('page.remove'), confirm: t('page.are_you_sure')
+      = render 'contributor_fields', f: contributor_form
     p
-      = f.link_to_add t('page.add'), :contributors
+      = link_to_add_association t('page.add'), f, :contributors
   .form-group
     = f.label :publisher_string
     = f.fields_for :publishers do |publisher_form|
-      = publisher_form.text_field :full_name
-      = publisher_form.link_to_remove t('page.remove'), confirm: t('page.are_you_sure')
+      = render 'publisher_fields', f: publisher_form
     p
-      = f.link_to_add t('page.add'), :publishers
+      = link_to_add_association t('page.add'), f, :publishers
   .form-group
     = f.label :publication_place
     = f.text_field :publication_place, class: 'form-control'
@@ -102,11 +89,9 @@
   .form-group
     = f.label :identifier
     = f.fields_for :identifiers do |identifier_form|
-      = identifier_form.select(:identifier_type_id, @identifier_types.collect{|i| [i.display_name.localize, i.id]}, {}, {class: 'form-control'})
-      = identifier_form.text_field :body, class: 'resource_identifier_body', style: 'ime-mode: disabled'
-      = identifier_form.link_to_remove t('page.remove'), confirm: t('page.are_you_sure')
+      = render 'identifier_fields', f: identifier_form
     p
-      = f.link_to_add t('page.add'), :identifiers
+      = link_to_add_association t('page.add'), f, :identifiers
   - if defined?(EnjuSubject)
     = render 'manifestations/subject_form', f: f
   .form-group

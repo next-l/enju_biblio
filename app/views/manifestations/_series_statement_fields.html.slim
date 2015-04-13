@@ -1,0 +1,12 @@
+      = f.label :original_title
+      = f.text_field :original_title, class: 'form-control'
+      = link_to_remove_association t('page.remove'), f, confirm: t('page.are_you_sure')
+      = f.label :title_transcription
+      = f.text_field :title_transcription, class: 'form-control'
+      = f.label :volume_number_string
+      = f.text_field :volume_number_string, class: 'form-control'
+      = f.label :creator_string
+      = f.text_field :creator_string, class: 'form-control'
+      = f.label :series_master
+      = f.check_box :series_master
+
