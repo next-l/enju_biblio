@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.create_type'))
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.create_type'))
     p#notice
       = notice
     table.table.table-striped.index
@@ -33,7 +33,7 @@
           - if policy(create_type).destroy?
             = link_to t('page.destroy'), create_type_path(create_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-  ul
-    - if policy(CreateType).create?
-      li
-        = link_to t('page.new', model: t('activerecord.models.create_type')), new_create_type_path
+    ul
+      - if policy(CreateType).create?
+        li
+          = link_to t('page.new', model: t('activerecord.models.create_type')), new_create_type_path
