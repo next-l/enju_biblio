@@ -1,26 +1,26 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.item'))
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.item'))
     p#notice
       = notice
     = render 'manifestations/title', manifestation: @manifestation if @manifestation
     .search_form
-      = form_for :items, url: items_path, html: {method: 'get'} do
+      = form_for :items, url: items_path, html: {method: 'get', class: 'form-inline'} do
         p
           = label_tag :search_form_top, t('page.search_term')
           | : 
-          = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
+          => search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'form-control', placeholder: t('page.search_term')}
           = hidden_field_tag :manifestation_id, @manifestation.id if @manifestation
-          = submit_tag t('page.search')
+          = submit_tag t('page.search'), class: 'btn btn-default'
           = set_focus_on_search_form
           br
           = t('activerecord.attributes.item.acquired_at')
           | : 
-          = t('advanced_search.from')
-          = text_field_tag 'acquired_from', @acquired_from, {class: 'date_field', placeholder: "#{t('page.example')}: 2012-04-12"}
-          = t('advanced_search.to')
-          = text_field_tag 'acquired_until', @acquired_until, {class: 'date_field', placeholder: "#{t('page.example')}: 2012-05-11"}
+          => t('advanced_search.from')
+          => text_field_tag 'acquired_from', @acquired_from, {class: 'form-control', placeholder: "#{t('page.example')}: 2012-04-12"}
+          => t('advanced_search.to')
+          => text_field_tag 'acquired_until', @acquired_until, {class: 'form-control', placeholder: "#{t('page.example')}: 2012-05-11"}
     table.table.table-striped.index
       tr
         th
@@ -63,18 +63,18 @@
               |  ) 
     = paginate(@items)
   #submenu.col-md-3
-  = render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation
-  ul
-    - if policy(Item).create? and @manifestation
-      li
-        = link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id)
-  - if defined?(EnjuCirculation)
-    h4
-      = t('activerecord.models.circulation_status')
+    = render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation
     ul
-      - @circulation_status_facet.each do |facet|
+      - if policy(Item).create? and @manifestation
         li
-          = circulation_status_facet(facet)
-        - if params[:circulation_status]
+          = link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id)
+    - if defined?(EnjuCirculation)
+      h4
+        = t('activerecord.models.circulation_status')
+      ul
+        - @circulation_status_facet.each do |facet|
           li
-            = link_to t('page.remove_this_facet'), url_for(params.merge(circulation_status: nil, page: nil, view: nil, only_path: true))
+            = circulation_status_facet(facet)
+          - if params[:circulation_status]
+            li
+              = link_to t('page.remove_this_facet'), url_for(params.merge(circulation_status: nil, page: nil, view: nil, only_path: true))
