@@ -25,6 +25,13 @@
             = link_to checkout_type.display_name.localize, checkout_type
     p
       strong
+        = t('activerecord.models.picture_file')
+        | :
+      br
+      - @carrier_type.picture_files.each do |picture_file|
+        = render 'picture_files/link', picture_file: picture_file
+    p
+      strong
         = t('activerecord.attributes.carrier_type.note')
         | :
       = @carrier_type.note
@@ -32,5 +39,7 @@
     ul
       li
         = link_to t('page.edit'), edit_carrier_type_path(@carrier_type)
+      li
+        = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(carrier_type_id: @carrier_type.id)
       li
         = back_to_index(flash[:page_info])
