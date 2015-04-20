@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.series_statement'))
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.series_statement'))
     p#notice
       = notice
     .search_form
@@ -9,7 +9,7 @@
         p
           = label_tag :search_form_top, t('page.search_term')
           | : 
-          = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
+          => search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           = submit_tag t('page.search')
           = set_focus_on_search_form
     table.table.table-striped.index
@@ -33,7 +33,7 @@
           = link_to t('page.destroy'), series_statement, data: {confirm: t('page.are_you_sure')}, method: :delete if policy(series_statement).destroy?
     = paginate(@series_statements)
   #submenu.col-md-3
-  ul
-    - if policy(SeriesStatement).create?
-      li
-        = link_to t('page.new', model: t('activerecord.models.series_statement')), new_series_statement_path
+    ul
+      - if policy(SeriesStatement).create?
+        li
+          = link_to t('page.new', model: t('activerecord.models.series_statement')), new_series_statement_path

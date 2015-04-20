@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.listing', model: t('activerecord.models.picture_file'))
   #content_list.col-md-9
+      h1.title
+    = t('page.listing', model: t('activerecord.models.picture_file'))
     p#notice
       = notice
     table.table.table-striped.index
@@ -38,14 +38,14 @@
             = link_to t('page.destroy'), picture_file, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@picture_files)
   #submenu.col-md-3
-  - if policy(PictureFile).create?
-    ul
-      li
-        = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path
-      li
-        = link_to t('page.listing', model: t('activerecord.models.shelf')), shelves_path
-      - if defined?(EnjuEvent)
+    - if policy(PictureFile).create?
+      ul
         li
-          = link_to t('page.listing', model: t('activerecord.models.event')), events_path
-      li
-        = link_to t('page.listing', model: t('activerecord.models.agent')), agents_path
+          = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path
+        li
+          = link_to t('page.listing', model: t('activerecord.models.shelf')), shelves_path
+        - if defined?(EnjuEvent)
+          li
+            = link_to t('page.listing', model: t('activerecord.models.event')), events_path
+        li
+          = link_to t('page.listing', model: t('activerecord.models.agent')), agents_path

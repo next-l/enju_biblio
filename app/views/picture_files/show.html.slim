@@ -50,27 +50,27 @@
     ul
       li
         = link_to t('page.edit'), edit_picture_file_path(@picture_file)
-      - if @picture_file.picture_attachable_type?
-        - case @picture_file.picture_attachable.class.name when "Shelf"
-          li
-            = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(shelf_id: @picture_file.picture_attachable_id)
-        | <ruby code="when "Manifestation""> 
-        li
-          = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @picture_file.picture_attachable_id)
-      | <ruby code="when "Agent""> 
-      li
-        = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @picture_file.picture_attachable_id)
-      - else
-        - if defined?(EnjuEvent)
-          - if @picture_file.picture_attachable.class.name == 'Event'
+        - if @picture_file.picture_attachable_type?
+          - case @picture_file.picture_attachable.class.name when "Shelf"
             li
-              = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(event_id: @picture_file.picture_attachable_id)
+              = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(shelf_id: @picture_file.picture_attachable_id)
+          - when 'Manifestation'
+            li
+              = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @picture_file.picture_attachable_id)
+          - when 'Agent'
+            li
+              = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @picture_file.picture_attachable_id)
           - else
-            li
-              = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
+            - if defined?(EnjuEvent)
+              - if @picture_file.picture_attachable.class.name == 'Event'
+                li
+                  = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(event_id: @picture_file.picture_attachable_id)
+              - else
+                li
+                  = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
+            - else
+              li
+                = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
         - else
           li
             = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
-      - else
-        li
-          = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path

@@ -8,7 +8,7 @@ div
       p
         = label_tag :search_form_bottom, t('page.search_term')
         | : 
-        = search_field_tag 'query', h(@query), {id: 'search_form_bottom', class: 'search_form', placeholder: t('page.search_term')}
+        => search_field_tag 'query', h(@query), {id: 'search_form_bottom', class: 'search_form', placeholder: t('page.search_term')}
         = hidden_field_tag 'reservable', h(@reservable) if @reservable
         = submit_tag t('page.search')
         br

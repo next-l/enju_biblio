@@ -29,9 +29,9 @@
           = carrier_type.note
         td
           - if policy(carrier_type).update?
-            = link_to t('page.edit'), edit_carrier_type_path(carrier_type)
+            => link_to t('page.edit'), edit_carrier_type_path(carrier_type)
           - if policy(carrier_type).destroy?
-            = link_to t('page.destroy'), carrier_type_path(carrier_type), data: {confirm: t('page.are_you_sure')}, method: :delete
+            => link_to t('page.destroy'), carrier_type_path(carrier_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
     ul
       - if policy(CarrierType).create?

@@ -29,9 +29,9 @@
           = content_type.note
         td
           - if policy(content_type).update?
-            = link_to t('page.edit'), edit_content_type_path(content_type)
+            => link_to t('page.edit'), edit_content_type_path(content_type)
           - if policy(content_type).destroy?
-            = link_to t('page.destroy'), content_type_path(content_type), data: {confirm: t('page.are_you_sure')}, method: :delete
+            => link_to t('page.destroy'), content_type_path(content_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
     ul
       - if policy(ContentType).create?

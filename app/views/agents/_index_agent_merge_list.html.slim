@@ -7,7 +7,7 @@
         p
           = label_tag :search_form_top, t('page.search_term')
           | : 
-          = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
+          => search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           - if policy(@agent_merge_list).update?
             = render 'page/add'
             = submit_tag t('page.search')

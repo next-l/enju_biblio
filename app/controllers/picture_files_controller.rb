@@ -187,6 +187,11 @@ class PictureFilesController < ApplicationController
       @attachable = @shelf
       return
     end
+    @carrier_type = CarrierType.where(id: params[:carrier_type_id]).first
+    if @carrier_type
+      @attachable = @carrier_type
+      return
+    end
   end
 
   def render_image(file)
