@@ -37,9 +37,14 @@
           |  $(document).ready(function(){ $("a[rel='manifestation_<ruby code="= @manifestation.id"></ruby>']").colorbox({transition:"none", photo:true}); }) 
         - if user_signed_in?
           #call_number_content
-            - @manifestation.items.for_checkout.on_shelf.each do |item|
-              - if item.hold?(current_user.profile.library)
-                = call_number_label(item)
+            - if defined?(EnjuCirculation)
+              - @manifestation.items.for_checkout.on_shelf.each do |item|
+                - if item.hold?(current_user.profile.library)
+                  = call_number_label(item)
+            - else
+              - @manifestation.items.on_shelf.each do |item|
+                - if item.hold?(current_user.profile.library)
+                  = call_number_label(item)
           #resource_bookmark_buttons
             ul
               - if user_signed_in?
