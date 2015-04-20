@@ -126,12 +126,10 @@
     = f.label :description
     = f.text_area :description, class: 'form-control'
   .form-group
-    .form-group
-      = f.label :note
-      = f.text_area :note, class: 'form-control'
+    = f.label :note
+    = f.text_area :note, class: 'form-control'
   .form-group
-    .form-control
-      = f.hidden_field :parent_id
-      = f.hidden_field :lock_version
-      = f.submit data: {disable_with: t('page.saving')}
-    = javascript_tag("$(function(){$('#query').focus()})")
+    = f.submit class: 'btn btn-default', data: {disable_with: t('page.saving')}
+  = f.hidden_field :parent_id
+  = f.hidden_field :lock_version
+  = javascript_tag("$(function(){$('#query').focus()})")

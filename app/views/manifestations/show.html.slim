@@ -38,13 +38,12 @@
         - if user_signed_in?
           #call_number_content
             - if defined?(EnjuCirculation)
-              - @manifestation.items.for_checkout.on_shelf.each do |item|
-                - if item.hold?(current_user.profile.library)
-                  = call_number_label(item)
+              - items = @manifestation.items.for_checkout
             - else
-              - @manifestation.items.on_shelf.each do |item|
-                - if item.hold?(current_user.profile.library)
-                  = call_number_label(item)
+              - items = @manifestation.items
+            - items.on_shelf.each do |item|
+              - if item.hold?(current_user.profile.library)
+                = call_number_label(item)
           #resource_bookmark_buttons
             ul
               - if user_signed_in?
