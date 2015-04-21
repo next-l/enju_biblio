@@ -207,7 +207,7 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  attachment :manifestation_attachment
+  attachment :attachment
   #do_not_validate_attachment_file_type :attachment
 
   validates_presence_of :original_title, :carrier_type, :language

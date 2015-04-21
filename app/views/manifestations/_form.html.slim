@@ -75,7 +75,7 @@
     = f.text_field :pub_date, class: 'form-control', placeholder: "#{t('page.example')}: 2011, 2011-04-12"
   .form-group
     = f.label t('page.file')
-    = f.file_field :attachment
+    = f.attachment_field :attachment
   .form-group
     = f.label t('activerecord.models.content_type')
     = f.select(:content_type_id, @content_types.collect{|c| [c.display_name.localize, c.id]}, {}, {class: 'form-control'})

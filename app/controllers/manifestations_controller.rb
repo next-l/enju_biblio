@@ -405,7 +405,7 @@ class ManifestationsController < ApplicationController
       #format.js
       format.download {
         send_file @manifestation.attachment.download,
-          filename: File.basename(@manifestation.attachment_file_name),
+          filename: File.basename(@manifestation.attachment_filename),
           type: 'application/octet-stream'
       }
       if defined?(EnjuOai)
@@ -455,7 +455,7 @@ class ManifestationsController < ApplicationController
     @manifestation = Manifestation.new(manifestation_params)
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment_file_name
+      @manifestation.original_title = @manifestation.attachment_filename
     end
 
     respond_to do |format|
