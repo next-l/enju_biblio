@@ -138,6 +138,12 @@ module ManifestationsHelper
     title
   end
 
+  def holding_item_sort_criteria( item )
+    own_library = 2
+    own_library = 1 if signed_in? and current_user.profile.library_id == item.shelf.library_id
+    [ own_library, Library.find(item.shelf.library_id).position, item.shelf.position, item.id ]
+  end
+
   if defined?(EnjuBookmark)
     def link_to_bookmark(manifestation)
       if manifestation.bookmarked?(current_user)
