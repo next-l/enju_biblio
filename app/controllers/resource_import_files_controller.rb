@@ -22,7 +22,7 @@ class ResourceImportFilesController < ApplicationController
       format.json { render json: @resource_import_file }
       format.download {
         send_file @resource_import_file.resource_import.download,
-          filename: @resource_import_file.resource_import_file_name,
+          filename: @resource_import_file.resource_import_filename,
           type: 'application/octet-stream'
       }
     end
