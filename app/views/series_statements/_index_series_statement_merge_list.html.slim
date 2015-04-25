@@ -9,7 +9,7 @@
         p
           = label_tag :search_form_top, t('page.search_term')
           | : 
-          = search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
+          => search_field_tag 'query', h(@query), {id: 'search_form_top', class: 'search_form', placeholder: t('page.search_term')}
           - if policy(@series_statement_merge_list).update?
             = render 'page/add'
             = submit_tag t('page.search')
@@ -34,7 +34,7 @@
             - if params[:mode] == 'add'
               = link_to t('page.add'), new_series_statement_merge_list_series_statement_merge_path(@series_statement_merge_list, series_statement_id: series_statement.id) unless @series_statement_merge_list.series_statements.include?(series_statement)
             - else
-              - - series_statement_merge = @series_statement_merge_list.series_statement_merges.where(series_statement_id: series_statement.id).first
+              - series_statement_merge = @series_statement_merge_list.series_statement_merges.where(series_statement_id: series_statement.id).first
               = link_to t('page.destroy'), series_statement_merge_list_series_statement_merge_path(@series_statement_merge_list, series_statement_merge), data: {confirm: t('page.are_you_sure')}, method: :delete if series_statement_merge
     = paginate(@series_statements)
   #submenu.col-md-3

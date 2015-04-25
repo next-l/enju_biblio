@@ -10,14 +10,18 @@ tr
         = link_to manifestation.access_address, manifestation.access_address if manifestation.access_address.present?
       - if current_user.try(:has_role?, 'Librarian')
         - unless manifestation.items.empty?
-        |  (
-        = link_to "#", { onclick: "$('#holding_#{manifestation.id}').toggle(); return false;"} do t('page.holding') end
-        | ) 
-    - else
-      - unless manifestation.items.for_checkout.on_shelf.empty?
-      |  (
-      = link_to "#", { onclick: "$('#holding_#{manifestation.id}').toggle(); return false;"} do t('page.holding') end
-      | ) 
+          |  (
+          = link_to "#", { onclick: "$('#holding_#{manifestation.id}').toggle(); return false;"} do t('page.holding') end
+          | ) 
+      - else
+        - if defined?(EnjuCirculation)
+          - items = manifestation.items.for_checkout
+        - else
+          - items = manifestation.items
+        - unless items.on_shelf.empty?
+          |  (
+          = link_to "#", { onclick: "$('#holding_#{manifestation.id}').toggle(); return false;"} do t('page.holding') end
+          | ) 
       - if defined?(EnjuBookmark)
         - if manifestation.tags.first
           |  (
@@ -43,9 +47,9 @@ tr
         = link_to t('page.edit'), edit_manifestation_path(manifestation)
       - else
         - case
-      - when @parent
-        = link_to t('page.add'), new_manifestation_relationship_path(manifestation_id: @parent.id, child_id: manifestation.id) unless @parent.derived_manifestations.include?(manifestation) or @parent == manifestation
-      - when @item
-        = link_to t('page.change'), edit_item_path(@item, manifestation_id: manifestation.id) unless @item.manifestation == manifestation
-      - else
-        = link_to image_tag('icons/arrow_divide.png', size: '16x16', alt: t('manifestation.add_derivation')), new_manifestation_path(parent_id: manifestation.id)
+        - when @parent
+          = link_to t('page.add'), new_manifestation_relationship_path(manifestation_id: @parent.id, child_id: manifestation.id) unless @parent.derived_manifestations.include?(manifestation) or @parent == manifestation
+        - when @item
+          = link_to t('page.change'), edit_item_path(@item, manifestation_id: manifestation.id) unless @item.manifestation == manifestation
+        - else
+          = link_to image_tag('icons/arrow_divide.png', size: '16x16', alt: t('manifestation.add_derivation')), new_manifestation_path(parent_id: manifestation.id)

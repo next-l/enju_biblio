@@ -1,7 +1,7 @@
 .row
-  h1.title
-    = t('page.showing', model: t('activerecord.models.content_type'))
   #content_list.col-md-9
+    h1.title
+      = t('page.showing', model: t('activerecord.models.content_type'))
     p#notice
       = notice
     p
@@ -20,8 +20,8 @@
         | :
       = @content_type.note
   #submenu.col-md-3
-  ul
-    li
-      = link_to t('page.edit'), edit_content_type_path(@content_type)
-    li
-      = back_to_index(flash[:page_info])
+    ul
+      li
+        = link_to t('page.edit'), edit_content_type_path(@content_type)
+      li
+        = back_to_index(flash[:page_info])

@@ -47,6 +47,7 @@
   .form-group
     = f.label :binding_call_number
     = f.text_field :binding_call_number, class: 'form-control'
+  .form-group
     = f.label :binded_at
     = f.text_field :binded_at, value: @item.binded_at.try(:strftime, "%Y-%m-%d"), class: 'form-control', placeholder: "#{t('page.example')}: 2014-07-20"
   .form-group
@@ -58,7 +59,7 @@
   .form-group
     = f.label :item_identifier
     = f.text_field :item_identifier, class: 'form-control'
-  .actions
-    = f.hidden_field :lock_version
+  .form-group
     = f.submit data: {disable_with: t('page.saving')}, class: 'btn btn-default'
+  = f.hidden_field :lock_version
   = javascript_tag("$(function(){$('#library_id').focus()})")

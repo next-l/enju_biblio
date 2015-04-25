@@ -7,9 +7,10 @@ require 'lisbn'
 require 'statesman'
 require 'faraday'
 require 'nkf'
-require "mini_magick"
-require "refile/rails"
-require "refile/image_processing"
+require 'mini_magick'
+require 'refile/rails'
+require 'refile/image_processing'
+require 'cocoon'
 begin
   require 'charlock_holmes/string'
 rescue LoadError

@@ -1,6 +1,6 @@
 = form_for(@agent_relationship) do |f|
   = f.error_messages
-  .field
+  .form-group
     - if @agent_relationship.try(:parent)
       = f.label :parent
       br
@@ -10,7 +10,7 @@
       = f.label :parent
       br
       = f.text_field :parent_id
-  .field
+  .form-group
     - if @agent_relationship.child.try(:full_name)
       = f.label :child
       br
@@ -20,9 +20,9 @@
       = f.label :child
       br
       = f.text_field :child_id
-  .field
+  .form-group
     = f.label :agent_relationship_type_id
     br
     = f.select(:agent_relationship_type_id, @agent_relationship_types.collect{|r| [r.display_name.localize, r.id]})
-  .actions
+  .form-control
     = f.submit class: 'btn btn-default'

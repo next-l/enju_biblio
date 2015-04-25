@@ -92,7 +92,7 @@
                   = identifier.identifier_type.display_name.localize
                   | : 
                   = identifier_link(identifier)
-        - unless manifestation.attachment_file_name.blank?
+        - unless manifestation.attachment_filename.blank?
         = render 'manifestations/attachment_file', manifestation: manifestation
         tr
           td

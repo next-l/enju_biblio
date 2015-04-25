@@ -1,6 +1,6 @@
 = form_for(@realize) do |f|
   = f.error_messages
-  .field
+  .form-group
     = f.label t('activerecord.models.agent')
     br
     - if @realize.agent
@@ -8,7 +8,7 @@
       = f.hidden_field :agent_id
     - else
       = f.text_field :agent_id
-  .field
+  .form-group
     = f.label t('activerecord.models.manifestation')
     br
     - if @realize.expression
@@ -16,9 +16,9 @@
       = f.hidden_field :expression_id
     - else
       = f.text_field :expression_id
-  .field
+  .form-group
     = f.label t('activerecord.models.realize_type')
     br
     = f.select :realize_type_id, @realize_types.map{|r| [r.display_name.localize, r.id]}
-  .actions
+  .form-control
     = f.submit class: 'btn btn-default'

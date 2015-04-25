@@ -16,7 +16,10 @@
       - if current_user.try(:has_role?, 'Librarian')
         - items = manifestation.items
       - else
-        - items = manifestation.items.for_checkout.on_shelf
+        - if defined?(EnjuCirculation)
+          - items = manifestation.items.for_checkout.on_shelf
+        - else
+          - items = manifestation.items.on_shelf
       - items.each do |item|
         tr
           td
