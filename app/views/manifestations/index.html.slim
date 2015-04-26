@@ -1,4 +1,21 @@
 .row
+  .col-md-3
+    .panel.panel-default
+      .panel-heading 検索結果
+      .panel-body
+        - if @parent and policy(@parent).update?
+          = render 'submenu_parent'
+        h4
+          = link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(params.merge(action: 'index', view: nil, carrier_type: nil, library: nil, language: nil, subject: nil, only_path: true))
+        - if @manifestations.total_count > 0
+          = render 'manifestations/all_facet'
+          div
+            - if params[:library_id].blank?
+              = link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, library_id: nil, only_path: true)))
+              = link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true))
+            - else
+              = link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, only_path: true)))
+              = link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true))
   .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
     .panel.panel-default
       .panel-heading
@@ -63,22 +80,6 @@
         - else
           = render 'manifestations/not_found'
           .autopagerize_insert_before
-  #submenu.col-md-3
-    .panel.panel-default
-      .panel-body
-        - if @parent and policy(@parent).update?
-          = render 'submenu_parent'
-        h3
-          = link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(params.merge(action: 'index', view: nil, carrier_type: nil, library: nil, language: nil, subject: nil, only_path: true))
-        - if @manifestations.total_count > 0
-          = render 'manifestations/all_facet'
-          div
-            - if params[:library_id].blank?
-              = link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, library_id: nil, only_path: true)))
-              = link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true))
-            - else
-              = link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, only_path: true)))
-              = link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true))
 - if defined?(EnjuBookmark)
   script[type="text/javascript"]
     |  window.onload = function() { $("#tag_cloud_list").load('<ruby code="= url_for(params.merge(view: "tag_cloud", only_path: true))"></ruby>', hideTagCloudSpinner); } function hideTagCloudSpinner(){ $("#spinner_tag_cloud").hide(); } 
