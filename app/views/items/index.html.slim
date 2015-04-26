@@ -1,4 +1,20 @@
 .row
+  #submenu.col-md-3
+    = render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation
+    ul
+      - if policy(Item).create? and @manifestation
+        li
+          = link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id)
+      - if defined?(EnjuCirculation)
+        h4
+          = t('activerecord.models.circulation_status')
+        ul
+          - @circulation_status_facet.each do |facet|
+            li
+              = circulation_status_facet(facet)
+              - if params[:circulation_status]
+              li
+                = link_to t('page.remove_this_facet'), url_for(params.merge(circulation_status: nil, page: nil, view: nil, only_path: true))
   #content_list.col-md-9
     h1.title
       = t('page.listing', model: t('activerecord.models.item'))
@@ -62,19 +78,3 @@
               = l(item.checkouts.first.due_date, format: :short)
               |  ) 
     = paginate(@items)
-  #submenu.col-md-3
-    = render 'manifestations/book_jacket', manifestation: @manifestation if @manifestation
-    ul
-      - if policy(Item).create? and @manifestation
-        li
-          = link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: @manifestation.id)
-      - if defined?(EnjuCirculation)
-        h4
-          = t('activerecord.models.circulation_status')
-        ul
-          - @circulation_status_facet.each do |facet|
-            li
-              = circulation_status_facet(facet)
-              - if params[:circulation_status]
-              li
-                = link_to t('page.remove_this_facet'), url_for(params.merge(circulation_status: nil, page: nil, view: nil, only_path: true))

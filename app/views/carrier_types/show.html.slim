@@ -1,4 +1,12 @@
 .row
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.edit'), edit_carrier_type_path(@carrier_type)
+      li
+        = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(carrier_type_id: @carrier_type.id)
+      li
+        = back_to_index(flash[:page_info])
   #content_list.col-md-9
     h1.title
       = t('page.showing', model: t('activerecord.models.carrier_type'))
@@ -34,11 +42,3 @@
         = t('activerecord.attributes.carrier_type.note')
         | :
       = @carrier_type.note
-  #submenu.col-md-3
-    ul
-      li
-        = link_to t('page.edit'), edit_carrier_type_path(@carrier_type)
-      li
-        = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(carrier_type_id: @carrier_type.id)
-      li
-        = back_to_index(flash[:page_info])

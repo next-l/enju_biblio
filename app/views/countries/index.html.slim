@@ -1,4 +1,8 @@
 .row
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.new', model: t('activerecord.models.country')), new_country_path
   #content_list.col-md-9
     h1.title
       = t('page.listing', model: t('activerecord.models.country'))
@@ -32,9 +36,5 @@
           = country.numeric_3
         td
           - if policy(country).update?
-            = link_to t('page.edit'), edit_country_path(country)
+            => link_to t('page.edit'), edit_country_path(country)
     = paginate(@countries)
-  #submenu.col-md-3
-    ul
-      li
-        = link_to t('page.new', model: t('activerecord.models.country')), new_country_path

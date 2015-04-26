@@ -1,4 +1,9 @@
 .row
+  #submenu.col-md-3
+    ul
+      - if policy(Frequency).create?
+        li
+          = link_to t('page.new', model: t('activerecord.models.frequency')), new_frequency_path
   #content_list.col-md-9
     h1.title
       = t('page.listing', model: t('activerecord.models.frequency'))
@@ -32,8 +37,3 @@
             => link_to t('page.edit'), edit_frequency_path(frequency)
           - if policy(frequency).destroy?
             => link_to t('page.destroy'), frequency_path(frequency), data: {confirm: t('page.are_you_sure')}, method: :delete
-  #submenu.col-md-3
-    ul
-      - if policy(Frequency).create?
-        li
-          = link_to t('page.new', model: t('activerecord.models.frequency')), new_frequency_path

@@ -1,7 +1,11 @@
 .row
-  h1.title
-    = t('page.showing', model: t('activerecord.models.import_request'))
+  #submenu.col-md-3
+    ul
+      li
+        = back_to_index(flash[:page_info])
   #content_list.col-md-9
+    h1.title
+      = t('page.showing', model: t('activerecord.models.import_request'))
     p#notice
       = notice
     p
@@ -33,7 +37,3 @@
         = t('activerecord.models.manifestation')
         | :
       = link_to @import_request.manifestation.original_title, @import_request.manifestation if @import_request.manifestation
-  #submenu.col-md-3
-  ul
-    li
-      = back_to_index(flash[:page_info])
