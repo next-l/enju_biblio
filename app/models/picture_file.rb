@@ -34,7 +34,7 @@ end
 #  position                :integer
 #  created_at              :datetime
 #  updated_at              :datetime
-#  picture_file_name       :string
+#  picture_filename        :string
 #  picture_content_type    :string
 #  picture_file_size       :integer
 #  picture_updated_at      :datetime

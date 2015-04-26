@@ -1,0 +1,47 @@
+.row
+  #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.resource_import_file'))
+    p#notice
+      = notice
+    table.table.table-striped.index
+      thead
+        tr
+          th[style="width: 30px"]
+            | Id
+          th
+            = t('activerecord.attributes.resource_import_file.resource_import_filename')
+          th
+            = t('activerecord.attributes.resource_import_file.edit_mode')
+          th
+            = t('activerecord.attributes.resource_import_file.executed_at')
+          th
+            = t('activerecord.attributes.resource_import_file.state')
+          th
+      tbody
+        - @resource_import_files.each do |resource_import_file|
+          |  <tr class="line
+          = cycle("0", "1")
+          | "> 
+          td
+            = link_to (resource_import_file.id), resource_import_file
+          td
+            = link_to resource_import_file.resource_import_filename, resource_import_file_path(resource_import_file, format: :download) if resource_import_file.resource_import_filename
+            br
+            = t('activerecord.models.user')
+            | : 
+            = link_to resource_import_file.user.username, resource_import_file.user.profile if resource_import_file.user.try(:profile)
+          td
+            = resource_import_file.edit_mode
+          td
+            = l(resource_import_file.executed_at) if resource_import_file.executed_at
+          td
+            = localized_state(resource_import_file.current_state)
+          td
+            => link_to t('page.show'), resource_import_file
+            => link_to t('page.destroy'), resource_import_file, data: {confirm: t('page.are_you_sure')}, method: :delete
+    = paginate(@resource_import_files)
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.new', model: t('activerecord.models.resource_import_file')), new_resource_import_file_path

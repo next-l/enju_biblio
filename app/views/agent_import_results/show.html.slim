@@ -1,0 +1,26 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.agent_import_result'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    p
+      b
+        = t('activerecord.models.agent_import_file')
+      = @agent_import_result.agent_import_file.agent_import_filename
+    p
+      b
+        = t('activerecord.models.agent')
+      = link_to @agent_import_result.agent.full_name, @agent_import_result.agent if @agent_import_result.agent
+    p
+      b
+        = t('activerecord.attributes.agent_import_result.body')
+      = @agent_import_result.body
+    p
+      b
+        = t('page.created_at')
+      =l @agent_import_result.created_at
+  #submenu.col-md-3
+  ul
+    li
+      = back_to_index(flash[:page_info])

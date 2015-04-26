@@ -1,0 +1,34 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.resource_import_result'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    p
+      b
+        = t('activerecord.models.resource_import_file')
+      = @resource_import_result.resource_import_file.resource_import_filename
+    p
+      b
+        = t('activerecord.models.manifestation')
+      = link_to @resource_import_result.manifestation.original_title, @resource_import_result.manifestation if @resource_import_result.manifestation
+    p
+      b
+        = t('activerecord.models.item')
+      = link_to @resource_import_result.item.item_identifier, @resource_import_result.item if @resource_import_result.item
+    p
+      b
+        = t('activerecord.attributes.resource_import_result.error_message')
+      = @resource_import_result.error_message
+    p
+      b
+        = t('activerecord.attributes.resource_import_result.body')
+      = @resource_import_result.body
+    p
+      b
+        = t('page.created_at')
+      =l @resource_import_result.created_at
+  #submenu.col-md-3
+  ul
+    li
+      = back_to_index(flash[:page_info])

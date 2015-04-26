@@ -1,0 +1,37 @@
+.row
+  h1.title
+    = t('page.listing', model: t('activerecord.models.realize'))
+  #content_list.col-md-9
+    h2.resource_title
+      = link_to expression.original_title, expression
+    table.table.table-striped.index
+      tr
+        th#position
+        th
+          = t('activerecord.models.agent')
+        th
+          = t('page.created_at')
+        th
+          = t('page.updated_at')
+      - @realizes.each do |realize|
+        |  <tr class="line
+        = cycle("0", "1")
+        | "> 
+        td
+          - if policy(realize).destroy?
+            = realize.first? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_up.png', size: '16x16', alt: t('page.asc')), expression_realize_path(realize.expression, realize, move: 'higher'), method: :put)
+            = realize.last? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_down.png', size: '16x16', alt: t('page.desc')), expression_realize_path(realize.expression, realize, move: 'lower'), method: :put)
+        td
+          = link_to realize.agent.try(:full_name), realize.agent
+        td
+          = l(realize.created_at)
+        td
+          = l(realize.updated_at)
+    = paginate(@realizes)
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.listing', model: t('activerecord.models.agent')), agents_path(expression_id: expression.id)
+    - if policy(Realize).create?
+      li
+        = link_to t('page.new', model: t('activerecord.models.realize')), new_realize_path(expression_id: expression.id)

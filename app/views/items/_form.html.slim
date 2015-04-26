@@ -1,0 +1,65 @@
+= render 'page/required_field'
+= simple_form_for(@item) do |f|
+  = f.error_messages
+  = f.hidden_field :manifestation_id, value: @item.manifestation_id if @item.manifestation_id
+  .form-inline
+    = f.label "#{t('activerecord.models.library')} / #{t('activerecord.models.shelf')}"
+    |  
+    = f.select(:library_id, @libraries.map{|l| [l.display_name.localize, l.id]}, {}, {class: 'form-control'})
+    |  
+    = f.select(:shelf_id, @shelves.map{|s| [s.display_name.localize, s.id]}, {}, {class: 'form-control'})
+    = render 'observe_field'
+  - if defined?(EnjuCirculation)
+    .form-group
+      = f.label t('activerecord.models.checkout_type')
+      = f.select(:checkout_type_id, @checkout_types.collect{|c| [c.display_name.localize, c.id]}, {}, {class: 'form-control'})
+    .form-group
+      = f.label t('activerecord.models.circulation_status')
+      = f.select(:circulation_status_id, @circulation_statuses.collect{|c| [c.display_name.localize, c.id]}, {}, {class: 'form-control'})
+    .form-group
+      = f.label t('activerecord.models.use_restriction')
+      = f.fields_for :item_has_use_restriction do |i|
+        = i.select(:use_restriction_id, @use_restrictions.collect{|r| [r.display_name.localize, r.id]}, {}, {class: 'form-control'})
+  .form-group
+    .checkbox-inline
+      = f.check_box :include_supplements
+      = f.label :include_supplements
+  .form-group
+    = f.label :call_number
+    = f.text_field :call_number, class: 'form-control'
+  .form-group
+    = f.label t('activerecord.models.budget_type')
+    = f.select(:budget_type_id, @budget_types.collect{|b| [b.display_name.localize, b.id]}, {include_blank: true}, {class: 'form-control'})
+    = f.label t('activerecord.models.bookstore')
+    = f.select(:bookstore_id, @bookstores.collect{|b| [b.name, b.id]}, {include_blank: true}, {class: 'form-control'})
+  .form-group
+    = f.label :price
+    = f.text_field :price, class: 'form-control'
+  .form-group
+    = f.label :url
+    = f.url_field :url, class: 'form-control'
+  .form-group
+    = f.label t('role.required_role')
+    = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}, {}, {class: 'form-control'})
+  .form-group
+    = f.label :acquired_at
+    = f.text_field :acquired_at, value: @item.acquired_at.try(:strftime, "%Y-%m-%d"), class: 'form-control', placeholder: "#{t('page.example')}: 2011-04-12"
+  .form-group
+    = f.label :binding_call_number
+    = f.text_field :binding_call_number, class: 'form-control'
+  .form-group
+    = f.label :binded_at
+    = f.text_field :binded_at, value: @item.binded_at.try(:strftime, "%Y-%m-%d"), class: 'form-control', placeholder: "#{t('page.example')}: 2014-07-20"
+  .form-group
+    = f.label :binding_item_identifier
+    = f.text_field :binding_item_identifier, class: 'form-control'
+  .form-group
+    = f.label :note
+    = f.text_area :note, class: 'form-control'
+  .form-group
+    = f.label :item_identifier
+    = f.text_field :item_identifier, class: 'form-control'
+  .form-group
+    = f.submit data: {disable_with: t('page.saving')}, class: 'btn btn-default'
+  = f.hidden_field :lock_version
+  = javascript_tag("$(function(){$('#library_id').focus()})")

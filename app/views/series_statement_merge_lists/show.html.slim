@@ -1,0 +1,27 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.series_statement_merge_list'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    = form_for(:series_statement_merge_list, url: series_statement_merge_list_path(@series_statement_merge_list, mode: 'merge'), html: { method: :put }) do |f|
+      p
+        strong
+          = t('page.title')
+          | :
+        = @series_statement_merge_list.title
+      ul
+        - @series_statement_merge_list.series_statements.each do |series_statement|
+          li
+            = radio_button_tag 'selected_series_statement_id', series_statement.id
+            = link_to series_statement.original_title, series_statement
+      - if @series_statement_merge_list.series_statements.size > 1
+        = f.submit t('page.merge'), data: {confirm: t('page.are_you_sure')}
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.listing', model: t('activerecord.models.series_statement')), series_statement_merge_list_series_statements_path(@series_statement_merge_list)
+    li
+      = link_to t('page.edit'), edit_series_statement_merge_list_path(@series_statement_merge_list)
+    li
+      = back_to_index(flash[:page_info])

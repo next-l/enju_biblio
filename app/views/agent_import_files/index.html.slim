@@ -1,0 +1,45 @@
+.row
+  h1.title
+    = t('page.listing', model: t('activerecord.models.agent_import_file'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    table.table.table-striped.index
+      tr
+        th
+          | Id
+        th
+          = t('activerecord.attributes.agent_import_file.agent_import_filename')
+        th
+          = t('activerecord.attributes.agent_import_file.executed_at')
+        th
+          = t('activerecord.models.user')
+        th
+          = t('activerecord.attributes.agent_import_file.edit_mode')
+        th
+          = t('activerecord.attributes.agent_import_file.state')
+        th
+      - @agent_import_files.each do |agent_import_file|
+        |  <tr class="line
+        = cycle("0", "1")
+        | "> 
+        td
+          = link_to agent_import_file.id, agent_import_file
+        td
+          = link_to agent_import_file.agent_import_filename, agent_import_file_path(agent_import_file, format: :download) if agent_import_file.agent_import_filename
+        td
+          = l(agent_import_file.executed_at) if agent_import_file.executed_at
+        td
+          = link_to agent_import_file.user.username, agent_import_file.user.profile if agent_import_file.user.try(:profile)
+        td
+          = agent_import_file.edit_mode
+        td
+          = localized_state(agent_import_file.current_state)
+        td
+          = link_to t('page.show'), agent_import_file
+          = link_to t('page.destroy'), agent_import_file, data: {confirm: t('page.are_you_sure')}, method: :delete
+    = paginate(@agent_import_files)
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.new', model: t('activerecord.models.agent_import_file')), new_agent_import_file_path

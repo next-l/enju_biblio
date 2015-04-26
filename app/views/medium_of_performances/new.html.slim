@@ -1,0 +1,9 @@
+.row
+  h1.title
+    = t('page.new', model: t('activerecord.models.medium_of_performance'))
+  #content_list.col-md-9
+    = render 'form'
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.back'), medium_of_performances_path

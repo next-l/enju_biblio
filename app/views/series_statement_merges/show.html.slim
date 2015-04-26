@@ -1,0 +1,22 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.series_statement_merge'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.models.series_statement')
+        | :
+      = link_to @series_statement_merge.series_statement.original_title, @series_statement_merge.series_statement
+    p
+      strong
+        = t('activerecord.models.series_statement_merge_list')
+        | :
+      = link_to @series_statement_merge.series_statement_merge_list.title, @series_statement_merge.series_statement_merge_list
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.add', model: t('activerecord.models.series_statement')), series_statement_merge_list_series_statements_path(@series_statement_merge.series_statement_merge_list)
+    li
+      = link_to t('page.edit'), edit_series_statement_merge_path(@series_statement_merge)

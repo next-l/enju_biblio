@@ -1,0 +1,25 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.own'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.models.agent')
+        | :
+      = link_to @own.agent.full_name, @own.agent
+    p
+      strong
+        = t('activerecord.models.item')
+        | :
+      = link_to @own.item.item_identifier, @own.item
+      |  (
+      = link_to @own.item.manifestation.original_title, @own.item.manifestation
+      | ) 
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.back_to', model: t('activerecord.models.agent')), agents_path(item_id: @own.item_id)
+    li
+      = link_to t('page.back_to', model: t('activerecord.models.item')), items_path(agent_id: @own.agent_id)

@@ -1,0 +1,7 @@
+- if policy(manifestation).show?
+  tr
+    td
+      = t('manifestation.attachment_file')
+      | :
+    td
+      = link_to manifestation.attachment_filename, attachment_url(manifestation, :attachment)

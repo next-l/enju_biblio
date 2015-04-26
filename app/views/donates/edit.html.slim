@@ -1,0 +1,22 @@
+.row
+  h1.title
+    = t('page.editing', model: t('activerecord.models.donate'))
+  #content_list.col-md-9
+    = form_for(@donate) do |f|
+      = f.error_messages
+      .form-group
+        = f.label t('activerecord.models.agent')
+        br
+        = f.text_field :agent_id
+      .form-group
+        = f.label t('activerecord.models.item')
+        br
+        = f.text_field :item_id
+      .form-control
+        = f.submit class: 'btn btn-default'
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.show'), @donate
+    li
+      = link_to t('page.back'), donates_path

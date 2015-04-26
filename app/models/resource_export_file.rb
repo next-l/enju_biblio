@@ -45,13 +45,12 @@ end
 #
 # Table name: resource_export_files
 #
-#  id                           :integer          not null, primary key
-#  user_id                      :integer
-#  executed_at                  :datetime
-#  created_at                   :datetime
-#  updated_at                   :datetime
-#  resource_export_id           :string
-#  resource_export_file_name    :string
-#  resource_export_size         :integer
-#  resource_export_content_type :integer
+#  id                       :integer          not null, primary key
+#  user_id                  :integer
+#  executed_at              :datetime
+#  created_at               :datetime
+#  updated_at               :datetime
+#  resource_export_id       :string
+#  resource_export_size     :integer
+#  resource_export_filename :string
 #

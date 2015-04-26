@@ -1,0 +1,18 @@
+.row
+  h1.title
+    = t('page.editing', model: t('activerecord.models.agent_import_file'))
+  #content_list.col-md-9
+    = form_for(@agent_import_file) do |f|
+      = f.error_messages
+      .form-group
+        = f.label :agent_import_filename
+        br
+        = f.text_field :agent_import_filename
+      .form-control
+        = f.submit class: 'btn btn-default'
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.show'), @agent_import_file
+    li
+      = link_to t('page.back'), agent_import_files_path

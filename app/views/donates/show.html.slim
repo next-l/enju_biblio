@@ -1,0 +1,25 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.donate'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.models.agent')
+        | :
+      = link_to @donate.agent.full_name, @donate.agent
+    p
+      strong
+        = t('activerecord.models.item')
+        | :
+      = link_to @donate.item.manifestation.original_title, @donate.item.manifestation
+      |  (
+      = link_to @donate.item.item_identifier, @donate.item
+      | ) 
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.edit'), edit_donate_path(@donate)
+    li
+      = back_to_index(flash[:page_info])

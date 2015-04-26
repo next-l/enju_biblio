@@ -95,6 +95,8 @@ class ContentTypesController < ApplicationController
   end
 
   def content_type_params
-    params.require(:content_type).permit(:name, :display_name, :note)
+    params.require(:content_type).permit(
+      :name, :display_name, :note, :attachment
+    )
   end
 end

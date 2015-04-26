@@ -1,0 +1,33 @@
+.row
+  #content_list.col-md-9
+    h1.title
+      = t('page.showing', model: t('activerecord.models.content_type'))
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.content_type.name')
+        | :
+      = @content_type.name
+    p
+      strong
+        = t('activerecord.attributes.content_type.display_name')
+        | :
+      = @content_type.display_name.localize
+    p
+      strong
+        = t('activerecord.models.picture_file')
+        | :
+      br
+      = link_to @content_type.attachment_filename, attachment_url(@content_type, :attachment)
+    p
+      strong
+        = t('activerecord.attributes.content_type.note')
+        | :
+      = @content_type.note
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.edit'), edit_content_type_path(@content_type)
+      li
+        = back_to_index(flash[:page_info])

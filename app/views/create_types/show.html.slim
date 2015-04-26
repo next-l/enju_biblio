@@ -1,0 +1,27 @@
+.row
+  #content_list.col-md-9
+    h1.title
+      = t('page.showing', model: t('activerecord.models.create_type'))
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.create_type.name')
+        | :
+      = @create_type.name
+    p
+      strong
+        = t('activerecord.attributes.create_type.display_name')
+        | :
+      = @create_type.display_name.localize
+    p
+      strong
+        = t('activerecord.attributes.create_type.note')
+        | :
+      = @create_type.note
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.edit'), edit_create_type_path(@create_type)
+      li
+        = back_to_index(flash[:page_info])

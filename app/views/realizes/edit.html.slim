@@ -1,0 +1,11 @@
+.row
+  h1.title
+    = t('page.editing', model: t('activerecord.models.realize'))
+  #content_list.col-md-9
+    = render 'form'
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.show'), @realize
+    li
+      = link_to t('page.back'), realizes_path

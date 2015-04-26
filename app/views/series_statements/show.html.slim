@@ -1,0 +1,37 @@
+.row
+  #content_list.col-md-9
+    h1.title
+      = t('page.showing', model: t('activerecord.models.series_statement'))
+    p#notice
+      = notice
+    - if @series_statement.root_manifestation and @manifestation_ids
+      = render 'manifestations/paginate_id_link', manifestation: @series_statement.root_manifestation , manifestation_ids: @manifestation_ids
+    h2.resource_title
+      = @series_statement.original_title
+    table#resource_detail
+      tr
+        td[style="width: 200px"]
+          = t('activerecord.attributes.series_statement.title_transcription')
+        td[style="width: 490px"]
+          = @series_statement.title_transcription
+      tr
+        td[style="width: 200px"]
+          = t('activerecord.attributes.series_statement.title_subseries')
+        td[style="width: 490px"]
+          = @series_statement.title_subseries
+          - if @series_statement.title_subseries_transcription?
+            |  (
+            = @series_statement.title_subseries_transcription
+            | ) 
+      tr
+        td
+          = t('activerecord.attributes.series_statement.note')
+        td
+          = @series_statement.note
+  #submenu.col-md-3
+    ul
+      - if policy(@series_statement).update?
+        li
+          = link_to t('page.edit'), edit_series_statement_path(@series_statement)
+      li
+        = back_to_index(flash[:page_info])

@@ -1,0 +1,22 @@
+.row
+  h1.title
+    = t('page.showing', model: t('activerecord.models.agent_relationship'))
+  #content_list.col-md-9
+    p#notice
+      = notice
+    p
+      strong
+        = t('activerecord.attributes.agent_relationship.parent')
+        | :
+      = link_to @agent_relationship.parent.full_name, @agent_relationship.parent
+    p
+      strong
+        = t('activerecord.attributes.agent_relationship.child')
+        | :
+      = link_to @agent_relationship.child.full_name, @agent_relationship.child
+  #submenu.col-md-3
+  ul
+    li
+      = link_to t('page.edit'), edit_agent_relationship_path(@agent_relationship)
+    li
+      = back_to_index(flash[:page_info])

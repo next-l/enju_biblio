@@ -3,7 +3,6 @@ require 'tasks/agent_type'
 require 'tasks/carrier_type'
 require 'tasks/content_type'
 require 'tasks/identifier_type'
-require 'tasks/item'
 
 namespace :enju_biblio do
   desc "create initial records for enju_biblio"

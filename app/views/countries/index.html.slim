@@ -1,0 +1,40 @@
+.row
+  #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('activerecord.models.country'))
+    table.table.table-striped.index
+      tr
+        th#position
+        th
+          = t('activerecord.attributes.country.name')
+        th
+          = t('activerecord.attributes.country.display_name')
+        th
+          | ISO-3166-1
+        th
+      - @countries.each do |country|
+        |  <tr class="line
+        = cycle("0", "1")
+        | "> 
+        td
+          - if policy(country).update?
+            = move_position(country)
+        td
+          = country.name
+        td
+          = link_to country.display_name.localize, country
+        td
+          |  alpha-2: 
+          = country.alpha_2
+          |  alpha-3: 
+          = country.alpha_3
+          |  numeric: 
+          = country.numeric_3
+        td
+          - if policy(country).update?
+            = link_to t('page.edit'), edit_country_path(country)
+    = paginate(@countries)
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.new', model: t('activerecord.models.country')), new_country_path
