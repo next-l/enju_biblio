@@ -28,8 +28,7 @@
         = t('activerecord.models.picture_file')
         | :
       br
-      - @carrier_type.picture_files.each do |picture_file|
-        = render 'picture_files/link', picture_file: picture_file
+      = link_to @carrier_type.attachment_filename, attachment_url(@carrier_type, :attachment)
     p
       strong
         = t('activerecord.attributes.carrier_type.note')

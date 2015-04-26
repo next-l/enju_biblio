@@ -10,9 +10,9 @@
       = @agent_import_file.id
     p
       strong
-        = t('activerecord.attributes.agent_import_file.agent_import_file_name')
+        = t('activerecord.attributes.agent_import_file.agent_import_filename')
         | :
-      = link_to @agent_import_file.agent_import_file_name, agent_import_file_path(@agent_import_file, format: :download) if @agent_import_file.agent_import_file_name
+      = link_to @agent_import_file.agent_import_filename, agent_import_file_path(@agent_import_file, format: :download) if @agent_import_file.agent_import_filename
     p
       strong
         = t('activerecord.attributes.agent_import_file.agent_import_content_type')

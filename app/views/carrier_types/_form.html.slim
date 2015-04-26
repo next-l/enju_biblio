@@ -11,6 +11,10 @@
   - if defined?(EnjuCirculation) and !@carrier_type.new_record?
     = render 'carrier_types/checkout_form', f: f
   .form-group
+    = f.label :attachment
+    br
+    = f.file_field :attachment
+  .form-group
     = f.label :note
     br
     = f.text_area :note, class: 'form-control'

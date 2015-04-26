@@ -16,6 +16,12 @@
       = @content_type.display_name.localize
     p
       strong
+        = t('activerecord.models.picture_file')
+        | :
+      br
+      = link_to @content_type.attachment_filename, attachment_url(@content_type, :attachment)
+    p
+      strong
         = t('activerecord.attributes.content_type.note')
         | :
       = @content_type.note

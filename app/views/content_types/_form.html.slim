@@ -9,6 +9,10 @@
     br
     = f.text_area :display_name, class: 'form-control'
   .form-group
+    = f.label :attachment
+    br
+    = f.file_field :attachment
+  .form-group
     = f.label :note
     br
     = f.text_area :note, class: 'form-control'

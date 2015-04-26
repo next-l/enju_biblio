@@ -2,8 +2,8 @@ class CarrierType < ActiveRecord::Base
   include MasterModel
   default_scope { order("carrier_types.position") }
   has_many :manifestations
-  has_many :picture_files, as: :picture_attachable, dependent: :destroy
   enju_circulation_carrier_type_model if defined?(EnjuCirculation)
+  attachment :attachment
 
   def mods_type
     case name
@@ -20,11 +20,15 @@ end
 #
 # Table name: carrier_types
 #
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
+#  id                      :integer          not null, primary key
+#  name                    :string           not null
+#  display_name            :text
+#  note                    :text
+#  position                :integer
+#  created_at              :datetime
+#  updated_at              :datetime
+#  attachment_id           :string
+#  attachment_filename     :string
+#  attachment_size         :integer
+#  attachment_content_type :string
 #
