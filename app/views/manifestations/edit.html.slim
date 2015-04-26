@@ -1,8 +1,4 @@
 .row
-  #content_list.col-md-9
-    h1.title
-      = t('page.editing', model: t('activerecord.models.manifestation'))
-    = render 'manifestations/form'
   #submenu.col-md-3
     = render 'manifestations/book_jacket', manifestation: @manifestation
     ul
@@ -17,3 +13,7 @@
       - else
         li
           = link_to t('page.back'), manifestations_path
+  #content_list.col-md-9
+    h1.title
+      = t('page.editing', model: t('activerecord.models.manifestation'))
+    = render 'manifestations/form'

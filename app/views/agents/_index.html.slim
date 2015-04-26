@@ -1,4 +1,11 @@
 .row
+  #submenu.col-md-3
+    ul
+      - if policy(Agent).create?
+        li
+          = link_to t('agent.add'), new_agent_path
+        li
+          = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path
   #content_list.col-md-9
     h1.title
       = t('page.listing', model: t('activerecord.models.agent'))
@@ -18,10 +25,3 @@
         th
       = render @agents
     = paginate(@agents)
-  #submenu.col-md-3
-    ul
-      - if policy(Agent).create?
-        li
-          = link_to t('agent.add'), new_agent_path
-        li
-          = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path

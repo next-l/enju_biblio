@@ -30,36 +30,36 @@
     br
     = f.text_field :birth_date, class: 'date_field'
   - unless @user
+    .form-group
+      = f.label :date_of_death
+      br
+      = f.text_field :death_date, class: 'date_field'
   .form-group
-    = f.label :date_of_death
+    = f.label t('activerecord.models.language')
+    = f.select(:language_id, @languages.collect{|l| [l.display_name.localize, l.id]})
+  .form-group
+    = f.label t('activerecord.models.country')
+    = f.select(:country_id, @countries.collect{|c| [c.display_name.localize, c.id]})
+  .form-group
+    = f.label :email
     br
-    = f.text_field :death_date, class: 'date_field'
-.form-group
-  = f.label t('activerecord.models.language')
-  = f.select(:language_id, @languages.collect{|l| [l.display_name.localize, l.id]})
-.form-group
-  = f.label t('activerecord.models.country')
-  = f.select(:country_id, @countries.collect{|c| [c.display_name.localize, c.id]})
-.form-group
-  = f.label :email
-  br
-  = f.email_field :email, class: 'resource_email'
-.form-group
-  = f.label :url
-  br
-  = f.url_field :url, class: 'resource_url'
-.form-group
-  = f.label t('role.required_role')
-  = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]})
-.form-control
-  = f.submit class: 'btn btn-default'
-.form-group
-  = f.label :note
-  br
-  = f.text_area :note, class: 'resource_textarea'
-.form-control
-  = hidden_field_tag 'work_id', @work.id if @work
-  = hidden_field_tag 'expression_id', @expression.id if @expression
-  = hidden_field_tag 'manifestation_id', @manifestation.id if @manifestation
-  = hidden_field_tag 'item_id', @item.id if @item
-  = f.submit class: 'btn btn-default'
+    = f.email_field :email, class: 'resource_email'
+  .form-group
+    = f.label :url
+    br
+    = f.url_field :url, class: 'resource_url'
+  .form-group
+    = f.label t('role.required_role')
+    = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]})
+  .form-control
+    = f.submit class: 'btn btn-default'
+  .form-group
+    = f.label :note
+    br
+    = f.text_area :note, class: 'resource_textarea'
+  .form-control
+    = hidden_field_tag 'work_id', @work.id if @work
+    = hidden_field_tag 'expression_id', @expression.id if @expression
+    = hidden_field_tag 'manifestation_id', @manifestation.id if @manifestation
+    = hidden_field_tag 'item_id', @item.id if @item
+    = f.submit class: 'btn btn-default'

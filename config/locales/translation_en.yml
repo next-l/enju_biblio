@@ -151,7 +151,7 @@ en:
         email: Email
         url: URL
       agent_import_file:
-        agent_import_file_name: Filename
+        agent_import_filename: Filename
         agent_import_content_type: Content type
         agent_import_file_size: Size
         agent_import_fingerprint: File hash
@@ -172,7 +172,7 @@ en:
         note: Note
         position: Position
       resource_import_file:
-        resource_import_file_name: Filename
+        resource_import_filename: Filename
         resource_import_content_type: Content type
         resource_import_file_size: Size
         resource_import_fingerprint: File hash
@@ -252,7 +252,7 @@ en:
         picture_file_size: Size
         picture_content_type: Content type
         title: Title
-        picture_file_name: Filename
+        picture_filename: Filename
         height: Height
         width: Width
         thumbnail: Thumbnail
@@ -316,8 +316,12 @@ en:
         manifestation_id: Manifestation
         primary: Primary
       resource_export_file:
-        resource_export_file_name: Filename
+        resource_export_filename: Filename
         resource_export_file_size: Size
+        state: State
+      agent_export_file:
+        agent_export_filename: Filename
+        agent_export_file_size: Size
         state: State
       agent_merge_list:
         title: Title
