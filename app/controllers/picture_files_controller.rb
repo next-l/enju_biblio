@@ -202,7 +202,7 @@ class PictureFilesController < ApplicationController
       disposition = 'inline'
     end
 
-    send_file file, filename: File.basename(@picture_file.picture_file_name),
+    send_file file, filename: File.basename(@picture_file.picture_filename),
       type: @picture_file.picture_content_type, disposition: disposition
   end
 end
