@@ -1,4 +1,11 @@
 .row
+  #submenu.col-md-3
+    ul
+      - if policy(@series_statement).update?
+        li
+          = link_to t('page.edit'), edit_series_statement_path(@series_statement)
+      li
+        = back_to_index(flash[:page_info])
   #content_list.col-md-9
     h1.title
       = t('page.showing', model: t('activerecord.models.series_statement'))
@@ -28,10 +35,3 @@
           = t('activerecord.attributes.series_statement.note')
         td
           = @series_statement.note
-  #submenu.col-md-3
-    ul
-      - if policy(@series_statement).update?
-        li
-          = link_to t('page.edit'), edit_series_statement_path(@series_statement)
-      li
-        = back_to_index(flash[:page_info])

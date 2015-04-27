@@ -11,11 +11,11 @@
           = render 'manifestations/all_facet'
           div
             - if params[:library_id].blank?
-              = link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, library_id: nil, only_path: true)))
-              = link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true))
+              => link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, library_id: nil, only_path: true)))
+              => link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true))
             - else
-              = link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, only_path: true)))
-              = link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true))
+              => link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'icon'), url_for(params.merge(format: :rss, page: nil, only_path: true)))
+              => link_to t('page.search_result_feed'), url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true))
   .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
     .panel.panel-default
       .panel-heading

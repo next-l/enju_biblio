@@ -1,22 +1,4 @@
 .row
-  .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
-    .panel.panel-default
-      .panel-heading
-        = t('page.showing', model: t('activerecord.models.manifestation'))
-      .panel-body
-        p#notice
-          = notice
-        = render 'paginate_id_link', manifestation: @manifestation, manifestation_ids: @manifestation_ids
-        = render 'manifestations/title', manifestation: @manifestation
-        - if @version
-          p
-            | (
-            = l(@manifestation.versions.find(@version).created_at)
-            | )
-        - if current_user.try(:has_role?, 'Librarian')
-          = render 'manifestations/show_detail_librarian', manifestation: @manifestation
-        - else
-          = render 'manifestations/show_detail_user', manifestation: @manifestation
   #submenu.col-md-3
     .panel.panel-default
       .panel-body
@@ -77,3 +59,21 @@
                       | )
             - if current_user.try(:has_role?, 'Librarian')
               = render 'manifestations/edit_detail'
+  .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
+    .panel.panel-default
+      .panel-heading
+        = t('page.showing', model: t('activerecord.models.manifestation'))
+      .panel-body
+        p#notice
+          = notice
+        = render 'paginate_id_link', manifestation: @manifestation, manifestation_ids: @manifestation_ids
+        = render 'manifestations/title', manifestation: @manifestation
+        - if @version
+          p
+            | (
+            = l(@manifestation.versions.find(@version).created_at)
+            | )
+        - if current_user.try(:has_role?, 'Librarian')
+          = render 'manifestations/show_detail_librarian', manifestation: @manifestation
+        - else
+          = render 'manifestations/show_detail_user', manifestation: @manifestation

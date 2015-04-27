@@ -1,4 +1,10 @@
 .row
+  #submenu.col-md-3
+    ul
+      li
+        = link_to t('page.show'), @picture_file
+      li
+        = link_to t('page.back'), :back
   #content_list.col-md-9
     h1.title
       = t('page.editing', model: t('activerecord.models.picture_file'))
@@ -34,9 +40,3 @@
         = f.text_field :height
       .form-control
         = f.submit class: 'btn btn-default'
-  #submenu.col-md-3
-    ul
-      li
-        = link_to t('page.show'), @picture_file
-      li
-        = link_to t('page.back'), :back
