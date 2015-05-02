@@ -618,10 +618,10 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} carrier_type_s:#{options[:carrier_type]}"
     #end
 
-    #unless options[:library].blank?
-    #  library_list = options[:library].split.uniq.join(' && ')
-    #  query = "#{query} library_sm:#{library_list}"
-    #end
+    unless options[:library_adv].blank?
+      library_list = options[:library_adv].split.uniq.join(' OR ')
+      query = "#{query} library_sm:(#{library_list})"
+    end
 
     #unless options[:language].blank?
     #  query = "#{query} language_sm:#{options[:language]}"
