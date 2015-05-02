@@ -184,6 +184,12 @@ describe ManifestationsController do
         expect(response).to be_success
         expect(assigns(:manifestations).size).to eq 2
       end
+
+      it "should show manifestation with call_number", :solr => true do
+        get :index, :call_number => "547|ヤ"
+        expect(response).to be_success
+        expect(assigns(:manifestations)).not_to be_empty
+      end
     end
   end
 
