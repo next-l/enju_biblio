@@ -24,7 +24,7 @@
           = link_to t('page.destroy'), series_statement_merge, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@series_statement_merges)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if @series_statement_merge_list
-      li
+      li.list-group-item
         = link_to t('page.add', model: t('activerecord.models.series_statement')), series_statement_merge_list_series_statements_path(@series_statement_merge_list)

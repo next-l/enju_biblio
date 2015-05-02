@@ -11,6 +11,6 @@ div[data-role="content"]
         = submit_tag t('page.search')
 ul[data-role="listview"]
   - @agents.each do |agent|
-    li
+    li.list-group-item
       = link_to agent.full_name, agent
 = paginate(@agents)

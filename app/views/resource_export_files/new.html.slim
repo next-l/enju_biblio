@@ -6,6 +6,6 @@
       = t('export.are_you_sure_to_export')
     = render 'form'
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = link_to t('page.listing', model: t('activerecord.models.resource_export_file')), resource_export_files_path

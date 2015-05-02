@@ -1,7 +1,9 @@
 .row
   .col-md-3
     .panel.panel-default
-      .panel-heading 検索結果
+      .panel-heading
+        h2.panel-title
+          | 検索結果
       .panel-body
         - if @parent and policy(@parent).update?
           = render 'submenu_parent'
@@ -19,7 +21,8 @@
   .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
     .panel.panel-default
       .panel-heading
-        = t('page.search_resource', model: t('page.resource'))
+        h1.panel-title
+          = t('page.search_resource', model: t('page.resource'))
       .panel-body
         p#notice
           = notice

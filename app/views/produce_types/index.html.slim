@@ -33,7 +33,7 @@
           - if policy(produce_type).destroy?
             = link_to t('page.destroy'), produce_type_path(produce_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-    ul
+    ul.list-group
       - if policy(ProduceType).create?
-        li
+        li.list-group-item
           = link_to t('page.new', model: t('activerecord.models.produce_type')), new_produce_type_path

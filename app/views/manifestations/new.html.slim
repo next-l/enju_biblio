@@ -1,11 +1,11 @@
 .row
   #submenu.col-md-3
-    ul
+    ul.list-group
       - if @agent
-        li
+        li.list-group-item
           = link_to t('page.back'), publisher_manifestations_path(@agent)
       - else
-        li
+        li.list-group-item
           = link_to t('page.back'), manifestations_path
   #content_list.col-md-9
     h1.title

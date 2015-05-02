@@ -15,8 +15,8 @@
         | :
       = link_to @series_statement_merge.series_statement_merge_list.title, @series_statement_merge.series_statement_merge_list
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = link_to t('page.add', model: t('activerecord.models.series_statement')), series_statement_merge_list_series_statements_path(@series_statement_merge.series_statement_merge_list)
-    li
+    li.list-group-item
       = link_to t('page.edit'), edit_series_statement_merge_path(@series_statement_merge)

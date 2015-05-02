@@ -33,7 +33,7 @@
           - if policy(agent_relationship_type).destroy?
             = link_to t('page.destroy'), agent_relationship_type_path(agent_relationship_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(AgentRelationshipType).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.agent_relationship_type')), new_agent_relationship_type_path

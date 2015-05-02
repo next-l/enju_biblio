@@ -1,10 +1,10 @@
 .row
   #submenu.col-md-3
-    ul
+    ul.list-group
       - if policy(Agent).create?
-        li
+        li.list-group-item
           = link_to t('agent.add'), new_agent_path
-        li
+        li.list-group-item
           = link_to t('page.merge', model: t('activerecord.models.agent')), agent_merge_lists_path
   #content_list.col-md-9
     h1.title

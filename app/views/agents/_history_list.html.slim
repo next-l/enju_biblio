@@ -1,7 +1,7 @@
 #history
-  ul
+  ul.list-group
     - @agent.versions.reverse.each_with_index do |version, i|
-      li
+      li.list-group-item
         = link_to l(version.created_at), agent_path(@agent, version_id: version.id)
         - if i == 0
           |  (

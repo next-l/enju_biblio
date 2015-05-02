@@ -26,9 +26,9 @@ div[data-role="content"]
           strong
             = t('activerecord.models.lending_policy')
             | :
-        ul
+        ul.list-group
           - @item.lending_policies.each do |lending_policy|
-            li
+            li.list-group-item
               = lending_policy.user_group.display_name.localize
         p
           strong
@@ -45,8 +45,8 @@ div[data-role="content"]
             = t('activerecord.models.use_restriction')
             | :
           - if @item.use_restriction
-            ul
-              li
+            ul.list-group
+              li.list-group-item
                 = @item.use_restriction.display_name.localize
       p
         strong

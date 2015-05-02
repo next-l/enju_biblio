@@ -3,17 +3,17 @@
     .panel.panel-default
       .panel-body
         = render 'manifestations/book_jacket', manifestation: @manifestation
-        ul
+        ul.list-group
           - if @manifestation.picture_files.exists?
-            li
+            li.list-group-item
               = t('page.total')
               | : 
               = @manifestation.picture_files.count
               = t('page.number_of_pictures', count: @manifestation.picture_files.count)
-            li
+            li.list-group-item
               = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @manifestation.id)
           - if policy(PictureFile).create?
-            li
+            li.list-group-item
               = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: @manifestation.id)
         script[type="text/javascript"]
           |  $(document).ready(function(){ $("a[rel='manifestation_<ruby code="= @manifestation.id"></ruby>']").colorbox({transition:"none", photo:true}); }) 
@@ -27,19 +27,19 @@
               - if item.hold?(current_user.profile.library)
                 = call_number_label(item)
           #resource_bookmark_buttons
-            ul
+            ul.list-group
               - if user_signed_in?
                 - if current_user.email.present?
-                  li
+                  li.list-group-item
                     = link_to t('manifestation.send_email'), manifestation_path(mode: 'send_email'), data: {confirm: t('page.are_you_sure')}
                   - if defined?(EnjuBookmark)
-                    li
+                    li.list-group-item
                       = link_to_bookmark(@manifestation)
                 - unless @manifestation.carrier_type.name == 'file'
                 - if defined?(EnjuCirculation)
                   - if user_signed_in?
                     - if @manifestation.is_reservable_by?(current_user)
-                      li
+                      li.list-group-item
                         = link_to_reservation(@manifestation, @reserve)
                         br
                         |  (
@@ -47,11 +47,11 @@
                         | )
                     - else
                       - if defined?(EnjuPurchaseRequest)
-                        li
+                        li.list-group-item
                           = link_to t('activerecord.models.purchase_request'), new_purchase_request_path(purchase_request: {url: manifestation_url(@manifestation)})
                   - else
                     - unless @manifestation.items.for_checkout.empty?
-                    li
+                    li.list-group-item
                       = link_to_reservation(@manifestation, @reserve)
                       br
                       |  (

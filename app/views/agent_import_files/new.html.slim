@@ -32,6 +32,6 @@
         = f.hidden_field :mode, value: 'import'
         = f.submit t('page.start_import')
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = back_to_index(flash[:page_info])

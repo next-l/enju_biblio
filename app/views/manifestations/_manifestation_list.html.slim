@@ -1,7 +1,7 @@
 #related_manifestation
-  ul
+  ul.list-group
     - manifestation.original_manifestations.each do |manifestation|
-      li
+      li.list-group-item
         |  [M] 
         = link_to manifestation.original_title, manifestation
         = form_icon(manifestation.carrier_type)
@@ -14,7 +14,7 @@
           = manifestation.pub_date
           | ) 
       - manifestation.derived_manifestations.each do |manifestation|
-        li
+        li.list-group-item
           |  [M] 
           = link_to manifestation.original_title, manifestation
           = form_icon(manifestation.carrier_type)

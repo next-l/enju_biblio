@@ -4,7 +4,7 @@ ul.hidden
       em
         = t('page.detail')
   - if manifestation.original_manifestations.exists? or manifestation.derived_manifestations.exists?
-    li
+    li.list-group-item
       a[href="#related_manifestation"]
         em
           = t('page.related_manifestation')
@@ -13,7 +13,7 @@ ul.hidden
           | )
     - if defined?(EnjuQuestion)
       - unless manifestation.questions(user: current_user).empty?
-      li
+      li.list-group-item
         a[href="#question"]
           em
             = t('resource.question')

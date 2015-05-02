@@ -1,12 +1,12 @@
 h4
   = t('manifestation.reservable')
-ul
+ul.list-group
   - @reservable_facet.each do |facet|
     - facet.value ? facet_reservable = true : facet_reservable = false
-    li
+    li.list-group-item
       - if @reservable == facet_reservable
         strong
           = link_to "#{localized_boolean(facet.value)} (#{facet.count})", url_for(params.merge(page: nil, reservable: facet.value.to_s, view: nil, only_path: true))
   - unless @reservable.nil?
-    li
+    li.list-group-item
       = link_to t('page.remove_this_facet'), url_for(params.merge(reservable: nil, page: nil, view: nil, only_path: true))

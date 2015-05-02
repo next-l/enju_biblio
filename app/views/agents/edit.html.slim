@@ -1,12 +1,12 @@
 .row
   #submenu.col-md-3
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('page.show'), @agent
       - if policy(@agent).destroy?
-        li
+        li.list-group-item
           = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
-        li
+        li.list-group-item
           = link_to t('page.back'), agents_path
   #content_list.col-md-9
     h1.title

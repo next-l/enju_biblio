@@ -1,10 +1,10 @@
 h4
   = t('activerecord.models.library')
-ul
+ul.list-group
   - libraries = params[:library].to_s.split
   - @library_facet.each do |facet|
     - current_libraries = libraries.dup
     = library_facet(current_libraries, facet)
     - if params[:library]
-      li
+      li.list-group-item
         = link_to t('page.remove_this_facet'), url_for(params.merge(library: nil, page: nil, view: nil, only_path: true))

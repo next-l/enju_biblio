@@ -1,13 +1,13 @@
 #related
-  ul
+  ul.list-group
     - @agent.parents.each do |agent_relationship|
-      li
+      li.list-group-item
         |  [P] (
         = agent_relationship.agent_relationship_type.display_name.localize
         | ) 
         = link_to agent_relationship.parent.full_name, agent_relationship.parent
       - @agent.children.each do |agent_relationship|
-        li
+        li.list-group-item
           |  [P] (
           = agent_relationship.agent_relationship_type.display_name.localize
           | ) 

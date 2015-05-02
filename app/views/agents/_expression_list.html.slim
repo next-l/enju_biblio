@@ -1,8 +1,8 @@
 #expression
   = paginate(@expressions, param_name: :expression_list_page, remote: true)
-  ul
+  ul.list-group
     - @expressions.each do |manifestation|
-      li
+      li.list-group-item
         |  [M] 
         = link_to manifestation.original_title, manifestation
         = form_icon(manifestation.carrier_type)

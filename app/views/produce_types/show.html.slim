@@ -20,8 +20,8 @@
         | :
       = @produce_type.note
   #submenu.col-md-3
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('page.edit'), edit_produce_type_path(@produce_type)
-      li
+      li.list-group-item
         = back_to_index(flash[:page_info])

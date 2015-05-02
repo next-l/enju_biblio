@@ -27,6 +27,6 @@
             = link_to t('page.destroy'), agent_relationship, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agent_relationships)
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = link_to t('page.new', model: t('activerecord.models.agent_relationship')), new_agent_relationship_path

@@ -28,7 +28,7 @@
             = link_to t('page.destroy'), produce_path(produce, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@produces)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(Produce).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.produce')), new_produce_path(agent_id: agent.id)

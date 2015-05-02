@@ -29,7 +29,7 @@
           = l(create.updated_at)
     = paginate(@creates)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(Create).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.create')), new_work_create_path(work)

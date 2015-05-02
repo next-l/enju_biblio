@@ -1,8 +1,8 @@
 .row
   #submenu.col-md-3
     - if policy(Language).create?
-      ul
-        li
+      ul.list-group
+        li.list-group-item
           = link_to t('page.new', model: t('activerecord.models.language')), new_language_path
   #content_list.col-md-9
     h1.title

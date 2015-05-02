@@ -65,11 +65,11 @@
       = link_to @agent_import_file.user.username, @agent_import_file.user.profile if @agent_import_file.user.try(:profile)
   #submenu.col-md-3
   = form_for(@agent_import_file) do |f|
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('activerecord.models.agent_import_result'), agent_import_results_path(agent_import_file_id: @agent_import_file.id)
-      li
+      li.list-group-item
         = back_to_index(flash[:page_info])
       - if current_user.has_role?('Administrator')
-        li
+        li.list-group-item
           = link_to 'Resque', resque_path

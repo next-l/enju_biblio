@@ -40,6 +40,6 @@
               = link_to t('page.destroy'), agent_merge_list_agent_merge_path(@agent_merge_list, agent_merge), data: {confirm: t('page.are_you_sure')}, method: :delete if agent_merge
     = paginate(@agents)
   #submenu.ui-corner-all
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('page.listing', model: t('activerecord.models.agent_merge_list')), @agent_merge_list

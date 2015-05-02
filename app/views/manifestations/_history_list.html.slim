@@ -1,7 +1,7 @@
 #history
-  ul
+  ul.list-group
     - manifestation.versions.reverse.each_with_index do |version, i|
-      li
+      li.list-group-item
         = link_to l(version.created_at), manifestation_path(manifestation, version_id: version.id)
         - if i == 0
           |  (

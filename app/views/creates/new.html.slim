@@ -4,10 +4,10 @@
   #content_list.col-md-9
     = render 'form'
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if @create.agent
-      li
+      li.list-group-item
         = link_to t('page.listing', model: t('activerecord.models.work')), manifestations_path(creator_id: @create.agent_id)
       - if @create.work
-        li
+        li.list-group-item
           = link_to t('page.listing', model: t('activerecord.models.agent')), agents_path(work_id: @create.work_id)

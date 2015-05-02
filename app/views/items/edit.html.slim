@@ -6,11 +6,11 @@
     = render 'form'
   #submenu.col-md-3
     = render 'manifestations/book_jacket', manifestation: @item.manifestation
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('page.show'), @item
         - if policy(@item).destroy?
-          li
+          li.list-group-item
             = link_to t('page.destroy'), @item, data: {confirm: t('page.are_you_sure')}, method: :delete
-      li
+      li.list-group-item
         = link_to t('page.back'), items_path(@item.manifestation.id)

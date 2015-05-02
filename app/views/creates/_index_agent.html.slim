@@ -33,7 +33,7 @@
             = link_to t('page.destroy'), create_path(create, agent_id: agent.id), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@creates)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(Create).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.create')), new_create_path(agent_id: agent.id)

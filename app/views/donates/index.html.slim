@@ -30,7 +30,7 @@
             = link_to t('page.destroy'), donate, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@donates)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(Donate).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.donate')), new_donate_path

@@ -40,6 +40,6 @@
           = link_to t('page.destroy'), agent_import_file, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agent_import_files)
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = link_to t('page.new', model: t('activerecord.models.agent_import_file')), new_agent_import_file_path

@@ -10,6 +10,6 @@ div[data-role="content"]
       = submit_tag t('page.search')
 ul[data-role="listview"]
   - @manifestations.each do |manifestation|
-    li
+    li.list-group-item
       = link_to manifestation.original_title, manifestation
 = paginate(@manifestations, window: 0, theme: 'enju_leaf_mobile')

@@ -1,17 +1,17 @@
 .row
   #submenu.col-md-3
     = render 'manifestations/book_jacket', manifestation: @manifestation
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('page.show'), @manifestation
       - if policy(@manifestation).destroy?
-        li
+        li.list-group-item
           = link_to t('page.destroy'), @manifestation, data: {confirm: t('page.are_you_sure')}, method: :delete
       - case when @agent
-        li
+        li.list-group-item
           = link_to t('page.back'), publisher_manifestations_path(@agent)
       - else
-        li
+        li.list-group-item
           = link_to t('page.back'), manifestations_path
   #content_list.col-md-9
     h1.title

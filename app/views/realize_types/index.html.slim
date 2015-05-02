@@ -33,7 +33,7 @@
           - if policy(realize_type).destroy?
             = link_to t('page.destroy'), realize_type_path(realize_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-    ul
+    ul.list-group
       - if policy(RealizeType).create?
-        li
+        li.list-group-item
           = link_to t('page.new', model: t('activerecord.models.realize_type')), new_realize_type_path

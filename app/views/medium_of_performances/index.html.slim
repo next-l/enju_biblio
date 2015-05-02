@@ -33,7 +33,7 @@
           - if policy(medium_of_performance).destroy?
             = link_to t('page.destroy'), medium_of_performance_path(medium_of_performance), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(MediumOfPerformance).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.medium_of_performance')), new_medium_of_performance_path

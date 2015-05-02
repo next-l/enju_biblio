@@ -1,31 +1,31 @@
 .row
   #submenu.col-md-3
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = link_to t('page.edit'), edit_picture_file_path(@picture_file)
         - if @picture_file.picture_attachable_type?
           - case @picture_file.picture_attachable.class.name when "Shelf"
-            li
+            li.list-group-item
               = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(shelf_id: @picture_file.picture_attachable_id)
           - when 'Manifestation'
-            li
+            li.list-group-item
               = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @picture_file.picture_attachable_id)
           - when 'Agent'
-            li
+            li.list-group-item
               = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @picture_file.picture_attachable_id)
           - else
             - if defined?(EnjuEvent)
               - if @picture_file.picture_attachable.class.name == 'Event'
-                li
+                li.list-group-item
                   = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(event_id: @picture_file.picture_attachable_id)
               - else
-                li
+                li.list-group-item
                   = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
             - else
-              li
+              li.list-group-item
                 = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
         - else
-          li
+          li.list-group-item
             = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path
   #content_list.col-md-9
     h1.title

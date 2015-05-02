@@ -15,8 +15,8 @@
         | :
       = link_to @produce.manifestation_original_title, @produce.manifestation
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = link_to t('page.back_to', model: t('activerecord.models.agent')), agents_path(manifestation_id: @produce.manifestation_id)
-    li
+    li.list-group-item
       = link_to t('page.back_to', model: t('activerecord.models.manifestation')), manifestations_path(publisher_id: @produce.agent_id)

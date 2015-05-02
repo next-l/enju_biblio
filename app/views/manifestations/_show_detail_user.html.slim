@@ -87,9 +87,9 @@
             = t('page.identifier')
             | :
           td
-            ul
+            ul.list-group
               - manifestation.identifiers.each do |identifier|
-                li
+                li.list-group-item
                   = identifier.identifier_type.display_name.localize
                   | : 
                   = identifier_link(identifier)

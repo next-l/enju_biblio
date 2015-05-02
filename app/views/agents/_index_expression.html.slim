@@ -42,9 +42,9 @@
               = link_to t('page.destroy'), expression_realize_path(expression, expression.realized(agent)), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agents)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(Agent).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.agent')), new_expression_agent_path(expression)
-      li
+      li.list-group-item
         = link_to t('page.rearrange_order'), expression_realizes_path(expression)

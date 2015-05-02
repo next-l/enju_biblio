@@ -7,10 +7,10 @@
   #submenu.col-md-3
     - if @manifestation
       = render 'manifestations/book_jacket', manifestation: @manifestation
-      ul
+      ul.list-group
         - if @manifestation
-          li
+          li.list-group-item
             = link_to t('page.back'), items_path(manifestation_id: @manifestation.id)
         - else
-          li
+          li.list-group-item
             = link_to t('page.back'), items_path

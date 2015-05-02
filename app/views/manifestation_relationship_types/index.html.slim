@@ -33,7 +33,7 @@
           - if policy(manifestation_relationship_type).destroy?
             = link_to t('page.destroy'), manifestation_relationship_type_path(manifestation_relationship_type), data: {confirm: t('page.are_you_sure')}, method: :delete
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(ManifestationRelationshipType).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.manifestation_relationship_type')), new_manifestation_relationship_type_path

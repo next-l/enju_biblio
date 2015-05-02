@@ -33,8 +33,8 @@
           = link_to t('page.destroy'), resource_import_result, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@resource_import_results)
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       - if @resource_import_file
         = link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), resource_import_results_path(resource_import_file_id: @resource_import_file.id, format: :txt))
         |  (

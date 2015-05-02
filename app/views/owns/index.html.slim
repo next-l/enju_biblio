@@ -32,7 +32,7 @@
             = link_to t('page.destroy'), own, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@owns)
   #submenu.col-md-3
-  ul
+  ul.list-group
     - if policy(Own).create?
-      li
+      li.list-group-item
         = link_to t('page.new', model: t('activerecord.models.own')), new_own_path

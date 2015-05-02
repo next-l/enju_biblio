@@ -27,6 +27,6 @@
             = link_to t('page.destroy'), manifestation_relationship, data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@manifestation_relationships)
   #submenu.col-md-3
-  ul
-    li
+  ul.list-group
+    li.list-group-item
       = link_to t('page.new', model: t('activerecord.models.manifestation_relationship')), new_manifestation_relationship_path

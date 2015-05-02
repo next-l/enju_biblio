@@ -37,9 +37,9 @@ div[style="color: red"]
           strong
             = t('activerecord.models.lending_policy')
             | :
-        ul
+        ul.list-group
           - @item.lending_policies.each do |lending_policy|
-            li
+            li.list-group-item
               = link_to lending_policy.user_group.display_name.localize, lending_policy
         p
           strong
@@ -56,8 +56,8 @@ div[style="color: red"]
             = t('activerecord.models.use_restriction')
             | :
           - if @item.use_restriction
-            ul
-              li
+            ul.list-group
+              li.list-group-item
                 = @item.use_restriction.display_name.localize
       p
         strong
@@ -128,24 +128,24 @@ div[style="color: red"]
       = render 'tooltip', item: @item
   #submenu.col-md-3
     = render 'manifestations/book_jacket', manifestation: @item.manifestation
-    ul
-      li
+    ul.list-group
+      li.list-group-item
         = back_to_index(flash[:page_info])
       - if policy(@item).update?
-        li
+        li.list-group-item
           = link_to t('page.edit'), edit_item_path(@item)
       - if defined?(EnjuInterLibraryLoan)
-        li
+        li.list-group-item
           = link_to t('page.listing', model: t('activerecord.models.inter_library_loan')), item_inter_library_loans_path(@item)
       - if policy(@item).destroy?
-        li
+        li.list-group-item
           = link_to t('page.destroy'), @item, data: {confirm: t('page.are_you_sure')}, method: :delete
       - if defined?(EnjuInterLibraryLoan)
         - if @item.inter_library_loans.empty?
-          li
+          li.list-group-item
             = link_to t('item.add_new_copy'), new_item_path(manifestation_id: @item.manifestation.id)
         - if defined?(EnjuCirculation)
-          li
+          li.list-group-item
             = link_to t('page.listing', model: t('activerecord.models.lending_policy')), lending_policies_path(item_id: @item.id)
-          li
+          li.list-group-item
             = link_to t('page.checkout_history'), checkouts_path(item_id: @item.id)
