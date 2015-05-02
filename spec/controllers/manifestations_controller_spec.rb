@@ -197,8 +197,6 @@ describe ManifestationsController do
         expect(assigns(:manifestations).count).to eq 3
         expect(assigns(:manifestations).total_count).to eq 119
       end
-=======
->>>>>>> a4246fe... search criteria for libraries from advanced search page. cf. next-l/enju_leaf#580.
     end
   end
 

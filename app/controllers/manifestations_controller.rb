@@ -673,6 +673,10 @@ class ManifestationsController < ApplicationController
       query = "#{query} publisher_text:#{options[:publisher]}"
     end
 
+    if options[:call_number].present?
+      query = "#{query} call_number_sm:#{options[:call_number]}*"
+    end
+
     if options[:item_identifier].present?
       query = "#{query} item_identifier_sm:#{options[:item_identifier]}"
     end

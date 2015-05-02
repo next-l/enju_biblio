@@ -51,6 +51,9 @@ class Manifestation < ActiveRecord::Base
         items.pluck(:item_identifier)
       end
     end
+    string :call_number, multiple: true do
+      items.pluck(:call_number)
+    end
     string :title, multiple: true
     # text フィールドだと区切りのない文字列の index が上手く作成
     #できなかったので。 downcase することにした。
