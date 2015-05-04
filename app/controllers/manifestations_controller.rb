@@ -231,7 +231,11 @@ class ManifestationsController < ApplicationController
       end
 
       page ||= params[:page] || 1
-      per_page ||= Manifestation.default_per_page
+      if params[:per_page].to_i > 0
+        per_page = params[:per_page].to_i
+      else
+        per_page = Manifestation.default_per_page
+      end
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
