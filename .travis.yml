@@ -10,13 +10,6 @@ before_script:
 services:
   - elasticsearch
   - redis-server
-gemfile:
-  - gemfiles/rails_4.1.gemfile
-  - gemfiles/rails_4.2.gemfile
-before_script: "bundle exec rake db:migrate"
-services:
-  - elasticsearch
-  - redis-server
 env:
   - DB=sqlite
   - DB=mysql
