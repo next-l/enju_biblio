@@ -12,6 +12,7 @@ services:
   - redis-server
 before_script: "bundle exec rake db:migrate"
 services:
+  - elasticsearch
   - redis-server
 env:
   - DB=sqlite

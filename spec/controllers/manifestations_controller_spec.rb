@@ -173,6 +173,30 @@ describe ManifestationsController do
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_empty
       end
+
+      it "should show manifestation with library 3", :solr => true do
+        get :index, :library_adv => ["hachioji"]
+        expect(response).to be_success
+        expect(assigns(:manifestations).size).to eq 1
+      end
+
+      it "should show manifestation with library 2 or 3", :solr => true do
+        get :index, :library_adv => ["hachioji", "kamata"]
+        expect(response).to be_success
+        expect(assigns(:manifestations).size).to eq 2
+      end
+
+      it "should show manifestation with call_number", :solr => true do
+        get :index, :call_number => "547|ヤ"
+        expect(response).to be_success
+        expect(assigns(:manifestations)).not_to be_empty
+      end
+
+      it "should accept per_page params" do
+        get :index, per_page: 3
+        expect(assigns(:manifestations).count).to eq 3
+        expect(assigns(:manifestations).total_count).to eq 119
+      end
     end
   end
 
