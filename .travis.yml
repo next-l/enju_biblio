@@ -22,19 +22,18 @@ env:
 matrix:
   exclude:
   - rvm: 1.9.3
-    gemfile: gemfiles/rails4_1.gemfile
+    gemfile: gemfiles/rails_4.1.gemfile
   - rvm: 1.9.3
-    gemfile: gemfiles/rails4_2.gemfile
+    gemfile: gemfiles/rails_4.2.gemfile
   - rvm: 2.0.0
-    gemfile: gemfiles/rails3_2.gemfile
+    gemfile: gemfiles/rails_3.2.gemfile
   - rvm: 2.0.0
-    gemfile: gemfiles/rails4_2.gemfile
+    gemfile: gemfiles/rails_4.2.gemfile
   - rvm: 2.1.5
-    gemfile: gemfiles/rails3_2.gemfile
-  - rvm: 2.2.1
-    gemfile: gemfiles/rails3_2.gemfile
+    gemfile: gemfiles/rails_3.2.gemfile
+  - rvm: 2.2.2
+    gemfile: gemfiles/rails_3.2.gemfile
 notifications:
   slack:
     secure: a4NQNeYYOKABDoP9lFJt9oEx6QRRfagA4sjOeJUMjdc2AFGDtZ95FvZom9s9YYimduIUQfUScNF4tJvAzqrYhHTAaBxcLRERZQZWse4sZj0+xzSvUqauPCXwDheVCc/tlriUm06skKfz8WZBqL6vZyw4FfV6xLSrHVFAeIeSdsU=
 sudo: false
-cache: bundler
