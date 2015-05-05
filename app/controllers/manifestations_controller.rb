@@ -275,7 +275,7 @@ class ManifestationsController < ApplicationController
       end
       @manifestations = Kaminari.paginate_array(
         search_result.results, total_count: max_count
-      ).page(page)
+      ).page(page).per(per_page)
 
       if params[:format].blank? or params[:format] == 'html'
         @carrier_type_facet = search_result.facet(:carrier_type).rows
