@@ -398,7 +398,7 @@ class ManifestationsController < ApplicationController
 
     if @manifestation.attachment.path
       if ENV['ENJU_STORAGE'] == 's3'
-        data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
+        data = Faraday.get(@manifestation.attachment.expiring_url).body.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
       end
