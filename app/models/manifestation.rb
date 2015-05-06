@@ -398,7 +398,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def index_series_statement
-    series_statements.map{|s| s.index; s.root_manifestation.index}
+    series_statements.map{|s| s.index; s.root_manifestation.try(:index)}
   end
 
   def acquired_at
