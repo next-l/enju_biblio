@@ -188,7 +188,7 @@ class ManifestationsController < ApplicationController
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
       max_number_of_results = @library_group.settings[:max_number_of_results].to_i
       if max_number_of_results == 0
-        @max_number_of_results = Manifestation.count
+        @max_number_of_results = Manifestation.search.total
       else
         @max_number_of_results = max_number_of_results
       end
