@@ -229,8 +229,7 @@ class Manifestation < ActiveRecord::Base
   validates :edition, numericality: {greater_than: 0}, allow_blank: true
   before_create :set_fingerprint, if: Proc.new{|model| model.attachment}
   before_save :set_date_of_publication, :set_number
-  after_create :clear_cached_numdocs
-  after_save :index_series_statement
+  after_save :index_series_statement, :extract_text!
   after_destroy :index_series_statement
   after_touch do |manifestation|
     manifestation.index
@@ -361,9 +360,20 @@ class Manifestation < ActiveRecord::Base
 
   def extract_text
     return nil unless attachment
-    # TODO: S3 support
-    response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=json" --data-binary @#{attachment.download.path} -H "Content-type:text/html"`
-    self.fulltext = JSON.parse(response)[""]
+    client = Faraday.new(url: ENV['SOLR_URL']) do |conn|
+      conn.request :multipart
+      conn.adapter :net_http
+    end
+    response = client.post('update/extract?extractOnly=true&wt=json&extractFormat=text') do |req|
+      req.headers['Content-type'] = 'text/html'
+      req.body = attachment.read
+    end
+    update_column(:fulltext, JSON.parse(response.body)[""])
+  end
+
+  def extract_text!
+    extract_text
+    index!
   end
 
   def created(agent)
