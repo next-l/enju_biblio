@@ -230,7 +230,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def import_marc(marc_type)
-    file = File.open(self.resource_import.path)
+    file = File.open(resource_import.path)
     case marc_type
     when 'marcxml'
       reader = MARC::XMLReader.new(file)
