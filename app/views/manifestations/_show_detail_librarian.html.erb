@@ -106,9 +106,12 @@
         </tr>
       </table>
     <% end %>
-      <%- if manifestation.items.on_shelf.exists? -%>
-        <%= render 'manifestations/show_holding', manifestation: manifestation -%>
-      <%- end -%>
-    </div>
+    <%- if manifestation.items.on_shelf.exists? -%>
+      <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items.on_shelf -%>
+    <%- end -%>
+    <%- if can? :create, Item -%>
+      <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
+    <%- end -%>
     <%= render 'manifestations/tab_list', manifestation: manifestation %>
+    </div>
   </div>

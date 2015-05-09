@@ -419,7 +419,7 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json { render json: @manifestation }
       #format.atom { render template: 'manifestations/oai_ore' }
-      #format.js
+      format.js
       format.download {
         if @manifestation.attachment.path
           if ENV['ENJU_STORAGE'] == 's3'

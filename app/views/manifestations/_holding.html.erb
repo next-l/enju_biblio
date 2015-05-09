@@ -1,3 +1,15 @@
-<div class="holding_index" id="holding_<%= manifestation.id -%>" style="display: none">
-  <%= render 'manifestations/show_holding', manifestation: manifestation -%>
-</div>
+<% if manifestation.items.available_for(current_user).count >= 1 %>
+  <div id="holding_link_<%= manifestation.id %>">
+    (<%= link_to t('page.holding'), manifestation_path(manifestation), remote: true %>)
+  </div>
+<% end %>
+<% if defined?(EnjuBookmark) %>
+  <%- if manifestation.tags.first -%>
+    (<%= link_to "#", { onclick: "$('#tag_#{manifestation.id}').toggle(); return false;" } do t('activerecord.models.tag') end %>)
+  <%- end -%>
+  <%= render 'manifestations/show_tag', manifestation: manifestation -%>
+<% end %>
+<div id="holding_<%= manifestation.id -%>"></div>
+<%- if can? :create, Item -%>
+  <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
+<%- end -%>
