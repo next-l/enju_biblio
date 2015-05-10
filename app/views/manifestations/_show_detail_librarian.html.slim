@@ -86,12 +86,17 @@
             = t('page.identifier')
             | :
           td
-            ul.list-group
+            ul
               - manifestation.identifiers.each do |identifier|
-                li.list-group-item
+                li
                   = identifier.identifier_type.display_name.localize
                   | : 
                   = identifier_link(identifier)
+              if manifestation.manifestation_identifier
+                li
+                  = t('activerecord.attributes.manifestation.manifestation_identifier')
+                  | : 
+                  = manifestation.manifestation_identifier 
         - unless manifestation.attachment_filename.blank?
           = render 'manifestations/attachment_file', manifestation: manifestation
         tr

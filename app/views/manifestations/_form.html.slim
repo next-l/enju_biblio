@@ -95,6 +95,9 @@
   - if defined?(EnjuSubject)
     = render 'manifestations/subject_form', f: f
   .form-group
+    = f.label :manifestation_identifier
+    = f.text_field :manifestation_identifier, class: 'form-control'
+  .form-group
     = f.label :start_page
     = f.text_field :start_page, class: 'form-control'
     = f.label :end_page
