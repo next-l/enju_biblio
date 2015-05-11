@@ -13,13 +13,6 @@
         - if defined?(EnjuCirculation)
           th
             = t('activerecord.models.circulation_status')
-      - if current_user.try(:has_role?, 'Librarian')
-        - items = manifestation.items
-      - else
-        - if defined?(EnjuCirculation)
-          - items = manifestation.items.for_checkout.on_shelf
-        - else
-          - items = manifestation.items.on_shelf
       - items.each do |item|
         tr
           td
@@ -49,10 +42,3 @@
                 | : 
                 = l(item.latest_checkout.due_date, format: :short)
                 |  ) 
-        - if policy(item).update?
-          script
-            |  $(function(){ $('a#item_identifier_item_<ruby code="= item.id"></ruby>').data( 'powertip', 'item_identifier: <ruby code="= item.item_identifier"></ruby>' ); $('a#item_identifier_item_<ruby code="= item.id"></ruby>').powerTip({ placement: 'e', mouseOnToPopup: true }); }); 
-          = render 'items/tooltip', item: item
-    - if policy(Item).create?
-      p
-        = link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id)

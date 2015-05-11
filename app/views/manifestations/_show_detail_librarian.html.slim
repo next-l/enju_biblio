@@ -92,7 +92,7 @@
                   = identifier.identifier_type.display_name.localize
                   | : 
                   = identifier_link(identifier)
-              if manifestation.manifestation_identifier
+              - if manifestation.manifestation_identifier
                 li
                   = t('activerecord.attributes.manifestation.manifestation_identifier')
                   | : 
@@ -124,5 +124,8 @@
           td
             = raw simple_format(h(manifestation.note))
     - if manifestation.items.on_shelf.exists?
-      = render 'manifestations/show_holding', manifestation: manifestation
+      = render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items.on_shelf
+    - if policy(Item).create?
+      p
+        = link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id)
   = render 'manifestations/tab_list', manifestation: manifestation

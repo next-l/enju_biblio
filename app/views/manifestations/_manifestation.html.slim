@@ -8,26 +8,6 @@ tr
       = render 'manifestations/show_index', manifestation: manifestation
       .access_address
         = link_to manifestation.access_address, manifestation.access_address if manifestation.access_address.present?
-      - if current_user.try(:has_role?, 'Librarian')
-        - unless manifestation.items.empty?
-          |  (
-          = link_to "#", { onclick: "$('#holding_#{manifestation.id}').toggle(); return false;"} do t('page.holding') end
-          | ) 
-      - else
-        - if defined?(EnjuCirculation)
-          - items = manifestation.items.for_checkout
-        - else
-          - items = manifestation.items
-        - unless items.on_shelf.empty?
-          |  (
-          = link_to "#", { onclick: "$('#holding_#{manifestation.id}').toggle(); return false;"} do t('page.holding') end
-          | ) 
-      - if defined?(EnjuBookmark)
-        - if manifestation.tags.first
-          |  (
-          = link_to "#", { onclick: "$('#tag_#{manifestation.id}').toggle(); return false;" } do t('activerecord.models.tag') end
-          | ) 
-          = render 'manifestations/show_tag', manifestation: manifestation
       = render 'manifestations/holding', manifestation: manifestation
   - if signed_in?
     td#edit_icons

@@ -83,7 +83,7 @@ module ManifestationsHelper
     return nil unless library
     string = ''
     current = true if current_libraries.include?(library.name)
-    content_tag :li do
+    content_tag :li, class: 'list-group-item' do
       if current
         content_tag :strong do
           link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))

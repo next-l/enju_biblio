@@ -8,6 +8,11 @@ class Item < ActiveRecord::Base
   enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
   scope :on_shelf, -> { where('shelf_id != 1') }
   scope :on_web, -> { where(shelf_id: 1) }
+  scope :available_for, -> user {
+    unless user.try(:has_role?, 'Librarian')
+      on_shelf
+    end
+  }
   delegate :display_name, to: :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns

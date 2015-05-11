@@ -411,7 +411,7 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json { render json: @manifestation }
       #format.atom { render template: 'manifestations/oai_ore' }
-      #format.js
+      format.js
       format.download {
         send_file @manifestation.attachment.download,
           filename: File.basename(@manifestation.attachment_filename),
