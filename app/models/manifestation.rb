@@ -517,7 +517,7 @@ class Manifestation < ActiveRecord::Base
       shelf
       library
     ).join("\t")
-    items = Manifestation.all.map{|m|
+    items = Manifestation.find_each.map{|m|
       if m.items.exists?
         lines = []
         m.items.each do |i|
