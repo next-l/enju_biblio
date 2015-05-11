@@ -51,6 +51,9 @@ class Manifestation < ActiveRecord::Base
         items.pluck(:item_identifier)
       end
     end
+    string :call_number, multiple: true do
+      items.pluck(:call_number)
+    end
     string :title, multiple: true
     # text フィールドだと区切りのない文字列の index が上手く作成
     #できなかったので。 downcase することにした。
@@ -207,9 +210,14 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  if Setting.uploaded_file.storage == :s3
+  if ENV['ENJU_STORAGE'] == 's3'
     has_attached_file :attachment, storage: :s3,
-      s3_credentials: Setting.amazon,
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME']
+      },
       s3_permissions: :private
   else
     has_attached_file :attachment,
@@ -233,7 +241,7 @@ class Manifestation < ActiveRecord::Base
   validates :edition, numericality: {greater_than: 0}, allow_blank: true
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
-  after_save :index_series_statement
+  after_save :index_series_statement, :extract_text!
   after_destroy :index_series_statement
   after_touch do |manifestation|
     manifestation.index
@@ -363,11 +371,26 @@ class Manifestation < ActiveRecord::Base
   end
 
   def extract_text
-    return nil unless attachment.path
-    # TODO: S3 support
-    response = `curl "#{Sunspot.config.solr.url}/update/extract?&extractOnly=true&wt=json" --data-binary @#{attachment.path} -H "Content-type:text/html"`
-    self.fulltext = JSON.parse(response)["responseHeader"][""]
-    save(validate: false)
+    return nil if attachment.path.nil?
+    if ENV['ENJU_STORAGE'] == 's3'
+      body = Faraday.get(attachment.expiring_url(10)).body.force_encoding('UTF-8')
+    else
+      body = File.open(attachment.path).read
+    end
+    client = Faraday.new(url: ENV['SOLR_URL']) do |conn|
+      conn.request :multipart
+      conn.adapter :net_http
+    end
+    response = client.post('update/extract?extractOnly=true&wt=json&extractFormat=text') do |req|
+      req.headers['Content-type'] = 'text/html'
+      req.body = body
+    end
+    update_column(:fulltext, JSON.parse(response.body)[""])
+  end
+
+  def extract_text!
+    extract_text
+    index!
   end
 
   def created(agent)
@@ -405,7 +428,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def index_series_statement
-    series_statements.map{|s| s.index}
+    series_statements.map{|s| s.index; s.root_manifestation.try(:index)}
   end
 
   def acquired_at

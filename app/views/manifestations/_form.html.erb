@@ -146,6 +146,11 @@
     <p><%= f.link_to_add t('page.add'), :identifiers %></p>
   </div>
 
+  <div class="field">
+    <%= f.label :manifestation_identifier -%><br />
+    <%= f.text_field :manifestation_identifier, class: 'resource_identifier_body', style: 'ime-mode: disabled' -%>
+  </div>
+
   <% if defined?(EnjuSubject) %>
     <%= render 'manifestations/subject_form', f: f %>
   <% end %>

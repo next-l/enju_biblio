@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 require 'spec_helper'
 
 describe ManifestationsController do
@@ -82,32 +84,32 @@ describe ManifestationsController do
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when pub_date_from and pub_date_to are specified" do
-        get :index, :pub_date_from => '2000', :pub_date_to => '2007'
-        assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('2000-01-01').utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
+      it "assigns all manifestations as @manifestations when pub_date_from and pub_date_until are specified" do
+        get :index, :pub_date_from => '2000', :pub_date_until => '2007'
+        assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('2000-01-01').beginning_of_day.utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when old pub_date_from and pub_date_to are specified" do
-        get :index, :pub_date_from => '200', :pub_date_to => '207'
+      it "assigns all manifestations as @manifestations when old pub_date_from and pub_date_until are specified" do
+        get :index, :pub_date_from => '200', :pub_date_until => '207'
         assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('200-01-01').utc.iso8601} TO #{Time.zone.parse('207-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when acquired_from and pub_date_to are specified" do
-        get :index, :acquired_from => '2000', :acquired_to => '2007'
-        assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('2000-01-01').utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_day.utc.iso8601}]"
+      it "assigns all manifestations as @manifestations when acquired_from and pub_date_until are specified" do
+        get :index, :acquired_from => '2000', :acquired_until => '2007'
+        assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('2000-01-01').beginning_of_day.utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when old acquired_from and pub_date_to are specified" do
-        get :index, :acquired_from => '200', :acquired_to => '207'
+      it "assigns all manifestations as @manifestations when old acquired_from and pub_date_until are specified" do
+        get :index, :acquired_from => '200', :acquired_until => '207'
         assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('200-01-01').utc.iso8601} TO #{Time.zone.parse('207-12-31').end_of_day.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
       it "assigns all manifestations as @manifestations when number_of_pages_at_least and number_of_pages_at_most are specified" do
-        get :index, :number_of_pages_at_least => '100', :number_of_pages_at_least => '200'
+        get :index, :number_of_pages_at_least => '100', :number_of_pages_at_most => '200'
         expect(assigns(:manifestations)).to_not be_nil
       end
 
@@ -149,8 +151,8 @@ describe ManifestationsController do
         assigns(:query).should eq '2005 date_of_publication_d:[1999-12-31T15:00:00Z TO *]'
       end
 
-      it "should get index with pub_date_to" do
-        get :index, :query => '2005', :pub_date_to => '2000'
+      it "should get index with pub_date_until" do
+        get :index, :query => '2005', :pub_date_until => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T14:59:59Z]'
@@ -172,6 +174,30 @@ describe ManifestationsController do
         get :index, :isbn => "47980020620"
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_empty
+      end
+
+      it "should show manifestation with library 3", :solr => true do
+        get :index, :library_adv => ["hachioji"]
+        expect(response).to be_success
+        expect(assigns(:manifestations).size).to eq 1
+      end
+
+      it "should show manifestation with library 2 or 3", :solr => true do
+        get :index, :library_adv => ["hachioji", "kamata"]
+        expect(response).to be_success
+        expect(assigns(:manifestations).size).to eq 2
+      end
+
+      it "should show manifestation with call_number", :solr => true do
+        get :index, :call_number => "547|ヤ"
+        expect(response).to be_success
+        expect(assigns(:manifestations)).not_to be_empty
+      end
+
+      it "should accept per_page params" do
+        get :index, per_page: 3
+        expect(assigns(:manifestations).count).to eq 3
+        expect(assigns(:manifestations).total_count).to eq 119
       end
     end
   end

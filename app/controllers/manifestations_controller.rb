@@ -186,6 +186,12 @@ class ManifestationsController < ApplicationController
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
+      max_number_of_results = @library_group.settings[:max_number_of_results].to_i
+      if max_number_of_results == 0
+        @max_number_of_results = Manifestation.search.total
+      else
+        @max_number_of_results = max_number_of_results
+      end
 
       if session[:search_params]
         unless search.query.to_params == session[:search_params]
@@ -208,7 +214,7 @@ class ManifestationsController < ApplicationController
           else
             flash[:search_query] = @search_query
             @manifestation_ids = search.build do
-              paginate page: 1, per_page: Setting.max_number_of_results
+              paginate page: 1, per_page: @max_number_of_results
             end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
           end
         end
@@ -217,7 +223,7 @@ class ManifestationsController < ApplicationController
           if params[:view] == 'tag_cloud'
             unless @manifestation_ids
               @manifestation_ids = search.build do
-                paginate page: 1, per_page: Setting.max_number_of_results
+                paginate page: 1, per_page: @max_number_of_results
               end.execute.raw_results.collect(&:primary_key).map{|id| id.to_i}
             end
             #bookmark_ids = Bookmark.where(manifestation_id: flash[:manifestation_ids]).limit(1000).pluck(:id)
@@ -230,7 +236,11 @@ class ManifestationsController < ApplicationController
       end
 
       page ||= params[:page] || 1
-      per_page ||= Manifestation.default_per_page
+      if params[:per_page].to_i > 0
+        per_page = params[:per_page].to_i
+      else
+        per_page = Manifestation.default_per_page
+      end
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
@@ -241,15 +251,15 @@ class ManifestationsController < ApplicationController
         else
           pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
         end
-        if pub_dates[:to] == '*'
-          pub_date_range[:to] = 10000
+        if pub_dates[:until] == '*'
+          pub_date_range[:until] = 10000
         else
-          pub_date_range[:to] = Time.zone.parse(pub_dates[:to]).year
+          pub_date_range[:until] = Time.zone.parse(pub_dates[:until]).year
         end
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
         else
-          pub_year_range_interval = Setting.manifestation.facet.pub_year_range_interval
+          pub_year_range_interval = @library_group.settings[:pub_year_facet_range_interval] || 10
         end
 
         search.build do
@@ -257,20 +267,20 @@ class ManifestationsController < ApplicationController
           facet :carrier_type
           facet :library
           facet :language
-          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:to], range_interval: pub_year_range_interval
+          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:until], range_interval: pub_year_range_interval
           facet :subject_ids if defined?(EnjuSubject)
           paginate page: page.to_i, per_page: per_page
         end
       end
       search_result = search.execute
-      if @count[:query_result] > Setting.max_number_of_results
-        max_count = Setting.max_number_of_results
+      if @count[:query_result] > @max_number_of_results
+        max_count = @max_number_of_results
       else
         max_count = @count[:query_result]
       end
       @manifestations = Kaminari.paginate_array(
         search_result.results, total_count: max_count
-      ).page(page)
+      ).page(page).per(per_page)
 
       if params[:format].blank? or params[:format] == 'html'
         @carrier_type_facet = search_result.facet(:carrier_type).rows
@@ -387,8 +397,8 @@ class ManifestationsController < ApplicationController
     end
 
     if @manifestation.attachment.path
-      if Setting.uploaded_file.storage == :s3
-        data = Faraday.get(@manifestation.attachment.url).body.force_encoding('UTF-8')
+      if ENV['ENJU_STORAGE'] == 's3'
+        data = Faraday.get(@manifestation.attachment.expiring_url).body.force_encoding('UTF-8')
       else
         file = @manifestation.attachment.path
       end
@@ -409,10 +419,10 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json { render json: @manifestation }
       #format.atom { render template: 'manifestations/oai_ore' }
-      #format.js
+      format.js
       format.download {
         if @manifestation.attachment.path
-          if Setting.uploaded_file.storage == :s3
+          if ENV['ENJU_STORAGE'] == 's3'
             send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
           else
             if File.exist?(file) && File.file?(file)
@@ -617,10 +627,10 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} carrier_type_s:#{options[:carrier_type]}"
     #end
 
-    #unless options[:library].blank?
-    #  library_list = options[:library].split.uniq.join(' && ')
-    #  query = "#{query} library_sm:#{library_list}"
-    #end
+    unless options[:library_adv].blank?
+      library_list = options[:library_adv].split.uniq.join(' OR ')
+      query = "#{query} library_sm:(#{library_list})"
+    end
 
     #unless options[:language].blank?
     #  query = "#{query} language_sm:#{options[:language]}"
@@ -668,6 +678,10 @@ class ManifestationsController < ApplicationController
 
     if options[:publisher].present?
       query = "#{query} publisher_text:#{options[:publisher]}"
+    end
+
+    if options[:call_number].present?
+      query = "#{query} call_number_sm:#{options[:call_number]}*"
     end
 
     if options[:item_identifier].present?
@@ -811,36 +825,36 @@ class ManifestationsController < ApplicationController
       end
     end
 
-    if options[:pub_date_to].blank?
-      pub_date[:to] = "*"
+    if options[:pub_date_until].blank?
+      pub_date[:until] = "*"
     else
-      year = options[:pub_date_to].rjust(4, "0")
+      year = options[:pub_date_until].rjust(4, "0")
       if year.length == 4
-        pub_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+        pub_date[:until] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
       else
-        pub_date[:to] = Time.zone.parse(options[:pub_date_to]).end_of_day.utc.iso8601 rescue nil
+        pub_date[:until] = Time.zone.parse(options[:pub_date_until]).end_of_day.utc.iso8601 rescue nil
       end
-      unless pub_date[:to]
-        pub_date[:to] = Time.zone.parse(Time.utc(options[:pub_date_to]).to_s).end_of_year.utc.iso8601
+      unless pub_date[:until]
+        pub_date[:until] = Time.zone.parse(Time.utc(options[:pub_date_until]).to_s).end_of_year.utc.iso8601
       end
     end
     pub_date
   end
 
   def set_pub_date(query, options)
-    unless options[:pub_date_from].blank? && options[:pub_date_to].blank?
+    unless options[:pub_date_from].blank? && options[:pub_date_until].blank?
       options[:pub_date_from].to_s.gsub!(/\D/, '')
-      options[:pub_date_to].to_s.gsub!(/\D/, '')
+      options[:pub_date_until].to_s.gsub!(/\D/, '')
       pub_date = parse_pub_date(options)
-      query = "#{query} date_of_publication_d:[#{pub_date[:from]} TO #{pub_date[:to]}]"
+      query = "#{query} date_of_publication_d:[#{pub_date[:from]} TO #{pub_date[:until]}]"
     end
     query
   end
 
   def set_acquisition_date(query, options)
-    unless options[:acquired_from].blank? && options[:acquired_to].blank?
+    unless options[:acquired_from].blank? && options[:acquired_until].blank?
       options[:acquired_from].to_s.gsub!(/\D/, '')
-      options[:acquired_to].to_s.gsub!(/\D/, '')
+      options[:acquired_until].to_s.gsub!(/\D/, '')
 
       acquisition_date = {}
       if options[:acquired_from].blank?
@@ -857,21 +871,21 @@ class ManifestationsController < ApplicationController
         end
       end
 
-      if options[:acquired_to].blank?
-        acquisition_date[:to] = "*"
+      if options[:acquired_until].blank?
+        acquisition_date[:until] = "*"
       else
-        year = options[:acquired_to].rjust(4, "0")
+        year = options[:acquired_until].rjust(4, "0")
         if year.length == 4
-          acquisition_date[:to] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
+          acquisition_date[:until] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
         else
-          acquisition_date[:to] = Time.zone.parse(options[:acquired_to]).end_of_day.utc.iso8601 rescue nil
+          acquisition_date[:until] = Time.zone.parse(options[:acquired_until]).end_of_day.utc.iso8601 rescue nil
         end
-        unless acquisition_date[:to]
-          pub_date[:to] = Time.zone.parse(Time.utc(options[:acquired_to]).to_s).end_of_year.utc.iso8601
+        unless acquisition_date[:until]
+          acquisition_date[:until] = Time.zone.parse(Time.utc(options[:acquired_until]).to_s).end_of_year.utc.iso8601
         end
       end
 
-      query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:to]}]"
+      query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:until]}]"
     end
     query
   end

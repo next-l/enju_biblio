@@ -10,11 +10,6 @@
       <th><%= t('activerecord.models.circulation_status') -%></th>
     <% end %>
   </tr>
-  <% if current_user.try(:has_role?, 'Librarian') %>
-    <% items = manifestation.items %>
-  <% else %>
-    <% items = manifestation.items.for_checkout.on_shelf %>
-  <% end %>
   <%- items.each do |item| -%>
     <tr>
       <td>
@@ -68,9 +63,5 @@
     <% end %>
   <%- end -%>
 </table>
-
-<%- if can? :create, Item -%>
-  <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
-<%- end -%>
 </div>
 <% end %>

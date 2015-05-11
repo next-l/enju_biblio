@@ -255,7 +255,7 @@ describe ItemsController do
         it "should create a lending policy" do
           old_lending_policy_count = LendingPolicy.count
           post :create, :item => @attrs
-          LendingPolicy.count.should eq old_lending_policy_count + UserGroup.count
+          LendingPolicy.count.should eq old_lending_policy_count
         end
       end
 

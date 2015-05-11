@@ -16,7 +16,7 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files/1.json
   def show
     if @resource_export_file.resource_export.path
-      unless Setting.uploaded_file.storage == :s3
+      unless ENV['ENJU_STORAGE'] == 's3'
         file = @resource_export_file.resource_export.path
       end
     end
@@ -25,8 +25,9 @@ class ResourceExportFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @resource_export_file }
       format.download {
-        if Setting.uploaded_file.storage == :s3
-          redirect_to @resource_export_file.resource_export.expiring_url(10)
+        if ENV['ENJU_STORAGE'] == 's3'
+          send_data Faraday.get(@resource_export_file.resource_export.expiring_url).body.force_encoding('UTF-8'),
+            filename: File.basename(@resource_export_file.resource_export_file_name), type: 'application/octet-stream'
         else
           send_file file, filename: @resource_export_file.resource_export_file_name, type: 'application/octet-stream'
         end

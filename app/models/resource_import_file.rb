@@ -6,9 +6,14 @@ class ResourceImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  if Setting.uploaded_file.storage == :s3
+  if ENV['ENJU_STORAGE'] == 's3'
     has_attached_file :resource_import, storage: :s3,
-      s3_credentials: Setting.amazon,
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME']
+      },
       s3_permissions: :private
   else
     has_attached_file :resource_import,
@@ -225,7 +230,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def import_marc(marc_type)
-    file = File.open(self.resource_import.path)
+    file = File.open(resource_import.path)
     case marc_type
     when 'marcxml'
       reader = MARC::XMLReader.new(file)
@@ -722,6 +727,10 @@ class ResourceImportFile < ActiveRecord::Base
 
   def self.transition_class
     ResourceImportFileTransition
+  end
+
+  def self.initial_state
+    :pending
   end
 
   def set_identifier(row)
