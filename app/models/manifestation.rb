@@ -513,11 +513,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    if IdentifierType.where(name: name.to_s).exists?
-      identifiers.where(identifier_type_id: IdentifierType.where(name: name).first.id).order(:position).pluck(:body)
-    else
-      []
-    end
+    identifiers.identifier_type(name).order(:position).pluck(:body)
   end
 
   def self.export(options = {format: :txt})
@@ -540,10 +536,10 @@ class Manifestation < ActiveRecord::Base
       shelf
       library
     ).join("\t")
-    items = Manifestation.find_each.map{|m|
+    items = Manifestation.includes(:items, :identifiers => :identifier_type).find_each.map{|m|
       if m.items.exists?
         lines = []
-        m.items.each do |i|
+        m.items.includes(:shelf => :library).each do |i|
           item_lines = []
           item_lines << m.id
           item_lines << m.original_title
@@ -562,7 +558,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << i.circulation_status.try(:name)
           item_lines << i.shelf.name
           item_lines << i.shelf.library.name
-        lines << item_lines
+          lines << item_lines
         end
         lines
       else
