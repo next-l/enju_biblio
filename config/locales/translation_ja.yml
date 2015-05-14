@@ -116,6 +116,8 @@ ja:
         binding_item_identifier: 製本後の所蔵情報ID
         binding_call_number: 製本後の請求記号
         binded_at: 製本日
+        budget_type_id: 予算種別
+        bookstore_id: 書店
       agent:
         last_name: 姓
         middle_name: ミドルネーム

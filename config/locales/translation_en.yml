@@ -116,6 +116,8 @@ en:
         binding_item_identifier: Binding item identifier
         binding_call_number: Binding call number
         binded_at: Binded at
+        budget_type_id: Budget type
+        bookstore_id: Bookstore
       agent:
         last_name: Last name
         middle_name: Middle name
