@@ -34,7 +34,9 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li><%= link_to t('page.edit'), edit_carrier_type_path(@carrier_type) -%></li>
+    <%- if can? :update, @carrier_type -%>
+      <li><%= link_to t('page.edit'), edit_carrier_type_path(@carrier_type) -%></li>
+    <%- end -%>
     <li><%= back_to_index(flash[:page_info]) -%></li>
   </ul>
 </div>
