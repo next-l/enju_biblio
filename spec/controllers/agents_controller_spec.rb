@@ -183,7 +183,7 @@ describe AgentsController do
 
       it "should not show agent when required_role is 'User'" do
         get :show, :id => 5
-        expect(response).to redirect_to new_user_session_url
+        expect(response).to redirect_to new_session_url
       end
     end
   end
@@ -221,7 +221,7 @@ describe AgentsController do
       it "should not assign the requested agent as @agent" do
         get :new
         expect(assigns(:agent)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -286,7 +286,7 @@ describe AgentsController do
       it "should not assign the requested agent as @agent" do
         agent = Agent.find(1)
         get :edit, :id => agent.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -425,7 +425,7 @@ describe AgentsController do
 
         it "should be forbidden" do
           post :create, :agent => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
@@ -437,7 +437,7 @@ describe AgentsController do
 
         it "should be forbidden" do
           post :create, :agent => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -553,14 +553,14 @@ describe AgentsController do
 
         it "should be forbidden" do
           put :update, :id => @agent.id, :agent => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent as @agent" do
           put :update, :id => @agent.id, :agent => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -637,7 +637,7 @@ describe AgentsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

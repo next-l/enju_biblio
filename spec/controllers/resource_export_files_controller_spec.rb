@@ -36,7 +36,7 @@ describe ResourceExportFilesController do
       it "assigns empty as @resource_export_files" do
         get :index
         expect(assigns(:resource_export_files)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -76,7 +76,7 @@ describe ResourceExportFilesController do
       it "assigns the requested resource_export_file as @resource_export_file" do
         get :show, id: resource_export_files(:resource_export_file_00003).id
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -116,7 +116,7 @@ describe ResourceExportFilesController do
       it "should not assign the requested resource_export_file as @resource_export_file" do
         get :new
         expect(assigns(:resource_export_file)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -147,7 +147,7 @@ describe ResourceExportFilesController do
       it "should be redirected to new session url" do
         post :create, resource_export_file: {mode: 'export'}
         assigns(:resource_export_file).should be_nil
-        expect(response).to redirect_to new_user_session_url
+        expect(response).to redirect_to new_session_url
       end
     end
   end
@@ -187,7 +187,7 @@ describe ResourceExportFilesController do
       it "should not assign the requested resource_export_file as @resource_export_file" do
         resource_export_file = resource_export_files(:resource_export_file_00001)
         get :edit, id: resource_export_file.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -223,7 +223,7 @@ describe ResourceExportFilesController do
     describe "When not logged in" do
       it "should not update resource_export_file" do
         put :update, id: resource_export_files(:resource_export_file_00003).id, resource_export_file: {mode: 'export'}
-        expect(response).to redirect_to new_user_session_url
+        expect(response).to redirect_to new_session_url
       end
     end
   end
@@ -279,7 +279,7 @@ describe ResourceExportFilesController do
 
       it "should be forbidden" do
         delete :destroy, id: @resource_export_file.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

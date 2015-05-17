@@ -19,7 +19,7 @@ class ItemsController < ApplicationController
     query = params[:query].to_s.strip
     per_page = Item.default_per_page
     @count = {}
-    if user_signed_in?
+    if current_user
       if current_user.has_role?('Librarian')
         if params[:format] == 'txt'
           per_page = 65534
@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
 
     if defined?(InventoryFile)
       if @inventory_file
-        if user_signed_in?
+        if current_user
           if current_user.has_role?('Librarian')
             case params[:inventory]
             when 'not_in_catalog'
@@ -46,7 +46,7 @@ class ItemsController < ApplicationController
             return
           end
         else
-          redirect_to new_user_session_url
+          redirect_to new_session_url
           return
         end
       end

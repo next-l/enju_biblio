@@ -114,7 +114,7 @@ describe RealizesController do
       it "should not assign the requested realize as @realize" do
         get :new
         expect(assigns(:realize)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -154,7 +154,7 @@ describe RealizesController do
       it "should not assign the requested realize as @realize" do
         realize = FactoryGirl.create(:realize)
         get :edit, :id => realize.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -256,9 +256,9 @@ describe RealizesController do
           expect(assigns(:realize)).to be_nil
         end
 
-        it "should redirect to new_user_session_url" do
+        it "should redirect to new_session_url" do
           post :create, :realize => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
@@ -268,9 +268,9 @@ describe RealizesController do
           expect(assigns(:realize)).to be_nil
         end
 
-        it "should redirect to new_user_session_url" do
+        it "should redirect to new_session_url" do
           post :create, :realize => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -376,14 +376,14 @@ describe RealizesController do
 
         it "should be forbidden" do
           put :update, :id => @realize.id, :realize => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested realize as @realize" do
           put :update, :id => @realize.id, :realize => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -440,7 +440,7 @@ describe RealizesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @realize.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

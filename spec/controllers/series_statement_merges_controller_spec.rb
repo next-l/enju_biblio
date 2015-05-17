@@ -36,7 +36,7 @@ describe SeriesStatementMergesController do
       it "should be forbidden" do
         get :index
         assigns(:series_statement_merges).should be_nil
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end
@@ -116,7 +116,7 @@ describe SeriesStatementMergesController do
       it "should not assign the requested series_statement_merge as @series_statement_merge" do
         get :new
         assigns(:series_statement_merge).should be_nil
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end
@@ -156,7 +156,7 @@ describe SeriesStatementMergesController do
       it "should not assign the requested series_statement_merge as @series_statement_merge" do
         series_statement_merge = FactoryGirl.create(:series_statement_merge)
         get :edit, :id => series_statement_merge.id
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end
@@ -260,7 +260,7 @@ describe SeriesStatementMergesController do
 
         it "should be forbidden" do
           post :create, :series_statement_merge => @attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
 
@@ -272,7 +272,7 @@ describe SeriesStatementMergesController do
 
         it "should be forbidden" do
           post :create, :series_statement_merge => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
     end
@@ -362,14 +362,14 @@ describe SeriesStatementMergesController do
 
         it "should be forbidden" do
           put :update, :id => @series_statement_merge.id, :series_statement_merge => @attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested series_statement_merge as @series_statement_merge" do
           put :update, :id => @series_statement_merge.id, :series_statement_merge => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
     end
@@ -426,7 +426,7 @@ describe SeriesStatementMergesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @series_statement_merge.id
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end

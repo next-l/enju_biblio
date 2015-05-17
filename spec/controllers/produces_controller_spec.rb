@@ -118,7 +118,7 @@ describe ProducesController do
       it "should not assign the requested produce as @produce" do
         get :new
         expect(assigns(:produce)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -158,7 +158,7 @@ describe ProducesController do
       it "should not assign the requested produce as @produce" do
         produce = FactoryGirl.create(:produce)
         get :edit, :id => produce.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -262,7 +262,7 @@ describe ProducesController do
 
         it "should be forbidden" do
           post :create, :produce => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
@@ -274,7 +274,7 @@ describe ProducesController do
 
         it "should be forbidden" do
           post :create, :produce => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -375,14 +375,14 @@ describe ProducesController do
 
         it "should be forbidden" do
           put :update, :id => @produce.id, :produce => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested produce as @produce" do
           put :update, :id => @produce.id, :produce => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -439,7 +439,7 @@ describe ProducesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @produce.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

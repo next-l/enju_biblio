@@ -40,7 +40,7 @@ describe AgentMergesController do
       it "should be forbidden" do
         get :index
         assigns(:agent_merges).should be_nil
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end
@@ -120,7 +120,7 @@ describe AgentMergesController do
       it "should not assign the requested agent_merge as @agent_merge" do
         get :new
         assigns(:agent_merge).should be_nil
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end
@@ -160,7 +160,7 @@ describe AgentMergesController do
       it "should not assign the requested agent_merge as @agent_merge" do
         agent_merge = FactoryGirl.create(:agent_merge)
         get :edit, :id => agent_merge.id
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end
@@ -264,7 +264,7 @@ describe AgentMergesController do
 
         it "should be forbidden" do
           post :create, :agent_merge => @attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
 
@@ -276,7 +276,7 @@ describe AgentMergesController do
 
         it "should be forbidden" do
           post :create, :agent_merge => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
     end
@@ -366,14 +366,14 @@ describe AgentMergesController do
 
         it "should be forbidden" do
           put :update, :id => @agent_merge.id, :agent_merge => @attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_merge as @agent_merge" do
           put :update, :id => @agent_merge.id, :agent_merge => @invalid_attrs
-          response.should redirect_to(new_user_session_url)
+          response.should redirect_to(new_session_url)
         end
       end
     end
@@ -430,7 +430,7 @@ describe AgentMergesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_merge.id
-        response.should redirect_to(new_user_session_url)
+        response.should redirect_to(new_session_url)
       end
     end
   end

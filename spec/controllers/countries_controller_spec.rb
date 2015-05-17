@@ -124,7 +124,7 @@ describe CountriesController do
       it "should not assign the requested country as @country" do
         get :new
         assigns(:country).should be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -164,7 +164,7 @@ describe CountriesController do
       it "should not assign the requested country as @country" do
         country = FactoryGirl.create(:country)
         get :edit, :id => country.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -268,7 +268,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
@@ -280,7 +280,7 @@ describe CountriesController do
 
         it "should be forbidden" do
           post :create, :country => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -382,14 +382,14 @@ describe CountriesController do
 
         it "should be forbidden" do
           put :update, :id => @country.id, :country => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested country as @country" do
           put :update, :id => @country.id, :country => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -446,7 +446,7 @@ describe CountriesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @country.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

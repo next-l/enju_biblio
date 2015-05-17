@@ -124,7 +124,7 @@ describe SeriesStatementsController do
       it "should not assign the requested series_statement as @series_statement" do
         get :new
         expect(assigns(:series_statement)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -164,7 +164,7 @@ describe SeriesStatementsController do
       it "should not assign the requested series_statement as @series_statement" do
         series_statement = FactoryGirl.create(:series_statement)
         get :edit, :id => series_statement.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -268,7 +268,7 @@ describe SeriesStatementsController do
 
         it "should be forbidden" do
           post :create, :series_statement => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
@@ -280,7 +280,7 @@ describe SeriesStatementsController do
 
         it "should be forbidden" do
           post :create, :series_statement => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -379,14 +379,14 @@ describe SeriesStatementsController do
 
         it "should be forbidden" do
           put :update, :id => @series_statement.id, :series_statement => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested series_statement as @series_statement" do
           put :update, :id => @series_statement.id, :series_statement => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -443,7 +443,7 @@ describe SeriesStatementsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @series_statement.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

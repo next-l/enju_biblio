@@ -124,7 +124,7 @@ describe OwnsController do
       it "should not assign the requested own as @own" do
         get :new
         expect(assigns(:own)).to be_nil
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -164,7 +164,7 @@ describe OwnsController do
       it "should not assign the requested own as @own" do
         own = FactoryGirl.create(:own)
         get :edit, :id => own.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end
@@ -268,7 +268,7 @@ describe OwnsController do
 
         it "should be forbidden" do
           post :create, :own => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
@@ -280,7 +280,7 @@ describe OwnsController do
 
         it "should be forbidden" do
           post :create, :own => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -375,14 +375,14 @@ describe OwnsController do
 
         it "should be forbidden" do
           put :update, :id => @own.id, :own => @attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested own as @own" do
           put :update, :id => @own.id, :own => @invalid_attrs
-          expect(response).to redirect_to(new_user_session_url)
+          expect(response).to redirect_to(new_session_url)
         end
       end
     end
@@ -439,7 +439,7 @@ describe OwnsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @own.id
-        expect(response).to redirect_to(new_user_session_url)
+        expect(response).to redirect_to(new_session_url)
       end
     end
   end

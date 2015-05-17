@@ -2,7 +2,7 @@
 class ManifestationsController < ApplicationController
   before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :authenticate_user!, only: :edit
+  before_action :authenticate, only: :edit
   before_action :get_agent, :get_manifestation, except: [:create, :update, :destroy]
   before_action :get_expression, only: :new
   if defined?(EnjuSubject)
@@ -365,7 +365,7 @@ class ManifestationsController < ApplicationController
 
     case params[:mode]
     when 'send_email'
-      if user_signed_in?
+      if current_user
         Notifier.manifestation_info(current_user.id, @manifestation.id).deliver_later
         flash[:notice] = t('page.sent_email')
         redirect_to @manifestation
@@ -389,7 +389,7 @@ class ManifestationsController < ApplicationController
 
     if defined?(EnjuCirculation)
       @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id, checked_out_at: nil).count
-      @reserve = current_user.reserves.where(manifestation_id: @manifestation.id).first if user_signed_in?
+      @reserve = current_user.reserves.where(manifestation_id: @manifestation.id).first if current_user
     end
 
     if defined?(EnjuQuestion)
