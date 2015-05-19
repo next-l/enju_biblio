@@ -155,7 +155,7 @@ en:
       agent_import_file:
         agent_import_filename: Filename
         agent_import_content_type: Content type
-        agent_import_file_size: Size
+        agent_import_size: Size
         agent_import_fingerprint: File hash
         note: Note
         executed_at: Executed at
@@ -176,7 +176,7 @@ en:
       resource_import_file:
         resource_import_filename: Filename
         resource_import_content_type: Content type
-        resource_import_file_size: Size
+        resource_import_size: Size
         resource_import_fingerprint: File hash
         note: Note
         executed_at: Executed at

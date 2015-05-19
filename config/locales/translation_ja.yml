@@ -155,7 +155,7 @@ ja:
       agent_import_file:
         agent_import_filename: ファイル名
         agent_import_content_type: Content-Type
-        agent_import_file_size: ファイルサイズ
+        agent_import_size: ファイルサイズ
         agent_import_fingerprint: ファイルのハッシュ
         note: 注記
         executed_at: 実行時刻
@@ -176,7 +176,7 @@ ja:
       resource_import_file:
         resource_import_filename: ファイル名
         resource_import_content_type: Content-Type
-        resource_import_file_size: ファイルサイズ
+        resource_import_size: ファイルサイズ
         resource_import_fingerprint: ファイルのハッシュ
         note: 注記
         executed_at: 実行時刻
