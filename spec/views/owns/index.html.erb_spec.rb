@@ -12,7 +12,6 @@ describe "owns/index" do
         :agent_id => 2
       )
     ]).page(1))
-    view.stub(:current_user).and_return(User.find('enjuadmin'))
   end
 
   it "renders a list of owns" do

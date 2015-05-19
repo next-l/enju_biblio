@@ -36,7 +36,7 @@ describe ResourceImportFilesController do
       it "assigns empty as @resource_import_files" do
         get :index
         expect(assigns(:resource_import_files)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -76,7 +76,7 @@ describe ResourceImportFilesController do
       it "assigns the requested resource_import_file as @resource_import_file" do
         get :show, :id => resource_import_files(:resource_import_file_00003).id
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -116,14 +116,17 @@ describe ResourceImportFilesController do
       it "should not assign the requested resource_import_file as @resource_import_file" do
         get :new
         expect(assigns(:resource_import_file)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
 
   describe "POST create" do
     describe "When logged in as Librarian" do
-      login_fixture_librarian
+      before(:each) do
+        @user = FactoryGirl.create(:librarian)
+        sign_in @user
+      end
 
       it "should create agent_import_file" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
@@ -134,7 +137,10 @@ describe ResourceImportFilesController do
     end
 
     describe "When logged in as User" do
-      login_fixture_user
+      before(:each) do
+        @user = FactoryGirl.create(:user)
+        sign_in @user
+      end
 
       it "should be forbidden" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
@@ -147,7 +153,7 @@ describe ResourceImportFilesController do
       it "should be redirected to new session url" do
         post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
         assigns(:resource_import_file).should be_nil
-        expect(response).to redirect_to new_session_url
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end
@@ -187,7 +193,7 @@ describe ResourceImportFilesController do
       it "should not assign the requested resource_import_file as @resource_import_file" do
         resource_import_file = resource_import_files(:resource_import_file_00001)
         get :edit, :id => resource_import_file.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -223,7 +229,7 @@ describe ResourceImportFilesController do
     describe "When not logged in" do
       it "should not update resource_import_file" do
         put :update, :id => resource_import_files(:resource_import_file_00003).id, :resource_import_file => {mode: "update"}
-        expect(response).to redirect_to new_session_url
+        expect(response).to redirect_to new_user_session_url
       end
     end
   end
@@ -279,7 +285,7 @@ describe ResourceImportFilesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @resource_import_file.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

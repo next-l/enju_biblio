@@ -116,7 +116,7 @@ describe PictureFilesController do
       it "should not assign the requested picture_file as @picture_file" do
         get :new
         expect(assigns(:picture_file)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -156,7 +156,7 @@ describe PictureFilesController do
       it "should not assign the requested picture_file as @picture_file" do
         picture_file = PictureFile.find(1)
         get :edit, :id => picture_file.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -260,7 +260,7 @@ describe PictureFilesController do
 
         it "should be forbidden" do
           post :create, :picture_file => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -272,7 +272,7 @@ describe PictureFilesController do
 
         it "should be forbidden" do
           post :create, :picture_file => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -373,14 +373,14 @@ describe PictureFilesController do
 
         it "should be forbidden" do
           put :update, :id => @picture_file.id, :picture_file => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested picture_file as @picture_file" do
           put :update, :id => @picture_file.id, :picture_file => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -437,7 +437,7 @@ describe PictureFilesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @picture_file.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

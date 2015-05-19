@@ -124,7 +124,7 @@ describe AgentRelationshipsController do
       it "should not assign the requested agent_relationship as @agent_relationship" do
         get :new
         expect(assigns(:agent_relationship)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -164,7 +164,7 @@ describe AgentRelationshipsController do
       it "should not assign the requested agent_relationship as @agent_relationship" do
         agent_relationship = FactoryGirl.create(:agent_relationship)
         get :edit, :id => agent_relationship.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -268,7 +268,7 @@ describe AgentRelationshipsController do
 
         it "should be forbidden" do
           post :create, :agent_relationship => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -280,7 +280,7 @@ describe AgentRelationshipsController do
 
         it "should be forbidden" do
           post :create, :agent_relationship => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -375,14 +375,14 @@ describe AgentRelationshipsController do
 
         it "should be forbidden" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_relationship as @agent_relationship" do
           put :update, :id => @agent_relationship.id, :agent_relationship => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -439,7 +439,7 @@ describe AgentRelationshipsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_relationship.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

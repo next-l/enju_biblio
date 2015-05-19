@@ -81,7 +81,7 @@ describe ItemsController do
 
       it "should not get index with inventory_file_id" do
         get :index, :inventory_file_id => 1
-        expect(response).to redirect_to new_session_url
+        expect(response).to redirect_to new_user_session_url
         assigns(:inventory_file).should_not be_nil
       end
     end
@@ -178,7 +178,7 @@ describe ItemsController do
       it "should not assign the requested item as @item" do
         get :new, :manifestation_id => @manifestation.id
         expect(assigns(:item)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -225,7 +225,7 @@ describe ItemsController do
       it "should not assign the requested item as @item" do
         item = FactoryGirl.create(:item)
         get :edit, :id => item.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -361,7 +361,7 @@ describe ItemsController do
 
         it "should be forbidden" do
           post :create, :item => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -373,7 +373,7 @@ describe ItemsController do
 
         it "should be forbidden" do
           post :create, :item => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -471,14 +471,14 @@ describe ItemsController do
 
         it "should be forbidden" do
           put :update, :id => @item.id, :item => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested item as @item" do
           put :update, :id => @item.id, :item => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -554,7 +554,7 @@ describe ItemsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @item.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

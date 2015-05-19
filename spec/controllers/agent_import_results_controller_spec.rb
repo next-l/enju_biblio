@@ -37,7 +37,7 @@ describe AgentImportResultsController do
       it "assigns empty as @agent_import_results" do
         get :index
         expect(assigns(:agent_import_results)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -74,7 +74,7 @@ describe AgentImportResultsController do
       it "assigns the requested agent_import_result as @agent_import_result" do
         get :show, :id => 1
         expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

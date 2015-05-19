@@ -118,7 +118,7 @@ describe DonatesController do
       it "should not assign the requested donate as @donate" do
         get :new
         expect(assigns(:donate)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -158,7 +158,7 @@ describe DonatesController do
       it "should not assign the requested donate as @donate" do
         donate = FactoryGirl.create(:donate)
         get :edit, :id => donate.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -262,7 +262,7 @@ describe DonatesController do
 
         it "should be forbidden" do
           post :create, :donate => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -274,7 +274,7 @@ describe DonatesController do
 
         it "should be forbidden" do
           post :create, :donate => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -368,14 +368,14 @@ describe DonatesController do
 
         it "should be forbidden" do
           put :update, :id => @donate.id, :donate => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested donate as @donate" do
           put :update, :id => @donate.id, :donate => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -432,7 +432,7 @@ describe DonatesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @donate.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

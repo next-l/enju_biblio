@@ -124,7 +124,7 @@ describe ManifestationRelationshipsController do
       it "should not assign the requested manifestation_relationship as @manifestation_relationship" do
         get :new
         expect(assigns(:manifestation_relationship)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -164,7 +164,7 @@ describe ManifestationRelationshipsController do
       it "should not assign the requested manifestation_relationship as @manifestation_relationship" do
         manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
         get :edit, :id => manifestation_relationship.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -268,7 +268,7 @@ describe ManifestationRelationshipsController do
 
         it "should be forbidden" do
           post :create, :manifestation_relationship => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -280,7 +280,7 @@ describe ManifestationRelationshipsController do
 
         it "should be forbidden" do
           post :create, :manifestation_relationship => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -375,14 +375,14 @@ describe ManifestationRelationshipsController do
 
         it "should be forbidden" do
           put :update, :id => @manifestation_relationship.id, :manifestation_relationship => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested manifestation_relationship as @manifestation_relationship" do
           put :update, :id => @manifestation_relationship.id, :manifestation_relationship => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -439,7 +439,7 @@ describe ManifestationRelationshipsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @manifestation_relationship.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

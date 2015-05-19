@@ -80,7 +80,7 @@ describe AgentMergeListsController do
       it "assigns the requested agent_merge_list as @agent_merge_list" do
         get :show, :id => @agent_merge_list.id
         assigns(:agent_merge_list).should eq(@agent_merge_list)
-        response.should redirect_to new_session_url
+        response.should redirect_to new_user_session_url
       end
     end
   end
@@ -118,7 +118,7 @@ describe AgentMergeListsController do
       it "should not assign the requested agent_merge_list as @agent_merge_list" do
         get :new
         assigns(:agent_merge_list).should be_nil
-        response.should redirect_to(new_session_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
   end
@@ -158,7 +158,7 @@ describe AgentMergeListsController do
       it "should not assign the requested agent_merge_list as @agent_merge_list" do
         agent_merge_list = FactoryGirl.create(:agent_merge_list)
         get :edit, :id => agent_merge_list.id
-        response.should redirect_to(new_session_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
   end
@@ -262,7 +262,7 @@ describe AgentMergeListsController do
 
         it "should be forbidden" do
           post :create, :agent_merge_list => @attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
 
@@ -274,7 +274,7 @@ describe AgentMergeListsController do
 
         it "should be forbidden" do
           post :create, :agent_merge_list => @invalid_attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
     end
@@ -385,14 +385,14 @@ describe AgentMergeListsController do
 
         it "should be forbidden" do
           put :update, :id => @agent_merge_list.id, :agent_merge_list => @attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested agent_merge_list as @agent_merge_list" do
           put :update, :id => @agent_merge_list.id, :agent_merge_list => @invalid_attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
     end
@@ -449,7 +449,7 @@ describe AgentMergeListsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @agent_merge_list.id
-        response.should redirect_to(new_session_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
   end

@@ -85,7 +85,7 @@ describe LanguagesController do
       it "should not assign the requested language as @language" do
         get :new
         expect(assigns(:language)).to be_nil
-        response.should redirect_to(new_session_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
   end
@@ -107,7 +107,7 @@ describe LanguagesController do
     describe "When not logged in" do
       it "should not assign the requested language as @language" do
         get :edit, :id => @language.id
-        response.should redirect_to(new_session_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
   end
@@ -211,7 +211,7 @@ describe LanguagesController do
 
         it "should be forbidden" do
           post :create, :language => @attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
 
@@ -223,7 +223,7 @@ describe LanguagesController do
 
         it "should be forbidden" do
           post :create, :language => @invalid_attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
     end
@@ -271,14 +271,14 @@ describe LanguagesController do
 
         it "should be forbidden" do
           put :update, :id => @language.id, :language => @attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested language as @language" do
           put :update, :id => @language.id, :language => @invalid_attrs
-          response.should redirect_to(new_session_url)
+          response.should redirect_to(new_user_session_url)
         end
       end
     end
@@ -309,7 +309,7 @@ describe LanguagesController do
 
       it "should be forbidden" do
         delete :destroy, :id => @language.id
-        response.should redirect_to(new_session_url)
+        response.should redirect_to(new_user_session_url)
       end
     end
   end

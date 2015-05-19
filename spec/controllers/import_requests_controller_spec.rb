@@ -114,7 +114,7 @@ describe ImportRequestsController do
       it "should not assign the requested import_request as @import_request" do
         get :new
         expect(assigns(:import_request)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -154,7 +154,7 @@ describe ImportRequestsController do
       it "should not assign the requested import_request as @import_request" do
         import_request = FactoryGirl.create(:import_request, :isbn => '9784797350999')
         get :edit, :id => import_request.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -270,7 +270,7 @@ describe ImportRequestsController do
 
         it "should be forbidden" do
           post :create, :import_request => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
@@ -282,7 +282,7 @@ describe ImportRequestsController do
 
         it "should be forbidden" do
           post :create, :import_request => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -376,14 +376,14 @@ describe ImportRequestsController do
 
         it "should be redirected to new session url" do
           put :update, :id => @import_request.id, :import_request => @attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe "with invalid params" do
         it "assigns the requested import_request as @import_request" do
           put :update, :id => @import_request.id, :import_request => @invalid_attrs
-          expect(response).to redirect_to(new_session_url)
+          expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
@@ -440,7 +440,7 @@ describe ImportRequestsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @import_request.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

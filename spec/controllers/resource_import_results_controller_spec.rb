@@ -37,7 +37,7 @@ describe ResourceImportResultsController do
       it "assigns empty as @resource_import_results" do
         get :index
         expect(assigns(:resource_import_results)).to be_nil
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -74,7 +74,7 @@ describe ResourceImportResultsController do
       it "assigns the requested resource_import_result as @resource_import_result" do
         get :show, :id => 1
         expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
@@ -130,7 +130,7 @@ describe ResourceImportResultsController do
 
       it "should be forbidden" do
         delete :destroy, :id => @resource_import_result.id
-        expect(response).to redirect_to(new_session_url)
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
   end

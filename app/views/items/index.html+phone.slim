@@ -24,7 +24,7 @@ div[data-role="content"]
             = t('activerecord.models.shelf')
           th
             = t('activerecord.models.circulation_status')
-          - if current_user
+          - if user_signed_in?
             th
         - @items.each do |item|
           |  <tr class="line
