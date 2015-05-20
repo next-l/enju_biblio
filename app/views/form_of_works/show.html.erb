@@ -23,7 +23,9 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <li<%= link_to t('page.edit'), edit_form_of_work_path(@form_of_work) -%></li>
+    <%- if can? :update, @form_of_work -%>
+      <li><%= link_to t('page.edit'), edit_form_of_work_path(@form_of_work) -%></li>
+    <%- end -%>
     <li><%= back_to_index(flash[:page_info]) -%></li>
   </ul>
 </div>
