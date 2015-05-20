@@ -3,7 +3,7 @@
   = f.error_messages
   .form-group
     = f.label t('activerecord.models.agent_type')
-    = f.select(:agent_type_id, @agent_types.collect{|p| [p.display_name.localize, p.id]})
+    = f.select(:agent_type_id, @agent_types.collect{|p| [p.display_name.localize, p.id]}, {}, {class: 'form-control'})
   .form-group
     span#name_person
       - if @library_group.settings[:family_name_first]
@@ -35,10 +35,10 @@
       = f.text_field :death_date, class: 'form-control'
   .form-group
     = f.label t('activerecord.models.language')
-    = f.select(:language_id, @languages.collect{|l| [l.display_name.localize, l.id]})
+    = f.select(:language_id, @languages.collect{|l| [l.display_name.localize, l.id]}, {}, {class: 'form-control'})
   .form-group
     = f.label t('activerecord.models.country')
-    = f.select(:country_id, @countries.collect{|c| [c.display_name.localize, c.id]})
+    = f.select(:country_id, @countries.collect{|c| [c.display_name.localize, c.id]}, {}, {class: 'form-control'})
   .form-group
     = f.label :email
     br
@@ -49,7 +49,7 @@
     = f.url_field :url, class: 'form-control'
   .form-group
     = f.label t('role.required_role')
-    = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]})
+    = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}, {}, {class: 'form-control'})
   .form-group
     = f.label :note
     br
