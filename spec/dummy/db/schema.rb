@@ -542,17 +542,6 @@ ActiveRecord::Schema.define(version: 20150221063719) do
   add_index "events", ["event_category_id"], name: "index_events_on_event_category_id"
   add_index "events", ["library_id"], name: "index_events_on_library_id"
 
-  create_table "exemplifies", force: :cascade do |t|
-    t.integer  "manifestation_id", null: false
-    t.integer  "item_id",          null: false
-    t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "exemplifies", ["item_id"], name: "index_exemplifies_on_item_id", unique: true
-  add_index "exemplifies", ["manifestation_id"], name: "index_exemplifies_on_manifestation_id"
-
   create_table "form_of_works", force: :cascade do |t|
     t.string   "name",         null: false
     t.text     "display_name"

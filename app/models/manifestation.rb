@@ -514,9 +514,14 @@ class Manifestation < ActiveRecord::Base
 
   def identifier_contents(name)
     if Rails::VERSION::MAJOR > 3
-      identifiers.identifier_type(name).order(:position).pluck(:body)
+      identifiers.id_type(name).order(:position).pluck(:body)
     else
-      identifiers.where(identifier_type: IdentifierType.where(name: name).first).order(:position).pluck(:body)
+      identifier_type = IdentifierType.where(name: name).first
+      if identifier_type
+        identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
+      else
+        []
+      end
     end
   end
 
@@ -540,7 +545,7 @@ class Manifestation < ActiveRecord::Base
       shelf
       library
     ).join("\t")
-    items = Manifestation.includes(:items, :identifiers => :identifier_type).find_each.map{|m|
+    items = Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
       if m.items.exists?
         lines = []
         m.items.includes(:shelf => :library).each do |i|
@@ -564,7 +569,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << i.shelf.library.name
           lines << item_lines
         end
-        lines
+        return lines
       else
         lines = []
         lines << m.id
@@ -574,9 +579,9 @@ class Manifestation < ActiveRecord::Base
         lines << m.pub_date
         lines << m.price
         lines << m.identifier_contents(:isbn).first
-        [lines]
+        return [lines]
       end
-    }
+    end
     if options[:format] == :txt
       items.map{|m| m.map{|i| i.join("\t")}}.flatten.unshift(header).join("\r\n")
     else

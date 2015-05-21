@@ -8,7 +8,7 @@ class Identifier < ActiveRecord::Base
   validate :check_identifier
   before_validation :normalize
   before_save :convert_isbn
-  scope :identifier_type, -> type {
+  scope :id_type, -> type {
     where(identifier_type: IdentifierType.where(name: type).first)
   }
 
