@@ -513,7 +513,11 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    identifiers.identifier_type(name).order(:position).pluck(:body)
+    if Rails::VERSION::MAJOR > 3
+      identifiers.identifier_type(name).order(:position).pluck(:body)
+    else
+      identifiers.where(identifier_type: IdentifierType.where(name: name).first).order(:position).pluck(:body)
+    end
   end
 
   def self.export(options = {format: :txt})
