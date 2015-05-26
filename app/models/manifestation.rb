@@ -377,7 +377,7 @@ class Manifestation < ActiveRecord::Base
     else
       body = File.open(attachment.path).read
     end
-    client = Faraday.new(url: ENV['SOLR_URL']) do |conn|
+    client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
     end
