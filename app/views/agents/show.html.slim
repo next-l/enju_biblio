@@ -1,37 +1,40 @@
 .row
   #submenu.col-md-3
-    #manifestation_book_jacket
-      = agent_custom_book_jacket(@agent)
-    ul.list-group
-      - if @agent.picture_files.exists?
-        li.list-group-item
-          = t('page.total')
-          | : 
-          = @agent.picture_files.count
-          = t('page.number_of_pictures', count: @agent.picture_files.count)
-        li.list-group-item
-          = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @agent.id)
-        script[type="text/javascript"]
-          |  $(document).ready(function(){ $("a[rel='agent_<ruby code="= @agent.id"></ruby>']").colorbox({transition:"none", photo:true}); $("a[rel='agent_<ruby code="= @agent.id"></ruby>_other']").colorbox({transition:"none", photo:true}); }) 
-      - if policy(PictureFile).create?
-        li.list-group-item
-          = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id)
-    ul.list-group
-      li.list-group-item
-        = back_to_index(flash[:page_info])
-      - if policy(Agent).create?
-        li.list-group-item
-          = link_to t('page.edit'), edit_agent_path(@agent)
-        li.list-group-item
-          = link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add')
-        - if policy(@agent).destroy?
+    .panel.panel-default
+      .panel-heading
+        h2.panel-title
+          = t('activerecord.models.agent')
+      .panel-body
+        #manifestation_book_jacket
+          = agent_custom_book_jacket(@agent)
+      ul.list-group
+        - if @agent.picture_files.exists?
           li.list-group-item
-            = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path
+            = t('page.total')
+            | : 
+            = @agent.picture_files.count
+            = t('page.number_of_pictures', count: @agent.picture_files.count)
           li.list-group-item
-            = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
-    ul.list-group
-      li.list-group-item
-        = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path(query: "\"#{@agent.full_name}\"")
+            = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @agent.id)
+          script[type="text/javascript"]
+            |  $(document).ready(function(){ $("a[rel='agent_<ruby code="= @agent.id"></ruby>']").colorbox({transition:"none", photo:true}); $("a[rel='agent_<ruby code="= @agent.id"></ruby>_other']").colorbox({transition:"none", photo:true}); }) 
+        - if policy(PictureFile).create?
+          li.list-group-item
+            = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id)
+        li.list-group-item
+          = back_to_index(flash[:page_info])
+        - if policy(Agent).create?
+          li.list-group-item
+            = link_to t('page.edit'), edit_agent_path(@agent)
+          li.list-group-item
+            = link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add')
+          - if policy(@agent).destroy?
+            li.list-group-item
+              = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path
+            li.list-group-item
+              = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
+        li.list-group-item
+          = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path(query: "\"#{@agent.full_name}\"")
   #content_list.col-md-9
     h1.title
       = t('page.showing', model: t('activerecord.models.agent'))
