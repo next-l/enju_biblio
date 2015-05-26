@@ -4,8 +4,9 @@
       .panel-heading
         h2.panel-title
           = t('activerecord.models.agent')
-      #manifestation_book_jacket
-        = agent_custom_book_jacket(@agent)
+      .panel-body
+        #manifestation_book_jacket
+          = agent_custom_book_jacket(@agent)
       ul.list-group
         - if @agent.picture_files.exists?
           li.list-group-item

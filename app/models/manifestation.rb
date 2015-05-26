@@ -360,7 +360,7 @@ class Manifestation < ActiveRecord::Base
 
   def extract_text
     return nil unless attachment
-    client = Faraday.new(url: ENV['SOLR_URL']) do |conn|
+    client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
     end
