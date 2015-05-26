@@ -1,7 +1,23 @@
 .row
-  h1.title
-    = t('page.listing', model: t('agent.publisher'))
+  #submenu.col-md-3
+    .panel.panel-default
+      .panel-heading
+        h2.panel-title
+          = t('activerecord.models.agent')
+      = render 'manifestations/book_jacket', manifestation: manifestation
+      ul.list-group
+        li.list-group-item
+          = link_to t('activerecord.models.manifestation'), manifestations_path
+        li.list-group-item
+          = link_to t('page.listing', model: t('activerecord.models.item')), items_path(manifestation_id: manifestation.id)
+        - if policy(Agent).create?
+          li.list-group-item
+            = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path(manifestation_id: manifestation.id)
+          li.list-group-item
+            = link_to t('page.rearrange_order'), produces_path(manifestation_id: manifestation.id)
   #content_list.col-md-9
+    h1.title
+      = t('page.listing', model: t('agent.publisher'))
     = render 'manifestations/title', manifestation: manifestation
     .search_form
       = form_for :agents, url: agents_path(manifestation_id: manifestation.id), html: {method: 'get'} do
@@ -40,15 +56,3 @@
               = link_to t('page.edit'), edit_produce_path(manifestation.produced(agent))
               = link_to t('page.destroy'), produce_path(manifestation.produced(agent), manifestation_id: manifestation.id), data: {confirm: t('page.are_you_sure')}, method: :delete
     = paginate(@agents)
-  #submenu.col-md-3
-  = render 'manifestations/book_jacket', manifestation: manifestation
-  ul.list-group
-    li.list-group-item
-      = link_to t('activerecord.models.manifestation'), manifestations_path
-    li.list-group-item
-      = link_to t('page.listing', model: t('activerecord.models.item')), items_path(manifestation_id: manifestation.id)
-    - if policy(Agent).create?
-      li.list-group-item
-        = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path(manifestation_id: manifestation.id)
-      li.list-group-item
-        = link_to t('page.rearrange_order'), produces_path(manifestation_id: manifestation.id)

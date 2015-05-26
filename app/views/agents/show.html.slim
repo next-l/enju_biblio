@@ -1,37 +1,39 @@
 .row
   #submenu.col-md-3
-    #manifestation_book_jacket
-      = agent_custom_book_jacket(@agent)
-    ul.list-group
-      - if @agent.picture_files.exists?
-        li.list-group-item
-          = t('page.total')
-          | : 
-          = @agent.picture_files.count
-          = t('page.number_of_pictures', count: @agent.picture_files.count)
-        li.list-group-item
-          = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @agent.id)
-        script[type="text/javascript"]
-          |  $(document).ready(function(){ $("a[rel='agent_<ruby code="= @agent.id"></ruby>']").colorbox({transition:"none", photo:true}); $("a[rel='agent_<ruby code="= @agent.id"></ruby>_other']").colorbox({transition:"none", photo:true}); }) 
-      - if policy(PictureFile).create?
-        li.list-group-item
-          = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id)
-    ul.list-group
-      li.list-group-item
-        = back_to_index(flash[:page_info])
-      - if policy(Agent).create?
-        li.list-group-item
-          = link_to t('page.edit'), edit_agent_path(@agent)
-        li.list-group-item
-          = link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add')
-        - if policy(@agent).destroy?
+    .panel.panel-default
+      .panel-heading
+        h2.panel-title
+          = t('activerecord.models.agent')
+      #manifestation_book_jacket
+        = agent_custom_book_jacket(@agent)
+      ul.list-group
+        - if @agent.picture_files.exists?
           li.list-group-item
-            = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path
+            = t('page.total')
+            | : 
+            = @agent.picture_files.count
+            = t('page.number_of_pictures', count: @agent.picture_files.count)
           li.list-group-item
-            = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
-    ul.list-group
-      li.list-group-item
-        = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path(query: "\"#{@agent.full_name}\"")
+            = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(agent_id: @agent.id)
+          script[type="text/javascript"]
+            |  $(document).ready(function(){ $("a[rel='agent_<ruby code="= @agent.id"></ruby>']").colorbox({transition:"none", photo:true}); $("a[rel='agent_<ruby code="= @agent.id"></ruby>_other']").colorbox({transition:"none", photo:true}); }) 
+        - if policy(PictureFile).create?
+          li.list-group-item
+            = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(agent_id: @agent.id)
+        li.list-group-item
+          = back_to_index(flash[:page_info])
+        - if policy(Agent).create?
+          li.list-group-item
+            = link_to t('page.edit'), edit_agent_path(@agent)
+          li.list-group-item
+            = link_to t('agent.add_derivation'), agents_path(agent_id: @agent.id, mode: 'add')
+          - if policy(@agent).destroy?
+            li.list-group-item
+              = link_to t('page.new', model: t('activerecord.models.agent')), new_agent_path
+            li.list-group-item
+              = link_to t('page.destroy'), @agent, data: {confirm: t('page.are_you_sure')}, method: :delete
+        li.list-group-item
+          = link_to t('page.listing', model: t('activerecord.models.manifestation')), manifestations_path(query: "\"#{@agent.full_name}\"")
   #content_list.col-md-9
     h1.title
       = t('page.showing', model: t('activerecord.models.agent'))
@@ -40,96 +42,97 @@
     h2.resource_title
       |  [P] 
       = @agent.full_name
-    #tabs
-      ul.list-group
-        li.selected[title="active"]
-          a[href="#detail"]
+    div[role="tabpanel"]
+      ul.nav.nav-tabs[role="tablist"]
+        li.active[role="presentation"]
+          a[href="#detail" aria-controls="detail" role="tab" data-toggle="tab"]
             em
               = t('page.detail')
         - if @agent.derived_agents.exists? or @agent.original_agents.exists?
-          li.list-group-item
+          li.active[role="presentation"]
             a[href="#related"]
               em
                 = t('page.related')
-      #detail
-        table.table.table-striped.index.vcard
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.full_name')
-                | :
-            td
-              span.fn
-                = @agent.full_name
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.full_name_transcription')
-                | :
-            td
-              = @agent.full_name_transcription
-          tr
-            td
-              strong
-                = t('activerecord.models.agent_type')
-                | :
-            td
-              = @agent.agent_type.display_name.localize
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.email')
-                | :
-            td
-              = mail_to @agent.email, nil, class: 'email'
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.url')
-                | :
-            td
-              = link_to @agent.url, @agent.url, class: 'url' if @agent.url?
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.other_designation')
-                | :
-            td
-              = @agent.other_designation
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.place')
-                | :
-            td
-              = @agent.place
-          tr
-            td
-              strong
-                = t('activerecord.models.language')
-                | :
-            td
-              = @agent.language.display_name.localize
-          tr
-            td
-              strong
-                = t('activerecord.attributes.agent.note')
-                | :
-            td
-              = @agent.note
-          tr
-            td
-              strong
-                = t('page.created_at')
-                | :
-            td
-              = l(@agent.created_at)
-          tr
-            td
-              strong
-                = t('page.updated_at')
-                | :
-            td
-              = l(@agent.updated_at)
-      - unless @agent.derived_agents.empty? and @agent.original_agents.empty?
-      = render 'agents/agent_list'
+      .tab-content
+        .tab-pane.active[role="tabpanel active" id="detail"]
+          table.table.table-striped.index.vcard
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.full_name')
+                  | :
+              td
+                span.fn
+                  = @agent.full_name
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.full_name_transcription')
+                  | :
+              td
+                = @agent.full_name_transcription
+            tr
+              td
+                strong
+                  = t('activerecord.models.agent_type')
+                  | :
+              td
+                = @agent.agent_type.display_name.localize
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.email')
+                  | :
+              td
+                = mail_to @agent.email, nil, class: 'email'
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.url')
+                  | :
+              td
+                = link_to @agent.url, @agent.url, class: 'url' if @agent.url?
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.other_designation')
+                  | :
+              td
+                = @agent.other_designation
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.place')
+                  | :
+              td
+                = @agent.place
+            tr
+              td
+                strong
+                  = t('activerecord.models.language')
+                  | :
+              td
+                = @agent.language.display_name.localize
+            tr
+              td
+                strong
+                  = t('activerecord.attributes.agent.note')
+                  | :
+              td
+                = @agent.note
+            tr
+              td
+                strong
+                  = t('page.created_at')
+                  | :
+              td
+                = l(@agent.created_at)
+            tr
+              td
+                strong
+                  = t('page.updated_at')
+                  | :
+              td
+                = l(@agent.updated_at)
+        - unless @agent.derived_agents.empty? and @agent.original_agents.empty?
+          = render 'agents/agent_list'
