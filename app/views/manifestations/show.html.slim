@@ -1,22 +1,24 @@
 .row
   #submenu.col-md-3
     .panel.panel-default
-      .panel-body
-        = render 'manifestations/book_jacket', manifestation: @manifestation
-        ul.list-group
-          - if @manifestation.picture_files.exists?
-            li.list-group-item
-              = t('page.total')
-              | : 
-              = @manifestation.picture_files.count
-              = t('page.number_of_pictures', count: @manifestation.picture_files.count)
-            li.list-group-item
-              = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @manifestation.id)
-          - if policy(PictureFile).create?
-            li.list-group-item
-              = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: @manifestation.id)
+      .panel-heading
+        h2.panel-title
+          = t('activerecord.models.manifestation')
+      = render 'manifestations/book_jacket', manifestation: @manifestation
+      ul.list-group
+        - if @manifestation.picture_files.exists?
+          li.list-group-item
+            = t('page.total')
+            | : 
+            = @manifestation.picture_files.count
+            = t('page.number_of_pictures', count: @manifestation.picture_files.count)
+          li.list-group-item
+            = link_to t('page.listing', model: t('activerecord.models.picture_file')), picture_files_path(manifestation_id: @manifestation.id)
+        - if policy(PictureFile).create?
+          li.list-group-item
+            = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: @manifestation.id)
         script[type="text/javascript"]
-          |  $(document).ready(function(){ $("a[rel='manifestation_<ruby code="= @manifestation.id"></ruby>']").colorbox({transition:"none", photo:true}); }) 
+          |  $(document).ready(function(){ $("a[rel='manifestation_<ruby code="= @manifestation.id"></ruby>']").colorbox({transition:"none", photo:true}); })
         - if user_signed_in?
           #call_number_content
             - if defined?(EnjuCirculation)
@@ -26,16 +28,14 @@
             - items.on_shelf.each do |item|
               - if item.hold?(current_user.profile.library)
                 = call_number_label(item)
-          #resource_bookmark_buttons
-            ul.list-group
-              - if user_signed_in?
-                - if current_user.email.present?
+            - if user_signed_in?
+              - if current_user.email.present?
+                li.list-group-item
+                  = link_to t('manifestation.send_email'), manifestation_path(mode: 'send_email'), data: {confirm: t('page.are_you_sure')}
+                - if defined?(EnjuBookmark)
                   li.list-group-item
-                    = link_to t('manifestation.send_email'), manifestation_path(mode: 'send_email'), data: {confirm: t('page.are_you_sure')}
-                  - if defined?(EnjuBookmark)
-                    li.list-group-item
-                      = link_to_bookmark(@manifestation)
-                - unless @manifestation.carrier_type.name == 'file'
+                    = link_to_bookmark(@manifestation)
+              - unless @manifestation.carrier_type.name == 'file'
                 - if defined?(EnjuCirculation)
                   - if user_signed_in?
                     - if @manifestation.is_reservable_by?(current_user)
@@ -57,8 +57,8 @@
                       |  (
                       = t('page.number_of_reservations', count: @reserved_count)
                       | )
-            - if current_user.try(:has_role?, 'Librarian')
-              = render 'manifestations/edit_detail'
+          - if current_user.try(:has_role?, 'Librarian')
+            = render 'manifestations/edit_detail'
   .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
     .panel.panel-default
       .panel-heading
