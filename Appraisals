@@ -1,5 +1,5 @@
 appraise "rails-3.2" do
-  gem "rails", "3.2.21"
+  gem "rails", "~> 3.2.22"
   gem "jquery-rails"
   gem "statesman", "~> 1.0.0"
   gem "strong_parameters"
@@ -9,7 +9,7 @@ appraise "rails-3.2" do
 end
 
 appraise "rails-4.1" do
-  gem "rails", "4.1.10"
+  gem "rails", "~> 4.1.11"
   gem "jquery-rails"
   gem "statesman", "~> 1.2"
   gem "foreigner"
@@ -17,7 +17,7 @@ appraise "rails-4.1" do
 end
 
 appraise "rails-4.2" do
-  gem "rails", "4.2.1"
+  gem "rails", "~> 4.2.2"
   gem "jquery-rails"
   gem "statesman", "~> 1.2"
   gem "coveralls", require: false
