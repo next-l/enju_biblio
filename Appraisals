@@ -9,16 +9,16 @@ appraise "rails-3.2" do
 end
 
 appraise "rails-4.1" do
-  gem "rails", "~> 4.1.11"
+  gem "rails", "~> 4.1.12"
   gem "jquery-rails"
-  gem "statesman", "~> 1.2"
+  gem "statesman", "~> 1.3"
   gem "foreigner"
   gem "coveralls", require: false
 end
 
 appraise "rails-4.2" do
-  gem "rails", "~> 4.2.2"
+  gem "rails", "~> 4.2.3"
   gem "jquery-rails"
-  gem "statesman", "~> 1.2"
+  gem "statesman", "~> 1.3"
   gem "coveralls", require: false
 end
