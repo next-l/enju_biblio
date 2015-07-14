@@ -59,14 +59,18 @@ module EnjuBiblio
           SeriesStatementMergeList
         ]
         can :manage, [
-          ContentType,
+          AgentType,
           Country,
-          Frequency,
           Language,
           License,
-          MediumOfPerformance,
-          AgentType
-        ] if LibraryGroup.site_config.network_access_allowed?(ip_address)
+          MediumOfPerformance
+        ]
+        can :manage, [
+          ContentType,
+          Frequency
+        ] do |record|
+          record.manifestations.empty?
+        end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can :read, [
           CarrierType,
           ContentType,
