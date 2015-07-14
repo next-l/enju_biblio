@@ -33,7 +33,6 @@ class ResourceImportFilesController < ApplicationController
   def new
     @resource_import_file = ResourceImportFile.new
     @resource_import_file.library_id = current_user.profile.library_id
-    @shelves = Library.find(@resource_import_file.library_id).shelves
 
     respond_to do |format|
       format.html # new.html.erb
