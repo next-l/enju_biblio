@@ -110,15 +110,15 @@ module ManifestationsHelper
     end
   end
 
-  def pub_year_facet(pub_date_from, pub_date_to, facet)
+  def pub_year_facet(pub_date_from, pub_date_until, facet)
     string = ''
-    current = true if facet.value.first.to_i == pub_date_from.to_i && facet.value.last.to_i - 1 == pub_date_to.to_i
+    current = true if facet.value.first.to_i == pub_date_from.to_i and facet.value.last.to_i - 1 == pub_date_until.to_i
     if current
       content_tag :strong do
-        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_to: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
+        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
       end
     else
-      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_to: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
+      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
     end
   end
 
