@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "mini_magick"
   #s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 4.0.0.rc2"
+  s.add_dependency "paper_trail", "~> 4.0"
   s.add_dependency "jc-validates_timeliness"
   s.add_dependency "simple_form", "~> 3.1"
   s.add_dependency "dynamic_form"
