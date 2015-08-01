@@ -27,7 +27,8 @@ class ResourceImportFile < ActiveRecord::Base
     'application/vnd.ms-excel'
   ]
   validates_attachment_presence :resource_import
-  validates :default_shelf_id, presence: true
+  validates :resource_import, presence: true, on: :create
+  validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user, validate: true
   belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
