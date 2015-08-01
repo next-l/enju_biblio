@@ -124,21 +124,28 @@ describe ResourceImportFilesController do
   describe "POST create" do
     describe "When logged in as Librarian" do
       before(:each) do
-        @user = FactoryGirl.create(:librarian)
+        @user = users(:librarian1)
         sign_in @user
       end
 
-      it "should create agent_import_file" do
-        post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
+      it "should create resource_import_file" do
+        post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv'), default_shelf_id: 1 }
         expect(assigns(:resource_import_file)).to be_valid
         assigns(:resource_import_file).user.username.should eq @user.username
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))
+      end
+
+      it "should not create resource_import_file without default_shelf_id" do
+        post :create, :resource_import_file => {:resource_import => fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv') }
+        expect(assigns(:resource_import_file)).not_to be_valid
+        assigns(:resource_import_file).user.username.should eq @user.username
+        expect(response).to be_success
       end
     end
 
     describe "When logged in as User" do
       before(:each) do
-        @user = FactoryGirl.create(:user)
+        @user = users(:user1)
         sign_in @user
       end
 

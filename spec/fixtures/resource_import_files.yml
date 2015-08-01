@@ -18,6 +18,7 @@ resource_import_file_00003:
   resource_import_file_size: 1
   user_id: 1
   resource_import_content_type: text/csv
+  default_shelf_id: 1
 
 # == Schema Information
 #

@@ -115,7 +115,7 @@ class ResourceImportFilesController < ApplicationController
     if library
       @shelves = library.shelves
     else
-      @shelves = current_user.profile.library.shelves
+      @shelves = current_user.profile.library.try(:shelves)
     end
   end
 end
