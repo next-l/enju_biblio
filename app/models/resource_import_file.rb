@@ -7,6 +7,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   attachment :resource_import
   validates :resource_import, presence: true, on: :create
+  validates :default_shelf_id, presence: true
   belongs_to :user, validate: true
   belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
