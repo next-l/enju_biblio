@@ -272,7 +272,7 @@ class ItemsController < ApplicationController
     else
       @library = @item.shelf.library
     end
-    @shelves = @library.shelves
+    @shelves = @library.try(:shelves)
     @bookstores = Bookstore.all
     @budget_types = BudgetType.all
     @roles = Role.all

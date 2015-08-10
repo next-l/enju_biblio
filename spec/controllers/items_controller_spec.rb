@@ -152,6 +152,17 @@ describe ItemsController do
         get :new
         expect(response).to redirect_to(manifestations_url)
       end
+
+      it "should work without exception, even if library and shelf is unavailable" do
+	Library.real.each do |library|
+	  library.try(:shelves).to_a.each do |shelf|
+	    shelf.destroy
+	  end
+	  library.destroy
+	end
+        get :new, :manifestation_id => @manifestation.id
+	expect(response).to redirect_to(libraries_url)
+      end
     end
 
     describe "When logged in as Librarian" do
