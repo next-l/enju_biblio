@@ -281,8 +281,14 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.real << Library.web
-    @bookstores = Bookstore.order(:position)
-    @budget_types = BudgetType.order(:position)
+    if @item.new_record?
+      @library = Library.real.includes(:shelves).order(:position).first
+    else
+      @library = @item.shelf.library
+    end
+    @shelves = @library.try(:shelves)
+    @bookstores = Bookstore.all
+    @budget_types = BudgetType.all
     @roles = Role.all
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.order(:position)
