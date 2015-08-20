@@ -118,6 +118,7 @@ ja:
         binded_at: 製本日
         budget_type_id: 予算種別
         bookstore_id: 書店
+        required_role_id: 閲覧に必要な権限
       agent:
         last_name: 姓
         middle_name: ミドルネーム

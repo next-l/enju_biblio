@@ -45,7 +45,7 @@
     <strong><%= t('activerecord.models.circulation_status') -%>:</strong>
     <%= link_to @item.circulation_status.display_name.localize, @item.circulation_status -%>
     <%- if current_user.try(:has_role?, 'Librarian') -%>
-     <%- unless @item.checkouts.not_returned.blank? -%>
+      <%- unless @item.checkouts.not_returned.blank? -%>
         (<%= link_to t('item.current_checkout'), @item.checkouts.not_returned.first -%>)
       <%- end -%>
     <%- end -%>
@@ -64,6 +64,11 @@
 <p>
   <strong><%= t('activerecord.attributes.item.include_supplements') -%>:</strong>
   <%= localized_boolean(@item.include_supplements) -%>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item.required_role_id') -%>:</strong>
+  <%= @item.required_role.name -%>
 </p>
 
 <p>
