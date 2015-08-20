@@ -31,7 +31,7 @@
             - if user_signed_in?
               - if current_user.email.present?
                 li.list-group-item
-                  = link_to t('manifestation.send_email'), manifestation_path(mode: 'send_email'), data: {confirm: t('page.are_you_sure')}
+                  = link_to t('manifestation.send_email'), manifestation_path(@manifestation, mode: 'send_email'), data: {confirm: t('page.are_you_sure')}
                 - if defined?(EnjuBookmark)
                   li.list-group-item
                     = link_to_bookmark(@manifestation)
