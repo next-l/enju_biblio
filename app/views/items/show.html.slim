@@ -94,6 +94,11 @@ div[style="color: red"]
         = localized_boolean(@item.include_supplements)
       p
         strong
+          = t('activerecord.attributes.item.required_role_id')
+          | :
+        = @item.required_role.name
+      p
+        strong
           = t('activerecord.attributes.item.call_number')
           | :
         = @item.call_number
