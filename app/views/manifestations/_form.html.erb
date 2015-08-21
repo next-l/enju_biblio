@@ -194,11 +194,6 @@
   </div>
 
   <div class="field">
-    <%= f.label :repository_content -%>
-    <%= f.check_box :repository_content -%>
-  </div>
-
-  <div class="field">
     <%= f.label t('role.required_role') -%>
     <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}) -%>
   </div>
