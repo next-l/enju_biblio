@@ -7,7 +7,7 @@ class ItemsController < ApplicationController
     before_filter :get_inventory_file
   end
   before_filter :get_library, :get_item, except: [:create, :update, :destroy]
-  before_filter :prepare_options, only: [:new, :edit]
+  before_filter :prepare_options, only: [:edit]
   before_filter :get_version, only: [:show]
   #before_filter :store_location
   after_filter :solr_commit, only: [:create, :update, :destroy]
@@ -158,6 +158,7 @@ class ItemsController < ApplicationController
       return
     end
     @item = Item.new
+    prepare_options
     set_library
     @item.shelf = @library.shelves.first
     @item.manifestation_id = @manifestation.id
