@@ -119,10 +119,6 @@
     = f.label :access_address
     = f.url_field :access_address, class: 'form-control'
   .form-group
-    .checkbox-inline
-      = f.check_box :repository_content
-      = f.label :repository_content
-  .form-group
     = f.label t('role.required_role')
     = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}, {}, {class: 'form-control'})
   .form-group
