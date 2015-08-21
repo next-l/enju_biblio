@@ -133,6 +133,7 @@ class ManifestationsController < ApplicationController
         fulltext query unless query.blank?
         order_by sort[:sort_by], sort[:order] unless oai_search
         order_by :updated_at, :desc if oai_search
+        with(:repository_content).equal_to true if oai_search
         if defined?(EnjuSubject)
           with(:subject_ids).equal_to subject.id if subject
         end
@@ -155,7 +156,6 @@ class ManifestationsController < ApplicationController
             end
           end
         end
-        order_by sort[:sort_by], sort[:order] unless oai_search
         facet :reservable if defined?(EnjuCirculation)
       end
       search = make_internal_query(search)
