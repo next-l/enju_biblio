@@ -14,8 +14,6 @@ class ManifestationsController < ApplicationController
   before_action :get_version, only: [:show]
   after_filter :solr_commit, only: :destroy
   after_filter :convert_charset, only: :index
-  include EnjuOai::OaiController if defined?(EnjuOai)
-  include EnjuSearchLog if defined?(EnjuSearchLog)
 
   # GET /manifestations
   # GET /manifestations.json
