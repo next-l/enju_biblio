@@ -90,19 +90,25 @@ module EnjuBiblio
         can [:destroy, :delete], Item do |item|
           item.removable?
         end
-        can :index, Manifestation
-        can [:show, :create, :update], Manifestation
+        can [:index, :create], Manifestation
+        can [:show, :update], Manifestation do |manifestation|
+	  manifestation.required_role_id <= 3
+	end
         can [:destroy, :delete], Manifestation do |manifestation|
-          if  manifestation.items.empty?
-            if manifestation.series_master?
-              if manifestation.children.empty?
-                true
+	  if manifestation.required_role_id <= 3
+            if manifestation.items.empty?
+              if manifestation.series_master?
+                if manifestation.children.empty?
+                  true
+                else
+                  false
+                end
               else
-                false
+                true
               end
-            else
-              true
             end
+	  else
+            false
           end
         end
         can [:index, :create], Agent
