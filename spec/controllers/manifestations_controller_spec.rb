@@ -223,6 +223,12 @@ describe ManifestationsController do
         expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(3)
         expect(response).to be_success
       end
+
+      it "should not show manifestation with required_role of admin" do
+        manifestation = FactoryGirl.create(:manifestation, :required_role_id => 4)
+	get :show, :id => manifestation.id
+	expect(response).not_to be_success
+      end
     end
 
     describe "When logged in as User" do
