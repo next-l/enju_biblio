@@ -25,7 +25,7 @@ class ManifestationPolicy < ApplicationPolicy
     when 'Administrator'
       true
     when 'Librarian'
-      true
+      true if record.required_role_id <= 3
     when 'User'
       true if record.required_role_id <= 2
     end
@@ -36,16 +36,26 @@ class ManifestationPolicy < ApplicationPolicy
   end
 
   def destroy?
-    if user.try(:has_role?, 'Librarian')
-      if  record.items.empty?
-        if record.series_master?
-          if record.children.empty?
+    if  record.items.empty?
+      if record.series_master?
+        if record.children.empty?
+          case user.try(:role).try(:name)
+          when 'Administrator'
             true
+          when 'Librarian'
+            true if record.required_role_id <= 3
           else
             false
           end
         else
-          true
+          case user.try(:role).try(:name)
+          when 'Administrator'
+            true
+          when 'Librarian'
+            true if record.required_role_id <= 3
+          else
+            false
+          end
         end
       end
     end

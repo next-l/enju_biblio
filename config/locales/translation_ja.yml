@@ -118,6 +118,7 @@ ja:
         binded_at: 製本日
         budget_type_id: 予算種別
         bookstore_id: 書店
+        required_role_id: 閲覧に必要な権限
       agent:
         last_name: 姓
         middle_name: ミドルネーム
@@ -185,7 +186,7 @@ ja:
         edit_mode: 編集モード
         error_message: エラーメッセージ
         user_encoding: 文字コード
-        default_shelf_id: 既定の書棚
+        default_shelf_id: 既定の本棚
       series_statement:
         original_title: シリーズ名
         numbering: シリーズ番号
@@ -334,7 +335,7 @@ ja:
 
   resource_import_file:
     update_relationship: 関連を更新
-    default_shelf: TSVファイルで"shelf"列が指定されていない場合、この書棚が登録されます。
+    default_shelf: TSVファイルで"shelf"列が指定されていない場合、この本棚が登録されます。
 
   agent:
     creator: 著者
@@ -400,7 +401,7 @@ ja:
     add: "所蔵情報を追加する"
     specify_manifestation: "資料を指定してください。"
     this_item_is_reserved: "この資料は予約されています！"
-    create_shelf_first: "最初に書棚を作成してください。"
+    create_shelf_first: "最初に本棚を作成してください。"
     this_item_include_supplement: "この資料は付録を含んでいます。"
     all_item: "全ての所蔵情報"
     add_new_copy: "複本を追加"

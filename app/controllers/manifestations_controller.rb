@@ -14,8 +14,6 @@ class ManifestationsController < ApplicationController
   before_action :get_version, only: [:show]
   after_filter :solr_commit, only: :destroy
   after_filter :convert_charset, only: :index
-  include EnjuOai::OaiController if defined?(EnjuOai)
-  include EnjuSearchLog if defined?(EnjuSearchLog)
 
   # GET /manifestations
   # GET /manifestations.json
@@ -36,18 +34,6 @@ class ManifestationsController < ApplicationController
           from_and_until_times = set_from_and_until(Manifestation, params[:from], params[:until])
           from_time = @from_time = from_and_until_times[:from]
           until_time = @until_time = from_and_until_times[:until]
-          # OAI-PMHのデフォルトの件数
-          per_page = 200
-          if params[:resumptionToken]
-            current_token = get_resumption_token(params[:resumptionToken])
-            if current_token
-              page = (current_token[:cursor].to_i + per_page).div(per_page) + 1
-            else
-              @oai[:errors] << 'badResumptionToken'
-            end
-          end
-          page ||= 1
-
           if params[:verb] == 'GetRecord' && params[:identifier]
             begin
               @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
@@ -155,7 +141,6 @@ class ManifestationsController < ApplicationController
             end
           end
         end
-        order_by sort[:sort_by], sort[:order] unless oai_search
         facet :reservable if defined?(EnjuCirculation)
       end
       search = make_internal_query(search)
@@ -188,8 +173,27 @@ class ManifestationsController < ApplicationController
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
       max_number_of_results = @library_group.settings[:max_number_of_results].to_i
+      if defined?(EnjuOai)
+        # OAI-PMHのデフォルトの件数
+        oai_per_page = 200
+        if params[:resumptionToken]
+          token = params[:resumptionToken].split(',')
+          if token.size == 3
+            @cursor = token.reverse.first.to_i
+            if @cursor <= @count[:query_result]
+              page = (@cursor.to_i + oai_per_page).div(oai_per_page)
+            else
+              @oai[:errors] << 'badResumptionToken'
+            end
+          else
+            @oai[:errors] << 'badResumptionToken'
+          end
+        end
+        page ||= 1 if params[:format] == 'oai'
+      end
+
       if max_number_of_results == 0
-        @max_number_of_results = Manifestation.search.total
+        @max_number_of_results = count[:query_result]
       else
         @max_number_of_results = max_number_of_results
       end
@@ -237,10 +241,14 @@ class ManifestationsController < ApplicationController
       end
 
       page ||= params[:page] || 1
-      if params[:per_page].to_i > 0
-        per_page = params[:per_page].to_i
+      if oai_per_page and params[:format] == 'oai'
+        per_page = 200
       else
-        per_page = Manifestation.default_per_page
+        if params[:per_page].to_i > 0
+          per_page = params[:per_page].to_i
+        else
+          per_page = Manifestation.default_per_page
+        end
       end
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
@@ -312,9 +320,8 @@ class ManifestationsController < ApplicationController
           unless @manifestations.empty?
             @resumption = set_resumption_token(
               params[:resumptionToken],
-              @from_time || Manifestation.last.updated_at,
-              @until_time || Manifestation.first.updated_at,
-              @manifestations.limit_value
+              @from_time || Manifestation.order(:updated_at).first.updated_at,
+              @until_time || Manifestation.order(:updated_at).last.updated_at
             )
           else
             @oai[:errors] << 'noRecordsMatch'
