@@ -189,7 +189,7 @@ class ManifestationsController < ApplicationController
             @oai[:errors] << 'badResumptionToken'
           end
         end
-        page ||= 1
+        page ||= 1 if params[:format] == 'oai'
       end
 
       if max_number_of_results == 0
