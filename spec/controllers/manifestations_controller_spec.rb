@@ -199,6 +199,16 @@ describe ManifestationsController do
         expect(assigns(:manifestations).count).to eq 3
         expect(assigns(:manifestations).total_count).to eq 119
       end
+
+      it "should accept page parameter" do
+	get :index
+	original_manifestations = assigns(:manifestations)
+	expect(original_manifestations.count).to eq 10
+        get :index, page: 2
+	manifestations_page2 = assigns(:manifestations)
+	expect(manifestations_page2.count).to eq 10
+	expect(original_manifestations.first).not_to eq manifestations_page2.first
+      end
     end
   end
 
