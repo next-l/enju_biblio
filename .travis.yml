@@ -38,6 +38,7 @@ matrix:
   include:
   - rvm: 2.2.2
     gemfile: gemfiles/rails_4.2_oai.gemfile
+    env: DB=postgresql
 notifications:
   slack:
     secure: a4NQNeYYOKABDoP9lFJt9oEx6QRRfagA4sjOeJUMjdc2AFGDtZ95FvZom9s9YYimduIUQfUScNF4tJvAzqrYhHTAaBxcLRERZQZWse4sZj0+xzSvUqauPCXwDheVCc/tlriUm06skKfz8WZBqL6vZyw4FfV6xLSrHVFAeIeSdsU=
