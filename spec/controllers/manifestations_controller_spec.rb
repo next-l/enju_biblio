@@ -194,6 +194,14 @@ describe ManifestationsController do
         expect(assigns(:manifestations)).not_to be_empty
       end
 
+      it "should show manifestation with NDC", :solr => true do
+        classification = FactoryGirl.create(:classification, :category => "007.3", :classification_type_id => 1)
+	Manifestation.first.classifications << classification
+        get :index, :classification => "007", :classification_type => 1
+	expect(response).to be_success
+	expect(assigns(:manifestations)).not_to be_empty
+      end
+
       it "should accept per_page params" do
         get :index, per_page: 3
         expect(assigns(:manifestations).count).to eq 3
