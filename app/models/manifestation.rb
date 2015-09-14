@@ -546,6 +546,7 @@ class Manifestation < ActiveRecord::Base
       library
     ).join("\t")
     lines = []
+    lines << header
     Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
       if m.items.exists?
         m.items.includes(:shelf => :library).each do |i|
@@ -570,7 +571,6 @@ class Manifestation < ActiveRecord::Base
           lines << item_lines
         end
       else
-        line = []
         line << m.id
         line << m.original_title
         line << m.creators.pluck(:full_name).join("//")

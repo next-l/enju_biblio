@@ -92,10 +92,10 @@ module EnjuBiblio
         end
         can [:index, :create], Manifestation
         can [:show, :update], Manifestation do |manifestation|
-	  manifestation.required_role_id <= 3
-	end
+          manifestation.required_role_id <= 3
+        end
         can [:destroy, :delete], Manifestation do |manifestation|
-	  if manifestation.required_role_id <= 3
+          if manifestation.required_role_id <= 3
             if manifestation.items.empty?
               if manifestation.series_master?
                 if manifestation.children.empty?
@@ -107,7 +107,7 @@ module EnjuBiblio
                 true
               end
             end
-	  else
+          else
             false
           end
         end
