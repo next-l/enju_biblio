@@ -556,7 +556,7 @@ class Manifestation < ActiveRecord::Base
         line << m.identifier_contents(:isbn).first
         lines << line
       end
-    }
+    end
     if options[:format] == :txt
       items.map{|m| m.map{|i| i.join("\t")}}.flatten.unshift(header).join("\r\n")
     else
