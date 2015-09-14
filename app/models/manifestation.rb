@@ -519,7 +519,9 @@ class Manifestation < ActiveRecord::Base
       shelf
       library
     ).join("\t")
-    items = Manifestation.includes(:items, :identifiers => :identifier_type).find_each.map{|m|
+    lines = []
+    lines << header
+    Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
       if m.items.exists?
         lines = []
         m.items.includes(:shelf => :library).each do |i|
@@ -545,15 +547,14 @@ class Manifestation < ActiveRecord::Base
         end
         lines
       else
-        lines = []
-        lines << m.id
-        lines << m.original_title
-        lines << m.creators.pluck(:full_name).join("//")
-        lines << m.publishers.pluck(:full_name).join("//")
-        lines << m.pub_date
-        lines << m.price
-        lines << m.identifier_contents(:isbn).first
-        [lines]
+        line << m.id
+        line << m.original_title
+        line << m.creators.pluck(:full_name).join("//")
+        line << m.publishers.pluck(:full_name).join("//")
+        line << m.pub_date
+        line << m.price
+        line << m.identifier_contents(:isbn).first
+        lines << line
       end
     }
     if options[:format] == :txt
