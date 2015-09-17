@@ -223,6 +223,11 @@ describe Manifestation, :solr => true do
   #  #manifestation.volume_number.should eq 1
   #end
 
+  it "should export a header line" do
+    lines = Manifestation.export
+    lines.split(/\n/).first.should include "manifestation_id"
+  end
+
   if defined?(EnjuCirculation)
     it "should respond to is_checked_out_by?" do
       manifestations(:manifestation_00001).is_checked_out_by?(users(:admin)).should be_truthy
