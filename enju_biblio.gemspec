@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 4.0"
   s.add_dependency "jc-validates_timeliness"
-  s.add_dependency "simple_form", "~> 3.1"
+  s.add_dependency "simple_form", "~> 3.2"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "lisbn"
