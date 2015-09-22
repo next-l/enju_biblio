@@ -211,7 +211,6 @@ class Manifestation < ActiveRecord::Base
   end
 
   attachment :attachment
-  #do_not_validate_attachment_file_type :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
@@ -518,12 +517,11 @@ class Manifestation < ActiveRecord::Base
       circulation_status
       shelf
       library
-    ).join("\t")
+    )
     lines = []
     lines << header
     Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
       if m.items.exists?
-        lines = []
         m.items.includes(:shelf => :library).each do |i|
           item_lines = []
           item_lines << m.id
@@ -545,8 +543,8 @@ class Manifestation < ActiveRecord::Base
           item_lines << i.shelf.library.name
           lines << item_lines
         end
-        lines
       else
+        line = []
         line << m.id
         line << m.original_title
         line << m.creators.pluck(:full_name).join("//")
@@ -558,9 +556,9 @@ class Manifestation < ActiveRecord::Base
       end
     end
     if options[:format] == :txt
-      items.map{|m| m.map{|i| i.join("\t")}}.flatten.unshift(header).join("\r\n")
+      lines.map{|i| i.join("\t")}.join("\r\n")
     else
-      items
+      lines
     end
   end
 
