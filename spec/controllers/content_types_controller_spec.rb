@@ -58,6 +58,13 @@ describe ContentTypesController do
       get :edit, :id => content_type.id
       expect(assigns(:content_type)).to eq(content_type)
     end
+    it "assigns the content_type even if it associates manifestation(s)" do
+      content_type = FactoryGirl.create(:content_type)
+      manifestation = FactoryGirl.create(:manifestation, :content_type_id => content_type.id)
+      get :edit, :id => content_type.id
+      expect(assigns(:content_type)).to eq content_type
+      expect(response).to be_success
+    end
   end
 
   describe "POST create" do
