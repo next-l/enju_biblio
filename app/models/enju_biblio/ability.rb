@@ -65,13 +65,13 @@ module EnjuBiblio
           License,
           MediumOfPerformance
         ]
-        can :manage, [
+        can [:destroy, :delete], [
           ContentType,
           Frequency
         ] do |record|
           record.manifestations.empty?
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
-        can :read, [
+        can [:create, :read, :update], [
           CarrierType,
           ContentType,
           Country,

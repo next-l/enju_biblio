@@ -58,6 +58,13 @@ describe FrequenciesController do
       get :edit, :id => frequency.id
       assigns(:frequency).should eq(frequency)
     end
+    it "assigns the frequency even if it associates manifestation(s)" do
+      frequency = FactoryGirl.create(:frequency)
+      manifestation = FactoryGirl.create(:manifestation, :frequency_id => frequency.id)
+      get :edit, :id => frequency.id
+      expect(assigns(:frequency)).to eq frequency
+      expect(response).to be_success
+    end
   end
 
   describe "POST create" do
