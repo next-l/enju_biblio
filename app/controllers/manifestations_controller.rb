@@ -26,28 +26,6 @@ class ManifestationsController < ApplicationController
     end
 
     @seconds = Benchmark.realtime do
-      if defined?(EnjuOai)
-        @oai = check_oai_params(params)
-        next if @oai[:need_not_to_search]
-        if params[:format] == 'oai'
-          oai_search = true
-          from_and_until_times = set_from_and_until(Manifestation, params[:from], params[:until])
-          from_time = @from_time = from_and_until_times[:from]
-          until_time = @until_time = from_and_until_times[:until]
-          if params[:verb] == 'GetRecord' && params[:identifier]
-            begin
-              @manifestation = Manifestation.find_by_oai_identifier(params[:identifier])
-            rescue ActiveRecord::RecordNotFound
-              @oai[:errors] << "idDoesNotExist"
-              render formats: :oai, layout: false
-              return
-            end
-            render template: 'manifestations/show', formats: :oai, layout: false
-            return
-          end
-        end
-      end
-
       set_reservable if defined?(EnjuCirculation)
 
       sort, @count = {}, {}
@@ -117,8 +95,7 @@ class ManifestationsController < ApplicationController
 
       search.build do
         fulltext query unless query.blank?
-        order_by sort[:sort_by], sort[:order] unless oai_search
-        order_by :updated_at, :desc if oai_search
+        order_by sort[:sort_by], sort[:order]
         if defined?(EnjuSubject)
           with(:subject_ids).equal_to subject.id if subject
         end
@@ -173,25 +150,6 @@ class ManifestationsController < ApplicationController
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
       max_number_of_results = @library_group.settings[:max_number_of_results].to_i
-      if defined?(EnjuOai)
-        # OAI-PMHのデフォルトの件数
-        oai_per_page = 200
-        if params[:resumptionToken]
-          token = params[:resumptionToken].split(',')
-          if token.size == 3
-            @cursor = token.reverse.first.to_i
-            if @cursor <= @count[:query_result]
-              page = (@cursor.to_i + oai_per_page).div(oai_per_page)
-            else
-              @oai[:errors] << 'badResumptionToken'
-            end
-          else
-            @oai[:errors] << 'badResumptionToken'
-          end
-        end
-        page ||= 1 if params[:format] == 'oai'
-      end
-
       if max_number_of_results == 0
         @max_number_of_results = count[:query_result]
       else
@@ -241,14 +199,10 @@ class ManifestationsController < ApplicationController
       end
 
       page ||= params[:page] || 1
-      if oai_per_page and params[:format] == 'oai'
-        per_page = 200
+      if params[:per_page].to_i > 0
+        per_page = params[:per_page].to_i
       else
-        if params[:per_page].to_i > 0
-          per_page = params[:per_page].to_i
-        else
-          per_page = Manifestation.default_per_page
-        end
+        per_page = Manifestation.default_per_page
       end
       if params[:format] == 'sru'
         search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
@@ -314,20 +268,6 @@ class ManifestationsController < ApplicationController
           current_user.save_history(query, @manifestations.offset_value + 1, @count[:query_result], params[:format])
         end
       end
-
-      if defined?(EnjuOai)
-        if params[:format] == 'oai'
-          unless @manifestations.empty?
-            @resumption = set_resumption_token(
-              params[:resumptionToken],
-              @from_time || Manifestation.order(:updated_at).first.updated_at,
-              @until_time || Manifestation.order(:updated_at).last.updated_at
-            )
-          else
-            @oai[:errors] << 'noRecordsMatch'
-          end
-        end
-      end
     end
 
     store_location # before_action ではファセット検索のURLを記憶してしまう
@@ -344,23 +284,6 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json { render json: @manifestations }
       format.js
-      if defined?(EnjuOai)
-        format.oai {
-          case params[:verb]
-          when 'Identify'
-            render template: 'manifestations/identify'
-          when 'ListMetadataFormats'
-            render template: 'manifestations/list_metadata_formats'
-          when 'ListSets'
-            @series_statements = SeriesStatement.select([:id, :original_title])
-            render template: 'manifestations/list_sets'
-          when 'ListIdentifiers'
-            render template: 'manifestations/list_identifiers'
-          when 'ListRecords'
-            render template: 'manifestations/list_records'
-          end
-        }
-      end
     end
   end
 
@@ -418,16 +341,12 @@ class ManifestationsController < ApplicationController
       format.rdf
       format.mods
       format.json { render json: @manifestation }
-      #format.atom { render template: 'manifestations/oai_ore' }
       format.js
       format.download {
         send_file @manifestation.attachment.download,
           filename: File.basename(@manifestation.attachment_filename),
           type: 'application/octet-stream'
       }
-      if defined?(EnjuOai)
-        format.oai
-      end
     end
   end
 
