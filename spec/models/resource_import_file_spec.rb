@@ -131,6 +131,13 @@ describe ResourceImportFile do
         Message.count.should eq old_message_count + 1
         Message.order(:id).last.subject.should eq 'インポートが完了しました'
       end
+
+      it "should be searchable right after the import", solr: true do
+        @file.import_start
+        Manifestation.search{ keywords "10101" }.total.should > 0
+        Manifestation.search{ keywords "10101", :fields => [:item_identifier] }.total.should > 0
+        Manifestation.search{ keywords "item_identifier_sm:10101" }.total.should > 0
+      end
     end
 
     describe "when it is written in shift_jis" do
