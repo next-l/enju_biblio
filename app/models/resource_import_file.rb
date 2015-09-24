@@ -168,7 +168,6 @@ class ResourceImportFile < ActiveRecord::Base
 
       if manifestation && item_identifier.present?
         import_result.item = create_item(row, manifestation)
-        manifestation.index
       else
         if manifestation.try(:fulltext_content?)
           item = Item.new
@@ -517,7 +516,7 @@ class ResourceImportFile < ActiveRecord::Base
       url: row['item_url'],
       note: row['item_note']
     )
-    item.manifestation = manifestation
+    manifestation.items << item
     if defined?(EnjuCirculation)
       circulation_status = CirculationStatus.where(name: row['circulation_status'].to_s.strip).first || CirculationStatus.where(name: 'In Process').first
       item.circulation_status = circulation_status
@@ -535,6 +534,7 @@ class ResourceImportFile < ActiveRecord::Base
     if %w(t true).include?(row['include_supplements'].to_s.downcase.strip)
       item.include_supplements = true
     end
+    item.save!
     item
   end
 
