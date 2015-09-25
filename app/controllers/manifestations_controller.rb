@@ -647,7 +647,7 @@ class ManifestationsController < ApplicationController
     #unless options[:subject].blank?
     #  query = "#{query} subject_sm:#{options[:subject]}"
     #end
-    unless options[:classification].blank? and options[:classification_type].blank?
+    if options[:classification].present? and options[:classification_type].present?
       classification_type = ClassificationType.find(options[:classification_type]).name
       query = "#{query} classification_sm:#{classification_type}_#{options[:classification]}*"
     end

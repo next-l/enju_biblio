@@ -202,6 +202,12 @@ describe ManifestationsController do
 	expect(assigns(:manifestations)).not_to be_empty
       end
 
+      it "should not search with classification if classification is blank" do
+        get :index, :classification => "", :classification_type => 1
+        expect(response).to be_success
+        expect(assigns(:query)).not_to match /classification/
+      end
+
       it "should accept per_page params" do
         get :index, per_page: 3
         expect(assigns(:manifestations).count).to eq 3
