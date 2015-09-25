@@ -21,7 +21,7 @@ gem "enju_inventory", github: "next-l/enju_inventory", branch: "master"
 gem "enju_ndl", github: "next-l/enju_ndl", branch: "master"
 gem "enju_nii", github: "next-l/enju_nii", branch: "master"
 gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer", branch: "master"
-gem "coveralls", require: false, group: :test
+gem "codeclimate-test-reporter", group: :test, require: false
 gem "dotenv-rails"
 
 # To use a debugger
