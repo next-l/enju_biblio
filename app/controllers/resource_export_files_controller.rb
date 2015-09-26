@@ -21,7 +21,7 @@ class ResourceExportFilesController < ApplicationController
       format.json { render json: @resource_export_file }
       format.download {
         send_file @resource_export_file.resource_export.download,
-          filename: @resource_export_file.resource_export_filename,
+          filename: File.basename(@resource_export_file.resource_export_filename),
           type: 'application/octet-stream'
       }
     end

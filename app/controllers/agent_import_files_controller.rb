@@ -21,7 +21,7 @@ class AgentImportFilesController < ApplicationController
       format.json { render json: @agent_import_file }
       format.download {
         send_file @agent_import_file.agent_import.download,
-          filename: @agent_import_file.agent_import_filename,
+          filename: File.basename(@agent_import_file.agent_import_filename),
           type: 'application/octet-stream'
       }
     end

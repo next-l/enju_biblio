@@ -53,7 +53,7 @@ div[style="color: red"]
         = link_to(@item.shelf_display_name.localize, @item.shelf, id: "shelf_item_#{@item.id}")
         = render 'items/shelf_picture', item: @item
         |  (
-        = link_to(@item.shelf.library.display_name.localize, @item.shelf.library, id: "library_item_#{@item.id}")
+        = link_to(@item.shelf.library.display_name.localize, @item.shelf.library, {id: "library_item_#{@item.id}"})
         | ) 
       - if defined?(EnjuCirculation)
         p
