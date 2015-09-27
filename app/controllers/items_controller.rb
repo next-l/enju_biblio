@@ -92,17 +92,17 @@ class ItemsController < ApplicationController
         rescue NoMethodError
         end
       end
-      if params[:acquired_to].present?
+      if params[:acquired_until].present?
         begin
-          acquired_to = @acquired_to = Time.zone.parse(params[:acquired_to]).end_of_day
-          @acquired_to = acquired_to.strftime('%Y-%m-%d')
+          acquired_until = @acquired_until = Time.zone.parse(params[:acquired_until]).end_of_day
+          @acquired_until = acquired_until.strftime('%Y-%m-%d')
         rescue ArgumentError
         rescue NoMethodError
         end
       end
       search.build do
         with(:acquired_at).greater_than_or_equal_to acquired_from.beginning_of_day if acquired_from
-        with(:acquired_at).less_than acquired_to.tomorrow.beginning_of_day if acquired_to
+        with(:acquired_at).less_than acquired_until.tomorrow.beginning_of_day if acquired_until
       end
 
       page = params[:page] || 1
