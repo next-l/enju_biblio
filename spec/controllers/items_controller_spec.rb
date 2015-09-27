@@ -30,6 +30,24 @@ describe ItemsController do
         expect(assigns(:items)).to_not be_nil
       end
 
+      it "assigns items as @items with acquired_from and acquired_until" do
+        get :index, acquired_from: '2015-09-20', acquired_until: '2015-09-26'
+        expect(assigns(:items)).to_not be_nil
+        expect(assigns(:items).count).to eq 1
+      end
+
+      it "assigns items as @items with acquired_from" do
+        get :index, acquired_from: '2015-09-20'
+        expect(assigns(:items)).to_not be_nil
+        expect(assigns(:items).count).to eq 1
+      end
+
+      it "assigns items as @items with acquired_until" do
+        get :index, acquired_until: '2015-09-20'
+        expect(assigns(:items)).to_not be_nil
+        expect(assigns(:items).count).to eq 1
+      end
+
       it "should not get index with inventory_file_id" do
         get :index, :inventory_file_id => 1
         expect(response).to be_success
