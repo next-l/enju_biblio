@@ -59,7 +59,6 @@ module EnjuBiblio
           SeriesStatementMergeList
         ]
         can :manage, [
-          AgentType,
           Country,
           Language,
           License,
@@ -71,7 +70,14 @@ module EnjuBiblio
         ] do |record|
           record.manifestations.empty?
         end if LibraryGroup.site_config.network_access_allowed?(ip_address)
+        can [:destroy, :delete], [
+          AgentType
+        ] do |record|
+          record.agents.empty?
+        end if LibraryGroup.site_config.network_access_allowed?(ip_address)
         can [:create, :read, :update], [
+          AgentType,
+          AgentImportResult,
           CarrierType,
           ContentType,
           Country,
@@ -81,8 +87,6 @@ module EnjuBiblio
           Language,
           License,
           MediumOfPerformance,
-          AgentImportResult,
-          AgentType,
           ResourceImportResult
         ]
       when 'Librarian'
@@ -139,6 +143,9 @@ module EnjuBiblio
           SeriesStatementMergeList
         ]
         can :read, [
+          AgentType,
+          AgentImportResult,
+          AgentRelationshipType,
           CarrierType,
           ContentType,
           Country,
@@ -148,11 +155,8 @@ module EnjuBiblio
           Language,
           License,
           ManifestationRelationshipType,
-          AgentImportResult,
-          AgentRelationshipType,
-          AgentType,
-          ResourceImportResult,
-          MediumOfPerformance
+          MediumOfPerformance,
+          ResourceImportResult
         ]
       when 'User'
         can :index, Item

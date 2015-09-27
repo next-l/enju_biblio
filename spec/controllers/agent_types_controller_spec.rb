@@ -162,6 +162,11 @@ describe AgentTypesController do
       delete :destroy, :id => agent_type.id
       expect(response).to redirect_to(agent_types_url)
     end
+
+    it "should not destroy agent_type that contains agents" do
+      delete :destroy, id: agent_types(:agent_type_00001)
+      expect(response).to be_forbidden
+    end
   end
 
 end
