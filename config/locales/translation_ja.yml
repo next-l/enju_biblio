@@ -130,7 +130,7 @@ ja:
         corporate_name_transcription: 企業名（ヨミ）
         full_name: フルネーム
         full_name_transcription: フルネーム（ヨミ）
-        full_name_alternative: フルネーム代替
+        full_name_alternative: フルネーム（代替）
         deleted_at: 削除時刻
         zip_code_1: 郵便番号1
         zip_code_2: 郵便番号2
