@@ -16,6 +16,8 @@ class AgentTypePolicy < ApplicationPolicy
   end
 
   def destroy?
-    true if user.try(:has_role?, 'Administrator')
+    if user.try(:has_role?, 'Administrator')
+      true if record.agents.empty?
+    end
   end
 end
