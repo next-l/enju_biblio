@@ -296,6 +296,7 @@ en:
       resource_import_result:
         body: Body
         error_message: Error message
+        lineno: Line
       agent_import_result:
         body: Body
       create_type:

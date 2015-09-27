@@ -296,6 +296,7 @@ ja:
       resource_import_result:
         body: 本文
         error_message: エラーメッセージ
+        lineno: 行数
       agent_import_result:
         body: 本文
       create_type:
