@@ -23,6 +23,7 @@ describe ResourceExportFile do
       manifestation.save!
       export_file = ResourceExportFile.new
       export_file.user = users(:admin)
+      export_file.save!
       export_file.export!
       file = export_file.resource_export
       expect(file).to be_truthy
