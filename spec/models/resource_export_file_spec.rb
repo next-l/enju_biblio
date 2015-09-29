@@ -13,6 +13,24 @@ describe ResourceExportFile do
     Message.count.should eq message_count + 1
     Message.order(:id).last.subject.should eq 'エクスポートが完了しました'
   end
+
+  context "NCID export" do
+    it "should export NCID value" do
+      manifestation = FactoryGirl.create(:manifestation)
+      ncid = IdentifierType.where(name: "ncid").first
+      identifier = FactoryGirl.create(:identifier, identifier_type: ncid, body: "BA91833159")
+      manifestation.identifiers << identifier
+      manifestation.save!
+      export_file = ResourceExportFile.new
+      export_file.user = users(:admin)
+      export_file.export!
+      file = export_file.resource_export
+      expect(file).to be_truthy
+      lines = File.open(file.path).readlines.map(&:chomp)
+      expect(lines.first.split(/\t/)).to include "ncid"
+      expect(lines.last.split(/\t/)).to include "BA91833159"
+    end
+  end
 end
 
 # == Schema Information
