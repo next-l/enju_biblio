@@ -128,14 +128,18 @@ class ResourceImportFile < ActiveRecord::Base
 
       unless manifestation
         if row['isbn'].present?
-          isbn = StdNum::ISBN.normalize(row['isbn'])
-          identifier_type_isbn = IdentifierType.where(name: 'isbn').first
-          identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
-          m = Identifier.where(body: isbn, identifier_type_id: identifier_type_isbn.id).first.try(:manifestation)
-        end
-        if m
-          if m.series_statements.exists?
-            manifestation = m
+          if StdNum::ISBN.valid?(row['isbn'])
+            isbn = StdNum::ISBN.normalize(row['isbn'])
+            identifier_type_isbn = IdentifierType.where(name: 'isbn').first
+            identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
+            m = Identifier.where(body: isbn, identifier_type_id: identifier_type_isbn.id).first.try(:manifestation)
+            if m
+              if m.series_statements.exists?
+                manifestation = m
+              end
+            end
+          else
+            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
           end
         end
       end
@@ -154,8 +158,10 @@ class ResourceImportFile < ActiveRecord::Base
             end
           rescue EnjuNdl::InvalidIsbn
             manifestation = nil
+            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
           rescue EnjuNdl::RecordNotFound
             manifestation = nil
+            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_record_not_found')}"
           end
         end
       end

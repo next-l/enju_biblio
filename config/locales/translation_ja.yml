@@ -427,3 +427,5 @@ ja:
   import:
     manifestation_found: "書誌インポート省略: すでに登録されている書誌が見つかりました。"
     item_found: "所蔵インポート省略: すでに登録されている個別資料が見つかりました。"
+    isbn_invalid: "ISBNインポートエラー: ISBNは不正な値です。"
+    isbn_record_not_found: "ISBNインポートエラー: 外部サービスにおいてISBNに該当する書誌データが見つかりませんでした。"

@@ -140,6 +140,27 @@ describe ResourceImportFile do
       end
     end
 
+    describe "ISBN import" do
+      context "with record not found" do
+        it "should record an error message", vcr: true do
+          file = ResourceImportFile.create resource_import: StringIO.new("isbn\n9780007264551"), user: users(:admin)
+          result = file.import_start
+          expect(result[:failed]).to eq 1
+          resource_import_result = file.resource_import_results.last
+          expect(resource_import_result.error_message).not_to be_empty
+        end
+      end
+      context "with ISBN invalid" do
+        it "should record an error message", vcr: true do
+          file = ResourceImportFile.create resource_import: StringIO.new("isbn\n978000726455x"), user: users(:admin)
+          result = file.import_start
+          expect(result[:failed]).to eq 1
+          resource_import_result = file.resource_import_results.last
+          expect(resource_import_result.error_message).not_to be_empty
+        end
+      end
+    end
+
     describe "when it is written in shift_jis" do
       before(:each) do
         @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
