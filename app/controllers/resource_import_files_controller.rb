@@ -21,6 +21,7 @@ class ResourceImportFilesController < ApplicationController
         file = @resource_import_file.resource_import.path
       end
     end
+    @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
 
     respond_to do |format|
       format.html # show.html.erb
