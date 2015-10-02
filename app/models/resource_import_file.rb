@@ -442,6 +442,7 @@ class ResourceImportFile < ActiveRecord::Base
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
       extent start_page end_page dimensions
+      ncid
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at item_price
       use_restriction include_supplements item_note item_url

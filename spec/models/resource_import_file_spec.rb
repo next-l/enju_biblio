@@ -260,6 +260,7 @@ describe ResourceImportFile do
         file = ResourceImportFile.create resource_import: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
         result = file.import_start
         #expect(result[:manifestation_found]).to eq 1
+        expect(file.error_message).to be_nil
         resource_import_result = file.resource_import_results.last
         expect(resource_import_result.error_message).to be_blank
         expect(resource_import_result.manifestation).not_to be_blank
