@@ -161,6 +161,19 @@ describe ResourceImportFile do
       end
     end
 
+    describe "NCID import" do
+      it "should import ncid value" do
+        file = ResourceImportFile.create resource_import: StringIO.new("original_title\tncid\noriginal_title_ncid\tBA67656964\n"), user: users(:admin)
+        result = file.import_start
+        expect(result[:manifestation_imported]).to eq 1
+        resource_import_result = file.resource_import_results.last
+        expect(resource_import_result.error_message).to be_blank
+        expect(resource_import_result.manifestation).not_to be_blank
+        manifestation = resource_import_result.manifestation
+        expect(manifestation.identifier_contents(:ncid).first).to eq "BA67656964"
+      end
+    end
+
     describe "when it is written in shift_jis" do
       before(:each) do
         @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
@@ -241,6 +254,19 @@ describe ResourceImportFile do
     #  manifestation.reload
     #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
     #end
+
+    describe "NCID import" do
+      it "should import ncid value" do
+        file = ResourceImportFile.create resource_import: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
+        result = file.import_start
+        #expect(result[:manifestation_found]).to eq 1
+        resource_import_result = file.resource_import_results.last
+        expect(resource_import_result.error_message).to be_blank
+        expect(resource_import_result.manifestation).not_to be_blank
+        manifestation = resource_import_result.manifestation
+        expect(manifestation.identifier_contents(:ncid).first).to eq "BA67656964"
+      end
+    end
   end
 
   describe "when its mode is 'destroy'" do

@@ -127,6 +127,15 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       unless manifestation
+        if row['ncid'].present?
+          ncid = row['ncid'].to_s.strip
+          identifier_type_ncid = IdentifierType.where(name: 'ncid').first
+          identifier_type_ncid = IdentifierType.where(name: 'ncid').create! unless identifier_type_ncid
+          manifestation = Identifier.where(body: ncid, identifier_type_id: identifier_type_ncid.id).first.try(:manifestation)
+        end
+      end
+
+      unless manifestation
         if row['isbn'].present?
           if StdNum::ISBN.valid?(row['isbn'])
             isbn = StdNum::ISBN.normalize(row['isbn'])
@@ -292,6 +301,7 @@ class ResourceImportFile < ActiveRecord::Base
 
     rows.each do |row|
       row_num += 1
+      import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(item_identifier: item_identifier).first if item_identifier.present?
       if item
@@ -337,6 +347,7 @@ class ResourceImportFile < ActiveRecord::Base
           end
         end
         item.save!
+        import_result.item = item
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first if manifestation_identifier.present?
@@ -345,8 +356,10 @@ class ResourceImportFile < ActiveRecord::Base
         end
         if manifestation
           fetch(row, edit_mode: 'update')
+          import_result.manifestation = manifestation
         end
       end
+      import_result.save!
     end
     transition_to!(:completed)
   rescue => e
@@ -743,7 +756,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def set_identifier(row)
     identifier = {}
-    %w(isbn issn doi jpno).each do |id_type|
+    %w(isbn issn doi jpno ncid).each do |id_type|
       if row["#{id_type}"].present?
         import_id = Identifier.new(body: row["#{id_type}"])
         identifier_type = IdentifierType.where(name: id_type).first
