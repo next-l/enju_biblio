@@ -299,6 +299,7 @@ class ResourceImportFile < ActiveRecord::Base
     rows.shift
     row_num = 1
 
+    ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
       row_num += 1
       import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))

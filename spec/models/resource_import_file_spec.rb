@@ -231,6 +231,8 @@ describe ResourceImportFile do
     it "should update items", vcr: true do
       @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
       @file.modify
+      expect(@file.resource_import_results.first).to be_truthy
+      expect(@file.resource_import_results.first.body).to match /item_identifier/
       item_00001 = Item.where(item_identifier: '00001').first
       item_00001.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
       item_00001.binding_item_identifier.should eq '900001'
