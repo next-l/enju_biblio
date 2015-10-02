@@ -532,7 +532,7 @@ class Manifestation < ActiveRecord::Base
       creator
       publisher
       pub_date
-      price
+      manifestation_price
       manifestation_created_at
       manifestation_updated_at
     )
