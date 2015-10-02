@@ -505,7 +505,7 @@ class Manifestation < ActiveRecord::Base
       creator
       publisher
       pub_date
-      manifestation_price
+      price
       isbn
       issn
       item_identifier
