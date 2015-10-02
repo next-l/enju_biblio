@@ -223,9 +223,17 @@ describe Manifestation, :solr => true do
   #  #manifestation.volume_number.should eq 1
   #end
 
-  it "should export a header line" do
-    lines = Manifestation.export
-    lines.split(/\n/).first.should include "manifestation_id"
+  context ".export" do
+    it "should export a header line" do
+      lines = Manifestation.export
+      (header, *lines) = lines.split(/\n/)
+      expect(header.split(/\t/).size).to eq lines.first.split(/\t/).size
+      expect(header).to include "manifestation_id"
+      expect(header).to include "manifestation_created_at"
+      expect(header).to include "manifestation_updated_at"
+      expect(header).to include "item_created_at"
+      expect(header).to include "item_updated_at"
+    end
   end
 
   if defined?(EnjuCirculation)
