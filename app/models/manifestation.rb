@@ -540,7 +540,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << i.call_number
           item_lines << i.price
           item_lines << i.acquired_at
-          item_lines << i.accepted_at
+          item_lines << i.accept.try(:created_at)
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
           item_lines << i.circulation_status.try(:name)
