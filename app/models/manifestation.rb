@@ -512,6 +512,7 @@ class Manifestation < ActiveRecord::Base
       call_number
       item_price
       acquired_at
+      accepted_at
       bookstore
       budget_type
       circulation_status
@@ -530,17 +531,23 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.publishers.pluck(:full_name).join("//")
           item_lines << m.pub_date
           item_lines << m.price
-          item_lines << m.identifier_contents(:isbn).first
-          item_lines << m.identifier_contents(:issn).first
+          item_lines << m.created_at
+          item_lines << m.updated_at
+          identifiers.each do |identifier_type|
+            item_lines << m.identifier_contents(identifier_type.to_sym).first
+          end
           item_lines << i.item_identifier
           item_lines << i.call_number
           item_lines << i.price
           item_lines << i.acquired_at
+          item_lines << i.accepted_at
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
           item_lines << i.circulation_status.try(:name)
           item_lines << i.shelf.name
           item_lines << i.shelf.library.name
+          item_lines << i.created_at
+          item_lines << i.updated_at
           lines << item_lines
         end
       else
@@ -551,7 +558,11 @@ class Manifestation < ActiveRecord::Base
         line << m.publishers.pluck(:full_name).join("//")
         line << m.pub_date
         line << m.price
-        line << m.identifier_contents(:isbn).first
+        line << m.created_at
+        line << m.updated_at
+        identifiers.each do |identifier_type|
+          line << m.identifier_contents(identifier_type.to_sym).first
+        end
         lines << line
       end
     end
