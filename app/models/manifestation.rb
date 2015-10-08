@@ -543,6 +543,7 @@ class Manifestation < ActiveRecord::Base
     identifiers = identifiers.keys.sort
     header += identifiers
     header += %w(
+      item_id
       item_identifier
       call_number
       item_price
@@ -573,6 +574,7 @@ class Manifestation < ActiveRecord::Base
           identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
+          item_lines << i.id
           item_lines << i.item_identifier
           item_lines << i.call_number
           item_lines << i.price
