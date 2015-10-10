@@ -28,9 +28,9 @@
         .radio-inline
           = f.radio_button :edit_mode, 'update_relationship'
           = f.label :edit_mode, t('resource_import_file.update_relationship'), value: 'update_relationship'
-        .radio-inline
-          = f.radio_button :edit_mode, 'destroy'
-          = f.label :edit_mode, t('page.destroy'), value: 'destroy'
+        /.radio-inline
+          /= f.radio_button :edit_mode, 'destroy'
+          /= f.label :edit_mode, t('page.destroy'), value: 'destroy'
       .form-group
         = f.label :user_encoding
         br
