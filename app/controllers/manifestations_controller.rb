@@ -349,6 +349,7 @@ class ManifestationsController < ApplicationController
       format.rdf
       format.mods
       format.json { render json: @manifestation }
+      format.txt
       format.js
       format.download {
         if @manifestation.attachment.path
