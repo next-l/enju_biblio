@@ -1,0 +1,5 @@
+<ul>
+  <li><%= link_to 'RDF/XML', manifestations_path(@manifestations, format: :rdf) %></li>
+  <li><%= link_to 'MODS', manifestations_path(@manifestations, format: :mods) %></li>
+  <li><%= link_to 'TSV', manifestations_path(@manifestations, format: :txt) %></li>
+</ul>
