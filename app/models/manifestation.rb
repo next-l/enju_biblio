@@ -535,6 +535,7 @@ class Manifestation < ActiveRecord::Base
       manifestation_price
       manifestation_created_at
       manifestation_updated_at
+      manifestation_identifier
     )
     identifiers = {}
     Identifier.find_each do |identifier|
@@ -543,6 +544,7 @@ class Manifestation < ActiveRecord::Base
     identifiers = identifiers.keys.sort
     header += identifiers
     header += %w(
+      item_id
       item_identifier
       call_number
       item_price
@@ -570,9 +572,11 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.price
           item_lines << m.created_at
           item_lines << m.updated_at
+          item_lines << m.manifestation_identifier
           identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
+          item_lines << i.id
           item_lines << i.item_identifier
           item_lines << i.call_number
           item_lines << i.price
@@ -597,6 +601,7 @@ class Manifestation < ActiveRecord::Base
         line << m.price
         line << m.created_at
         line << m.updated_at
+        line << m.manifestation_identifier
         identifiers.each do |identifier_type|
           line << m.identifier_contents(identifier_type.to_sym).first
         end

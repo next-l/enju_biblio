@@ -226,13 +226,16 @@ describe Manifestation, :solr => true do
   context ".export" do
     it "should export a header line" do
       lines = Manifestation.export
-      (header, *lines) = lines.split(/\n/)
-      expect(header.split(/\t/).size).to eq lines.first.split(/\t/).size
+      (header, *lines) = lines.split(/\r?\n/)
+      header = header.split(/\t/)
+      expect(header.size).to eq lines.first.split(/\t/).size
       expect(header).to include "manifestation_id"
       expect(header).to include "manifestation_created_at"
       expect(header).to include "manifestation_updated_at"
       expect(header).to include "item_created_at"
       expect(header).to include "item_updated_at"
+      expect(header).to include "item_id"
+      expect(header).to include "manifestation_identifier"
     end
   end
 
