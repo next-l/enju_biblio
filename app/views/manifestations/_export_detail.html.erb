@@ -1,8 +1,7 @@
 <h3><%= t('page.export') %></h3>
 
 <ul>
-  <li><%= link_to 'JSON', manifestation_url(@manifestation, format: :json) %></li>
-  <li><%= link_to 'XML', manifestation_url(@manifestation, format: :xml) %></li>
   <li><%= link_to 'RDF/XML', manifestation_url(@manifestation, format: :rdf) %></li>
   <li><%= link_to 'MODS', manifestation_url(@manifestation, format: :mods) %></li>
+  <li><%= link_to 'TSV', manifestation_url(@manifestation, format: :txt) %></li>
 </ul>
