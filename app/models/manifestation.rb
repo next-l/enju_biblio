@@ -46,11 +46,9 @@ class Manifestation < ActiveRecord::Base
       :statement_of_responsibility
     text :item_identifier do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier)
-        + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier) + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
       else
-        items.pluck(:item_identifier)
-        + items.pluck(:binding_item_identifier)
+        items.pluck(:item_identifier) + items.pluck(:binding_item_identifier)
       end
     end
     string :call_number, multiple: true do
@@ -102,8 +100,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :item_identifier, multiple: true do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier)
-        + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier) + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
       else
         items.pluck(:item_identifier) + items.pluck(:binding_item_identifier)
       end
