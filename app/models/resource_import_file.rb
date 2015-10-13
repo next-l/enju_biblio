@@ -296,7 +296,9 @@ class ResourceImportFile < ActiveRecord::Base
           binding_item_identifier binding_call_number binded_at
         )
         item_columns.each do |column|
-          item.assign_attributes(:"#{column}" => row[column])
+          if row[column].present?
+            item.assign_attributes(:"#{column}" => row[column])
+          end
         end
 
         item.price = row['item_price'] if row['item_price'].present?
