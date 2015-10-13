@@ -47,8 +47,10 @@ class Manifestation < ActiveRecord::Base
     text :item_identifier do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier)
+        + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
       else
         items.pluck(:item_identifier)
+        + items.pluck(:binding_item_identifier)
       end
     end
     string :call_number, multiple: true do
@@ -101,8 +103,9 @@ class Manifestation < ActiveRecord::Base
     string :item_identifier, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier)
+        + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
       else
-        items.collect(&:item_identifier)
+        items.pluck(:item_identifier) + items.pluck(:binding_item_identifier)
       end
     end
     string :shelf, multiple: true do
