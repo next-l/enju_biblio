@@ -247,6 +247,7 @@ describe ResourceImportFile do
       item_00003.include_supplements.should be_truthy
 
       Item.where(item_identifier: '00004').first.include_supplements.should be_falsy
+      Item.where(item_identifier: '00025').first.call_number.should eq "547|ヤ"
     end
 
     #it "should update series_statement", vcr: true do
