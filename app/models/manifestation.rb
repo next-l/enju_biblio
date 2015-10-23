@@ -362,6 +362,7 @@ class Manifestation < ActiveRecord::Base
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
+      conn.proxy ENV['SOLR_PROXY_URL'].to_s
     end
     response = client.post('update/extract?extractOnly=true&wt=json&extractFormat=text') do |req|
       req.headers['Content-type'] = 'text/html'
