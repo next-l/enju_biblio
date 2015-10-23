@@ -13,7 +13,6 @@ class Identifier < ActiveRecord::Base
   }
 
   acts_as_list scope: :manifestation_id
-  #normalize_attributes :body
   strip_attributes only: :body
 
   def check_identifier
@@ -66,6 +65,16 @@ class Identifier < ActiveRecord::Base
       self.body = StdNum::ISSN.normalize(body)
     when 'lccn'
       self.body = StdNum::LCCN.normalize(body)
+    when 'doi'
+      normalize_doi
+    end
+  end
+
+  def normalize_doi
+    if identifier_type.name == 'doi'
+      if body =~ /^http:\/\/dx\.doi\.org\//
+        self.body = body.gsub(/^http:\/\/dx\.doi\.org\//, '')
+      end
     end
   end
 end
