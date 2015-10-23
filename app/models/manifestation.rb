@@ -495,7 +495,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    identifiers.identifier_type(name).order(:position).pluck(:body)
+    identifiers.identifier_type_scope(name).order(:position).pluck(:body)
   end
 
   def self.export(options = {format: :txt})
