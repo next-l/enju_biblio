@@ -71,10 +71,8 @@ class Identifier < ActiveRecord::Base
   end
 
   def normalize_doi
-    if identifier_type.name == 'doi'
-      if body =~ /^http:\/\/dx\.doi\.org\//
-        self.body = body.gsub(/^http:\/\/dx\.doi\.org\//, '')
-      end
+    if body =~ /^http:\/\/dx\.doi\.org\//
+      self.body = body.gsub(/^http:\/\/dx\.doi\.org\//, '')
     end
   end
 end
