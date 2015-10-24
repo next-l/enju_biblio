@@ -1,5 +1,5 @@
 module EnjuBiblio
-  module BiblioHelper
+  module ApplicationHelper
     def form_icon(carrier_type)
       case carrier_type.name
       when 'volume'
