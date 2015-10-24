@@ -8,12 +8,11 @@ class Identifier < ActiveRecord::Base
   validate :check_identifier
   before_validation :normalize
   before_save :convert_isbn
-  scope :identifier_type, -> type {
+  scope :identifier_type_scope, -> type {
     where(identifier_type: IdentifierType.where(name: type).first)
   }
 
   acts_as_list scope: :manifestation_id
-  #normalize_attributes :body
   strip_attributes only: :body
 
   def check_identifier
@@ -66,6 +65,14 @@ class Identifier < ActiveRecord::Base
       self.body = StdNum::ISSN.normalize(body)
     when 'lccn'
       self.body = StdNum::LCCN.normalize(body)
+    when 'doi'
+      normalize_doi
+    end
+  end
+
+  def normalize_doi
+    if body =~ /^http:\/\/dx\.doi\.org\//
+      self.body = body.gsub(/^http:\/\/dx\.doi\.org\//, '')
     end
   end
 end

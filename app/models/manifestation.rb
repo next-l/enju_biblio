@@ -362,6 +362,7 @@ class Manifestation < ActiveRecord::Base
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
+      conn.proxy ENV['SOLR_PROXY_URL'].to_s
     end
     response = client.post('update/extract?extractOnly=true&wt=json&extractFormat=text') do |req|
       req.headers['Content-type'] = 'text/html'
@@ -495,7 +496,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    identifiers.identifier_type(name).order(:position).pluck(:body)
+    identifiers.identifier_type_scope(name).order(:position).pluck(:body)
   end
 
   def self.export(options = {format: :txt})
