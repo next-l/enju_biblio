@@ -435,6 +435,7 @@ class ManifestationsController < ApplicationController
     # workaround
     @manifestation.identifiers.destroy_all
     @manifestation.creators.destroy_all
+    @manifestation.contributors.destroy_all
     @manifestation.publishers.destroy_all
     @manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
     @manifestation.reload
