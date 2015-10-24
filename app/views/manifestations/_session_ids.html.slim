@@ -1,2 +1,0 @@
-script
-  |  $(function(){ if(typeof sessionStorage === "undefined"){ return; }else{ var ids = <ruby code="= @manifestation_ids"></ruby>; sessionStorage.setItem("<ruby code="= @search_query"></ruby>", JSON.stringify(ids)); }; }); 

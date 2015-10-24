@@ -17,8 +17,7 @@
         - if policy(PictureFile).create?
           li.list-group-item
             = link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: @manifestation.id)
-        script[type="text/javascript"]
-          |  $(document).ready(function(){ $("a[rel='manifestation_<ruby code="= @manifestation.id"></ruby>']").colorbox({transition:"none", photo:true}); })
+        = render 'manifestations/colorbox'
         - if user_signed_in?
           #call_number_content
             - if defined?(EnjuCirculation)

@@ -1,6 +1,4 @@
-- if flash[:search_query]
-  script
-    |  $(function(){ if(typeof sessionStorage === "undefined"){ return; }else{ var ids = JSON.parse(sessionStorage.getItem("<ruby code="= flash[:search_query]"></ruby>")); var index = $.inArray(<ruby code="= manifestation.id"></ruby>, ids); if(ids[index - 1] > 0){ $("#prev_link").html('<a href="<ruby code="= root_url"></ruby>manifestations/' + ids[index - 1] + '"><ruby code="= t('page.previous')"></ruby></a>'); }; if(ids[index + 1] > 0){ $("#next_link").html('<a href="<ruby code="= root_url"></ruby>manifestations/' + ids[index + 1] + '"><ruby code="= t('page.next')"></ruby></a>'); }; }; }); 
+= render 'manifestations/paginate_id_store'
 = form_for :manifestations, url: manifestations_path, html: {method: 'get', class: 'form-inline'} do
   .form-group
     span#next_link
