@@ -61,7 +61,8 @@
   .col-md-9[itemscope="itemscope" itemtype="http://schema.org/Book"]
     .panel.panel-default
       .panel-heading
-        = t('page.showing', model: t('activerecord.models.manifestation'))
+        h1.panel-title
+          = t('page.showing', model: t('activerecord.models.manifestation'))
       .panel-body
         p#notice
           = notice

@@ -1,17 +1,18 @@
-<script>
-  $(function(){
-    if(typeof sessionStorage === "undefined"){
-      return;
-    }else{
-      var ids = JSON.parse(sessionStorage.getItem("<%= flash[:search_query] %>"));
-      var index = $.inArray(<%= @manifestation.id %>, ids);
-      if(ids[index - 1] > 0){
-        $("#prev_link").html('<a href="<%= manifestations_path %>/' + ids[index - 1] + '"><%= t('page.previous') %></a>');
+<% if flash[:search_query] %>
+  <script>
+    $(function(){
+      if(typeof sessionStorage === "undefined"){
+        return;
+      }else{
+        var ids = JSON.parse(sessionStorage.getItem("<%= flash[:search_query] %>"));
+        var index = $.inArray(<%= @manifestation.id %>, ids);
+        if(ids[index - 1] > 0){
+          $("#prev_link").html('<a href="<%= manifestations_path %>/' + ids[index - 1] + '"><%= t('page.previous') %></a>');
+        };
+        if(ids[index + 1] > 0){
+          $("#next_link").html('<a href="<%= manifestations_path %>/' + ids[index + 1] + '"><%= t('page.next') %></a>');
+        };
       };
-      if(ids[index + 1] > 0){
-        $("#next_link").html('<a href="<%= manifestations_path %>/' + ids[index + 1] + '"><%= t('page.next') %></a>');
-      };
-    };
-  });
-</script>
-
+    });
+  </script>
+<% end %>
