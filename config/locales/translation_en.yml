@@ -39,14 +39,14 @@ en:
       resource_export_file: Resource export
       agent_export_file: Agent export
       agent_merge_list: Patron merge list
-      agent_merge: Patrom merge
+      agent_merge: Patron merge
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
 
     attributes:
       manifestation:
         original_title: Original title
-        title_alternative: Titlte alternative
+        title_alternative: Title alternative
         title_transcription: Title transcription
         classification_number: Classification number
         manifestation_identifier: Local manifestation identifier
@@ -342,7 +342,7 @@ en:
     contributor: Contributor
     publisher: Publisher
     library_group_agent: "Agents of %{library_group_name}"
-    work_agent: "Creaters of %{work_title}"
+    work_agent: "Creators of %{work_title}"
     expression_agent: "Realizers of %{expression_title}"
     manifestation_agent: "Producers of %{manifestation_title}"
     activate_as_user: "Activate as an user"
@@ -352,7 +352,7 @@ en:
     recent_publication: "Recent publications"
     all_publication: "All publications"
     other_address: "The other address"
-    add_derivation: "Add derivatation"
+    add_derivation: "Add derivation"
     creator: "Creator"
     contributor: "Contributor"
     publisher: "Publisher"
@@ -377,7 +377,7 @@ en:
     serial: "Serial"
     number: "Number"
     invalid_isbn: "Invalid ISBN."
-    already_imported: "This manifestation is already imporeted."
+    already_imported: "This manifestation is already imported."
     record_not_found: "Record not found."
     add: "Add a manifestation"
     specify_expression: "Specify the expression."
