@@ -1,4 +1,4 @@
-<%= link_to 'manifestations/paginate_id_store' %>
+<%= render 'manifestations/paginate_id_store' %>
 <%= form_for :manifestations, url: manifestations_path, html: {method: 'get'} do -%>
   <div>
     <span id="next_link"><%= t('page.next') %></span>
