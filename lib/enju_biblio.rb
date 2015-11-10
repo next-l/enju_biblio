@@ -90,8 +90,8 @@ module EnjuBiblio
           end
           unless library.blank?
             library_list = library.split.uniq
-            library_list.each do |library|
-              with(:library).equal_to library
+            library_list.each do |lib|
+              with(:library).equal_to lib
             end
           end
           unless language.blank?

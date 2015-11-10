@@ -163,7 +163,7 @@ class ManifestationsController < ApplicationController
       else
         clear_search_sessions
         session[:params] = params
-        session[:search_params] == search.query.to_params
+        session[:search_params] = search.query.to_params
         session[:query] = @query
       end
 

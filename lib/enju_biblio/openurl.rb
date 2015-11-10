@@ -111,7 +111,7 @@ class Openurl
     else
       "%s:%s" % [field, val]  # fieldに対して語が１つならばこれ
     end
- end
+  end
 
   # 前方一致の項目の検索文組立て
   def to_sunspot_match_ahead(key, field, val)
