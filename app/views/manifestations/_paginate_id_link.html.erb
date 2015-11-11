@@ -1,4 +1,8 @@
-<%= render 'manifestations/paginate_id_store' %>
+<% if @parent %>
+  <%= render 'manifestations/paginate_id_store', manifestation: @parent %>
+<% elsif @manifestation %>
+  <%= render 'manifestations/paginate_id_store', manifestation: @manifestation %>
+<% end %>
 <%= form_for :manifestations, url: manifestations_path, html: {method: 'get'} do -%>
   <div>
     <span id="next_link"><%= t('page.next') %></span>
