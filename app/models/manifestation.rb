@@ -69,7 +69,13 @@ class Manifestation < ActiveRecord::Base
     end
     string :isbn, multiple: true do
       identifier_contents(:isbn).map{|i|
-        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
+        isbn10 = Lisbn.new(i).isbn10
+        isbn13 =  Lisbn.new(i).isbn13
+        [
+          isbn10, isbn13,
+          Lisbn.new(isbn10).isbn_with_dash,
+          Lisbn.new(isbn13).isbn_with_dash
+        ]
       }.flatten
     end
     string :issn, multiple: true do
