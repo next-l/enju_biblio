@@ -23,7 +23,7 @@
 <% @series_statements.each do |series_statement| %>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if @query.present? and can? :update, series_statement -%>
+      <%- if @query.present? and policy(series_statement).update? -%>
         <%= move_position(series_statement) -%>
       <%- end -%>
     </td>
@@ -31,8 +31,8 @@
       <strong><%= link_to series_statement.original_title, series_statement %></strong>
     </td>
     <td>
-      <%= link_to t('page.edit'), edit_series_statement_path(series_statement) if can? :update, series_statement -%>
-      <%= link_to t('page.destroy'), series_statement, data: {confirm: t('page.are_you_sure')}, method: :delete if can? :delete, series_statement -%>
+      <%= link_to t('page.edit'), edit_series_statement_path(series_statement) if policy(series_statement).update? -%>
+      <%= link_to t('page.destroy'), series_statement, data: {confirm: t('page.are_you_sure')}, method: :delete if policy(series_statement).destroy? -%>
     </td>
   </tr>
 <% end %>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <% if can? :create, SeriesStatement %>
+    <% if policy(SeriesStatement).create? %>
       <li><%= link_to t('page.new', model: t('activerecord.models.series_statement')), new_series_statement_path -%></li>
     <% end %>
   </ul>

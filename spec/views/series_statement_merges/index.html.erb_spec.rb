@@ -14,9 +14,6 @@ describe "series_statement_merges/index" do
         :series_statement_merge_list_id => 2
       )
     ]).page(1))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders a list of series_statement_merges" do

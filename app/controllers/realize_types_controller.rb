@@ -1,9 +1,11 @@
 class RealizeTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_realize_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /realize_types
   # GET /realize_types.json
   def index
-    @realize_types = RealizeType.all
+    @realize_types = RealizeType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class RealizeTypesController < ApplicationController
   end
 
   private
+  def set_realize_type
+    @realize_type = RealizeType.find(params[:id])
+    authorize @realize_type
+  end
+
+  def check_policy
+    authorize RealizeType
+  end
+
   def realize_type_params
     params.require(:realize_type).permit(
       :name, :display_name, :note, :position

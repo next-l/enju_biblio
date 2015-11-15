@@ -6,9 +6,6 @@ describe "series_statement_merges/edit" do
       :series_statement_id => 1,
       :series_statement_merge_list_id => 1
     ))
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders the edit series_statement_merge form" do

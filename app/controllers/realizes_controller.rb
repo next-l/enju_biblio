@@ -1,8 +1,9 @@
 class RealizesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_expression
-  before_filter :prepare_options, only: [:new, :edit]
-  after_filter :solr_commit, only: [:create, :update, :destroy]
+  before_action :set_realize, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_agent, :get_expression
+  before_action :prepare_options, only: [:new, :edit]
+  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /realizes
   # GET /realizes.json
@@ -111,6 +112,15 @@ class RealizesController < ApplicationController
   end
 
   private
+  def set_realize
+    @realize = Realize.find(params[:id])
+    authorize @realize
+  end
+
+  def check_policy
+    authorize Realize
+  end
+
   def realize_params
     params.require(:realize).permit(
       :agent_id, :expression_id, :realize_type_id, :position

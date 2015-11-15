@@ -28,7 +28,7 @@ describe AgentImportFilesController do
 
       it "assigns empty as @agent_import_files" do
         get :index
-        expect(assigns(:agent_import_files)).to be_empty
+        expect(assigns(:agent_import_files)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -36,7 +36,7 @@ describe AgentImportFilesController do
     describe "When not logged in" do
       it "assigns empty as @agent_import_files" do
         get :index
-        expect(assigns(:agent_import_files)).to be_empty
+        expect(assigns(:agent_import_files)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -105,7 +105,7 @@ describe AgentImportFilesController do
 
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        expect(assigns(:agent_import_file)).to_not be_valid
+        expect(assigns(:agent_import_file)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -113,7 +113,7 @@ describe AgentImportFilesController do
     describe "When not logged in" do
       it "should not assign the requested agent_import_file as @agent_import_file" do
         get :new
-        expect(assigns(:agent_import_file)).to_not be_valid
+        expect(assigns(:agent_import_file)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end

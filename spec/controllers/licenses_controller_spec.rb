@@ -33,7 +33,7 @@ describe LicensesController do
     it "assigns all licenses as @licenses" do
       license = License.create! valid_attributes
       get :index
-      expect(assigns(:licenses)).to eq(License.all)
+      expect(assigns(:licenses)).to eq(License.order(:position))
     end
   end
 

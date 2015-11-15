@@ -113,7 +113,7 @@ describe CreatesController do
 
       it "should not assign the requested create as @create" do
         get :new
-        expect(assigns(:create)).not_to be_valid
+        expect(assigns(:create)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -121,7 +121,7 @@ describe CreatesController do
     describe "When not logged in" do
       it "should not assign the requested create as @create" do
         get :new
-        expect(assigns(:create)).not_to be_valid
+        expect(assigns(:create)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -235,7 +235,7 @@ describe CreatesController do
       describe "with valid params" do
         it "assigns a newly created create as @create" do
           post :create, :create => @attrs
-          expect(assigns(:create)).to be_valid
+          expect(assigns(:create)).to be_nil
         end
 
         it "should be forbidden" do
@@ -247,7 +247,7 @@ describe CreatesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved create as @create" do
           post :create, :create => @invalid_attrs
-          expect(assigns(:create)).not_to be_valid
+          expect(assigns(:create)).to be_nil
         end
 
         it "should be forbidden" do
@@ -261,7 +261,7 @@ describe CreatesController do
       describe "with valid params" do
         it "assigns a newly created create as @create" do
           post :create, :create => @attrs
-          expect(assigns(:create)).to be_valid
+          expect(assigns(:create)).to be_nil
         end
 
         it "should be forbidden" do
@@ -273,7 +273,7 @@ describe CreatesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved create as @create" do
           post :create, :create => @invalid_attrs
-          expect(assigns(:create)).not_to be_valid
+          expect(assigns(:create)).to be_nil
         end
 
         it "should be redirected to new session url" do

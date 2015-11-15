@@ -16,7 +16,7 @@
 <%- @realizes.each do |realize| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :delete, realize -%>
+      <%- if policy(realize).destroy? -%>
         <%= realize.first? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_up.png', size: '16x16', alt: t('page.asc')), expression_realize_path(realize.expression, realize, move: 'higher'), method: :put) -%>
         <%= realize.last? ? image_tag('icons/stop.png', size: '16x16') : link_to(image_tag('icons/arrow_down.png', size: '16x16', alt: t('page.desc')), expression_realize_path(realize.expression, realize, move: 'lower'), method: :put) -%>
       <%- end -%>
@@ -36,7 +36,7 @@
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
     <li><%= link_to t('page.listing', model: t('activerecord.models.agent')), agents_path(expression_id: expression.id) -%></li>
-    <%- if can? :create, Realize -%>
+    <%- if policy(Realize).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.realize')), new_realize_path(expression_id: expression.id) -%></li>
     <%- end -%>
   </ul>

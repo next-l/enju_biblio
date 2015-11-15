@@ -1,6 +1,7 @@
 class PictureFilesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_attachable, only: [:index, :new]
+  before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_attachable, only: [:index, :new]
 
   # GET /picture_files
   # GET /picture_files.json
@@ -40,7 +41,7 @@ class PictureFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @picture_file }
-      format.mobile {
+      format.html.phone {
         if params[:format] == 'download'
           render_image(file)
         end
@@ -157,6 +158,15 @@ class PictureFilesController < ApplicationController
   end
 
   private
+  def set_picture_file
+    @picture_file = PictureFile.find(params[:id])
+    authorize @picture_file
+  end
+
+  def check_policy
+    authorize PictureFile
+  end
+
   def picture_file_params
     params.require(:picture_file).permit(
       :picture, :picture_attachable_id, :picture_attachable_type

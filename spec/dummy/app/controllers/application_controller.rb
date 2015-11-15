@@ -7,4 +7,7 @@ class ApplicationController < ActionController::Base
   enju_inventory
   enju_event
   enju_subject
+  after_action :verify_authorized
+
+  include Pundit
 end

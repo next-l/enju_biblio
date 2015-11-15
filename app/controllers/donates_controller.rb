@@ -1,5 +1,6 @@
 class DonatesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_donate, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
 
   # GET /donates
   # GET /donates.json
@@ -78,6 +79,15 @@ class DonatesController < ApplicationController
   end
 
   private
+  def set_donate
+    @donate = Donate.find(params[:id])
+    authorize @donate
+  end
+
+  def check_policy
+    authorize Donate
+  end
+
   def donate_params
     params.require(:donate).permit(:agent_id, :item_id)
   end

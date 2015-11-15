@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 class Manifestation < ActiveRecord::Base
   enju_circulation_manifestation_model if defined?(EnjuCirculation)
   enju_subject_manifestation_model if defined?(EnjuSubject)
@@ -255,7 +254,7 @@ class Manifestation < ActiveRecord::Base
     manifestation.index_series_statement
     Sunspot.commit
   end
-  normalize_attributes :manifestation_identifier, :pub_date, :original_title
+  strip_attributes only: [:manifestation_identifier, :pub_date, :original_title]
   paginates_per 10
 
   attr_accessor :during_import, :parent_id

@@ -148,14 +148,14 @@ describe ManifestationsController do
         get :index, :query => '2005', :pub_date_from => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
-        assigns(:query).should eq '2005 date_of_publication_d:[1999-12-31T15:00:00Z TO *]'
+        assigns(:query).should eq '2005 date_of_publication_d:[2000-01-01T00:00:00Z TO *]'
       end
 
       it "should get index with pub_date_until" do
         get :index, :query => '2005', :pub_date_until => '2000'
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
-        assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T14:59:59Z]'
+        assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T23:59:59Z]'
       end
 
       it "should get tag_cloud" do
@@ -374,7 +374,7 @@ describe ManifestationsController do
 
       it "should not assign the requested manifestation as @manifestation" do
         get :new
-        expect(assigns(:manifestation)).to_not be_valid
+        expect(assigns(:manifestation)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -382,7 +382,7 @@ describe ManifestationsController do
     describe "When not logged in" do
       it "should not assign the requested manifestation as @manifestation" do
         get :new
-        expect(assigns(:manifestation)).to_not be_valid
+        expect(assigns(:manifestation)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -512,7 +512,7 @@ describe ManifestationsController do
       describe "with valid params" do
         it "assigns a newly created manifestation as @manifestation" do
           post :create, :manifestation => @attrs
-          expect(assigns(:manifestation)).to be_valid
+          expect(assigns(:manifestation)).to be_nil
         end
 
         it "should be forbidden" do
@@ -524,7 +524,7 @@ describe ManifestationsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation as @manifestation" do
           post :create, :manifestation => @invalid_attrs
-          expect(assigns(:manifestation)).to_not be_valid
+          expect(assigns(:manifestation)).to be_nil
         end
 
         it "should be forbidden" do
@@ -538,7 +538,7 @@ describe ManifestationsController do
       describe "with valid params" do
         it "assigns a newly created manifestation as @manifestation" do
           post :create, :manifestation => @attrs
-          expect(assigns(:manifestation)).to be_valid
+          expect(assigns(:manifestation)).to be_nil
         end
 
         it "should be forbidden" do
@@ -550,7 +550,7 @@ describe ManifestationsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved manifestation as @manifestation" do
           post :create, :manifestation => @invalid_attrs
-          expect(assigns(:manifestation)).to_not be_valid
+          expect(assigns(:manifestation)).to be_nil
         end
 
         it "should be forbidden" do

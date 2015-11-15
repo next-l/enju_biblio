@@ -1,9 +1,11 @@
 class LicensesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_license, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /licenses
   # GET /licenses.json
   def index
-    @licenses = License.all
+    @licenses = License.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class LicensesController < ApplicationController
   end
 
   private
+  def set_license
+    @license = License.find(params[:id])
+    authorize @license
+  end
+
+  def check_policy
+    authorize License
+  end
+
   def license_params
     params.require(:license).permit(:name, :display_name, :note)
   end

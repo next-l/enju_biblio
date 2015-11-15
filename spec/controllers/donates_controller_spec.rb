@@ -33,14 +33,14 @@ describe DonatesController do
 
       it "assigns all donates as @donates" do
         get :index
-        expect(assigns(:donates)).to be_empty
+        expect(assigns(:donates)).to be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns all donates as @donates" do
         get :index
-        expect(assigns(:donates)).to be_empty
+        expect(assigns(:donates)).to be_nil
       end
     end
   end
@@ -109,7 +109,7 @@ describe DonatesController do
 
       it "should not assign the requested donate as @donate" do
         get :new
-        expect(assigns(:donate)).not_to be_valid
+        expect(assigns(:donate)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -117,7 +117,7 @@ describe DonatesController do
     describe "When not logged in" do
       it "should not assign the requested donate as @donate" do
         get :new
-        expect(assigns(:donate)).not_to be_valid
+        expect(assigns(:donate)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -231,7 +231,7 @@ describe DonatesController do
       describe "with valid params" do
         it "assigns a newly created donate as @donate" do
           post :create, :donate => @attrs
-          expect(assigns(:donate)).to be_valid
+          expect(assigns(:donate)).to be_nil
         end
 
         it "should be forbidden" do
@@ -243,7 +243,7 @@ describe DonatesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved donate as @donate" do
           post :create, :donate => @invalid_attrs
-          expect(assigns(:donate)).not_to be_valid
+          expect(assigns(:donate)).to be_nil
         end
 
         it "should be forbidden" do
@@ -257,7 +257,7 @@ describe DonatesController do
       describe "with valid params" do
         it "assigns a newly created donate as @donate" do
           post :create, :donate => @attrs
-          expect(assigns(:donate)).to be_valid
+          expect(assigns(:donate)).to be_nil
         end
 
         it "should be forbidden" do
@@ -269,7 +269,7 @@ describe DonatesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved donate as @donate" do
           post :create, :donate => @invalid_attrs
-          expect(assigns(:donate)).not_to be_valid
+          expect(assigns(:donate)).to be_nil
         end
 
         it "should be forbidden" do

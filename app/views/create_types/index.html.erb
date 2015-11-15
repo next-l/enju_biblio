@@ -18,7 +18,7 @@
 <%- @create_types.each do |create_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, create_type -%>
+      <%- if policy(create_type).update? -%>
         <%= move_position(create_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= create_type.note %>
     </td>
     <td>
-      <%- if can? :update, create_type -%>
+      <%- if policy(create_type).update? -%>
         <%= link_to t('page.edit'), edit_create_type_path(create_type) -%>
       <% end %>
-      <%- if can? :delete, create_type -%>
+      <%- if policy(create_type).destroy? -%>
         <%= link_to t('page.destroy'), create_type_path(create_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, CreateType -%>
+    <%- if policy(CreateType).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.create_type')), new_create_type_path -%></li>
     <%- end -%>
   </ul>

@@ -1,5 +1,6 @@
 class ImportRequestsController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_import_request, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
 
   # GET /import_requests
   # GET /import_requests.json
@@ -52,17 +53,17 @@ class ImportRequestsController < ApplicationController
             redirect_to new_import_request_url, notice: t('import_request.record_not_found')
           end
         }
-        format.mobile {
-          if @import_request.manifestation
-            redirect_to @import_request.manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.import_request'))
-          else
-            redirect_to new_import_request_url, notice: t('import_request.record_not_found')
-          end
-        }
+        #format.html.phone {
+        #  if @import_request.manifestation
+        #    redirect_to @import_request.manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.import_request'))
+        #  else
+        #    redirect_to new_import_request_url, notice: t('import_request.record_not_found')
+        #  end
+        #}
         format.json { render json: @import_request, status: :created, location: @import_request }
       else
         format.html { render action: "new" }
-        format.mobile { render action: "new" }
+        #format.html.phone { render action: "new" }
         format.json { render json: @import_request.errors, status: :unprocessable_entity }
       end
     end
@@ -99,6 +100,15 @@ class ImportRequestsController < ApplicationController
   end
 
   private
+  def set_import_request
+    @import_request = ImportRequest.find(params[:id])
+    authorize @import_request
+  end
+
+  def check_policy
+    authorize ImportRequest
+  end
+
   def import_request_params
     params.require(:import_request).permit(:isbn, :manifestation_id, :user_id)
   end

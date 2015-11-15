@@ -18,7 +18,7 @@
 <%- @agent_relationship_types.each do |agent_relationship_type| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, agent_relationship_type -%>
+      <%- if policy(agent).update?_relationship_type -%>
         <%= move_position(agent_relationship_type) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= agent_relationship_type.note %>
     </td>
     <td>
-      <%- if can? :update, agent_relationship_type -%>
+      <%- if policy(agent).update?_relationship_type -%>
         <%= link_to t('page.edit'), edit_agent_relationship_type_path(agent_relationship_type) -%>
       <% end %>
-      <%- if can? :delete, agent_relationship_type -%>
+      <%- if policy(agent).destroy?_relationship_type -%>
         <%= link_to t('page.destroy'), agent_relationship_type_path(agent_relationship_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, AgentRelationshipType -%>
+    <%- if policy(AgentRelationshipType).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.agent_relationship_type')), new_agent_relationship_type_path -%></li>
     <%- end -%>
   </ul>

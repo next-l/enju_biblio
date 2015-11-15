@@ -1,9 +1,11 @@
 class ProduceTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_produce_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /produce_types
   # GET /produce_types.json
   def index
-    @produce_types = ProduceType.all
+    @produce_types = ProduceType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class ProduceTypesController < ApplicationController
   end
 
   private
+  def set_produce_type
+    @produce_type = ProduceType.find(params[:id])
+    authorize @produce_type
+  end
+
+  def check_policy
+    authorize ProduceType
+  end
+
   def produce_type_params
     params.require(:produce_type).permit(:name, :display_name, :note, :position)
   end

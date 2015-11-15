@@ -33,7 +33,7 @@ describe ProduceTypesController do
     it "assigns all produce_types as @produce_types" do
       produce_type = ProduceType.create! valid_attributes
       get :index
-      expect(assigns(:produce_types)).to eq(ProduceType.all)
+      expect(assigns(:produce_types)).to eq(ProduceType.order(:position))
     end
   end
 

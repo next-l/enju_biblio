@@ -198,7 +198,7 @@ describe ItemsController do
 
       it "should not assign the requested item as @item" do
         get :new, :manifestation_id => @manifestation.id
-        expect(assigns(:item)).to_not be_valid
+        expect(assigns(:item)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -206,7 +206,7 @@ describe ItemsController do
     describe "When not logged in" do
       it "should not assign the requested item as @item" do
         get :new, :manifestation_id => @manifestation.id
-        expect(assigns(:item)).to_not be_valid
+        expect(assigns(:item)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -359,7 +359,7 @@ describe ItemsController do
       describe "with valid params" do
         it "assigns a newly created item as @item" do
           post :create, :item => @attrs
-          expect(assigns(:item)).to be_valid
+          expect(assigns(:item)).to be_nil
         end
 
         it "should be forbidden" do
@@ -371,7 +371,7 @@ describe ItemsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved item as @item" do
           post :create, :item => @invalid_attrs
-          expect(assigns(:item)).to_not be_valid
+          expect(assigns(:item)).to be_nil
         end
 
         it "should be forbidden" do
@@ -385,7 +385,7 @@ describe ItemsController do
       describe "with valid params" do
         it "assigns a newly created item as @item" do
           post :create, :item => @attrs
-          expect(assigns(:item)).to be_valid
+          expect(assigns(:item)).to be_nil
         end
 
         it "should be forbidden" do
@@ -397,7 +397,7 @@ describe ItemsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved item as @item" do
           post :create, :item => @invalid_attrs
-          expect(assigns(:item)).to_not be_valid
+          expect(assigns(:item)).to be_nil
         end
 
         it "should be forbidden" do

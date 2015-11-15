@@ -1,16 +1,16 @@
-# -*- encoding: utf-8 -*-
 class ItemsController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
+  before_action :set_item, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_filter :get_inventory_file
+    before_action :get_inventory_file
   end
-  before_filter :get_library, :get_item, except: [:create, :update, :destroy]
-  before_filter :prepare_options, only: [:new, :edit]
-  before_filter :get_version, only: [:show]
-  #before_filter :store_location
-  after_filter :solr_commit, only: [:create, :update, :destroy]
-  after_filter :convert_charset, only: :index
+  before_action :get_library, :get_item, except: [:create, :update, :destroy]
+  before_action :prepare_options, only: [:new, :edit]
+  before_action :get_version, only: [:show]
+  #before_action :store_location
+  after_action :solr_commit, only: [:create, :update, :destroy]
+  after_action :convert_charset, only: :index
 
   # GET /items
   # GET /items.json
@@ -253,6 +253,15 @@ class ItemsController < ApplicationController
   end
 
   private
+  def set_item
+    @item = Item.find(params[:id])
+    authorize @item
+  end
+
+  def check_policy
+    authorize Item
+  end
+
   def item_params
     params.require(:item).permit(
       :call_number, :item_identifier, :circulation_status_id,
@@ -267,10 +276,10 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.real << Library.web
-    if @item.new_record?
-      @library = Library.real.includes(:shelves).order(:position).first
-    else
+    if @item
       @library = @item.shelf.library
+    else
+      @library = Library.real.includes(:shelves).order(:position).first
     end
     @shelves = @library.try(:shelves)
     @bookstores = Bookstore.all

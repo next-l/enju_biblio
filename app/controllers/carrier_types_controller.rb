@@ -1,6 +1,7 @@
 class CarrierTypesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :prepare_options, only: [:new, :edit]
+  before_action :set_carrier_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :prepare_options, only: [:new, :edit]
 
   # GET /carrier_types
   # GET /carrier_types.json
@@ -86,6 +87,15 @@ class CarrierTypesController < ApplicationController
   end
 
   private
+  def set_carrier_type
+    @carrier_type = CarrierType.find(params[:id])
+    authorize @carrier_type
+  end
+
+  def check_policy
+    authorize CarrierType
+  end
+
   def carrier_type_params
     params.require(:carrier_type).permit(
       :name, :display_name, :note, :position,

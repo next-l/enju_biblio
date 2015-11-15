@@ -18,7 +18,7 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   attr_accessor :selected
-  normalize_attributes :original_title
+  strip_attributes only: :original_title
 
   paginates_per 10
 

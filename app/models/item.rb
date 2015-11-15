@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 class Item < ActiveRecord::Base
   enju_library_item_model if defined?(EnjuLibrary)
   enju_circulation_item_model if defined?(EnjuCirculation)
@@ -33,8 +32,8 @@ class Item < ActiveRecord::Base
   validates :url, url: true, allow_blank: true, length: { maximum: 255 }
   validates_date :acquired_at, allow_blank: true
 
-  normalize_attributes :item_identifier, :binding_item_identifier,
-    :call_number, :binding_call_number, :url
+  strip_attributes only: [:item_identifier, :binding_item_identifier,
+    :call_number, :binding_call_number, :url]
 
   searchable do
     text :item_identifier, :note, :title, :creator, :contributor, :publisher,

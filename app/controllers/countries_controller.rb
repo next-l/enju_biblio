@@ -1,5 +1,7 @@
 class CountriesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_country, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /countries
   # GET /countries.json
   def index
@@ -82,6 +84,15 @@ class CountriesController < ApplicationController
   end
 
   private
+  def set_country
+    @country = Country.find(params[:id])
+    authorize @country
+  end
+
+  def check_policy
+    authorize Country
+  end
+
   def country_params
     params.require(:country).permit(
       :name, :display_name, :alpha_2, :alpha_3, :numeric_3, :note

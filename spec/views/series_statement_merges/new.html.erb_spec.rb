@@ -6,9 +6,6 @@ describe "series_statement_merges/new" do
       :series_statement_id => 1,
       :series_statement_merge_list_id => 1
     ).as_new_record)
-    @ability = Object.new
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders new series_statement_merge form" do

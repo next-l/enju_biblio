@@ -33,7 +33,7 @@ describe FrequenciesController do
     it "assigns all frequencies as @frequencies" do
       frequency = Frequency.create! valid_attributes
       get :index
-      assigns(:frequencies).should eq(Frequency.all)
+      assigns(:frequencies).should eq(Frequency.order(:position))
     end
   end
 

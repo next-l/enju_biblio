@@ -33,7 +33,7 @@ describe MediumOfPerformancesController do
     it "assigns all medium_of_performances as @medium_of_performances" do
       medium_of_performance = MediumOfPerformance.create! valid_attributes
       get :index
-      expect(assigns(:medium_of_performances)).to eq(MediumOfPerformance.all)
+      expect(assigns(:medium_of_performances)).to eq(MediumOfPerformance.order(:position))
     end
   end
 

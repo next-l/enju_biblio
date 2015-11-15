@@ -46,7 +46,7 @@
         </td>
       <% end %>
     </tr>
-    <% if can? :update, item %>
+    <% if policy(item).update? %>
       <script>
         $(function(){
           $('a#item_identifier_item_<%= item.id %>').data(

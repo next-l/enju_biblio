@@ -10,6 +10,6 @@
   <%= render 'manifestations/show_tag', manifestation: manifestation -%>
 <% end %>
 <div id="holding_<%= manifestation.id -%>"></div>
-<%- if can? :create, Item -%>
+<%- if policy(Item).create? -%>
   <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
 <%- end -%>

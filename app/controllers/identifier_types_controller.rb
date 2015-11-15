@@ -1,9 +1,11 @@
 class IdentifierTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_identifier_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /identifier_types
   # GET /identifier_types.json
   def index
-    @identifier_types = IdentifierType.all
+    @identifier_types = IdentifierType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class IdentifierTypesController < ApplicationController
   end
 
   private
+  def set_identifier_type
+    @identifier_type = IdentifierType.find(params[:id])
+    authorize @identifier_type
+  end
+
+  def check_policy
+    authorize IdentifierType
+  end
+
   def identifier_type_params
     params.require(:identifier_type).permit(
       :display_name, :name, :note, :position

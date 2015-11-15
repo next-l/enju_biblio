@@ -21,12 +21,12 @@
                     <%- if reserve -%>
                       <%= link_to t('reserve.show'), reserve -%><br />
                     <%- else -%>
-                      <%= link_to t('activerecord.models.reserve'), new_reserve_path(manifestation_id: manifestation.id) if can? :create, Reserve -%><br />
+                      <%= link_to t('activerecord.models.reserve'), new_reserve_path(manifestation_id: manifestation.id) if policy(Reserve).create? -%><br />
                     <%- end -%>
                   <% end %>
                 <% end %>
               <% end %>
-              <%- if can? :update, manifestation -%>
+              <%- if policy(manifestation).update? -%>
                 <% unless params[:mode] == 'add' %>
                   <% if manifestation.serial? && manifestation.series_master? %>
                     <%= link_to t('page.new_acquisition'), new_manifestation_path(parent_id: manifestation.id) %>

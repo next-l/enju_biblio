@@ -18,7 +18,7 @@
 <%- @medium_of_performances.each do |medium_of_performance| -%>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%- if can? :update, medium_of_performance -%>
+      <%- if policy(medium_of_performance).update? -%>
         <%= move_position(medium_of_performance) -%>
       <%- end -%>
     </td>
@@ -29,10 +29,10 @@
       <%= medium_of_performance.note %>
     </td>
     <td>
-      <%- if can? :update, medium_of_performance -%>
+      <%- if policy(medium_of_performance).update? -%>
         <%= link_to t('page.edit'), edit_medium_of_performance_path(medium_of_performance) -%>
       <% end %>
-      <%- if can? :delete, medium_of_performance -%>
+      <%- if policy(medium_of_performance).destroy? -%>
         <%= link_to t('page.destroy'), medium_of_performance_path(medium_of_performance), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
@@ -45,7 +45,7 @@
 
 <div id="submenu" class="ui-corner-all ui-widget-content">
   <ul>
-    <%- if can? :create, MediumOfPerformance -%>
+    <%- if policy(MediumOfPerformance).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.medium_of_performance')), new_medium_of_performance_path -%></li>
     <%- end -%>
   </ul>

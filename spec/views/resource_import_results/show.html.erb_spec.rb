@@ -7,20 +7,17 @@ describe "resource_import_results/show" do
     @resource_import_result = resource_import_results(:one)
     admin = User.find('enjuadmin')
     view.stub(:current_user).and_return(admin)
-    @ability = EnjuLeaf::Ability.new(admin, '0.0.0.0')
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders a resource_import_result" do
     render
     expect(rendered).to match /MyString/
   end
+
   it "renders even if a resource_import_file is deleted" do
     #@resource_import_result.resource_import_file = nil
     @resource_import_result.resource_import_file.delete
     @resource_import_result.resource_import_file = nil
-    STDERR.puts @resource_import_result.inspect
     render
     expect(rendered).to match /MyText/
   end

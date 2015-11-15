@@ -1,5 +1,7 @@
 class ContentTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_content_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /content_types
   # GET /content_types.json
   def index
@@ -82,6 +84,15 @@ class ContentTypesController < ApplicationController
   end
 
   private
+  def set_content_type
+    @content_type = ContentType.find(params[:id])
+    authorize @content_type
+  end
+
+  def check_policy
+    authorize ContentType
+  end
+
   def content_type_params
     params.require(:content_type).permit(:name, :display_name, :note)
   end

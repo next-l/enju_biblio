@@ -1,5 +1,7 @@
 class LanguagesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_language, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /languages
   # GET /languages.json
   def index
@@ -82,6 +84,15 @@ class LanguagesController < ApplicationController
   end
 
   private
+  def set_language
+    @language = Language.find(params[:id])
+    authorize @language
+  end
+
+  def check_policy
+    authorize Language
+  end
+
   def language_params
     params.require(:language).permit(
       :name, :native_name, :display_name, :iso_639_1, :iso_639_2, :iso_639_3,

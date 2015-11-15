@@ -33,7 +33,7 @@ describe AgentTypesController do
     it "assigns all agent_types as @agent_types" do
       agent_type = AgentType.create! valid_attributes
       get :index
-      expect(assigns(:agent_types)).to eq(AgentType.all)
+      expect(assigns(:agent_types)).to eq(AgentType.order(:position))
     end
   end
 

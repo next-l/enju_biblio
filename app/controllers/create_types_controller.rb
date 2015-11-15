@@ -1,9 +1,11 @@
 class CreateTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_create_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /create_types
   # GET /create_types.json
   def index
-    @create_types = CreateType.all
+    @create_types = CreateType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class CreateTypesController < ApplicationController
   end
 
   private
+  def set_create_type
+    @create_type = CreateType.find(params[:id])
+    authorize @create_type
+  end
+
+  def check_policy
+    authorize CreateType
+  end
+
   def create_type_params
     params.require(:create_type).permit(:name, :display_name, :note, :position)
   end

@@ -1,9 +1,11 @@
 class FrequenciesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_frequency, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /frequencies
   # GET /frequencies.json
   def index
-    @frequencies = Frequency.all
+    @frequencies = Frequency.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class FrequenciesController < ApplicationController
   end
 
   private
+  def set_frequency
+    @frequency = Frequency.find(params[:id])
+    authorize @frequency
+  end
+
+  def check_policy
+    authorize Frequency
+  end
+
   def frequency_params
     params.require(:frequency).permit(:name, :display_name, :note)
   end

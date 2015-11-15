@@ -87,7 +87,7 @@ describe PictureFilesController do
 
       it "assigns the requested picture_file as @picture_file" do
         get :new
-        expect(assigns(:picture_file)).not_to be_valid
+        expect(assigns(:picture_file)).to be_nil
         expect(response).to redirect_to picture_files_url
       end
     end
@@ -97,7 +97,7 @@ describe PictureFilesController do
 
       it "assigns the requested picture_file as @picture_file" do
         get :new
-        expect(assigns(:picture_file)).not_to be_valid
+        expect(assigns(:picture_file)).to be_nil
         expect(response).to redirect_to picture_files_url
       end
     end
@@ -107,7 +107,7 @@ describe PictureFilesController do
 
       it "should not assign the requested picture_file as @picture_file" do
         get :new
-        expect(assigns(:picture_file)).not_to be_valid
+        expect(assigns(:picture_file)).to be_nil
         expect(response).to be_forbidden
       end
     end
@@ -115,7 +115,7 @@ describe PictureFilesController do
     describe "When not logged in" do
       it "should not assign the requested picture_file as @picture_file" do
         get :new
-        expect(assigns(:picture_file)).not_to be_valid
+        expect(assigns(:picture_file)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -229,7 +229,7 @@ describe PictureFilesController do
       describe "with valid params" do
         it "assigns a newly created picture_file as @picture_file" do
           post :create, :picture_file => @attrs
-          expect(assigns(:picture_file)).to be_valid
+          expect(assigns(:picture_file)).to be_nil
         end
 
         it "should be forbidden" do
@@ -241,7 +241,7 @@ describe PictureFilesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved picture_file as @picture_file" do
           post :create, :picture_file => @invalid_attrs
-          expect(assigns(:picture_file)).not_to be_valid
+          expect(assigns(:picture_file)).to be_nil
         end
 
         it "should be forbidden" do
@@ -255,7 +255,7 @@ describe PictureFilesController do
       describe "with valid params" do
         it "assigns a newly created picture_file as @picture_file" do
           post :create, :picture_file => @attrs
-          expect(assigns(:picture_file)).to be_valid
+          expect(assigns(:picture_file)).to be_nil
         end
 
         it "should be forbidden" do
@@ -267,7 +267,7 @@ describe PictureFilesController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved picture_file as @picture_file" do
           post :create, :picture_file => @invalid_attrs
-          expect(assigns(:picture_file)).not_to be_valid
+          expect(assigns(:picture_file)).to be_nil
         end
 
         it "should be forbidden" do

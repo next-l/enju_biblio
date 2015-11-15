@@ -1,9 +1,11 @@
 class AgentTypesController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_agent_type, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /agent_types
   # GET /agent_types.json
   def index
-    @agent_types = AgentType.all
+    @agent_types = AgentType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class AgentTypesController < ApplicationController
   end
 
   private
+  def set_agent_type
+    @agent_type = AgentType.find(params[:id])
+    authorize @agent_type
+  end
+
+  def check_policy
+    authorize AgentType
+  end
+
   def agent_type_params
     params.require(:agent_type).permit(:name, :display_name, :note)
   end

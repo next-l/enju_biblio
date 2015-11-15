@@ -1,6 +1,7 @@
 class AgentMergesController < ApplicationController
-  load_and_authorize_resource
-  before_filter :get_agent, :get_agent_merge_list
+  before_action :set_agent_merge, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+  before_action :get_agent, :get_agent_merge_list
 
   # GET /agent_merges
   # GET /agent_merges.json
@@ -86,6 +87,15 @@ class AgentMergesController < ApplicationController
   end
 
   private
+  def set_agent_merge
+    @agent_merge = AgentMerge.find(params[:id])
+    authorize @agent_merge
+  end
+
+  def check_policy
+    authorize AgentMerge
+  end
+
   def agent_merge_params
     params.require(:agent_merge).permit(:agent_id, :agent_merge_list_id)
   end

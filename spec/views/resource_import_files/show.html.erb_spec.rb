@@ -10,9 +10,6 @@ describe "resource_import_files/show" do
       Kaminari.paginate_array(file.resource_import_results).page(1))
     admin = User.find('enjuadmin')
     view.stub(:current_user).and_return(admin)
-    @ability = EnjuLeaf::Ability.new(admin, '0.0.0.0')
-    @ability.extend(CanCan::Ability)
-    controller.stub(:current_ability) { @ability }
   end
 
   it "renders a resource_import_file" do

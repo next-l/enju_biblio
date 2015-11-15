@@ -1,9 +1,11 @@
 class FormOfWorksController < ApplicationController
-  load_and_authorize_resource
+  before_action :set_form_of_work, only: [:show, :edit, :update, :destroy]
+  before_action :check_policy, only: [:index, :new, :create]
+
   # GET /form_of_works
   # GET /form_of_works.json
   def index
-    @form_of_works = FormOfWork.all
+    @form_of_works = FormOfWork.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -82,6 +84,15 @@ class FormOfWorksController < ApplicationController
   end
 
   private
+  def set_form_of_work
+    @form_of_work = FormOfWork.find(params[:id])
+    authorize @form_of_work
+  end
+
+  def check_policy
+    authorize FormOfWork
+  end
+
   def form_of_work_params
     params.require(:form_of_work).permit(:name, :display_name, :note)
   end

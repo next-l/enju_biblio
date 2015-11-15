@@ -29,14 +29,14 @@ describe AgentMergeListsController do
 
       it "assigns empty as @agent_merge_lists" do
         get :index
-        assigns(:agent_merge_lists).should be_empty
+        assigns(:agent_merge_lists).should be_nil
       end
     end
 
     describe "When not logged in" do
       it "assigns empty as @agent_merge_lists" do
         get :index
-        assigns(:agent_merge_lists).should be_empty
+        assigns(:agent_merge_lists).should be_nil
       end
     end
   end
@@ -109,7 +109,7 @@ describe AgentMergeListsController do
 
       it "should not assign the requested agent_merge_list as @agent_merge_list" do
         get :new
-        assigns(:agent_merge_list).should_not be_valid
+        assigns(:agent_merge_list).should be_nil
         response.should be_forbidden
       end
     end
@@ -117,7 +117,7 @@ describe AgentMergeListsController do
     describe "When not logged in" do
       it "should not assign the requested agent_merge_list as @agent_merge_list" do
         get :new
-        assigns(:agent_merge_list).should_not be_valid
+        assigns(:agent_merge_list).should be_nil
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -231,7 +231,7 @@ describe AgentMergeListsController do
       describe "with valid params" do
         it "assigns a newly created agent_merge_list as @agent_merge_list" do
           post :create, :agent_merge_list => @attrs
-          assigns(:agent_merge_list).should be_valid
+          assigns(:agent_merge_list).should be_nil
         end
 
         it "should be forbidden" do
@@ -243,7 +243,7 @@ describe AgentMergeListsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_merge_list as @agent_merge_list" do
           post :create, :agent_merge_list => @invalid_attrs
-          assigns(:agent_merge_list).should_not be_valid
+          assigns(:agent_merge_list).should be_nil
         end
 
         it "should be forbidden" do
@@ -257,7 +257,7 @@ describe AgentMergeListsController do
       describe "with valid params" do
         it "assigns a newly created agent_merge_list as @agent_merge_list" do
           post :create, :agent_merge_list => @attrs
-          assigns(:agent_merge_list).should be_valid
+          assigns(:agent_merge_list).should be_nil
         end
 
         it "should be forbidden" do
@@ -269,7 +269,7 @@ describe AgentMergeListsController do
       describe "with invalid params" do
         it "assigns a newly created but unsaved agent_merge_list as @agent_merge_list" do
           post :create, :agent_merge_list => @invalid_attrs
-          assigns(:agent_merge_list).should_not be_valid
+          assigns(:agent_merge_list).should be_nil
         end
 
         it "should be forbidden" do
