@@ -42,7 +42,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_bookmark", "~> 0.1.2"
   s.add_development_dependency "enju_event", "~> 0.1.17"
   s.add_development_dependency "enju_manifestation_viewer", "~> 0.1.0"
-  s.add_development_dependency "enju_circulation", "~> 0.1.0"
+  #s.add_development_dependency "enju_circulation", "~> 0.1.0"
   s.add_development_dependency "enju_ndl", "~> 0.1.0"
   s.add_development_dependency "simplecov"
   s.add_development_dependency "webmock"
