@@ -941,7 +941,7 @@ ActiveRecord::Schema.define(version: 20150221063719) do
     t.text     "title",                     null: false
     t.text     "body",                      null: false
     t.integer  "position"
-    t.string   "locale",     default: "ja"
+    t.string   "locale",     default: "en"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
