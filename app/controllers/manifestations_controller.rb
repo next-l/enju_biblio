@@ -204,7 +204,7 @@ class ManifestationsController < ApplicationController
         per_page = Manifestation.default_per_page
       end
       if params[:format] == 'sru'
-        search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
+        #search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
         pub_dates = parse_pub_date(params)
         pub_date_range = {}

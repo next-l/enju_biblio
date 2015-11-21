@@ -11,6 +11,7 @@ require 'enju_subject'
 require 'enju_ndl'
 require 'enju_bookmark'
 require 'resque/server'
+require 'resque_mailer'
 
 module Dummy
   class Application < Rails::Application
