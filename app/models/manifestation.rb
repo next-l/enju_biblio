@@ -378,6 +378,7 @@ class Manifestation < ActiveRecord::Base
 
   def extract_text
     return nil if attachment.path.nil?
+    return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
     if ENV['ENJU_STORAGE'] == 's3'
       body = Faraday.get(attachment.expiring_url(10)).body.force_encoding('UTF-8')
     else
