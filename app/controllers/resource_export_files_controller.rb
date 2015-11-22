@@ -61,7 +61,7 @@ class ResourceExportFilesController < ApplicationController
     respond_to do |format|
       if @resource_export_file.save
         if @resource_export_file.mode == 'export'
-          Resque.enqueue(ResourceExportFileQueue, @resource_export_file.id)
+          ResourceExportFileJob.perform_later(@resource_export_file)
         end
         format.html { redirect_to @resource_export_file, notice: t('export.successfully_created', model: t('activerecord.models.resource_export_file')) }
         format.json { render json: @resource_export_file, status: :created, location: @resource_export_file }
@@ -78,7 +78,7 @@ class ResourceExportFilesController < ApplicationController
     respond_to do |format|
       if @resource_export_file.update_attributes(resource_export_file_params)
         if @resource_export_file.mode == 'export'
-          ResourceExportFileQueue.perform(@resource_export_file.id)
+          ResourceExportFileJob.perform_later(@resource_export_file)
         end
         format.html { redirect_to @resource_export_file, notice: t('controller.successfully_updated', model: t('activerecord.models.resource_export_file')) }
         format.json { head :no_content }

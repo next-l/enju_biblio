@@ -286,7 +286,7 @@ describe ResourceImportFile do
     file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
-    ResourceImportFileQueue.perform(file.id).should be_truthy
+    ResourceImportFileJob.perform_later(file).should be_truthy
   end
 end
 

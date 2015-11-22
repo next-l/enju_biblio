@@ -62,7 +62,7 @@ class ResourceImportFilesController < ApplicationController
     respond_to do |format|
       if @resource_import_file.save
         if @resource_import_file.mode == 'import'
-          Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
+          ResourceImportFileJob.perform_later(@resource_import_file)
         end
         format.html { redirect_to @resource_import_file, notice: t('import.successfully_created', model: t('activerecord.models.resource_import_file')) }
         format.json { render json: @resource_import_file, status: :created, location: @resource_import_file }
@@ -80,7 +80,7 @@ class ResourceImportFilesController < ApplicationController
     respond_to do |format|
       if @resource_import_file.update_attributes(resource_import_file_params)
         if @resource_import_file.mode == 'import'
-          Resque.enqueue(ResourceImportFileQueue, @resource_import_file.id)
+          ResourceImportFileJob.perform_later(@resource_import_file)
         end
         format.html { redirect_to @resource_import_file, notice: t('controller.successfully_updated', model: t('activerecord.models.resource_import_file')) }
         format.json { head :no_content }
