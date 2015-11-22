@@ -541,7 +541,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.price
           item_lines << m.created_at
           item_lines << m.updated_at
-          identifiers.each do |identifier_type|
+          m.identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
           item_lines << i.item_identifier
@@ -568,7 +568,7 @@ class Manifestation < ActiveRecord::Base
         line << m.price
         line << m.created_at
         line << m.updated_at
-        identifiers.each do |identifier_type|
+        m.identifiers.each do |identifier_type|
           line << m.identifier_contents(identifier_type.to_sym).first
         end
         lines << line
