@@ -112,8 +112,8 @@
         </tr>
       </table>
     <% end %>
-    <%- if manifestation.items.on_shelf.exists? -%>
-      <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items.on_shelf -%>
+    <%- if manifestation.items.exists? -%>
+      <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items %>
     <%- end -%>
     <%- if policy(Item).create? -%>
       <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
