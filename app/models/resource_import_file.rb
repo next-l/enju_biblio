@@ -33,7 +33,6 @@ class ResourceImportFile < ActiveRecord::Base
   has_many :resource_import_results
   has_many :resource_import_file_transitions
 
-  enju_import_file_model
   attr_accessor :mode, :library_id
 
   def state_machine

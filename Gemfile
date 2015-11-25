@@ -13,6 +13,7 @@ gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '1.2'
 gem 'enju_event', github: 'next-l/enju_event', branch: '1.2'
 gem 'enju_circulation', github: 'next-l/enju_circulation', branch: '1.2'
 gem 'enju_subject', github: 'next-l/enju_subject', branch: '1.2'
+gem 'enju_message', github: 'next-l/enju_message', branch: '1.2'
 gem 'enju_bookmark', github: 'next-l/enju_bookmark', branch: '1.2'
 
 # To use debugger
