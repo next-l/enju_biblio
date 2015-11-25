@@ -229,11 +229,19 @@ class Manifestation < ActiveRecord::Base
   validates :manifestation_identifier, uniqueness: true, allow_blank: true
   validates :pub_date, format: {with: /\A\[{0,1}\d+([\/-]\d{0,2}){0,2}\]{0,1}\z/}, allow_blank: true
   validates :access_address, url: true, allow_blank: true, length: {maximum: 255}
+<<<<<<< HEAD
   validates :issue_number, numericality: {greater_than: 0}, allow_blank: true
   validates :volume_number, numericality: {greater_than: 0}, allow_blank: true
   validates :serial_number, numericality: {greater_than: 0}, allow_blank: true
   validates :edition, numericality: {greater_than: 0}, allow_blank: true
   before_create :set_fingerprint, if: Proc.new{|model| model.attachment}
+=======
+  validates :issue_number, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :volume_number, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :serial_number, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  validates :edition, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
+  after_create :clear_cached_numdocs
+>>>>>>> 4348f0f... accept 0 for volume_number
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement, :extract_text!
   after_destroy :index_series_statement
