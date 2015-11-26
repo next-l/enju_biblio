@@ -33,8 +33,12 @@ class Identifier < ActiveRecord::Base
       end
 
     when 'doi'
-      if URI.parse(body).scheme
-        errors.add(:body)
+      begin
+        if URI.parse(body).scheme
+          errors.add(:body)
+        end
+      rescue URI::InvalidURIError
+        nil
       end
     end
   end
