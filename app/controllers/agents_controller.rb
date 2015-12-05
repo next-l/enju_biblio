@@ -81,7 +81,7 @@ class AgentsController < ApplicationController
       format.xml  { render xml: @agents }
       format.rss  { render layout: false }
       format.atom
-      format.json { render json: @agents }
+      format.json
       format.html.phone
     end
   end
