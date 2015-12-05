@@ -1,5 +1,5 @@
 <%= render 'page/required_field' %>
-<%= simple_nested_form_for(@manifestation, html: { multipart: true }) do |f| -%>
+<%= simple_form_for(@manifestation, html: { multipart: true }) do |f| -%>
   <%= f.error_messages -%>
 
   <% if @manifestation.original_manifestations.exists? or @parent %>
