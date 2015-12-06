@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150221063719) do
+ActiveRecord::Schema.define(version: 20151125004028) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer  "basket_id"
@@ -158,12 +158,14 @@ ActiveRecord::Schema.define(version: 20150221063719) do
     t.string   "birth_date"
     t.string   "death_date"
     t.string   "agent_identifier"
+    t.integer  "profile_id"
   end
 
   add_index "agents", ["agent_identifier"], name: "index_agents_on_agent_identifier"
   add_index "agents", ["country_id"], name: "index_agents_on_country_id"
   add_index "agents", ["full_name"], name: "index_agents_on_full_name"
   add_index "agents", ["language_id"], name: "index_agents_on_language_id"
+  add_index "agents", ["profile_id"], name: "index_agents_on_profile_id"
   add_index "agents", ["required_role_id"], name: "index_agents_on_required_role_id"
 
   create_table "baskets", force: :cascade do |t|
