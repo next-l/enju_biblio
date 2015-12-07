@@ -66,6 +66,8 @@ module EnjuBiblio
         link_to identifier.body, "http://lccn.loc.gov/#{identifier.body}"
       when 'ncid'
         link_to identifier.body, "http://ci.nii.ac.jp/ncid/#{identifier.body}"
+      when 'isbn'
+        Lisbn.new(identifier.body).isbn_with_dash
       else
         identifier.body
       end
