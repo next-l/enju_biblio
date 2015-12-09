@@ -3,7 +3,7 @@ class ApplicationController < ActionController::Base
 
   include EnjuLeaf::Controller
   include EnjuBiblio::Controller
-  enju_library
+  include EnjuLibrary::Controller
   enju_inventory
   enju_event
   enju_subject
