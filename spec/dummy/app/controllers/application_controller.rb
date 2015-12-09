@@ -1,8 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
 
-  enju_leaf
-  enju_biblio
+  include EnjuLeaf::Controller
+  include EnjuBiblio::Controller
   enju_library
   enju_inventory
   enju_event
