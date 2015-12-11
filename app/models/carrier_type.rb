@@ -2,7 +2,6 @@ class CarrierType < ActiveRecord::Base
   include MasterModel
   default_scope { order("carrier_types.position") }
   has_many :manifestations
-  enju_circulation_carrier_type_model if defined?(EnjuCirculation)
   attachment :attachment
 
   def mods_type

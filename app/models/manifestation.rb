@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 class Manifestation < ActiveRecord::Base
   enju_subject_manifestation_model if defined?(EnjuSubject)
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)

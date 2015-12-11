@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 class Agent < ActiveRecord::Base
   scope :readable_by, lambda{ |user|
     if user
