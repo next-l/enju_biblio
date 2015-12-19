@@ -376,6 +376,11 @@ class ManifestationsController < ApplicationController
       @manifestation.parent_id = @parent.id
       @manifestation.original_title = @parent.original_title
       @manifestation.title_transcription = @parent.title_transcription
+      @manifestation.creators = @parent.creators
+      @manifestation.contributors = @parent.contributors
+      @manifestation.publishers = @parent.publishers
+      @manifestation.classifications = @parent.classifications
+      @manifestation.subjects = @parent.subjects
       @manifestation.serial = true if @parent.serial
     end
 

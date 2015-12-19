@@ -367,6 +367,28 @@ describe ManifestationsController do
         get :new, :expression_id => 1
         expect(response).to be_success
       end
+
+      it "should get new template with parent_id" do
+        serial = FactoryGirl.create(:manifestation_serial)
+        serial.creators << FactoryGirl.create(:agent)
+        serial.contributors << FactoryGirl.create(:agent)
+        serial.publishers << FactoryGirl.create(:agent)
+        serial.subjects << FactoryGirl.create(:subject)
+        serial.classifications << FactoryGirl.create(:classification)
+        serial.save!
+        get :new, :parent_id => serial.id
+        expect(response).to be_success
+        manifestation = assigns(:manifestation)
+        parent = assigns(:parent)
+        expect(parent).to be_truthy
+        expect(manifestation.original_title).to eq parent.original_title
+        expect(manifestation.creators).to eq parent.creators
+        expect(manifestation.contributors).to eq parent.contributors
+        expect(manifestation.publishers).to eq parent.publishers
+        expect(manifestation.classifications).to eq parent.classifications
+        expect(manifestation.subjects).to eq parent.subjects
+      end
+
     end
 
     describe "When logged in as User" do
