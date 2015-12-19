@@ -512,8 +512,19 @@ class Manifestation < ActiveRecord::Base
       publisher
       pub_date
       manifestation_price
-      isbn
-      issn
+      manifestation_created_at
+      manifestation_updated_at
+      manifestation_identifier
+      note
+    )
+    identifiers = {}
+    Identifier.find_each do |identifier|
+      identifiers[identifier.identifier_type.name] = true
+    end
+    identifiers = identifiers.keys.sort
+    header += identifiers
+    header += %w(
+      item_id
       item_identifier
       call_number
       item_price
@@ -539,8 +550,10 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.price
           item_lines << m.created_at
           item_lines << m.updated_at
-          m.identifiers.each do |identifier_type|
-            item_lines << m.identifier_contents(identifier_type.name.to_sym).first
+          item_lines << m.manifestation_identifier
+          item_lines << note
+          identifiers.each do |identifier_type|
+            item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
           item_lines << i.item_identifier
           item_lines << i.call_number
@@ -566,8 +579,10 @@ class Manifestation < ActiveRecord::Base
         line << m.price
         line << m.created_at
         line << m.updated_at
-        m.identifiers.each do |identifier|
-          line << m.identifier_contents(identifier.identifier_type.name.to_sym).first
+        line << m.manifestation_identifier
+        line << m.note
+        identifiers.each do |identifier_type|
+          line << m.identifier_contents(identifier_type.to_sym).first
         end
         lines << line
       end
