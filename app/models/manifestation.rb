@@ -541,6 +541,7 @@ class Manifestation < ActiveRecord::Base
       manifestation_created_at
       manifestation_updated_at
       manifestation_identifier
+      access_address
       note
     )
     identifiers = {}
@@ -579,6 +580,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.created_at
           item_lines << m.updated_at
           item_lines << m.manifestation_identifier
+          item_lines << access_address
           item_lines << note
           identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
@@ -609,6 +611,7 @@ class Manifestation < ActiveRecord::Base
         line << m.created_at
         line << m.updated_at
         line << m.manifestation_identifier
+        line << access_address
         line << m.note
         identifiers.each do |identifier_type|
           line << m.identifier_contents(identifier_type.to_sym).first
