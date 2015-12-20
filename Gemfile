@@ -20,6 +20,7 @@ gem 'enju_ndl', github: 'next-l/enju_ndl', branch: '1.2'
 gem 'enju_oai', github: 'next-l/enju_oai', branch: '1.2'
 gem 'enju_inventory', github: 'next-l/enju_inventory', branch: '1.2'
 gem 'enju_manifestation_viewer', github: 'next-l/enju_manifestation_viewer', branch: '1.2'
+gem 'jquery-rails'
 
 # To use debugger
 # gem 'debugger'
