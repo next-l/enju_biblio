@@ -36,7 +36,7 @@ matrix:
   - rvm: 2.2.4
     gemfile: gemfiles/rails_3.2.gemfile
   include:
-  - rvm: 2.2.3
+  - rvm: 2.2.4
     gemfile: gemfiles/rails_4.2_oai.gemfile
     env: DB=postgresql
 notifications:
