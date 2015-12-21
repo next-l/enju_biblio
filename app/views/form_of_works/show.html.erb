@@ -26,6 +26,6 @@
     <%- if policy(@form_of_work).update? -%>
       <li><%= link_to t('page.edit'), edit_form_of_work_path(@form_of_work) -%></li>
     <%- end -%>
-    <li><%= back_to_index(flash[:page_info]) -%></li>
+    <li><%= t('page.back'), :back -%></li>
   </ul>
 </div>
