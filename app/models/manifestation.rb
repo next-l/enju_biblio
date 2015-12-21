@@ -591,7 +591,7 @@ class Manifestation < ActiveRecord::Base
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
           item_lines << m.classifications.map{|classification|
-            {"#{classification.classification_type.name}": "#{classification.category}"}
+            {"#{classification.classification_type.name}" => "#{classification.category}"}
           }.reduce(Hash.new, :merge).to_json
           item_lines << i.id
           item_lines << i.item_identifier
