@@ -26,6 +26,6 @@
     <%- if policy(@agent_type).update? -%>
       <li><%= link_to t('page.edit'), edit_agent_type_path(@agent_type) -%></li>
     <%- end -%>
-    <li><%= t('page.back'), :back -%></li>
+    <li><%= link_to t('page.back'), :back -%></li>
   </ul>
 </div>

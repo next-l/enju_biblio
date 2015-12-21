@@ -37,6 +37,6 @@
     <%- if policy(@carrier_type).update? -%>
       <li><%= link_to t('page.edit'), edit_carrier_type_path(@carrier_type) -%></li>
     <%- end -%>
-    <li><%= t('page.back'), :back -%></li>
+    <li><%= link_to t('page.back'), :back -%></li>
   </ul>
 </div>

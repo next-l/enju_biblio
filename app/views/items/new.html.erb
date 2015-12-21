@@ -11,10 +11,6 @@
   <%- end -%>
 
   <ul>
-    <%- if @manifestation -%>
-      <li><%= link_to t('page.back'), items_path(manifestation_id: @manifestation.id) -%></li>
-    <%- else -%>
-      <li><%= link_to t('page.back'), items_path -%></li>
-    <%- end -%>
+    <li><%= link_to t('page.back'), :back %></li>
   </ul>
 </div>
