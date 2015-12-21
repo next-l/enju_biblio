@@ -12,10 +12,6 @@
     <% if policy(@manifestation).destroy? %>
       <li><%= link_to t('page.destroy'), @manifestation, data: {confirm: t('page.are_you_sure')}, method: :delete -%></li>
     <% end %>
-    <%- case when @agent -%>
-      <li><%= link_to t('page.back'), publisher_manifestations_path(@agent) -%></li>
-    <%- else -%>
-      <li><%= link_to t('page.back'), manifestations_path -%></li>
-    <%- end -%>
+    <li><%= link_to t('page.back'), :back -%></li>
   </ul>
 </div>
