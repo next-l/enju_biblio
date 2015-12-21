@@ -551,6 +551,10 @@ class Manifestation < ActiveRecord::Base
     identifiers = identifiers.keys.sort
     header += identifiers
     header += %w(
+      classification
+    ) if defined?(EnjuSubject)
+
+    header += %w(
       item_id
       item_identifier
       call_number
@@ -565,6 +569,7 @@ class Manifestation < ActiveRecord::Base
       item_created_at
       item_updated_at
     )
+
     lines = []
     lines << header
     Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
@@ -585,6 +590,9 @@ class Manifestation < ActiveRecord::Base
           identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
+          item_lines << m.classifications.map{|classification|
+            {"#{classification.classification_type.name}": "#{classification.category}"}
+          }.reduce(Hash.new, :merge).to_json
           item_lines << i.id
           item_lines << i.item_identifier
           item_lines << i.call_number

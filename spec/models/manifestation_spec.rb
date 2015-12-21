@@ -226,6 +226,7 @@ describe Manifestation, :solr => true do
   context ".export" do
     it "should export a header line" do
       lines = Manifestation.export
+      CSV.parse(lines)
       (header, *lines) = lines.split(/\r?\n/)
       header = header.split(/\t/)
       expect(header.size).to eq lines.first.split(/\t/).size
