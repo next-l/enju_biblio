@@ -537,6 +537,7 @@ class Manifestation < ActiveRecord::Base
       creator
       publisher
       pub_date
+      statement_of_responsibility
       manifestation_price
       manifestation_created_at
       manifestation_updated_at
@@ -581,6 +582,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.creators.pluck(:full_name).join("//")
           item_lines << m.publishers.pluck(:full_name).join("//")
           item_lines << m.pub_date
+          item_lines << m.statement_of_responsibility
           item_lines << m.price
           item_lines << m.created_at
           item_lines << m.updated_at
@@ -615,6 +617,7 @@ class Manifestation < ActiveRecord::Base
         line << m.creators.pluck(:full_name).join("//")
         line << m.publishers.pluck(:full_name).join("//")
         line << m.pub_date
+        line << m.statement_of_responsibility
         line << m.price
         line << m.created_at
         line << m.updated_at
