@@ -65,16 +65,7 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, multiple: true do
-      identifier_contents(:isbn).map{|i|
-        isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
-        isbn10 = Lisbn.new(i).isbn10
-        isbn13 =  Lisbn.new(i).isbn13
-        isbn10_dash = Lisbn.new(isbn10).isbn_with_dash if isbn10
-        isbn13_dash = Lisbn.new(isbn13).isbn_with_dash if isbn13
-        [
-          isbn10, isbn13, isbn10_dash, isbn13_dash
-        ]
-      }.flatten
+      isbn_characters
     end
     string :issn, multiple: true do
       if series_statements.exists?
@@ -179,9 +170,7 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      identifier_contents(:isbn).map{|i|
-        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
-      }.flatten
+      isbn_characters
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statements.exists?
@@ -632,6 +621,19 @@ class Manifestation < ActiveRecord::Base
     else
       lines
     end
+  end
+
+  def isbn_characters
+    identifier_contents(:isbn).map{|i|
+      isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
+      isbn10 = Lisbn.new(i).isbn10
+      isbn13 =  Lisbn.new(i).isbn13
+      isbn10_dash = Lisbn.new(isbn10).isbn_with_dash if isbn10
+      isbn13_dash = Lisbn.new(isbn13).isbn_with_dash if isbn13
+      [
+        isbn10, isbn13, isbn10_dash, isbn13_dash
+      ]
+    }.flatten
   end
 end
 
