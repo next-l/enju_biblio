@@ -534,6 +534,7 @@ class Manifestation < ActiveRecord::Base
       manifestation_id
       original_title
       creator
+      contributor
       publisher
       pub_date
       statement_of_responsibility
@@ -579,6 +580,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.id
           item_lines << m.original_title
           item_lines << m.creators.pluck(:full_name).join("//")
+          item_lines << m.contributors.pluck(:full_name).join("//")
           item_lines << m.publishers.pluck(:full_name).join("//")
           item_lines << m.pub_date
           item_lines << m.statement_of_responsibility
@@ -616,6 +618,7 @@ class Manifestation < ActiveRecord::Base
         line << m.id
         line << m.original_title
         line << m.creators.pluck(:full_name).join("//")
+        line << m.contributors.pluck(:full_name).join("//")
         line << m.publishers.pluck(:full_name).join("//")
         line << m.pub_date
         line << m.statement_of_responsibility
