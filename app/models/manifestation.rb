@@ -24,7 +24,6 @@ class Manifestation < ActiveRecord::Base
   belongs_to :carrier_type
   belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
   has_many :series_statements
-  has_one :root_series_statement, foreign_key: 'root_manifestation_id', class_name: 'SeriesStatement'
   belongs_to :frequency
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   has_one :resource_import_result
@@ -642,6 +641,10 @@ class Manifestation < ActiveRecord::Base
     else
       lines
     end
+  end
+
+  def root_series_statement
+    series_statements.where(root_manifestation_id: id).first
   end
 end
 
