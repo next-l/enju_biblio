@@ -592,9 +592,11 @@ class Manifestation < ActiveRecord::Base
           identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
-          item_lines << m.classifications.map{|classification|
-            [{"#{classification.classification_type.name}" => "#{classification.category}"}
-          }.reduce(Hash.new, :merge).to_yaml].to_csv if defined?(EnjuSubject)
+          item_lines << [
+            m.classifications.map{|classification|
+              {"#{classification.classification_type.name}" => "#{classification.category}"}
+            }.reduce(Hash.new, :merge).to_yaml
+          ].to_csv if defined?(EnjuSubject)
           item_lines << i.id
           item_lines << i.item_identifier
           item_lines << i.call_number
@@ -627,9 +629,11 @@ class Manifestation < ActiveRecord::Base
         identifiers.each do |identifier_type|
           line << m.identifier_contents(identifier_type.to_sym).first
         end
-        line << m.classifications.map{|classification|
-          {"#{classification.classification_type.name}" => "#{classification.category}"}
-        }.reduce(Hash.new, :merge).to_yaml if defined?(EnjuSubject)
+        line << [
+          m.classifications.map{|classification|
+            {"#{classification.classification_type.name}" => "#{classification.category}"}
+          }.reduce(Hash.new, :merge).to_yaml
+        ].to_csv if defined?(EnjuSubject)
         lines << line
       end
     end
