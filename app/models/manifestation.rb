@@ -629,7 +629,7 @@ class Manifestation < ActiveRecord::Base
       end
     end
     if options[:format] == :txt
-      lines.map{|i| i.join("\t")}.join("\r\n")
+      lines.map{|i| i.to_csv(col_sep: "\t")}.join
     else
       lines
     end
