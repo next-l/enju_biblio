@@ -4,6 +4,7 @@ class SeriesStatement < ActiveRecord::Base
   belongs_to :manifestation, touch: true
   belongs_to :root_manifestation, foreign_key: :root_manifestation_id, class_name: 'Manifestation', touch: true
   validates_presence_of :original_title
+  validates :root_manifestation_id, uniqueness: true, allow_nil: true
   before_save :create_root_series_statement
 
   acts_as_list
@@ -30,7 +31,7 @@ class SeriesStatement < ActiveRecord::Base
   end
 
   def create_root_series_statement
-    if series_master? && root_manifestation.nil?
+    if series_master?
       self.root_manifestation = manifestation
     else
       self.root_manifestation = nil
