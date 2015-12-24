@@ -24,7 +24,6 @@ class Manifestation < ActiveRecord::Base
   belongs_to :carrier_type
   belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
   has_many :series_statements
-  has_one :root_series_statement, foreign_key: 'root_manifestation_id', class_name: 'SeriesStatement'
   belongs_to :frequency
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   has_one :resource_import_result
@@ -524,8 +523,10 @@ class Manifestation < ActiveRecord::Base
       manifestation_id
       original_title
       creator
+      contributor
       publisher
       pub_date
+      statement_of_responsibility
       manifestation_price
       manifestation_created_at
       manifestation_updated_at
@@ -539,9 +540,9 @@ class Manifestation < ActiveRecord::Base
     end
     identifiers = identifiers.keys.sort
     header += identifiers
-    header += %w(
-      classification
-    ) if defined?(EnjuSubject)
+    #header += %w(
+    #  classification
+    #) if defined?(EnjuSubject)
 
     header += %w(
       item_id
@@ -568,8 +569,10 @@ class Manifestation < ActiveRecord::Base
           item_lines << m.id
           item_lines << m.original_title
           item_lines << m.creators.pluck(:full_name).join("//")
+          item_lines << m.contributors.pluck(:full_name).join("//")
           item_lines << m.publishers.pluck(:full_name).join("//")
           item_lines << m.pub_date
+          item_lines << m.statement_of_responsibility
           item_lines << m.price
           item_lines << m.created_at
           item_lines << m.updated_at
@@ -579,9 +582,11 @@ class Manifestation < ActiveRecord::Base
           identifiers.each do |identifier_type|
             item_lines << m.identifier_contents(identifier_type.to_sym).first
           end
-          item_lines << m.classifications.map{|classification|
-            {"#{classification.classification_type.name}": "#{classification.category}"}
-          }.reduce(Hash.new, :merge).to_json
+          #item_lines << [
+          #  m.classifications.map{|classification|
+          #    {"#{classification.classification_type.name}" => "#{classification.category}"}
+          #  }.reduce(Hash.new, :merge).to_yaml
+          #].to_csv if defined?(EnjuSubject)
           item_lines << i.id
           item_lines << i.item_identifier
           item_lines << i.call_number
@@ -602,8 +607,10 @@ class Manifestation < ActiveRecord::Base
         line << m.id
         line << m.original_title
         line << m.creators.pluck(:full_name).join("//")
+        line << m.contributors.pluck(:full_name).join("//")
         line << m.publishers.pluck(:full_name).join("//")
         line << m.pub_date
+        line << m.statement_of_responsibility
         line << m.price
         line << m.created_at
         line << m.updated_at
@@ -613,6 +620,11 @@ class Manifestation < ActiveRecord::Base
         identifiers.each do |identifier_type|
           line << m.identifier_contents(identifier_type.to_sym).first
         end
+        #line << [
+        #  m.classifications.map{|classification|
+        #    {"#{classification.classification_type.name}" => "#{classification.category}"}
+        #  }.reduce(Hash.new, :merge).to_yaml
+        #].to_csv if defined?(EnjuSubject)
         lines << line
       end
     end
@@ -621,6 +633,10 @@ class Manifestation < ActiveRecord::Base
     else
       lines
     end
+  end
+
+  def root_series_statement
+    series_statements.where(root_manifestation_id: id).first
   end
 
   def isbn_characters

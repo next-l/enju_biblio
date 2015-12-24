@@ -42,7 +42,7 @@ describe Manifestation, :solr => true do
     openurl.query_text.should eq "atitle_text:2005"
     openurl = Openurl.new({:atitle => "テスト", :jtitle => "テスト雑誌"})
     results = openurl.search
-    results.size.should eq 1
+    results.size.should eq 2
   end
 
   it "should search agent in openurl" do

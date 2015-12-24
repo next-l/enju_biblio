@@ -36,6 +36,6 @@
     <% if policy(@series_statement).update? %>
       <li><%= link_to t('page.edit'), edit_series_statement_path(@series_statement) %></li>
     <% end %>
-    <li><%= link_to t('page.back'), :back %></li>
+    <li><%= back_to_index(flash[:page_info]) %></li>
   </ul>
 </div>
