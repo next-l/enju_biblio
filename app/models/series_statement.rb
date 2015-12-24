@@ -5,6 +5,8 @@ class SeriesStatement < ActiveRecord::Base
   belongs_to :root_manifestation, foreign_key: :root_manifestation_id, class_name: 'Manifestation', touch: true
   validates_presence_of :original_title
   before_save :create_root_series_statement
+  after_save :reindex
+  after_destroy :reindex
 
   acts_as_list
   searchable do
@@ -21,6 +23,11 @@ class SeriesStatement < ActiveRecord::Base
   strip_attributes only: :original_title
 
   paginates_per 10
+
+  def reindex
+    manifestation.try(:index)
+    root_manifestation.try(:index)
+  end
 
   def titles
     [
