@@ -6,7 +6,6 @@ appraise "rails-3.2" do
   gem "cache_digests"
   gem "foreigner"
   gem "coveralls", require: false
-  gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '1.1'
 end
 
 appraise "rails-4.1" do
@@ -14,14 +13,12 @@ appraise "rails-4.1" do
   gem "jquery-rails"
   gem "foreigner"
   gem "coveralls", require: false
-  gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '1.1'
 end
 
 appraise "rails-4.2" do
   gem "rails", "~> 4.2.5"
   gem "jquery-rails"
   gem "coveralls", require: false
-  gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '1.1'
 end
 
 appraise "rails-4.2-oai" do
@@ -29,5 +26,4 @@ appraise "rails-4.2-oai" do
   gem "jquery-rails"
   gem "coveralls", require: false
   gem "enju_oai", "~> 0.1.0"
-  gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '1.1'
 end
