@@ -3,7 +3,7 @@ manifestation_00001:
   carrier_type_id: 1
   language_id: 1
   updated_at: 2007-11-19 16:59:00.293393 +09:00
-  original_title: "\xE3\x82\x88\xE3\x81\x8F\xE3\x82\x8F\xE3\x81\x8B\xE3\x82\x8B\xE6\x9C\x80\xE6\x96\xB0Web\xE3\x82\xB5\xE3\x83\xBC\xE3\x83\x93\xE3\x82\xB9\xE6\x8A\x80\xE8\xA1\x93"
+  original_title: "よくわかる最新Webサービス技術の基本と仕組み : 標準Webシステム技術とeコマース基盤技術入門"
   price: 
   manifestation_identifier: 
   depth: 
@@ -20,7 +20,7 @@ manifestation_00002:
   carrier_type_id: 1
   language_id: 1
   updated_at: 2007-11-19 16:59:01.991512 +09:00
-  original_title: "\xE6\x83\x85\xE5\xA0\xB1\xE9\x80\x9A\xE4\xBF\xA1\xE3\x83\x8F\xE3\x83\xB3\xE3\x83\x89\xE3\x83\x96\xE3\x83\x83\xE3\x82\xAF2005"
+  original_title: "情報通信ハンドブック : 情報通信の最新データがわかる 2005年版"
   price: 
   manifestation_identifier: 
   depth: 
@@ -112,7 +112,7 @@ manifestation_00008:
   carrier_type_id: 1
   language_id: 1
   updated_at: 2007-11-19 16:59:07.463333 +09:00
-  original_title: "Web\xE3\x82\xB5\xE3\x83\xBC\xE3\x83\x93\xE3\x82\xB9\xE5\xAE\x8C\xE5\x85\xA8\xE8\xA7\xA3\xE8\xAA\xAC"
+  original_title: "Webサービス完全解説 : 基礎からわかる次世代インターネット・テクノロジー"
   price: 
   manifestation_identifier: 
   depth: 

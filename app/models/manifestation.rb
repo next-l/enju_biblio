@@ -568,9 +568,21 @@ class Manifestation < ActiveRecord::Base
           item_lines = []
           item_lines << m.id
           item_lines << m.original_title
-          item_lines << m.creators.pluck(:full_name).join("//")
-          item_lines << m.contributors.pluck(:full_name).join("//")
-          item_lines << m.publishers.pluck(:full_name).join("//")
+          if m.creators.exists?
+            item_lines << m.creators.pluck(:full_name).join("//")
+          else
+            item_lines << nil
+          end
+          if m.contributors.exists?
+            item_lines << m.contributors.pluck(:full_name).join("//")
+          else
+            item_lines << nil
+          end
+          if m.publishers.exists?
+            item_lines << m.publishers.pluck(:full_name).join("//")
+          else
+            item_lines << nil
+          end
           item_lines << m.pub_date
           item_lines << m.statement_of_responsibility
           item_lines << m.price
@@ -606,9 +618,21 @@ class Manifestation < ActiveRecord::Base
         line = []
         line << m.id
         line << m.original_title
-        line << m.creators.pluck(:full_name).join("//")
-        line << m.contributors.pluck(:full_name).join("//")
-        line << m.publishers.pluck(:full_name).join("//")
+        if m.creators.exists?
+          line << m.creators.pluck(:full_name).join("//")
+        else
+          line << nil
+        end
+        if m.contributors.exists?
+          line << m.contributors.pluck(:full_name).join("//")
+        else
+          line << nil
+        end
+        if m.publishers.exists?
+          line << m.publishers.pluck(:full_name).join("//")
+        else
+          line << nil
+        end
         line << m.pub_date
         line << m.statement_of_responsibility
         line << m.price
