@@ -378,6 +378,8 @@ describe ManifestationsController do
                                     depth: 123,
                                     price: "price1",
                                     access_address: "http://example.jp",
+                                    language_id: FactoryGirl.create(:language).id,
+                                    frequency_id: FactoryGirl.create(:frequency).id,
                                    )
         serial.creators << FactoryGirl.create(:agent)
         serial.contributors << FactoryGirl.create(:agent)
@@ -404,6 +406,8 @@ describe ManifestationsController do
         expect(manifestation.depth).to eq parent.depth
         expect(manifestation.price).to eq parent.price
         expect(manifestation.access_address).to eq parent.access_address
+        expect(manifestation.language).to eq parent.language
+        expect(manifestation.frequency).to eq parent.frequency
       end
 
     end
