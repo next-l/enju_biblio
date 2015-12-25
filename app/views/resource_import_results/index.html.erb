@@ -17,7 +17,7 @@
     <li>
     <% if @resource_import_file %>
       <%= link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), resource_import_results_path(resource_import_file_id: @resource_import_file.id, format: :txt)) -%>
-      (<%= link_to 'TSV', resource_import_results_path(resource_imporf_file_id: @resource_import_file.id, format: :txt) -%>)
+      (<%= link_to 'TSV', resource_import_results_path(resource_import_file_id: @resource_import_file.id, format: :txt) -%>)
     <% else %>
       <%= link_to((image_tag 'icons/page_white_excel.png', size: '16x16', alt: 'TSV', class: 'icon'), resource_import_results_path(format: :txt)) -%>
       (<%= link_to 'TSV', resource_import_results_path(format: :txt) -%>)
