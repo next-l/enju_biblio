@@ -223,6 +223,23 @@ describe Manifestation, :solr => true do
   #  #manifestation.volume_number.should eq 1
   #end
 
+  context ".export" do
+    it "should export a header line" do
+      lines = Manifestation.export
+      CSV.parse(lines, col_sep: "\t")
+      (header, *lines) = lines.split(/\r?\n/)
+      header = header.split(/\t/)
+      expect(header.size).to eq lines.first.split(/\t/).size
+      expect(header).to include "manifestation_id"
+      expect(header).to include "manifestation_created_at"
+      expect(header).to include "manifestation_updated_at"
+      expect(header).to include "item_created_at"
+      expect(header).to include "item_updated_at"
+      expect(header).to include "item_id"
+      expect(header).to include "manifestation_identifier"
+    end
+  end
+
   if defined?(EnjuCirculation)
     it "should respond to is_checked_out_by?" do
       manifestations(:manifestation_00001).is_checked_out_by?(users(:admin)).should be_truthy
