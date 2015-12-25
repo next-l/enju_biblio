@@ -369,7 +369,16 @@ describe ManifestationsController do
       end
 
       it "should get new template with parent_id" do
-        serial = FactoryGirl.create(:manifestation_serial)
+        serial = FactoryGirl.create(:manifestation_serial,
+                                    statement_of_responsibility: "statement_of_responsibility1",
+                                    title_alternative: "title_alternative1",
+                                    publication_place: "publication_place1",
+                                    height: 123,
+                                    width: 123,
+                                    depth: 123,
+                                    price: "price1",
+                                    access_address: "http://example.jp",
+                                   )
         serial.creators << FactoryGirl.create(:agent)
         serial.contributors << FactoryGirl.create(:agent)
         serial.publishers << FactoryGirl.create(:agent)
@@ -387,6 +396,14 @@ describe ManifestationsController do
         expect(manifestation.publishers).to eq parent.publishers
         expect(manifestation.classifications).to eq parent.classifications
         expect(manifestation.subjects).to eq parent.subjects
+        expect(manifestation.statement_of_responsibility).to eq parent.statement_of_responsibility
+        expect(manifestation.title_alternative).to eq parent.title_alternative
+        expect(manifestation.publication_place).to eq parent.publication_place
+        expect(manifestation.height).to eq parent.height
+        expect(manifestation.width).to eq parent.width
+        expect(manifestation.depth).to eq parent.depth
+        expect(manifestation.price).to eq parent.price
+        expect(manifestation.access_address).to eq parent.access_address
       end
 
     end

@@ -374,14 +374,15 @@ class ManifestationsController < ApplicationController
     @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
     if @parent
       @manifestation.parent_id = @parent.id
-      @manifestation.original_title = @parent.original_title
-      @manifestation.title_transcription = @parent.title_transcription
-      @manifestation.creators = @parent.creators
-      @manifestation.contributors = @parent.contributors
-      @manifestation.publishers = @parent.publishers
-      @manifestation.classifications = @parent.classifications
-      @manifestation.subjects = @parent.subjects
-      @manifestation.serial = true if @parent.serial
+      [ :original_title, :title_transcription,
+        :serial, :title_alternative, :statement_of_responsibility, :publication_place,
+        :height, :width, :depth, :price, :access_address,
+      ].each do |attribute|
+        @manifestation.send("#{attribute}=", @parent.send(attribute))
+      end
+      [ :creators, :contributors, :publishers, :classifications, :subjects ].each do |attribute|
+        @manifestation.send(attribute).build(@parent.send(attribute).collect(&:attributes))
+      end
     end
 
     respond_to do |format|
