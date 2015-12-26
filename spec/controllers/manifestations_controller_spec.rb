@@ -380,6 +380,7 @@ describe ManifestationsController do
                                     access_address: "http://example.jp",
                                     language_id: FactoryGirl.create(:language).id,
                                     frequency_id: FactoryGirl.create(:frequency).id,
+                                    required_role_id: FactoryGirl.create(:role).id,
                                    )
         serial.creators << FactoryGirl.create(:agent)
         serial.contributors << FactoryGirl.create(:agent)
@@ -408,6 +409,7 @@ describe ManifestationsController do
         expect(manifestation.access_address).to eq parent.access_address
         expect(manifestation.language).to eq parent.language
         expect(manifestation.frequency).to eq parent.frequency
+        expect(manifestation.required_role).to eq parent.required_role
       end
 
     end
