@@ -134,6 +134,7 @@
   <div class="field">
     <%= f.label :identifier -%><br />
     <%= f.fields_for :identifiers do |identifier_form| %>
+      <%= render 'identifier_fields', f: identifier_form %>
     <% end %>
     <div class="links">
       <p><%= link_to_add_association t('page.add'), f, :identifiers %></p>

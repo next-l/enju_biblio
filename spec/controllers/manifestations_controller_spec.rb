@@ -450,6 +450,17 @@ describe ManifestationsController do
         get :edit, :id => manifestation.id
         expect(assigns(:manifestation)).to eq(manifestation)
       end
+
+      render_views
+      it "assigns the identifiers to @manifestation" do
+        manifestation = FactoryGirl.create(:manifestation)
+        identifier = FactoryGirl.create(:identifier)
+        manifestation.identifiers << identifier
+        get :edit, :id => manifestation.id
+        expect(assigns(:manifestation)).to eq manifestation
+        expect(assigns(:manifestation).identifiers).to eq manifestation.identifiers
+        expect(response).to render_template(partial: "manifestations/identifier_fields")
+      end
     end
 
     describe "When logged in as User" do
@@ -652,6 +663,14 @@ describe ManifestationsController do
           put :update, :id => @manifestation.id, :manifestation => @attrs
           expect(assigns(:manifestation)).to eq(@manifestation)
           expect(response).to redirect_to(@manifestation)
+        end
+
+        it "assigns identifiers to @manifestation" do
+          identifiers_attrs = {
+            identifier_attributes: [ FactoryGirl.create(:identifier) ]
+          }
+          put :update, id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs)
+          expect(assigns(:manifestation)).to eq @manifestation
         end
       end
 
