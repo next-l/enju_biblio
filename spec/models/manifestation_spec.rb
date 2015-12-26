@@ -84,7 +84,7 @@ describe Manifestation, :solr => true do
     results.size.should eq 9
   end
 
-  it "should serach multi in openurl" do
+  it "should search multi in openurl" do
     openurl = Openurl.new({:btitle => "CGI Perl プログラミング"})
     results = openurl.search
     results.size.should eq 2

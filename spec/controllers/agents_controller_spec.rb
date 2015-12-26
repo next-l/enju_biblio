@@ -117,7 +117,7 @@ describe AgentsController do
       #  expect(response).to be_success
       #end
 
-      #it "should show_ atron when required_role is librarian" do
+      #it "should show patron when required_role is librarian" do
       #  get :show, :id => users(:user1).agent.id
       #  expect(assigns(:agent)).to eq(users(:user1).agent)
       #  expect(response).to be_success
