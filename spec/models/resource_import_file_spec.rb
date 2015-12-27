@@ -16,7 +16,7 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 8, :manifestation_found => 5, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 9, :manifestation_found => 6, :item_found => 3, :failed => 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -25,10 +25,10 @@ describe ResourceImportFile do
         manifestation.creates.first.create_type.name.should eq 'author'
         manifestation.identifier_contents(:issn).should eq ['03875806']
         Manifestation.count.should eq old_manifestations_count + 9
-        Item.count.should eq old_items_count + 8
+        Item.count.should eq old_items_count + 9
         Agent.count.should eq old_agents_count + 9
         @file.resource_import_results.order(:id).first.body.split("\t").first.should eq 'manifestation_identifier'
-        ResourceImportResult.count.should eq old_import_results_count + 21
+        ResourceImportResult.count.should eq old_import_results_count + 22
 
         manifestation_101 = Manifestation.where(manifestation_identifier: '101').first
         manifestation_101.series_statements.count.should eq 1
@@ -36,6 +36,7 @@ describe ResourceImportFile do
         manifestation_101.series_statements.first.title_transcription.should eq 'しゅしりーず'
         manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ'
         manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず'
+        manifestation_101.items.order(:id).last.call_number.should eq '007|A'
 
         item_10101 = Item.where(item_identifier: '10101').first
         item_10101.manifestation.creators.size.should eq 2
@@ -112,7 +113,7 @@ describe ResourceImportFile do
         manifestation_104.creators.collect(&:full_name).should eq ['test3']
         manifestation_104.publishers.collect(&:full_name).should eq ['test4']
 
-        ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 8: #{I18n.t('import.manifestation_found')}"
+        ResourceImportResult.where(manifestation_id: manifestation_101.id).order(:id).last.error_message.should eq "line 22: #{I18n.t('import.manifestation_found')}"
         ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
 
         Item.where(item_identifier: '11113').first.manifestation.original_title.should eq 'test10'

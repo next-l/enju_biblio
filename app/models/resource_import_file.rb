@@ -179,21 +179,21 @@ class ResourceImportFile < ActiveRecord::Base
       end
       import_result.manifestation = manifestation
 
-      if manifestation && item_identifier.present?
-        import_result.item = create_item(row, manifestation)
-      else
-        if manifestation.try(:fulltext_content?)
-          item = Item.new
-          item.circulation_status = CirculationStatus.where(name: 'Available On Shelf').first
-          item.shelf = Shelf.web
-          begin
-            item.acquired_at = Time.zone.parse(row['acquired_at'].to_s.strip)
-          rescue ArgumentError
+      if manifestation
+        if item_identifier.present? or row['shelf'].present?
+          import_result.item = create_item(row, manifestation)
+        else
+          if manifestation.fulltext_content?
+            item = create_item(row, manifestation)
+            item.circulation_status = CirculationStatus.where(name: 'Available On Shelf').first
+            begin
+              item.acquired_at = Time.zone.parse(row['acquired_at'].to_s.strip)
+            rescue ArgumentError
+            end
           end
-          item.manifestation_id = manifestation.id
-          item.save!
-          manifestation.items << item
+          num[:failed] += 1
         end
+      else
         num[:failed] += 1
       end
 
