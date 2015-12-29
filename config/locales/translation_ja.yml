@@ -420,6 +420,7 @@ ja:
     merge_resource: "%{model}を統合する"
     new_acquisition: 新規受入
     per_page: "%{num}件ずつ表示"
+    new_item: 所蔵作成
 
   merge_list:
     successfully_merged: "%{model}は正常に統合されました。"

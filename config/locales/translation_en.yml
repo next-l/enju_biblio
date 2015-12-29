@@ -416,6 +416,7 @@ en:
     merge_resource: "Merge %{model}"
     new_acquisition: Acquisition
     per_page: "%{num} records per page"
+    new_item: New item
 
   merge_list:
     successfully_merged: "%{model} were merged successfully."
