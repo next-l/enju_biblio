@@ -47,7 +47,7 @@ describe ResourceImportFile do
         item_10101.budget_type.name.should eq 'Public fund'
         item_10101.bookstore.name.should eq 'Example store'
         item_10101.manifestation.classifications.count.should eq 1
-        item_10101.manifestation.classifications.first.classification_type.name.should eq 'ndc'
+        item_10101.manifestation.classifications.first.classification_type.name.should eq 'ndc9'
         item_10101.manifestation.classifications.first.category.should eq '007'
         item_10101.manifestation.language.name.should eq 'Japanese'
         item_10101.manifestation.statement_of_responsibility.should eq '著者A; 著者B'
@@ -105,7 +105,7 @@ describe ResourceImportFile do
         item_10104.manifestation.width.should be_nil
         item_10104.manifestation.depth.should be_nil
         item_10104.manifestation.subjects.order(:id).map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
-        item_10104.manifestation.classifications.order(:id).map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
+        item_10104.manifestation.classifications.order(:id).map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc9" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
 
         manifestation_104 = Manifestation.where(manifestation_identifier: '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
