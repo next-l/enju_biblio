@@ -35,24 +35,30 @@
       <%- end -%>
     </p>
 
-    <p>
-      <%= t('page.sort_by') -%>:
-      <%- if params[:sort_by].blank? -%>
-        <strong><%= t('manifestation.date_of_acquisition') -%></strong>
-      <%- else -%>
-        <%= link_to t('manifestation.date_of_acquisition'), url_for(params.merge(sort_by: nil, only_path: true)) -%>
+    <div class="field">
+      <%= form_for :manifestations, url: manifestations_path, html: {method: 'get'} do -%>
+        <p>
+          <%= t('page.sort_by') -%>:
+          <%= select_tag 'sort_by', options_for_select({
+            t('page.created_at') => 'created_at',
+            t('activerecord.attributes.manifestation.pub_date') => 'pub_date',
+            t('page.title') => 'title',
+          }, selected: params[:sort_by] || 'created_at') -%>
+          <%= select_tag 'order', options_for_select({
+            t('page.asc') => 'asc',
+            t('page.desc') => 'desc'
+          }, selected: params[:order] || 'asc') -%>
+          <%= select_tag 'per_page', options_for_select({
+            t('page.per_page', num: 10) => 10,
+            t('page.per_page', num: 20) => 20,
+            t('page.per_page', num: 50) => 50,
+            t('page.per_page', num: 100) => 100,
+          }) %>
+          <%= hidden_field_tag 'query', @query -%>
+          <%= submit_tag t('page.search') -%><br />
+        </p>
       <%- end -%>
-      <%- if params[:sort_by] == 'pub_date' -%>
-        <strong><%= t('activerecord.attributes.manifestation.date_of_publication') -%></strong>
-      <%- else -%>
-        <%= link_to t('activerecord.attributes.manifestation.date_of_publication'), url_for(params.merge(sort_by: 'pub_date', only_path: true)) -%>
-      <%- end -%>
-      <%- if params[:sort_by] == 'title' -%>
-        <strong><%= t('page.title') -%></strong>
-      <%- else -%>
-        <%= link_to t('page.title'), url_for(params.merge(sort_by: 'title', only_path: true)) -%>
-      <%- end -%>
-    </p>
+    </div>
 
     <div class="autopagerize_page_element" id="list">
       <table class="table table-striped index" id="manifestation_list">
