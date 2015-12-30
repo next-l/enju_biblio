@@ -450,7 +450,8 @@ class ResourceImportFile < ActiveRecord::Base
       dummy
     )
     if defined?(EnjuSubject)
-      header_columns += %w(subject classification)
+      header_columns += ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}
+      header_columns += SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}
     end
     header = file.first
     ignored_columns = header - header_columns
@@ -467,52 +468,37 @@ class ResourceImportFile < ActiveRecord::Base
 
   def import_subject(row)
     subjects = []
-    subject_list = YAML.load(row['subject'].to_s)
-    # TODO: Subject typeの設定
-    return subjects unless subject_list
-    subject_list.map{|k, v|
-      subject_heading_type = SubjectHeadingType.where(name: k.downcase).first
-      next unless subject_heading_type
-      if v.is_a?(Array)
-        v.each do |term|
-          subject = Subject.new(term: term)
-          subject.subject_heading_type = subject_heading_type
-          subject.subject_type = SubjectType.where(name: 'concept').first
-          subject.save!
-          subjects << subject
-        end
-      else
-        subject = Subject.new(term: v)
+    SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}.each do |column_name|
+      type = column_name.split(':').last
+      subject_list = row[column_name].to_s.split('//')
+      subject_list.map{|value|
+        subject_heading_type = SubjectHeadingType.where(name: type).first
+        next unless subject_heading_type
+        subject = Subject.new(term: value)
         subject.subject_heading_type = subject_heading_type
+        # TODO: Subject typeの設定
         subject.subject_type = SubjectType.where(name: 'concept').first
         subject.save!
         subjects << subject
-      end
-    }
+      }
+    end
     subjects
   end
 
   def import_classification(row)
     classifications = []
-    classification_number = YAML.load(row['classification'].to_s)
-    return classifications unless classification_number
-    classification_number.map{|k, v|
-      classification_type = ClassificationType.where(name: k.downcase).first
-      next unless classification_type
-      if v.is_a?(Array)
-        v.each do |category|
-          classification = Classification.new(category: category)
-          classification.classification_type = classification_type
-          classification.save!
-          classifications << classification
-        end
-      else
-        classification = Classification.new(category: v)
+    ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}.each do |column_name|
+      type = column_name.split(':').last
+      classification_list = row[column_name].to_s.split('//')
+      classification_list.map{|value|
+        classification_type = ClassificationType.where(name: type).first
+        next unless classification_type
+        classification = Classification.new(category: value)
         classification.classification_type = classification_type
         classification.save!
         classifications << classification
-      end
-    }
+      }
+    end
     classifications
   end
 
