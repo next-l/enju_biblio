@@ -592,14 +592,26 @@ class Manifestation < ActiveRecord::Base
         item_lines << note
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-          item_lines << identifier_contents(identifier_type.to_sym).first
+          if identifier_contents(identifier_type.to_sym).first
+            item_lines << identifier_contents(identifier_type.to_sym).first
+          else
+            item_lines << nil
+          end
         end
         if defined?(EnjuSubject)
           SubjectHeadingType.order(:position).each do |subject_heading_type|
-            item_lines << subjects.where(subject_heading_type: subject_heading_type).pluck(:term)
+            if subjects.exists?
+              item_lines << subjects.where(subject_heading_type: subject_heading_type).pluck(:term).join('//')
+            else
+              item_lines << nil
+            end
           end
           ClassificationType.order(:position).each do |classification_type|
-            item_lines << classifications.where(classification_type: classification_type).pluck(:category)
+            if classifications.exists?
+              item_lines << classifications.where(classification_type: classification_type).pluck(:category).join('//')
+            else
+              item_lines << nil
+            end
           end
         end
 
@@ -647,14 +659,26 @@ class Manifestation < ActiveRecord::Base
       line << note
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-        line << identifier_contents(identifier_type.to_sym).first
+        if identifier_contents(identifier_type.to_sym).first
+          line << identifier_contents(identifier_type.to_sym).first
+        else
+          line << nil
+        end
       end
       if defined?(EnjuSubject)
         SubjectHeadingType.order(:position).each do |subject_heading_type|
-          line << subjects.where(subject_heading_type: subject_heading_type).pluck(:term)
+          if subjects.exists?
+            line << subjects.where(subject_heading_type: subject_heading_type).pluck(:term).join('//')
+          else
+            line << nil
+          end
         end
         ClassificationType.order(:position).each do |classification_type|
-          lines << classifications.where(classification_type: classification_type).pluck(:category)
+          if classifications.exists?
+            line << classifications.where(classification_type: classification_type).pluck(:category).join('//')
+          else
+            line << nil
+          end
         end
       end
 
