@@ -226,19 +226,16 @@ describe Manifestation, :solr => true do
   context ".export" do
     it "should export a header line" do
       lines = Manifestation.export
-      CSV.parse(lines, col_sep: "\t")
-      (header, *lines) = lines.split(/\r?\n/)
-      header = header.split(/\t/)
-      expect(header.size).to eq lines.first.split(/\t/).size
-      expect(header).to include "manifestation_id"
-      expect(header).to include "manifestation_created_at"
-      expect(header).to include "manifestation_updated_at"
-      expect(header).to include "item_created_at"
-      expect(header).to include "item_updated_at"
-      expect(header).to include "item_id"
-      expect(header).to include "manifestation_identifier"
-      expect(header).to include "subject:ndlsh"
-      expect(header).to include "classification:ndc9"
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      csv["manifestation_id"].compact.should_not be_empty
+      csv["manifestation_identifier"].compact.should_not be_empty
+      csv["manifestation_created_at"].compact.should_not be_empty
+      csv["manifestation_updated_at"].compact.should_not be_empty
+      csv["item_id"].compact.should_not be_empty
+      csv["item_created_at"].compact.should_not be_empty
+      csv["item_updated_at"].compact.should_not be_empty
+      csv["subject:unknown"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"next-l"}
+      csv["classification:ndc9"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"400"}
     end
   end
 
