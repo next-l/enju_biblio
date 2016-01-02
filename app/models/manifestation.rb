@@ -518,7 +518,7 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.export(options = {format: :txt})
+  def self.csv_header(options = {col_sep: "\t"})
     header = %w(
       manifestation_id
       original_title
@@ -534,15 +534,12 @@ class Manifestation < ActiveRecord::Base
       access_address
       note
     )
-    identifiers = {}
-    Identifier.find_each do |identifier|
-      identifiers[identifier.identifier_type.name] = true
+
+    header += IdentifierType.order(:position).pluck(:name)
+    if defined?(EnjuSubject)
+      header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
+      header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
     end
-    identifiers = identifiers.keys.sort
-    header += identifiers
-    #header += %w(
-    #  classification
-    #) if defined?(EnjuSubject)
 
     header += %w(
       item_id
@@ -560,103 +557,124 @@ class Manifestation < ActiveRecord::Base
       item_updated_at
     )
 
+    header.to_csv(options)
+  end
+
+  def to_csv(options = {format: :txt})
     lines = []
-    lines << header
-    Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
-      if m.items.exists?
-        m.items.includes(:shelf => :library).each do |i|
-          item_lines = []
-          item_lines << m.id
-          item_lines << m.original_title
-          if m.creators.exists?
-            item_lines << m.creators.pluck(:full_name).join("//")
-          else
-            item_lines << nil
-          end
-          if m.contributors.exists?
-            item_lines << m.contributors.pluck(:full_name).join("//")
-          else
-            item_lines << nil
-          end
-          if m.publishers.exists?
-            item_lines << m.publishers.pluck(:full_name).join("//")
-          else
-            item_lines << nil
-          end
-          item_lines << m.pub_date
-          item_lines << m.statement_of_responsibility
-          item_lines << m.price
-          item_lines << m.created_at
-          item_lines << m.updated_at
-          item_lines << m.manifestation_identifier
-          item_lines << m.access_address
-          item_lines << m.note
-          identifiers.each do |identifier_type|
-            item_lines << m.identifier_contents(identifier_type.to_sym).first
-          end
-          #item_lines << [
-          #  m.classifications.map{|classification|
-          #    {"#{classification.classification_type.name}" => "#{classification.category}"}
-          #  }.reduce(Hash.new, :merge).to_yaml
-          #].to_csv if defined?(EnjuSubject)
-          item_lines << i.id
-          item_lines << i.item_identifier
-          item_lines << i.call_number
-          item_lines << i.price
-          item_lines << i.acquired_at
-          item_lines << i.accept.try(:created_at)
-          item_lines << i.bookstore.try(:name)
-          item_lines << i.budget_type.try(:name)
-          item_lines << i.circulation_status.try(:name)
-          item_lines << i.shelf.name
-          item_lines << i.shelf.library.name
-          item_lines << i.created_at
-          item_lines << i.updated_at
-          lines << item_lines
-        end
-      else
-        line = []
-        line << m.id
-        line << m.original_title
-        if m.creators.exists?
-          line << m.creators.pluck(:full_name).join("//")
+    if items.exists?
+      items.includes(shelf: :library).each do |i|
+        item_lines = []
+        item_lines << id
+        item_lines << original_title
+        if creators.exists?
+          item_lines << creators.pluck(:full_name).join("//")
         else
-          line << nil
+          item_lines << nil
         end
-        if m.contributors.exists?
-          line << m.contributors.pluck(:full_name).join("//")
+        if contributors.exists?
+          item_lines << contributors.pluck(:full_name).join("//")
         else
-          line << nil
+          item_lines << nil
         end
-        if m.publishers.exists?
-          line << m.publishers.pluck(:full_name).join("//")
+        if publishers.exists?
+          item_lines << publishers.pluck(:full_name).join("//")
         else
-          line << nil
+          item_lines << nil
         end
-        line << m.pub_date
-        line << m.statement_of_responsibility
-        line << m.price
-        line << m.created_at
-        line << m.updated_at
-        line << m.manifestation_identifier
-        line << m.access_address
-        line << m.note
-        identifiers.each do |identifier_type|
-          line << m.identifier_contents(identifier_type.to_sym).first
+        item_lines << pub_date
+        item_lines << statement_of_responsibility
+        item_lines << price
+        item_lines << created_at
+        item_lines << updated_at
+        item_lines << manifestation_identifier
+        item_lines << access_address
+        item_lines << note
+
+        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+          item_lines << identifier_contents(identifier_type.to_sym).first
         end
-        #line << [
-        #  m.classifications.map{|classification|
-        #    {"#{classification.classification_type.name}" => "#{classification.category}"}
-        #  }.reduce(Hash.new, :merge).to_yaml
-        #].to_csv if defined?(EnjuSubject)
-        lines << line
+        if defined?(EnjuSubject)
+          SubjectHeadingType.order(:position).each do |subject_heading_type|
+            item_lines << subjects.where(subject_heading_type: subject_heading_type).pluck(:term)
+          end
+          ClassificationType.order(:position).each do |classification_type|
+            item_lines << classifications.where(classification_type: classification_type).pluck(:category)
+          end
+        end
+
+        item_lines << i.id
+        item_lines << i.item_identifier
+        item_lines << i.call_number
+        item_lines << i.price
+        item_lines << i.acquired_at
+        item_lines << i.accept.try(:created_at)
+        item_lines << i.bookstore.try(:name)
+        item_lines << i.budget_type.try(:name)
+        item_lines << i.circulation_status.try(:name)
+        item_lines << i.shelf.name
+        item_lines << i.shelf.library.name
+        item_lines << i.created_at
+        item_lines << i.updated_at
+        lines << item_lines
       end
+    else
+      line = []
+      line << id
+      line << original_title
+      if creators.exists?
+        line << creators.pluck(:full_name).join("//")
+      else
+        line << nil
+      end
+      if contributors.exists?
+        line << contributors.pluck(:full_name).join("//")
+      else
+        line << nil
+      end
+      if publishers.exists?
+        line << publishers.pluck(:full_name).join("//")
+      else
+        line << nil
+      end
+      line << pub_date
+      line << statement_of_responsibility
+      line << price
+      line << created_at
+      line << updated_at
+      line << manifestation_identifier
+      line << access_address
+      line << note
+
+      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+        line << identifier_contents(identifier_type.to_sym).first
+      end
+      if defined?(EnjuSubject)
+        SubjectHeadingType.order(:position).each do |subject_heading_type|
+          line << subjects.where(subject_heading_type: subject_heading_type).pluck(:term)
+        end
+        ClassificationType.order(:position).each do |classification_type|
+          lines << classifications.where(classification_type: classification_type).pluck(:category)
+        end
+      end
+
+      lines << line
     end
+
     if options[:format] == :txt
       lines.map{|i| i.to_csv(col_sep: "\t")}.join
     else
       lines
     end
+  end
+
+  def self.export(options = {format: :txt})
+    file = ''
+    file += Manifestation.csv_header(col_sep: "\t") if options[:format].to_sym == :txt
+    Manifestation.find_each do |manifestation|
+      file += manifestation.to_csv(options)
+    end
+    file
   end
 
   def root_series_statement

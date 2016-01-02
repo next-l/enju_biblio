@@ -237,6 +237,8 @@ describe Manifestation, :solr => true do
       expect(header).to include "item_updated_at"
       expect(header).to include "item_id"
       expect(header).to include "manifestation_identifier"
+      expect(header).to include "subject:ndlsh"
+      expect(header).to include "classification:ndc9"
     end
   end
 

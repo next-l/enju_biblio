@@ -1,2 +1,1 @@
-manifestation_identifier	original_title	creator	publisher	isbn	pub_date	note
-<%= render @manifestations %>
+<%= Manifestation.csv_header(col_sep: "\t") -%><%= render @manifestations -%>
