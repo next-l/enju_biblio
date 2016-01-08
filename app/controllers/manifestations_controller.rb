@@ -410,7 +410,10 @@ class ManifestationsController < ApplicationController
   # POST /manifestations
   # POST /manifestations.json
   def create
-    @manifestation = Manifestation.new(manifestation_params)
+    creators_params = manifestation_params[:creators_attributes]
+    @manifestation = Manifestation.new(manifestation_params.delete_if{|k, v|
+      k == 'creators_attributes'
+    })
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
@@ -418,8 +421,11 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       if @manifestation.save
+        Manifestation.transaction do
+          @manifestation.creators = Agent.new_agents(creators_params)
+          parent.derived_manifestations << @manifestation if parent
+        end
         if parent
-          parent.derived_manifestations << @manifestation
           parent.index
           @manifestation.index
         end
@@ -438,9 +444,16 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1
   # PUT /manifestations/1.json
   def update
+    creators_params = manifestation_params[:creators_attributes]
+    Manifestation.transaction do
+      @manifestation.update_attributes(manifestation_params.delete_if{|k, v|
+        k == 'creators_attributes'
+      })
+      @manifestation.creators = Agent.new_agents(creators_params)
+    end
+
     respond_to do |format|
-      if @manifestation.update_attributes(manifestation_params)
-        Sunspot.commit
+      if @manifestation.valid?
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
@@ -504,7 +517,7 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier,
+        :agent_identifier, :agent_id,
         :_destroy
       ]},
       {:contributors_attributes => [
