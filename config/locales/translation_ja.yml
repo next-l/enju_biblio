@@ -421,6 +421,8 @@ ja:
     new_acquisition: 新規受入
     per_page: "%{num}件ずつ表示"
     new_item: 所蔵作成
+    sort_criteria:
+      created_at: 書誌作成日
 
   merge_list:
     successfully_merged: "%{model}は正常に統合されました。"

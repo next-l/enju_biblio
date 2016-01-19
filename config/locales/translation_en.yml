@@ -417,6 +417,8 @@ en:
     new_acquisition: Acquisition
     per_page: "%{num} records per page"
     new_item: New item
+    sort_criteria:
+      created_at: "Created at"
 
   merge_list:
     successfully_merged: "%{model} were merged successfully."

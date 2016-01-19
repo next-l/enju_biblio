@@ -40,7 +40,7 @@
         <p>
           <%= t('page.sort_by') -%>:
           <%= select_tag 'sort_by', options_for_select({
-            t('page.created_at') => 'created_at',
+            t('page.sort_criteria.created_at') => 'created_at',
             t('activerecord.attributes.manifestation.pub_date') => 'pub_date',
             t('page.title') => 'title',
           }, selected: params[:sort_by] || 'created_at') -%>
