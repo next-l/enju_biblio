@@ -223,6 +223,15 @@ describe ManifestationsController do
 	expect(manifestations_page2.count).to eq 10
 	expect(original_manifestations.first).not_to eq manifestations_page2.first
       end
+
+      it "should accept sort_by parameter" do
+        get :index, sort_by: "created_at:desc"
+        manifestations = assigns(:manifestations)
+        expect(manifestations.first.created_at).to be >= manifestations.last.created_at
+        get :index, sort_by: "created_at:asc"
+        manifestations = assigns(:manifestations)
+        expect(manifestations.first.created_at).to be <= manifestations.last.created_at
+      end
     end
   end
 

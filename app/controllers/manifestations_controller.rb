@@ -673,6 +673,9 @@ class ManifestationsController < ApplicationController
 
   def set_search_result_order(sort_by, order)
     sort = {}
+    if sort_by.try(:"include?", ":")
+       sort_by, order = sort_by.split(/:/)
+    end
     # TODO: ページ数や大きさでの並べ替え
     case sort_by
     when 'title'

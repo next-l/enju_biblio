@@ -419,6 +419,10 @@ en:
     new_item: New item
     sort_criteria:
       created_at: "Created at"
+      date_asc: Oldest
+      date_desc: Newest
+      title_asc: A-Z
+      title_desc: Z-A
 
   merge_list:
     successfully_merged: "%{model} were merged successfully."
