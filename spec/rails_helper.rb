@@ -16,6 +16,7 @@ require 'factory_girl'
 require 'sunspot-rails-tester'
 require 'rspec/active_model/mocks'
 require 'pundit/rspec'
+require "capybara/rspec"
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
