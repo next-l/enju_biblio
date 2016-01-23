@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: agent_import_files
+#
+#  id                        :integer          not null, primary key
+#  parent_id                 :integer
+#  content_type              :string
+#  size                      :integer
+#  user_id                   :integer
+#  note                      :text
+#  executed_at               :datetime
+#  agent_import_filename     :string
+#  agent_import_content_type :string
+#  agent_import_size         :integer
+#  agent_import_updated_at   :datetime
+#  created_at                :datetime
+#  updated_at                :datetime
+#  agent_import_fingerprint  :string
+#  error_message             :text
+#  edit_mode                 :string
+#  user_encoding             :string
+#  agent_import_id           :string
+#
+
 class AgentImportFilesController < ApplicationController
   before_action :set_agent_import_file, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

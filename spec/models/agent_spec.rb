@@ -92,4 +92,5 @@ end
 #  birth_date                          :string
 #  death_date                          :string
 #  agent_identifier                    :string
+#  profile_id                          :integer
 #

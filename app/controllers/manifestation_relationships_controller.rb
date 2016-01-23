@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: manifestation_relationships
+#
+#  id                                 :integer          not null, primary key
+#  parent_id                          :integer
+#  child_id                           :integer
+#  manifestation_relationship_type_id :integer
+#  created_at                         :datetime
+#  updated_at                         :datetime
+#  position                           :integer
+#
+
 class ManifestationRelationshipsController < ApplicationController
   before_action :set_manifestation_relationship, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

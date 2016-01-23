@@ -1,3 +1,28 @@
+# == Schema Information
+#
+# Table name: resource_import_files
+#
+#  id                           :integer          not null, primary key
+#  parent_id                    :integer
+#  content_type                 :string
+#  size                         :integer
+#  user_id                      :integer
+#  note                         :text
+#  executed_at                  :datetime
+#  resource_import_filename     :string
+#  resource_import_content_type :string
+#  resource_import_size         :integer
+#  resource_import_updated_at   :datetime
+#  created_at                   :datetime
+#  updated_at                   :datetime
+#  edit_mode                    :string
+#  resource_import_fingerprint  :string
+#  error_message                :text
+#  user_encoding                :string
+#  default_shelf_id             :integer
+#  resource_import_id           :string
+#
+
 require 'spec_helper'
 
 describe ResourceImportFilesController do

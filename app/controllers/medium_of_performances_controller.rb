@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: medium_of_performances
+#
+#  id           :integer          not null, primary key
+#  name         :string           not null
+#  display_name :text
+#  note         :text
+#  position     :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+
 class MediumOfPerformancesController < ApplicationController
   before_action :set_medium_of_performance, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

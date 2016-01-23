@@ -1,9 +1,6 @@
 class ResourceExportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   include ExportFile
-  enju_export_file_model
-
-  #validates_attachment_content_type :resource_export, content_type: /\Atext\/plain\Z/
   attachment :resource_export
 
   has_many :resource_export_file_transitions
@@ -18,8 +15,10 @@ class ResourceExportFile < ActiveRecord::Base
   def export!
     transition_to!(:started)
     tempfile = Tempfile.new(['resource_export_file_', '.txt'])
-    file = Manifestation.export(format: :txt)
-    tempfile.puts(file)
+    tempfile.puts(Manifestation.csv_header(col_sep: "\t"))
+    Manifestation.find_each do |manifestation|
+      tempfile.puts(manifestation.to_csv(format: :txt))
+    end
     tempfile.close
     self.resource_export = File.new(tempfile.path, "r")
     if save

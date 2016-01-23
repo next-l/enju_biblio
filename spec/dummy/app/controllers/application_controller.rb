@@ -5,7 +5,7 @@ class ApplicationController < ActionController::Base
   include EnjuLeaf::Controller
   include EnjuBiblio::Controller
   include EnjuLibrary::Controller
+  include EnjuEvent::Controller
+  include EnjuSubject::Controller
   enju_inventory
-  enju_event
-  enju_subject
 end

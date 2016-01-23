@@ -1,3 +1,16 @@
+# == Schema Information
+#
+# Table name: agent_relationship_types
+#
+#  id           :integer          not null, primary key
+#  name         :string           not null
+#  display_name :text
+#  note         :text
+#  position     :integer
+#  created_at   :datetime
+#  updated_at   :datetime
+#
+
 class AgentRelationshipTypesController < ApplicationController
   before_action :set_agent_relationship_type, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

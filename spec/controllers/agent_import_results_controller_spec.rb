@@ -1,4 +1,16 @@
 # -*- encoding: utf-8 -*-
+# == Schema Information
+#
+# Table name: agent_import_results
+#
+#  id                   :integer          not null, primary key
+#  agent_import_file_id :integer
+#  agent_id             :integer
+#  body                 :text
+#  created_at           :datetime
+#  updated_at           :datetime
+#
+
 require 'spec_helper'
 
 describe AgentImportResultsController do

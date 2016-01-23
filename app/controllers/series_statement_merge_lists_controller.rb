@@ -1,3 +1,13 @@
+# == Schema Information
+#
+# Table name: series_statement_merge_lists
+#
+#  id         :integer          not null, primary key
+#  title      :string
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class SeriesStatementMergeListsController < ApplicationController
   before_action :set_series_statement_merge_list, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

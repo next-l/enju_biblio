@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: import_requests
+#
+#  id               :integer          not null, primary key
+#  isbn             :string
+#  manifestation_id :integer
+#  user_id          :integer
+#  created_at       :datetime
+#  updated_at       :datetime
+#
+
 class ImportRequestsController < ApplicationController
   before_action :set_import_request, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

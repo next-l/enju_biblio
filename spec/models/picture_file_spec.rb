@@ -21,7 +21,7 @@ end
 #  updated_at              :datetime
 #  picture_filename        :string
 #  picture_content_type    :string
-#  picture_file_size       :integer
+#  picture_size            :integer
 #  picture_updated_at      :datetime
 #  picture_meta            :text
 #  picture_fingerprint     :string

@@ -13,7 +13,6 @@ class AgentImportFile < ActiveRecord::Base
   has_many :agent_import_file_transitions
 
   before_create :set_fingerprint
-  enju_import_file_model
   attr_accessor :mode
 
   def state_machine

@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: owns
+#
+#  id         :integer          not null, primary key
+#  agent_id   :integer          not null
+#  item_id    :integer          not null
+#  position   :integer
+#  created_at :datetime
+#  updated_at :datetime
+#
+
 class OwnsController < ApplicationController
   before_action :set_own, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

@@ -1,6 +1,7 @@
 class ResourceImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
+  default_scope { order('resource_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
@@ -106,15 +107,28 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       unless manifestation
-        if row['isbn'].present?
-          isbn = StdNum::ISBN.normalize(row['isbn'])
-          identifier_type_isbn = IdentifierType.where(name: 'isbn').first
-          identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
-          m = Identifier.where(body: isbn, identifier_type_id: identifier_type_isbn.id).first.try(:manifestation)
+        if row['ncid'].present?
+          ncid = row['ncid'].to_s.strip
+          identifier_type_ncid = IdentifierType.where(name: 'ncid').first
+          identifier_type_ncid = IdentifierType.where(name: 'ncid').create! unless identifier_type_ncid
+          manifestation = Identifier.where(body: ncid, identifier_type_id: identifier_type_ncid.id).first.try(:manifestation)
         end
-        if m
-          if m.series_statements.exists?
-            manifestation = m
+      end
+
+      unless manifestation
+        if row['isbn'].present?
+          if StdNum::ISBN.valid?(row['isbn'])
+            isbn = StdNum::ISBN.normalize(row['isbn'])
+            identifier_type_isbn = IdentifierType.where(name: 'isbn').first
+            identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
+            m = Identifier.where(body: isbn, identifier_type_id: identifier_type_isbn.id).first.try(:manifestation)
+            if m
+              if m.series_statements.exists?
+                manifestation = m
+              end
+            end
+          else
+            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
           end
         end
       end
@@ -133,8 +147,10 @@ class ResourceImportFile < ActiveRecord::Base
             end
           rescue EnjuNdl::InvalidIsbn
             manifestation = nil
+            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
           rescue EnjuNdl::RecordNotFound
             manifestation = nil
+            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_record_not_found')}"
           end
         end
       end
@@ -145,21 +161,21 @@ class ResourceImportFile < ActiveRecord::Base
       end
       import_result.manifestation = manifestation
 
-      if manifestation && item_identifier.present?
-        import_result.item = create_item(row, manifestation)
-      else
-        if manifestation.try(:fulltext_content?)
-          item = Item.new
-          item.circulation_status = CirculationStatus.where(name: 'Available On Shelf').first
-          item.shelf = Shelf.web
-          begin
-            item.acquired_at = Time.zone.parse(row['acquired_at'].to_s.strip)
-          rescue ArgumentError
+      if manifestation
+        if item_identifier.present? or row['shelf'].present?
+          import_result.item = create_item(row, manifestation)
+        else
+          if manifestation.fulltext_content?
+            item = create_item(row, manifestation)
+            item.circulation_status = CirculationStatus.where(name: 'Available On Shelf').first
+            begin
+              item.acquired_at = Time.zone.parse(row['acquired_at'].to_s.strip)
+            rescue ArgumentError
+            end
           end
-          item.manifestation_id = manifestation.id
-          item.save!
-          manifestation.items << item
+          num[:failed] += 1
         end
+      else
         num[:failed] += 1
       end
 
@@ -263,8 +279,10 @@ class ResourceImportFile < ActiveRecord::Base
     rows.shift
     row_num = 1
 
+    ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
       row_num += 1
+      import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(item_identifier: item_identifier).first if item_identifier.present?
       if item
@@ -312,6 +330,7 @@ class ResourceImportFile < ActiveRecord::Base
           end
         end
         item.save!
+        import_result.item = item
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first if manifestation_identifier.present?
@@ -320,8 +339,10 @@ class ResourceImportFile < ActiveRecord::Base
         end
         if manifestation
           fetch(row, edit_mode: 'update')
+          import_result.manifestation = manifestation
         end
       end
+      import_result.save!
     end
     transition_to!(:completed)
   rescue => e
@@ -404,13 +425,15 @@ class ResourceImportFile < ActiveRecord::Base
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
       extent start_page end_page dimensions
+      ncid
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at item_price
       use_restriction include_supplements item_note item_url
       dummy
     )
     if defined?(EnjuSubject)
-      header_columns += %w(subject classification)
+      header_columns += ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}
+      header_columns += SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}
     end
     header = file.first
     ignored_columns = header - header_columns
@@ -427,52 +450,37 @@ class ResourceImportFile < ActiveRecord::Base
 
   def import_subject(row)
     subjects = []
-    subject_list = YAML.load(row['subject'].to_s)
-    # TODO: Subject typeの設定
-    return subjects unless subject_list
-    subject_list.map{|k, v|
-      subject_heading_type = SubjectHeadingType.where(name: k.downcase).first
-      next unless subject_heading_type
-      if v.is_a?(Array)
-        v.each do |term|
-          subject = Subject.new(term: term)
-          subject.subject_heading_type = subject_heading_type
-          subject.subject_type = SubjectType.where(name: 'concept').first
-          subject.save!
-          subjects << subject
-        end
-      else
-        subject = Subject.new(term: v)
+    SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}.each do |column_name|
+      type = column_name.split(':').last
+      subject_list = row[column_name].to_s.split('//')
+      subject_list.map{|value|
+        subject_heading_type = SubjectHeadingType.where(name: type).first
+        next unless subject_heading_type
+        subject = Subject.new(term: value)
         subject.subject_heading_type = subject_heading_type
+        # TODO: Subject typeの設定
         subject.subject_type = SubjectType.where(name: 'concept').first
         subject.save!
         subjects << subject
-      end
-    }
+      }
+    end
     subjects
   end
 
   def import_classification(row)
     classifications = []
-    classification_number = YAML.load(row['classification'].to_s)
-    return classifications unless classification_number
-    classification_number.map{|k, v|
-      classification_type = ClassificationType.where(name: k.downcase).first
-      next unless classification_type
-      if v.is_a?(Array)
-        v.each do |category|
-          classification = Classification.new(category: category)
-          classification.classification_type = classification_type
-          classification.save!
-          classifications << classification
-        end
-      else
-        classification = Classification.new(category: v)
+    ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}.each do |column_name|
+      type = column_name.split(':').last
+      classification_list = row[column_name].to_s.split('//')
+      classification_list.map{|value|
+        classification_type = ClassificationType.where(name: type).first
+        next unless classification_type
+        classification = Classification.new(category: value)
         classification.classification_type = classification_type
         classification.save!
         classifications << classification
-      end
-    }
+      }
+    end
     classifications
   end
 
@@ -718,7 +726,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def set_identifier(row)
     identifier = {}
-    %w(isbn issn doi jpno).each do |id_type|
+    %w(isbn issn doi jpno ncid).each do |id_type|
       if row["#{id_type}"].present?
         import_id = Identifier.new(body: row["#{id_type}"])
         identifier_type = IdentifierType.where(name: id_type).first

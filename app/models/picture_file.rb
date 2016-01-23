@@ -3,10 +3,8 @@ class PictureFile < ActiveRecord::Base
   belongs_to :picture_attachable, polymorphic: true, validate: true
 
   attachment :picture
-  #validates_attachment_content_type :picture, content_type: ["image/jpeg", "image/pjpeg", "image/png", "image/gif", "image/svg+xml"], on: :create
-
-  #validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates :picture, presence: true
+  validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates_associated :picture_attachable
   default_scope { order('picture_files.position') }
   # http://railsforum.com/viewtopic.php?id=11615
@@ -36,7 +34,7 @@ end
 #  updated_at              :datetime
 #  picture_filename        :string
 #  picture_content_type    :string
-#  picture_file_size       :integer
+#  picture_size            :integer
 #  picture_updated_at      :datetime
 #  picture_meta            :text
 #  picture_fingerprint     :string

@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: picture_files
+#
+#  id                      :integer          not null, primary key
+#  picture_attachable_id   :integer
+#  picture_attachable_type :string
+#  content_type            :string
+#  title                   :text
+#  thumbnail               :string
+#  position                :integer
+#  created_at              :datetime
+#  updated_at              :datetime
+#  picture_filename        :string
+#  picture_content_type    :string
+#  picture_size            :integer
+#  picture_updated_at      :datetime
+#  picture_meta            :text
+#  picture_fingerprint     :string
+#  picture_id              :string
+#
+
 module PictureFilesHelper
   def show_image(picture_file, options = {size: :medium})
     case options[:size]
