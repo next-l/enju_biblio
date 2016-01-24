@@ -5,7 +5,6 @@ class Manifestation < ActiveRecord::Base
   enju_loc_search if defined?(EnjuLoc)
   enju_nii_cinii_books if defined?(EnjuNii)
   enju_oai if defined?(EnjuOai)
-  enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
 
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
