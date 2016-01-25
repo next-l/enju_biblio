@@ -85,8 +85,12 @@
       </div>
     <% end %>
   <%- else -%>
-    <!-- TODO: 検索結果が少ない場合にも表示させる -->
-    <%= render 'manifestations/not_found' -%>
+    <%- if @parent -%>
+      <p><%= t('manifestation.record_not_added') %></p>
+    <%- else -%>
+      <!-- TODO: 検索結果が少ない場合にも表示させる -->
+      <%= render 'manifestations/not_found' -%>
+    <%- end -%>
   <%- end -%>
 
     <div class="autopagerize_insert_before"></div>

@@ -380,6 +380,7 @@ ja:
     invalid_isbn: "無効なISBNです。"
     already_imported: "すでにインポートされています。"
     record_not_found: "資料が見つかりませんでした。"
+    record_not_added: "資料がまだ登録されていません。"
     add: "資料を追加する"
     specify_expression: "協力した資料を指定してください。"
     pickup: "ピックアップ"

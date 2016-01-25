@@ -376,6 +376,7 @@ en:
     invalid_isbn: "Invalid ISBN."
     already_imported: "This manifestation is already imported."
     record_not_found: "Record not found."
+    record_not_added: "Record not added."
     add: "Add a manifestation"
     specify_expression: "Specify the expression."
     pickup: "Pick up"
