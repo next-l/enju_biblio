@@ -181,6 +181,12 @@ describe ItemsController do
         get :new, :manifestation_id => @manifestation.id
 	expect(response).to redirect_to(libraries_url)
       end
+
+      it "should not get new item for series_master" do
+        manifestation_serial = FactoryGirl.create(:manifestation_serial)
+        get :new, :manifestation_id => manifestation_serial.id
+	expect(response).to redirect_to(manifestations_url(parent_id: manifestation_serial.id))
+      end
     end
 
     describe "When logged in as Librarian" do

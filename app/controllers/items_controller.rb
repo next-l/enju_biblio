@@ -156,6 +156,11 @@ class ItemsController < ApplicationController
       redirect_to manifestations_url
       return
     end
+    if @manifestation.series_master?
+      flash[:notice] = t('item.specify_manifestation')
+      redirect_to manifestations_url(parent_id: @manifestation.id)
+      return
+    end
     @item = Item.new
     @item.shelf = @library.shelves.first
     @item.manifestation = @manifestation
