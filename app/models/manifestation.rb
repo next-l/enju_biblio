@@ -1,11 +1,8 @@
 class Manifestation < ActiveRecord::Base
-  enju_subject_manifestation_model if defined?(EnjuSubject)
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_loc_search if defined?(EnjuLoc)
   enju_nii_cinii_books if defined?(EnjuNii)
-  enju_oai if defined?(EnjuOai)
-  enju_question_manifestation_model if defined?(EnjuQuestion)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
 
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
@@ -42,7 +39,7 @@ class Manifestation < ActiveRecord::Base
       :statement_of_responsibility
     text :item_identifier do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier) + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
       else
         items.pluck(:item_identifier, :binding_item_identifier)
       end
@@ -64,16 +61,7 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, multiple: true do
-      identifier_contents(:isbn).map{|i|
-        isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
-        isbn10 = Lisbn.new(i).isbn10
-        isbn13 =  Lisbn.new(i).isbn13
-        isbn10_dash = Lisbn.new(isbn10).isbn_with_dash if isbn10
-        isbn13_dash = Lisbn.new(isbn13).isbn_with_dash if isbn13
-        [
-          isbn10, isbn13, isbn10_dash, isbn13_dash
-        ]
-      }.flatten
+      isbn_characters
     end
     string :issn, multiple: true do
       if series_statements.exists?
@@ -103,9 +91,9 @@ class Manifestation < ActiveRecord::Base
     end
     string :item_identifier, multiple: true do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier) + root_series_statement.root_manifestation.items.pluck(:binding_item_identifier)
       else
-        items.pluck(:item_identifier, :binding_item_identifier)
+        items.pluck(:item_identifier) + items.pluck(:binding_item_identifier)
       end
     end
     string :shelf, multiple: true do
@@ -178,9 +166,7 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      identifier_contents(:isbn).map{|i|
-        [Lisbn.new(i).isbn10, Lisbn.new(i).isbn13]
-      }.flatten
+      isbn_characters
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statements.exists?
@@ -363,6 +349,7 @@ class Manifestation < ActiveRecord::Base
 
   def extract_text
     return nil unless attachment
+    return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
@@ -503,7 +490,7 @@ class Manifestation < ActiveRecord::Base
     identifiers.identifier_type_scope(name).order(:position).pluck(:body)
   end
 
-  def self.export(options = {format: :txt})
+  def self.csv_header(options = {col_sep: "\t"})
     header = %w(
       manifestation_id
       original_title
@@ -511,6 +498,7 @@ class Manifestation < ActiveRecord::Base
       contributor
       publisher
       pub_date
+      statement_of_responsibility
       manifestation_price
       manifestation_created_at
       manifestation_updated_at
@@ -518,12 +506,13 @@ class Manifestation < ActiveRecord::Base
       access_address
       note
     )
-    identifiers = {}
-    Identifier.find_each do |identifier|
-      identifiers[identifier.identifier_type.name] = true
+
+    header += IdentifierType.order(:position).pluck(:name)
+    if defined?(EnjuSubject)
+      header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
+      header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
     end
-    identifiers = identifiers.keys.sort
-    header += identifiers
+
     header += %w(
       item_id
       item_identifier
@@ -536,67 +525,152 @@ class Manifestation < ActiveRecord::Base
       circulation_status
       shelf
       library
+      item_created_at
+      item_updated_at
     )
+
+    header.to_csv(options)
+  end
+
+  def to_csv(options = {format: :txt})
     lines = []
-    lines << header
-    Manifestation.includes(:items, :identifiers => :identifier_type).find_each do |m|
-      if m.items.exists?
-        m.items.includes(:shelf => :library).each do |i|
-          item_lines = []
-          item_lines << m.id
-          item_lines << m.original_title
-          item_lines << m.creators.pluck(:full_name).join("//")
-          item_lines << m.contributors.pluck(:full_name).join("//")
-          item_lines << m.publishers.pluck(:full_name).join("//")
-          item_lines << m.pub_date
-          item_lines << m.price
-          item_lines << m.created_at
-          item_lines << m.updated_at
-          item_lines << m.manifestation_identifier
-          item_lines << access_address
-          item_lines << note
-          identifiers.each do |identifier_type|
-            item_lines << m.identifier_contents(identifier_type.to_sym).first
+    if items.exists?
+      items.includes(shelf: :library).each do |i|
+        item_lines = []
+        item_lines << id
+        item_lines << original_title
+        if creators.exists?
+          item_lines << creators.pluck(:full_name).join("//")
+        else
+          item_lines << nil
+        end
+        if contributors.exists?
+          item_lines << contributors.pluck(:full_name).join("//")
+        else
+          item_lines << nil
+        end
+        if publishers.exists?
+          item_lines << publishers.pluck(:full_name).join("//")
+        else
+          item_lines << nil
+        end
+        item_lines << pub_date
+        item_lines << statement_of_responsibility
+        item_lines << price
+        item_lines << created_at
+        item_lines << updated_at
+        item_lines << manifestation_identifier
+        item_lines << access_address
+        item_lines << note
+
+        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+          if identifier_contents(identifier_type.to_sym).first
+            item_lines << identifier_contents(identifier_type.to_sym).first
+          else
+            item_lines << nil
           end
-          item_lines << i.item_identifier
-          item_lines << i.call_number
-          item_lines << i.price
-          item_lines << i.acquired_at
-          item_lines << i.accept.try(:created_at)
-          item_lines << i.bookstore.try(:name)
-          item_lines << i.budget_type.try(:name)
-          item_lines << i.circulation_status.try(:name)
-          item_lines << i.shelf.name
-          item_lines << i.shelf.library.name
-          item_lines << i.created_at
-          item_lines << i.updated_at
-          lines << item_lines
         end
-      else
-        line = []
-        line << m.id
-        line << m.original_title
-        line << m.creators.pluck(:full_name).join("//")
-        line << m.contributors.pluck(:full_name).join("//")
-        line << m.publishers.pluck(:full_name).join("//")
-        line << m.pub_date
-        line << m.price
-        line << m.created_at
-        line << m.updated_at
-        line << m.manifestation_identifier
-        line << access_address
-        line << m.note
-        identifiers.each do |identifier_type|
-          line << m.identifier_contents(identifier_type.to_sym).first
+        if defined?(EnjuSubject)
+          SubjectHeadingType.order(:position).each do |subject_heading_type|
+            if subjects.exists?
+              item_lines << subjects.where(subject_heading_type: subject_heading_type).pluck(:term).join('//')
+            else
+              item_lines << nil
+            end
+          end
+          ClassificationType.order(:position).each do |classification_type|
+            if classifications.exists?
+              item_lines << classifications.where(classification_type: classification_type).pluck(:category).join('//')
+            else
+              item_lines << nil
+            end
+          end
         end
-        lines << line
+
+        item_lines << i.id
+        item_lines << i.item_identifier
+        item_lines << i.call_number
+        item_lines << i.price
+        item_lines << i.acquired_at
+        item_lines << i.accept.try(:created_at)
+        item_lines << i.bookstore.try(:name)
+        item_lines << i.budget_type.try(:name)
+        item_lines << i.circulation_status.try(:name)
+        item_lines << i.shelf.name
+        item_lines << i.shelf.library.name
+        item_lines << i.created_at
+        item_lines << i.updated_at
+        lines << item_lines
       end
+    else
+      line = []
+      line << id
+      line << original_title
+      if creators.exists?
+        line << creators.pluck(:full_name).join("//")
+      else
+        line << nil
+      end
+      if contributors.exists?
+        line << contributors.pluck(:full_name).join("//")
+      else
+        line << nil
+      end
+      if publishers.exists?
+        line << publishers.pluck(:full_name).join("//")
+      else
+        line << nil
+      end
+      line << pub_date
+      line << statement_of_responsibility
+      line << price
+      line << created_at
+      line << updated_at
+      line << manifestation_identifier
+      line << access_address
+      line << note
+
+      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+        if identifier_contents(identifier_type.to_sym).first
+          line << identifier_contents(identifier_type.to_sym).first
+        else
+          line << nil
+        end
+      end
+      if defined?(EnjuSubject)
+        SubjectHeadingType.order(:position).each do |subject_heading_type|
+          if subjects.exists?
+            line << subjects.where(subject_heading_type: subject_heading_type).pluck(:term).join('//')
+          else
+            line << nil
+          end
+        end
+        ClassificationType.order(:position).each do |classification_type|
+          if classifications.exists?
+            line << classifications.where(classification_type: classification_type).pluck(:category).join('//')
+          else
+            line << nil
+          end
+        end
+      end
+
+      lines << line
     end
+
     if options[:format] == :txt
       lines.map{|i| i.to_csv(col_sep: "\t")}.join
     else
       lines
     end
+  end
+
+  def self.export(options = {format: :txt})
+    file = ''
+    file += Manifestation.csv_header(col_sep: "\t") if options[:format].to_sym == :txt
+    Manifestation.find_each do |manifestation|
+      file += manifestation.to_csv(options)
+    end
+    file
   end
 
   def set_fingerprint
@@ -605,6 +679,19 @@ class Manifestation < ActiveRecord::Base
 
   def root_series_statement
     series_statements.where(root_manifestation_id: id).first
+  end
+
+  def isbn_characters
+    identifier_contents(:isbn).map{|i|
+      isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
+      isbn10 = Lisbn.new(i).isbn10
+      isbn13 =  Lisbn.new(i).isbn13
+      isbn10_dash = Lisbn.new(isbn10).isbn_with_dash if isbn10
+      isbn13_dash = Lisbn.new(isbn13).isbn_with_dash if isbn13
+      [
+        isbn10, isbn13, isbn10_dash, isbn13_dash
+      ]
+    }.flatten
   end
 end
 

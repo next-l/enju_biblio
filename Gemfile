@@ -23,6 +23,7 @@ gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer", bra
 gem "codeclimate-test-reporter", group: :test, require: false
 gem "rspec_junit_formatter", group: :test, require: false
 gem "dotenv-rails"
+gem "jquery-rails"
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]
