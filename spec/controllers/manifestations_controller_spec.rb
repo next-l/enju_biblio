@@ -770,8 +770,9 @@ describe ManifestationsController do
       end
 
       it "should not destroy manifestation of series master with children" do
-        @series_statement = FactoryGirl.create(:series_statement_serial)
-	@manifestation = FactoryGirl.create(:manifestation_serial)
+        @manifestation = FactoryGirl.create(:manifestation_serial)
+        child = FactoryGirl.create(:manifestation)
+        @manifestation.derived_manifestations << child
         delete :destroy, :id => @manifestation.id
         expect(response).to be_forbidden
       end
