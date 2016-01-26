@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 # == Schema Information
 #
 # Table name: manifestations
@@ -80,8 +79,8 @@ class ManifestationsController < ApplicationController
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
   before_action :get_version, only: [:show]
-  after_filter :solr_commit, only: :destroy
-  after_filter :convert_charset, only: :index
+  after_action :solr_commit, only: :destroy
+  after_action :convert_charset, only: :index
 
   # GET /manifestations
   # GET /manifestations.json
@@ -163,6 +162,7 @@ class ManifestationsController < ApplicationController
 
       search.build do
         fulltext query unless query.blank?
+        with(:username).equal_to params[:username] if params[:username]
         order_by sort[:sort_by], sort[:order]
         if defined?(EnjuSubject)
           with(:subject_ids).equal_to subject.id if subject
@@ -212,14 +212,15 @@ class ManifestationsController < ApplicationController
         :edition_string,
         :edition,
         :serial,
-        :statement_of_responsibility
+        :statement_of_responsibility,
+        :manifestation_identifier
       ] if params[:format] == 'html' or params[:format].nil?
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
       max_number_of_results = @library_group.settings[:max_number_of_results].to_i
       if max_number_of_results == 0
-        @max_number_of_results = count[:query_result]
+        @max_number_of_results = @count[:query_result]
       else
         @max_number_of_results = max_number_of_results
       end
@@ -231,7 +232,7 @@ class ManifestationsController < ApplicationController
       else
         clear_search_sessions
         session[:params] = params
-        session[:search_params] == search.query.to_params
+        session[:search_params] = search.query.to_params
         session[:query] = @query
       end
 
@@ -273,7 +274,7 @@ class ManifestationsController < ApplicationController
         per_page = Manifestation.default_per_page
       end
       if params[:format] == 'sru'
-        search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
+        #search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
       else
         pub_dates = parse_pub_date(params)
         pub_date_range = {}
@@ -367,7 +368,7 @@ class ManifestationsController < ApplicationController
       if user_signed_in?
         Notifier.manifestation_info(current_user.id, @manifestation.id).deliver_later
         flash[:notice] = t('page.sent_email')
-        redirect_to manifestation_url(@manifestation)
+        redirect_to @manifestation
         return
       else
         access_denied; return
@@ -409,6 +410,7 @@ class ManifestationsController < ApplicationController
       format.rdf
       format.mods
       format.json { render json: @manifestation }
+      format.txt
       format.js
       format.download {
         send_file @manifestation.attachment.download,
@@ -426,9 +428,15 @@ class ManifestationsController < ApplicationController
     @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
     if @parent
       @manifestation.parent_id = @parent.id
-      @manifestation.original_title = @parent.original_title
-      @manifestation.title_transcription = @parent.title_transcription
-      @manifestation.serial = true if @parent.serial
+      [ :original_title, :title_transcription,
+        :serial, :title_alternative, :statement_of_responsibility, :publication_place,
+        :height, :width, :depth, :price, :access_address, :language, :frequency, :required_role,
+      ].each do |attribute|
+        @manifestation.send("#{attribute}=", @parent.send(attribute))
+      end
+      [ :creators, :contributors, :publishers, :classifications, :subjects ].each do |attribute|
+        @manifestation.send(attribute).build(@parent.send(attribute).collect(&:attributes))
+      end
     end
 
     respond_to do |format|
@@ -456,7 +464,10 @@ class ManifestationsController < ApplicationController
   # POST /manifestations
   # POST /manifestations.json
   def create
-    @manifestation = Manifestation.new(manifestation_params)
+    creators_params = manifestation_params[:creators_attributes]
+    @manifestation = Manifestation.new(manifestation_params.delete_if{|k, v|
+      k == 'creators_attributes'
+    })
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_filename
@@ -464,6 +475,10 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       if @manifestation.save
+        Manifestation.transaction do
+          @manifestation.creators = Agent.new_agents(creators_params)
+          parent.derived_manifestations << @manifestation if parent
+        end
         if parent
           parent.derived_manifestations << @manifestation
           parent.index
@@ -484,9 +499,16 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1
   # PUT /manifestations/1.json
   def update
+    creators_params = manifestation_params[:creators_attributes]
+    Manifestation.transaction do
+      @manifestation.update_attributes(manifestation_params.delete_if{|k, v|
+        k == 'creators_attributes'
+      })
+      @manifestation.creators = Agent.new_agents(creators_params)
+    end
+
     respond_to do |format|
-      if @manifestation.update_attributes(manifestation_params)
-        Sunspot.commit
+      if @manifestation.valid?
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
@@ -541,6 +563,7 @@ class ManifestationsController < ApplicationController
       :dimensions, :fulltext_content, :extent,
       :number_of_page_string, :parent_id,
       :serial, :statement_of_responsibility,
+      :remote_attachment_url,
       {:creators_attributes => [
         :id, :last_name, :middle_name, :first_name,
         :last_name_transcription, :middle_name_transcription,
@@ -550,7 +573,7 @@ class ManifestationsController < ApplicationController
         :other_designation, :language_id,
         :country_id, :agent_type_id, :note, :required_role_id, :email, :url,
         :full_name_alternative_transcription, :title,
-        :agent_identifier,
+        :agent_identifier, :agent_id,
         :_destroy
       ]},
       {:contributors_attributes => [
@@ -706,6 +729,9 @@ class ManifestationsController < ApplicationController
 
   def set_search_result_order(sort_by, order)
     sort = {}
+    if sort_by.try(:"include?", ":")
+      sort_by, order = sort_by.split(/:/)
+    end
     # TODO: ページ数や大きさでの並べ替え
     case sort_by
     when 'title'
