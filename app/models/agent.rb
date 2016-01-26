@@ -54,6 +54,8 @@ class Agent < ActiveRecord::Base
     Sunspot.commit
   end
 
+  attr_accessor :agent_id
+
   searchable do
     text :name, :place, :address_1, :address_2, :other_designation, :note
     string :zip_code_1
@@ -242,6 +244,24 @@ class Agent < ActiveRecord::Base
 
   def agents
     self.original_agents + self.derived_agents
+  end
+
+  def self.new_agents(agents_params)
+    return [] unless agents_params
+    agents = []
+    Agent.transaction do
+      agents_params.each do |k, v|
+        next if v['_destroy'] == '1'
+        if v['agent_id'].present?
+          agent = Agent.find(v['agent_id'])
+        else
+          v.delete('_destroy')
+          agent = Agent.create(v)
+        end
+        agents << agent
+      end
+    end
+    agents
   end
 end
 
