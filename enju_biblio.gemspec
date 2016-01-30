@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 4.0"
+  s.add_dependency "paper_trail", "~> 4.1"
   s.add_dependency "validates_timeliness", "~> 4.0"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
