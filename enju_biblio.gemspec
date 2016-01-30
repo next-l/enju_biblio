@@ -54,4 +54,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "resque_mailer"
   s.add_development_dependency "resque", "~> 1.25"
   s.add_development_dependency "coveralls"
+  s.add_development_dependency "capybara"
 end
