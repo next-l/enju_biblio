@@ -254,6 +254,8 @@ class Agent < ActiveRecord::Base
         next if v['_destroy'] == '1'
         if v['agent_id'].present?
           agent = Agent.find(v['agent_id'])
+        elsif v['id'].present?
+          agent = Agent.find(v['id'])
         else
           v.delete('_destroy')
           agent = Agent.create(v)
