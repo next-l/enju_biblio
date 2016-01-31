@@ -39,7 +39,7 @@ class Manifestation < ActiveRecord::Base
       :statement_of_responsibility
     text :item_identifier do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier)
       else
         items.pluck(:item_identifier, :binding_item_identifier)
       end
@@ -91,7 +91,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :item_identifier, multiple: true do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_identifier)
+        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier)
       else
         items.pluck(:item_identifier, :binding_item_identifier)
       end
