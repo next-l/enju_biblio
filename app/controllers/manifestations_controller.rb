@@ -740,6 +740,9 @@ class ManifestationsController < ApplicationController
     when 'pub_date'
       sort[:sort_by] = 'date_of_publication'
       sort[:order] = 'desc'
+    when 'score'
+      sort[:sort_by] = 'score'
+      sort[:order] = 'desc'
     else
       # デフォルトの並び方
       sort[:sort_by] = 'created_at'

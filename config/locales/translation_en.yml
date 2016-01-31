@@ -418,6 +418,17 @@ en:
     merge: "Merge!"
     merge_resource: "Merge %{model}"
     new_acquisition: Acquisition
+    per_page: "%{num} records per page"
+    new_item: New item
+    sort_criteria:
+      created_at: "Created at"
+      date_asc: Oldest
+      date_desc: Newest
+      score_asc: Score Asc
+      score_desc: Score Desc
+      title_asc: A-Z
+      title_desc: Z-A
+    score: Score
 
   merge_list:
     successfully_merged: "%{model} were merged successfully."

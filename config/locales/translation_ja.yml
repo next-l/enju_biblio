@@ -418,6 +418,17 @@ ja:
     merge: "統合する（取り消しはできません）"
     merge_resource: "%{model}を統合する"
     new_acquisition: 新規受入
+    per_page: "%{num}件ずつ表示"
+    new_item: 所蔵作成
+    sort_criteria:
+      created_at: 書誌作成日
+      date_asc: 古い順
+      date_desc: 新しい順
+      score_asc: 適合度逆順
+      score_desc: 適合度順
+      title_asc: 50音順
+      title_desc: 50音逆順
+    score: スコア
 
   merge_list:
     successfully_merged: "%{model}は正常に統合されました。"
