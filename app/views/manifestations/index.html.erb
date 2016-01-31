@@ -35,10 +35,9 @@
       <%- end -%>
     </p>
 
-    <div class="field">
+    <div class="field right">
       <%= form_for :manifestations, url: manifestations_path, html: {method: 'get'} do -%>
         <p>
-          <%= t('page.sort_by') -%>:
           <%= select_tag 'per_page', options_for_select({
             t('page.per_page', num: 10) => 10,
             t('page.per_page', num: 20) => 20,
