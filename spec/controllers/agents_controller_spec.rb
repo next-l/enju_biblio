@@ -51,7 +51,7 @@
 #  profile_id                          :integer
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe AgentsController do
   fixtures :all

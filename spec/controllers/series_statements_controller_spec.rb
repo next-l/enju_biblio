@@ -23,7 +23,7 @@
 #  root_manifestation_id              :integer
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe SeriesStatementsController do
   fixtures :users

@@ -66,7 +66,7 @@
 #  attachment_fingerprint          :string
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ManifestationsController do
   fixtures :all

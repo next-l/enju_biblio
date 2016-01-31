@@ -13,7 +13,7 @@
 #  error_message           :text
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ResourceImportResultsController do
   fixtures :all

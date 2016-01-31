@@ -12,7 +12,7 @@
 #  resource_export_filename :string
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ResourceExportFilesController do
   fixtures :all

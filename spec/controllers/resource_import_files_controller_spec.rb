@@ -23,7 +23,7 @@
 #  resource_import_id           :string
 #
 
-require 'spec_helper'
+require 'rails_helper'
 
 describe ResourceImportFilesController do
   fixtures :all

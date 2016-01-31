@@ -20,7 +20,7 @@
 #  picture_id              :string
 #
 
-require 'spec_helper'
+require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 
 describe PictureFilesController do
