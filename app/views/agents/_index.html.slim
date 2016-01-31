@@ -14,7 +14,7 @@
     h1.title
       = t('page.listing', model: t('activerecord.models.agent'))
     .search_form
-      = form_for :agents, url: agents_path, html: {method: 'get'} do
+      = form_for :agents, url: agents_path, html: {method: 'get', class: 'form-inline'} do
         p
           = label_tag :search_form_top, t('page.search_term')
           | : 
