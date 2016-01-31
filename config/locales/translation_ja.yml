@@ -425,8 +425,11 @@ ja:
       created_at: 書誌作成日
       date_asc: 古い順
       date_desc: 新しい順
+      score_asc: 適合度逆順
+      score_desc: 適合度順
       title_asc: 50音順
       title_desc: 50音逆順
+    score: スコア
 
   merge_list:
     successfully_merged: "%{model}は正常に統合されました。"
