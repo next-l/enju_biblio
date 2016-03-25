@@ -46,21 +46,19 @@
           }, selected: params[:per_page]) %>
           <%= select_tag 'sort_by', options_for_select({
             [t('page.sort_criteria.created_at'),
-	     t('page.sort_criteria.date_desc')].join(" : ") => 'created_at:desc',
+              t('page.sort_criteria.date_desc')].join(" : ") => 'created_at:desc',
             [t('page.sort_criteria.created_at'),
-	     t('page.sort_criteria.date_asc')].join(" : ") => 'created_at:asc',
+              t('page.sort_criteria.date_asc')].join(" : ") => 'created_at:asc',
             [t('activerecord.attributes.manifestation.pub_date'),
-	     t('page.sort_criteria.date_desc')].join(" : ") => 'pub_date:desc',
+              t('page.sort_criteria.date_desc')].join(" : ") => 'pub_date:desc',
             [t('activerecord.attributes.manifestation.pub_date'),
-	     t('page.sort_criteria.date_asc')].join(" : ") => 'pub_date:asc',
+              t('page.sort_criteria.date_asc')].join(" : ") => 'pub_date:asc',
             [t('page.score'),
-	     t('page.sort_criteria.score_desc')].join(" : ") => 'score:desc',
+              t('page.sort_criteria.score_desc')].join(" : ") => 'score:desc',
             [t('page.score'),
-	     t('page.sort_criteria.score_asc')].join(" : ") => 'score:asc',
+              t('page.sort_criteria.title_asc')].join(" : ") => 'title:asc',
             [t('page.title'),
-	     t('page.sort_criteria.title_asc')].join(" : ") => 'title:asc',
-            [t('page.title'),
-	     t('page.sort_criteria.title_desc')].join(" : ") => 'title:desc',
+              t('page.sort_criteria.title_desc')].join(" : ") => 'title:desc',
           }, selected: params[:sort_by] || 'created_at:desc') -%>
           <%= hidden_field_tag 'query', @query -%>
           <%= submit_tag t('page.show') -%><br />
