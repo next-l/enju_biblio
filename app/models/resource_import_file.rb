@@ -180,7 +180,7 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.manifestation = manifestation
 
       if manifestation
-        if item_identifier.present? or row['shelf'].present?
+        if item_identifier.present? or row['shelf'].present? or row['call_number'].present?
           import_result.item = create_item(row, manifestation)
         else
           if manifestation.fulltext_content?
