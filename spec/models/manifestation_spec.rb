@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
 
 describe Manifestation, :solr => true do
   fixtures :all
@@ -236,6 +236,21 @@ describe Manifestation, :solr => true do
       csv["item_updated_at"].compact.should_not be_empty
       csv["subject:unknown"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"next-l"}
       csv["classification:ndc9"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"400"}
+    end
+
+    it "should respect the role of the user" do
+      FactoryGirl.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
+      lines = Manifestation.export
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["bookstore"].compact).to be_empty
+      expect(csv["item_price"].compact).to be_empty
+      expect(csv["budget_type"].compact).to be_empty
+
+      lines = Manifestation.export(format: :txt, role: :Librarian)
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["bookstore"].compact).not_to be_empty
+      expect(csv["item_price"].compact).not_to be_empty
+      expect(csv["budget_type"].compact).not_to be_empty
     end
   end
 

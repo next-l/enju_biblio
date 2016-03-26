@@ -515,7 +515,7 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.csv_header(options = {col_sep: "\t"})
+  def self.csv_header(role, options = {col_sep: "\t", role: :Guest})
     header = %w(
       manifestation_id
       original_title
@@ -542,11 +542,23 @@ class Manifestation < ActiveRecord::Base
       item_id
       item_identifier
       call_number
-      item_price
+    )
+    case role.to_sym
+    when :Administrator, :Librarian
+      header << "item_price"
+    end
+    header += %w(
       acquired_at
       accepted_at
-      bookstore
-      budget_type
+    )
+    case role.to_sym
+    when :Administrator, :Librarian
+      header += %w(
+        bookstore
+        budget_type
+      )
+    end
+    header += %w(
       circulation_status
       shelf
       library
@@ -557,7 +569,7 @@ class Manifestation < ActiveRecord::Base
     header.to_csv(options)
   end
 
-  def to_csv(options = {format: :txt})
+  def to_csv(options = {format: :txt, role: :Guest})
     lines = []
     if items.exists?
       items.includes(shelf: :library).each do |i|
@@ -615,11 +627,17 @@ class Manifestation < ActiveRecord::Base
         item_lines << i.id
         item_lines << i.item_identifier
         item_lines << i.call_number
-        item_lines << i.price
+        case options[:role].to_sym
+        when :Administrator, :Librarian
+          item_lines << i.price
+        end
         item_lines << i.acquired_at
         item_lines << i.accept.try(:created_at)
-        item_lines << i.bookstore.try(:name)
-        item_lines << i.budget_type.try(:name)
+        case options[:role].to_sym
+        when :Administrator, :Librarian
+          item_lines << i.bookstore.try(:name)
+          item_lines << i.budget_type.try(:name)
+        end
         item_lines << i.circulation_status.try(:name)
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
@@ -689,9 +707,9 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.export(options = {format: :txt})
+  def self.export(options = {format: :txt, role: :Guest})
     file = ''
-    file += Manifestation.csv_header(col_sep: "\t") if options[:format].to_sym == :txt
+    file += Manifestation.csv_header(options[:role], col_sep: "\t") if options[:format].to_sym == :txt
     Manifestation.find_each do |manifestation|
       file += manifestation.to_csv(options)
     end
