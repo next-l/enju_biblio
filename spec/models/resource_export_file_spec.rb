@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
   
 describe ResourceExportFile do
   fixtures :all
@@ -12,6 +12,19 @@ describe ResourceExportFile do
     ResourceExportFileJob.perform_later(file).should be_truthy
     Message.count.should eq message_count + 1
     Message.order(:id).last.subject.should eq 'エクスポートが完了しました'
+  end
+
+  it "should respect the role of the user" do
+    export_file = ResourceExportFile.new
+    export_file.user = users(:admin)
+    export_file.save!
+    export_file.export!
+    file = export_file.resource_export
+    lines = File.open(file.path).readlines.map(&:chomp)
+    columns = lines.first.split(/\t/)
+    expect(columns).to include "bookstore"
+    expect(columns).to include "budget_type"
+    expect(columns).to include "item_price"
   end
 
   context "NCID export" do
