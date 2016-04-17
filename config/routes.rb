@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :periodicals
+
   resources :resource_export_files
 
   resources :identifier_types
