@@ -1,1 +1,1 @@
-<%= Manifestation.csv_header(col_sep: "\t") -%><%= render @manifestation -%>
+<%= Manifestation.csv_header(current_user_role_name, col_sep: "\t") -%><%= render @manifestation -%>
