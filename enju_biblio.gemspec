@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
   s.add_dependency "paperclip"
-  s.add_dependency "paperclip-meta"
+  s.add_dependency "paperclip-meta", "~> 1.2"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "> 3.0"
