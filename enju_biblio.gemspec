@@ -17,10 +17,10 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
   s.add_dependency "paperclip"
-  s.add_dependency "paperclip-meta", "~> 1.2"
+  s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "> 3.0"
+  s.add_dependency "paper_trail", "~> 4.0"
   s.add_dependency "validates_timeliness", "~> 4.0"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_dependency "faraday"
 
   s.add_development_dependency "sqlite3"
-  s.add_development_dependency "mysql2", "~> 0.3.20"
+  s.add_development_dependency "mysql2"
   s.add_development_dependency "pg"
   s.add_development_dependency "rspec-rails", "~> 3.4"
   s.add_development_dependency "factory_girl_rails"
