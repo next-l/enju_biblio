@@ -47,10 +47,12 @@ class Item < ActiveRecord::Base
   end
 
   after_save do
-    manifestation.index!
+    manifestation.index
+    Sunspot.commit
   end
   after_destroy do
-    manifestation.index!
+    manifestation.index
+    Sunspot.commit
   end
 
   attr_accessor :library_id
