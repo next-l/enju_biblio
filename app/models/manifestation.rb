@@ -365,7 +365,8 @@ class Manifestation < ActiveRecord::Base
 
   def extract_text!
     extract_text
-    index!
+    index
+    Sunspot.commit
   end
 
   def created(agent)
