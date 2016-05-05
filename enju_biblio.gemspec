@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 4.0"
-  s.add_dependency "validates_timeliness", "~> 4.0"
+  s.add_dependency "jc-validates_timeliness", "~> 3.1"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
@@ -49,7 +49,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov"
   s.add_development_dependency "webmock"
   s.add_development_dependency "sunspot-rails-tester"
-  s.add_development_dependency "annotate"
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "appraisal"
 end
