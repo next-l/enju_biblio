@@ -41,7 +41,8 @@ class ImportRequest < ActiveRecord::Base
       if manifestation
         self.manifestation = manifestation
         transition_to!(:completed)
-        manifestation.index!
+        manifestation.index
+        Sunspot.commit
       else
         transition_to!(:failed)
       end
