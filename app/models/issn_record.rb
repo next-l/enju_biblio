@@ -1,4 +1,3 @@
 class IssnRecord < ActiveRecord::Base
-  belongs_to :periodical
-  belongs_to :proceeding
+  belongs_to :manifestation
 end

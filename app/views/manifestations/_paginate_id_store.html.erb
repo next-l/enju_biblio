@@ -5,7 +5,7 @@
         return;
       }else{
         var ids = JSON.parse(sessionStorage.getItem("<%= flash[:search_query] %>"));
-        var index = $.inArray(<%= @manifestation.id %>, ids);
+        var index = $.inArray(<%= manifestation.id %>, ids);
         if(ids[index - 1] > 0){
           $("#prev_link").html('<a href="<%= manifestations_path %>/' + ids[index - 1] + '"><%= t('page.previous') %></a>');
         };

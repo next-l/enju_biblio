@@ -8,7 +8,7 @@ html lang="#{@locale.to_s}"
     - if %w(index show new edit).include?(controller.action_name)
       = book_jacket_header(@library_group.settings[:book_jacket_source])
   body[itemscope itemtype="http://schema.org/WebPage"]
-    .container
+    .container-fluid
       = render 'page/header'
       = render 'page/menu'
       = yield

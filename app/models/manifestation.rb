@@ -26,6 +26,8 @@ class Manifestation < ActiveRecord::Base
   belongs_to :periodical
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
+  has_many :issn_records
+
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
