@@ -29,6 +29,7 @@ class Agent < ActiveRecord::Base
   belongs_to :country
   has_one :agent_import_result
   belongs_to :profile
+  has_many :agent_names
 
   validates_presence_of :language, :agent_type, :country
   validates_associated :language, :agent_type, :country

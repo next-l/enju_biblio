@@ -1,5 +1,5 @@
 class Periodical < ActiveRecord::Base
-  belongs_to :manifestation
+  has_many :manifestations
 
   validates :original_title, presence: true
   searchable do

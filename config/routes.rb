@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :agent_names
   resources :periodicals
 
   resources :resource_export_files
