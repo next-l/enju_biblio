@@ -26,6 +26,8 @@ class Manifestation < ActiveRecord::Base
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   has_many :issn_records
+  has_many :isbn_records
+  belongs_to :periodical
 
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
@@ -41,7 +43,7 @@ class Manifestation < ActiveRecord::Base
       :statement_of_responsibility
     text :item_identifier do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
+        periodical.manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
       else
         items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
       end
@@ -83,7 +85,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :library, multiple: true do
       if series_master?
-        root_series_statement.root_manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
+        periodical.manifestation.items.map{|i| i.shelf.library.name}.flatten.uniq
       else
         items.map{|i| i.shelf.library.name}
       end
@@ -93,7 +95,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :item_identifier, multiple: true do
       if series_master?
-        root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
+        periodical.manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
       else
         items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
       end
@@ -106,7 +108,7 @@ class Manifestation < ActiveRecord::Base
     time :deleted_at
     time :pub_date, multiple: true do
       if series_master?
-        root_series_statement.root_manifestation.pub_dates
+        periodical.manifestation.pub_dates
       else
         pub_dates
       end
@@ -151,7 +153,7 @@ class Manifestation < ActiveRecord::Base
       creator
     end
     text :atitle do
-      if serial? && root_series_statement.nil?
+      if serial? && periodical.nil?
         titles
       end
     end
@@ -160,8 +162,8 @@ class Manifestation < ActiveRecord::Base
     end
     text :jtitle do
       if serial?
-        if root_series_statement
-          root_series_statement.titles
+        if periodical
+          periodical.manifestation.titles
         else
           titles
         end
@@ -382,8 +384,7 @@ class Manifestation < ActiveRecord::Base
 
   def extract_text!
     extract_text
-    index
-    Sunspot.commit
+    index!
   end
 
   def created(agent)
@@ -400,10 +401,10 @@ class Manifestation < ActiveRecord::Base
 
   def sort_title
     if series_master?
-      if root_series_statement.title_transcription?
-        NKF.nkf('-w --katakana', root_series_statement.title_transcription)
+      if periodical.manifestation.title_transcription?
+        NKF.nkf('-w --katakana', periodical.manifestation.title_transcription)
       else
-        root_series_statement.original_title
+        periodical.manifestation.original_title
       end
     else
       if title_transcription?
@@ -429,7 +430,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def series_master?
-    return true if root_series_statement
+    return true if periodical
     false
   end
 
@@ -717,10 +718,6 @@ class Manifestation < ActiveRecord::Base
       file += manifestation.to_csv(options)
     end
     file
-  end
-
-  def root_series_statement
-    series_statements.where(root_manifestation_id: id).first
   end
 
   def isbn_characters

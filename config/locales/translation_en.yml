@@ -42,6 +42,7 @@ en:
       agent_merge: Patron merge
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
+      periodical: Periodical
 
     attributes:
       manifestation:
@@ -96,6 +97,8 @@ en:
         extent: Extent
         dimensions: Dimensions
         fulltext_content: Fulltext content
+        isbn_records: ISBN
+        issn_records: ISSN
       manifestation/subjects:
           term: Subject
       manifestation/classifications:
