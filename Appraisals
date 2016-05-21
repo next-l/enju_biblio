@@ -6,6 +6,7 @@ appraise "rails-3.2" do
   gem "cache_digests"
   gem "foreigner"
   gem "coveralls", require: false
+  gem "test-unit", "~> 3.0"
 end
 
 appraise "rails-4.1" do
