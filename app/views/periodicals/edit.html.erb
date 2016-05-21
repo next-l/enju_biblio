@@ -1,6 +1,15 @@
-<h1>Editing Periodical</h1>
+<div id="content_detail" class="ui-corner-all ui-widget-content">
+<h1 class="ui-widget-header"><%= t('page.editing', model: t('activerecord.models.periodical')) -%></h1>
+<div id="content_list">
 
 <%= render 'form' %>
 
-<%= link_to 'Show', @periodical %> |
-<%= link_to 'Back', periodicals_path %>
+</div>
+</div>
+
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <ul>
+    <li><%= link_to t('page.show'), @periodical %></li>
+    <li><%= link_to t('page.back'), periodicals_path %></li>
+  </ul>
+</div>

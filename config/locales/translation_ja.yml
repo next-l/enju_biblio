@@ -336,6 +336,9 @@ ja:
       series_statement_merge_list:
         title: タイトル
       series_statement_merge:
+      periodical:
+        original_title: タイトル
+        manifestation_id: 書誌ID
 
   resource_import_file:
     update_relationship: 関連を更新

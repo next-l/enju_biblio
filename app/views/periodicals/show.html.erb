@@ -1,19 +1,25 @@
+<div id="content_detail" class="ui-corner-all ui-widget-content">
 <p id="notice"><%= notice %></p>
 
 <p>
-  <strong>Original title:</strong>
+  <strong><%= t('activerecord.attributes.periodical.original_title') %>:</strong>
   <%= @periodical.original_title %>
 </p>
 
 <p>
-  <strong>Manifestation:</strong>
-  <%= @periodical.manifestation %>
+  <strong><%= t('activerecord.attributes.periodical.manifestation_id') %>:</strong>
+  <%= link_to @periodical.manifestation.original_title, @periodical.manifestation if @periodical.manifestation %>
 </p>
 
-<p>
-  <strong>Frequency:</strong>
-  <%= @periodical.frequency %>
-</p>
+<ul>
+  <% @periodical.manifestations.each do |manifestation| %>
+    <li><%= link_to manifestation.original_title, manifestation %></li>
+  <% end %>
+</div>
 
-<%= link_to 'Edit', edit_periodical_path(@periodical) %> |
-<%= link_to 'Back', periodicals_path %>
+<div id="submenu" class="ui-corner-all ui-widget-content">
+  <ul>
+    <li><%= link_to t('page.edit'), edit_periodical_path(@periodical) %></li>
+    <li><%= link_to t('page.back'), periodicals_path %></li>
+  </ul>
+</div>
