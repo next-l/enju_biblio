@@ -332,9 +332,6 @@ en:
       series_statement_merge_list:
         title: Title
       series_statement_merge:
-      periodical:
-        original_title: Title
-        manifestation_id: Manifestation ID
 
   resource_import_file:
     update_relationship: Update relationship
