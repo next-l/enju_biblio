@@ -42,7 +42,6 @@ ja:
       agent_merge: 人物・団体の統合
       series_statement_merge_list: シリーズ情報統合リスト
       series_statement_merge: シリーズ情報の統合
-      periodical: 定期刊行物
 
     attributes:
       manifestation:
@@ -97,8 +96,6 @@ ja:
         extent: ページ数
         dimensions: 大きさ
         fulltext_content: 全文あり
-        isbn_records: ISBN
-        issn_records: ISSN
       manifestation/subjects:
           term: 件名
       manifestation/classifications:
