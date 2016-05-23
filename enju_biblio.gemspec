@@ -13,14 +13,20 @@ Gem::Specification.new do |s|
   s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
 
+  s.required_ruby_version = ">= 1.9.3"
+
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
   s.add_dependency "paperclip"
-  s.add_dependency "paperclip-meta"
+  if RUBY_VERSION >= '2.0'
+    s.add_dependency "paperclip-meta", "~> 2.0"
+  else
+    s.add_dependency "paperclip-meta", "< 2.0"
+  end
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 4.0"
+  s.add_dependency "paper_trail", "~> 4.1"
   s.add_dependency "jc-validates_timeliness", "~> 3.1"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
