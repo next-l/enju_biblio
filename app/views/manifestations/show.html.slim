@@ -4,7 +4,7 @@
       .panel-heading
         h2.panel-title
           = t('activerecord.models.manifestation')
-      = render 'manifestations/book_jacket', manifestation: @manifestation
+        = render 'manifestations/book_jacket', manifestation: @manifestation
       ul.list-group
         - if @manifestation.picture_files.exists?
           li.list-group-item

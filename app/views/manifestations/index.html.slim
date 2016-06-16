@@ -44,7 +44,7 @@
           = render 'index_form'
         = set_focus_on_search_form
         - if @parent
-          = render 'show_parent'
+          = render 'show_periodical'
         - if @manifestations.total_count > 0
           p
             = t('page.number_of_search_results', count: @count[:query_result], numdocs: Manifestation.search.total, seconds: sprintf("%.3f", @seconds))

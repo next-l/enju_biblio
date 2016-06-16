@@ -7,11 +7,11 @@
     ul
       - if @parent
         li
-          = render 'show_parent_form', manifestation: @parent
+          = render 'show_periodical_form', manifestation: @parent
       - @manifestation.original_manifestations.each do |manifestation|
         - if manifestation != @parent
           li
-            = render 'show_parent_form', manifestation: @manifestation
+            = render 'show_periodical_form', manifestation: @manifestation
   .form-group
     = f.label :original_title
     = f.text_field :original_title, class: 'form-control'

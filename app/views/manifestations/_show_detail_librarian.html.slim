@@ -1,6 +1,6 @@
-#tabs
-  = render 'manifestations/tab_menu', manifestation: manifestation
-  #detail
+= render 'manifestations/tab_menu', manifestation: manifestation
+#tabs.tab-content
+  #detail.tab-pane.active role="tabpanel"
     - cache([manifestation, fragment: 'show_detail_librarian_html', role: current_user_role_name, locale: @locale]) do
       table#resource_detail.table.table-striped
         = embed_content(manifestation)

@@ -1,5 +1,5 @@
-#tabs
-  = render 'manifestations/tab_menu', manifestation: manifestation
+= render 'manifestations/tab_menu', manifestation: manifestation
+#tabs.tab-content
   #detail
     - cache([manifestation, fragment: 'show_detail_user_html', role: current_user_role_name, locale: @locale]) do
       table#resource_detail.table.table-striped
