@@ -20,9 +20,9 @@ Gem::Specification.new do |s|
   s.add_dependency "refile-mini_magick"
   #s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 4.1"
+  s.add_dependency "paper_trail", "~> 4.2"
   s.add_dependency "validates_timeliness", "~> 4.0"
-  s.add_dependency "simple_form", "~> 3.2"
+  s.add_dependency "simple_form", "~> 3.1"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "lisbn"
@@ -51,5 +51,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "annotate"
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "redis-rails"
-  s.add_development_dependency "resque-scheduler", "~> 4.0"
+  s.add_development_dependency "resque-scheduler", "~> 4.1"
 end
