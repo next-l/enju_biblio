@@ -25,6 +25,8 @@ xml.rdf(:RDF,
     end
   }
   @manifestations.each do |manifestation|
-    xml << render('manifestations/show', manifestation: manifestation)
+    xml.item('rdf:about' => manifestation_url(manifestation)) do
+      xml << render('manifestations/show', manifestation: manifestation)
+    end
   end
 }
