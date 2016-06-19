@@ -2,7 +2,6 @@ appraise "rails-3.2" do
   gem "rails", "~> 3.2.22"
   gem "jquery-rails"
   gem "strong_parameters"
-  gem "cancancan", "~> 1.12.0"
   gem "cache_digests"
   gem "foreigner"
   gem "coveralls", require: false
