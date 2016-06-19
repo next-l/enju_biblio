@@ -16,7 +16,6 @@ describe "manifestations/index.rdf.builder" do
     nodes.each do |node|
       rdf_ns = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
       expect(node.attribute_with_ns("about", rdf_ns).value).not_to be_empty
-      puts node.to_s
     end
   end
 end
