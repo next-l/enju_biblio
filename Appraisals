@@ -22,7 +22,7 @@ appraise "rails-4.2" do
 end
 
 appraise "rails-4.2-oai" do
-  gem "rails", "~> 4.2.5"
+  gem "rails", "~> 4.2.6"
   gem "jquery-rails"
   gem "coveralls", require: false
   gem "enju_oai", "~> 0.1.0"
