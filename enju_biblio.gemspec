@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 4.1"
+  s.add_dependency "paper_trail", "~> 5.2"
   s.add_dependency "validates_timeliness", "~> 4.0"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
@@ -52,7 +52,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "annotate"
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "resque_mailer"
-  s.add_development_dependency "resque", "~> 1.25"
+  s.add_development_dependency "resque", "~> 1.26"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "capybara"
 end
