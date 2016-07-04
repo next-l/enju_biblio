@@ -71,10 +71,10 @@ module ManifestationsHelper
     current = true if languages.include?(language.name)
     if current
       content_tag :strong do
-        link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, language: language.name, view: nil, only_path: true)))
+        link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.permit.merge(page: nil, language: language.name, view: nil, only_path: true)))
       end
     else
-      link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, language: language.name, view: nil, only_path: true)))
+      link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(params.permit.merge(page: nil, language: language.name, view: nil, only_path: true)))
     end
   end
 
@@ -86,10 +86,10 @@ module ManifestationsHelper
     content_tag :li do
       if current
         content_tag :strong do
-          link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
+          link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.permit.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
         end
       else
-        link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
+        link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(params.permit.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
       end
     end
   end
@@ -102,10 +102,10 @@ module ManifestationsHelper
       current = true if params[:carrier_type] == carrier_type.name
       if current
         content_tag :strong do
-          link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
+          link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(params.permit.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
         end
       else
-        link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
+        link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(params.permit.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
       end
     end
   end
@@ -115,10 +115,10 @@ module ManifestationsHelper
     current = true if facet.value.first.to_i == pub_date_from.to_i and facet.value.last.to_i - 1 == pub_date_until.to_i
     if current
       content_tag :strong do
-        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
+        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.permit.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
       end
     else
-      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
+      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(params.permit.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
     end
   end
 
