@@ -20,7 +20,7 @@
                 = circulation_status_facet(facet)
                 - if params[:circulation_status]
                 li
-                  = link_to t('page.remove_this_facet'), url_for(params.merge(circulation_status: nil, page: nil, view: nil, only_path: true))
+                  = link_to t('page.remove_this_facet'), url_for(params.permit.merge(circulation_status: nil, page: nil, view: nil, only_path: true))
   #content_list.col-md-9
     h1.title
       = t('page.listing', model: t('activerecord.models.item'))

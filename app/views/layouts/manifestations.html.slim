@@ -6,8 +6,8 @@ html lang="#{@locale.to_s}"
       = resource_title(@manifestation, controller.action_name)
     = render 'page/include'
     - if controller.action_name == 'index'
-      = auto_discovery_link_tag(:rss, url_for(params.merge(format: :rss, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (RSS)"))
-      = auto_discovery_link_tag(:atom, url_for(params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (Atom)"))
+      = auto_discovery_link_tag(:rss, url_for(params.permit.merge(format: :rss, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (RSS)"))
+      = auto_discovery_link_tag(:atom, url_for(params.permit.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name.localize) + " (Atom)"))
       - if %w(show edit).include?(controller.action_name)
         = book_jacket_header(@library_group.settings[:book_jacket_source])
       |  <link rel="search" type="application/opensearchdescription+xml" title="
