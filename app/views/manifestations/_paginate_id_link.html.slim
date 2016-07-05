@@ -2,8 +2,6 @@
   = render 'manifestations/paginate_id_store', manifestation: @parent
 - elsif @manifestation
   = render 'manifestations/paginate_id_store', manifestation: @manifestation
-<% end %>
-= render 'manifestations/paginate_id_store'
 = form_for :manifestations, url: manifestations_path, html: {method: 'get', class: 'form-inline'} do
   .form-group
     span#next_link
