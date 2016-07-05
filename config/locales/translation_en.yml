@@ -42,6 +42,7 @@ en:
       agent_merge: Patron merge
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
+      periodical: Periodical
 
     attributes:
       manifestation:
