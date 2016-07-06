@@ -1,7 +1,4 @@
 class Item < ActiveRecord::Base
-  enju_question_item_model if defined?(EnjuQuestion)
-  enju_inventory_item_model if defined?(EnjuInventory)
-  enju_inter_library_loan_item_model if defined?(EnjuInterLibraryLoan)
   scope :on_shelf, -> { where('shelf_id != 1') }
   scope :on_web, -> { where(shelf_id: 1) }
   scope :available_for, -> user {

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151213072705) do
+ActiveRecord::Schema.define(version: 20160513000929) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer  "basket_id"
@@ -83,6 +83,26 @@ ActiveRecord::Schema.define(version: 20151213072705) do
 
   add_index "agent_merges", ["agent_id"], name: "index_agent_merges_on_agent_id"
   add_index "agent_merges", ["agent_merge_list_id"], name: "index_agent_merges_on_agent_merge_list_id"
+
+  create_table "agent_names", force: :cascade do |t|
+    t.string   "first_name"
+    t.string   "middle_name"
+    t.string   "last_name"
+    t.string   "full_name"
+    t.integer  "language_id"
+    t.integer  "agent_id"
+    t.integer  "profile_id"
+    t.integer  "position"
+    t.string   "source"
+    t.string   "name_type"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+  end
+
+  add_index "agent_names", ["agent_id"], name: "index_agent_names_on_agent_id"
+  add_index "agent_names", ["full_name"], name: "index_agent_names_on_full_name"
+  add_index "agent_names", ["language_id"], name: "index_agent_names_on_language_id"
+  add_index "agent_names", ["profile_id"], name: "index_agent_names_on_profile_id"
 
   create_table "agent_relationship_types", force: :cascade do |t|
     t.string   "name",         null: false
@@ -451,6 +471,18 @@ ActiveRecord::Schema.define(version: 20151213072705) do
   add_index "creates", ["agent_id"], name: "index_creates_on_agent_id"
   add_index "creates", ["work_id"], name: "index_creates_on_work_id"
 
+  create_table "doi_records", force: :cascade do |t|
+    t.string   "body",                null: false
+    t.string   "registration_agency"
+    t.integer  "manifestation_id",    null: false
+    t.string   "source"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+  end
+
+  add_index "doi_records", ["body"], name: "index_doi_records_on_body"
+  add_index "doi_records", ["manifestation_id"], name: "index_doi_records_on_manifestation_id"
+
   create_table "donates", force: :cascade do |t|
     t.integer  "agent_id",   null: false
     t.integer  "item_id",    null: false
@@ -660,6 +692,30 @@ ActiveRecord::Schema.define(version: 20151213072705) do
   end
 
   add_index "inventory_files", ["user_id"], name: "index_inventory_files_on_user_id"
+
+  create_table "isbn_records", force: :cascade do |t|
+    t.string   "body",             null: false
+    t.string   "isbn_type"
+    t.string   "source"
+    t.integer  "manifestation_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "isbn_records", ["body"], name: "index_isbn_records_on_body"
+  add_index "isbn_records", ["manifestation_id"], name: "index_isbn_records_on_manifestation_id"
+
+  create_table "issn_records", force: :cascade do |t|
+    t.string   "body"
+    t.string   "issn_type"
+    t.string   "source"
+    t.integer  "manifestation_id"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+  end
+
+  add_index "issn_records", ["body"], name: "index_issn_records_on_body"
+  add_index "issn_records", ["manifestation_id"], name: "index_issn_records_on_manifestation_id"
 
   create_table "item_has_use_restrictions", force: :cascade do |t|
     t.integer  "item_id",            null: false
@@ -1056,6 +1112,16 @@ ActiveRecord::Schema.define(version: 20151213072705) do
 
   add_index "participates", ["agent_id"], name: "index_participates_on_agent_id"
   add_index "participates", ["event_id"], name: "index_participates_on_event_id"
+
+  create_table "periodicals", force: :cascade do |t|
+    t.text     "original_title"
+    t.string   "periodical_type"
+    t.integer  "manifestation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "periodicals", ["manifestation_id"], name: "index_periodicals_on_manifestation_id"
 
   create_table "picture_files", force: :cascade do |t|
     t.integer  "picture_attachable_id"
