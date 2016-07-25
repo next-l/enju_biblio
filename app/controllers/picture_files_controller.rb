@@ -11,7 +11,7 @@
 #  position                :integer
 #  created_at              :datetime
 #  updated_at              :datetime
-#  picture_filename        :string
+#  picture_file_name       :string
 #  picture_content_type    :string
 #  picture_size            :integer
 #  picture_updated_at      :datetime
@@ -233,7 +233,7 @@ class PictureFilesController < ApplicationController
       disposition = 'inline'
     end
 
-    send_file file, filename: File.basename(@picture_file.picture_filename),
+    send_file file, filename: File.basename(@picture_file.picture_file_name),
       type: @picture_file.picture_content_type, disposition: disposition
   end
 end
