@@ -52,7 +52,14 @@ class PictureFilesController < ApplicationController
       size = 'medium'
     end
 
-    # TODO: サイズ指定
+    if @picture_file.picture.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
+      else
+        file = @picture_file.picture.path(size)
+      end
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @picture_file }
