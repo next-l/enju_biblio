@@ -56,10 +56,13 @@ class PictureFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @picture_file }
+      format.html.phone {
+        if params[:format] == 'download'
+          render_image(file)
+        end
+      }
       format.download {
-        send_file @picture_file.picture.download,
-          filename: File.basename(@picture_file.picture_filename),
-          type: 'application/octet-stream'
+        render_image(file)
       }
     end
   end
