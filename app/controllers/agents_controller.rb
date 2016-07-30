@@ -5,7 +5,6 @@ class AgentsController < ApplicationController
   before_action :get_agent_merge_list, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:new, :edit]
   before_action :get_version, only: [:show]
-  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /agents
   # GET /agents.json

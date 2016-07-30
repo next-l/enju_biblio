@@ -11,7 +11,6 @@ class ManifestationsController < ApplicationController
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
   before_action :get_version, only: [:show]
-  after_action :solr_commit, only: :destroy
   after_action :convert_charset, only: :index
 
   # GET /manifestations

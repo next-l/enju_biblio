@@ -3,7 +3,6 @@ class AgentRelationshipsController < ApplicationController
   before_action :check_policy, only: [:index, :new, :create]
   before_action :get_agent
   before_action :prepare_options, only: [:new, :edit]
-  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /agent_relationships
   # GET /agent_relationships.json

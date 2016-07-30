@@ -2,7 +2,6 @@ class OwnsController < ApplicationController
   before_action :set_own, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :get_agent, :get_item
-  after_action :solr_commit, only: [:create, :update, :destroy]
 
   # GET /owns
   # GET /owns.json
