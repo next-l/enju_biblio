@@ -8,7 +8,6 @@ class ItemsController < ApplicationController
   before_action :get_library, :get_item, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:new, :edit]
   before_action :get_version, only: [:show]
-  #before_action :store_location
   after_action :solr_commit, only: [:create, :update, :destroy]
   after_action :convert_charset, only: :index
 
