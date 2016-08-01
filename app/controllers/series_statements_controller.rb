@@ -28,7 +28,6 @@ class SeriesStatementsController < ApplicationController
   before_action :set_series_statement, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :get_manifestation, except: [:create, :update, :destroy]
-  after_action :solr_commit, only: [:create, :update, :destroy]
   before_action :get_series_statement_merge_list, except: [:create, :update, :destroy]
 
   # GET /series_statements

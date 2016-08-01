@@ -79,7 +79,6 @@ class ManifestationsController < ApplicationController
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
   before_action :get_version, only: [:show]
-  after_action :solr_commit, only: :destroy
   after_action :convert_charset, only: :index
 
   # GET /manifestations
@@ -339,8 +338,6 @@ class ManifestationsController < ApplicationController
       end
     end
 
-    store_location # before_action ではファセット検索のURLを記憶してしまう
-
     respond_to do |format|
       format.html
       format.html.phone
@@ -378,7 +375,6 @@ class ManifestationsController < ApplicationController
     return if render_mode(params[:mode])
 
     flash.keep(:search_query)
-    store_location
 
     if @manifestation.series_master?
       flash.keep(:notice) if flash[:notice]
@@ -457,7 +453,6 @@ class ManifestationsController < ApplicationController
         @bookmark = current_user.bookmarks.where(manifestation_id: @manifestation.id).first if @manifestation rescue nil
         render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
-      store_location unless params[:mode] == 'tag_edit'
     end
   end
 

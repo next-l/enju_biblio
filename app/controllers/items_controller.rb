@@ -38,8 +38,6 @@ class ItemsController < ApplicationController
   before_filter :get_library, :get_item, except: [:create, :update, :destroy]
   before_filter :prepare_options, only: [:edit]
   before_filter :get_version, only: [:show]
-  #before_filter :store_location
-  after_filter :solr_commit, only: [:create, :update, :destroy]
   after_filter :convert_charset, only: :index
 
   # GET /items
