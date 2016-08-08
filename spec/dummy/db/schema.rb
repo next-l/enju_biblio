@@ -895,7 +895,7 @@ ActiveRecord::Schema.define(version: 20151213072705) do
     t.datetime "valid_until"
     t.datetime "date_submitted"
     t.datetime "date_accepted"
-    t.datetime "date_caputured"
+    t.datetime "date_captured"
     t.string   "pub_date"
     t.string   "edition_string"
     t.integer  "volume_number"
