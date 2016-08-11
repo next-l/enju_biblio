@@ -17,7 +17,7 @@ class PictureFile < ActiveRecord::Base
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_presence :picture
-  validates_attachment_content_type :picture, content_type: ["image/jpeg", "image/pjpeg", "image/png", "image/gif", "image/svg+xml"], on: :create
+  validates_attachment_content_type :picture, content_type: /\Aimage\/.*\Z/
 
   validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates_associated :picture_attachable
@@ -30,6 +30,7 @@ class PictureFile < ActiveRecord::Base
 
   private
   def extract_dimensions
+    return nil unless picture.queued_for_write[:original]
     geometry = Paperclip::Geometry.from_file(picture.queued_for_write[:original])
     self.picture_width = geometry.width.to_i
     self.picture_height = geometry.height.to_i
