@@ -18,7 +18,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency "enju_seed", "~> 0.2.0.beta.1"
   s.add_dependency "paperclip"
-  s.add_dependency "paperclip-meta"
   s.add_dependency "aws-sdk"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 5.2"

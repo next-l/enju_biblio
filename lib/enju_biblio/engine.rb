@@ -1,6 +1,5 @@
 require 'paper_trail'
 require 'paperclip'
-require 'paperclip-meta'
 require 'validates_timeliness'
 require 'dynamic_form'
 require 'simple_form'

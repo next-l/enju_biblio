@@ -1,6 +1,7 @@
 class PictureFile < ActiveRecord::Base
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true, validate: true
+  before_save :extract_dimensions
 
   if ENV['ENJU_STORAGE'] == 's3'
     has_attached_file :picture, storage: :s3, styles: { medium: "600x600>", thumb: "100x100>" },
@@ -26,6 +27,13 @@ class PictureFile < ActiveRecord::Base
   strip_attributes only: :picture_attachable_type
 
   paginates_per 10
+
+  private
+  def extract_dimensions
+    geometry = Paperclip::Geometry.from_file(picture.queued_for_write[:original])
+    self.picture_width = geometry.width.to_i
+    self.picture_height = geometry.height.to_i
+  end
 end
 
 # == Schema Information
