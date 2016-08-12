@@ -1,4 +1,4 @@
-require 'enju_seed'
+require 'enju_library'
 require 'paper_trail'
 require 'paperclip'
 require 'validates_timeliness'
