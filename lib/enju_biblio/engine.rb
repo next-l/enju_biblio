@@ -1,6 +1,4 @@
 require 'enju_library'
-require 'paper_trail'
-require 'paperclip'
 require 'validates_timeliness'
 require 'dynamic_form'
 require 'simple_form'
