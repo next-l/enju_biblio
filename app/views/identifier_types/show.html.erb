@@ -26,6 +26,6 @@
     <%- if policy(@identifier_type).update? -%>
       <li><%= link_to t('page.edit'), edit_identifier_type_path(@identifier_type) -%></li>
     <%- end -%>
-    <li><%= link_to t('page.back'), :back %></li>
+    <li><%= back_to_index(flash[:page_info]) -%></li>
   </ul>
 </div>
