@@ -3,7 +3,6 @@ require File.expand_path('../boot', __FILE__)
 require 'rails/all'
 
 Bundler.require(*Rails.groups)
-require 'enju_leaf'
 require 'enju_biblio'
 require 'enju_manifestation_viewer'
 require 'enju_inventory'
@@ -12,7 +11,6 @@ require 'enju_circulation'
 require 'enju_ndl'
 require 'enju_bookmark'
 require 'resque/server'
-require 'resque_mailer'
 
 module Dummy
   class Application < Rails::Application
