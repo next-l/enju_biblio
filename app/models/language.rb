@@ -41,13 +41,12 @@ end
 # Table name: languages
 #
 #  id           :integer          not null, primary key
-#  name         :string(255)      not null
-#  native_name  :string(255)
+#  name         :string           not null
+#  native_name  :string
 #  display_name :text
-#  iso_639_1    :string(255)
-#  iso_639_2    :string(255)
-#  iso_639_3    :string(255)
+#  iso_639_1    :string
+#  iso_639_2    :string
+#  iso_639_3    :string
 #  note         :text
 #  position     :integer
 #
-

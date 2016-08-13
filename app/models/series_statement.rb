@@ -60,7 +60,7 @@ end
 #  updated_at                         :datetime
 #  title_transcription                :text
 #  title_alternative                  :text
-#  series_statement_identifier        :string(255)
+#  series_statement_identifier        :string
 #  manifestation_id                   :integer
 #  note                               :text
 #  title_subseries_transcription      :text

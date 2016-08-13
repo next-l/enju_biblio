@@ -11,8 +11,8 @@ end
 # Table name: import_request_transitions
 #
 #  id                :integer          not null, primary key
-#  to_state          :string(255)
-#  metadata          :text             default("{}")
+#  to_state          :string
+#  metadata          :text             default({})
 #  sort_key          :integer
 #  import_request_id :integer
 #  created_at        :datetime

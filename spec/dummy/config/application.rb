@@ -11,6 +11,8 @@ require 'enju_subject'
 require 'enju_circulation'
 require 'enju_ndl'
 require 'enju_bookmark'
+require 'globalize'
+require 'globalize-accessors'
 require 'resque/server'
 
 module Dummy

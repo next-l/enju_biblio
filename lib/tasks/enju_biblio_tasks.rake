@@ -25,13 +25,10 @@ namespace :enju_biblio do
 
   desc "upgrade enju_biblio"
   task :upgrade => :environment do
-    Item.transaction do
-      update_item
-      update_agent_type
-      update_carrier_type
-      update_content_type
-      update_identifier_type
-    end
+    Rake::Task['statesman:backfill_most_recent'].invoke('AgentImportFile')
+    Rake::Task['statesman:backfill_most_recent'].invoke('ImportRequest')
+    Rake::Task['statesman:backfill_most_recent'].invoke('ResourceExportFile')
+    Rake::Task['statesman:backfill_most_recent'].invoke('ResourceImportFile')
     puts 'enju_biblio: The upgrade completed successfully.'
   end
 end

@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
 
   # Setup accessible (or protected) attributes for your model
 
-  include EnjuLeaf::EnjuUser
+  include EnjuSeed::EnjuUser
   include EnjuCirculation::EnjuUser
   include EnjuMessage::EnjuUser
   include EnjuBookmark::EnjuUser
