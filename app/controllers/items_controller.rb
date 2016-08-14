@@ -278,23 +278,23 @@ class ItemsController < ApplicationController
   end
 
   def prepare_options
-    @libraries = Library.real << Library.web
+    @libraries = Library.order(:position)
     if @item
       @library = @item.shelf.library
     else
       @library = Library.real.includes(:shelves).order(:position).first
     end
     @shelves = @library.try(:shelves)
-    @bookstores = Bookstore.all
-    @budget_types = BudgetType.all
+    @bookstores = Bookstore.order(:position)
+    @budget_types = BudgetType.order(:position)
     @roles = Role.all
     if defined?(EnjuCirculation)
-      @circulation_statuses = CirculationStatus.all
+      @circulation_statuses = CirculationStatus.order(:position)
       @use_restrictions = UseRestriction.available
       if @manifestation
         @checkout_types = CheckoutType.available_for_carrier_type(@manifestation.carrier_type)
       else
-        @checkout_types = CheckoutType.all
+        @checkout_types = CheckoutType.order(:position)
       end
     end
   end

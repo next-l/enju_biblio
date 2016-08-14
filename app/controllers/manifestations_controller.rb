@@ -147,7 +147,7 @@ class ManifestationsController < ApplicationController
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
-      max_number_of_results = @library_group.settings[:max_number_of_results].to_i
+      max_number_of_results = @library_group.max_number_of_results
       if max_number_of_results == 0
         @max_number_of_results = @count[:query_result]
       else
@@ -220,7 +220,7 @@ class ManifestationsController < ApplicationController
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
         else
-          pub_year_range_interval = @library_group.settings[:pub_year_facet_range_interval] || 10
+          pub_year_range_interval = @library_group.pub_year_facet_range_interval || 10
         end
 
         search.build do
