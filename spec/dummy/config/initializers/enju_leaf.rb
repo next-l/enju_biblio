@@ -1,8 +1,0 @@
-CarrierType.include(EnjuCirculation::EnjuCarrierType)
-Manifestation.include(EnjuCirculation::EnjuManifestation)
-Manifestation.include(EnjuSubject::EnjuManifestation)
-Item.include(EnjuCirculation::EnjuItem)
-Item.include(EnjuLibrary::EnjuItem)
-Item.include(EnjuInventory::EnjuItem)
-Profile.include(EnjuCirculation::EnjuProfile)
-UserGroup.include(EnjuCirculation::EnjuUserGroup)
