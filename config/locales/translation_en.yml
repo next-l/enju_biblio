@@ -55,6 +55,7 @@ en:
         pub_date: Date of publication
         deleted_at: Deleted at
         access_address: Access address
+        number_of_page_string: Number of page (string)
         start_page: Start page
         end_page: End page
         height: Height

@@ -55,6 +55,7 @@ ja:
         pub_date: 出版日
         deleted_at: 削除時刻
         access_address: アクセスアドレス
+        number_of_page_string: ページ数（文字列）
         start_page: 最初のページ
         end_page: 最後のページ
         height: 高さ

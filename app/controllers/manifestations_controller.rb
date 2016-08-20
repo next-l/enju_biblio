@@ -491,7 +491,7 @@ class ManifestationsController < ApplicationController
     params.require(:manifestation).permit(
       :original_title, :title_alternative, :title_transcription,
       :manifestation_identifier, :date_copyrighted,
-      :access_address, :language_id, :carrier_type_id, :extent, :start_page,
+      :access_address, :language_id, :carrier_type_id, :start_page,
       :end_page, :height, :width, :depth, :publication_place,
       :price, :fulltext, :volume_number_string,
       :issue_number_string, :serial_number_string, :edition, :note,
@@ -501,7 +501,7 @@ class ManifestationsController < ApplicationController
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
       :dimensions, :fulltext_content, :extent,
-      :number_of_page_string, :parent_id,
+      :parent_id,
       :serial, :statement_of_responsibility,
       {:creators_attributes => [
         :id, :last_name, :middle_name, :first_name,
