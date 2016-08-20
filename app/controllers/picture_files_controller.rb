@@ -2,7 +2,6 @@ class PictureFilesController < ApplicationController
   before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :get_attachable, only: [:index, :new]
-  skip_before_action :store_current_location
 
   # GET /picture_files
   # GET /picture_files.json
