@@ -3,7 +3,7 @@
     [M]
     <%= link_to title_with_volume_number(manifestation), manifestation, itemprop: 'name' -%>
     <% if manifestation.serial? %>
-      <%= image_tag('icons/newspaper.png', size: '16x16', alt: t('manifestation.serial')) -%>
+      <%= image_tag('icons/newspaper.png', size: '16x16', class: 'enju_icon', alt: t('manifestation.serial')) -%>
     <%- end -%>
     <%= link_to form_icon(manifestation.carrier_type), manifestation -%>
   </h2>
@@ -25,7 +25,7 @@
     <%- if manifestation.access_address? -%>
       <br />
       <%= link_to manifestation.access_address, manifestation.access_address -%>
-      <%= link_to image_tag('icons/world_go.png', size: '16x16', alt: ('Web')), manifestation.access_address -%>
+      <%= link_to image_tag('icons/world_go.png', size: '16x16', class: 'enju_icon', alt: t('manifestation.web')), manifestation.access_address -%>
     <%- end -%>
   </p>
 <% end %>
