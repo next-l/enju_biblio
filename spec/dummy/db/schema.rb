@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160814165332) do
+ActiveRecord::Schema.define(version: 20160820004638) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer  "basket_id"
@@ -262,12 +262,16 @@ ActiveRecord::Schema.define(version: 20160814165332) do
   add_index "carrier_type_has_checkout_types", ["checkout_type_id"], name: "index_carrier_type_has_checkout_types_on_checkout_type_id"
 
   create_table "carrier_types", force: :cascade do |t|
-    t.string   "name",         null: false
+    t.string   "name",                    null: false
     t.text     "display_name"
     t.text     "note"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "attachment_file_name"
+    t.string   "attachment_content_type"
+    t.integer  "attachment_file_size"
+    t.datetime "attachment_updated_at"
   end
 
   create_table "checked_items", force: :cascade do |t|
