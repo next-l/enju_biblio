@@ -917,6 +917,7 @@ ActiveRecord::Schema.define(version: 20160820004638) do
     t.integer  "year_of_publication"
     t.text     "attachment_meta"
     t.integer  "month_of_publication"
+    t.string   "number_of_page_string"
     t.boolean  "fulltext_content"
     t.boolean  "serial"
     t.text     "statement_of_responsibility"
