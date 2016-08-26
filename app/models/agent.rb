@@ -224,7 +224,11 @@ class Agent < ActiveRecord::Base
       if agent_list[:agent_identifier].present?
         agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       else
-        agent = Agent.where(full_name: name_and_role[0]).first
+        agents_matched = Agent.where(full_name: name_and_role[0])
+        attr0 = agent_list.keys - [ :full_name ]
+        agent = agents_matched.select{|a|
+          attr0.select{|attr| a.send(attr) != agent_list[attr] }.empty?
+        }.first
       end
       role_type = name_and_role[1].to_s.strip
       unless agent
@@ -232,13 +236,15 @@ class Agent < ActiveRecord::Base
           full_name: name_and_role[0],
           full_name_transcription: agent_list[:full_name_transcription],
           agent_identifier: agent_list[:agent_identifier],
-          language_id: 1
+          place: agent_list[:place],
+          language_id: 1,
         )
         agent.required_role = Role.where(name: 'Guest').first
         agent.save
       end
       agents << agent
     end
+    agents.uniq!
     agents
   end
 
