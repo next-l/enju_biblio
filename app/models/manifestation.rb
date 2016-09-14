@@ -35,8 +35,15 @@ class Manifestation < ActiveRecord::Base
     text :title, default_boost: 2 do
       titles
     end
-    text :fulltext, :note, :creator, :contributor, :publisher, :description,
-      :statement_of_responsibility
+    [ :fulltext, :note, :creator, :contributor, :publisher, :description, :statement_of_responsibility ].each do |field|
+      text field do
+        if series_master?
+          derived_manifestations.map{|c| c.send(field) }.flatten.compact
+        else
+          self.send(field)
+        end
+      end
+    end
     text :item_identifier do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
