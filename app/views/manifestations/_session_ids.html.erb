@@ -4,7 +4,9 @@
       return;
     }else{
       var ids = <%= @manifestation_ids %>;
-      sessionStorage.setItem("<%= @search_query %>", JSON.stringify(ids));
+      var query = '<%= request.query_string %>';
+      sessionStorage.setItem("ids_<%= @search_query %>", JSON.stringify(ids));
+      sessionStorage.setItem("query_<%= @search_query %>", query);
     };
   });
 </script>
