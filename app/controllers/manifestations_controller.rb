@@ -224,17 +224,6 @@ class ManifestationsController < ApplicationController
         @max_number_of_results = max_number_of_results
       end
 
-      if session[:search_params]
-        unless search.query.to_params == session[:search_params]
-          clear_search_sessions
-        end
-      else
-        clear_search_sessions
-        session[:params] = params
-        session[:search_params] = search.query.to_params
-        session[:query] = @query
-      end
-
       if params[:format] == 'html' or params[:format].nil?
         @search_query = Digest::SHA1.hexdigest(Marshal.dump(search.query.to_params).force_encoding('UTF-8'))
         if flash[:search_query] == @search_query
