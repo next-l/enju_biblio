@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20160820004638) do
     t.integer  "agent_import_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
   end
 
   add_index "agent_import_file_transitions", ["agent_import_file_id"], name: "index_agent_import_file_transitions_on_agent_import_file_id"
@@ -595,6 +596,7 @@ ActiveRecord::Schema.define(version: 20160820004638) do
     t.integer  "import_request_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
   end
 
   add_index "import_request_transitions", ["import_request_id"], name: "index_import_request_transitions_on_import_request_id"
@@ -1159,12 +1161,11 @@ ActiveRecord::Schema.define(version: 20160820004638) do
 
   create_table "reserve_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",    default: "{}"
+    t.text     "metadata",   default: "{}"
     t.integer  "sort_key"
     t.integer  "reserve_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "most_recent"
   end
 
   add_index "reserve_transitions", ["reserve_id"], name: "index_reserve_transitions_on_reserve_id"
@@ -1200,6 +1201,7 @@ ActiveRecord::Schema.define(version: 20160820004638) do
     t.integer  "resource_export_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
   end
 
   add_index "resource_export_file_transitions", ["resource_export_file_id"], name: "index_resource_export_file_transitions_on_file_id"
@@ -1223,6 +1225,7 @@ ActiveRecord::Schema.define(version: 20160820004638) do
     t.integer  "resource_import_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
   end
 
   add_index "resource_import_file_transitions", ["resource_import_file_id"], name: "index_resource_import_file_transitions_on_file_id"

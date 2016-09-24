@@ -126,7 +126,8 @@ describe FormOfWorksController do
         position = form_of_work.position
         put :update, :id => form_of_work.id, :move => 'higher'
         expect(response).to redirect_to form_of_works_url
-        assigns(:form_of_work).position.should eq position - 1
+        form_of_work.reload
+        form_of_work.position.should eq position - 1
       end
     end
 
