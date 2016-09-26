@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "CreateTypes" do
   describe "GET /create_types" do

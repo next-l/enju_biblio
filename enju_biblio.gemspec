@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_inventory", "~> 0.2.0.beta.2"
   s.add_development_dependency "enju_bookmark", "~> 0.2.0.beta.2"
   s.add_development_dependency "enju_event", "~> 0.2.0.beta.2"
-  s.add_development_dependency "enju_circulation", "~> 0.2.0.beta.2"
+  s.add_development_dependency "enju_circulation", "~> 0.2.0.beta.3"
   s.add_development_dependency "enju_ndl", "~> 0.2.0.beta.2"
   s.add_development_dependency "enju_oai", "~> 0.2.0.beta.2"
   s.add_development_dependency "globalize", "~> 5.0.1"
