@@ -20,7 +20,6 @@ gem "enju_inventory", github: "next-l/enju_inventory"
 gem "enju_ndl", github: "next-l/enju_ndl"
 gem "enju_nii", github: "next-l/enju_nii"
 gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer"
-gem "refile", github: "refile/refile"
 gem "globalize", github: "globalize/globalize"
 gem "codeclimate-test-reporter", group: :test, require: false
 gem "rspec_junit_formatter", group: :test, require: false

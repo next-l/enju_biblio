@@ -16,13 +16,12 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
-  #s.add_dependency "refile", "~> 0.6"
-  #s.add_dependency "refile-mini_magick"
-  #s.add_dependency "aws-sdk"
+  s.add_dependency "enju_seed", "~> 0.2.0.beta.6"
+  s.add_dependency "shrine"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 5.1"
+  s.add_dependency "paper_trail", "~> 5.2"
   s.add_dependency "validates_timeliness", "~> 4.0"
-  s.add_dependency "simple_form", "~> 3.1"
+  s.add_dependency "simple_form", "~> 3.3"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "lisbn"
@@ -33,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "mysql2"
   s.add_development_dependency "pg"
-  s.add_development_dependency "rspec-rails", "~> 3.4"
+  s.add_development_dependency "rspec-rails", "~> 3.5"
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "vcr", "~> 3.0"
   s.add_development_dependency "sunspot_solr", "2.2.0"
