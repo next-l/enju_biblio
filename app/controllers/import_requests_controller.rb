@@ -45,12 +45,12 @@ class ImportRequestsController < ApplicationController
 
     respond_to do |format|
       if @import_request.save
-        @import_request.import!
+        @error_type = @import_request.import!
         format.html {
           if @import_request.manifestation
             redirect_to @import_request.manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.import_request'))
-          else
-            redirect_to new_import_request_url, notice: t('import_request.record_not_found')
+          elsif @error_type
+            redirect_to new_import_request_url, notice: t("import_request.#{@error_type}")
           end
         }
         #format.html.phone {

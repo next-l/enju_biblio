@@ -197,11 +197,13 @@ describe ImportRequestsController do
           post :create, :import_request => {:isbn => manifestations(:manifestation_00001).identifier_contents(:isbn).first}
           expect(assigns(:import_request)).to be_valid
         end
-
         it "redirects to the created import_request", :vcr => true do
           post :create, :import_request => @attrs
           expect(response).to redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
+      end
+      it "should import without errors", vcr: true do
+        expect{ post :create, import_request: { isbn: "0744521815" } }.not_to raise_error
       end
     end
 
