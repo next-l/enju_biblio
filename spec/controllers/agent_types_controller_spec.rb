@@ -126,7 +126,7 @@ describe AgentTypesController do
         position = agent_type.position
         put :update, :id => agent_type.id, :move => 'higher'
         expect(response).to redirect_to agent_types_url
-        assigns(:agent_type).position.should eq position - 1
+        assigns(:agent_type).reload.position.should eq position - 1
       end
     end
 

@@ -126,7 +126,7 @@ describe MediumOfPerformancesController do
         position = medium_of_performance.position
         put :update, :id => medium_of_performance.id, :move => 'higher'
         expect(response).to redirect_to medium_of_performances_url
-        assigns(:medium_of_performance).position.should eq position - 1
+        assigns(:medium_of_performance).reload.position.should eq position - 1
       end
     end
 

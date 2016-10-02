@@ -328,7 +328,7 @@ describe RealizesController do
           position = @realize.position
           put :update, :id => @realize.id, :expression_id => @realize.expression.id, :move => 'lower'
           expect(response).to redirect_to realizes_url(expression_id: @realize.expression_id)
-          assigns(:realize).position.should eq position + 1
+          assigns(:realize).reload.position.should eq position + 1
         end
       end
 

@@ -126,7 +126,7 @@ describe LicensesController do
         position = license.position
         put :update, :id => license.id, :move => 'higher'
         expect(response).to redirect_to licenses_url
-        assigns(:license).position.should eq position - 1
+        assigns(:license).reload.position.should eq position - 1
       end
     end
 

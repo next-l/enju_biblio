@@ -126,7 +126,7 @@ describe CreateTypesController do
         position = create_type.position
         put :update, :id => create_type.id, :move => 'higher'
         expect(response).to redirect_to create_types_url
-        assigns(:create_type).position.should eq position - 1
+        assigns(:create_type).reload.position.should eq position - 1
       end
     end
 

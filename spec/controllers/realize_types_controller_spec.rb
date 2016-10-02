@@ -126,7 +126,7 @@ describe RealizeTypesController do
         position = realize_type.position
         put :update, :id => realize_type.id, :move => 'higher'
         expect(response).to redirect_to realize_types_url
-        assigns(:realize_type).position.should eq position - 1
+        assigns(:realize_type).reload.position.should eq position - 1
       end
     end
 

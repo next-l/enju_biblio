@@ -331,7 +331,7 @@ describe CreatesController do
           position = @create.position
           put :update, :id => @create.id, :work_id => @create.work.id, :move => 'lower'
           expect(response).to redirect_to creates_url(work_id: @create.work_id)
-          assigns(:create).position.should eq position + 1
+          assigns(:create).reload.position.should eq position + 1
         end
       end
 
