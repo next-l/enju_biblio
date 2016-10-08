@@ -539,6 +539,8 @@ class Manifestation < ActiveRecord::Base
       manifestation_identifier
       access_address
       note
+      extent
+      dimensions
     )
 
     header += IdentifierType.order(:position).pluck(:name)
@@ -608,6 +610,8 @@ class Manifestation < ActiveRecord::Base
         item_lines << manifestation_identifier
         item_lines << access_address
         item_lines << note
+        item_lines << extent
+        item_lines << dimensions
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
           if identifier_contents(identifier_type.to_sym).first
@@ -681,6 +685,8 @@ class Manifestation < ActiveRecord::Base
       line << manifestation_identifier
       line << access_address
       line << note
+      line << extent
+      line << dimensions
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
         if identifier_contents(identifier_type.to_sym).first
