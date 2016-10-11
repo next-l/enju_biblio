@@ -227,4 +227,10 @@ class AgentsController < ApplicationController
     @languages = Language.all
     @agent_type = AgentType.where(name: 'person').first
   end
+
+  def filtered_params
+    params.permit([:view, :format, :page, :language])
+  end
+
+  helper_method :filtered_params
 end
