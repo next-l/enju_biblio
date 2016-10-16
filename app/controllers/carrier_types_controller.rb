@@ -126,7 +126,7 @@ class CarrierTypesController < ApplicationController
     end
   end
 
-  def render_image
+  def render_image(file)
     if @carrier_type.picture.path
       if ENV['ENJU_STORAGE'] == 's3'
         send_data file, filename: File.basename(@carrier_type.attachment_file_name), type: @carrier_type.attachment_content_type, disposition: 'inline'
