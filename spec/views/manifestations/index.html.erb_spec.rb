@@ -12,7 +12,7 @@ describe "manifestations/index" do
     @reservable_facet = @carrier_type_facet = @language_facet = @library_facet = @pub_year_facet = []
     @seconds = 0
     @max_number_of_results = 500
-    view.stub(:params).and_return(ActionController::Parameters.new(per_page: 50))
+    view.stub(:filtered_params).and_return(ActionController::Parameters.new(per_page: 50).permit(:per_page))
   end
 
   describe "sort_by menu" do

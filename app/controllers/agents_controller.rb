@@ -229,7 +229,7 @@ class AgentsController < ApplicationController
   end
 
   def filtered_params
-    params.permit([:view, :format, :page, :language])
+    params.permit([:view, :format, :page, :language, :sort_by, :per_page])
   end
 
   helper_method :filtered_params

@@ -43,7 +43,7 @@
             t('page.per_page', num: 20) => 20,
             t('page.per_page', num: 50) => 50,
             t('page.per_page', num: 100) => 100,
-          }, selected: params[:per_page]) %>
+          }, selected: filtered_params[:per_page]) %>
           <%= select_tag 'sort_by', options_for_select({
             [t('page.sort_criteria.created_at'),
               t('page.sort_criteria.date_desc')].join(" : ") => 'created_at:desc',
@@ -59,7 +59,7 @@
               t('page.sort_criteria.title_asc')].join(" : ") => 'title:asc',
             [t('page.title'),
               t('page.sort_criteria.title_desc')].join(" : ") => 'title:desc',
-          }, selected: params[:sort_by] || 'created_at:desc') -%>
+          }, selected: filtered_params[:sort_by] || 'created_at:desc') -%>
           <%= hidden_field_tag 'query', @query -%>
           <%= submit_tag t('page.show') -%><br />
         </p>

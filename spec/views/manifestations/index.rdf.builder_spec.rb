@@ -5,7 +5,7 @@ describe "manifestations/index.rdf.builder" do
     manifestation = FactoryGirl.create(:manifestation)
     @manifestations = assign(:manifestations, [ manifestation ] )
     @library_group = LibraryGroup.first
-    view.stub(:params).and_return(ActionController::Parameters.new)
+    view.stub(:filtered_params).and_return(ActionController::Parameters.new(per_page: 50))
   end
 
   it "should export RDF format" do
