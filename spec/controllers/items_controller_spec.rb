@@ -364,7 +364,6 @@ describe ItemsController do
         post :create, :item => FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id)
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        pending "..wait for the next release of enju_circulation module"
         post :create, :item => FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id)
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
