@@ -24,6 +24,10 @@ gem "globalize", github: "globalize/globalize"
 gem "codeclimate-test-reporter", group: :test, require: false
 gem "rspec_junit_formatter", group: :test, require: false
 gem "jquery-rails"
+gem "refile", github: "refile/refile", require: "refile/rails"
+gem "refile-mini_magick"
+gem "sinatra", "~> 2.0.0.beta2"
+gem "rails-controller-testing"
 
 # To use a debugger
 # gem 'byebug', group: [:development, :test]

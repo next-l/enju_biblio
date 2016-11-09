@@ -2,8 +2,8 @@ class PictureFile < ActiveRecord::Base
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true, validate: true
 
-  attachment :picture
-  validates :picture, presence: true
+  include AttachmentUploader[:image]
+
   validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates_associated :picture_attachable
   default_scope { order('picture_files.position') }
@@ -25,18 +25,18 @@ end
 #
 #  id                      :integer          not null, primary key
 #  picture_attachable_id   :integer
-#  picture_attachable_type :string
-#  content_type            :string
+#  picture_attachable_type :string(255)
+#  content_type            :string(255)
 #  title                   :text
-#  thumbnail               :string
+#  thumbnail               :string(255)
 #  position                :integer
-#  created_at              :datetime
-#  updated_at              :datetime
-#  picture_filename        :string
-#  picture_content_type    :string
-#  picture_size            :integer
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#  picture_file_name       :string(255)
+#  picture_content_type    :string(255)
+#  picture_file_size       :integer
 #  picture_updated_at      :datetime
 #  picture_meta            :text
-#  picture_fingerprint     :string
-#  picture_id              :string
+#  picture_fingerprint     :string(255)
 #
+

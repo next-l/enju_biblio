@@ -28,6 +28,7 @@ Gem::Specification.new do |s|
   s.add_dependency "statesman"
   s.add_dependency "faraday"
   s.add_dependency "cocoon"
+  s.add_dependency "image_processing"
 
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "mysql2"
@@ -51,4 +52,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "redis-rails"
   s.add_development_dependency "resque-scheduler", "~> 4.3"
+  s.add_development_dependency "codeclimate-test-reporter", "~> 1.0.0"
 end
