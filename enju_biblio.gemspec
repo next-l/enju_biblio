@@ -16,8 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
-  s.add_dependency "enju_seed", "~> 0.2.0"
-  s.add_dependency "shrine"
+  #s.add_dependency "enju_seed", "~> 0.2.0"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 5.2"
   s.add_dependency "validates_timeliness", "~> 4.0"
