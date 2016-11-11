@@ -11,8 +11,6 @@ services:
   - elasticsearch
   - redis-server
 env:
-  - DB=sqlite
-  - DB=mysql
   - DB=postgresql
 notifications:
   slack:

@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
-  s.add_dependency "enju_seed", "~> 0.2.0.beta.6"
+  s.add_dependency "enju_seed", "~> 0.2.0"
   s.add_dependency "shrine"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 5.2"
@@ -30,8 +30,6 @@ Gem::Specification.new do |s|
   s.add_dependency "cocoon"
   s.add_dependency "image_processing"
 
-  s.add_development_dependency "sqlite3"
-  s.add_development_dependency "mysql2"
   s.add_development_dependency "pg"
   s.add_development_dependency "rspec-rails", "~> 3.5"
   s.add_development_dependency "factory_girl_rails"
@@ -51,6 +49,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "annotate"
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "redis-rails"
-  s.add_development_dependency "resque-scheduler", "~> 4.3"
   s.add_development_dependency "codeclimate-test-reporter", "~> 1.0.0"
 end

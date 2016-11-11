@@ -20,13 +20,11 @@ gem "enju_inventory", github: "next-l/enju_inventory"
 gem "enju_ndl", github: "next-l/enju_ndl"
 gem "enju_nii", github: "next-l/enju_nii"
 gem "enju_manifestation_viewer", github: "next-l/enju_manifestation_viewer"
-gem "globalize", github: "globalize/globalize"
 gem "codeclimate-test-reporter", group: :test, require: false
 gem "rspec_junit_formatter", group: :test, require: false
 gem "jquery-rails"
-gem "refile", github: "refile/refile", require: "refile/rails"
-gem "refile-mini_magick"
 gem "sinatra", "~> 2.0.0.beta2"
+gem "mini_magick"
 gem "rails-controller-testing"
 
 # To use a debugger
