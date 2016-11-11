@@ -42,6 +42,7 @@ Gem::Specification.new do |s|
   #s.add_development_dependency "enju_manifestation_viewer", "~> 0.2.0.beta.1"
   #s.add_development_dependency "enju_circulation", "~> 0.2.0.beta.1"
   #s.add_development_dependency "enju_ndl", "~> 0.2.0.beta.1"
+  s.add_development_dependency "resque"
   s.add_development_dependency "simplecov"
   s.add_development_dependency "webmock"
   s.add_development_dependency "sunspot-rails-tester"

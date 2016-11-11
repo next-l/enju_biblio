@@ -1,8 +1,7 @@
 class CarrierType < ActiveRecord::Base
   include MasterModel
-  default_scope { order("carrier_types.position") }
   has_many :manifestations
-  attachment :attachment
+  include AttachmentUploader[:attachment]
 
   def mods_type
     case name

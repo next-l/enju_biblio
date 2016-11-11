@@ -1,7 +1,7 @@
 class ContentType < ActiveRecord::Base
   include MasterModel
   has_many :manifestations
-  attachment :attachment
+  include AttachmentUploader[:attachment]
 end
 
 # == Schema Information

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "series_statement_merges/index" do
   fixtures :all
