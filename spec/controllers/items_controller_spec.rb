@@ -353,7 +353,18 @@ describe ItemsController do
         expect(response).to redirect_to item_url(assigns(:item))
         flash[:message].should eq I18n.t('item.this_item_is_reserved')
         assigns(:item).manifestation.should eq Manifestation.find(2)
-        assigns(:item).manifestation.next_reservation.current_state.should eq 'retained'
+        assigns(:item).should be_retained
+      end
+
+      it "should create another item with already retained" do
+        reserve = FactoryGirl.create(:reserve)
+        reserve.transition_to!(:requested)
+        post :create, :item => FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id)
+        expect(assigns(:item)).to be_valid
+        expect(response).to redirect_to item_url(assigns(:item))
+        post :create, :item => FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id)
+        expect(assigns(:item)).to be_valid
+        expect(response).to redirect_to item_url(assigns(:item))
       end
     end
 

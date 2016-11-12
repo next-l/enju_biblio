@@ -147,22 +147,11 @@ class ManifestationsController < ApplicationController
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
-      max_number_of_results = @library_group.settings[:max_number_of_results].to_i
+      max_number_of_results = @library_group.max_number_of_results
       if max_number_of_results == 0
         @max_number_of_results = @count[:query_result]
       else
         @max_number_of_results = max_number_of_results
-      end
-
-      if session[:search_params]
-        unless search.query.to_params == session[:search_params]
-          clear_search_sessions
-        end
-      else
-        clear_search_sessions
-        session[:params] = params
-        session[:search_params] = search.query.to_params
-        session[:query] = @query
       end
 
       if params[:format] == 'html' or params[:format].nil?
@@ -220,7 +209,7 @@ class ManifestationsController < ApplicationController
         if params[:pub_year_range_interval]
           pub_year_range_interval = params[:pub_year_range_interval].to_i
         else
-          pub_year_range_interval = @library_group.settings[:pub_year_facet_range_interval] || 10
+          pub_year_range_interval = @library_group.pub_year_facet_range_interval || 10
         end
 
         search.build do
@@ -491,7 +480,7 @@ class ManifestationsController < ApplicationController
     params.require(:manifestation).permit(
       :original_title, :title_alternative, :title_transcription,
       :manifestation_identifier, :date_copyrighted,
-      :access_address, :language_id, :carrier_type_id, :extent, :start_page,
+      :access_address, :language_id, :carrier_type_id, :start_page,
       :end_page, :height, :width, :depth, :publication_place,
       :price, :fulltext, :volume_number_string,
       :issue_number_string, :serial_number_string, :edition, :note,
@@ -501,7 +490,7 @@ class ManifestationsController < ApplicationController
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
       :dimensions, :fulltext_content, :extent,
-      :number_of_page_string, :parent_id,
+      :parent_id,
       :serial, :statement_of_responsibility,
       {:creators_attributes => [
         :id, :last_name, :middle_name, :first_name,
@@ -850,4 +839,10 @@ class ManifestationsController < ApplicationController
     end
     query
   end
+
+  def filtered_params
+    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page])
+  end
+
+  helper_method :filtered_params
 end

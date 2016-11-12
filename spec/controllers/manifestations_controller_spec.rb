@@ -232,6 +232,17 @@ describe ManifestationsController do
         manifestations = assigns(:manifestations)
         expect(manifestations.first.created_at).to be <= manifestations.last.created_at
       end
+
+      it "should get manifestations with series for its children's information" do
+        periodical = FactoryGirl.create(:manifestation_serial)
+        manifestation = FactoryGirl.create(:manifestation, description: "foo")
+        periodical.derived_manifestations << manifestation
+        periodical.save!
+        get :index, query: "foo"
+        manifestations = assigns(:manifestations)
+        expect(manifestations).not_to be_blank
+        expect(manifestations.map{|e| e.id }).to include periodical.id
+      end
     end
   end
 

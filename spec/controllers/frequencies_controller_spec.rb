@@ -133,7 +133,7 @@ describe FrequenciesController do
         position = frequency.position
         put :update, params: { id: frequency.id, move: 'higher' }
         expect(response).to redirect_to frequencies_url
-        assigns(:frequency).position.should eq position - 1
+        assigns(:frequency).reload.position.should eq position - 1
       end
     end
 

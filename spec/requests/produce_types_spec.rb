@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "ProduceTypes" do
   describe "GET /produce_types" do

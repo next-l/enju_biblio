@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "Manifestations" do
   describe "GET /manifestations", :solr => true do

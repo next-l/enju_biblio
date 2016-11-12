@@ -55,6 +55,7 @@ ja:
         pub_date: 出版日
         deleted_at: 削除時刻
         access_address: アクセスアドレス
+        number_of_page_string: ページ数（文字列）
         start_page: 最初のページ
         end_page: 最後のページ
         height: 高さ
@@ -442,3 +443,7 @@ ja:
     item_found: "所蔵インポート省略: すでに登録されている個別資料が見つかりました。"
     isbn_invalid: "ISBNインポートエラー: ISBNは不正な値です。"
     isbn_record_not_found: "ISBNインポートエラー: 外部サービスにおいてISBNに該当する書誌データが見つかりませんでした。"
+
+  import_request:
+    record_not_found: 書誌レコードが見つかりませんでした。
+    error: インポート中にエラーが発生しました。

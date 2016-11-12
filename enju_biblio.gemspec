@@ -14,9 +14,9 @@ Gem::Specification.new do |s|
   s.description = "Bibliographic record module for Next-L Enju"
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
-  s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
+  s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/{log,private,solr,tmp}/**/*"] - Dir["spec/dummy/db/*.sqlite3"]
 
-  s.add_dependency "enju_library", "~> 0.2.0.beta.5"
+  s.add_dependency "enju_library", "~> 0.2.0.beta.9"
   s.add_dependency "marc"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
@@ -24,21 +24,21 @@ Gem::Specification.new do |s|
   s.add_dependency "lisbn"
   s.add_dependency "faraday"
 
-  s.add_development_dependency "enju_leaf", "~> 1.2.0.beta.2"
+  s.add_development_dependency "enju_leaf", "~> 1.2.0"
   s.add_development_dependency "enju_manifestation_viewer", "~> 0.2.0.beta.2"
-  s.add_development_dependency "enju_subject", "~> 0.2.0.beta.2"
+  s.add_development_dependency "enju_subject", "~> 0.2.0.beta.3"
   s.add_development_dependency "enju_inventory", "~> 0.2.0.beta.2"
   s.add_development_dependency "enju_bookmark", "~> 0.2.0.beta.2"
   s.add_development_dependency "enju_event", "~> 0.2.0.beta.2"
-  s.add_development_dependency "enju_circulation", "~> 0.2.0.beta.2"
+  s.add_development_dependency "enju_circulation", "~> 0.2.0.beta.3"
   s.add_development_dependency "enju_ndl", "~> 0.2.0.beta.2"
   s.add_development_dependency "enju_oai", "~> 0.2.0.beta.2"
-  s.add_development_dependency "globalize"
+  s.add_development_dependency "globalize", "~> 5.0.1"
   s.add_development_dependency "globalize-accessors"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "mysql2"
   s.add_development_dependency "pg"
-  s.add_development_dependency "rspec-rails", "~> 3.4"
+  s.add_development_dependency "rspec-rails", "~> 3.5"
   s.add_development_dependency "factory_girl_rails"
   s.add_development_dependency "vcr", "~> 3.0"
   s.add_development_dependency "sunspot_solr", "2.2.0"
@@ -50,4 +50,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "resque", "~> 1.26"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "capybara"
+  s.add_development_dependency "appraisal"
 end

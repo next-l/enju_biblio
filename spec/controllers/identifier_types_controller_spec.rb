@@ -126,7 +126,7 @@ describe IdentifierTypesController do
         position = identifier_type.position
         put :update, params: { id: identifier_type.id, move: 'higher' }
         expect(response).to redirect_to identifier_types_url
-        assigns(:identifier_type).position.should eq position - 1
+        assigns(:identifier_type).reload.position.should eq position - 1
       end
     end
 

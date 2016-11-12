@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "SeriesStatementMerges" do
   describe "GET /series_statement_merges" do

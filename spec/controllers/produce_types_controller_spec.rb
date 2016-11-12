@@ -126,7 +126,7 @@ describe ProduceTypesController do
         position = produce_type.position
         put :update, params: { id: produce_type.id, move: 'higher' }
         expect(response).to redirect_to produce_types_url
-        assigns(:produce_type).position.should eq position - 1
+        assigns(:produce_type).reload.position.should eq position - 1
       end
     end
 

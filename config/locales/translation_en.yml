@@ -55,6 +55,7 @@ en:
         pub_date: Date of publication
         deleted_at: Deleted at
         access_address: Access address
+        number_of_page_string: Number of page (string)
         start_page: Start page
         end_page: End page
         height: Height
@@ -438,3 +439,6 @@ en:
     item_found: 'Item skipped: This item is already created.'
     isbn_invalid: "ISBN import error: ISBN string is invalid."
     isbn_record_not_found: "ISBN import error: Bibliographic record is not found in the external service."
+  import_request:
+    record_not_found: Record not found.
+    error: An error occured during import.

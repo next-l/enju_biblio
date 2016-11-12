@@ -36,29 +36,31 @@ class ImportRequest < ActiveRecord::Base
   end
 
   def import!
-    return nil unless Manifestation.respond_to?(:import_isbn)
-    unless manifestation
-      manifestation = Manifestation.import_isbn(isbn)
-      if manifestation
-        self.manifestation = manifestation
-        transition_to!(:completed)
-        manifestation.index
-        Sunspot.commit
-      else
-        transition_to!(:failed)
+    exceptions = [ ActiveRecord::RecordInvalid, NameError, URI::InvalidURIError ]
+    not_found_exceptions = []
+    not_found_exceptions << EnjuNdl::RecordNotFound if defined? EnjuNdl
+    not_found_exceptions << EnjuNii::RecordNotFound if defined? EnjuNii
+    begin
+      return nil unless Manifestation.respond_to?(:import_isbn)
+      unless manifestation
+        manifestation = Manifestation.import_isbn(isbn)
+        if manifestation
+          self.manifestation = manifestation
+          transition_to!(:completed)
+          manifestation.index
+          Sunspot.commit
+        else
+          transition_to!(:failed)
+        end
       end
-    #else
-    #  transition_to!(:failed)
+      save
+    rescue *not_found_exceptions => e
+      transition_to!(:failed)
+      return :record_not_found
+    rescue *exceptions => e
+      transition_to!(:failed)
+      return :error
     end
-    save
-  rescue ActiveRecord::RecordInvalid
-    transition_to!(:failed)
-  rescue NameError
-    transition_to!(:failed)
-  rescue EnjuNdl::RecordNotFound
-    transition_to!(:failed)
-  rescue EnjuNii::RecordNotFound
-    transition_to!(:failed)
   end
 
   private

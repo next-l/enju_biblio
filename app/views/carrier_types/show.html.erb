@@ -13,6 +13,11 @@
   <%= @carrier_type.display_name.localize -%>
 </p>
 
+<p>
+  <strong><%= t('page.file') -%>:</strong>
+  <%= link_to @carrier_type.attachment_file_name, carrier_type_path(@carrier_type, format: :download, size: 'thumb') -%><br />
+</p>
+
 <% if defined?(EnjuCirculation) %>
   <p>
     <strong><%= t('activerecord.models.checkout_type') -%>:</strong>

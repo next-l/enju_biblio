@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "RealizeTypes" do
   describe "GET /realize_types" do

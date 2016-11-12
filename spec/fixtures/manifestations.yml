@@ -16,6 +16,8 @@ manifestation_00001:
   start_page: 1
   end_page: 100
   repository_content: true
+  extent: "123p"
+  dimensions: "25cm"
 manifestation_00002: 
   carrier_type_id: 1
   language_id: 1

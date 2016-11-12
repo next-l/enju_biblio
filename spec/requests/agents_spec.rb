@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "Agents" do
   describe "GET /agents", :solr => true do

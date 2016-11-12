@@ -35,8 +35,15 @@ class Manifestation < ActiveRecord::Base
     text :title, default_boost: 2 do
       titles
     end
-    text :fulltext, :note, :creator, :contributor, :publisher, :description,
-      :statement_of_responsibility
+    [ :fulltext, :note, :creator, :contributor, :publisher, :description, :statement_of_responsibility ].each do |field|
+      text field do
+        if series_master?
+          derived_manifestations.map{|c| c.send(field) }.flatten.compact
+        else
+          self.send(field)
+        end
+      end
+    end
     text :item_identifier do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
@@ -205,7 +212,8 @@ class Manifestation < ActiveRecord::Base
         access_key: ENV['AWS_ACCESS_KEY_ID'],
         secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
         bucket: ENV['S3_BUCKET_NAME'],
-        s3_host_name: ENV['S3_HOST_NAME']
+        s3_host_name: ENV['S3_HOST_NAME'],
+        s3_region: ENV["S3_REGION"]
       },
       s3_permissions: :private
   else
@@ -531,6 +539,8 @@ class Manifestation < ActiveRecord::Base
       manifestation_identifier
       access_address
       note
+      extent
+      dimensions
     )
 
     header += IdentifierType.order(:position).pluck(:name)
@@ -600,6 +610,8 @@ class Manifestation < ActiveRecord::Base
         item_lines << manifestation_identifier
         item_lines << access_address
         item_lines << note
+        item_lines << extent
+        item_lines << dimensions
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
           if identifier_contents(identifier_type.to_sym).first
@@ -673,6 +685,8 @@ class Manifestation < ActiveRecord::Base
       line << manifestation_identifier
       line << access_address
       line << note
+      line << extent
+      line << dimensions
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
         if identifier_contents(identifier_type.to_sym).first

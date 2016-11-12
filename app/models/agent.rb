@@ -82,7 +82,7 @@ class Agent < ActiveRecord::Base
 
   def set_full_name
     if full_name.blank?
-      if LibraryGroup.site_config.settings[:family_name_first]
+      if LibraryGroup.site_config.family_name_first
         self.full_name = [last_name, middle_name, first_name].compact.join(" ").to_s.strip
       else
         self.full_name = [first_name, last_name, middle_name].compact.join(" ").to_s.strip
@@ -224,7 +224,9 @@ class Agent < ActiveRecord::Base
       if agent_list[:agent_identifier].present?
         agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       else
-        agent = Agent.where(full_name: name_and_role[0]).first
+        agents_matched = Agent.where(full_name: name_and_role[0])
+        agents_matched = agents_matched.where(place: agent_list[:place]) if agent_list[:place]
+        agent = agents_matched.first
       end
       role_type = name_and_role[1].to_s.strip
       unless agent
@@ -232,13 +234,15 @@ class Agent < ActiveRecord::Base
           full_name: name_and_role[0],
           full_name_transcription: agent_list[:full_name_transcription],
           agent_identifier: agent_list[:agent_identifier],
-          language_id: 1
+          place: agent_list[:place],
+          language_id: 1,
         )
         agent.required_role = Role.where(name: 'Guest').first
         agent.save
       end
       agents << agent
     end
+    agents.uniq!
     agents
   end
 

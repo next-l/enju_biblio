@@ -1,4 +1,4 @@
-require "spec_helper"
+require 'rails_helper'
 
 describe LicensesController do
   describe "routing" do

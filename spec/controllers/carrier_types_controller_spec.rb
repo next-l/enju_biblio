@@ -126,7 +126,7 @@ describe CarrierTypesController do
         position = carrier_type.position
         put :update, params: { id: carrier_type.id, move: 'higher' }
         expect(response).to redirect_to carrier_types_url
-        assigns(:carrier_type).position.should eq position - 1
+        assigns(:carrier_type).reload.position.should eq position - 1
       end
     end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe "series_statement_merges/new" do
   before(:each) do

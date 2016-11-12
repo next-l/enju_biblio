@@ -203,6 +203,9 @@ describe ImportRequestsController do
           expect(response).to redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
+      it "should import without errors", vcr: true do
+        expect{ post :create, import_request: { isbn: "0744521815" } }.not_to raise_error
+      end
     end
 
     describe 'When logged in as Librarian' do

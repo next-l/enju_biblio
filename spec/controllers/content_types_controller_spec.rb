@@ -133,7 +133,7 @@ describe ContentTypesController do
         position = content_type.position
         put :update, params: { id: content_type.id, move: 'higher' }
         expect(response).to redirect_to content_types_url
-        assigns(:content_type).position.should eq position - 1
+        assigns(:content_type).reload.position.should eq position - 1
       end
     end
 

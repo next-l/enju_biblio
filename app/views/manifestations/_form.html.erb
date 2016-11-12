@@ -150,19 +150,10 @@
     <%= render 'manifestations/subject_form', f: f %>
   <% end %>
 
-<!--
   <div class="field">
     <%= f.label :extent -%>
-    <%= f.text_field :extent -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :dimensions -%>
-    <%= f.text_field :dimensions -%>
-  </div>
--->
-
-  <div class="field">
+    <%= f.text_field :extent, class: 'resource_subject' -%>
+    <br />
     <%= f.label :start_page -%>
     <%= f.text_field :start_page, class: 'resource_integer' -%>
     <%= f.label :end_page -%>
@@ -170,6 +161,9 @@
   </div>
 
   <div class="field">
+    <%= f.label :dimensions -%>
+    <%= f.text_field :dimensions, class: 'resource_subject' -%>
+    <br />
     <%= f.label :height -%>(cm)
     <%= f.text_field :height, class: 'resource_integer' -%>
     <%= f.label :width -%>(cm)
