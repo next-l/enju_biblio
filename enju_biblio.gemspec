@@ -27,6 +27,7 @@ Gem::Specification.new do |s|
   s.add_dependency "statesman"
   s.add_dependency "faraday"
   s.add_dependency "cocoon"
+  s.add_dependency "mini_magick"
   s.add_dependency "image_processing"
 
   s.add_development_dependency "pg"
