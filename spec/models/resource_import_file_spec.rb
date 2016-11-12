@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
   
 describe ResourceImportFile do
   fixtures :all
@@ -226,6 +226,25 @@ describe ResourceImportFile do
         Manifestation.order(:id).last.publication_place.should eq '東京'
       end
     end
+
+    describe "when it contains item related fields" do
+      it "should create an item as well" do
+        import_file = <<-EOF
+original_title	call_number	item_note
+resource_import_file_test1	007.6	note for the item.
+        EOF
+        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
+        file.user = users(:admin)
+        old_manifestations_count = Manifestation.count
+        old_items_count = Item.count
+        result = file.import_start
+        expect(Manifestation.count).to eq old_manifestations_count + 1
+        expect(Item.count).to eq old_items_count + 1
+        expect(file.resource_import_results.last.item).to be_valid
+        expect(file.resource_import_results.last.item.call_number).to eq "007.6"
+        expect(file.resource_import_results.last.item.note).to eq "note for the item."
+      end
+    end
   end
 
   describe "when its mode is 'update'" do
@@ -302,7 +321,7 @@ end
 #  user_id                      :integer
 #  note                         :text
 #  executed_at                  :datetime
-#  resource_import_filename     :string
+#  resource_import_file_name    :string
 #  resource_import_content_type :string
 #  resource_import_size         :integer
 #  resource_import_updated_at   :datetime
@@ -314,4 +333,5 @@ end
 #  user_encoding                :string
 #  default_shelf_id             :integer
 #  resource_import_id           :string
+#  attachment_data              :jsonb
 #

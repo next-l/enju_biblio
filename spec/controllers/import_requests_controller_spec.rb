@@ -1,15 +1,3 @@
-# == Schema Information
-#
-# Table name: import_requests
-#
-#  id               :integer          not null, primary key
-#  isbn             :string
-#  manifestation_id :integer
-#  user_id          :integer
-#  created_at       :datetime
-#  updated_at       :datetime
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 
@@ -23,7 +11,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.order(id: :desc).page(1))
+        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
       end
     end
 
@@ -32,7 +20,7 @@ describe ImportRequestsController do
 
       it "assigns all import_requests as @import_requests" do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.order(id: :desc).page(1))
+        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
       end
     end
 

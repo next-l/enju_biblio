@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: manifestation_relationship_types
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 
@@ -32,8 +19,7 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
-        expect(response).to be_success
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
       end
     end
 
@@ -42,8 +28,7 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
-        expect(response).to be_success
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
       end
     end
 
@@ -52,16 +37,14 @@ describe ManifestationRelationshipTypesController do
 
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
-        expect(response).to be_success
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
       end
     end
 
     describe "When not logged in" do
       it "assigns all manifestation_relationship_types as @manifestation_relationship_types" do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
-        expect(response).to be_success
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
       end
     end
   end

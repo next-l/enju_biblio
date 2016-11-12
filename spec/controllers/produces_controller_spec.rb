@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: produces
-#
-#  id               :integer          not null, primary key
-#  agent_id         :integer          not null
-#  manifestation_id :integer          not null
-#  position         :integer
-#  created_at       :datetime
-#  updated_at       :datetime
-#  produce_type_id  :integer
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 

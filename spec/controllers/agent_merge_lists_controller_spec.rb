@@ -1,13 +1,3 @@
-# == Schema Information
-#
-# Table name: agent_merge_lists
-#
-#  id         :integer          not null, primary key
-#  title      :string
-#  created_at :datetime
-#  updated_at :datetime
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 

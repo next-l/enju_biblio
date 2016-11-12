@@ -1,33 +1,4 @@
 # -*- encoding: utf-8 -*-
-# == Schema Information
-#
-# Table name: items
-#
-#  id                      :integer          not null, primary key
-#  call_number             :string
-#  item_identifier         :string
-#  created_at              :datetime
-#  updated_at              :datetime
-#  deleted_at              :datetime
-#  shelf_id                :integer          default(1), not null
-#  include_supplements     :boolean          default(FALSE), not null
-#  note                    :text
-#  url                     :string
-#  price                   :integer
-#  lock_version            :integer          default(0), not null
-#  required_role_id        :integer          default(1), not null
-#  required_score          :integer          default(0), not null
-#  acquired_at             :datetime
-#  bookstore_id            :integer
-#  budget_type_id          :integer
-#  circulation_status_id   :integer          default(5), not null
-#  checkout_type_id        :integer          default(1), not null
-#  binding_item_identifier :string
-#  binding_call_number     :string
-#  binded_at               :datetime
-#  manifestation_id        :integer
-#
-
 require 'rails_helper'
 
 describe ItemsController do
@@ -209,6 +180,12 @@ describe ItemsController do
 	end
         get :new, :manifestation_id => @manifestation.id
 	expect(response).to redirect_to(libraries_url)
+      end
+
+      it "should not get new item for series_master" do
+        manifestation_serial = FactoryGirl.create(:manifestation_serial)
+        get :new, :manifestation_id => manifestation_serial.id
+	expect(response).to redirect_to(manifestations_url(parent_id: manifestation_serial.id))
       end
     end
 
@@ -551,12 +528,12 @@ describe ItemsController do
       login_fixture_admin
 
       it "destroys the requested item" do
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
       end
 
       it "redirects to the items list" do
         manifestation = @item.manifestation
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
         expect(response).to redirect_to(items_url(manifestation_id: manifestation.id))
       end
 
@@ -582,12 +559,12 @@ describe ItemsController do
       login_fixture_librarian
 
       it "destroys the requested item" do
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
       end
 
       it "redirects to the items list" do
         manifestation = @item.manifestation
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
         expect(response).to redirect_to(items_url(manifestation_id: manifestation.id))
       end
     end
@@ -596,22 +573,22 @@ describe ItemsController do
       login_fixture_user
 
       it "destroys the requested item" do
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
       end
 
       it "should be forbidden" do
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
         expect(response).to be_forbidden
       end
     end
 
     describe "When not logged in" do
       it "destroys the requested item" do
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
       end
 
       it "should be forbidden" do
-        delete :destroy, :id => @item.id
+        delete :destroy, params: {:id => @item.id}
         expect(response).to redirect_to(new_user_session_url)
       end
     end

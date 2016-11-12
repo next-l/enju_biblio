@@ -1,70 +1,4 @@
-# == Schema Information
-#
-# Table name: manifestations
-#
-#  id                              :integer          not null, primary key
-#  original_title                  :text             not null
-#  title_alternative               :text
-#  title_transcription             :text
-#  classification_number           :string
-#  manifestation_identifier        :string
-#  date_of_publication             :datetime
-#  date_copyrighted                :datetime
-#  created_at                      :datetime
-#  updated_at                      :datetime
-#  deleted_at                      :datetime
-#  access_address                  :string
-#  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          default(1), not null
-#  start_page                      :integer
-#  end_page                        :integer
-#  height                          :integer
-#  width                           :integer
-#  depth                           :integer
-#  price                           :integer
-#  fulltext                        :text
-#  volume_number_string            :string
-#  issue_number_string             :string
-#  serial_number_string            :string
-#  edition                         :integer
-#  note                            :text
-#  repository_content              :boolean          default(FALSE), not null
-#  lock_version                    :integer          default(0), not null
-#  required_role_id                :integer          default(1), not null
-#  required_score                  :integer          default(0), not null
-#  frequency_id                    :integer          default(1), not null
-#  subscription_master             :boolean          default(FALSE), not null
-#  attachment_filename             :string
-#  attachment_content_type         :string
-#  attachment_size                 :integer
-#  attachment_updated_at           :datetime
-#  nii_type_id                     :integer
-#  title_alternative_transcription :text
-#  description                     :text
-#  abstract                        :text
-#  available_at                    :datetime
-#  valid_until                     :datetime
-#  date_submitted                  :datetime
-#  date_accepted                   :datetime
-#  date_caputured                  :datetime
-#  pub_date                        :string
-#  edition_string                  :string
-#  volume_number                   :integer
-#  issue_number                    :integer
-#  serial_number                   :integer
-#  content_type_id                 :integer          default(1)
-#  year_of_publication             :integer
-#  attachment_meta                 :text
-#  month_of_publication            :integer
-#  fulltext_content                :boolean
-#  serial                          :boolean
-#  statement_of_responsibility     :text
-#  publication_place               :text
-#  extent                          :text
-#  dimensions                      :text
-#  attachment_id                   :string
-#  attachment_fingerprint          :string
-#
+# -*- coding: utf-8 -*-
 
 require 'rails_helper'
 
@@ -279,6 +213,25 @@ describe ManifestationsController do
         expect(assigns(:manifestations).count).to eq 3
         expect(assigns(:manifestations).total_count).to eq 118
       end
+
+      it "should accept page parameter" do
+	get :index
+	original_manifestations = assigns(:manifestations)
+	expect(original_manifestations.count).to eq 10
+        get :index, page: 2
+	manifestations_page2 = assigns(:manifestations)
+	expect(manifestations_page2.count).to eq 10
+	expect(original_manifestations.first).not_to eq manifestations_page2.first
+      end
+
+      it "should accept sort_by parameter" do
+        get :index, sort_by: "created_at:desc"
+        manifestations = assigns(:manifestations)
+        expect(manifestations.first.created_at).to be >= manifestations.last.created_at
+        get :index, sort_by: "created_at:asc"
+        manifestations = assigns(:manifestations)
+        expect(manifestations.first.created_at).to be <= manifestations.last.created_at
+      end
     end
   end
 
@@ -423,6 +376,51 @@ describe ManifestationsController do
         get :new, :expression_id => 1
         expect(response).to be_success
       end
+
+      it "should get new template with parent_id" do
+        serial = FactoryGirl.create(:manifestation_serial,
+                                    statement_of_responsibility: "statement_of_responsibility1",
+                                    title_alternative: "title_alternative1",
+                                    publication_place: "publication_place1",
+                                    height: 123,
+                                    width: 123,
+                                    depth: 123,
+                                    price: "price1",
+                                    access_address: "http://example.jp",
+                                    language_id: FactoryGirl.create(:language).id,
+                                    frequency_id: FactoryGirl.create(:frequency).id,
+                                    required_role_id: FactoryGirl.create(:role).id,
+                                   )
+        serial.creators << FactoryGirl.create(:agent)
+        serial.contributors << FactoryGirl.create(:agent)
+        serial.publishers << FactoryGirl.create(:agent)
+        serial.subjects << FactoryGirl.create(:subject)
+        serial.classifications << FactoryGirl.create(:classification)
+        serial.save!
+        get :new, :parent_id => serial.id
+        expect(response).to be_success
+        manifestation = assigns(:manifestation)
+        parent = assigns(:parent)
+        expect(parent).to be_truthy
+        expect(manifestation.original_title).to eq parent.original_title
+        expect(manifestation.creators).to eq parent.creators
+        expect(manifestation.contributors).to eq parent.contributors
+        expect(manifestation.publishers).to eq parent.publishers
+        expect(manifestation.classifications).to eq parent.classifications
+        expect(manifestation.subjects).to eq parent.subjects
+        expect(manifestation.statement_of_responsibility).to eq parent.statement_of_responsibility
+        expect(manifestation.title_alternative).to eq parent.title_alternative
+        expect(manifestation.publication_place).to eq parent.publication_place
+        expect(manifestation.height).to eq parent.height
+        expect(manifestation.width).to eq parent.width
+        expect(manifestation.depth).to eq parent.depth
+        expect(manifestation.price).to eq parent.price
+        expect(manifestation.access_address).to eq parent.access_address
+        expect(manifestation.language).to eq parent.language
+        expect(manifestation.frequency).to eq parent.frequency
+        expect(manifestation.required_role).to eq parent.required_role
+      end
+
     end
 
     describe "When logged in as User" do
@@ -462,6 +460,17 @@ describe ManifestationsController do
         manifestation = FactoryGirl.create(:manifestation)
         get :edit, :id => manifestation.id
         expect(assigns(:manifestation)).to eq(manifestation)
+      end
+
+      render_views
+      it "assigns the identifiers to @manifestation" do
+        manifestation = FactoryGirl.create(:manifestation)
+        identifier = FactoryGirl.create(:identifier)
+        manifestation.identifiers << identifier
+        get :edit, :id => manifestation.id
+        expect(assigns(:manifestation)).to eq manifestation
+        expect(assigns(:manifestation).identifiers).to eq manifestation.identifiers
+        expect(response).to render_template(partial: "manifestations/_identifier_fields")
       end
     end
 
@@ -666,6 +675,14 @@ describe ManifestationsController do
           expect(assigns(:manifestation)).to eq(@manifestation)
           expect(response).to redirect_to(@manifestation)
         end
+
+        it "assigns identifiers to @manifestation" do
+          identifiers_attrs = {
+            identifier_attributes: [ FactoryGirl.create(:identifier) ]
+          }
+          put :update, id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs)
+          expect(assigns(:manifestation)).to eq @manifestation
+        end
       end
 
       describe "with invalid params" do
@@ -691,7 +708,7 @@ describe ManifestationsController do
 
         it "assigns the requested manifestation as @manifestation" do
           put :update, :id => @manifestation.id, :manifestation => @attrs
-          expect(assigns(:manifestation)).to be_valid
+          expect(assigns(:manifestation)).to eq(@manifestation)
           expect(response).to be_forbidden
         end
       end
@@ -753,8 +770,9 @@ describe ManifestationsController do
       end
 
       it "should not destroy manifestation of series master with children" do
-        @series_statement = FactoryGirl.create(:series_statement_serial)
-	@manifestation = FactoryGirl.create(:manifestation_serial)
+        @manifestation = FactoryGirl.create(:manifestation_serial)
+        child = FactoryGirl.create(:manifestation)
+        @manifestation.derived_manifestations << child
         delete :destroy, :id => @manifestation.id
         expect(response).to be_forbidden
       end

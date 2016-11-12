@@ -25,18 +25,18 @@ end
 #
 #  id                      :integer          not null, primary key
 #  picture_attachable_id   :integer
-#  picture_attachable_type :string(255)
-#  content_type            :string(255)
+#  picture_attachable_type :string
+#  content_type            :string
 #  title                   :text
-#  thumbnail               :string(255)
+#  thumbnail               :string
 #  position                :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  picture_file_name       :string(255)
-#  picture_content_type    :string(255)
-#  picture_file_size       :integer
+#  created_at              :datetime
+#  updated_at              :datetime
+#  picture_file_name       :string
+#  picture_content_type    :string
+#  picture_size            :integer
 #  picture_updated_at      :datetime
 #  picture_meta            :text
-#  picture_fingerprint     :string(255)
+#  picture_fingerprint     :string
+#  picture_id              :string
 #
-

@@ -217,7 +217,7 @@ end
 #  user_id                   :integer
 #  note                      :text
 #  executed_at               :datetime
-#  agent_import_filename     :string
+#  agent_import_file_name    :string
 #  agent_import_content_type :string
 #  agent_import_size         :integer
 #  agent_import_updated_at   :datetime
@@ -228,4 +228,5 @@ end
 #  edit_mode                 :string
 #  user_encoding             :string
 #  agent_import_id           :string
+#  attachment_data           :jsonb
 #

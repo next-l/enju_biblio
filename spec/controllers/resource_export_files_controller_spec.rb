@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: resource_export_files
-#
-#  id                       :integer          not null, primary key
-#  user_id                  :integer
-#  executed_at              :datetime
-#  created_at               :datetime
-#  updated_at               :datetime
-#  resource_export_id       :string
-#  resource_export_size     :integer
-#  resource_export_filename :string
-#
-
 require 'rails_helper'
 
 describe ResourceExportFilesController do
@@ -23,7 +9,7 @@ describe ResourceExportFilesController do
 
       it "assigns all resource_export_files as @resource_export_files" do
         get :index
-        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order(id: :desc).page(1))
+        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order('id DESC').page(1))
       end
     end
 
@@ -32,7 +18,7 @@ describe ResourceExportFilesController do
 
       it "assigns all resource_export_files as @resource_export_files" do
         get :index
-        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order(id: :desc).page(1))
+        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order('id DESC').page(1))
       end
     end
 

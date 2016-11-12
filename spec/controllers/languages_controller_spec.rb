@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: languages
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  native_name  :string
-#  display_name :text
-#  iso_639_1    :string
-#  iso_639_2    :string
-#  iso_639_3    :string
-#  note         :text
-#  position     :integer
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 
@@ -34,7 +19,7 @@ describe LanguagesController do
 
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
 
@@ -43,7 +28,7 @@ describe LanguagesController do
 
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
 
@@ -52,14 +37,14 @@ describe LanguagesController do
 
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
 
     describe "When not logged in" do
       it "assigns all languages as @languages" do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
   end
@@ -73,14 +58,14 @@ describe LanguagesController do
       login_fixture_admin
 
       it "assigns the requested language as @language" do
-        get :show, :id => @language.id
+        get :show, params: {:id => @language.id}
         expect(assigns(:language)).to eq(@language)
       end
     end
 
     describe "When not logged in" do
       it "assigns the requested language as @language" do
-        get :show, :id => @language.id
+        get :show, params: {:id => @language.id}
         expect(assigns(:language)).to eq(@language)
       end
     end
@@ -114,14 +99,14 @@ describe LanguagesController do
       login_fixture_admin
 
       it "assigns the requested language as @language" do
-        get :edit, :id => @language.id
+        get :edit, params: {:id => @language.id}
         expect(assigns(:language)).to eq(@language)
       end
     end
 
     describe "When not logged in" do
       it "should not assign the requested language as @language" do
-        get :edit, :id => @language.id
+        get :edit, params: {:id => @language.id}
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -308,22 +293,22 @@ describe LanguagesController do
       login_fixture_admin
 
       it "destroys the requested language" do
-        delete :destroy, :id => @language.id
+        delete :destroy, params: {:id => @language.id}
       end
 
       it "redirects to the languagees list" do
-        delete :destroy, :id => @language.id
+        delete :destroy, params: {:id => @language.id}
         response.should redirect_to(languages_url)
       end
     end
 
     describe "When not logged in" do
       it "destroys the requested language" do
-        delete :destroy, :id => @language.id
+        delete :destroy, params: {:id => @language.id}
       end
 
       it "should be forbidden" do
-        delete :destroy, :id => @language.id
+        delete :destroy, params: {:id => @language.id}
         response.should redirect_to(new_user_session_url)
       end
     end

@@ -52,4 +52,5 @@ end
 #  resource_export_id       :string
 #  resource_export_size     :integer
 #  resource_export_filename :string
+#  attachment_data          :jsonb
 #

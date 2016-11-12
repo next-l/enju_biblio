@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: agent_relationships
-#
-#  id                         :integer          not null, primary key
-#  parent_id                  :integer
-#  child_id                   :integer
-#  agent_relationship_type_id :integer
-#  created_at                 :datetime
-#  updated_at                 :datetime
-#  position                   :integer
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 

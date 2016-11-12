@@ -752,7 +752,7 @@ end
 #  user_id                      :integer
 #  note                         :text
 #  executed_at                  :datetime
-#  resource_import_filename     :string
+#  resource_import_file_name    :string
 #  resource_import_content_type :string
 #  resource_import_size         :integer
 #  resource_import_updated_at   :datetime
@@ -764,4 +764,5 @@ end
 #  user_encoding                :string
 #  default_shelf_id             :integer
 #  resource_import_id           :string
+#  attachment_data              :jsonb
 #

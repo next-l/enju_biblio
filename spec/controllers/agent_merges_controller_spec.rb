@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: agent_merges
-#
-#  id                  :integer          not null, primary key
-#  agent_id            :integer          not null
-#  agent_merge_list_id :integer          not null
-#  created_at          :datetime
-#  updated_at          :datetime
-#
-
 require 'rails_helper'
 
 describe AgentMergesController do

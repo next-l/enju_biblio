@@ -1,25 +1,3 @@
-# == Schema Information
-#
-# Table name: picture_files
-#
-#  id                      :integer          not null, primary key
-#  picture_attachable_id   :integer
-#  picture_attachable_type :string
-#  content_type            :string
-#  title                   :text
-#  thumbnail               :string
-#  position                :integer
-#  created_at              :datetime
-#  updated_at              :datetime
-#  picture_filename        :string
-#  picture_content_type    :string
-#  picture_size            :integer
-#  picture_updated_at      :datetime
-#  picture_meta            :text
-#  picture_fingerprint     :string
-#  picture_id              :string
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 
@@ -343,9 +321,7 @@ describe PictureFilesController do
         end
 
         it "assigns the requested picture_file as @picture_file" do
-          put :update, :id => @picture_file.id, :picture_file => {
-            :picture_attachable_type => 'Shelf', :picture_attachable_id => 1, :picture => fixture_file_upload("/../../examples/spinner.gif", 'image/gif')
-          }
+          put :update, :id => @picture_file.id, :picture_file => @attrs
           expect(assigns(:picture_file)).to eq(@picture_file)
           expect(response).to redirect_to(@picture_file)
         end

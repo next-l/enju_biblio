@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: countries
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  display_name :text
-#  alpha_2      :string
-#  alpha_3      :string
-#  numeric_3    :string
-#  note         :text
-#  position     :integer
-#
-
 require 'rails_helper'
 require 'sunspot/rails/spec_helper'
 

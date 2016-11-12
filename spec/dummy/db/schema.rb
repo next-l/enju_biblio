@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161111193346) do
+ActiveRecord::Schema.define(version: 20161112122814) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -44,7 +44,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "agent_import_filename"
+    t.string   "agent_import_file_name"
     t.string   "agent_import_content_type"
     t.integer  "agent_import_size"
     t.datetime "agent_import_updated_at"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.string   "edit_mode"
     t.string   "user_encoding"
     t.string   "agent_import_id"
+    t.jsonb    "attachment_data"
     t.index ["agent_import_id"], name: "index_agent_import_files_on_agent_import_id", using: :btree
     t.index ["parent_id"], name: "index_agent_import_files_on_parent_id", using: :btree
     t.index ["user_id"], name: "index_agent_import_files_on_user_id", using: :btree
@@ -353,11 +354,13 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "shelf_id"
+    t.integer  "library_id"
     t.index ["basket_id"], name: "index_checkouts_on_basket_id", using: :btree
     t.index ["checkin_id"], name: "index_checkouts_on_checkin_id", using: :btree
     t.index ["item_id", "basket_id"], name: "index_checkouts_on_item_id_and_basket_id", unique: true, using: :btree
     t.index ["item_id"], name: "index_checkouts_on_item_id", using: :btree
     t.index ["librarian_id"], name: "index_checkouts_on_librarian_id", using: :btree
+    t.index ["library_id"], name: "index_checkouts_on_library_id", using: :btree
     t.index ["shelf_id"], name: "index_checkouts_on_shelf_id", using: :btree
     t.index ["user_id"], name: "index_checkouts_on_user_id", using: :btree
   end
@@ -454,6 +457,17 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "create_type_id"
     t.index ["agent_id"], name: "index_creates_on_agent_id", using: :btree
     t.index ["work_id"], name: "index_creates_on_work_id", using: :btree
+  end
+
+  create_table "demands", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "item_id"
+    t.integer  "message_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_demands_on_item_id", using: :btree
+    t.index ["message_id"], name: "index_demands_on_message_id", using: :btree
+    t.index ["user_id"], name: "index_demands_on_user_id", using: :btree
   end
 
   create_table "doi_records", force: :cascade do |t|
@@ -697,6 +711,17 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.index ["use_restriction_id"], name: "index_item_has_use_restrictions_on_use_restriction_id", using: :btree
   end
 
+  create_table "item_transitions", force: :cascade do |t|
+    t.string   "to_state"
+    t.text     "metadata",   default: "{}"
+    t.integer  "sort_key"
+    t.integer  "item_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["item_id"], name: "index_item_transitions_on_item_id", using: :btree
+    t.index ["sort_key", "item_id"], name: "index_item_transitions_on_sort_key_and_item_id", unique: true, using: :btree
+  end
+
   create_table "items", force: :cascade do |t|
     t.string   "call_number"
     t.string   "item_identifier"
@@ -824,6 +849,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "manifestation_checkout_stat_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["manifestation_checkout_stat_id"], name: "index_manifestation_checkout_stat_transitions_on_stat_id", using: :btree
     t.index ["sort_key", "manifestation_checkout_stat_id"], name: "index_manifestation_checkout_stat_transitions_on_transition", unique: true, using: :btree
   end
@@ -867,6 +893,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "manifestation_reserve_stat_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["manifestation_reserve_stat_id"], name: "index_manifestation_reserve_stat_transitions_on_stat_id", using: :btree
     t.index ["sort_key", "manifestation_reserve_stat_id"], name: "index_manifestation_reserve_stat_transitions_on_transition", unique: true, using: :btree
   end
@@ -915,7 +942,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "required_score",                  default: 0,     null: false
     t.integer  "frequency_id",                    default: 1,     null: false
     t.boolean  "subscription_master",             default: false, null: false
-    t.string   "attachment_filename"
+    t.string   "attachment_file_name"
     t.string   "attachment_content_type"
     t.integer  "attachment_size"
     t.datetime "attachment_updated_at"
@@ -1074,7 +1101,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "picture_filename"
+    t.string   "picture_file_name"
     t.string   "picture_content_type"
     t.integer  "picture_size"
     t.datetime "picture_updated_at"
@@ -1188,11 +1215,12 @@ ActiveRecord::Schema.define(version: 20161111193346) do
 
   create_table "reserve_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",   default: "{}"
+    t.text     "metadata",    default: "{}"
     t.integer  "sort_key"
     t.integer  "reserve_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["reserve_id"], name: "index_reserve_transitions_on_reserve_id", using: :btree
     t.index ["sort_key", "reserve_id"], name: "index_reserve_transitions_on_sort_key_and_reserve_id", unique: true, using: :btree
   end
@@ -1210,11 +1238,13 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.datetime "deleted_at"
     t.boolean  "expiration_notice_to_patron",  default: false
     t.boolean  "expiration_notice_to_library", default: false
+    t.integer  "pickup_location_id"
     t.datetime "retained_at"
     t.datetime "postponed_at"
     t.integer  "lock_version",                 default: 0,     null: false
     t.index ["item_id"], name: "index_reserves_on_item_id", using: :btree
     t.index ["manifestation_id"], name: "index_reserves_on_manifestation_id", using: :btree
+    t.index ["pickup_location_id"], name: "index_reserves_on_pickup_location_id", using: :btree
     t.index ["request_status_type_id"], name: "index_reserves_on_request_status_type_id", using: :btree
     t.index ["user_id"], name: "index_reserves_on_user_id", using: :btree
   end
@@ -1239,6 +1269,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.string   "resource_export_id"
     t.integer  "resource_export_size"
     t.string   "resource_export_filename"
+    t.jsonb    "attachment_data"
     t.index ["resource_export_id"], name: "index_resource_export_files_on_resource_export_id", using: :btree
   end
 
@@ -1261,7 +1292,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "resource_import_filename"
+    t.string   "resource_import_file_name"
     t.string   "resource_import_content_type"
     t.integer  "resource_import_size"
     t.datetime "resource_import_updated_at"
@@ -1273,6 +1304,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.string   "user_encoding"
     t.integer  "default_shelf_id"
     t.string   "resource_import_id"
+    t.jsonb    "attachment_data"
     t.index ["parent_id"], name: "index_resource_import_files_on_parent_id", using: :btree
     t.index ["resource_import_id"], name: "index_resource_import_files_on_resource_import_id", using: :btree
     t.index ["user_id"], name: "index_resource_import_files_on_user_id", using: :btree
@@ -1469,6 +1501,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "user_checkout_stat_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["sort_key", "user_checkout_stat_id"], name: "index_user_checkout_stat_transitions_on_sort_key_and_stat_id", unique: true, using: :btree
     t.index ["user_checkout_stat_id"], name: "index_user_checkout_stat_transitions_on_user_checkout_stat_id", using: :btree
   end
@@ -1598,6 +1631,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
     t.integer  "user_reserve_stat_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["sort_key", "user_reserve_stat_id"], name: "index_user_reserve_stat_transitions_on_sort_key_and_stat_id", unique: true, using: :btree
     t.index ["user_reserve_stat_id"], name: "index_user_reserve_stat_transitions_on_user_reserve_stat_id", using: :btree
   end
@@ -1670,6 +1704,7 @@ ActiveRecord::Schema.define(version: 20161111193346) do
   add_foreign_key "profiles", "libraries"
   add_foreign_key "profiles", "user_groups"
   add_foreign_key "profiles", "users"
+  add_foreign_key "reserves", "manifestations"
   add_foreign_key "shelves", "libraries"
   add_foreign_key "user_has_roles", "roles"
 end

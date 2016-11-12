@@ -25,4 +25,5 @@ end
 #  attachment_filename     :string
 #  attachment_size         :integer
 #  attachment_content_type :string
+#  attachment_data         :jsonb
 #

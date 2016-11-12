@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
 
 describe Manifestation, :solr => true do
   fixtures :all
@@ -84,7 +84,7 @@ describe Manifestation, :solr => true do
     results.size.should eq 9
   end
 
-  it "should serach multi in openurl" do
+  it "should search multi in openurl" do
     openurl = Openurl.new({:btitle => "CGI Perl プログラミング"})
     results = openurl.search
     results.size.should eq 2
@@ -226,17 +226,31 @@ describe Manifestation, :solr => true do
   context ".export" do
     it "should export a header line" do
       lines = Manifestation.export
-      CSV.parse(lines, col_sep: "\t")
-      (header, *lines) = lines.split(/\r?\n/)
-      header = header.split(/\t/)
-      expect(header.size).to eq lines.first.split(/\t/).size
-      expect(header).to include "manifestation_id"
-      expect(header).to include "manifestation_created_at"
-      expect(header).to include "manifestation_updated_at"
-      expect(header).to include "item_created_at"
-      expect(header).to include "item_updated_at"
-      expect(header).to include "item_id"
-      expect(header).to include "manifestation_identifier"
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      csv["manifestation_id"].compact.should_not be_empty
+      csv["manifestation_identifier"].compact.should_not be_empty
+      csv["manifestation_created_at"].compact.should_not be_empty
+      csv["manifestation_updated_at"].compact.should_not be_empty
+      csv["item_id"].compact.should_not be_empty
+      csv["item_created_at"].compact.should_not be_empty
+      csv["item_updated_at"].compact.should_not be_empty
+      csv["subject:unknown"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"next-l"}
+      csv["classification:ndc9"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"400"}
+    end
+
+    it "should respect the role of the user" do
+      FactoryGirl.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
+      lines = Manifestation.export
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["bookstore"].compact).to be_empty
+      expect(csv["item_price"].compact).to be_empty
+      expect(csv["budget_type"].compact).to be_empty
+
+      lines = Manifestation.export(format: :txt, role: :Librarian)
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["bookstore"].compact).not_to be_empty
+      expect(csv["item_price"].compact).not_to be_empty
+      expect(csv["budget_type"].compact).not_to be_empty
     end
   end
 
@@ -284,7 +298,7 @@ end
 #  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  attachment_filename             :string
+#  attachment_file_name            :string
 #  attachment_content_type         :string
 #  attachment_size                 :integer
 #  attachment_updated_at           :datetime
@@ -296,7 +310,7 @@ end
 #  valid_until                     :datetime
 #  date_submitted                  :datetime
 #  date_accepted                   :datetime
-#  date_caputured                  :datetime
+#  date_captured                   :datetime
 #  pub_date                        :string
 #  edition_string                  :string
 #  volume_number                   :integer
@@ -314,4 +328,5 @@ end
 #  dimensions                      :text
 #  attachment_id                   :string
 #  attachment_fingerprint          :string
+#  attachment_data                 :jsonb
 #

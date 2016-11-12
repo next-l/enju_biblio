@@ -735,7 +735,7 @@ end
 #  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  attachment_filename             :string
+#  attachment_file_name            :string
 #  attachment_content_type         :string
 #  attachment_size                 :integer
 #  attachment_updated_at           :datetime
@@ -747,7 +747,7 @@ end
 #  valid_until                     :datetime
 #  date_submitted                  :datetime
 #  date_accepted                   :datetime
-#  date_caputured                  :datetime
+#  date_captured                   :datetime
 #  pub_date                        :string
 #  edition_string                  :string
 #  volume_number                   :integer
@@ -765,4 +765,5 @@ end
 #  dimensions                      :text
 #  attachment_id                   :string
 #  attachment_fingerprint          :string
+#  attachment_data                 :jsonb
 #
