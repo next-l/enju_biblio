@@ -31,14 +31,14 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_filter :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
+  before_action :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_filter :get_inventory_file
+    before_action :get_inventory_file
   end
-  before_filter :get_library, :get_item, except: [:create, :update, :destroy]
-  before_filter :prepare_options, only: [:edit]
-  before_filter :get_version, only: [:show]
-  after_filter :convert_charset, only: :index
+  before_action :get_library, :get_item, except: [:create, :update, :destroy]
+  before_action :prepare_options, only: [:edit]
+  before_action :get_version, only: [:show]
+  after_action :convert_charset, only: :index
 
   # GET /items
   # GET /items.json

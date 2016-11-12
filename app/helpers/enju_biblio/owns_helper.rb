@@ -10,6 +10,8 @@
 #  updated_at :datetime
 #
 
-module OwnsHelper
-  include ManifestationsHelper
+module EnjuBiblio
+  module OwnsHelper
+    include ManifestationsHelper
+  end
 end

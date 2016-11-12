@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161111175127) do
+ActiveRecord::Schema.define(version: 20161111193346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 20161111175127) do
     t.string   "attachment_filename"
     t.integer  "attachment_size"
     t.string   "attachment_content_type"
+    t.jsonb    "attachment_data"
   end
 
   create_table "checked_items", force: :cascade do |t|
@@ -389,6 +390,8 @@ ActiveRecord::Schema.define(version: 20161111175127) do
     t.integer  "lft"
     t.integer  "rgt"
     t.integer  "manifestation_id"
+    t.string   "url"
+    t.string   "label"
     t.index ["category"], name: "index_classifications_on_category", using: :btree
     t.index ["classification_type_id"], name: "index_classifications_on_classification_type_id", using: :btree
     t.index ["manifestation_id"], name: "index_classifications_on_manifestation_id", using: :btree
@@ -416,6 +419,7 @@ ActiveRecord::Schema.define(version: 20161111175127) do
     t.string   "attachment_filename"
     t.integer  "attachment_size"
     t.string   "attachment_content_type"
+    t.jsonb    "attachment_data"
   end
 
   create_table "countries", force: :cascade do |t|
@@ -941,7 +945,7 @@ ActiveRecord::Schema.define(version: 20161111175127) do
     t.text     "dimensions"
     t.string   "attachment_id"
     t.string   "attachment_fingerprint"
-    t.jsonb    "attachment",                      default: "{}"
+    t.jsonb    "attachment_data"
     t.index ["access_address"], name: "index_manifestations_on_access_address", using: :btree
     t.index ["attachment_id"], name: "index_manifestations_on_attachment_id", using: :btree
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication", using: :btree

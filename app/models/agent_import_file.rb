@@ -1,12 +1,11 @@
 class AgentImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
-  default_scope { order('agent_import_files.id DESC') }
+  include AttachmentUploader[:attachment]
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
-  attachment :agent_import
-  validates :agent_import, presence: true, on: :create
+  validates :attachment, presence: true, on: :create
   belongs_to :user, validate: true
   has_many :agent_import_results
 
@@ -41,7 +40,7 @@ class AgentImportFile < ActiveRecord::Base
     rows = open_import_file
     field = rows.first
     row_num = 1
-    if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
+    if [field['first_name'], field['last_name'], field['full_name']].reject{|f| f.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
     #rows.shift
@@ -149,7 +148,7 @@ class AgentImportFile < ActiveRecord::Base
 
   def open_import_file
     tempfile = Tempfile.new(self.class.name.underscore)
-    open(agent_import.download.path){|f|
+    open(attachment.download.path){|f|
       f.each{|line|
         tempfile.puts(convert_encoding(line))
       }
