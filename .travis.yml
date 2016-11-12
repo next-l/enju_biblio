@@ -16,5 +16,6 @@ notifications:
     secure: a4NQNeYYOKABDoP9lFJt9oEx6QRRfagA4sjOeJUMjdc2AFGDtZ95FvZom9s9YYimduIUQfUScNF4tJvAzqrYhHTAaBxcLRERZQZWse4sZj0+xzSvUqauPCXwDheVCc/tlriUm06skKfz8WZBqL6vZyw4FfV6xLSrHVFAeIeSdsU=
 sudo: false
 addons:
+  postgresql: "9.4"
   code_climate:
     repo_token: 84d2e59e54564cf92bc2d073240cce7f7c0e82f7544404343b22e05fbff599dd
