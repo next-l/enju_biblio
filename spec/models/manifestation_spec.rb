@@ -236,6 +236,8 @@ describe Manifestation, :solr => true do
       csv["item_updated_at"].compact.should_not be_empty
       csv["subject:unknown"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"next-l"}
       csv["classification:ndc9"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"400"}
+      csv["extent"].compact.should_not be_empty
+      csv["dimensions"].compact.should_not be_empty
     end
 
     it "should respect the role of the user" do
@@ -300,9 +302,8 @@ end
 #  subscription_master             :boolean          default(FALSE), not null
 #  attachment_file_name            :string
 #  attachment_content_type         :string
-#  attachment_size                 :integer
+#  attachment_file_size            :integer
 #  attachment_updated_at           :datetime
-#  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text
 #  abstract                        :text
@@ -326,7 +327,4 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
-#  attachment_id                   :string
-#  attachment_fingerprint          :string
-#  attachment_data                 :jsonb
 #

@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
 
 describe Agent do
   #pending "add some examples to (or delete) #{__FILE__}"
@@ -39,6 +39,34 @@ describe Agent do
 
   it "should not be publisher" do
     agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_falsy
+  end
+
+  describe ".import_agents" do
+    it "should import agents" do
+      agent_list = [{full_name: "Agent 1"}, {full_name: "Agent 2"}]
+      agents = Agent.import_agents(agent_list)
+      expect(agents).to be_truthy
+      expect(agents.first).to be_truthy
+      expect(agents.first.full_name).to eq "Agent 1"
+      expect(agents.last).to be_truthy
+      expect(agents.last.full_name).to eq "Agent 2"
+    end
+    it "should import place" do
+      agent_list = [{full_name: "Agent 1", place: "place"}]
+      agents = Agent.import_agents(agent_list)
+      expect(agents.first).to be_truthy
+      expect(agents.first.place).to eq "place"
+    end
+    it "should unique the same agent" do
+      agent_list = [{full_name: "Agent 1", place: "place"}, {full_name: "Agent 1"}]
+      agents = Agent.import_agents(agent_list)
+      expect(agents.size).to be 1
+    end
+    it "should distinguish the agents even with the same full_name" do
+      agent_list = [{full_name: "Agent 1", place: "place 1"}, {full_name: "Agent 1", place: "place 2"}]
+      agents = Agent.import_agents(agent_list)
+      expect(agents.size).to be 2
+    end
   end
 end
 

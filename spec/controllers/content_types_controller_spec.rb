@@ -29,120 +29,120 @@ describe ContentTypesController do
     FactoryGirl.attributes_for(:content_type)
   end
 
-  describe "GET index" do
-    it "assigns all content_types as @content_types" do
+  describe 'GET index' do
+    it 'assigns all content_types as @content_types' do
       content_type = ContentType.create! valid_attributes
       get :index
       expect(assigns(:content_types)).to eq(ContentType.all)
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested content_type as @content_type" do
+  describe 'GET show' do
+    it 'assigns the requested content_type as @content_type' do
       content_type = ContentType.create! valid_attributes
-      get :show, :id => content_type.id
+      get :show, params: { id: content_type.id }
       expect(assigns(:content_type)).to eq(content_type)
     end
   end
 
-  describe "GET new" do
-    it "assigns a new content_type as @content_type" do
+  describe 'GET new' do
+    it 'assigns a new content_type as @content_type' do
       get :new
       expect(assigns(:content_type)).to be_a_new(ContentType)
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested content_type as @content_type" do
+  describe 'GET edit' do
+    it 'assigns the requested content_type as @content_type' do
       content_type = ContentType.create! valid_attributes
-      get :edit, :id => content_type.id
+      get :edit, params: { id: content_type.id }
       expect(assigns(:content_type)).to eq(content_type)
     end
-    it "assigns the content_type even if it associates manifestation(s)" do
+    it 'assigns the content_type even if it associates manifestation(s)' do
       content_type = FactoryGirl.create(:content_type)
-      manifestation = FactoryGirl.create(:manifestation, :content_type_id => content_type.id)
-      get :edit, :id => content_type.id
+      manifestation = FactoryGirl.create(:manifestation, content_type_id: content_type.id)
+      get :edit, params: { id: content_type.id }
       expect(assigns(:content_type)).to eq content_type
       expect(response).to be_success
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new ContentType" do
-        expect {
-          post :create, :content_type => valid_attributes
-        }.to change(ContentType, :count).by(1)
+  describe 'POST create' do
+    describe 'with valid params' do
+      it 'creates a new ContentType' do
+        expect do
+          post :create, params: { content_type: valid_attributes }
+        end.to change(ContentType, :count).by(1)
       end
 
-      it "assigns a newly created content_type as @content_type" do
-        post :create, :content_type => valid_attributes
+      it 'assigns a newly created content_type as @content_type' do
+        post :create, params: { content_type: valid_attributes }
         expect(assigns(:content_type)).to be_a(ContentType)
         expect(assigns(:content_type)).to be_persisted
       end
 
-      it "redirects to the created content_type" do
-        post :create, :content_type => valid_attributes
+      it 'redirects to the created content_type' do
+        post :create, params: { content_type: valid_attributes }
         expect(response).to redirect_to(ContentType.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved content_type as @content_type" do
+    describe 'with invalid params' do
+      it 'assigns a newly created but unsaved content_type as @content_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        post :create, :content_type => {name: "test"}
+        post :create, params: { content_type: { name: 'test' } }
         expect(assigns(:content_type)).to be_a_new(ContentType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        post :create, :content_type => {name: "test"}
-        expect(response).to render_template("new")
+        post :create, params: { content_type: { name: 'test' } }
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested content_type" do
+  describe 'PUT update' do
+    describe 'with valid params' do
+      it 'updates the requested content_type' do
         content_type = ContentType.create! valid_attributes
         # Assuming there are no other content_types in the database, this
         # specifies that the ContentType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        ContentType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
-        put :update, :id => content_type.id, :content_type => {'name' => 'test'}
+        ContentType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        put :update, params: { id: content_type.id, content_type: { 'name' => 'test' } }
       end
 
-      it "assigns the requested content_type as @content_type" do
+      it 'assigns the requested content_type as @content_type' do
         content_type = ContentType.create! valid_attributes
-        put :update, :id => content_type.id, :content_type => valid_attributes
+        put :update, params: { id: content_type.id, content_type: valid_attributes }
         expect(assigns(:content_type)).to eq(content_type)
       end
 
-      it "redirects to the content_type" do
+      it 'redirects to the content_type' do
         content_type = ContentType.create! valid_attributes
-        put :update, :id => content_type.id, :content_type => valid_attributes
+        put :update, params: { id: content_type.id, content_type: valid_attributes }
         expect(response).to redirect_to(content_type)
       end
 
-      it "moves its position when specified" do
+      it 'moves its position when specified' do
         content_type = ContentType.create! valid_attributes
         position = content_type.position
-        put :update, :id => content_type.id, :move => 'higher'
+        put :update, params: { id: content_type.id, move: 'higher' }
         expect(response).to redirect_to content_types_url
-        assigns(:content_type).position.should eq position - 1
+        assigns(:content_type).reload.position.should eq position - 1
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the content_type as @content_type" do
+    describe 'with invalid params' do
+      it 'assigns the content_type as @content_type' do
         content_type = ContentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        put :update, :id => content_type.id, :content_type => {name: "test"}
+        put :update, params: { id: content_type.id, content_type: { name: 'test' } }
         expect(assigns(:content_type)).to eq(content_type)
       end
 
@@ -150,25 +150,24 @@ describe ContentTypesController do
         content_type = ContentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ContentType.any_instance.stub(:save).and_return(false)
-        put :update, :id => content_type.id, :content_type => {name: "test"}
-        expect(response).to render_template("edit")
+        put :update, params: { id: content_type.id, content_type: { name: 'test' } }
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested content_type" do
+  describe 'DELETE destroy' do
+    it 'destroys the requested content_type' do
       content_type = ContentType.create! valid_attributes
-      expect {
-        delete :destroy, :id => content_type.id
-      }.to change(ContentType, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: content_type.id }
+      end.to change(ContentType, :count).by(-1)
     end
 
-    it "redirects to the content_types list" do
+    it 'redirects to the content_types list' do
       content_type = ContentType.create! valid_attributes
-      delete :destroy, :id => content_type.id
+      delete :destroy, params: { id: content_type.id }
       expect(response).to redirect_to(content_types_url)
     end
   end
-
 end

@@ -814,9 +814,9 @@ ActiveRecord::Schema.define(version: 20161112122814) do
   end
 
   create_table "library_groups", force: :cascade do |t|
-    t.string   "name",                                                           null: false
+    t.string   "name",                                                             null: false
     t.text     "display_name"
-    t.string   "short_name",                                                     null: false
+    t.string   "short_name",                                                       null: false
     t.text     "my_networks"
     t.text     "login_banner"
     t.text     "note"
@@ -825,12 +825,17 @@ ActiveRecord::Schema.define(version: 20161112122814) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.text     "admin_networks"
-    t.boolean  "allow_bookmark_external_url", default: false,                    null: false
-    t.string   "url",                         default: "http://localhost:3000/"
+    t.boolean  "allow_bookmark_external_url",   default: false,                    null: false
+    t.string   "url",                           default: "http://localhost:3000/"
     t.jsonb    "settings"
     t.jsonb    "footer_banner"
     t.text     "html_snippet"
+    t.integer  "max_number_of_results",         default: 500
+    t.boolean  "family_name_first",             default: true
+    t.integer  "pub_year_facet_range_interval", default: 10
+    t.integer  "user_id"
     t.index ["short_name"], name: "index_library_groups_on_short_name", using: :btree
+    t.index ["user_id"], name: "index_library_groups_on_user_id", using: :btree
   end
 
   create_table "licenses", force: :cascade do |t|
@@ -1700,6 +1705,7 @@ ActiveRecord::Schema.define(version: 20161112122814) do
   add_foreign_key "isbn_records", "manifestations"
   add_foreign_key "items", "manifestations"
   add_foreign_key "items", "shelves"
+  add_foreign_key "library_groups", "users"
   add_foreign_key "periodicals", "manifestations"
   add_foreign_key "profiles", "libraries"
   add_foreign_key "profiles", "user_groups"

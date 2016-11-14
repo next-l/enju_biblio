@@ -1,5 +1,5 @@
 # -*- encoding: utf-8 -*-
-require 'spec_helper'
+require 'rails_helper'
 
 describe PictureFile do
   #pending "add some examples to (or delete) #{__FILE__}"
@@ -21,9 +21,10 @@ end
 #  updated_at              :datetime
 #  picture_file_name       :string
 #  picture_content_type    :string
-#  picture_size            :integer
+#  picture_file_size       :integer
 #  picture_updated_at      :datetime
 #  picture_meta            :text
 #  picture_fingerprint     :string
-#  picture_id              :string
+#  picture_width           :integer
+#  picture_height          :integer
 #

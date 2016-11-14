@@ -29,113 +29,113 @@ describe IdentifierTypesController do
     FactoryGirl.attributes_for(:identifier_type)
   end
 
-  describe "GET index" do
-    it "assigns all identifier_types as @identifier_types" do
+  describe 'GET index' do
+    it 'assigns all identifier_types as @identifier_types' do
       identifier_type = IdentifierType.create! valid_attributes
       get :index
       expect(assigns(:identifier_types)).to eq(IdentifierType.order(:position))
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested identifier_type as @identifier_type" do
+  describe 'GET show' do
+    it 'assigns the requested identifier_type as @identifier_type' do
       identifier_type = IdentifierType.create! valid_attributes
-      get :show, :id => identifier_type.id
+      get :show, params: { id: identifier_type.id }
       expect(assigns(:identifier_type)).to eq(identifier_type)
     end
   end
 
-  describe "GET new" do
-    it "assigns a new identifier_type as @identifier_type" do
+  describe 'GET new' do
+    it 'assigns a new identifier_type as @identifier_type' do
       get :new
       expect(assigns(:identifier_type)).to be_a_new(IdentifierType)
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested identifier_type as @identifier_type" do
+  describe 'GET edit' do
+    it 'assigns the requested identifier_type as @identifier_type' do
       identifier_type = IdentifierType.create! valid_attributes
-      get :edit, :id => identifier_type.id
+      get :edit, params: { id: identifier_type.id }
       expect(assigns(:identifier_type)).to eq(identifier_type)
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new IdentifierType" do
-        expect {
-          post :create, :identifier_type => valid_attributes
-        }.to change(IdentifierType, :count).by(1)
+  describe 'POST create' do
+    describe 'with valid params' do
+      it 'creates a new IdentifierType' do
+        expect do
+          post :create, params: { identifier_type: valid_attributes }
+        end.to change(IdentifierType, :count).by(1)
       end
 
-      it "assigns a newly created identifier_type as @identifier_type" do
-        post :create, :identifier_type => valid_attributes
+      it 'assigns a newly created identifier_type as @identifier_type' do
+        post :create, params: { identifier_type: valid_attributes }
         expect(assigns(:identifier_type)).to be_a(IdentifierType)
         expect(assigns(:identifier_type)).to be_persisted
       end
 
-      it "redirects to the created identifier_type" do
-        post :create, :identifier_type => valid_attributes
+      it 'redirects to the created identifier_type' do
+        post :create, params: { identifier_type: valid_attributes }
         expect(response).to redirect_to(IdentifierType.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved identifier_type as @identifier_type" do
+    describe 'with invalid params' do
+      it 'assigns a newly created but unsaved identifier_type as @identifier_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        post :create, :identifier_type => {name: "test"}
+        post :create, params: { identifier_type: { name: 'test' } }
         expect(assigns(:identifier_type)).to be_a_new(IdentifierType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        post :create, :identifier_type => {name: "test"}
-        expect(response).to render_template("new")
+        post :create, params: { identifier_type: { name: 'test' } }
+        expect(response).to render_template('new')
       end
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested identifier_type" do
+  describe 'PUT update' do
+    describe 'with valid params' do
+      it 'updates the requested identifier_type' do
         identifier_type = IdentifierType.create! valid_attributes
         # Assuming there are no other identifier_types in the database, this
         # specifies that the IdentifierType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        IdentifierType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
-        put :update, :id => identifier_type.id, :identifier_type => {'name' => 'test'}
+        IdentifierType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        put :update, params: { id: identifier_type.id, identifier_type: { 'name' => 'test' } }
       end
 
-      it "assigns the requested identifier_type as @identifier_type" do
+      it 'assigns the requested identifier_type as @identifier_type' do
         identifier_type = IdentifierType.create! valid_attributes
-        put :update, :id => identifier_type.id, :identifier_type => valid_attributes
+        put :update, params: { id: identifier_type.id, identifier_type: valid_attributes }
         expect(assigns(:identifier_type)).to eq(identifier_type)
       end
 
-      it "redirects to the identifier_type" do
+      it 'redirects to the identifier_type' do
         identifier_type = IdentifierType.create! valid_attributes
-        put :update, :id => identifier_type.id, :identifier_type => valid_attributes
+        put :update, params: { id: identifier_type.id, identifier_type: valid_attributes }
         expect(response).to redirect_to(identifier_type)
       end
 
-      it "moves its position when specified" do
+      it 'moves its position when specified' do
         identifier_type = IdentifierType.create! valid_attributes
         position = identifier_type.position
-        put :update, :id => identifier_type.id, :move => 'higher'
+        put :update, params: { id: identifier_type.id, move: 'higher' }
         expect(response).to redirect_to identifier_types_url
-        assigns(:identifier_type).position.should eq position - 1
+        assigns(:identifier_type).reload.position.should eq position - 1
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the identifier_type as @identifier_type" do
+    describe 'with invalid params' do
+      it 'assigns the identifier_type as @identifier_type' do
         identifier_type = IdentifierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        put :update, :id => identifier_type.id, :identifier_type => {name: "test"}
+        put :update, params: { id: identifier_type.id, identifier_type: { name: 'test' } }
         expect(assigns(:identifier_type)).to eq(identifier_type)
       end
 
@@ -143,25 +143,24 @@ describe IdentifierTypesController do
         identifier_type = IdentifierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         IdentifierType.any_instance.stub(:save).and_return(false)
-        put :update, :id => identifier_type.id, :identifier_type => {name: "test"}
-        expect(response).to render_template("edit")
+        put :update, params: { id: identifier_type.id, identifier_type: { name: 'test' } }
+        expect(response).to render_template('edit')
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested identifier_type" do
+  describe 'DELETE destroy' do
+    it 'destroys the requested identifier_type' do
       identifier_type = IdentifierType.create! valid_attributes
-      expect {
-        delete :destroy, :id => identifier_type.id
-      }.to change(IdentifierType, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: identifier_type.id }
+      end.to change(IdentifierType, :count).by(-1)
     end
 
-    it "redirects to the identifier_types list" do
+    it 'redirects to the identifier_types list' do
       identifier_type = IdentifierType.create! valid_attributes
-      delete :destroy, :id => identifier_type.id
+      delete :destroy, params: { id: identifier_type.id }
       expect(response).to redirect_to(identifier_types_url)
     end
   end
-
 end
