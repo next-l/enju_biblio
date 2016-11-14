@@ -19,7 +19,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    file = export_file.resource_export
+    file = export_file.attachment.download
     lines = File.open(file.path).readlines.map(&:chomp)
     columns = lines.first.split(/\t/)
     expect(columns).to include "bookstore"
@@ -38,7 +38,7 @@ describe ResourceExportFile do
       export_file.user = users(:admin)
       export_file.save!
       export_file.export!
-      file = export_file.resource_export
+      file = export_file.attachment.download
       expect(file).to be_truthy
       lines = File.open(file.path).readlines.map(&:chomp)
       expect(lines.first.split(/\t/)).to include "ncid"

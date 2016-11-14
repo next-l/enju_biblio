@@ -18,7 +18,7 @@ class AgentTypesController < ApplicationController
   # GET /agent_types
   # GET /agent_types.json
   def index
-    @agent_types = AgentType.all
+    @agent_types = AgentType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb

@@ -36,7 +36,7 @@
         = t('activerecord.models.picture_file')
         | :
       br
-      = link_to @carrier_type.attachment_filename, attachment_url(@carrier_type, :attachment)
+      = link_to @carrier_type.attachment.metadata['filename'], carrier_type_path(@carrier_type, format: :download)
     p
       strong
         = t('activerecord.attributes.carrier_type.note')

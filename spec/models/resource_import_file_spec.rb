@@ -7,7 +7,7 @@ describe ResourceImportFile do
   describe "when its mode is 'create'" do
     describe "when it is written in utf-8" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
+        @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
         @file.user = users(:admin)
       end
 
@@ -144,7 +144,7 @@ describe ResourceImportFile do
     describe "ISBN import" do
       context "with record not found" do
         it "should record an error message", vcr: true do
-          file = ResourceImportFile.create resource_import: StringIO.new("isbn\n9780007264551"), user: users(:admin)
+          file = ResourceImportFile.create attachment: StringIO.new("isbn\n9780007264551"), user: users(:admin)
           result = file.import_start
           expect(result[:failed]).to eq 1
           resource_import_result = file.resource_import_results.last
@@ -153,7 +153,7 @@ describe ResourceImportFile do
       end
       context "with ISBN invalid" do
         it "should record an error message", vcr: true do
-          file = ResourceImportFile.create resource_import: StringIO.new("isbn\n978000726455x"), user: users(:admin)
+          file = ResourceImportFile.create attachment: StringIO.new("isbn\n978000726455x"), user: users(:admin)
           result = file.import_start
           expect(result[:failed]).to eq 1
           resource_import_result = file.resource_import_results.last
@@ -164,7 +164,7 @@ describe ResourceImportFile do
 
     describe "NCID import" do
       it "should import ncid value" do
-        file = ResourceImportFile.create resource_import: StringIO.new("original_title\tncid\noriginal_title_ncid\tBA67656964\n"), user: users(:admin)
+        file = ResourceImportFile.create attachment: StringIO.new("original_title\tncid\noriginal_title_ncid\tBA67656964\n"), user: users(:admin)
         result = file.import_start
         expect(result[:manifestation_imported]).to eq 1
         resource_import_result = file.resource_import_results.last
@@ -177,7 +177,7 @@ describe ResourceImportFile do
 
     describe "when it is written in shift_jis" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
+        @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
         @file.user = users(:admin)
       end
 
@@ -213,7 +213,7 @@ describe ResourceImportFile do
 
     describe "when it has only isbn" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
+        @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
         @file.user = users(:admin)
       end
 
@@ -233,7 +233,7 @@ describe ResourceImportFile do
 original_title	call_number	item_note
 resource_import_file_test1	007.6	note for the item.
         EOF
-        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
+        file = ResourceImportFile.create(attachment: StringIO.new(import_file))
         file.user = users(:admin)
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
@@ -249,7 +249,7 @@ resource_import_file_test1	007.6	note for the item.
 
   describe "when its mode is 'update'" do
     it "should update items", vcr: true do
-      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
+      @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
       @file.modify
       expect(@file.resource_import_results.first).to be_truthy
       expect(@file.resource_import_results.first.body).to match /item_identifier/
@@ -272,7 +272,7 @@ resource_import_file_test1	007.6	note for the item.
 
     #it "should update series_statement", vcr: true do
     #  manifestation = Manifestation.find(10)
-    #  file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
+    #  file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
     #  file.modify
     #  manifestation.reload
     #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
@@ -280,7 +280,7 @@ resource_import_file_test1	007.6	note for the item.
 
     describe "NCID import" do
       it "should import ncid value" do
-        file = ResourceImportFile.create resource_import: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
+        file = ResourceImportFile.create attachment: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
         result = file.import_start
         #expect(result[:manifestation_found]).to eq 1
         expect(file.error_message).to be_nil
@@ -296,14 +296,14 @@ resource_import_file_test1	007.6	note for the item.
   describe "when its mode is 'destroy'" do
     it "should remove items", vcr: true do
       old_count = Item.count
-      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
+      @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
       @file.remove
       Item.count.should eq old_count - 2
     end
   end
 
   it "should import in background", vcr: true do
-    file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
+    file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
     ResourceImportFileJob.perform_later(file).should be_truthy

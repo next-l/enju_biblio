@@ -19,7 +19,7 @@ describe ManifestationRelationshipTypesController do
 
       it 'assigns all manifestation_relationship_types as @manifestation_relationship_types' do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
 
@@ -28,7 +28,7 @@ describe ManifestationRelationshipTypesController do
 
       it 'assigns all manifestation_relationship_types as @manifestation_relationship_types' do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
 
@@ -37,14 +37,14 @@ describe ManifestationRelationshipTypesController do
 
       it 'assigns all manifestation_relationship_types as @manifestation_relationship_types' do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
 
     describe 'When not logged in' do
       it 'assigns all manifestation_relationship_types as @manifestation_relationship_types' do
         get :index
-        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.all)
+        expect(assigns(:manifestation_relationship_types)).to eq(ManifestationRelationshipType.order(:position))
       end
     end
   end

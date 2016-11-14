@@ -238,7 +238,7 @@ describe ManifestationsController do
         manifestation = FactoryGirl.create(:manifestation, description: 'foo')
         periodical.derived_manifestations << manifestation
         periodical.save!
-        get :index, query: 'foo'
+        get :index, params: { query: 'foo' }
         manifestations = assigns(:manifestations)
         expect(manifestations).not_to be_blank
         expect(manifestations.map(&:id)).to include periodical.id

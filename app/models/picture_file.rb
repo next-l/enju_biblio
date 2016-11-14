@@ -4,9 +4,6 @@ class PictureFile < ActiveRecord::Base
 
   include AttachmentUploader[:image]
 
-  validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
-  validates_associated :picture_attachable
-  default_scope { order('picture_files.position') }
   # http://railsforum.com/viewtopic.php?id=11615
   acts_as_list scope: 'picture_attachable_type=\'#{picture_attachable_type}\''
   before_create :set_fingerprint
@@ -15,7 +12,7 @@ class PictureFile < ActiveRecord::Base
   paginates_per 10
 
   def set_fingerprint
-    self.picture_fingerprint = Digest::SHA1.file(picture.download.path).hexdigest
+    self.picture_fingerprint = Digest::SHA1.file(image.download.path).hexdigest
   end
 end
 

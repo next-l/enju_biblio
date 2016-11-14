@@ -5,7 +5,7 @@ class ResourceImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  validates :resource_import, presence: true, on: :create
+  validates :attachment, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user, validate: true
   belongs_to :default_shelf, class_name: 'Shelf'
@@ -46,7 +46,7 @@ class ResourceImportFile < ActiveRecord::Base
       item_found: 0,
       failed: 0
     }
-    rows = open_import_file(create_import_temp_file(resource_import.download))
+    rows = open_import_file(create_import_temp_file(attachment.download))
     rows.shift
     #if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
     #  f.to_s.strip == ''
@@ -224,7 +224,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def import_marc(marc_type)
-    file = File.open(resource_import.path)
+    file = File.open(attachment.path)
     case marc_type
     when 'marcxml'
       reader = MARC::XMLReader.new(file)
@@ -273,7 +273,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def modify
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import.download))
+    rows = open_import_file(create_import_temp_file(attachment.download))
     rows.shift
     row_num = 1
 
@@ -352,7 +352,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def remove
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import.download))
+    rows = open_import_file(create_import_temp_file(attachment.download))
     rows.shift
     row_num = 1
 
@@ -374,7 +374,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def update_relationship
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import.download))
+    rows = open_import_file(create_import_temp_file(attachment.download))
     rows.shift
     row_num = 1
 
@@ -737,7 +737,7 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def set_fingerprint
-    self.resource_import_fingerprint = Digest::SHA1.file(resource_import.download.path).hexdigest
+    self.resource_import_fingerprint = Digest::SHA1.file(attachment.download.path).hexdigest
   end
 end
 

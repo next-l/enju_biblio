@@ -454,7 +454,7 @@ class ManifestationsController < ApplicationController
     })
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment_filename
+      @manifestation.original_title = @manifestation.attachment.metadata['filename']
     end
 
     respond_to do |format|
@@ -547,7 +547,6 @@ class ManifestationsController < ApplicationController
       :dimensions, :fulltext_content, :extent,
       :number_of_page_string, :parent_id,
       :serial, :statement_of_responsibility,
-      :remote_attachment_url,
       {:creators_attributes => [
         :id, :last_name, :middle_name, :first_name,
         :last_name_transcription, :middle_name_transcription,

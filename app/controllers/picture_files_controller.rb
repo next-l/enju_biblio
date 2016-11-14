@@ -52,13 +52,7 @@ class PictureFilesController < ApplicationController
       size = 'medium'
     end
 
-    if @picture_file.picture.path
-      if ENV['ENJU_STORAGE'] == 's3'
-        file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
-      else
-        file = @picture_file.picture.path(size)
-      end
-    end
+    file = @picture_file.image[size].download.path
 
     respond_to do |format|
       format.html # show.html.erb
@@ -191,7 +185,7 @@ class PictureFilesController < ApplicationController
 
   def picture_file_params
     params.require(:picture_file).permit(
-      :picture, :picture_attachable_id, :picture_attachable_type
+      :image, :picture_attachable_id, :picture_attachable_type
     )
   end
 
@@ -207,7 +201,7 @@ class PictureFilesController < ApplicationController
       return
     end
     if defined?(EnjuEvent)
-      get_event
+      set_event
       if @event
         @attachable = @event
         return
@@ -233,7 +227,7 @@ class PictureFilesController < ApplicationController
       disposition = 'inline'
     end
 
-    send_file file, filename: File.basename(@picture_file.picture_file_name),
-      type: @picture_file.picture_content_type, disposition: disposition
+    send_file file, filename: File.basename(@picture_file.image[:original].metadata['filename']),
+      type: @picture_file.image[:original].content_type, disposition: disposition
   end
 end

@@ -6,7 +6,7 @@ describe AgentImportFile do
 
   describe "when its mode is 'create'" do
     before(:each) do
-      @file = AgentImportFile.create! :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
+      @file = AgentImportFile.create! :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
     end
 
     it "should be imported" do
@@ -28,7 +28,7 @@ describe AgentImportFile do
 
   describe "when it is written in shift_jis" do
     before(:each) do
-      @file = AgentImportFile.create! :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample3.tsv")
+      @file = AgentImportFile.create! :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample3.tsv")
     end
 
     it "should be imported" do
@@ -48,7 +48,7 @@ describe AgentImportFile do
 
   describe "when its mode is 'update'" do
     it "should update users" do
-      @file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_update_file.tsv")
+      @file = AgentImportFile.create :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_update_file.tsv")
       @file.modify
       agent_1 = Agent.find(1)
       agent_1.full_name.should eq 'たなべこうすけ'
@@ -62,14 +62,14 @@ describe AgentImportFile do
   describe "when its mode is 'destroy'" do
     it "should remove users" do
       old_count = Agent.count
-      @file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_delete_file.tsv")
+      @file = AgentImportFile.create :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_delete_file.tsv")
       @file.remove
       Agent.count.should eq old_count - 7
     end
   end
 
   it "should import in background" do
-    file = AgentImportFile.create :agent_import => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
+    file = AgentImportFile.create :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
     AgentImportFileJob.perform_later(file).should be_truthy

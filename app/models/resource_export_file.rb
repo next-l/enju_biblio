@@ -20,7 +20,7 @@ class ResourceExportFile < ActiveRecord::Base
       tempfile.puts(manifestation.to_csv(format: :txt))
     end
     tempfile.close
-    self.resource_export = File.new(tempfile.path, "r")
+    self.attachment = File.new(tempfile.path, "r")
     if save
       send_message
     end

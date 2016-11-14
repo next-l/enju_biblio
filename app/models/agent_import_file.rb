@@ -202,7 +202,7 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def set_fingerprint
-    self.agent_import_fingerprint = Digest::SHA1.file(agent_import.download.path).hexdigest
+    self.agent_import_fingerprint = Digest::SHA1.file(attachment.download.path).hexdigest
   end
 end
 
