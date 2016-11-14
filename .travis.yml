@@ -19,5 +19,3 @@ notifications:
 sudo: false
 addons:
   postgresql: "9.4"
-  code_climate:
-    repo_token: 84d2e59e54564cf92bc2d073240cce7f7c0e82f7544404343b22e05fbff599dd
