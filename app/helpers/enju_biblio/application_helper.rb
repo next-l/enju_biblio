@@ -2,6 +2,7 @@ module EnjuBiblio
   module ApplicationHelper
     include ManifestationsHelper
     include AgentsHelper
+    include PictureFilesHelper
     def form_icon(carrier_type)
       case carrier_type.name
       when 'volume'
