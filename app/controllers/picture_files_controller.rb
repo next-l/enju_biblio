@@ -23,7 +23,7 @@
 class PictureFilesController < ApplicationController
   before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :get_attachable, only: [:index, :new]
+  before_action :set_attachable, only: [:index, :new]
 
   # GET /picture_files
   # GET /picture_files.json
@@ -189,13 +189,13 @@ class PictureFilesController < ApplicationController
     )
   end
 
-  def get_attachable
-    get_manifestation
+  def set_attachable
+    set_manifestation
     if @manifestation
       @attachable = @manifestation
       return
     end
-    get_agent
+    set_agent
     if @agent
       @attachable = @agent
       return
@@ -207,7 +207,7 @@ class PictureFilesController < ApplicationController
         return
       end
     end
-    get_shelf
+    set_shelf
     if @shelf
       @attachable = @shelf
       return

@@ -70,15 +70,15 @@ class ManifestationsController < ApplicationController
   before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :authenticate_user!, only: :edit
-  before_action :get_agent, :get_manifestation, except: [:create, :update, :destroy]
-  before_action :get_expression, only: :new
+  before_action :set_agent, :set_manifestation, except: [:create, :update, :destroy]
+  before_action :set_expression, only: :new
   if defined?(EnjuSubject)
-    before_action :get_subject, except: [:create, :update, :destroy]
+    before_action :set_subject, except: [:create, :update, :destroy]
   end
-  before_action :get_series_statement, only: [:index, :new, :edit]
-  before_action :get_item, :get_libraries, only: :index
+  before_action :set_series_statement, only: [:index, :new, :edit]
+  before_action :set_item, :set_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
-  before_action :get_version, only: [:show]
+  before_action :set_version, only: [:show]
   after_action :convert_charset, only: :index
 
   # GET /manifestations
@@ -139,7 +139,7 @@ class ManifestationsController < ApplicationController
         reservable = nil
       end
 
-      agent = get_index_agent
+      agent = set_index_agent
       @index_agent = agent
       manifestation = @manifestation if @manifestation
       series_statement = @series_statement if @series_statement
@@ -789,7 +789,7 @@ class ManifestationsController < ApplicationController
     end
   end
 
-  def get_index_agent
+  def set_index_agent
     agent = {}
     case
     when params[:agent_id]

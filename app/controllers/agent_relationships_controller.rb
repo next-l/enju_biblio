@@ -14,7 +14,7 @@
 class AgentRelationshipsController < ApplicationController
   before_action :set_agent_relationship, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :get_agent
+  before_action :set_agent
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /agent_relationships

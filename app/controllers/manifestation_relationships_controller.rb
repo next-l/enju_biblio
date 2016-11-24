@@ -14,7 +14,7 @@
 class ManifestationRelationshipsController < ApplicationController
   before_action :set_manifestation_relationship, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :get_manifestation
+  before_action :set_manifestation
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /manifestation_relationships

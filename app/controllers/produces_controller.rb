@@ -14,7 +14,7 @@
 class ProducesController < ApplicationController
   before_action :set_produce, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :get_agent, :get_manifestation
+  before_action :set_agent, :set_manifestation
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /produces

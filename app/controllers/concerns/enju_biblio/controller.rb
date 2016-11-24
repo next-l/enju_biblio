@@ -4,48 +4,44 @@ module EnjuBiblio
 
     private
 
-    def get_work
+    def set_work
       @work = Manifestation.find(params[:work_id]) if params[:work_id]
       authorize @work if @work
     end
 
-    def get_expression
+    def set_expression
       @expression = Manifestation.find(params[:expression_id]) if params[:expression_id]
       authorize @expression if @expression
     end
 
-    def get_manifestation
+    def set_manifestation
       @manifestation = Manifestation.find(params[:manifestation_id]) if params[:manifestation_id]
       authorize @manifestation if @manifestation
     end
 
-    def get_item
+    def set_item
       @item = Item.find(params[:item_id]) if params[:item_id]
       authorize @item if @item
     end
 
-    def get_carrier_type
+    def set_carrier_type
       @carrier_type = CarrierType.find(params[:carrier_type_id]) if params[:carrier_type_id]
     end
 
-    def get_agent
+    def set_agent
       @agent = Agent.find(params[:agent_id]) if params[:agent_id]
       authorize @agent if @agent
     end
 
-    def get_series_statement
+    def set_series_statement
       @series_statement = SeriesStatement.find(params[:series_statement_id]) if params[:series_statement_id]
     end
 
-    def get_basket
-      @basket = Basket.find(params[:basket_id]) if params[:basket_id]
-    end
-
-    def get_agent_merge_list
+    def set_agent_merge_list
       @agent_merge_list = AgentMergeList.find(params[:agent_merge_list_id]) if params[:agent_merge_list_id]
     end
 
-    def get_series_statement_merge_list
+    def set_series_statement_merge_list
       @series_statement_merge_list = SeriesStatementMergeList.find(params[:series_statement_merge_list_id]) if params[:series_statement_merge_list_id]
     end
 

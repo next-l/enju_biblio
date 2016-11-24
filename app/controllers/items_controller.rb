@@ -19,7 +19,7 @@
 #  required_score          :integer          default(0), not null
 #  acquired_at             :datetime
 #  bookstore_id            :integer
-#  budget_type_id          :integer
+#  budset_type_id          :integer
 #  circulation_status_id   :integer          default(5), not null
 #  checkout_type_id        :integer          default(1), not null
 #  binding_item_identifier :string
@@ -31,13 +31,13 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
+  before_action :set_agent, :set_manifestation, :set_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_action :get_inventory_file
+    before_action :set_inventory_file
   end
-  before_action :get_library, :get_item, except: [:create, :update, :destroy]
+  before_action :set_library, :set_item, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:edit]
-  before_action :get_version, only: [:show]
+  before_action :set_version, only: [:show]
   after_action :convert_charset, only: :index
 
   # GET /items
@@ -299,7 +299,7 @@ class ItemsController < ApplicationController
     params.require(:item).permit(
       :call_number, :item_identifier, :circulation_status_id,
       :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
-      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
+      :acquired_at, :bookstore_id, :missing_since, :budset_type_id,
       :lock_version, :manifestation_id, :library_id, :required_role_id,
       :binding_item_identifier, :binding_call_number, :binded_at,
       :use_restriction_id,
@@ -316,7 +316,7 @@ class ItemsController < ApplicationController
     end
     @shelves = @library.try(:shelves)
     @bookstores = Bookstore.order(:position)
-    @budget_types = BudgetType.order(:position)
+    @budset_types = BudgetType.order(:position)
     @roles = Role.all
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.order(:position)
