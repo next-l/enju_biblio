@@ -70,7 +70,7 @@ class ManifestationsController < ApplicationController
   before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :authenticate_user!, only: :edit
-  before_action :set_agent, :set_manifestation, except: [:create, :update, :destroy]
+  before_action :set_parent_agent, :set_parent_manifestation, except: [:create, :update, :destroy]
   before_action :set_expression, only: :new
   if defined?(EnjuSubject)
     before_action :set_subject, except: [:create, :update, :destroy]

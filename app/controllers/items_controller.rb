@@ -31,11 +31,11 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_agent, :set_manifestation, :set_shelf, except: [:create, :update, :destroy]
+  before_action :set_parent_agent, :set_parent_manifestation, :set_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
     before_action :set_inventory_file
   end
-  before_action :set_library, :set_item, except: [:create, :update, :destroy]
+  before_action :set_library, :set_parent_item, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:edit]
   before_action :set_version, only: [:show]
   after_action :convert_charset, only: :index
