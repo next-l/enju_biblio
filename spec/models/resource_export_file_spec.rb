@@ -27,22 +27,42 @@ describe ResourceExportFile do
     expect(columns).to include "item_price"
   end
 
-  context "NCID export" do
-    it "should export NCID value" do
-      manifestation = FactoryGirl.create(:manifestation)
-      ncid = IdentifierType.where(name: "ncid").first
-      identifier = FactoryGirl.create(:identifier, identifier_type: ncid, body: "BA91833159")
-      manifestation.identifiers << identifier
-      manifestation.save!
-      export_file = ResourceExportFile.new
-      export_file.user = users(:admin)
-      export_file.save!
-      export_file.export!
-      file = export_file.resource_export
-      expect(file).to be_truthy
-      lines = File.open(file.path).readlines.map(&:chomp)
-      expect(lines.first.split(/\t/)).to include "ncid"
-      expect(lines.last.split(/\t/)).to include "BA91833159"
+  it "should export NCID value" do
+    manifestation = FactoryGirl.create(:manifestation)
+    ncid = IdentifierType.where(name: "ncid").first
+    identifier = FactoryGirl.create(:identifier, identifier_type: ncid, body: "BA91833159")
+    manifestation.identifiers << identifier
+    manifestation.save!
+    export_file = ResourceExportFile.new
+    export_file.user = users(:admin)
+    export_file.save!
+    export_file.export!
+    file = export_file.resource_export
+    expect(file).to be_truthy
+    lines = File.open(file.path).readlines.map(&:chomp)
+    expect(lines.first.split(/\t/)).to include "ncid"
+    expect(lines.last.split(/\t/)).to include "BA91833159"
+  end
+
+  it "should export carrier_type" do
+    carrier_type = FactoryGirl.create(:carrier_type)
+    manifestation = FactoryGirl.create(:manifestation, carrier_type: carrier_type)
+    manifestation.save!
+    export_file = ResourceExportFile.new
+    export_file.user = users(:admin)
+    export_file.save!
+    export_file.export!
+    file = export_file.resource_export
+    expect(file).to be_truthy
+    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
+    csv.each do |row|
+      expect(row).to have_key "carrier_type"
+      case row["manifestation_id"].to_i
+      when 1
+        expect(row["carrier_type"]).to eq "volume"
+      when manifestation.id
+        expect(row["carrier_type"]).to eq carrier_type.name
+      end
     end
   end
 end
