@@ -73,7 +73,7 @@ class ManifestationsController < ApplicationController
   before_action :set_parent_agent, :set_parent_manifestation, except: [:create, :update, :destroy]
   before_action :set_expression, only: :new
   if defined?(EnjuSubject)
-    before_action :set_subject, except: [:create, :update, :destroy]
+    before_action :set_parent_subject, except: [:create, :update, :destroy]
   end
   before_action :set_series_statement, only: [:index, :new, :edit]
   before_action :set_item, :set_libraries, only: :index

@@ -195,7 +195,7 @@ class PictureFilesController < ApplicationController
       @attachable = @manifestation
       return
     end
-    set_agent
+    set_parent_agent
     if @agent
       @attachable = @agent
       return
