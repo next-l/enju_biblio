@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 # == Schema Information
 #
 # Table name: items
@@ -19,7 +18,7 @@
 #  required_score          :integer          default(0), not null
 #  acquired_at             :datetime
 #  bookstore_id            :integer
-#  budset_type_id          :integer
+#  budget_type_id          :integer
 #  circulation_status_id   :integer          default(5), not null
 #  checkout_type_id        :integer          default(1), not null
 #  binding_item_identifier :string
@@ -35,7 +34,7 @@ class ItemsController < ApplicationController
   if defined?(EnjuInventory)
     before_action :set_inventory_file
   end
-  before_action :set_library, :set_parent_item, except: [:create, :update, :destroy]
+  before_action :set_parent_item, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:edit]
   before_action :set_version, only: [:show]
   after_action :convert_charset, only: :index
@@ -184,11 +183,16 @@ class ItemsController < ApplicationController
       redirect_to manifestations_url
       return
     end
+    if @manifestation.series_master?
+      flash[:notice] = t('item.specify_manifestation')
+      redirect_to manifestations_url(parent_id: @manifestation.id)
+      return
+    end
     @item = Item.new
     prepare_options
     set_library
     @item.shelf = @library.shelves.first
-    @item.manifestation_id = @manifestation.id
+    @item.manifestation = @manifestation
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.where(
         name: [
@@ -299,7 +303,7 @@ class ItemsController < ApplicationController
     params.require(:item).permit(
       :call_number, :item_identifier, :circulation_status_id,
       :checkout_type_id, :shelf_id, :include_supplements, :note, :url, :price,
-      :acquired_at, :bookstore_id, :missing_since, :budset_type_id,
+      :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
       :lock_version, :manifestation_id, :library_id, :required_role_id,
       :binding_item_identifier, :binding_call_number, :binded_at,
       :use_restriction_id,
@@ -316,7 +320,7 @@ class ItemsController < ApplicationController
     end
     @shelves = @library.try(:shelves)
     @bookstores = Bookstore.order(:position)
-    @budset_types = BudgetType.order(:position)
+    @budget_types = BudgetType.order(:position)
     @roles = Role.all
     if defined?(EnjuCirculation)
       @circulation_statuses = CirculationStatus.order(:position)
@@ -337,4 +341,10 @@ class ItemsController < ApplicationController
     end
     @shelves = @library.shelves
   end
+
+  def filtered_params
+    params.permit([:view, :format, :page, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page])
+  end
+
+  helper_method :filtered_params
 end
