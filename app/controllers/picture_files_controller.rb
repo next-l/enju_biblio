@@ -201,7 +201,7 @@ class PictureFilesController < ApplicationController
       return
     end
     if defined?(EnjuEvent)
-      set_event
+      set_parent_event
       if @event
         @attachable = @event
         return
