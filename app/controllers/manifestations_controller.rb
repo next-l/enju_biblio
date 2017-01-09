@@ -76,7 +76,7 @@ class ManifestationsController < ApplicationController
     before_action :set_parent_subject, except: [:create, :update, :destroy]
   end
   before_action :set_series_statement, only: [:index, :new, :edit]
-  before_action :set_item, :set_libraries, only: :index
+  before_action :set_parent_item, :set_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
   before_action :set_version, only: [:show]
   after_action :convert_charset, only: :index
