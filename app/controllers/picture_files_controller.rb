@@ -190,7 +190,7 @@ class PictureFilesController < ApplicationController
   end
 
   def set_attachable
-    set_manifestation
+    set_parent_manifestation
     if @manifestation
       @attachable = @manifestation
       return

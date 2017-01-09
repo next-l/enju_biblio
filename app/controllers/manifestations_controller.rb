@@ -455,7 +455,7 @@ class ManifestationsController < ApplicationController
     })
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment.metadata['filename']
+      @manifestation.original_title = @manifestation.attachment.metadata['filename'] if @manifestation.attachment
     end
 
     respond_to do |format|

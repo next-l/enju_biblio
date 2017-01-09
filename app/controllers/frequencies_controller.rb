@@ -18,7 +18,7 @@ class FrequenciesController < ApplicationController
   # GET /frequencies
   # GET /frequencies.json
   def index
-    @frequencies = Frequency.all
+    @frequencies = Frequency.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
