@@ -16,11 +16,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
-  s.add_dependency "enju_seed", "~> 0.3.0.beta.1"
+  s.add_dependency "enju_seed", "~> 0.3.0.beta.2"
   s.add_dependency "marc"
   s.add_dependency "paper_trail", "~> 6.0"
   s.add_dependency "validates_timeliness", "~> 4.0"
-  s.add_dependency "simple_form", "~> 3.3"
+  s.add_dependency "simple_form", "~> 3.4"
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "lisbn"
