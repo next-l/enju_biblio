@@ -6,7 +6,7 @@ html lang="#{@locale.to_s}"
     title
       = title(controller.controller_name)
     - if %w(index show new edit).include?(controller.action_name)
-      = book_jacket_header(@library_group.settings[:book_jacket_source])
+      = book_jacket_header(@library_group.book_jacket_source)
   body[itemscope itemtype="http://schema.org/WebPage"]
     .container-fluid
       = render 'page/header'

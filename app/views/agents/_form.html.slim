@@ -6,7 +6,7 @@
     = f.select(:agent_type_id, @agent_types.collect{|p| [p.display_name.localize, p.id]}, {}, {class: 'form-control'})
   .form-group
     span#name_person
-      - if @library_group.settings[:family_name_first]
+      - if @library_group.family_name_first
         = render 'agents/form_family_name_first', f: f
       - else
         = render 'agents/form_family_name_last', f: f
