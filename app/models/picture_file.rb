@@ -6,12 +6,14 @@ class PictureFile < ActiveRecord::Base
 
   # http://railsforum.com/viewtopic.php?id=11615
   acts_as_list scope: 'picture_attachable_type=\'#{picture_attachable_type}\''
+  validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   before_create :set_fingerprint
   strip_attributes only: :picture_attachable_type
 
   paginates_per 10
 
   def set_fingerprint
+    return nil unless image
     self.picture_fingerprint = Digest::SHA1.file(image.download.path).hexdigest
   end
 end
