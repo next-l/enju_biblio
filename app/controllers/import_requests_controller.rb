@@ -17,7 +17,7 @@ class ImportRequestsController < ApplicationController
   # GET /import_requests
   # GET /import_requests.json
   def index
-    @import_requests = ImportRequest.order(id: :desc).page(params[:page])
+    @import_requests = ImportRequest.order(created_at: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

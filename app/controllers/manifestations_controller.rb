@@ -70,13 +70,13 @@ class ManifestationsController < ApplicationController
   before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :authenticate_user!, only: :edit
-  before_action :set_agent, :set_manifestation, except: [:create, :update, :destroy]
+  before_action :set_parent_agent, :set_parent_manifestation, except: [:create, :update, :destroy]
   before_action :set_expression, only: :new
   if defined?(EnjuSubject)
-    before_action :set_subject, except: [:create, :update, :destroy]
+    before_action :set_parent_subject, except: [:create, :update, :destroy]
   end
   before_action :set_series_statement, only: [:index, :new, :edit]
-  before_action :set_item, :set_libraries, only: :index
+  before_action :set_parent_item, :set_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
   before_action :set_version, only: [:show]
   after_action :convert_charset, only: :index
@@ -455,7 +455,7 @@ class ManifestationsController < ApplicationController
     })
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment.metadata['filename']
+      @manifestation.original_title = @manifestation.attachment.metadata['filename'] if @manifestation.attachment
     end
 
     respond_to do |format|

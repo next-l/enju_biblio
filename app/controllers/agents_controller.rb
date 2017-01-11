@@ -55,7 +55,7 @@
 class AgentsController < ApplicationController
   before_action :set_agent, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_work, :set_expression, :set_manifestation, :set_item, :set_agent, except: [:update, :destroy]
+  before_action :set_work, :set_expression, :set_parent_manifestation, :set_parent_item, :set_parent_agent, except: [:update, :destroy]
   before_action :set_agent_merge_list, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:new, :edit]
   before_action :set_version, only: [:show]

@@ -8,11 +8,11 @@ class ManifestationPolicy < ApplicationPolicy
     when 'Administrator'
       true
     when 'Librarian'
-      true if record.required_role_id <= 3
+      true if record.required_role.score <= 3
     when 'User'
-      true if record.required_role_id <= 2
+      true if record.required_role.score <= 2
     else
-      true if record.required_role_id <= 1
+      true if record.required_role.score <= 1
     end
   end
 
@@ -25,9 +25,9 @@ class ManifestationPolicy < ApplicationPolicy
     when 'Administrator'
       true
     when 'Librarian'
-      true if record.required_role_id <= 3
+      true if record.required_role.score <= 3
     when 'User'
-      true if record.required_role_id <= 2
+      true if record.required_role.score <= 2
     end
   end
 
@@ -43,7 +43,7 @@ class ManifestationPolicy < ApplicationPolicy
           when 'Administrator'
             true
           when 'Librarian'
-            true if record.required_role_id <= 3
+            true if record.required_role.score <= 3
           else
             false
           end
@@ -52,7 +52,7 @@ class ManifestationPolicy < ApplicationPolicy
           when 'Administrator'
             true
           when 'Librarian'
-            true if record.required_role_id <= 3
+            true if record.required_role.score <= 3
           else
             false
           end

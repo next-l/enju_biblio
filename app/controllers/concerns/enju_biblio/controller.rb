@@ -14,12 +14,12 @@ module EnjuBiblio
       authorize @expression if @expression
     end
 
-    def set_manifestation
+    def set_parent_manifestation
       @manifestation = Manifestation.find(params[:manifestation_id]) if params[:manifestation_id]
       authorize @manifestation if @manifestation
     end
 
-    def set_item
+    def set_parent_item
       @item = Item.find(params[:item_id]) if params[:item_id]
       authorize @item if @item
     end
@@ -28,7 +28,7 @@ module EnjuBiblio
       @carrier_type = CarrierType.find(params[:carrier_type_id]) if params[:carrier_type_id]
     end
 
-    def set_agent
+    def set_parent_agent
       @agent = Agent.find(params[:agent_id]) if params[:agent_id]
       authorize @agent if @agent
     end

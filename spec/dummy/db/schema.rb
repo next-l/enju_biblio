@@ -27,7 +27,7 @@ ActiveRecord::Schema.define(version: 20161114083857) do
 
   create_table "agent_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",             default: "{}"
+    t.jsonb    "metadata",             default: "{}"
     t.integer  "sort_key"
     t.integer  "agent_import_file_id"
     t.datetime "created_at"
@@ -633,7 +633,7 @@ ActiveRecord::Schema.define(version: 20161114083857) do
 
   create_table "import_request_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",          default: "{}"
+    t.jsonb    "metadata",          default: "{}"
     t.integer  "sort_key"
     t.integer  "import_request_id"
     t.datetime "created_at"
@@ -830,8 +830,10 @@ ActiveRecord::Schema.define(version: 20161114083857) do
     t.jsonb    "settings"
     t.jsonb    "footer_banner"
     t.text     "html_snippet"
+    t.string   "book_jacket_source"
     t.integer  "max_number_of_results",         default: 500
     t.boolean  "family_name_first",             default: true
+    t.string   "screenshot_generator"
     t.integer  "pub_year_facet_range_interval", default: 10
     t.integer  "user_id"
     t.index ["short_name"], name: "index_library_groups_on_short_name", using: :btree
@@ -1259,7 +1261,7 @@ ActiveRecord::Schema.define(version: 20161114083857) do
 
   create_table "resource_export_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",                default: "{}"
+    t.jsonb    "metadata",                default: "{}"
     t.integer  "sort_key"
     t.integer  "resource_export_file_id"
     t.datetime "created_at"
@@ -1283,7 +1285,7 @@ ActiveRecord::Schema.define(version: 20161114083857) do
 
   create_table "resource_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",                default: "{}"
+    t.jsonb    "metadata",                default: "{}"
     t.integer  "sort_key"
     t.integer  "resource_import_file_id"
     t.datetime "created_at"

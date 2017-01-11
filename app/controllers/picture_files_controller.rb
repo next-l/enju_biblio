@@ -190,18 +190,18 @@ class PictureFilesController < ApplicationController
   end
 
   def set_attachable
-    set_manifestation
+    set_parent_manifestation
     if @manifestation
       @attachable = @manifestation
       return
     end
-    set_agent
+    set_parent_agent
     if @agent
       @attachable = @agent
       return
     end
     if defined?(EnjuEvent)
-      set_event
+      set_parent_event
       if @event
         @attachable = @event
         return
