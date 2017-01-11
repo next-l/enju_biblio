@@ -7,4 +7,4 @@ ul.list-group
     = library_facet(current_libraries, facet)
     - if params[:library]
       li.list-group-item
-        = link_to t('page.remove_this_facet'), url_for(params.permit.merge(library: nil, page: nil, view: nil, only_path: true))
+        = link_to t('page.remove_this_facet'), url_for(filtered_params.merge(library: nil, page: nil, view: nil, only_path: true))
