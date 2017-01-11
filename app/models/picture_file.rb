@@ -38,4 +38,5 @@ end
 #  picture_meta            :text
 #  picture_fingerprint     :string
 #  picture_id              :string
+#  image_data              :jsonb
 #
