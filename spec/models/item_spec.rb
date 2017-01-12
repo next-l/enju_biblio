@@ -61,13 +61,13 @@ end
 #
 # Table name: items
 #
-#  id                      :integer          not null, primary key
+#  id                      :uuid             not null, primary key
 #  call_number             :string
 #  item_identifier         :string
-#  created_at              :datetime
-#  updated_at              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #  deleted_at              :datetime
-#  shelf_id                :integer          default(1), not null
+#  shelf_id                :integer          default(1)
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string
@@ -83,5 +83,5 @@ end
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime
-#  manifestation_id        :integer
+#  manifestation_id        :uuid
 #

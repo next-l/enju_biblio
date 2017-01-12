@@ -474,11 +474,11 @@ ActiveRecord::Schema.define(version: 20161114083857) do
   create_table "doi_records", force: :cascade do |t|
     t.string   "body",                null: false
     t.string   "registration_agency"
-    t.integer  "manifestation_id",    null: false
+    t.uuid     "manifestation_id"
     t.string   "source"
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.index ["body"], name: "index_doi_records_on_body", using: :btree
+    t.index ["body"], name: "index_doi_records_on_body", unique: true, using: :btree
     t.index ["manifestation_id"], name: "index_doi_records_on_manifestation_id", using: :btree
   end
 
@@ -688,7 +688,7 @@ ActiveRecord::Schema.define(version: 20161114083857) do
     t.uuid     "manifestation_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.index ["body"], name: "index_isbn_records_on_body", using: :btree
+    t.index ["body"], name: "index_isbn_records_on_body", unique: true, using: :btree
     t.index ["manifestation_id"], name: "index_isbn_records_on_manifestation_id", using: :btree
   end
 
@@ -696,10 +696,10 @@ ActiveRecord::Schema.define(version: 20161114083857) do
     t.string   "body",             null: false
     t.string   "issn_type"
     t.string   "source"
-    t.integer  "manifestation_id"
+    t.uuid     "manifestation_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
-    t.index ["body"], name: "index_issn_records_on_body", using: :btree
+    t.index ["body"], name: "index_issn_records_on_body", unique: true, using: :btree
     t.index ["manifestation_id"], name: "index_issn_records_on_manifestation_id", using: :btree
   end
 
@@ -1708,7 +1708,9 @@ ActiveRecord::Schema.define(version: 20161114083857) do
     t.index ["item_id"], name: "index_withdraws_on_item_id", using: :btree
   end
 
+  add_foreign_key "doi_records", "manifestations"
   add_foreign_key "isbn_records", "manifestations"
+  add_foreign_key "issn_records", "manifestations"
   add_foreign_key "items", "manifestations"
   add_foreign_key "items", "shelves"
   add_foreign_key "library_groups", "users"

@@ -1,7 +1,7 @@
-# -*- encoding: utf-8 -*-
 require 'rails_helper'
 
 describe AgentImportFilesController do
+  fixtures :users, :libraries, :user_groups
   fixtures :all
 
   describe 'GET index' do

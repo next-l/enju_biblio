@@ -15,7 +15,7 @@ end
 #  id               :integer          not null, primary key
 #  original_title   :text
 #  periodical_type  :string
-#  manifestation_id :integer
-#  created_at       :datetime
-#  updated_at       :datetime
+#  manifestation_id :uuid
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #

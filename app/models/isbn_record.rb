@@ -10,7 +10,7 @@ end
 #  body             :string           not null
 #  isbn_type        :string
 #  source           :string
-#  manifestation_id :integer
+#  manifestation_id :uuid
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #
