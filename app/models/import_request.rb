@@ -76,8 +76,8 @@ end
 #
 #  id               :integer          not null, primary key
 #  isbn             :string
-#  manifestation_id :integer
+#  manifestation_id :uuid
 #  user_id          :integer
-#  created_at       :datetime
-#  updated_at       :datetime
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
