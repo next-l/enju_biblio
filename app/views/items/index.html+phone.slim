@@ -42,11 +42,11 @@ div[data-role="content"]
           td
             = render 'manifestations/show_index', manifestation: item.manifestation
           td
-            = link_to item.shelf.library.display_name.localize, item.shelf.library
+            = link_to item.shelf.library.display_name, item.shelf.library
           td
-            = link_to item.shelf_display_name.localize, item.shelf
+            = link_to item.shelf_display_name, item.shelf
           td
-            = item.circulation_status.display_name.localize
+            = item.circulation_status.display_name
           - if policy(item).update?
             td
               = link_to t('page.edit'), edit_item_path(item)

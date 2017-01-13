@@ -71,7 +71,7 @@ module EnjuBiblio
     include EnjuCirculation::ManifestationsHelper if defined?(EnjuCirculation)
 
     def resource_title(manifestation, action)
-      string = LibraryGroup.site_config.display_name.localize.dup
+      string = LibraryGroup.site_config.display_name.dup
       unless action == ('index' or 'new')
         if manifestation.try(:original_title)
           string << ' - ' + manifestation.original_title.to_s
@@ -109,7 +109,7 @@ module EnjuBiblio
     def language_list(languages)
       list = []
       languages.each do |language|
-        list << language.display_name.localize if language.name != 'unknown'
+        list << language.display_name if language.name != 'unknown'
       end
       list.join("; ")
     end
@@ -140,10 +140,10 @@ module EnjuBiblio
       current = true if languages.include?(language.name)
       if current
         content_tag :strong do
-          link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, language: language.name, view: nil, only_path: true)))
+          link_to("#{language.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, language: language.name, view: nil, only_path: true)))
         end
       else
-        link_to("#{language.display_name.localize} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, language: language.name, view: nil, only_path: true)))
+        link_to("#{language.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, language: language.name, view: nil, only_path: true)))
       end
     end
 
@@ -155,10 +155,10 @@ module EnjuBiblio
       content_tag :li, class: 'list-group-item' do
         if current
           content_tag :strong do
-            link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
+            link_to("#{library.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
           end
         else
-          link_to("#{library.display_name.localize} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
+          link_to("#{library.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
         end
       end
     end
@@ -171,10 +171,10 @@ module EnjuBiblio
         current = true if params[:carrier_type] == carrier_type.name
         if current
           content_tag :strong do
-            link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(filtered_params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
+            link_to("#{carrier_type.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
           end
         else
-          link_to("#{carrier_type.display_name.localize} (" + facet.count.to_s + ")", url_for(filtered_params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
+          link_to("#{carrier_type.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
         end
       end
     end

@@ -6,13 +6,13 @@ module EnjuBiblio
     def form_icon(carrier_type)
       case carrier_type.name
       when 'volume'
-        image_tag('icons/book.png', size: '16x16', alt: carrier_type.display_name.localize)
+        image_tag('icons/book.png', size: '16x16', alt: carrier_type.display_name)
       when 'audio_disc'
-        image_tag('icons/cd.png', size: '16x16', alt: carrier_type.display_name.localize)
+        image_tag('icons/cd.png', size: '16x16', alt: carrier_type.display_name)
       when 'videodisc'
-        image_tag('icons/dvd.png', size: '16x16', alt: carrier_type.display_name.localize)
+        image_tag('icons/dvd.png', size: '16x16', alt: carrier_type.display_name)
       when 'online_resource'
-        image_tag('icons/monitor.png', size: '16x16', alt: carrier_type.display_name.localize)
+        image_tag('icons/monitor.png', size: '16x16', alt: carrier_type.display_name)
       else
         image_tag('icons/help.png', size: '16x16', alt: t('page.unknown'))
       end
@@ -23,13 +23,13 @@ module EnjuBiblio
     def content_type_icon(content_type)
       case content_type.name
       when 'text'
-        image_tag('icons/page_white_text.png', size: '16x16', alt: content_type.display_name.localize)
+        image_tag('icons/page_white_text.png', size: '16x16', alt: content_type.display_name)
       when 'still_image'
-        image_tag('icons/picture.png', size: '16x16', alt: content_type.display_name.localize)
+        image_tag('icons/picture.png', size: '16x16', alt: content_type.display_name)
       when 'sounds'
-        image_tag('icons/sound.png', size: '16x16', alt: content_type.display_name.localize)
+        image_tag('icons/sound.png', size: '16x16', alt: content_type.display_name)
       when 'two_dimensional_moving_image'
-        image_tag('icons/film.png', size: '16x16', alt: content_type.display_name.localize)
+        image_tag('icons/film.png', size: '16x16', alt: content_type.display_name)
       else
         image_tag('icons/help.png', size: '16x16', alt: t('page.unknown'))
       end

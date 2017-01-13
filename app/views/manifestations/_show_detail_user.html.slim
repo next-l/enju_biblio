@@ -31,17 +31,17 @@
             | :
           td[style="width: 500px"]
             = form_icon(manifestation.carrier_type)
-            = manifestation.carrier_type.display_name.localize
+            = manifestation.carrier_type.display_name
             |  / 
             = content_type_icon(manifestation.manifestation_content_type)
-            = manifestation.manifestation_content_type.display_name.localize if manifestation.manifestation_content_type
+            = manifestation.manifestation_content_type.display_name if manifestation.manifestation_content_type
         tr
           td
             = t('activerecord.models.language')
             | :
           td
             span[itemprop="inLanguage"]
-              = manifestation.language.display_name.localize
+              = manifestation.language.display_name
         tr
           td
             = t('activerecord.attributes.manifestation.publication_place')
@@ -89,7 +89,7 @@
             ul.list-group
               - manifestation.identifiers.each do |identifier|
                 li.list-group-item
-                  = identifier.identifier_type.display_name.localize
+                  = identifier.identifier_type.display_name
                   | : 
                   = identifier_link(identifier)
         - unless manifestation.attachment

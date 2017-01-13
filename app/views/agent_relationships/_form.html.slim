@@ -23,6 +23,6 @@
   .form-group
     = f.label :agent_relationship_type_id
     br
-    = f.select(:agent_relationship_type_id, @agent_relationship_types.collect{|r| [r.display_name.localize, r.id]})
+    = f.select(:agent_relationship_type_id, @agent_relationship_types.collect{|r| [r.display_name, r.id]})
   .form-control
     = f.submit class: 'btn btn-default'
