@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe SeriesStatementsController do
+  fixtures :shelves
   fixtures :users
 
   def valid_attributes

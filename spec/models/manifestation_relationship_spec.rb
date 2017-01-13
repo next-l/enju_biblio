@@ -11,10 +11,10 @@ end
 # Table name: manifestation_relationships
 #
 #  id                                 :integer          not null, primary key
-#  parent_id                          :integer
-#  child_id                           :integer
+#  parent_id                          :uuid
+#  child_id                           :uuid
 #  manifestation_relationship_type_id :integer
-#  created_at                         :datetime
-#  updated_at                         :datetime
+#  created_at                         :datetime         not null
+#  updated_at                         :datetime         not null
 #  position                           :integer
 #

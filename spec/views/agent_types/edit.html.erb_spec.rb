@@ -1,6 +1,9 @@
 require 'rails_helper'
 
 describe "agent_types/edit" do
+  fixtures :libraries, :users, :agents, :manifestations, :items,
+    :baskets, :subscriptions, :user_groups
+  fixtures :all
   before(:each) do
     @agent_type = assign(:agent_type, stub_model(AgentType,
       :name => "MyString",

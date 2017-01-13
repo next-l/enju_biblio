@@ -22,14 +22,14 @@ produce_00003:
   created_at: 2008-01-11 23:32:03.701425 +09:00
 produce_00004: 
   updated_at: 2008-01-11 02:34:20.183962 +09:00
-  manifestation_id: 4
+  manifestation_id: e153878e-3001-4f0f-a576-2ec63ffb9bf9
   agent_id: 1
   id: 4
   position: 1
   created_at: 2008-01-11 02:34:20.183962 +09:00
 produce_00005: 
   updated_at: 2008-01-11 02:34:32.352223 +09:00
-  manifestation_id: 5
+  manifestation_id: ff12ea9b-177b-4765-af27-775d2e1f1895
   agent_id: 2
   id: 5
   position: 2

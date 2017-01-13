@@ -60,7 +60,7 @@ RSpec.configure do |config|
   # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
-  config.extend ControllerMacros, :type => :controller
+  config.extend ControllerMacros, type: :controller
 
   $original_sunspot_session = Sunspot.session
 
@@ -68,7 +68,7 @@ RSpec.configure do |config|
     Sunspot.session = Sunspot::Rails::StubSessionProxy.new($original_sunspot_session)
   end
 
-  config.before :each, :solr => true do
+  config.before :each, solr: true do
     Sunspot::Rails::Tester.start_original_sunspot_session
     Sunspot.session = $original_sunspot_session
     Sunspot.remove_all!
@@ -76,8 +76,16 @@ RSpec.configure do |config|
 
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
+    DatabaseCleaner.clean_with:truncation, except: %w(
+                               users libraries user_groups
+                              )
   end
+
+  #config.around(:each) do |example|
+  #  DatabaseCleaner.cleaning do
+  #    example.run
+  #  end
+  #end
 end
 
 FactoryGirl.definition_file_paths << "#{::Rails.root}/../../spec/factories"

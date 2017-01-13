@@ -1,8 +1,7 @@
 require 'rails_helper'
 
 describe AgentImportFilesController do
-  fixtures :users, :libraries, :user_groups, :profiles, :manifestations, :items,
-    :baskets, :subscriptions, :agents
+  fixtures :users, :profiles, :libraries, :manifestations, :items, :baskets, :subscriptions, :agents, :user_groups
   fixtures :all
 
   describe 'GET index' do

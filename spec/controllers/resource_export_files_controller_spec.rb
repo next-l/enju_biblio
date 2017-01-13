@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 describe ResourceExportFilesController do
+  fixtures :shelves, :libraries
   fixtures :all
 
   describe 'GET index' do

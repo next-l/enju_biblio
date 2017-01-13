@@ -1,6 +1,7 @@
 class CarrierType < ActiveRecord::Base
-  include MasterModel
+  #include MasterModel
   has_many :manifestations
+  translates :display_name
   include AttachmentUploader[:attachment]
 
   def mods_type

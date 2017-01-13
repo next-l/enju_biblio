@@ -1,7 +1,8 @@
-# -*- encoding: utf-8 -*-
 require 'rails_helper'
 
 describe AgentImportFile do
+  fixtures :users, :agents, :manifestations, :items, :baskets, :subscriptions,
+    :user_groups, :baskets
   fixtures :all
 
   describe "when its mode is 'create'" do

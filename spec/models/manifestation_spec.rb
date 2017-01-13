@@ -1,7 +1,7 @@
-# -*- encoding: utf-8 -*-
 require 'rails_helper'
 
 describe Manifestation, :solr => true do
+  fixtures :shelves, :libraries
   fixtures :all
   before do
     Manifestation.reindex
@@ -281,7 +281,7 @@ end
 #  deleted_at                      :datetime
 #  access_address                  :string
 #  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          default(1), not null
+#  carrier_type_id                 :integer          not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer

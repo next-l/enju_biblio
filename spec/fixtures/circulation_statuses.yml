@@ -1,8 +1,7 @@
 --- 
 circulation_status_00001: 
   name: Available For Pickup  
-  display_name_translations: "en: Available For Pickup\r\n\
-    ja: 持ち出し可能"
+  display_name_translations: {"en": "Available For Pickup", "ja": "持ち出し可能"}
   id: 1
   note: ""
   position: 1

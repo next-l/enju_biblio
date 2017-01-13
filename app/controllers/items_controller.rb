@@ -316,7 +316,7 @@ class ItemsController < ApplicationController
     if @item
       @library = @item.shelf.library
     else
-      @library = Library.real.includes(:shelves).order(:position).first
+      @library = Shelf.find_by(name: 'web').library
     end
     @shelves = @library.try(:shelves)
     @bookstores = Bookstore.order(:position)
