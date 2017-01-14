@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161115184756) do
+ActiveRecord::Schema.define(version: 20170114174536) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -334,13 +334,13 @@ ActiveRecord::Schema.define(version: 20161115184756) do
   end
 
   create_table "checkout_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["name"], name: "index_checkout_types_on_name", using: :btree
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_checkout_types_on_name", unique: true, using: :btree
   end
 
   create_table "checkouts", force: :cascade do |t|
@@ -373,6 +373,7 @@ ActiveRecord::Schema.define(version: 20161115184756) do
     t.integer  "position"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_circulation_statuses_on_name", unique: true, using: :btree
   end
 
   create_table "classification_types", force: :cascade do |t|
@@ -1161,7 +1162,6 @@ ActiveRecord::Schema.define(version: 20161115184756) do
   end
 
   create_table "profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.integer  "user_id"
     t.uuid     "user_group_id"
     t.uuid     "library_id"
     t.string   "locale"
@@ -1181,7 +1181,6 @@ ActiveRecord::Schema.define(version: 20161115184756) do
     t.index ["checkout_icalendar_token"], name: "index_profiles_on_checkout_icalendar_token", unique: true, using: :btree
     t.index ["library_id"], name: "index_profiles_on_library_id", using: :btree
     t.index ["user_group_id"], name: "index_profiles_on_user_group_id", using: :btree
-    t.index ["user_id"], name: "index_profiles_on_user_id", using: :btree
     t.index ["user_number"], name: "index_profiles_on_user_number", unique: true, using: :btree
   end
 
@@ -1518,6 +1517,7 @@ ActiveRecord::Schema.define(version: 20161115184756) do
     t.integer  "position"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_use_restrictions_on_name", unique: true, using: :btree
   end
 
   create_table "user_checkout_stat_transitions", force: :cascade do |t|
@@ -1569,7 +1569,7 @@ ActiveRecord::Schema.define(version: 20161115184756) do
   end
 
   create_table "user_group_has_checkout_types", force: :cascade do |t|
-    t.integer  "user_group_id",                                   null: false
+    t.uuid     "user_group_id",                                   null: false
     t.integer  "checkout_type_id",                                null: false
     t.integer  "checkout_limit",                  default: 0,     null: false
     t.integer  "checkout_period",                 default: 0,     null: false
@@ -1580,8 +1580,8 @@ ActiveRecord::Schema.define(version: 20161115184756) do
     t.datetime "fixed_due_date"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.integer  "current_checkout_count"
     t.index ["checkout_type_id"], name: "index_user_group_has_checkout_types_on_checkout_type_id", using: :btree
     t.index ["user_group_id"], name: "index_user_group_has_checkout_types_on_user_group_id", using: :btree
@@ -1698,8 +1698,10 @@ ActiveRecord::Schema.define(version: 20161115184756) do
     t.string   "unlock_token"
     t.datetime "locked_at"
     t.datetime "confirmed_at"
+    t.uuid     "profile_id"
     t.index ["checkout_icalendar_token"], name: "index_users_on_checkout_icalendar_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", using: :btree
+    t.index ["profile_id"], name: "index_users_on_profile_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true, using: :btree
     t.index ["username"], name: "index_users_on_username", unique: true, using: :btree
@@ -1728,7 +1730,7 @@ ActiveRecord::Schema.define(version: 20161115184756) do
   add_foreign_key "accepts", "baskets"
   add_foreign_key "accepts", "items"
   add_foreign_key "baskets", "users"
-  add_foreign_key "checked_items", "baskets"
+  add_foreign_key "checked_items", "baskets", on_delete: :nullify
   add_foreign_key "checked_items", "items"
   add_foreign_key "checkouts", "checkins"
   add_foreign_key "checkouts", "items"
@@ -1753,15 +1755,17 @@ ActiveRecord::Schema.define(version: 20161115184756) do
   add_foreign_key "periodicals", "manifestations"
   add_foreign_key "produces", "agents"
   add_foreign_key "produces", "manifestations"
-  add_foreign_key "profiles", "users"
   add_foreign_key "reserves", "items"
   add_foreign_key "reserves", "manifestations"
   add_foreign_key "reserves", "users"
   add_foreign_key "shelves", "libraries"
   add_foreign_key "subscribes", "subscriptions"
   add_foreign_key "subscriptions", "users"
+  add_foreign_key "user_group_has_checkout_types", "checkout_types"
+  add_foreign_key "user_group_has_checkout_types", "user_groups"
   add_foreign_key "user_has_roles", "roles"
   add_foreign_key "user_has_roles", "users"
+  add_foreign_key "users", "profiles"
   add_foreign_key "withdraws", "baskets"
   add_foreign_key "withdraws", "items"
 end
