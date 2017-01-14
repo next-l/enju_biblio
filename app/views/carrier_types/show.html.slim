@@ -21,7 +21,7 @@
       strong
         = t('activerecord.attributes.carrier_type.display_name')
         | :
-      = @carrier_type.display_name.localize
+      = @carrier_type.display_name
     - if defined?(EnjuCirculation)
       p
         strong
@@ -30,7 +30,7 @@
       ul
         - @carrier_type.checkout_types.each do |checkout_type|
           li
-            = link_to checkout_type.display_name.localize, checkout_type
+            = link_to checkout_type.display_name, checkout_type
     p
       strong
         = t('activerecord.models.picture_file')

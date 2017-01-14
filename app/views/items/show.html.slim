@@ -50,17 +50,17 @@ div[style="color: red"]
         strong
           = t('activerecord.models.shelf')
           | :
-        = link_to(@item.shelf_display_name.localize, @item.shelf, id: "shelf_item_#{@item.id}")
+        = link_to(@item.shelf_display_name, @item.shelf, id: "shelf_item_#{@item.id}")
         = render 'items/shelf_picture', item: @item
         |  (
-        = link_to(@item.shelf.library.display_name.localize, @item.shelf.library, {id: "library_item_#{@item.id}"})
+        = link_to(@item.shelf.library.display_name, @item.shelf.library, {id: "library_item_#{@item.id}"})
         | ) 
       - if defined?(EnjuCirculation)
         p
           strong
             = t('activerecord.attributes.item.checkout_type')
             | :
-          = link_to @item.checkout_type.display_name.localize, @item.checkout_type
+          = link_to @item.checkout_type.display_name, @item.checkout_type
         p
           strong
             = t('activerecord.models.lending_policy')
@@ -68,12 +68,12 @@ div[style="color: red"]
         ul
           - @item.lending_policies.each do |lending_policy|
             li
-              = link_to lending_policy.user_group.display_name.localize, lending_policy
+              = link_to lending_policy.user_group.display_name, lending_policy
         p
           strong
             = t('activerecord.models.circulation_status')
             | :
-          = link_to @item.circulation_status.display_name.localize, @item.circulation_status
+          = link_to @item.circulation_status.display_name, @item.circulation_status
           - if current_user.try(:has_role?, 'Librarian')
             - if @item.checkouts.not_returned.exists?
               | (
@@ -86,7 +86,7 @@ div[style="color: red"]
           - if @item.use_restriction
             ul
               li
-                = @item.use_restriction.display_name.localize
+                = @item.use_restriction.display_name
       p
         strong
           = t('activerecord.attributes.item.include_supplements')

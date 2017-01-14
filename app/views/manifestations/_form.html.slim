@@ -78,14 +78,14 @@
     = f.file_field :attachment
   .form-group
     = f.label t('activerecord.models.content_type')
-    = f.select(:content_type_id, @content_types.collect{|c| [c.display_name.localize, c.id]}, {}, {class: 'form-control'})
+    = f.select(:content_type_id, @content_types.collect{|c| [c.display_name, c.id]}, {}, {class: 'form-control'})
     = f.label t('activerecord.models.carrier_type')
-    = f.select(:carrier_type_id, @carrier_types.collect{|c| [c.display_name.localize, c.id]}, {}, {class: 'form-control'})
+    = f.select(:carrier_type_id, @carrier_types.collect{|c| [c.display_name, c.id]}, {}, {class: 'form-control'})
   .form-group
     = f.label t('activerecord.models.frequency')
-    = f.select(:frequency_id, @frequencies.collect{|frequency| [frequency.display_name.localize, frequency.id]}, {}, {class: 'form-control'})
+    = f.select(:frequency_id, @frequencies.collect{|frequency| [frequency.display_name, frequency.id]}, {}, {class: 'form-control'})
     = f.label t('activerecord.models.language')
-    = f.select(:language_id, @languages.collect{|language| [language.display_name.localize, language.id]}, {}, {class: 'form-control'})
+    = f.select(:language_id, @languages.collect{|language| [language.display_name, language.id]}, {}, {class: 'form-control'})
   .form-group
     = f.label :identifier
     = f.fields_for :identifiers do |identifier_form|
@@ -120,7 +120,7 @@
     = f.url_field :access_address, class: 'form-control'
   .form-group
     = f.label t('role.required_role')
-    = f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}, {}, {class: 'form-control'})
+    = f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}, {}, {class: 'form-control'})
   .form-group
     = f.label :description
     = f.text_area :description, class: 'form-control'

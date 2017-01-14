@@ -13,9 +13,9 @@ table.table.table-striped
   - manifestation.items.on_shelf.each do |item|
     tr
       td
-        = item.shelf.library.display_name.localize
+        = item.shelf.library.display_name
       td
-        = item.shelf_display_name.localize
+        = item.shelf_display_name
       td
         = item.call_number
       td
@@ -26,7 +26,7 @@ table.table.table-striped
           = link_to t('item.no_number'), item
           | ) 
       td
-        = item.circulation_status.display_name.localize if item.circulation_status
+        = item.circulation_status.display_name if item.circulation_status
         - if item.rent?
           |  ( 
           = t('activerecord.attributes.checkout.due_date')

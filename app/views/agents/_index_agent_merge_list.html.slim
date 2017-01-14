@@ -28,7 +28,7 @@
         td
           = link_to agent.full_name, agent_merge_list_agent_path(@agent_merge_list, agent)
         td
-          = agent.agent_type.display_name.localize
+          = agent.agent_type.display_name
         td
           =l agent.date_of_birth if agent.date_of_birth
         td

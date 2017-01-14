@@ -19,6 +19,6 @@
   .form-group
     = f.label t('activerecord.models.create_type')
     br
-    = f.select :create_type_id, @create_types.map{|c| [c.display_name.localize, c.id]}
+    = f.select :create_type_id, @create_types.map{|c| [c.display_name, c.id]}
   .form-control
     = f.submit class: 'btn btn-default'

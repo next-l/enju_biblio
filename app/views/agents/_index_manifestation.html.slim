@@ -45,9 +45,9 @@
         td
           = link_to agent.full_name, agent
         td
-          = manifestation.produced(agent).produce_type.display_name.localize if params[:mode] != 'add' and manifestation.produced(agent).try(:produce_type)
+          = manifestation.produced(agent).produce_type.display_name if params[:mode] != 'add' and manifestation.produced(agent).try(:produce_type)
         td
-          = agent.agent_type.display_name.localize
+          = agent.agent_type.display_name
         td
           - if policy(agent).destroy?
             - if params[:mode] == 'add'

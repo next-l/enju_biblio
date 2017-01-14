@@ -11,17 +11,17 @@ div[data-role="content"]
         strong
           = t('activerecord.models.shelf')
           | :
-        = link_to @item.shelf_display_name.localize, @item.shelf
+        = link_to @item.shelf_display_name, @item.shelf
         = render 'items/shelf_picture', item: @item
         |  (
-        = link_to @item.shelf.library.display_name.localize, @item.shelf.library
+        = link_to @item.shelf.library.display_name, @item.shelf.library
         | ) 
       - if defined?(EnjuCirculation)
         p
           strong
             = t('activerecord.attributes.item.checkout_type')
             | :
-          = @item.checkout_type.display_name.localize
+          = @item.checkout_type.display_name
         p
           strong
             = t('activerecord.models.lending_policy')
@@ -29,12 +29,12 @@ div[data-role="content"]
         ul.list-group
           - @item.lending_policies.each do |lending_policy|
             li.list-group-item
-              = lending_policy.user_group.display_name.localize
+              = lending_policy.user_group.display_name
         p
           strong
             = t('activerecord.models.circulation_status')
             | :
-          = @item.circulation_status.display_name.localize
+          = @item.circulation_status.display_name
           - if current_user.try(:has_role?, 'Librarian')
             - unless @item.checkouts.not_returned.blank?
             |  (
@@ -47,7 +47,7 @@ div[data-role="content"]
           - if @item.use_restriction
             ul.list-group
               li.list-group-item
-                = @item.use_restriction.display_name.localize
+                = @item.use_restriction.display_name
       p
         strong
           = t('activerecord.attributes.item.call_number')
