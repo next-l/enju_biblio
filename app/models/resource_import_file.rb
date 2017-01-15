@@ -7,7 +7,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   validates :attachment, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
-  belongs_to :user, validate: true
+  belongs_to :user
   belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
   has_many :resource_import_file_transitions
@@ -216,7 +216,6 @@ class ResourceImportFile < ActiveRecord::Base
   def self.import_manifestation(expression, agents, options = {}, edit_options = {edit_mode: 'create'})
     manifestation = expression
     manifestation.during_import = true
-    manifestation.reload
     manifestation.update_attributes!(options)
     manifestation.publishers = agents.uniq unless agents.empty?
     manifestation.reload

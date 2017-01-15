@@ -6,7 +6,7 @@ class AgentImportFile < ActiveRecord::Base
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
   validates :attachment, presence: true, on: :create
-  belongs_to :user, validate: true
+  belongs_to :user
   has_many :agent_import_results
 
   has_many :agent_import_file_transitions

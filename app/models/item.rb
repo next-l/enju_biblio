@@ -14,8 +14,8 @@ class Item < ActiveRecord::Base
   has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
-  belongs_to :bookstore, validate: true
-  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
+  belongs_to :bookstore
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :budget_type
   has_many :item_transitions
 
@@ -93,7 +93,7 @@ class Item < ActiveRecord::Base
   def removable?
     if defined?(EnjuCirculation)
       return false if circulation_status.name == 'Removed'
-      return false if checkouts.not_returned.exists?
+      return false if checkouts.exists?
       true
     else
       true

@@ -4,8 +4,7 @@ class Create < ActiveRecord::Base
   belongs_to :create_type
 
   validates_associated :agent, :work
-  validates_presence_of :agent_id, :work_id
-  validates_uniqueness_of :work_id, scope: :agent_id
+  validates :work_id, presence: true, uniqueness: {scope: :agent_id}
   after_save :reindex
   after_destroy :reindex
 

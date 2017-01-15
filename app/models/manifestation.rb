@@ -22,7 +22,7 @@ class Manifestation < ActiveRecord::Base
   belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
   has_many :series_statements
   belongs_to :frequency
-  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :periodical
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
@@ -436,7 +436,7 @@ class Manifestation < ActiveRecord::Base
       case options[:scope]
       when :creator
         type = 'author' if type.blank?
-        role_type = CreateType.where(name: type).first
+        role_type = CreateType.find_by(name: type)
         create = Create.where(work_id: id, agent_id: agent.id).first
         if create
           create.create_type = role_type
