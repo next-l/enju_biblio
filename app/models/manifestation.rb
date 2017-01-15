@@ -27,6 +27,7 @@ class Manifestation < ActiveRecord::Base
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   has_many :issn_records
+  has_many :isbn_records
 
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
@@ -735,10 +736,6 @@ end
 #  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  attachment_file_name            :string
-#  attachment_content_type         :string
-#  attachment_size                 :integer
-#  attachment_updated_at           :datetime
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text
@@ -763,7 +760,6 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
-#  attachment_id                   :string
 #  attachment_fingerprint          :string
 #  attachment_data                 :jsonb
 #

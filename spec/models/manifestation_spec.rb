@@ -300,10 +300,6 @@ end
 #  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  attachment_file_name            :string
-#  attachment_content_type         :string
-#  attachment_size                 :integer
-#  attachment_updated_at           :datetime
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text
@@ -328,7 +324,6 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
-#  attachment_id                   :string
 #  attachment_fingerprint          :string
 #  attachment_data                 :jsonb
 #

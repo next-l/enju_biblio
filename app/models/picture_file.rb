@@ -31,12 +31,7 @@ end
 #  position                :integer
 #  created_at              :datetime
 #  updated_at              :datetime
-#  picture_file_name       :string
-#  picture_content_type    :string
-#  picture_size            :integer
-#  picture_updated_at      :datetime
 #  picture_meta            :text
 #  picture_fingerprint     :string
-#  picture_id              :string
 #  image_data              :jsonb
 #
