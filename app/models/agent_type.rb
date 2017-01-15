@@ -1,7 +1,7 @@
 class AgentType < ActiveRecord::Base
   include MasterModel
-  default_scope { order('agent_types.position') }
   has_many :agents
+  translates :display_name
 end
 
 # == Schema Information

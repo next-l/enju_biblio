@@ -1,6 +1,6 @@
 class License < ActiveRecord::Base
   include MasterModel
-  default_scope { order('licenses.position') }
+  translates :display_name
 end
 
 # == Schema Information
