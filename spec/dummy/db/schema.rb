@@ -125,12 +125,13 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "agent_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_agent_types_on_name", unique: true, using: :btree
   end
 
   create_table "agents", force: :cascade do |t|
@@ -446,8 +447,8 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "display_name"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "creates", force: :cascade do |t|
@@ -859,12 +860,13 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "licenses", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.string   "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_licenses_on_name", unique: true, using: :btree
   end
 
   create_table "manifestation_checkout_stat_transitions", force: :cascade do |t|
@@ -1147,8 +1149,8 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "display_name"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "produces", force: :cascade do |t|
@@ -1190,8 +1192,8 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "display_name"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "realizes", force: :cascade do |t|
