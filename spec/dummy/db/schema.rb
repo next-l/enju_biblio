@@ -832,20 +832,20 @@ ActiveRecord::Schema.define(version: 20170114174536) do
 
   create_table "library_groups", force: :cascade do |t|
     t.string   "name",                                                             null: false
-    t.text     "display_name"
+    t.jsonb    "display_name_translations"
     t.string   "short_name",                                                       null: false
     t.cidr     "my_networks"
-    t.text     "login_banner"
+    t.jsonb    "login_banner_translations"
     t.text     "note"
     t.integer  "country_id"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                                       null: false
+    t.datetime "updated_at",                                                       null: false
     t.cidr     "admin_networks"
     t.boolean  "allow_bookmark_external_url",   default: false,                    null: false
     t.string   "url",                           default: "http://localhost:3000/"
     t.jsonb    "settings"
-    t.jsonb    "footer_banner"
+    t.jsonb    "footer_banner_translations"
     t.text     "html_snippet"
     t.string   "book_jacket_source"
     t.integer  "max_number_of_results",         default: 500
@@ -853,7 +853,8 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.string   "screenshot_generator"
     t.integer  "pub_year_facet_range_interval", default: 10
     t.integer  "user_id"
-    t.index ["short_name"], name: "index_library_groups_on_short_name", using: :btree
+    t.index ["name"], name: "index_library_groups_on_name", unique: true, using: :btree
+    t.index ["short_name"], name: "index_library_groups_on_short_name", unique: true, using: :btree
     t.index ["user_id"], name: "index_library_groups_on_user_id", using: :btree
   end
 
@@ -1205,21 +1206,23 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "request_status_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_request_status_types_on_name", unique: true, using: :btree
   end
 
   create_table "request_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_request_types_on_name", unique: true, using: :btree
   end
 
   create_table "reserve_stat_has_manifestations", force: :cascade do |t|
@@ -1626,9 +1629,9 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.integer  "user_id"
     t.text     "note"
     t.datetime "executed_at"
-    t.string   "user_import_filename"
+    t.string   "user_import_file_name"
     t.string   "user_import_content_type"
-    t.integer  "user_import_file_size"
+    t.string   "user_import_file_size"
     t.datetime "user_import_updated_at"
     t.string   "user_import_fingerprint"
     t.string   "edit_mode"
@@ -1727,7 +1730,7 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["item_id"], name: "index_withdraws_on_item_id", using: :btree
   end
 
-  add_foreign_key "accepts", "baskets"
+  add_foreign_key "accepts", "baskets", on_delete: :nullify
   add_foreign_key "accepts", "items"
   add_foreign_key "baskets", "users"
   add_foreign_key "checked_items", "baskets", on_delete: :nullify
@@ -1766,6 +1769,6 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   add_foreign_key "user_has_roles", "roles"
   add_foreign_key "user_has_roles", "users", on_delete: :cascade
   add_foreign_key "users", "profiles", on_delete: :cascade
-  add_foreign_key "withdraws", "baskets"
+  add_foreign_key "withdraws", "baskets", on_delete: :nullify
   add_foreign_key "withdraws", "items"
 end
