@@ -76,8 +76,8 @@ describe AgentsController do
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
-        assigns(:manifestation).should eq Manifestation.find(1)
+        get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
+        assigns(:manifestation).should eq manifestations(:manifestation_00001)
         expect(assigns(:agents)).to eq assigns(:manifestation).publishers.where(required_role_id: 1).page(1)
       end
 
@@ -177,7 +177,7 @@ describe AgentsController do
       end
 
       it 'should show agent with manifestation' do
-        get :show, params: { id: 1, manifestation_id: 1 }
+        get :show, params: { id: 1, manifestation_id: manifestations(:manifestation_00001).id }
         expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
       end
 
@@ -340,21 +340,21 @@ describe AgentsController do
         end
 
         it 'should create a relationship if work_id is set' do
-          post :create, params: { agent: @attrs, work_id: 1 }
+          post :create, params: { agent: @attrs, work_id: manifestations(:manifestation_00001).id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).works.should eq [Manifestation.find(1)]
+          assigns(:agent).works.should eq [manifestations(:manifestation_00001)]
         end
 
         it 'should create a relationship if manifestation_id is set' do
-          post :create, params: { agent: @attrs, manifestation_id: 1 }
+          post :create, params: { agent: @attrs, manifestation_id: manifestations(:manifestation_00001).id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).manifestations.should eq [Manifestation.find(1)]
+          assigns(:agent).manifestations.should eq [manifestations(:manifestation_00001)]
         end
 
         it 'should create a relationship if item_id is set' do
-          post :create, params: { agent: @attrs, item_id: 1 }
+          post :create, params: { agent: @attrs, item_id: items(:item_00001).id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).items.should eq [Item.find(1)]
+          assigns(:agent).manifestations.should eq [items(:item_00001)]
         end
       end
 

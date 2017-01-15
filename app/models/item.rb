@@ -1,4 +1,5 @@
 class Item < ActiveRecord::Base
+  include Statesman::Adapters::ActiveRecordQueries
   scope :on_shelf, -> { where('shelf_id != 1') }
   scope :on_web, -> { where(shelf_id: 1) }
   scope :available_for, -> user {
@@ -16,6 +17,14 @@ class Item < ActiveRecord::Base
   belongs_to :bookstore, validate: true
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
   belongs_to :budget_type
+  has_many :item_transitions
+
+  def state_machine
+    IitemStateMachine.new(self, transition_class: ItemTransition)
+  end
+
+  delegate :can_transition_to?, :transition_to!, :transition_to, :current_state,
+    to: :state_machine
 
   validates_associated :bookstore
   validates :manifestation_id, presence: true
