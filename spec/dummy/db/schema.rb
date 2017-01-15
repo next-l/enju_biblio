@@ -378,15 +378,16 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "classification_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_classification_types_on_name", unique: true, using: :btree
   end
 
-  create_table "classifications", force: :cascade do |t|
+  create_table "classifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer  "parent_id"
     t.string   "category",               null: false
     t.text     "note"
@@ -494,21 +495,23 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "event_categories", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_event_categories_on_name", unique: true, using: :btree
   end
 
   create_table "event_export_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",             default: "{}"
+    t.jsonb    "metadata",             default: {}
     t.integer  "sort_key"
     t.integer  "event_export_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["event_export_file_id"], name: "index_event_export_file_transitions_on_file_id", using: :btree
     t.index ["sort_key", "event_export_file_id"], name: "index_event_export_file_transitions_on_sort_key_and_file_id", unique: true, using: :btree
   end
@@ -519,19 +522,21 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "event_export_id"
-    t.string   "event_export_filename"
     t.integer  "event_export_size"
-    t.string   "event_export_content_type"
+    t.string   "event_export_filename"
+    t.jsonb    "attachment_data"
     t.index ["event_export_id"], name: "index_event_export_files_on_event_export_id", using: :btree
+    t.index ["user_id"], name: "index_event_export_files_on_user_id", using: :btree
   end
 
   create_table "event_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",             default: "{}"
+    t.jsonb    "metadata",             default: {}
     t.integer  "sort_key"
     t.integer  "event_import_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "most_recent"
     t.index ["event_import_file_id"], name: "index_event_import_file_transitions_on_event_import_file_id", using: :btree
     t.index ["sort_key", "event_import_file_id"], name: "index_event_import_file_transitions_on_sort_key_and_file_id", unique: true, using: :btree
   end
@@ -556,6 +561,7 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.integer  "default_library_id"
     t.integer  "default_event_category_id"
     t.string   "event_import_id"
+    t.jsonb    "attachment_data"
     t.index ["event_import_id"], name: "index_event_import_files_on_event_import_id", using: :btree
     t.index ["parent_id"], name: "index_event_import_files_on_parent_id", using: :btree
     t.index ["user_id"], name: "index_event_import_files_on_user_id", using: :btree
@@ -569,20 +575,22 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.datetime "updated_at"
   end
 
-  create_table "events", force: :cascade do |t|
-    t.integer  "library_id",                        null: false
-    t.integer  "event_category_id",                 null: false
+  create_table "events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid     "library_id",                                null: false
+    t.integer  "event_category_id",                         null: false
     t.string   "name"
     t.text     "note"
     t.datetime "start_at"
     t.datetime "end_at"
-    t.boolean  "all_day",           default: false, null: false
+    t.boolean  "all_day",                   default: false, null: false
     t.datetime "deleted_at"
-    t.text     "display_name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.jsonb    "display_name_translations"
+    t.datetime "created_at",                                null: false
+    t.datetime "updated_at",                                null: false
+    t.integer  "place_id"
     t.index ["event_category_id"], name: "index_events_on_event_category_id", using: :btree
     t.index ["library_id"], name: "index_events_on_library_id", using: :btree
+    t.index ["place_id"], name: "index_events_on_place_id", using: :btree
   end
 
   create_table "exemplifies", force: :cascade do |t|
@@ -1144,6 +1152,18 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["picture_id"], name: "index_picture_files_on_picture_id", using: :btree
   end
 
+  create_table "places", force: :cascade do |t|
+    t.string   "term"
+    t.text     "city"
+    t.integer  "country_id"
+    t.float    "latitude"
+    t.float    "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_places_on_country_id", using: :btree
+    t.index ["term"], name: "index_places_on_term", using: :btree
+  end
+
   create_table "produce_types", force: :cascade do |t|
     t.string   "name"
     t.text     "display_name"
@@ -1431,24 +1451,25 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "subject_heading_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_subject_heading_types_on_name", unique: true, using: :btree
   end
 
   create_table "subject_types", force: :cascade do |t|
-    t.string   "name",         null: false
-    t.text     "display_name"
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
-  create_table "subjects", force: :cascade do |t|
+  create_table "subjects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.integer  "parent_id"
     t.integer  "use_term_id"
     t.string   "term"
@@ -1458,15 +1479,14 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "note"
     t.integer  "required_role_id",        default: 1, null: false
     t.integer  "lock_version",            default: 0, null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                          null: false
+    t.datetime "updated_at",                          null: false
     t.datetime "deleted_at"
     t.string   "url"
     t.integer  "manifestation_id"
     t.integer  "subject_heading_type_id"
     t.index ["manifestation_id"], name: "index_subjects_on_manifestation_id", using: :btree
     t.index ["parent_id"], name: "index_subjects_on_parent_id", using: :btree
-    t.index ["required_role_id"], name: "index_subjects_on_required_role_id", using: :btree
     t.index ["subject_type_id"], name: "index_subjects_on_subject_type_id", using: :btree
     t.index ["term"], name: "index_subjects_on_term", using: :btree
     t.index ["use_term_id"], name: "index_subjects_on_use_term_id", using: :btree
@@ -1742,6 +1762,8 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   add_foreign_key "checkouts", "users"
   add_foreign_key "creates", "agents"
   add_foreign_key "doi_records", "manifestations"
+  add_foreign_key "events", "event_categories"
+  add_foreign_key "events", "libraries"
   add_foreign_key "exemplifies", "items"
   add_foreign_key "exemplifies", "manifestations"
   add_foreign_key "identifiers", "manifestations"
