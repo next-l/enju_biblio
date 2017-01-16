@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: produce_types
-#
-#  id           :integer          not null, primary key
-#  name         :string
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
 class ProduceTypesController < ApplicationController
   before_action :set_produce_type, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

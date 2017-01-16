@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: produces
-#
-#  id               :integer          not null, primary key
-#  agent_id         :integer          not null
-#  manifestation_id :integer          not null
-#  position         :integer
-#  created_at       :datetime
-#  updated_at       :datetime
-#  produce_type_id  :integer
-#
-
 class ProducesController < ApplicationController
   before_action :set_produce, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: realize_types
-#
-#  id           :integer          not null, primary key
-#  name         :string
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
 class RealizeTypesController < ApplicationController
   before_action :set_realize_type, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

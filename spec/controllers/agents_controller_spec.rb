@@ -172,7 +172,7 @@ describe AgentsController do
       end
 
       it 'should show agent with work' do
-        get :show, params: { id: 1, work_id: manifestatoins(:manifestation_00001).id }
+        get :show, params: { id: 1, work_id: manifestations(:manifestation_00001).id }
         expect(assigns(:agent)).to eq assigns(:work).creators.first
       end
 

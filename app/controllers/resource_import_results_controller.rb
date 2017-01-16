@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: resource_import_results
-#
-#  id                      :integer          not null, primary key
-#  resource_import_file_id :integer
-#  manifestation_id        :integer
-#  item_id                 :integer
-#  body                    :text
-#  created_at              :datetime
-#  updated_at              :datetime
-#  error_message           :text
-#
-
 class ResourceImportResultsController < ApplicationController
   before_action :set_resource_import_result, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

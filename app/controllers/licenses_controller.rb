@@ -1,16 +1,3 @@
-# == Schema Information
-#
-# Table name: licenses
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  display_name :string
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
 class LicensesController < ApplicationController
   before_action :set_license, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

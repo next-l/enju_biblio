@@ -1,17 +1,3 @@
-# == Schema Information
-#
-# Table name: resource_export_files
-#
-#  id                       :integer          not null, primary key
-#  user_id                  :integer
-#  executed_at              :datetime
-#  created_at               :datetime
-#  updated_at               :datetime
-#  resource_export_id       :string
-#  resource_export_size     :integer
-#  resource_export_filename :string
-#
-
 class ResourceExportFilesController < ApplicationController
   before_action :set_resource_export_file, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

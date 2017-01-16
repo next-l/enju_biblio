@@ -1,18 +1,3 @@
-# == Schema Information
-#
-# Table name: languages
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  native_name  :string
-#  display_name :text
-#  iso_639_1    :string
-#  iso_639_2    :string
-#  iso_639_3    :string
-#  note         :text
-#  position     :integer
-#
-
 class LanguagesController < ApplicationController
   before_action :set_language, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]

@@ -1,14 +1,3 @@
-# == Schema Information
-#
-# Table name: agent_merges
-#
-#  id                  :integer          not null, primary key
-#  agent_id            :integer          not null
-#  agent_merge_list_id :integer          not null
-#  created_at          :datetime
-#  updated_at          :datetime
-#
-
 class AgentMergesController < ApplicationController
   before_action :set_agent_merge, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
