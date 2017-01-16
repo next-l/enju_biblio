@@ -87,11 +87,17 @@
     = f.label t('activerecord.models.language')
     = f.select(:language_id, @languages.collect{|language| [language.display_name, language.id]}, {}, {class: 'form-control'})
   .form-group
-    = f.label :identifier
-    = f.fields_for :identifiers do |identifier_form|
-      = render 'identifier_fields', f: identifier_form
+    = f.label :isbn_record
+    = f.fields_for :isbn_records do |isbn_form|
+      = render 'isbn_record_fields', f: isbn_form
     p
-      = link_to_add_association t('page.add'), f, :identifiers
+      = link_to_add_association t('page.add'), f, :isbn_records
+  .form-group
+    = f.label :issn_record
+    = f.fields_for :issn_records do |issn_form|
+      = render 'issn_record_fields', f: issn_form
+    p
+      = link_to_add_association t('page.add'), f, :issn_records
   - if defined?(EnjuSubject)
     = render 'manifestations/subject_form', f: f
   .form-group

@@ -1,5 +1,6 @@
 class IsbnRecord < ActiveRecord::Base
-  belongs_to :manifestation
+  has_many :isbn_record_and_manifestations, dependent: :destroy
+  has_many :manifestations, through: :isbn_record_and_manifestations
 
   def self.new_records(isbn_records_params)
     return [] unless isbn_records_params

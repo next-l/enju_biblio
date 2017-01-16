@@ -442,12 +442,11 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1.json
   def destroy
     # workaround
-    @manifestation.identifiers.destroy_all
-    @manifestation.creators.destroy_all
-    @manifestation.contributors.destroy_all
-    @manifestation.publishers.destroy_all
-    @manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
-    @manifestation.reload
+    #@manifestation.creators.destroy_all
+    #@manifestation.contributors.destroy_all
+    #@manifestation.publishers.destroy_all
+    #@manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
+    #@manifestation.reload
     @manifestation.destroy
 
     respond_to do |format|

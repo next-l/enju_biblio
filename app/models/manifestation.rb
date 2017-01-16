@@ -25,15 +25,17 @@ class Manifestation < ActiveRecord::Base
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :periodical
   has_one :resource_import_result
-  has_many :identifiers, dependent: :destroy
-  has_many :issn_records
-  has_many :isbn_records
+  has_many :isbn_record_and_manifestations, dependent: :destroy
+  has_many :isbn_records, through: :isbn_record_and_manifestations
+  has_many :issn_record_and_manifestations, dependent: :destroy
+  has_many :issn_records, through: :issn_record_and_manifestations
 
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
@@ -65,14 +67,10 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, multiple: true do
-      isbn_characters
+      isbn_records.pluck(:body)
     end
     string :issn, multiple: true do
-      if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
-      else
-        identifier_contents(:issn)
-      end
+      issn_records.pluck(:body)
     end
     string :lccn, multiple: true do
       identifier_contents(:lccn)
@@ -170,18 +168,14 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      isbn_characters
+      isbn_records.pluck(:body)
     end
     text :issn do # 前方一致検索のためtext指定を追加
-      if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
-      else
-        identifier_contents(:issn)
-      end
+      issn_records.pluck(:body)
     end
     string :sort_title
     string :doi, multiple: true do
-      identifier_contents(:doi)
+      doi_record.body
     end
     boolean :serial do
       serial?
@@ -219,7 +213,6 @@ class Manifestation < ActiveRecord::Base
   validates :volume_number, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :serial_number, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :edition, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
-  before_create :set_fingerprint, if: Proc.new{|model| model.attachment}
   after_create :clear_cached_numdocs
   before_save :set_date_of_publication, :set_number
   after_save :index_series_statement, :extract_text!
@@ -401,9 +394,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    identifier_type = IdentifierType.where(name: 'isbn').first
-    return nil unless identifier_type
-    Manifestation.includes(identifiers: :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
+    IsbnRecord.find_by(body: isbn).try(:manifestation)
   end
 
   def index_series_statement
@@ -491,10 +482,6 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def identifier_contents(name)
-    identifiers.identifier_type_scope(name).order(:position).pluck(:body)
-  end
-
   def self.csv_header(options = {col_sep: "\t"})
     header = %w(
       manifestation_id
@@ -568,12 +555,11 @@ class Manifestation < ActiveRecord::Base
         item_lines << access_address
         item_lines << note
 
-        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-          if identifier_contents(identifier_type.to_sym).first
-            item_lines << identifier_contents(identifier_type.to_sym).first
-          else
-            item_lines << nil
-          end
+        isbn_records.each do |isbn_record|
+          item_lines << issn_record.body
+        end
+        issn_records.each do |issn_record|
+          item_lines << issn_record.body
         end
         if defined?(EnjuSubject)
           SubjectHeadingType.order(:position).each do |subject_heading_type|
@@ -635,13 +621,13 @@ class Manifestation < ActiveRecord::Base
       line << access_address
       line << note
 
-      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-        if identifier_contents(identifier_type.to_sym).first
-          line << identifier_contents(identifier_type.to_sym).first
-        else
-          line << nil
-        end
+      isbn_records.each do |isbn_record|
+        line << isbn_record.body
       end
+      issn_records.each do |issn_record|
+        line << issn_record.body
+      end
+
       if defined?(EnjuSubject)
         SubjectHeadingType.order(:position).each do |subject_heading_type|
           if subjects.exists?
@@ -678,25 +664,8 @@ class Manifestation < ActiveRecord::Base
     file
   end
 
-  def set_fingerprint
-    self.attachment_fingerprint = Digest::SHA1.file(attachment.download.path).hexdigest
-  end
-
   def root_series_statement
     series_statements.where(root_manifestation_id: id).first
-  end
-
-  def isbn_characters
-    identifier_contents(:isbn).map{|i|
-      isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
-      isbn10 = Lisbn.new(i).isbn10
-      isbn13 =  Lisbn.new(i).isbn13
-      isbn10_dash = Lisbn.new(isbn10).isbn_with_dash if isbn10
-      isbn13_dash = Lisbn.new(isbn13).isbn_with_dash if isbn13
-      [
-        isbn10, isbn13, isbn10_dash, isbn13_dash
-      ]
-    }.flatten
   end
 end
 
@@ -714,7 +683,6 @@ end
 #  date_copyrighted                :datetime
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
-#  deleted_at                      :datetime
 #  access_address                  :string
 #  language_id                     :integer          default(1), not null
 #  carrier_type_id                 :integer          not null
@@ -760,6 +728,5 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
-#  attachment_fingerprint          :string
 #  attachment_data                 :jsonb
 #

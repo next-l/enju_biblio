@@ -1,6 +1,8 @@
 class Periodical < ActiveRecord::Base
   has_many :manifestations
   belongs_to :manifestation
+  has_many :issn_record_and_periodicals, dependent: :destroy
+  has_many :issn_records, through: :issn_record_and_periodicals
 
   validates :original_title, presence: true
   searchable do
@@ -12,7 +14,7 @@ end
 #
 # Table name: periodicals
 #
-#  id               :integer          not null, primary key
+#  id               :uuid             not null, primary key
 #  original_title   :text
 #  periodical_type  :string
 #  manifestation_id :uuid

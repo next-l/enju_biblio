@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170114174536) do
+ActiveRecord::Schema.define(version: 20170116152012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -241,7 +241,6 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.string   "fax_number"
     t.string   "url"
     t.integer  "position"
-    t.datetime "deleted_at"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
   end
@@ -694,6 +693,16 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["user_id"], name: "index_inventory_files_on_user_id", using: :btree
   end
 
+  create_table "isbn_record_and_manifestations", force: :cascade do |t|
+    t.integer  "isbn_record_id",   null: false
+    t.uuid     "manifestation_id", null: false
+    t.integer  "position"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["isbn_record_id"], name: "index_isbn_record_and_manifestations_on_isbn_record_id", using: :btree
+    t.index ["manifestation_id"], name: "index_isbn_record_and_manifestations_on_manifestation_id", using: :btree
+  end
+
   create_table "isbn_records", force: :cascade do |t|
     t.string   "body",             null: false
     t.string   "isbn_type"
@@ -703,6 +712,26 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.datetime "updated_at",       null: false
     t.index ["body"], name: "index_isbn_records_on_body", unique: true, using: :btree
     t.index ["manifestation_id"], name: "index_isbn_records_on_manifestation_id", using: :btree
+  end
+
+  create_table "issn_record_and_manifestations", force: :cascade do |t|
+    t.integer  "issn_record_id",   null: false
+    t.uuid     "manifestation_id", null: false
+    t.integer  "position"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["issn_record_id"], name: "index_issn_record_and_manifestations_on_issn_record_id", using: :btree
+    t.index ["manifestation_id"], name: "index_issn_record_and_manifestations_on_manifestation_id", using: :btree
+  end
+
+  create_table "issn_record_and_periodicals", force: :cascade do |t|
+    t.integer  "issn_record_id", null: false
+    t.uuid     "periodical_id",  null: false
+    t.integer  "position"
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
+    t.index ["issn_record_id"], name: "index_issn_record_and_periodicals_on_issn_record_id", using: :btree
+    t.index ["periodical_id"], name: "index_issn_record_and_periodicals_on_periodical_id", using: :btree
   end
 
   create_table "issn_records", force: :cascade do |t|
@@ -768,6 +797,15 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["shelf_id"], name: "index_items_on_shelf_id", using: :btree
   end
 
+  create_table "jpno_records", force: :cascade do |t|
+    t.string   "body",             null: false
+    t.uuid     "manifestation_id", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["body"], name: "index_jpno_records_on_body", unique: true, using: :btree
+    t.index ["manifestation_id"], name: "index_jpno_records_on_manifestation_id", using: :btree
+  end
+
   create_table "languages", force: :cascade do |t|
     t.string  "name",         null: false
     t.string  "native_name"
@@ -800,7 +838,7 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "libraries", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string   "name",                                          null: false
+    t.string   "name",                                            null: false
     t.jsonb    "display_name_translations"
     t.jsonb    "short_display_name_translations"
     t.string   "zip_code"
@@ -811,19 +849,19 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.string   "telephone_number_2"
     t.string   "fax_number"
     t.text     "note"
-    t.integer  "call_number_rows",                default: 1,   null: false
-    t.string   "call_number_delimiter",           default: "|", null: false
-    t.integer  "library_group_id",                default: 1,   null: false
-    t.integer  "users_count",                     default: 0,   null: false
+    t.integer  "call_number_rows",                default: 1,     null: false
+    t.string   "call_number_delimiter",           default: "|",   null: false
+    t.integer  "library_group_id",                default: 1,     null: false
+    t.integer  "users_count",                     default: 0,     null: false
     t.integer  "position"
     t.integer  "country_id"
-    t.datetime "created_at",                                    null: false
-    t.datetime "updated_at",                                    null: false
-    t.datetime "deleted_at"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.text     "opening_hour"
     t.string   "isil"
     t.float    "latitude"
     t.float    "longitude"
+    t.boolean  "in_use",                          default: false, null: false
     t.index ["library_group_id"], name: "index_libraries_on_library_group_id", using: :btree
     t.index ["name"], name: "index_libraries_on_name", unique: true, using: :btree
   end
@@ -990,7 +1028,6 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "publication_place"
     t.text     "extent"
     t.text     "dimensions"
-    t.string   "attachment_fingerprint"
     t.jsonb    "attachment_data"
     t.index ["access_address"], name: "index_manifestations_on_access_address", using: :btree
     t.index ["carrier_type_id"], name: "index_manifestations_on_carrier_type_id", using: :btree
@@ -1074,6 +1111,15 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["sender_id"], name: "index_messages_on_sender_id", using: :btree
   end
 
+  create_table "ncid_records", force: :cascade do |t|
+    t.string   "body",             null: false
+    t.uuid     "manifestation_id", null: false
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
+    t.index ["body"], name: "index_ncid_records_on_body", unique: true, using: :btree
+    t.index ["manifestation_id"], name: "index_ncid_records_on_manifestation_id", using: :btree
+  end
+
   create_table "nii_types", force: :cascade do |t|
     t.string   "name",         null: false
     t.text     "display_name"
@@ -1104,7 +1150,7 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["event_id"], name: "index_participates_on_event_id", using: :btree
   end
 
-  create_table "periodicals", force: :cascade do |t|
+  create_table "periodicals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.text     "original_title"
     t.string   "periodical_type"
     t.uuid     "manifestation_id"
@@ -1346,17 +1392,18 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   end
 
   create_table "search_engines", force: :cascade do |t|
-    t.string   "name",             null: false
-    t.text     "display_name"
-    t.string   "url",              null: false
-    t.text     "base_url",         null: false
-    t.text     "http_method",      null: false
-    t.text     "query_param",      null: false
+    t.string   "name",                      null: false
+    t.jsonb    "display_name_translations"
+    t.string   "url",                       null: false
+    t.text     "base_url",                  null: false
+    t.text     "http_method",               null: false
+    t.text     "query_param",               null: false
     t.text     "additional_param"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
+    t.index ["name"], name: "index_search_engines_on_name", unique: true, using: :btree
   end
 
   create_table "series_statement_merge_lists", force: :cascade do |t|
@@ -1407,9 +1454,9 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.integer  "position"
     t.datetime "created_at",                                null: false
     t.datetime "updated_at",                                null: false
-    t.datetime "deleted_at"
     t.boolean  "closed",                    default: false, null: false
     t.index ["library_id"], name: "index_shelves_on_library_id", using: :btree
+    t.index ["name"], name: "index_shelves_on_name", unique: true, using: :btree
   end
 
   create_table "subject_heading_types", force: :cascade do |t|
@@ -1470,7 +1517,6 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "note"
     t.integer  "user_id"
     t.integer  "order_list_id"
-    t.datetime "deleted_at"
     t.integer  "subscribes_count", default: 0, null: false
     t.datetime "created_at",                   null: false
     t.datetime "updated_at",                   null: false
@@ -1581,12 +1627,12 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.integer  "position"
     t.datetime "created_at",                                   null: false
     t.datetime "updated_at",                                   null: false
-    t.datetime "deleted_at"
     t.integer  "valid_period_for_new_user",        default: 0, null: false
     t.datetime "expired_at"
     t.integer  "number_of_day_to_notify_overdue",  default: 1, null: false
     t.integer  "number_of_day_to_notify_due_date", default: 7, null: false
     t.integer  "number_of_time_to_notify_overdue", default: 3, null: false
+    t.index ["name"], name: "index_user_groups_on_name", unique: true, using: :btree
   end
 
   create_table "user_has_roles", force: :cascade do |t|
@@ -1732,14 +1778,22 @@ ActiveRecord::Schema.define(version: 20170114174536) do
   add_foreign_key "identifiers", "manifestations"
   add_foreign_key "import_requests", "manifestations"
   add_foreign_key "import_requests", "users"
+  add_foreign_key "isbn_record_and_manifestations", "isbn_records"
+  add_foreign_key "isbn_record_and_manifestations", "manifestations"
   add_foreign_key "isbn_records", "manifestations"
+  add_foreign_key "issn_record_and_manifestations", "issn_records"
+  add_foreign_key "issn_record_and_manifestations", "manifestations"
+  add_foreign_key "issn_record_and_periodicals", "issn_records"
+  add_foreign_key "issn_record_and_periodicals", "periodicals"
   add_foreign_key "issn_records", "manifestations"
   add_foreign_key "item_has_use_restrictions", "items"
   add_foreign_key "item_has_use_restrictions", "use_restrictions"
   add_foreign_key "items", "manifestations"
+  add_foreign_key "jpno_records", "manifestations"
   add_foreign_key "lending_policies", "items"
   add_foreign_key "lending_policies", "user_groups"
   add_foreign_key "library_groups", "users"
+  add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "owns", "agents"
   add_foreign_key "owns", "items"
   add_foreign_key "periodicals", "manifestations"

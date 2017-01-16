@@ -18,12 +18,18 @@
               | :
             td[style="width: 500px"]
               = render 'show_series_detail', manifestation: manifestation
-              - unless manifestation.identifier_contents(:issn).empty?
-              |  (
-              = t('activerecord.attributes.manifestation.issn')
-              | : 
-              = manifestation.identifier_contents(:issn).join(" ")
-              | ) 
+              - unless manifestation.isbn_records.empty?
+                |  (
+                = t('activerecord.attributes.manifestation.isbn')
+                | : 
+                = manifestation.ibsn_records.join(" ")
+                | ) 
+              - unless manifestation.issn_records.empty?
+                |  (
+                = t('activerecord.attributes.manifestation.issn')
+                | : 
+                = manifestation.issn_records.join(" ")
+                | ) 
         = render 'edition_and_number', manifestation: manifestation
         tr
           td[style="width: 200px"]
@@ -80,22 +86,6 @@
               | :
             td
               = render 'manifestations/tag_list', manifestation: manifestation
-        tr
-          td
-            = t('page.identifier')
-            | :
-          td
-            ul
-              - manifestation.identifiers.each do |identifier|
-                li
-                  = identifier.identifier_type.display_name
-                  | : 
-                  = identifier_link(identifier)
-              - if manifestation.manifestation_identifier
-                li
-                  = t('activerecord.attributes.manifestation.manifestation_identifier')
-                  | : 
-                  = manifestation.manifestation_identifier 
         - unless manifestation.attachment_filename.blank?
           = render 'manifestations/attachment_file', manifestation: manifestation
         tr
@@ -103,13 +93,13 @@
             = t('page.created_at')
             | :
           td
-            =l manifestation.created_at if manifestation.created_at
+            =l manifestation.created_at
         tr
           td
             = t('page.updated_at')
             | :
           td
-            =l manifestation.updated_at if manifestation.updated_at
+            =l manifestation.updated_at
         tr
           td
             = t('activerecord.attributes.manifestation.description')

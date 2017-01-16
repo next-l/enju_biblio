@@ -117,9 +117,7 @@ class ResourceImportFile < ActiveRecord::Base
         if row['isbn'].present?
           if StdNum::ISBN.valid?(row['isbn'])
             isbn = StdNum::ISBN.normalize(row['isbn'])
-            identifier_type_isbn = IdentifierType.where(name: 'isbn').first
-            identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
-            m = Identifier.where(body: isbn, identifier_type_id: identifier_type_isbn.id).first.try(:manifestation)
+            m = IsbnRecorad.find_by(body: isbn).try(:manifestation)
             if m
               if m.series_statements.exists?
                 manifestation = m
