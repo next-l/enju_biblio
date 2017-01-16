@@ -138,7 +138,6 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "full_name_alternative"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.string   "zip_code_1"
     t.string   "zip_code_2"
     t.text     "address_1"
@@ -743,15 +742,13 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.string   "item_identifier"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
-    t.datetime "deleted_at"
-    t.integer  "shelf_id",                default: 1
+    t.integer  "shelf_id"
     t.boolean  "include_supplements",     default: false, null: false
     t.text     "note"
     t.string   "url"
     t.integer  "price"
     t.integer  "lock_version",            default: 0,     null: false
     t.integer  "required_role_id",        default: 1,     null: false
-    t.integer  "required_score",          default: 0,     null: false
     t.datetime "acquired_at"
     t.integer  "bookstore_id"
     t.integer  "budget_type_id"
@@ -765,7 +762,7 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id", using: :btree
     t.index ["checkout_type_id"], name: "index_items_on_checkout_type_id", using: :btree
     t.index ["circulation_status_id"], name: "index_items_on_circulation_status_id", using: :btree
-    t.index ["item_identifier"], name: "index_items_on_item_identifier", using: :btree
+    t.index ["item_identifier"], name: "index_items_on_item_identifier", unique: true, using: :btree
     t.index ["manifestation_id"], name: "index_items_on_manifestation_id", using: :btree
     t.index ["required_role_id"], name: "index_items_on_required_role_id", using: :btree
     t.index ["shelf_id"], name: "index_items_on_shelf_id", using: :btree
@@ -898,8 +895,8 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.text     "display_name"
     t.text     "note"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "manifestation_relationships", force: :cascade do |t|
@@ -948,7 +945,6 @@ ActiveRecord::Schema.define(version: 20170114174536) do
     t.datetime "date_copyrighted"
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
-    t.datetime "deleted_at"
     t.string   "access_address"
     t.integer  "language_id",                     default: 1,     null: false
     t.integer  "carrier_type_id",                                 null: false
