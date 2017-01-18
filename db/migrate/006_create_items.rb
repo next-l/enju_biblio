@@ -10,7 +10,7 @@ class CreateItems < ActiveRecord::Migration[5.0]
       t.string :url
       t.integer :price
       t.integer :lock_version, default: 0, null: false
-      t.integer :required_role_id, default: 1, null: false, index: true
+      t.integer :required_role_id, null: false, default: 1
     end
   end
 end

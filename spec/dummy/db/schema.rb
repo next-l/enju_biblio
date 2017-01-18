@@ -162,7 +162,6 @@ ActiveRecord::Schema.define(version: 20170116152012) do
     t.integer  "lock_version",                        default: 0, null: false
     t.text     "note"
     t.integer  "required_role_id",                    default: 1, null: false
-    t.integer  "required_score",                      default: 0, null: false
     t.text     "email"
     t.text     "url"
     t.text     "full_name_alternative_transcription"
@@ -175,7 +174,6 @@ ActiveRecord::Schema.define(version: 20170116152012) do
     t.index ["full_name"], name: "index_agents_on_full_name", using: :btree
     t.index ["language_id"], name: "index_agents_on_language_id", using: :btree
     t.index ["profile_id"], name: "index_agents_on_profile_id", using: :btree
-    t.index ["required_role_id"], name: "index_agents_on_required_role_id", using: :btree
   end
 
   create_table "baskets", force: :cascade do |t|
@@ -793,7 +791,6 @@ ActiveRecord::Schema.define(version: 20170116152012) do
     t.index ["circulation_status_id"], name: "index_items_on_circulation_status_id", using: :btree
     t.index ["item_identifier"], name: "index_items_on_item_identifier", unique: true, using: :btree
     t.index ["manifestation_id"], name: "index_items_on_manifestation_id", using: :btree
-    t.index ["required_role_id"], name: "index_items_on_required_role_id", using: :btree
     t.index ["shelf_id"], name: "index_items_on_shelf_id", using: :btree
   end
 
@@ -1001,7 +998,6 @@ ActiveRecord::Schema.define(version: 20170116152012) do
     t.boolean  "repository_content",              default: false, null: false
     t.integer  "lock_version",                    default: 0,     null: false
     t.integer  "required_role_id",                default: 1,     null: false
-    t.integer  "required_score",                  default: 0,     null: false
     t.integer  "frequency_id",                    default: 1,     null: false
     t.boolean  "subscription_master",             default: false, null: false
     t.integer  "nii_type_id"
