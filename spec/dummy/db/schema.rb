@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20170116152012) do
 
   create_table "agent_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.jsonb    "metadata",             default: "{}"
+    t.jsonb    "metadata",             default: {}
     t.integer  "sort_key"
     t.integer  "agent_import_file_id"
     t.datetime "created_at"
@@ -644,7 +644,7 @@ ActiveRecord::Schema.define(version: 20170116152012) do
 
   create_table "import_request_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.jsonb    "metadata",          default: "{}"
+    t.jsonb    "metadata",          default: {}
     t.integer  "sort_key"
     t.integer  "import_request_id"
     t.datetime "created_at"
@@ -753,13 +753,13 @@ ActiveRecord::Schema.define(version: 20170116152012) do
   end
 
   create_table "item_transitions", force: :cascade do |t|
-    t.string   "to_state",                   null: false
-    t.jsonb    "metadata",    default: "{}"
-    t.integer  "sort_key",                   null: false
-    t.uuid     "item_id",                    null: false
-    t.boolean  "most_recent",                null: false
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.string   "to_state",                 null: false
+    t.jsonb    "metadata",    default: {}
+    t.integer  "sort_key",                 null: false
+    t.uuid     "item_id",                  null: false
+    t.boolean  "most_recent",              null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
     t.index ["item_id"], name: "index_item_transitions_on_item_id", using: :btree
     t.index ["sort_key", "item_id"], name: "index_item_transitions_on_sort_key_and_item_id", unique: true, using: :btree
   end
@@ -1319,7 +1319,7 @@ ActiveRecord::Schema.define(version: 20170116152012) do
 
   create_table "resource_export_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.jsonb    "metadata",                default: "{}"
+    t.jsonb    "metadata",                default: {}
     t.integer  "sort_key"
     t.integer  "resource_export_file_id"
     t.datetime "created_at"
@@ -1339,7 +1339,7 @@ ActiveRecord::Schema.define(version: 20170116152012) do
 
   create_table "resource_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.jsonb    "metadata",                default: "{}"
+    t.jsonb    "metadata",                default: {}
     t.integer  "sort_key"
     t.integer  "resource_import_file_id"
     t.datetime "created_at"

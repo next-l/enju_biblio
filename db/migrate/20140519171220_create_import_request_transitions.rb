@@ -5,7 +5,7 @@ class CreateImportRequestTransitions < ActiveRecord::Migration
       if ActiveRecord::Base.configurations[Rails.env]["adapter"].try(:match, /mysql/)
         t.jsonb :metadata
       else
-        t.jsonb :metadata, default: "{}"
+        t.jsonb :metadata, default: {}
       end
       t.integer :sort_key
       t.integer :import_request_id
