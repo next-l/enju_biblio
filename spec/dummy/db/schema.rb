@@ -1575,11 +1575,11 @@ ActiveRecord::Schema.define(version: 20170116152012) do
 
   create_table "user_export_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",            default: "{}"
+    t.jsonb    "metadata",            default: {}
     t.integer  "sort_key"
     t.integer  "user_export_file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.index ["sort_key", "user_export_file_id"], name: "index_user_export_file_transitions_on_sort_key_and_file_id", unique: true, using: :btree
     t.index ["user_export_file_id"], name: "index_user_export_file_transitions_on_file_id", using: :btree
   end
@@ -1642,11 +1642,11 @@ ActiveRecord::Schema.define(version: 20170116152012) do
 
   create_table "user_import_file_transitions", force: :cascade do |t|
     t.string   "to_state"
-    t.text     "metadata",            default: "{}"
+    t.jsonb    "metadata",            default: {}
     t.integer  "sort_key"
     t.integer  "user_import_file_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                       null: false
+    t.datetime "updated_at",                       null: false
     t.index ["sort_key", "user_import_file_id"], name: "index_user_import_file_transitions_on_sort_key_and_file_id", unique: true, using: :btree
     t.index ["user_import_file_id"], name: "index_user_import_file_transitions_on_user_import_file_id", using: :btree
   end
