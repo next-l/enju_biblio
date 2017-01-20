@@ -12,7 +12,7 @@ end
 #
 #  id         :integer          not null, primary key
 #  agent_id   :integer          not null
-#  item_id    :integer          not null
-#  created_at :datetime
-#  updated_at :datetime
+#  item_id    :uuid             not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #

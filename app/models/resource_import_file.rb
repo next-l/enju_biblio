@@ -117,7 +117,7 @@ class ResourceImportFile < ActiveRecord::Base
         if row['isbn'].present?
           if StdNum::ISBN.valid?(row['isbn'])
             isbn = StdNum::ISBN.normalize(row['isbn'])
-            m = IsbnRecorad.find_by(body: isbn).try(:manifestation)
+            m = IsbnRecord.find_by(body: isbn).try(:manifestation)
             if m
               if m.series_statements.exists?
                 manifestation = m
