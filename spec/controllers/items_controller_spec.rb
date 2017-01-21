@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require 'rails_helper'
 
 describe ItemsController do
@@ -84,14 +83,14 @@ describe ItemsController do
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
+        get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
         expect(response).to be_success
-        assigns(:manifestation).should eq Manifestation.find(1)
+        assigns(:manifestation).should eq manifestations(:manifestation_00001).id
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
       it 'should get index with shelf_id' do
-        get :index, params: { shelf_id: 1 }
+        get :index, params: { shelf_id: shelves(:shelf_00001).id }
         expect(response).to be_success
         assigns(:shelf).should eq Shelf.find(1)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
@@ -313,7 +312,7 @@ describe ItemsController do
       end
 
       it 'should not create item already created' do
-        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
+        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: manifestations(:manifestation_00001).id } }
         expect(assigns(:item)).to_not be_valid
         expect(response).to be_success
       end

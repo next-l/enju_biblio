@@ -25,6 +25,7 @@ class Manifestation < ActiveRecord::Base
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :periodical
   has_one :resource_import_result
+  has_one :doi_record, dependent: :destroy
   has_many :isbn_record_and_manifestations, dependent: :destroy
   has_many :isbn_records, through: :isbn_record_and_manifestations
   has_many :issn_record_and_manifestations, dependent: :destroy
@@ -72,12 +73,6 @@ class Manifestation < ActiveRecord::Base
     string :issn, multiple: true do
       issn_records.pluck(:body)
     end
-    string :lccn, multiple: true do
-      identifier_contents(:lccn)
-    end
-    string :jpno, multiple: true do
-      identifier_contents(:jpno)
-    end
     string :carrier_type do
       carrier_type.name
     end
@@ -103,7 +98,6 @@ class Manifestation < ActiveRecord::Base
     end
     time :created_at
     time :updated_at
-    time :deleted_at
     time :pub_date, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.pub_dates
@@ -175,7 +169,7 @@ class Manifestation < ActiveRecord::Base
     end
     string :sort_title
     string :doi, multiple: true do
-      doi_record.body
+      doi_record.try(:body)
     end
     boolean :serial do
       serial?
