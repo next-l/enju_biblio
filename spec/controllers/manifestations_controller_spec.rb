@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 require 'rails_helper'
 
 describe ManifestationsController do
@@ -286,7 +284,7 @@ describe ManifestationsController do
       end
 
       it 'should send manifestation detail email' do
-        get :show, params: { id: 1, mode: 'send_email' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'send_email' }
         expect(response).to redirect_to manifestation_url(assigns(:manifestation))
       end
 
@@ -315,36 +313,36 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with holding' do
-        get :show, params: { id: 1, mode: 'holding' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'holding' }
         expect(response).to be_success
       end
 
       it 'should show manifestation with tag_edit' do
-        get :show, params: { id: 1, mode: 'tag_edit' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_edit' }
         expect(response).to render_template('manifestations/_tag_edit')
         expect(response).to be_success
       end
 
       it 'should show manifestation with tag_list' do
-        get :show, params: { id: 1, mode: 'tag_list' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_list' }
         expect(response).to render_template('manifestations/_tag_list')
         expect(response).to be_success
       end
 
       it 'should show manifestation with show_creators' do
-        get :show, params: { id: 1, mode: 'show_creators' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'show_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_success
       end
 
       it 'should show manifestation with show_all_creators' do
-        get :show, params: { id: 1, mode: 'show_all_creators' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'show_all_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_success
       end
 
       it "should not send manifestation's detail email" do
-        get :show, params: { id: 1, mode: 'send_email' }
+        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'send_email' }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -493,7 +491,7 @@ describe ManifestationsController do
       end
 
       it 'should edit manifestation with tag_edit' do
-        get :edit, params: { id: 1, mode: 'tag_edit' }
+        get :edit, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_edit' }
         expect(response).to be_success
       end
     end

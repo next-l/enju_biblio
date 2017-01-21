@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119061648) do
+ActiveRecord::Schema.define(version: 20170121121927) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -765,7 +765,6 @@ ActiveRecord::Schema.define(version: 20170119061648) do
     t.string   "item_identifier"
     t.datetime "created_at",                              null: false
     t.datetime "updated_at",                              null: false
-    t.integer  "shelf_id"
     t.boolean  "include_supplements",     default: false, null: false
     t.text     "note"
     t.string   "url"
@@ -781,6 +780,7 @@ ActiveRecord::Schema.define(version: 20170119061648) do
     t.string   "binding_call_number"
     t.datetime "binded_at"
     t.uuid     "manifestation_id"
+    t.uuid     "shelf_id",                                null: false
     t.index ["binding_item_identifier"], name: "index_items_on_binding_item_identifier", using: :btree
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id", using: :btree
     t.index ["checkout_type_id"], name: "index_items_on_checkout_type_id", using: :btree
@@ -1802,6 +1802,7 @@ ActiveRecord::Schema.define(version: 20170119061648) do
   add_foreign_key "items", "checkout_types"
   add_foreign_key "items", "circulation_statuses"
   add_foreign_key "items", "manifestations"
+  add_foreign_key "items", "shelves"
   add_foreign_key "jpno_records", "manifestations"
   add_foreign_key "lending_policies", "items"
   add_foreign_key "lending_policies", "user_groups"

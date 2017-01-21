@@ -15,6 +15,7 @@ end
 CarrierType.include(EnjuCirculation::EnjuCarrierType)
 Manifestation.include(EnjuCirculation::EnjuManifestation)
 Manifestation.include(EnjuSubject::EnjuManifestation)
+Manifestation.include(EnjuNdl::EnjuManifestation)
 Item.include(EnjuCirculation::EnjuItem)
 Item.include(EnjuLibrary::EnjuItem)
 Item.include(EnjuInventory::EnjuItem)
