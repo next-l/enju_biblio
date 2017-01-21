@@ -393,6 +393,8 @@ en:
     attachment_file: "Attachment file"
     add_derivation: "Add a derivation"
     new_item: "New item"
+    this_year_checkouts: "Checkouts for the past year"
+    total_checkouts: "Total checkouts"
 
   item:
     current_checkout: "Current checkout"

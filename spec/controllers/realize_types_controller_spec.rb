@@ -29,113 +29,113 @@ describe RealizeTypesController do
     FactoryGirl.attributes_for(:realize_type)
   end
 
-  describe "GET index" do
-    it "assigns all realize_types as @realize_types" do
+  describe 'GET index' do
+    it 'assigns all realize_types as @realize_types' do
       realize_type = RealizeType.create! valid_attributes
       get :index
       expect(assigns(:realize_types)).to eq(RealizeType.order(:position))
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested realize_type as @realize_type" do
+  describe 'GET show' do
+    it 'assigns the requested realize_type as @realize_type' do
       realize_type = RealizeType.create! valid_attributes
-      get :show, :id => realize_type.id
+      get :show, params: { id: realize_type.id }
       expect(assigns(:realize_type)).to eq(realize_type)
     end
   end
 
-  describe "GET new" do
-    it "assigns a new realize_type as @realize_type" do
+  describe 'GET new' do
+    it 'assigns a new realize_type as @realize_type' do
       get :new
       expect(assigns(:realize_type)).to be_a_new(RealizeType)
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested realize_type as @realize_type" do
+  describe 'GET edit' do
+    it 'assigns the requested realize_type as @realize_type' do
       realize_type = RealizeType.create! valid_attributes
-      get :edit, :id => realize_type.id
+      get :edit, params: { id: realize_type.id }
       expect(assigns(:realize_type)).to eq(realize_type)
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new RealizeType" do
-        expect {
-          post :create, :realize_type => valid_attributes
-        }.to change(RealizeType, :count).by(1)
+  describe 'POST create' do
+    describe 'with valid params' do
+      it 'creates a new RealizeType' do
+        expect do
+          post :create, params: { realize_type: valid_attributes }
+        end.to change(RealizeType, :count).by(1)
       end
 
-      it "assigns a newly created realize_type as @realize_type" do
-        post :create, :realize_type => valid_attributes
+      it 'assigns a newly created realize_type as @realize_type' do
+        post :create, params: { realize_type: valid_attributes }
         expect(assigns(:realize_type)).to be_a(RealizeType)
         expect(assigns(:realize_type)).to be_persisted
       end
 
-      it "redirects to the created realize_type" do
-        post :create, :realize_type => valid_attributes
+      it 'redirects to the created realize_type' do
+        post :create, params: { realize_type: valid_attributes }
         expect(response).to redirect_to(RealizeType.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved realize_type as @realize_type" do
+    describe 'with invalid params' do
+      it 'assigns a newly created but unsaved realize_type as @realize_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        post :create, :realize_type => {name: "test"}
+        post :create, params: { realize_type: { name: 'test' } }
         expect(assigns(:realize_type)).to be_a_new(RealizeType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        post :create, :realize_type => {name: "test"}
-        #expect(response).to render_template("new")
+        post :create, params: { realize_type: { name: 'test' } }
+        # expect(response).to render_template("new")
       end
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested realize_type" do
+  describe 'PUT update' do
+    describe 'with valid params' do
+      it 'updates the requested realize_type' do
         realize_type = RealizeType.create! valid_attributes
         # Assuming there are no other realize_types in the database, this
         # specifies that the RealizeType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        RealizeType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
-        put :update, :id => realize_type.id, :realize_type => {'name' => 'test'}
+        RealizeType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        put :update, params: { id: realize_type.id, realize_type: { 'name' => 'test' } }
       end
 
-      it "assigns the requested realize_type as @realize_type" do
+      it 'assigns the requested realize_type as @realize_type' do
         realize_type = RealizeType.create! valid_attributes
-        put :update, :id => realize_type.id, :realize_type => valid_attributes
+        put :update, params: { id: realize_type.id, realize_type: valid_attributes }
         expect(assigns(:realize_type)).to eq(realize_type)
       end
 
-      it "redirects to the realize_type" do
+      it 'redirects to the realize_type' do
         realize_type = RealizeType.create! valid_attributes
-        put :update, :id => realize_type.id, :realize_type => valid_attributes
+        put :update, params: { id: realize_type.id, realize_type: valid_attributes }
         expect(response).to redirect_to(realize_type)
       end
 
-      it "moves its position when specified" do
+      it 'moves its position when specified' do
         realize_type = RealizeType.create! valid_attributes
         position = realize_type.position
-        put :update, :id => realize_type.id, :move => 'higher'
+        put :update, params: { id: realize_type.id, move: 'higher' }
         expect(response).to redirect_to realize_types_url
         assigns(:realize_type).reload.position.should eq position - 1
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the realize_type as @realize_type" do
+    describe 'with invalid params' do
+      it 'assigns the realize_type as @realize_type' do
         realize_type = RealizeType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        put :update, :id => realize_type.id, :realize_type => {name: "test"}
+        put :update, params: { id: realize_type.id, realize_type: { name: 'test' } }
         expect(assigns(:realize_type)).to eq(realize_type)
       end
 
@@ -143,25 +143,24 @@ describe RealizeTypesController do
         realize_type = RealizeType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         RealizeType.any_instance.stub(:save).and_return(false)
-        put :update, :id => realize_type.id, :realize_type => {name: "test"}
-        #expect(response).to render_template("edit")
+        put :update, params: { id: realize_type.id, realize_type: { name: 'test' } }
+        # expect(response).to render_template("edit")
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested realize_type" do
+  describe 'DELETE destroy' do
+    it 'destroys the requested realize_type' do
       realize_type = RealizeType.create! valid_attributes
-      expect {
-        delete :destroy, :id => realize_type.id
-      }.to change(RealizeType, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: realize_type.id }
+      end.to change(RealizeType, :count).by(-1)
     end
 
-    it "redirects to the realize_types list" do
+    it 'redirects to the realize_types list' do
       realize_type = RealizeType.create! valid_attributes
-      delete :destroy, :id => realize_type.id
+      delete :destroy, params: { id: realize_type.id }
       expect(response).to redirect_to(realize_types_url)
     end
   end
-
 end

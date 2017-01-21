@@ -397,6 +397,8 @@ ja:
     attachment_file: "添付ファイル"
     add_derivation: "派生資料を追加"
     new_item: "新規作成"
+    this_year_checkouts: "過去一年間の貸出回数"
+    total_checkouts: "累計貸出回数"
 
   item:
     current_checkout: "現在の貸出"

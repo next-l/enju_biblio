@@ -29,113 +29,113 @@ describe CreateTypesController do
     FactoryGirl.attributes_for(:create_type)
   end
 
-  describe "GET index" do
-    it "assigns all create_types as @create_types" do
+  describe 'GET index' do
+    it 'assigns all create_types as @create_types' do
       create_type = CreateType.create! valid_attributes
       get :index
       expect(assigns(:create_types)).to eq(CreateType.order(:position))
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested create_type as @create_type" do
+  describe 'GET show' do
+    it 'assigns the requested create_type as @create_type' do
       create_type = CreateType.create! valid_attributes
-      get :show, :id => create_type.id
+      get :show, params: { id: create_type.id }
       expect(assigns(:create_type)).to eq(create_type)
     end
   end
 
-  describe "GET new" do
-    it "assigns a new create_type as @create_type" do
+  describe 'GET new' do
+    it 'assigns a new create_type as @create_type' do
       get :new
       expect(assigns(:create_type)).to be_a_new(CreateType)
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested create_type as @create_type" do
+  describe 'GET edit' do
+    it 'assigns the requested create_type as @create_type' do
       create_type = CreateType.create! valid_attributes
-      get :edit, :id => create_type.id
+      get :edit, params: { id: create_type.id }
       expect(assigns(:create_type)).to eq(create_type)
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new CreateType" do
-        expect {
-          post :create, :create_type => valid_attributes
-        }.to change(CreateType, :count).by(1)
+  describe 'POST create' do
+    describe 'with valid params' do
+      it 'creates a new CreateType' do
+        expect do
+          post :create, params: { create_type: valid_attributes }
+        end.to change(CreateType, :count).by(1)
       end
 
-      it "assigns a newly created create_type as @create_type" do
-        post :create, :create_type => valid_attributes
+      it 'assigns a newly created create_type as @create_type' do
+        post :create, params: { create_type: valid_attributes }
         expect(assigns(:create_type)).to be_a(CreateType)
         expect(assigns(:create_type)).to be_persisted
       end
 
-      it "redirects to the created create_type" do
-        post :create, :create_type => valid_attributes
+      it 'redirects to the created create_type' do
+        post :create, params: { create_type: valid_attributes }
         expect(response).to redirect_to(CreateType.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved create_type as @create_type" do
+    describe 'with invalid params' do
+      it 'assigns a newly created but unsaved create_type as @create_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         CreateType.any_instance.stub(:save).and_return(false)
-        post :create, :create_type => {name: "test"}
+        post :create, params: { create_type: { name: 'test' } }
         expect(assigns(:create_type)).to be_a_new(CreateType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         CreateType.any_instance.stub(:save).and_return(false)
-        post :create, :create_type => {name: "test"}
-        #expect(response).to render_template("new")
+        post :create, params: { create_type: { name: 'test' } }
+        # expect(response).to render_template("new")
       end
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested create_type" do
+  describe 'PUT update' do
+    describe 'with valid params' do
+      it 'updates the requested create_type' do
         create_type = CreateType.create! valid_attributes
         # Assuming there are no other create_types in the database, this
         # specifies that the CreateType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        CreateType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
-        put :update, :id => create_type.id, :create_type => {'name' => 'test'}
+        CreateType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        put :update, params: { id: create_type.id, create_type: { 'name' => 'test' } }
       end
 
-      it "assigns the requested create_type as @create_type" do
+      it 'assigns the requested create_type as @create_type' do
         create_type = CreateType.create! valid_attributes
-        put :update, :id => create_type.id, :create_type => valid_attributes
+        put :update, params: { id: create_type.id, create_type: valid_attributes }
         expect(assigns(:create_type)).to eq(create_type)
       end
 
-      it "redirects to the create_type" do
+      it 'redirects to the create_type' do
         create_type = CreateType.create! valid_attributes
-        put :update, :id => create_type.id, :create_type => valid_attributes
+        put :update, params: { id: create_type.id, create_type: valid_attributes }
         expect(response).to redirect_to(create_type)
       end
 
-      it "moves its position when specified" do
+      it 'moves its position when specified' do
         create_type = CreateType.create! valid_attributes
         position = create_type.position
-        put :update, :id => create_type.id, :move => 'higher'
+        put :update, params: { id: create_type.id, move: 'higher' }
         expect(response).to redirect_to create_types_url
         assigns(:create_type).reload.position.should eq position - 1
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the create_type as @create_type" do
+    describe 'with invalid params' do
+      it 'assigns the create_type as @create_type' do
         create_type = CreateType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         CreateType.any_instance.stub(:save).and_return(false)
-        put :update, :id => create_type.id, :create_type => {name: "test"}
+        put :update, params: { id: create_type.id, create_type: { name: 'test' } }
         expect(assigns(:create_type)).to eq(create_type)
       end
 
@@ -143,25 +143,24 @@ describe CreateTypesController do
         create_type = CreateType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         CreateType.any_instance.stub(:save).and_return(false)
-        put :update, :id => create_type.id, :create_type => {name: "test"}
-        #expect(response).to render_template("edit")
+        put :update, params: { id: create_type.id, create_type: { name: 'test' } }
+        # expect(response).to render_template("edit")
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested create_type" do
+  describe 'DELETE destroy' do
+    it 'destroys the requested create_type' do
       create_type = CreateType.create! valid_attributes
-      expect {
-        delete :destroy, :id => create_type.id
-      }.to change(CreateType, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: create_type.id }
+      end.to change(CreateType, :count).by(-1)
     end
 
-    it "redirects to the create_types list" do
+    it 'redirects to the create_types list' do
       create_type = CreateType.create! valid_attributes
-      delete :destroy, :id => create_type.id
+      delete :destroy, params: { id: create_type.id }
       expect(response).to redirect_to(create_types_url)
     end
   end
-
 end

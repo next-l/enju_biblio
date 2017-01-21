@@ -225,10 +225,8 @@ class Agent < ActiveRecord::Base
         agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       else
         agents_matched = Agent.where(full_name: name_and_role[0])
-        attr0 = agent_list.keys - [ :full_name ]
-        agent = agents_matched.select{|a|
-          attr0.select{|attr| a.send(attr) != agent_list[attr] }.empty?
-        }.first
+        agents_matched = agents_matched.where(place: agent_list[:place]) if agent_list[:place]
+        agent = agents_matched.first
       end
       role_type = name_and_role[1].to_s.strip
       unless agent

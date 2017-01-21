@@ -29,113 +29,113 @@ describe ProduceTypesController do
     FactoryGirl.attributes_for(:produce_type)
   end
 
-  describe "GET index" do
-    it "assigns all produce_types as @produce_types" do
+  describe 'GET index' do
+    it 'assigns all produce_types as @produce_types' do
       produce_type = ProduceType.create! valid_attributes
       get :index
       expect(assigns(:produce_types)).to eq(ProduceType.order(:position))
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested produce_type as @produce_type" do
+  describe 'GET show' do
+    it 'assigns the requested produce_type as @produce_type' do
       produce_type = ProduceType.create! valid_attributes
-      get :show, :id => produce_type.id
+      get :show, params: { id: produce_type.id }
       expect(assigns(:produce_type)).to eq(produce_type)
     end
   end
 
-  describe "GET new" do
-    it "assigns a new produce_type as @produce_type" do
+  describe 'GET new' do
+    it 'assigns a new produce_type as @produce_type' do
       get :new
       expect(assigns(:produce_type)).to be_a_new(ProduceType)
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested produce_type as @produce_type" do
+  describe 'GET edit' do
+    it 'assigns the requested produce_type as @produce_type' do
       produce_type = ProduceType.create! valid_attributes
-      get :edit, :id => produce_type.id
+      get :edit, params: { id: produce_type.id }
       expect(assigns(:produce_type)).to eq(produce_type)
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new ProduceType" do
-        expect {
-          post :create, :produce_type => valid_attributes
-        }.to change(ProduceType, :count).by(1)
+  describe 'POST create' do
+    describe 'with valid params' do
+      it 'creates a new ProduceType' do
+        expect do
+          post :create, params: { produce_type: valid_attributes }
+        end.to change(ProduceType, :count).by(1)
       end
 
-      it "assigns a newly created produce_type as @produce_type" do
-        post :create, :produce_type => valid_attributes
+      it 'assigns a newly created produce_type as @produce_type' do
+        post :create, params: { produce_type: valid_attributes }
         expect(assigns(:produce_type)).to be_a(ProduceType)
         expect(assigns(:produce_type)).to be_persisted
       end
 
-      it "redirects to the created produce_type" do
-        post :create, :produce_type => valid_attributes
+      it 'redirects to the created produce_type' do
+        post :create, params: { produce_type: valid_attributes }
         expect(response).to redirect_to(ProduceType.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved produce_type as @produce_type" do
+    describe 'with invalid params' do
+      it 'assigns a newly created but unsaved produce_type as @produce_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        post :create, :produce_type => {name: "test"}
+        post :create, params: { produce_type: { name: 'test' } }
         expect(assigns(:produce_type)).to be_a_new(ProduceType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        post :create, :produce_type => {name: "test"}
-        #expect(response).to render_template("new")
+        post :create, params: { produce_type: { name: 'test' } }
+        # expect(response).to render_template("new")
       end
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested produce_type" do
+  describe 'PUT update' do
+    describe 'with valid params' do
+      it 'updates the requested produce_type' do
         produce_type = ProduceType.create! valid_attributes
         # Assuming there are no other produce_types in the database, this
         # specifies that the ProduceType created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        ProduceType.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
-        put :update, :id => produce_type.id, :produce_type => {'name' => 'test'}
+        ProduceType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        put :update, params: { id: produce_type.id, produce_type: { 'name' => 'test' } }
       end
 
-      it "assigns the requested produce_type as @produce_type" do
+      it 'assigns the requested produce_type as @produce_type' do
         produce_type = ProduceType.create! valid_attributes
-        put :update, :id => produce_type.id, :produce_type => valid_attributes
+        put :update, params: { id: produce_type.id, produce_type: valid_attributes }
         expect(assigns(:produce_type)).to eq(produce_type)
       end
 
-      it "redirects to the produce_type" do
+      it 'redirects to the produce_type' do
         produce_type = ProduceType.create! valid_attributes
-        put :update, :id => produce_type.id, :produce_type => valid_attributes
+        put :update, params: { id: produce_type.id, produce_type: valid_attributes }
         expect(response).to redirect_to(produce_type)
       end
 
-      it "moves its position when specified" do
+      it 'moves its position when specified' do
         produce_type = ProduceType.create! valid_attributes
         position = produce_type.position
-        put :update, :id => produce_type.id, :move => 'higher'
+        put :update, params: { id: produce_type.id, move: 'higher' }
         expect(response).to redirect_to produce_types_url
         assigns(:produce_type).reload.position.should eq position - 1
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the produce_type as @produce_type" do
+    describe 'with invalid params' do
+      it 'assigns the produce_type as @produce_type' do
         produce_type = ProduceType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        put :update, :id => produce_type.id, :produce_type => {name: "test"}
+        put :update, params: { id: produce_type.id, produce_type: { name: 'test' } }
         expect(assigns(:produce_type)).to eq(produce_type)
       end
 
@@ -143,25 +143,24 @@ describe ProduceTypesController do
         produce_type = ProduceType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         ProduceType.any_instance.stub(:save).and_return(false)
-        put :update, :id => produce_type.id, :produce_type => {name: "test"}
-        #expect(response).to render_template("edit")
+        put :update, params: { id: produce_type.id, produce_type: { name: 'test' } }
+        # expect(response).to render_template("edit")
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested produce_type" do
+  describe 'DELETE destroy' do
+    it 'destroys the requested produce_type' do
       produce_type = ProduceType.create! valid_attributes
-      expect {
-        delete :destroy, :id => produce_type.id
-      }.to change(ProduceType, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: produce_type.id }
+      end.to change(ProduceType, :count).by(-1)
     end
 
-    it "redirects to the produce_types list" do
+    it 'redirects to the produce_types list' do
       produce_type = ProduceType.create! valid_attributes
-      delete :destroy, :id => produce_type.id
+      delete :destroy, params: { id: produce_type.id }
       expect(response).to redirect_to(produce_types_url)
     end
   end
-
 end

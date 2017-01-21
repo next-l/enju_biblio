@@ -9,226 +9,226 @@ describe ManifestationsController do
     FactoryGirl.attributes_for(:manifestation)
   end
 
-  describe "GET index", :solr => true do
+  describe 'GET index', solr: true do
     before do
       Manifestation.reindex
     end
 
-    describe "When logged in as Administrator" do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      it "assigns all manifestations as @manifestations" do
+      it 'assigns all manifestations as @manifestations' do
         get :index
         expect(assigns(:manifestations)).to_not be_nil
       end
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      it "assigns all manifestations as @manifestations" do
+      it 'assigns all manifestations as @manifestations' do
         get :index
         expect(assigns(:manifestations)).to_not be_nil
       end
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      it "assigns all manifestations as @manifestations" do
+      it 'assigns all manifestations as @manifestations' do
         get :index
         expect(assigns(:manifestations)).to_not be_nil
       end
     end
 
-    describe "When not logged in" do
-      it "assigns all manifestations as @manifestations" do
+    describe 'When not logged in' do
+      it 'assigns all manifestations as @manifestations' do
         get :index
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations in xml format without operation" do
-        get :index, :format => 'xml'
+      it 'assigns all manifestations as @manifestations in xml format without operation' do
+        get :index, params: { format: 'xml' }
         expect(response).to be_success
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations in txt format without operation" do
-        get :index, :format => 'txt'
+      it 'assigns all manifestations as @manifestations in txt format without operation' do
+        get :index, params: { format: 'txt' }
         expect(response).to be_success
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
 
-      it "assigns all manifestations as @manifestations in sru format without operation" do
-        get :index, :format => 'sru'
+      it 'assigns all manifestations as @manifestations in sru format without operation' do
+        get :index, params: { format: 'sru' }
         assert_response :success
         expect(assigns(:manifestations)).to be_nil
         expect(response).to render_template('manifestations/explain')
       end
 
-      it "assigns all manifestations as @manifestations in sru format with operation" do
-        get :index, :format => 'sru', :operation => 'searchRetrieve', :query => 'ruby'
+      it 'assigns all manifestations as @manifestations in sru format with operation' do
+        get :index, params: { format: 'sru', operation: 'searchRetrieve', query: 'ruby' }
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
 
-      it "assigns all manifestations as @manifestations in sru format with operation and title" do
-        get :index, :format => 'sru', :query => 'title=ruby', :operation => 'searchRetrieve'
+      it 'assigns all manifestations as @manifestations in sru format with operation and title' do
+        get :index, params: { format: 'sru', query: 'title=ruby', operation: 'searchRetrieve' }
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
 
-      it "assigns all manifestations as @manifestations in openurl" do
-        get :index, :api => 'openurl', :title => 'ruby'
+      it 'assigns all manifestations as @manifestations in openurl' do
+        get :index, params: { api: 'openurl', title: 'ruby' }
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when pub_date_from and pub_date_until are specified" do
-        get :index, :pub_date_from => '2000', :pub_date_until => '2007'
+      it 'assigns all manifestations as @manifestations when pub_date_from and pub_date_until are specified' do
+        get :index, params: { pub_date_from: '2000', pub_date_until: '2007' }
         assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('2000-01-01').beginning_of_day.utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when old pub_date_from and pub_date_until are specified" do
-        get :index, :pub_date_from => '200', :pub_date_until => '207'
+      it 'assigns all manifestations as @manifestations when old pub_date_from and pub_date_until are specified' do
+        get :index, params: { pub_date_from: '200', pub_date_until: '207' }
         assigns(:query).should eq "date_of_publication_d:[#{Time.zone.parse('200-01-01').utc.iso8601} TO #{Time.zone.parse('207-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when acquired_from and pub_date_until are specified" do
-        get :index, :acquired_from => '2000', :acquired_until => '2007'
+      it 'assigns all manifestations as @manifestations when acquired_from and pub_date_until are specified' do
+        get :index, params: { acquired_from: '2000', acquired_until: '2007' }
         assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('2000-01-01').beginning_of_day.utc.iso8601} TO #{Time.zone.parse('2007-12-31').end_of_year.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when old acquired_from and pub_date_until are specified" do
-        get :index, :acquired_from => '200', :acquired_until => '207'
+      it 'assigns all manifestations as @manifestations when old acquired_from and pub_date_until are specified' do
+        get :index, params: { acquired_from: '200', acquired_until: '207' }
         assigns(:query).should eq "acquired_at_d:[#{Time.zone.parse('200-01-01').utc.iso8601} TO #{Time.zone.parse('207-12-31').end_of_day.utc.iso8601}]"
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations when number_of_pages_at_least and number_of_pages_at_most are specified" do
-        get :index, :number_of_pages_at_least => '100', :number_of_pages_at_most => '200'
+      it 'assigns all manifestations as @manifestations when number_of_pages_at_least and number_of_pages_at_most are specified' do
+        get :index, params: { number_of_pages_at_least: '100', number_of_pages_at_most: '200' }
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it "assigns all manifestations as @manifestations in mods format" do
-        get :index, :format => 'mods'
+      it 'assigns all manifestations as @manifestations in mods format' do
+        get :index, params: { format: 'mods' }
         expect(assigns(:manifestations)).to_not be_nil
-        expect(response).to render_template("manifestations/index")
+        expect(response).to render_template('manifestations/index')
       end
 
-      it "assigns all manifestations as @manifestations in rdf format" do
-        get :index, :format => 'rdf'
+      it 'assigns all manifestations as @manifestations in rdf format' do
+        get :index, params: { format: 'rdf' }
         expect(assigns(:manifestations)).to_not be_nil
-        expect(response).to render_template("manifestations/index")
+        expect(response).to render_template('manifestations/index')
       end
 
-      it "should get index with manifestation_id" do
-        get :index, :manifestation_id => 1
+      it 'should get index with manifestation_id' do
+        get :index, params: { manifestation_id: 1 }
         expect(response).to be_success
         expect(assigns(:manifestation)).to eq Manifestation.find(1)
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
       end
 
-      it "should get index with query" do
-        get :index, :query => '2005'
+      it 'should get index with query' do
+        get :index, params: { query: '2005' }
         expect(response).to be_success
         expect(assigns(:manifestations)).to_not be_blank
       end
 
-      it "should get index with page number" do
-        get :index, :query => '2005', :number_of_pages_at_least => 1, :number_of_pages_at_most => 100
+      it 'should get index with page number' do
+        get :index, params: { query: '2005', number_of_pages_at_least: 1, number_of_pages_at_most: 100 }
         expect(response).to be_success
         assigns(:query).should eq '2005 number_of_pages_i:[1 TO 100]'
       end
 
-      it "should get index with pub_date_from" do
-        get :index, :query => '2005', :pub_date_from => '2000'
+      it 'should get index with pub_date_from' do
+        get :index, params: { query: '2005', pub_date_from: '2000' }
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
         assigns(:query).should eq '2005 date_of_publication_d:[2000-01-01T00:00:00Z TO *]'
       end
 
-      it "should get index with pub_date_until" do
-        get :index, :query => '2005', :pub_date_until => '2000'
+      it 'should get index with pub_date_until' do
+        get :index, params: { query: '2005', pub_date_until: '2000' }
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_truthy
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T23:59:59Z]'
       end
 
-      it "should get tag_cloud" do
-        get :index, :query => '2005', :view => 'tag_cloud'
+      it 'should get tag_cloud' do
+        get :index, params: { query: '2005', view: 'tag_cloud' }
         expect(response).to be_success
-        expect(response).to render_template("manifestations/_tag_cloud")
+        expect(response).to render_template('manifestations/_tag_cloud')
       end
 
-      it "should show manifestation with isbn", :solr => true do
-        get :index, :isbn => "4798002062"
+      it 'should show manifestation with isbn', solr: true do
+        get :index, params: { isbn: '4798002062' }
         expect(response).to be_success
         expect(assigns(:manifestations).count).to eq 1
       end
 
-      it "should not show missing manifestation with isbn", :solr => true do
-        get :index, :isbn => "47980020620"
+      it 'should not show missing manifestation with isbn', solr: true do
+        get :index, params: { isbn: '47980020620' }
         expect(response).to be_success
         expect(assigns(:manifestations)).to be_empty
       end
 
-      it "should show manifestation with library 3", :solr => true do
-        get :index, :library_adv => ["hachioji"]
+      it 'should show manifestation with library 3', solr: true do
+        get :index, params: { library_adv: ['hachioji'] }
         expect(response).to be_success
         expect(assigns(:manifestations).size).to eq 1
       end
 
-      it "should show manifestation with library 2 or 3", :solr => true do
-        get :index, :library_adv => ["hachioji", "kamata"]
+      it 'should show manifestation with library 2 or 3', solr: true do
+        get :index, params: { library_adv: %w(hachioji kamata) }
         expect(response).to be_success
         expect(assigns(:manifestations).size).to eq 2
       end
 
-      it "should show manifestation with call_number", :solr => true do
-        get :index, :call_number => "547|ヤ"
+      it 'should show manifestation with call_number', solr: true do
+        get :index, params: { call_number: '547|ヤ' }
         expect(response).to be_success
         expect(assigns(:manifestations)).not_to be_empty
       end
 
-      it "should show manifestation with NDC", :solr => true do
-        classification = FactoryGirl.create(:classification, :category => "007.3", :classification_type_id => 1)
-	Manifestation.first.classifications << classification
-        get :index, :classification => "007", :classification_type => 1
-	expect(response).to be_success
-	expect(assigns(:manifestations)).not_to be_empty
+      it 'should show manifestation with NDC', solr: true do
+        classification = FactoryGirl.create(:classification, category: '007.3', classification_type_id: 1)
+        Manifestation.first.classifications << classification
+        get :index, params: { classification: '007', classification_type: 1 }
+        expect(response).to be_success
+        expect(assigns(:manifestations)).not_to be_empty
       end
 
-      it "should not search with classification if classification is blank" do
-        get :index, :classification => "", :classification_type => 1
+      it 'should not search with classification if classification is blank' do
+        get :index, params: { classification: '', classification_type: 1 }
         expect(response).to be_success
         expect(assigns(:query)).not_to match /classification/
       end
 
-      it "should accept per_page params" do
-        get :index, per_page: 3
+      it 'should accept per_page params' do
+        get :index, params: { per_page: 3 }
         expect(assigns(:manifestations).count).to eq 3
         expect(assigns(:manifestations).total_count).to eq 118
       end
 
-      it "should accept page parameter" do
-	get :index
-	original_manifestations = assigns(:manifestations)
-	expect(original_manifestations.count).to eq 10
-        get :index, page: 2
-	manifestations_page2 = assigns(:manifestations)
-	expect(manifestations_page2.count).to eq 10
-	expect(original_manifestations.first).not_to eq manifestations_page2.first
+      it 'should accept page parameter' do
+        get :index
+        original_manifestations = assigns(:manifestations)
+        expect(original_manifestations.count).to eq 10
+        get :index, params: { page: 2 }
+        manifestations_page2 = assigns(:manifestations)
+        expect(manifestations_page2.count).to eq 10
+        expect(original_manifestations.first).not_to eq manifestations_page2.first
       end
 
-      it "should accept sort_by parameter" do
-        get :index, sort_by: "created_at:desc"
+      it 'should accept sort_by parameter' do
+        get :index, params: { sort_by: 'created_at:desc' }
         manifestations = assigns(:manifestations)
         expect(manifestations.first.created_at).to be >= manifestations.last.created_at
-        get :index, sort_by: "created_at:asc"
+        get :index, params: { sort_by: 'created_at:asc' }
         manifestations = assigns(:manifestations)
         expect(manifestations.first.created_at).to be <= manifestations.last.created_at
       end
@@ -246,169 +246,168 @@ describe ManifestationsController do
     end
   end
 
-  describe "GET show" do
-    describe "When logged in as Administrator" do
+  describe 'GET show' do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      it "assigns the requested manifestation as @manifestation" do
-        get :show, :id => 1
+      it 'assigns the requested manifestation as @manifestation' do
+        get :show, params: { id: 1 }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      it "assigns the requested manifestation as @manifestation" do
-        get :show, :id => 1
+      it 'assigns the requested manifestation as @manifestation' do
+        get :show, params: { id: 1 }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
-      it "should show manifestation with agent who does not produce it" do
-        get :show, :id => 3, :agent_id => 3
+      it 'should show manifestation with agent who does not produce it' do
+        get :show, params: { id: 3, agent_id: 3 }
         expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(3)
         expect(response).to be_success
       end
 
-      it "should not show manifestation with required_role of admin" do
-        manifestation = FactoryGirl.create(:manifestation, :required_role_id => 4)
-	get :show, :id => manifestation.id
-	expect(response).not_to be_success
+      it 'should not show manifestation with required_role of admin' do
+        manifestation = FactoryGirl.create(:manifestation, required_role_id: 4)
+        get :show, params: { id: manifestation.id }
+        expect(response).not_to be_success
       end
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      it "assigns the requested manifestation as @manifestation" do
-        get :show, :id => 1
+      it 'assigns the requested manifestation as @manifestation' do
+        get :show, params: { id: 1 }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
-      it "should send manifestation detail email" do
-        get :show, :id => 1, :mode => 'send_email'
+      it 'should send manifestation detail email' do
+        get :show, params: { id: 1, mode: 'send_email' }
         expect(response).to redirect_to manifestation_url(assigns(:manifestation))
       end
 
-      #it "should show myself" do
+      # it "should show myself" do
       #  get :show, :id => users(:user1).agent
       #  expect(response).to be_success
-      #end
+      # end
     end
 
-    describe "When not logged in" do
-      it "assigns the requested manifestation as @manifestation" do
-        get :show, :id => 1
+    describe 'When not logged in' do
+      it 'assigns the requested manifestation as @manifestation' do
+        get :show, params: { id: 1 }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
-      it "guest should show manifestation mods template" do
-        get :show, :id => 22, :format => 'mods'
+      it 'guest should show manifestation mods template' do
+        get :show, params: { id: 22, format: 'mods' }
         expect(assigns(:manifestation)).to eq Manifestation.find(22)
-        expect(response).to render_template("manifestations/show")
+        expect(response).to render_template('manifestations/show')
       end
 
-      it "should show manifestation rdf template" do
-        get :show, :id => 22, :format => 'rdf'
+      it 'should show manifestation rdf template' do
+        get :show, params: { id: 22, format: 'rdf' }
         expect(assigns(:manifestation)).to eq Manifestation.find(22)
-        expect(response).to render_template("manifestations/show")
+        expect(response).to render_template('manifestations/show')
       end
 
-      it "should show manifestation with holding" do
-        get :show, :id => 1, :mode => 'holding'
+      it 'should show manifestation with holding' do
+        get :show, params: { id: 1, mode: 'holding' }
         expect(response).to be_success
       end
 
-      it "should show manifestation with tag_edit" do
-        get :show, :id => 1, :mode => 'tag_edit'
+      it 'should show manifestation with tag_edit' do
+        get :show, params: { id: 1, mode: 'tag_edit' }
         expect(response).to render_template('manifestations/_tag_edit')
         expect(response).to be_success
       end
 
-      it "should show manifestation with tag_list" do
-        get :show, :id => 1, :mode => 'tag_list'
+      it 'should show manifestation with tag_list' do
+        get :show, params: { id: 1, mode: 'tag_list' }
         expect(response).to render_template('manifestations/_tag_list')
         expect(response).to be_success
       end
 
-      it "should show manifestation with show_creators" do
-        get :show, :id => 1, :mode => 'show_creators'
+      it 'should show manifestation with show_creators' do
+        get :show, params: { id: 1, mode: 'show_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_success
       end
 
-      it "should show manifestation with show_all_creators" do
-        get :show, :id => 1, :mode => 'show_all_creators'
+      it 'should show manifestation with show_all_creators' do
+        get :show, params: { id: 1, mode: 'show_all_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_success
       end
 
       it "should not send manifestation's detail email" do
-        get :show, :id => 1, :mode => 'send_email'
+        get :show, params: { id: 1, mode: 'send_email' }
         expect(response).to redirect_to new_user_session_url
       end
     end
   end
 
-  describe "GET new" do
-    describe "When logged in as Administrator" do
+  describe 'GET new' do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      it "assigns the requested manifestation as @manifestation" do
+      it 'assigns the requested manifestation as @manifestation' do
         get :new
         expect(assigns(:manifestation)).to_not be_valid
       end
 
-      it "should get new template without expression_id" do
+      it 'should get new template without expression_id' do
         get :new
         expect(response).to be_success
       end
-  
-      it "should get new template with expression_id" do
-        get :new, :expression_id => 1
+
+      it 'should get new template with expression_id' do
+        get :new, params: { expression_id: 1 }
         expect(response).to be_success
       end
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      it "assigns the requested manifestation as @manifestation" do
+      it 'assigns the requested manifestation as @manifestation' do
         get :new
         expect(assigns(:manifestation)).to_not be_valid
       end
 
-      it "should get new template without expression_id" do
+      it 'should get new template without expression_id' do
         get :new
         expect(response).to be_success
       end
-  
-      it "should get new template with expression_id" do
-        get :new, :expression_id => 1
+
+      it 'should get new template with expression_id' do
+        get :new, params: { expression_id: 1 }
         expect(response).to be_success
       end
 
-      it "should get new template with parent_id" do
+      it 'should get new template with parent_id' do
         serial = FactoryGirl.create(:manifestation_serial,
-                                    statement_of_responsibility: "statement_of_responsibility1",
-                                    title_alternative: "title_alternative1",
-                                    publication_place: "publication_place1",
+                                    statement_of_responsibility: 'statement_of_responsibility1',
+                                    title_alternative: 'title_alternative1',
+                                    publication_place: 'publication_place1',
                                     height: 123,
                                     width: 123,
                                     depth: 123,
-                                    price: "price1",
-                                    access_address: "http://example.jp",
+                                    price: 'price1',
+                                    access_address: 'http://example.jp',
                                     language_id: FactoryGirl.create(:language).id,
                                     frequency_id: FactoryGirl.create(:frequency).id,
-                                    required_role_id: FactoryGirl.create(:role).id,
-                                   )
+                                    required_role_id: FactoryGirl.create(:role).id)
         serial.creators << FactoryGirl.create(:agent)
         serial.contributors << FactoryGirl.create(:agent)
         serial.publishers << FactoryGirl.create(:agent)
         serial.subjects << FactoryGirl.create(:subject)
         serial.classifications << FactoryGirl.create(:classification)
         serial.save!
-        get :new, :parent_id => serial.id
+        get :new, params: { parent_id: serial.id }
         expect(response).to be_success
         manifestation = assigns(:manifestation)
         parent = assigns(:parent)
@@ -431,21 +430,20 @@ describe ManifestationsController do
         expect(manifestation.frequency).to eq parent.frequency
         expect(manifestation.required_role).to eq parent.required_role
       end
-
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      it "should not assign the requested manifestation as @manifestation" do
+      it 'should not assign the requested manifestation as @manifestation' do
         get :new
         expect(assigns(:manifestation)).to be_nil
         expect(response).to be_forbidden
       end
     end
 
-    describe "When not logged in" do
-      it "should not assign the requested manifestation as @manifestation" do
+    describe 'When not logged in' do
+      it 'should not assign the requested manifestation as @manifestation' do
         get :new
         expect(assigns(:manifestation)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
@@ -453,376 +451,375 @@ describe ManifestationsController do
     end
   end
 
-  describe "GET edit" do
-    describe "When logged in as Administrator" do
+  describe 'GET edit' do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      it "assigns the requested manifestation as @manifestation" do
+      it 'assigns the requested manifestation as @manifestation' do
         manifestation = FactoryGirl.create(:manifestation)
-        get :edit, :id => manifestation.id
+        get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq(manifestation)
       end
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      it "assigns the requested manifestation as @manifestation" do
+      it 'assigns the requested manifestation as @manifestation' do
         manifestation = FactoryGirl.create(:manifestation)
-        get :edit, :id => manifestation.id
+        get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq(manifestation)
       end
 
       render_views
-      it "assigns the identifiers to @manifestation" do
+      it 'assigns the identifiers to @manifestation' do
         manifestation = FactoryGirl.create(:manifestation)
         identifier = FactoryGirl.create(:identifier)
         manifestation.identifiers << identifier
-        get :edit, :id => manifestation.id
+        get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq manifestation
         expect(assigns(:manifestation).identifiers).to eq manifestation.identifiers
-        expect(response).to render_template(partial: "manifestations/_identifier_fields")
+        expect(response).to render_template(partial: 'manifestations/_identifier_fields')
       end
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      it "assigns the requested manifestation as @manifestation" do
+      it 'assigns the requested manifestation as @manifestation' do
         manifestation = FactoryGirl.create(:manifestation)
-        get :edit, :id => manifestation.id
+        get :edit, params: { id: manifestation.id }
         expect(response).to be_forbidden
       end
 
-      it "should edit manifestation with tag_edit" do
-        get :edit, :id => 1, :mode => 'tag_edit'
+      it 'should edit manifestation with tag_edit' do
+        get :edit, params: { id: 1, mode: 'tag_edit' }
         expect(response).to be_success
       end
     end
 
-    describe "When not logged in" do
-      it "should not assign the requested manifestation as @manifestation" do
+    describe 'When not logged in' do
+      it 'should not assign the requested manifestation as @manifestation' do
         manifestation = FactoryGirl.create(:manifestation)
-        get :edit, :id => manifestation.id
+        get :edit, params: { id: manifestation.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
 
-  describe "POST create" do
+  describe 'POST create' do
     before(:each) do
       @attrs = valid_attributes
-      @invalid_attrs = {:original_title => ''}
+      @invalid_attrs = { original_title: '' }
     end
 
-    describe "When logged in as Administrator" do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      describe "with valid params" do
-        it "assigns a newly created manifestation as @manifestation" do
-          post :create, :manifestation => @attrs
+      describe 'with valid params' do
+        it 'assigns a newly created manifestation as @manifestation' do
+          post :create, params: { manifestation: @attrs }
           expect(assigns(:manifestation)).to be_valid
         end
 
-        it "assigns a series_statement" do
-          post :create, :manifestation => @attrs.merge(:series_statements_attributes => {"0" => {:original_title => SeriesStatement.find(1).original_title}})
+        it 'assigns a series_statement' do
+          post :create, params: { manifestation: @attrs.merge(series_statements_attributes: { '0' => { original_title: SeriesStatement.find(1).original_title } }) }
           assigns(:manifestation).reload
           assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_truthy
         end
 
-        it "redirects to the created manifestation" do
-          post :create, :manifestation => @attrs
+        it 'redirects to the created manifestation' do
+          post :create, params: { manifestation: @attrs }
           expect(response).to redirect_to(manifestation_url(assigns(:manifestation)))
         end
       end
 
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved manifestation as @manifestation" do
-          post :create, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns a newly created but unsaved manifestation as @manifestation' do
+          post :create, params: { manifestation: @invalid_attrs }
           expect(assigns(:manifestation)).to_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, :manifestation => @invalid_attrs
-          expect(response).to render_template("new")
+          post :create, params: { manifestation: @invalid_attrs }
+          expect(response).to render_template('new')
         end
       end
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      describe "with valid params" do
-        it "assigns a newly created manifestation as @manifestation" do
-          post :create, :manifestation => @attrs
+      describe 'with valid params' do
+        it 'assigns a newly created manifestation as @manifestation' do
+          post :create, params: { manifestation: @attrs }
           expect(assigns(:manifestation)).to be_valid
         end
 
-        it "redirects to the created manifestation" do
-          post :create, :manifestation => @attrs
+        it 'redirects to the created manifestation' do
+          post :create, params: { manifestation: @attrs }
           expect(response).to redirect_to(manifestation_url(assigns(:manifestation)))
         end
 
-        it "accepts an attachment file" do
-          post :create, :manifestation => @attrs.merge(attachment: fixture_file_upload("/../../examples/resource_import_file_sample1.tsv", 'text/csv'))
+        it 'accepts an attachment file' do
+          post :create, params: { manifestation: @attrs.merge(attachment: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv')) }
           expect(assigns(:manifestation)).to be_valid
         end
       end
 
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved manifestation as @manifestation" do
-          post :create, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns a newly created but unsaved manifestation as @manifestation' do
+          post :create, params: { manifestation: @invalid_attrs }
           expect(assigns(:manifestation)).to_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, :manifestation => @invalid_attrs
-          expect(response).to render_template("new")
+          post :create, params: { manifestation: @invalid_attrs }
+          expect(response).to render_template('new')
         end
       end
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      describe "with valid params" do
-        it "assigns a newly created manifestation as @manifestation" do
-          post :create, :manifestation => @attrs
+      describe 'with valid params' do
+        it 'assigns a newly created manifestation as @manifestation' do
+          post :create, params: { manifestation: @attrs }
           expect(assigns(:manifestation)).to be_nil
         end
 
-        it "should be forbidden" do
-          post :create, :manifestation => @attrs
+        it 'should be forbidden' do
+          post :create, params: { manifestation: @attrs }
           expect(response).to be_forbidden
         end
       end
 
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved manifestation as @manifestation" do
-          post :create, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns a newly created but unsaved manifestation as @manifestation' do
+          post :create, params: { manifestation: @invalid_attrs }
           expect(assigns(:manifestation)).to be_nil
         end
 
-        it "should be forbidden" do
-          post :create, :manifestation => @invalid_attrs
+        it 'should be forbidden' do
+          post :create, params: { manifestation: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
     end
 
-    describe "When not logged in" do
-      describe "with valid params" do
-        it "assigns a newly created manifestation as @manifestation" do
-          post :create, :manifestation => @attrs
+    describe 'When not logged in' do
+      describe 'with valid params' do
+        it 'assigns a newly created manifestation as @manifestation' do
+          post :create, params: { manifestation: @attrs }
           expect(assigns(:manifestation)).to be_nil
         end
 
-        it "should be forbidden" do
-          post :create, :manifestation => @attrs
+        it 'should be forbidden' do
+          post :create, params: { manifestation: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
-      describe "with invalid params" do
-        it "assigns a newly created but unsaved manifestation as @manifestation" do
-          post :create, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns a newly created but unsaved manifestation as @manifestation' do
+          post :create, params: { manifestation: @invalid_attrs }
           expect(assigns(:manifestation)).to be_nil
         end
 
-        it "should be forbidden" do
-          post :create, :manifestation => @invalid_attrs
+        it 'should be forbidden' do
+          post :create, params: { manifestation: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
   end
 
-  describe "PUT update" do
+  describe 'PUT update' do
     before(:each) do
       @manifestation = FactoryGirl.create(:manifestation)
       @manifestation.series_statements = [SeriesStatement.find(1)]
       @attrs = valid_attributes
-      @invalid_attrs = {:original_title => ''}
+      @invalid_attrs = { original_title: '' }
     end
 
-    describe "When logged in as Administrator" do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      describe "with valid params" do
-        it "updates the requested manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+      describe 'with valid params' do
+        it 'updates the requested manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
         end
 
-        it "assigns a series_statement" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs.merge(:series_statements_attributes => {"0" => {:original_title => series_statements(:two).original_title, "_destroy"=>"false"}})
+        it 'assigns a series_statement' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(series_statements_attributes: { '0' => { :original_title => series_statements(:two).original_title, '_destroy' => 'false' } }) }
           assigns(:manifestation).reload
           assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:two).original_title).should be_truthy
         end
 
-        it "assigns the requested manifestation as @manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+        it 'assigns the requested manifestation as @manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
           expect(assigns(:manifestation)).to eq(@manifestation)
         end
       end
 
-      describe "with invalid params" do
-        it "assigns the requested manifestation as @manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @invalid_attrs
-          expect(response).to render_template("edit")
+      describe 'with invalid params' do
+        it 'assigns the requested manifestation as @manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @invalid_attrs }
+          expect(response).to render_template('edit')
         end
       end
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      describe "with valid params" do
-        it "updates the requested manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+      describe 'with valid params' do
+        it 'updates the requested manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
         end
 
-        it "assigns the requested manifestation as @manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+        it 'assigns the requested manifestation as @manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
           expect(assigns(:manifestation)).to eq(@manifestation)
           expect(response).to redirect_to(@manifestation)
         end
 
-        it "assigns identifiers to @manifestation" do
+        it 'assigns identifiers to @manifestation' do
           identifiers_attrs = {
-            identifier_attributes: [ FactoryGirl.create(:identifier) ]
+            identifier_attributes: [FactoryGirl.create(:identifier)]
           }
-          put :update, id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs)
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs) }
           expect(assigns(:manifestation)).to eq @manifestation
         end
       end
 
-      describe "with invalid params" do
-        it "assigns the manifestation as @manifestation" do
-          put :update, :id => @manifestation, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns the manifestation as @manifestation' do
+          put :update, params: { id: @manifestation, manifestation: @invalid_attrs }
           expect(assigns(:manifestation)).to_not be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, :id => @manifestation, :manifestation => @invalid_attrs
-          expect(response).to render_template("edit")
+          put :update, params: { id: @manifestation, manifestation: @invalid_attrs }
+          expect(response).to render_template('edit')
         end
       end
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      describe "with valid params" do
-        it "updates the requested manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+      describe 'with valid params' do
+        it 'updates the requested manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
         end
 
-        it "assigns the requested manifestation as @manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+        it 'assigns the requested manifestation as @manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
           expect(assigns(:manifestation)).to eq(@manifestation)
           expect(response).to be_forbidden
         end
       end
 
-      describe "with invalid params" do
-        it "assigns the requested manifestation as @manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns the requested manifestation as @manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
     end
 
-    describe "When not logged in" do
-      describe "with valid params" do
-        it "updates the requested manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+    describe 'When not logged in' do
+      describe 'with valid params' do
+        it 'updates the requested manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
         end
 
-        it "should be forbidden" do
-          put :update, :id => @manifestation.id, :manifestation => @attrs
+        it 'should be forbidden' do
+          put :update, params: { id: @manifestation.id, manifestation: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
-      describe "with invalid params" do
-        it "assigns the requested manifestation as @manifestation" do
-          put :update, :id => @manifestation.id, :manifestation => @invalid_attrs
+      describe 'with invalid params' do
+        it 'assigns the requested manifestation as @manifestation' do
+          put :update, params: { id: @manifestation.id, manifestation: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
     end
   end
 
-  describe "DELETE destroy" do
+  describe 'DELETE destroy' do
     before(:each) do
       @manifestation = FactoryGirl.create(:manifestation)
     end
 
-    describe "When logged in as Administrator" do
+    describe 'When logged in as Administrator' do
       login_fixture_admin
 
-      it "destroys the requested manifestation" do
-        delete :destroy, :id => @manifestation.id
+      it 'destroys the requested manifestation' do
+        delete :destroy, params: { id: @manifestation.id }
       end
 
-      it "redirects to the manifestations list" do
-        delete :destroy, :id => @manifestation.id
+      it 'redirects to the manifestations list' do
+        delete :destroy, params: { id: @manifestation.id }
         expect(response).to redirect_to(manifestations_url)
       end
 
-      it "should not destroy the reserved manifestation" do
-        delete :destroy, :id => 2
+      it 'should not destroy the reserved manifestation' do
+        delete :destroy, params: { id: 2 }
         expect(response).to be_forbidden
       end
 
-      it "should not destroy manifestation contains items" do
-        delete :destroy, :id => 1
+      it 'should not destroy manifestation contains items' do
+        delete :destroy, params: { id: 1 }
         expect(response).to be_forbidden
       end
 
-      it "should not destroy manifestation of series master with children" do
+      it 'should not destroy manifestation of series master with children' do
         @manifestation = FactoryGirl.create(:manifestation_serial)
         child = FactoryGirl.create(:manifestation)
         @manifestation.derived_manifestations << child
-        delete :destroy, :id => @manifestation.id
+        delete :destroy, params: { id: @manifestation.id }
         expect(response).to be_forbidden
       end
-
     end
 
-    describe "When logged in as Librarian" do
+    describe 'When logged in as Librarian' do
       login_fixture_librarian
 
-      it "destroys the requested manifestation" do
-        delete :destroy, :id => @manifestation.id
+      it 'destroys the requested manifestation' do
+        delete :destroy, params: { id: @manifestation.id }
       end
 
-      it "should be forbidden" do
-        delete :destroy, :id => @manifestation.id
+      it 'should be forbidden' do
+        delete :destroy, params: { id: @manifestation.id }
         expect(response).to redirect_to(manifestations_url)
       end
     end
 
-    describe "When logged in as User" do
+    describe 'When logged in as User' do
       login_fixture_user
 
-      it "destroys the requested manifestation" do
-        delete :destroy, :id => @manifestation.id
+      it 'destroys the requested manifestation' do
+        delete :destroy, params: { id: @manifestation.id }
       end
 
-      it "should be forbidden" do
-        delete :destroy, :id => @manifestation.id
+      it 'should be forbidden' do
+        delete :destroy, params: { id: @manifestation.id }
         expect(response).to be_forbidden
       end
     end
 
-    describe "When not logged in" do
-      it "destroys the requested manifestation" do
-        delete :destroy, :id => @manifestation.id
+    describe 'When not logged in' do
+      it 'destroys the requested manifestation' do
+        delete :destroy, params: { id: @manifestation.id }
       end
 
-      it "should be forbidden" do
-        delete :destroy, :id => @manifestation.id
+      it 'should be forbidden' do
+        delete :destroy, params: { id: @manifestation.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

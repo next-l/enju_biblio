@@ -21,7 +21,7 @@ class CarrierTypesController < ApplicationController
       if ENV['ENJU_STORAGE'] == 's3'
         file = Faraday.get(@carrier_type.attachment.expiring_url).body.force_encoding('UTF-8')
       else
-        file = @carrier_type.attachment.path(size)
+        file = @carrier_type.attachment.path
       end
     end
 
@@ -126,8 +126,8 @@ class CarrierTypesController < ApplicationController
     end
   end
 
-  def render_image
-    if @carrier_type.picture.path
+  def render_image(file)
+    if @carrier_type.attachment.path
       if ENV['ENJU_STORAGE'] == 's3'
         send_data file, filename: File.basename(@carrier_type.attachment_file_name), type: @carrier_type.attachment_content_type, disposition: 'inline'
       else

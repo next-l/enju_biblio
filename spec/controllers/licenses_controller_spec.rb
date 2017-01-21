@@ -29,113 +29,113 @@ describe LicensesController do
     FactoryGirl.attributes_for(:license)
   end
 
-  describe "GET index" do
-    it "assigns all licenses as @licenses" do
+  describe 'GET index' do
+    it 'assigns all licenses as @licenses' do
       license = License.create! valid_attributes
       get :index
       expect(assigns(:licenses)).to eq(License.order(:position))
     end
   end
 
-  describe "GET show" do
-    it "assigns the requested license as @license" do
+  describe 'GET show' do
+    it 'assigns the requested license as @license' do
       license = License.create! valid_attributes
-      get :show, :id => license.id
+      get :show, params: { id: license.id }
       expect(assigns(:license)).to eq(license)
     end
   end
 
-  describe "GET new" do
-    it "assigns a new license as @license" do
+  describe 'GET new' do
+    it 'assigns a new license as @license' do
       get :new
       expect(assigns(:license)).to be_a_new(License)
     end
   end
 
-  describe "GET edit" do
-    it "assigns the requested license as @license" do
+  describe 'GET edit' do
+    it 'assigns the requested license as @license' do
       license = License.create! valid_attributes
-      get :edit, :id => license.id
+      get :edit, params: { id: license.id }
       expect(assigns(:license)).to eq(license)
     end
   end
 
-  describe "POST create" do
-    describe "with valid params" do
-      it "creates a new License" do
-        expect {
-          post :create, :license => valid_attributes
-        }.to change(License, :count).by(1)
+  describe 'POST create' do
+    describe 'with valid params' do
+      it 'creates a new License' do
+        expect do
+          post :create, params: { license: valid_attributes }
+        end.to change(License, :count).by(1)
       end
 
-      it "assigns a newly created license as @license" do
-        post :create, :license => valid_attributes
+      it 'assigns a newly created license as @license' do
+        post :create, params: { license: valid_attributes }
         expect(assigns(:license)).to be_a(License)
         expect(assigns(:license)).to be_persisted
       end
 
-      it "redirects to the created license" do
-        post :create, :license => valid_attributes
+      it 'redirects to the created license' do
+        post :create, params: { license: valid_attributes }
         expect(response).to redirect_to(License.last)
       end
     end
 
-    describe "with invalid params" do
-      it "assigns a newly created but unsaved license as @license" do
+    describe 'with invalid params' do
+      it 'assigns a newly created but unsaved license as @license' do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        post :create, :license => {name: "test"}
+        post :create, params: { license: { name: 'test' } }
         expect(assigns(:license)).to be_a_new(License)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        post :create, :license => {name: "test"}
-        #expect(response).to render_template("new")
+        post :create, params: { license: { name: 'test' } }
+        # expect(response).to render_template("new")
       end
     end
   end
 
-  describe "PUT update" do
-    describe "with valid params" do
-      it "updates the requested license" do
+  describe 'PUT update' do
+    describe 'with valid params' do
+      it 'updates the requested license' do
         license = License.create! valid_attributes
         # Assuming there are no other licenses in the database, this
         # specifies that the License created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        License.any_instance.should_receive(:update_attributes).with({'name' => 'test'})
-        put :update, :id => license.id, :license => {'name' => 'test'}
+        License.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        put :update, params: { id: license.id, license: { 'name' => 'test' } }
       end
 
-      it "assigns the requested license as @license" do
+      it 'assigns the requested license as @license' do
         license = License.create! valid_attributes
-        put :update, :id => license.id, :license => valid_attributes
+        put :update, params: { id: license.id, license: valid_attributes }
         expect(assigns(:license)).to eq(license)
       end
 
-      it "redirects to the license" do
+      it 'redirects to the license' do
         license = License.create! valid_attributes
-        put :update, :id => license.id, :license => valid_attributes
+        put :update, params: { id: license.id, license: valid_attributes }
         expect(response).to redirect_to(license)
       end
 
-      it "moves its position when specified" do
+      it 'moves its position when specified' do
         license = License.create! valid_attributes
         position = license.position
-        put :update, :id => license.id, :move => 'higher'
+        put :update, params: { id: license.id, move: 'higher' }
         expect(response).to redirect_to licenses_url
         assigns(:license).reload.position.should eq position - 1
       end
     end
 
-    describe "with invalid params" do
-      it "assigns the license as @license" do
+    describe 'with invalid params' do
+      it 'assigns the license as @license' do
         license = License.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        put :update, :id => license.id, :license => {name: "test"}
+        put :update, params: { id: license.id, license: { name: 'test' } }
         expect(assigns(:license)).to eq(license)
       end
 
@@ -143,25 +143,24 @@ describe LicensesController do
         license = License.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         License.any_instance.stub(:save).and_return(false)
-        put :update, :id => license.id, :license => {name: "test"}
-        #expect(response).to render_template("edit")
+        put :update, params: { id: license.id, license: { name: 'test' } }
+        # expect(response).to render_template("edit")
       end
     end
   end
 
-  describe "DELETE destroy" do
-    it "destroys the requested license" do
+  describe 'DELETE destroy' do
+    it 'destroys the requested license' do
       license = License.create! valid_attributes
-      expect {
-        delete :destroy, :id => license.id
-      }.to change(License, :count).by(-1)
+      expect do
+        delete :destroy, params: { id: license.id }
+      end.to change(License, :count).by(-1)
     end
 
-    it "redirects to the licenses list" do
+    it 'redirects to the licenses list' do
       license = License.create! valid_attributes
-      delete :destroy, :id => license.id
+      delete :destroy, params: { id: license.id }
       expect(response).to redirect_to(licenses_url)
     end
   end
-
 end
