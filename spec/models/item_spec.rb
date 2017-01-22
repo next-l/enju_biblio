@@ -66,7 +66,6 @@ end
 #  item_identifier         :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  shelf_id                :integer
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string
@@ -82,4 +81,5 @@ end
 #  binding_call_number     :string
 #  binded_at               :datetime
 #  manifestation_id        :uuid
+#  shelf_id                :uuid             not null
 #

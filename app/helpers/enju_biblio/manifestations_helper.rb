@@ -1,71 +1,3 @@
-# == Schema Information
-#
-# Table name: manifestations
-#
-#  id                              :integer          not null, primary key
-#  original_title                  :text             not null
-#  title_alternative               :text
-#  title_transcription             :text
-#  classification_number           :string
-#  manifestation_identifier        :string
-#  date_of_publication             :datetime
-#  date_copyrighted                :datetime
-#  created_at                      :datetime
-#  updated_at                      :datetime
-#  deleted_at                      :datetime
-#  access_address                  :string
-#  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          default(1), not null
-#  start_page                      :integer
-#  end_page                        :integer
-#  height                          :integer
-#  width                           :integer
-#  depth                           :integer
-#  price                           :integer
-#  fulltext                        :text
-#  volume_number_string            :string
-#  issue_number_string             :string
-#  serial_number_string            :string
-#  edition                         :integer
-#  note                            :text
-#  repository_content              :boolean          default(FALSE), not null
-#  lock_version                    :integer          default(0), not null
-#  required_role_id                :integer          default(1), not null
-#  required_score                  :integer          default(0), not null
-#  frequency_id                    :integer          default(1), not null
-#  subscription_master             :boolean          default(FALSE), not null
-#  attachment_filename             :string
-#  attachment_content_type         :string
-#  attachment_size                 :integer
-#  attachment_updated_at           :datetime
-#  nii_type_id                     :integer
-#  title_alternative_transcription :text
-#  description                     :text
-#  abstract                        :text
-#  available_at                    :datetime
-#  valid_until                     :datetime
-#  date_submitted                  :datetime
-#  date_accepted                   :datetime
-#  date_caputured                  :datetime
-#  pub_date                        :string
-#  edition_string                  :string
-#  volume_number                   :integer
-#  issue_number                    :integer
-#  serial_number                   :integer
-#  content_type_id                 :integer          default(1)
-#  year_of_publication             :integer
-#  attachment_meta                 :text
-#  month_of_publication            :integer
-#  fulltext_content                :boolean
-#  serial                          :boolean
-#  statement_of_responsibility     :text
-#  publication_place               :text
-#  extent                          :text
-#  dimensions                      :text
-#  attachment_id                   :string
-#  attachment_fingerprint          :string
-#
-
 module EnjuBiblio
   module ManifestationsHelper
     include EnjuCirculation::ManifestationsHelper if defined?(EnjuCirculation)
@@ -135,7 +67,6 @@ module EnjuBiblio
     end
 
     def language_facet(language, current_languages, facet)
-      string = ''
       languages = current_languages.dup
       current = true if languages.include?(language.name)
       if current
@@ -148,9 +79,8 @@ module EnjuBiblio
     end
 
     def library_facet(current_libraries, facet)
-      library = Library.where(name: facet.value).select([:name, :display_name]).first
+      library = Library.where(name: facet.value).select([:name, :display_name_translations]).first
       return nil unless library
-      string = ''
       current = true if current_libraries.include?(library.name)
       content_tag :li, class: 'list-group-item' do
         if current
@@ -165,7 +95,7 @@ module EnjuBiblio
 
     def carrier_type_facet(facet)
       string = ''
-      carrier_type = CarrierType.where(name: facet.value).select([:name, :display_name]).first
+      carrier_type = CarrierType.where(name: facet.value).select([:name, :display_name_translations]).first
       if carrier_type
         string << form_icon(carrier_type)
         current = true if params[:carrier_type] == carrier_type.name
@@ -180,7 +110,6 @@ module EnjuBiblio
     end
 
     def pub_year_facet(pub_date_from, pub_date_until, facet)
-      string = ''
       current = true if facet.value.first.to_i == pub_date_from.to_i and facet.value.last.to_i - 1 == pub_date_until.to_i
       if current
         content_tag :strong do

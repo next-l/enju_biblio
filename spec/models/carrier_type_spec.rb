@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require 'rails_helper'
 
 describe CarrierType do
@@ -21,9 +20,5 @@ end
 #  position                  :integer
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
-#  attachment_id             :string
-#  attachment_filename       :string
-#  attachment_size           :integer
-#  attachment_content_type   :string
 #  attachment_data           :jsonb
 #

@@ -137,8 +137,8 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.string   "full_name"
     t.text     "full_name_transcription"
     t.text     "full_name_alternative"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.string   "zip_code_1"
     t.string   "zip_code_2"
     t.text     "address_1"
@@ -272,10 +272,6 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.integer  "position"
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.string   "attachment_id"
-    t.string   "attachment_filename"
-    t.integer  "attachment_size"
-    t.string   "attachment_content_type"
     t.jsonb    "attachment_data"
   end
 
@@ -504,11 +500,7 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.datetime "executed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "event_export_id"
-    t.integer  "event_export_size"
-    t.string   "event_export_filename"
     t.jsonb    "attachment_data"
-    t.index ["event_export_id"], name: "index_event_export_files_on_event_export_id", using: :btree
     t.index ["user_id"], name: "index_event_export_files_on_user_id", using: :btree
   end
 
@@ -533,7 +525,7 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.datetime "executed_at"
     t.string   "event_import_filename"
     t.string   "event_import_content_type"
-    t.integer  "event_import_size"
+    t.integer  "event_import_file_size"
     t.datetime "event_import_updated_at"
     t.string   "edit_mode"
     t.datetime "created_at"
@@ -543,9 +535,7 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.string   "user_encoding"
     t.integer  "default_library_id"
     t.integer  "default_event_category_id"
-    t.string   "event_import_id"
     t.jsonb    "attachment_data"
-    t.index ["event_import_id"], name: "index_event_import_files_on_event_import_id", using: :btree
     t.index ["parent_id"], name: "index_event_import_files_on_parent_id", using: :btree
     t.index ["user_id"], name: "index_event_import_files_on_user_id", using: :btree
   end
@@ -1590,16 +1580,11 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   end
 
   create_table "user_export_files", force: :cascade do |t|
-    t.integer  "user_id",                  null: false
+    t.integer  "user_id",         null: false
     t.datetime "executed_at"
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.string   "user_export_id"
-    t.string   "user_export_filename"
-    t.integer  "user_export_size"
-    t.string   "user_export_content_type"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
     t.jsonb    "attachment_data"
-    t.index ["user_export_id"], name: "index_user_export_files_on_user_export_id", using: :btree
     t.index ["user_id"], name: "index_user_export_files_on_user_id", using: :btree
   end
 
@@ -1667,11 +1652,8 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.string   "user_encoding"
     t.integer  "default_library_id"
     t.integer  "default_user_group_id"
-    t.string   "user_import_id"
-    t.integer  "user_import_size"
     t.jsonb    "attachment_data"
     t.index ["user_id"], name: "index_user_import_files_on_user_id", using: :btree
-    t.index ["user_import_id"], name: "index_user_import_files_on_user_import_id", using: :btree
   end
 
   create_table "user_import_results", force: :cascade do |t|
