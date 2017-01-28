@@ -55,7 +55,7 @@ describe AgentRelationshipTypesController do
 
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :show, params: { id: agent_relationship_type.id }
+        get :show, id: agent_relationship_type.id
         expect(assigns(:agent_relationship_type)).to eq(agent_relationship_type)
       end
     end
@@ -65,7 +65,7 @@ describe AgentRelationshipTypesController do
 
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :show, params: { id: agent_relationship_type.id }
+        get :show, id: agent_relationship_type.id
         expect(assigns(:agent_relationship_type)).to eq(agent_relationship_type)
       end
     end
@@ -75,7 +75,7 @@ describe AgentRelationshipTypesController do
 
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :show, params: { id: agent_relationship_type.id }
+        get :show, id: agent_relationship_type.id
         expect(assigns(:agent_relationship_type)).to eq(agent_relationship_type)
       end
     end
@@ -83,7 +83,7 @@ describe AgentRelationshipTypesController do
     describe 'When not logged in' do
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :show, params: { id: agent_relationship_type.id }
+        get :show, id: agent_relationship_type.id
         expect(assigns(:agent_relationship_type)).to eq(agent_relationship_type)
       end
     end
@@ -135,7 +135,7 @@ describe AgentRelationshipTypesController do
 
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :edit, params: { id: agent_relationship_type.id }
+        get :edit, id: agent_relationship_type.id
         expect(assigns(:agent_relationship_type)).to eq(agent_relationship_type)
       end
     end
@@ -145,7 +145,7 @@ describe AgentRelationshipTypesController do
 
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :edit, params: { id: agent_relationship_type.id }
+        get :edit, id: agent_relationship_type.id
         expect(response).to be_forbidden
       end
     end
@@ -155,7 +155,7 @@ describe AgentRelationshipTypesController do
 
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :edit, params: { id: agent_relationship_type.id }
+        get :edit, id: agent_relationship_type.id
         expect(response).to be_forbidden
       end
     end
@@ -163,7 +163,7 @@ describe AgentRelationshipTypesController do
     describe 'When not logged in' do
       it 'should not assign the requested agent_relationship_type as @agent_relationship_type' do
         agent_relationship_type = FactoryGirl.create(:agent_relationship_type)
-        get :edit, params: { id: agent_relationship_type.id }
+        get :edit, id: agent_relationship_type.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -180,24 +180,24 @@ describe AgentRelationshipTypesController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to be_valid
         end
 
         it 'redirects to the created agent' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(response).to redirect_to(assigns(:agent_relationship_type))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(assigns(:agent_relationship_type)).not_to be_valid
         end
 
         it 'should be successful' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(response).to be_success
         end
       end
@@ -208,24 +208,24 @@ describe AgentRelationshipTypesController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(assigns(:agent_relationship_type)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(response).to be_forbidden
         end
       end
@@ -236,24 +236,24 @@ describe AgentRelationshipTypesController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(assigns(:agent_relationship_type)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(response).to be_forbidden
         end
       end
@@ -262,24 +262,24 @@ describe AgentRelationshipTypesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { agent_relationship_type: @attrs }
+          post :create, agent_relationship_type: @attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_relationship_type as @agent_relationship_type' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(assigns(:agent_relationship_type)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { agent_relationship_type: @invalid_attrs }
+          post :create, agent_relationship_type: @invalid_attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -298,23 +298,23 @@ describe AgentRelationshipTypesController do
 
       describe 'with valid params' do
         it 'updates the requested agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
         end
 
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to eq(@agent_relationship_type)
         end
 
         it 'moves its position when specified' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs, move: 'lower' }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs, move: 'lower'
           expect(response).to redirect_to(agent_relationship_types_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs
           expect(response).to render_template('edit')
         end
       end
@@ -325,11 +325,11 @@ describe AgentRelationshipTypesController do
 
       describe 'with valid params' do
         it 'updates the requested agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
         end
 
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to eq(@agent_relationship_type)
           expect(response).to be_forbidden
         end
@@ -337,7 +337,7 @@ describe AgentRelationshipTypesController do
 
       describe 'with invalid params' do
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs
           expect(response).to be_forbidden
         end
       end
@@ -348,11 +348,11 @@ describe AgentRelationshipTypesController do
 
       describe 'with valid params' do
         it 'updates the requested agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
         end
 
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
           expect(assigns(:agent_relationship_type)).to eq(@agent_relationship_type)
           expect(response).to be_forbidden
         end
@@ -360,7 +360,7 @@ describe AgentRelationshipTypesController do
 
       describe 'with invalid params' do
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs
           expect(response).to be_forbidden
         end
       end
@@ -369,18 +369,18 @@ describe AgentRelationshipTypesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
         end
 
         it 'should be forbidden' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
-          put :update, params: { id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs }
+          put :update, id: @agent_relationship_type.id, agent_relationship_type: @invalid_attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -396,11 +396,11 @@ describe AgentRelationshipTypesController do
       login_fixture_admin
 
       it 'destroys the requested agent_relationship_type' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
       end
 
       it 'redirects to the agent_relationship_types list' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
         expect(response).to redirect_to(agent_relationship_types_url)
       end
     end
@@ -409,11 +409,11 @@ describe AgentRelationshipTypesController do
       login_fixture_librarian
 
       it 'destroys the requested agent_relationship_type' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
         expect(response).to be_forbidden
       end
     end
@@ -422,22 +422,22 @@ describe AgentRelationshipTypesController do
       login_fixture_user
 
       it 'destroys the requested agent_relationship_type' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested agent_relationship_type' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @agent_relationship_type.id }
+        delete :destroy, id: @agent_relationship_type.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end

@@ -46,7 +46,7 @@ describe ResourceImportFilesController do
       login_fixture_admin
 
       it 'assigns the requested resource_import_file as @resource_import_file' do
-        get :show, params: { id: resource_import_files(:resource_import_file_00003).id }
+        get :show, id: resource_import_files(:resource_import_file_00003).id
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
         expect(response).to be_success
       end
@@ -56,7 +56,7 @@ describe ResourceImportFilesController do
       login_fixture_librarian
 
       it 'assigns the requested resource_import_file as @resource_import_file' do
-        get :show, params: { id: resource_import_files(:resource_import_file_00003).id }
+        get :show, id: resource_import_files(:resource_import_file_00003).id
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
         expect(response).to be_success
       end
@@ -66,7 +66,7 @@ describe ResourceImportFilesController do
       login_fixture_user
 
       it 'assigns the requested resource_import_file as @resource_import_file' do
-        get :show, params: { id: resource_import_files(:resource_import_file_00003).id }
+        get :show, id: resource_import_files(:resource_import_file_00003).id
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
         expect(response).to be_forbidden
       end
@@ -74,7 +74,7 @@ describe ResourceImportFilesController do
 
     describe 'When not logged in' do
       it 'assigns the requested resource_import_file as @resource_import_file' do
-        get :show, params: { id: resource_import_files(:resource_import_file_00003).id }
+        get :show, id: resource_import_files(:resource_import_file_00003).id
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -129,14 +129,14 @@ describe ResourceImportFilesController do
       end
 
       it 'should create resource_import_file' do
-        post :create, params: { resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create', default_shelf_id: 1 } }
+        post :create, resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create', default_shelf_id: 1 }
         expect(assigns(:resource_import_file)).to be_valid
         assigns(:resource_import_file).user.username.should eq @user.username
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
 
       it 'should not create resource_import_file without default_shelf_id' do
-        post :create, params: { resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create' } }
+        post :create, resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create' }
         expect(assigns(:resource_import_file)).not_to be_valid
         assigns(:resource_import_file).user.username.should eq @user.username
         expect(response).to be_success
@@ -150,7 +150,7 @@ describe ResourceImportFilesController do
       end
 
       it 'should be forbidden' do
-        post :create, params: { resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv') } }
+        post :create, resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv') }
         assigns(:resource_import_file).should be_nil
         expect(response).to be_forbidden
       end
@@ -158,7 +158,7 @@ describe ResourceImportFilesController do
 
     describe 'When not logged in' do
       it 'should be redirected to new session url' do
-        post :create, params: { resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv') } }
+        post :create, resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv') }
         assigns(:resource_import_file).should be_nil
         expect(response).to redirect_to new_user_session_url
       end
@@ -171,7 +171,7 @@ describe ResourceImportFilesController do
 
       it 'assigns the requested resource_import_file as @resource_import_file' do
         resource_import_file = resource_import_files(:resource_import_file_00001)
-        get :edit, params: { id: resource_import_file.id }
+        get :edit, id: resource_import_file.id
         expect(assigns(:resource_import_file)).to eq(resource_import_file)
       end
     end
@@ -181,7 +181,7 @@ describe ResourceImportFilesController do
 
       it 'assigns the requested resource_import_file as @resource_import_file' do
         resource_import_file = resource_import_files(:resource_import_file_00001)
-        get :edit, params: { id: resource_import_file.id }
+        get :edit, id: resource_import_file.id
         expect(assigns(:resource_import_file)).to eq(resource_import_file)
       end
     end
@@ -191,7 +191,7 @@ describe ResourceImportFilesController do
 
       it 'assigns the requested resource_import_file as @resource_import_file' do
         resource_import_file = resource_import_files(:resource_import_file_00001)
-        get :edit, params: { id: resource_import_file.id }
+        get :edit, id: resource_import_file.id
         expect(response).to be_forbidden
       end
     end
@@ -199,7 +199,7 @@ describe ResourceImportFilesController do
     describe 'When not logged in' do
       it 'should not assign the requested resource_import_file as @resource_import_file' do
         resource_import_file = resource_import_files(:resource_import_file_00001)
-        get :edit, params: { id: resource_import_file.id }
+        get :edit, id: resource_import_file.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -210,7 +210,7 @@ describe ResourceImportFilesController do
       login_fixture_admin
 
       it 'should update resource_import_file' do
-        put :update, params: { id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' } }
+        put :update, id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' }
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
     end
@@ -219,7 +219,7 @@ describe ResourceImportFilesController do
       login_fixture_librarian
 
       it 'should update resource_import_file' do
-        put :update, params: { id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' } }
+        put :update, id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' }
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))
       end
     end
@@ -228,14 +228,14 @@ describe ResourceImportFilesController do
       login_fixture_user
 
       it 'should not update resource_import_file' do
-        put :update, params: { id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' } }
+        put :update, id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not update resource_import_file' do
-        put :update, params: { id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' } }
+        put :update, id: resource_import_files(:resource_import_file_00003).id, resource_import_file: { mode: 'update' }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -250,11 +250,11 @@ describe ResourceImportFilesController do
       login_fixture_admin
 
       it 'destroys the requested resource_import_file' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
       end
 
       it 'redirects to the resource_import_files list' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
         expect(response).to redirect_to(resource_import_files_url)
       end
     end
@@ -263,11 +263,11 @@ describe ResourceImportFilesController do
       login_fixture_librarian
 
       it 'destroys the requested resource_import_file' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
       end
 
       it 'redirects to the resource_import_files list' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
         expect(response).to redirect_to(resource_import_files_url)
       end
     end
@@ -276,22 +276,22 @@ describe ResourceImportFilesController do
       login_fixture_user
 
       it 'destroys the requested resource_import_file' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested resource_import_file' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @resource_import_file.id }
+        delete :destroy, id: @resource_import_file.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end

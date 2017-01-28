@@ -40,7 +40,7 @@ describe FrequenciesController do
   describe 'GET show' do
     it 'assigns the requested frequency as @frequency' do
       frequency = Frequency.create! valid_attributes
-      get :show, params: { id: frequency.id }
+      get :show, id: frequency.id
       assigns(:frequency).should eq(frequency)
     end
   end
@@ -55,13 +55,13 @@ describe FrequenciesController do
   describe 'GET edit' do
     it 'assigns the requested frequency as @frequency' do
       frequency = Frequency.create! valid_attributes
-      get :edit, params: { id: frequency.id }
+      get :edit, id: frequency.id
       assigns(:frequency).should eq(frequency)
     end
     it 'assigns the frequency even if it associates manifestation(s)' do
       frequency = FactoryGirl.create(:frequency)
       manifestation = FactoryGirl.create(:manifestation, frequency_id: frequency.id)
-      get :edit, params: { id: frequency.id }
+      get :edit, id: frequency.id
       expect(assigns(:frequency)).to eq frequency
       expect(response).to be_success
     end
@@ -71,18 +71,18 @@ describe FrequenciesController do
     describe 'with valid params' do
       it 'creates a new Frequency' do
         expect do
-          post :create, params: { frequency: valid_attributes }
+          post :create, frequency: valid_attributes
         end.to change(Frequency, :count).by(1)
       end
 
       it 'assigns a newly created frequency as @frequency' do
-        post :create, params: { frequency: valid_attributes }
+        post :create, frequency: valid_attributes
         assigns(:frequency).should be_a(Frequency)
         assigns(:frequency).should be_persisted
       end
 
       it 'redirects to the created frequency' do
-        post :create, params: { frequency: valid_attributes }
+        post :create, frequency: valid_attributes
         expect(response).to redirect_to(Frequency.last)
       end
     end
@@ -91,14 +91,14 @@ describe FrequenciesController do
       it 'assigns a newly created but unsaved frequency as @frequency' do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        post :create, params: { frequency: { name: 'test' } }
+        post :create, frequency: { name: 'test' }
         assigns(:frequency).should be_a_new(Frequency)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        post :create, params: { frequency: { name: 'test' } }
+        post :create, frequency: { name: 'test' }
         expect(response).to render_template('new')
       end
     end
@@ -113,25 +113,25 @@ describe FrequenciesController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         Frequency.any_instance.should_receive(:update_attributes).with('name' => 'test')
-        put :update, params: { id: frequency.id, frequency: { 'name' => 'test' } }
+        put :update, id: frequency.id, frequency: { 'name' => 'test' }
       end
 
       it 'assigns the requested frequency as @frequency' do
         frequency = Frequency.create! valid_attributes
-        put :update, params: { id: frequency.id, frequency: valid_attributes }
+        put :update, id: frequency.id, frequency: valid_attributes
         assigns(:frequency).should eq(frequency)
       end
 
       it 'redirects to the frequency' do
         frequency = Frequency.create! valid_attributes
-        put :update, params: { id: frequency.id, frequency: valid_attributes }
+        put :update, id: frequency.id, frequency: valid_attributes
         expect(response).to redirect_to(frequency)
       end
 
       it 'moves its position when specified' do
         frequency = Frequency.create! valid_attributes
         position = frequency.position
-        put :update, params: { id: frequency.id, move: 'higher' }
+        put :update, id: frequency.id, move: 'higher'
         expect(response).to redirect_to frequencies_url
         assigns(:frequency).reload.position.should eq position - 1
       end
@@ -142,7 +142,7 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        put :update, params: { id: frequency.id, frequency: { name: 'test' } }
+        put :update, id: frequency.id, frequency: { name: 'test' }
         assigns(:frequency).should eq(frequency)
       end
 
@@ -150,7 +150,7 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         Frequency.any_instance.stub(:save).and_return(false)
-        put :update, params: { id: frequency.id, frequency: { name: 'test' } }
+        put :update, id: frequency.id, frequency: { name: 'test' }
         expect(response).to render_template('edit')
       end
     end
@@ -160,13 +160,13 @@ describe FrequenciesController do
     it 'destroys the requested frequency' do
       frequency = Frequency.create! valid_attributes
       expect do
-        delete :destroy, params: { id: frequency.id }
+        delete :destroy, id: frequency.id
       end.to change(Frequency, :count).by(-1)
     end
 
     it 'redirects to the frequencies list' do
       frequency = Frequency.create! valid_attributes
-      delete :destroy, params: { id: frequency.id }
+      delete :destroy, id: frequency.id
       expect(response).to redirect_to(frequencies_url)
     end
   end

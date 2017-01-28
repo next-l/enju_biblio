@@ -31,25 +31,25 @@ describe ItemsController do
       end
 
       it 'assigns items as @items with acquired_from and acquired_until' do
-        get :index, params: { acquired_from: '2015-09-20', acquired_until: '2015-09-26' }
+        get :index, acquired_from: '2015-09-20', acquired_until: '2015-09-26'
         expect(assigns(:items)).to_not be_nil
         expect(assigns(:items).count).to eq 1
       end
 
       it 'assigns items as @items with acquired_from' do
-        get :index, params: { acquired_from: '2015-09-20' }
+        get :index, acquired_from: '2015-09-20'
         expect(assigns(:items)).to_not be_nil
         expect(assigns(:items).count).to eq 1
       end
 
       it 'assigns items as @items with acquired_until' do
-        get :index, params: { acquired_until: '2015-09-20' }
+        get :index, acquired_until: '2015-09-20'
         expect(assigns(:items)).to_not be_nil
         expect(assigns(:items).count).to eq 1
       end
 
       it 'should not get index with inventory_file_id' do
-        get :index, params: { inventory_file_id: 1 }
+        get :index, inventory_file_id: 1
         expect(response).to be_success
         assigns(:inventory_file).should eq InventoryFile.find(1)
         expect(assigns(:items)).to eq Item.inventory_items(assigns(:inventory_file), 'not_on_shelf').order('items.id').page(1)
@@ -65,7 +65,7 @@ describe ItemsController do
       end
 
       it 'should not get index with inventory_file_id' do
-        get :index, params: { inventory_file_id: 1 }
+        get :index, inventory_file_id: 1
         expect(response).to be_forbidden
       end
     end
@@ -77,28 +77,28 @@ describe ItemsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, agent_id: 1
         expect(response).to be_success
         assigns(:agent).should eq Agent.find(1)
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
+        get :index, manifestation_id: 1
         expect(response).to be_success
         assigns(:manifestation).should eq Manifestation.find(1)
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
       it 'should get index with shelf_id' do
-        get :index, params: { shelf_id: 1 }
+        get :index, shelf_id: 1
         expect(response).to be_success
         assigns(:shelf).should eq Shelf.find(1)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
       end
 
       it 'should not get index with inventory_file_id' do
-        get :index, params: { inventory_file_id: 1 }
+        get :index, inventory_file_id: 1
         expect(response).to redirect_to new_user_session_url
         assigns(:inventory_file).should_not be_nil
       end
@@ -114,13 +114,13 @@ describe ItemsController do
       login_fixture_admin
 
       it 'assigns the requested item as @item' do
-        get :show, params: { id: @item.id }
+        get :show, id: @item.id
         expect(assigns(:item)).to eq(@item)
       end
 
       it 'should not show missing item' do
         lambda do
-          get :show, params: { id: 'missing' }
+          get :show, id: 'missing'
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
@@ -130,7 +130,7 @@ describe ItemsController do
       login_fixture_librarian
 
       it 'assigns the requested item as @item' do
-        get :show, params: { id: @item.id }
+        get :show, id: @item.id
         expect(assigns(:item)).to eq(@item)
       end
     end
@@ -139,14 +139,14 @@ describe ItemsController do
       login_fixture_user
 
       it 'assigns the requested item as @item' do
-        get :show, params: { id: @item.id }
+        get :show, id: @item.id
         expect(assigns(:item)).to eq(@item)
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested item as @item' do
-        get :show, params: { id: @item.id }
+        get :show, id: @item.id
         expect(assigns(:item)).to eq(@item)
       end
     end
@@ -161,7 +161,7 @@ describe ItemsController do
       login_fixture_admin
 
       it 'assigns the requested item as @item' do
-        get :new, params: { manifestation_id: @manifestation.id }
+        get :new, manifestation_id: @manifestation.id
         expect(assigns(:item)).to be_valid
         expect(response).to be_success
       end
@@ -176,13 +176,13 @@ describe ItemsController do
           library.try(:shelves).to_a.each(&:destroy)
           library.destroy
         end
-        get :new, params: { manifestation_id: @manifestation.id }
+        get :new, manifestation_id: @manifestation.id
         expect(response).to redirect_to(libraries_url)
       end
 
       it 'should not get new item for series_master' do
         manifestation_serial = FactoryGirl.create(:manifestation_serial)
-        get :new, params: { manifestation_id: manifestation_serial.id }
+        get :new, manifestation_id: manifestation_serial.id
         expect(response).to redirect_to(manifestations_url(parent_id: manifestation_serial.id))
       end
     end
@@ -191,7 +191,7 @@ describe ItemsController do
       login_fixture_librarian
 
       it 'assigns the requested item as @item' do
-        get :new, params: { manifestation_id: @manifestation.id }
+        get :new, manifestation_id: @manifestation.id
         expect(assigns(:item)).to be_valid
         expect(response).to be_success
       end
@@ -201,7 +201,7 @@ describe ItemsController do
       login_fixture_user
 
       it 'should not assign the requested item as @item' do
-        get :new, params: { manifestation_id: @manifestation.id }
+        get :new, manifestation_id: @manifestation.id
         expect(assigns(:item)).to be_nil
         expect(response).to be_forbidden
       end
@@ -209,7 +209,7 @@ describe ItemsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested item as @item' do
-        get :new, params: { manifestation_id: @manifestation.id }
+        get :new, manifestation_id: @manifestation.id
         expect(assigns(:item)).to be_nil
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -222,13 +222,13 @@ describe ItemsController do
 
       it 'assigns the requested item as @item' do
         item = FactoryGirl.create(:item)
-        get :edit, params: { id: item.id }
+        get :edit, id: item.id
         expect(assigns(:item)).to eq(item)
       end
 
       it 'should not edit missing item' do
         lambda do
-          get :edit, params: { id: 'missing' }
+          get :edit, id: 'missing'
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
@@ -239,7 +239,7 @@ describe ItemsController do
 
       it 'assigns the requested item as @item' do
         item = FactoryGirl.create(:item)
-        get :edit, params: { id: item.id }
+        get :edit, id: item.id
         expect(assigns(:item)).to eq(item)
       end
     end
@@ -249,7 +249,7 @@ describe ItemsController do
 
       it 'assigns the requested item as @item' do
         item = FactoryGirl.create(:item)
-        get :edit, params: { id: item.id }
+        get :edit, id: item.id
         expect(response).to be_forbidden
       end
     end
@@ -257,7 +257,7 @@ describe ItemsController do
     describe 'When not logged in' do
       it 'should not assign the requested item as @item' do
         item = FactoryGirl.create(:item)
-        get :edit, params: { id: item.id }
+        get :edit, id: item.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -275,45 +275,45 @@ describe ItemsController do
 
       describe 'with valid params' do
         it 'assigns a newly created item as @item' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(assigns(:item)).to be_valid
         end
 
         it 'redirects to the created item' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           assigns(:item).manifestation.should_not be_nil
           expect(response).to redirect_to(item_url(assigns(:item)))
         end
 
         it 'should create a lending policy' do
           old_lending_policy_count = LendingPolicy.count
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           LendingPolicy.count.should eq old_lending_policy_count
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved item as @item' do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(assigns(:item)).to_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(response).to render_template('new')
         end
       end
 
       it 'should not create item without manifestation_id' do
         lambda do
-          post :create, params: { item: { circulation_status_id: 1 } }
+          post :create, item: { circulation_status_id: 1 }
         end.should raise_error(ActiveRecord::RecordNotFound)
         expect(assigns(:item)).to_not be_valid
         # expect(response).to be_missing
       end
 
       it 'should not create item already created' do
-        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
+        post :create, item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 }
         expect(assigns(:item)).to_not be_valid
         expect(response).to be_success
       end
@@ -324,30 +324,30 @@ describe ItemsController do
 
       describe 'with valid params' do
         it 'assigns a newly created item as @item' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(assigns(:item)).to be_valid
         end
 
         it 'redirects to the created item' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(response).to redirect_to(item_url(assigns(:item)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved item as @item' do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(assigns(:item)).to_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(response).to render_template('new')
         end
       end
 
       it 'should create reserved item' do
-        post :create, params: { item: { circulation_status_id: 1, manifestation_id: 2 } }
+        post :create, item: { circulation_status_id: 1, manifestation_id: 2 }
         expect(assigns(:item)).to be_valid
 
         expect(response).to redirect_to item_url(assigns(:item))
@@ -373,24 +373,24 @@ describe ItemsController do
 
       describe 'with valid params' do
         it 'assigns a newly created item as @item' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(assigns(:item)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved item as @item' do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(assigns(:item)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(response).to be_forbidden
         end
       end
@@ -399,24 +399,24 @@ describe ItemsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created item as @item' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(assigns(:item)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { item: @attrs }
+          post :create, item: @attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved item as @item' do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(assigns(:item)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, params: { item: @invalid_attrs }
+          post :create, item: @invalid_attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -435,22 +435,22 @@ describe ItemsController do
 
       describe 'with valid params' do
         it 'updates the requested item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
         end
 
         it 'assigns the requested item as @item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
           expect(assigns(:item)).to eq(@item)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested item as @item' do
-          put :update, params: { id: @item.id, item: @invalid_attrs }
+          put :update, id: @item.id, item: @invalid_attrs
         end
 
         it "re-renders the 'edit' template" do
-          put :update, params: { id: @item, item: @invalid_attrs }
+          put :update, id: @item, item: @invalid_attrs
           expect(response).to render_template('edit')
         end
       end
@@ -461,11 +461,11 @@ describe ItemsController do
 
       describe 'with valid params' do
         it 'updates the requested item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
         end
 
         it 'assigns the requested item as @item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
           expect(assigns(:item)).to eq(@item)
           expect(response).to redirect_to(@item)
         end
@@ -473,12 +473,12 @@ describe ItemsController do
 
       describe 'with invalid params' do
         it 'assigns the item as @item' do
-          put :update, params: { id: @item, item: @invalid_attrs }
+          put :update, id: @item, item: @invalid_attrs
           expect(assigns(:item)).to_not be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, params: { id: @item, item: @invalid_attrs }
+          put :update, id: @item, item: @invalid_attrs
           expect(response).to render_template('edit')
         end
       end
@@ -489,11 +489,11 @@ describe ItemsController do
 
       describe 'with valid params' do
         it 'updates the requested item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
         end
 
         it 'assigns the requested item as @item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
           expect(assigns(:item)).to eq(@item)
           expect(response).to be_forbidden
         end
@@ -501,7 +501,7 @@ describe ItemsController do
 
       describe 'with invalid params' do
         it 'assigns the requested item as @item' do
-          put :update, params: { id: @item.id, item: @invalid_attrs }
+          put :update, id: @item.id, item: @invalid_attrs
           expect(response).to be_forbidden
         end
       end
@@ -510,18 +510,18 @@ describe ItemsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested item' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
         end
 
         it 'should be forbidden' do
-          put :update, params: { id: @item.id, item: @attrs }
+          put :update, id: @item.id, item: @attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested item as @item' do
-          put :update, params: { id: @item.id, item: @invalid_attrs }
+          put :update, id: @item.id, item: @invalid_attrs
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -537,29 +537,29 @@ describe ItemsController do
       login_fixture_admin
 
       it 'destroys the requested item' do
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
       end
 
       it 'redirects to the items list' do
         manifestation = @item.manifestation
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
         expect(response).to redirect_to(items_url(manifestation_id: manifestation.id))
       end
 
       it 'should not destroy missing item' do
         lambda do
-          delete :destroy, params: { id: 'missing' }
+          delete :destroy, id: 'missing'
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
 
       it 'should not destroy item if not checked in' do
-        delete :destroy, params: { id: 1 }
+        delete :destroy, id: 1
         expect(response).to be_forbidden
       end
 
       it 'should not destroy a removed item' do
-        delete :destroy, params: { id: 23 }
+        delete :destroy, id: 23
         expect(response).to be_forbidden
       end
     end
@@ -568,12 +568,12 @@ describe ItemsController do
       login_fixture_librarian
 
       it 'destroys the requested item' do
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
       end
 
       it 'redirects to the items list' do
         manifestation = @item.manifestation
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
         expect(response).to redirect_to(items_url(manifestation_id: manifestation.id))
       end
     end
@@ -582,22 +582,22 @@ describe ItemsController do
       login_fixture_user
 
       it 'destroys the requested item' do
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested item' do
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
       end
 
       it 'should be forbidden' do
-        delete :destroy, params: { id: @item.id }
+        delete :destroy, id: @item.id
         expect(response).to redirect_to(new_user_session_url)
       end
     end

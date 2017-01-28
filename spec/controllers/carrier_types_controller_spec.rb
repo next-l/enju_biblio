@@ -40,7 +40,7 @@ describe CarrierTypesController do
   describe 'GET show' do
     it 'assigns the requested carrier_type as @carrier_type' do
       carrier_type = CarrierType.create! valid_attributes
-      get :show, params: { id: carrier_type.id }
+      get :show, id: carrier_type.id
       expect(assigns(:carrier_type)).to eq(carrier_type)
     end
   end
@@ -55,7 +55,7 @@ describe CarrierTypesController do
   describe 'GET edit' do
     it 'assigns the requested carrier_type as @carrier_type' do
       carrier_type = CarrierType.create! valid_attributes
-      get :edit, params: { id: carrier_type.id }
+      get :edit, id: carrier_type.id
       expect(assigns(:carrier_type)).to eq(carrier_type)
     end
   end
@@ -64,18 +64,18 @@ describe CarrierTypesController do
     describe 'with valid params' do
       it 'creates a new CarrierType' do
         expect do
-          post :create, params: { carrier_type: valid_attributes }
+          post :create, carrier_type: valid_attributes
         end.to change(CarrierType, :count).by(1)
       end
 
       it 'assigns a newly created carrier_type as @carrier_type' do
-        post :create, params: { carrier_type: valid_attributes }
+        post :create, carrier_type: valid_attributes
         expect(assigns(:carrier_type)).to be_a(CarrierType)
         expect(assigns(:carrier_type)).to be_persisted
       end
 
       it 'redirects to the created carrier_type' do
-        post :create, params: { carrier_type: valid_attributes }
+        post :create, carrier_type: valid_attributes
         expect(response).to redirect_to(CarrierType.last)
       end
     end
@@ -84,14 +84,14 @@ describe CarrierTypesController do
       it 'assigns a newly created but unsaved carrier_type as @carrier_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        post :create, params: { carrier_type: { name: 'test' } }
+        post :create, carrier_type: { name: 'test' }
         expect(assigns(:carrier_type)).to be_a_new(CarrierType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        post :create, params: { carrier_type: { name: 'test' } }
+        post :create, carrier_type: { name: 'test' }
         expect(response).to render_template('new')
       end
     end
@@ -106,25 +106,25 @@ describe CarrierTypesController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         CarrierType.any_instance.should_receive(:update_attributes).with('name' => 'test')
-        put :update, params: { id: carrier_type.id, carrier_type: { 'name' => 'test' } }
+        put :update, id: carrier_type.id, carrier_type: { 'name' => 'test' }
       end
 
       it 'assigns the requested carrier_type as @carrier_type' do
         carrier_type = CarrierType.create! valid_attributes
-        put :update, params: { id: carrier_type.id, carrier_type: valid_attributes }
+        put :update, id: carrier_type.id, carrier_type: valid_attributes
         expect(assigns(:carrier_type)).to eq(carrier_type)
       end
 
       it 'redirects to the carrier_type' do
         carrier_type = CarrierType.create! valid_attributes
-        put :update, params: { id: carrier_type.id, carrier_type: valid_attributes }
+        put :update, id: carrier_type.id, carrier_type: valid_attributes
         expect(response).to redirect_to(carrier_type)
       end
 
       it 'moves its position when specified' do
         carrier_type = CarrierType.create! valid_attributes
         position = carrier_type.position
-        put :update, params: { id: carrier_type.id, move: 'higher' }
+        put :update, id: carrier_type.id, move: 'higher'
         expect(response).to redirect_to carrier_types_url
         assigns(:carrier_type).reload.position.should eq position - 1
       end
@@ -135,7 +135,7 @@ describe CarrierTypesController do
         carrier_type = CarrierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        put :update, params: { id: carrier_type.id, carrier_type: { name: 'test' } }
+        put :update, id: carrier_type.id, carrier_type: { name: 'test' }
         expect(assigns(:carrier_type)).to eq(carrier_type)
       end
 
@@ -143,7 +143,7 @@ describe CarrierTypesController do
         carrier_type = CarrierType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         CarrierType.any_instance.stub(:save).and_return(false)
-        put :update, params: { id: carrier_type.id, carrier_type: { name: 'test' } }
+        put :update, id: carrier_type.id, carrier_type: { name: 'test' }
         expect(response).to render_template('edit')
       end
     end
@@ -153,13 +153,13 @@ describe CarrierTypesController do
     it 'destroys the requested carrier_type' do
       carrier_type = CarrierType.create! valid_attributes
       expect do
-        delete :destroy, params: { id: carrier_type.id }
+        delete :destroy, id: carrier_type.id
       end.to change(CarrierType, :count).by(-1)
     end
 
     it 'redirects to the carrier_types list' do
       carrier_type = CarrierType.create! valid_attributes
-      delete :destroy, params: { id: carrier_type.id }
+      delete :destroy, id: carrier_type.id
       expect(response).to redirect_to(carrier_types_url)
     end
   end
