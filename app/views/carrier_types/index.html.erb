@@ -22,7 +22,10 @@
         <%= move_position(carrier_type) -%>
       <%- end -%>
     </td>
-    <td><%= carrier_type.name -%></td>
+    <td>
+      <%= image_tag(carrier_type_path(carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: carrier_type.display_name.localize) %>
+      <%= carrier_type.name -%>
+    </td>
     <td>
       <%= link_to carrier_type.display_name.localize, carrier_type -%>
       <br />
