@@ -568,6 +568,7 @@ class Manifestation < ActiveRecord::Base
       header += %w(
         bookstore
         budget_type
+        total_checkouts
       )
     end
     header += %w(
@@ -652,6 +653,7 @@ class Manifestation < ActiveRecord::Base
         when :Administrator, :Librarian
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
+          item_lines << Checkout.where(:item_id => i.id).size
         end
         item_lines << i.circulation_status.try(:name)
         item_lines << i.shelf.name
