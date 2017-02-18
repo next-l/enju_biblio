@@ -23,14 +23,12 @@ end
 # Table name: picture_files
 #
 #  id                      :integer          not null, primary key
-#  picture_attachable_id   :integer
-#  picture_attachable_type :string
-#  content_type            :string
+#  picture_attachable_id   :uuid             not null
+#  picture_attachable_type :string           not null
 #  title                   :text
-#  thumbnail               :string
 #  position                :integer
-#  created_at              :datetime
-#  updated_at              :datetime
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
 #  picture_meta            :text
 #  picture_fingerprint     :string
 #  image_data              :jsonb

@@ -1142,14 +1142,12 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   end
 
   create_table "picture_files", force: :cascade do |t|
-    t.integer  "picture_attachable_id"
-    t.string   "picture_attachable_type"
-    t.string   "content_type"
+    t.uuid     "picture_attachable_id",   null: false
+    t.string   "picture_attachable_type", null: false
     t.text     "title"
-    t.string   "thumbnail"
     t.integer  "position"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
     t.text     "picture_meta"
     t.string   "picture_fingerprint"
     t.jsonb    "image_data"
