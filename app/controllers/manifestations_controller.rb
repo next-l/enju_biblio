@@ -571,6 +571,16 @@ class ManifestationsController < ApplicationController
       library_list = options[:library_adv].split.uniq.join(' OR ')
       query = "#{query} library_sm:(#{library_list})"
     end
+    shelf_list = []
+    options.keys.grep(/_shelf\Z/).each do |library_shelf|
+      library_name = library_shelf.sub(/_shelf\Z/, "")
+      options[library_shelf].each do |shelf|
+        shelf_list << "#{library_name}_#{shelf}"
+      end
+    end
+    unless shelf_list.blank?
+      query += " shelf_sm:(#{shelf_list.join(" OR ")})"
+    end
 
     #unless options[:language].blank?
     #  query = "#{query} language_sm:#{options[:language]}"
