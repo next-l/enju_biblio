@@ -576,9 +576,12 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} language_sm:#{options[:language]}"
     #end
 
-    #unless options[:subject].blank?
-    #  query = "#{query} subject_sm:#{options[:subject]}"
-    #end
+    unless options[:subject].blank?
+      query = "#{query} subject_sm:#{options[:subject]}"
+    end
+    unless options[:subject_text].blank?
+      query = "#{query} subject_text:#{options[:subject_text]}"
+    end
     if options[:classification].present? and options[:classification_type].present?
       classification_type = ClassificationType.find(options[:classification_type]).name
       query = "#{query} classification_sm:#{classification_type}_#{options[:classification]}*"

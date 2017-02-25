@@ -206,6 +206,16 @@ describe ManifestationsController do
         expect(assigns(:query)).not_to match /classification/
       end
 
+      it 'should show manifestation with subject', solr: true do
+        subject = FactoryGirl.create(:subject, term: 'test_subject')
+        manifestation = FactoryGirl.create(:manifestation)
+        manifestation.subjects << subject
+        get :index, subject_text: 'test_subject'
+        expect(response).to be_success
+        expect(assigns(:manifestations)).not_to be_empty
+        expect(assigns(:manifestations).first).to eq manifestation
+      end
+
       it 'should accept per_page params' do
         get :index, per_page: 3
         expect(assigns(:manifestations).count).to eq 3
