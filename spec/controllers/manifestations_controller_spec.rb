@@ -190,7 +190,7 @@ describe ManifestationsController do
         shelf = FactoryGirl.create(:shelf)
         library = shelf.library
         item = FactoryGirl.create(:item, shelf: shelf)
-        get :index, "#{library.name}_shelf": [shelf.name]
+        get :index, :"#{library.name}_shelf" => [shelf.name]
         expect(response).to be_success
         expect(assigns(:manifestations).size).to eq 1
         expect(assigns(:manifestations).first).to eq item.manifestation
