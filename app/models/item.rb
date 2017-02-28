@@ -1,7 +1,7 @@
 class Item < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
-  scope :on_shelf, -> { where('shelf_id != 1') }
-  scope :on_web, -> { where(shelf_id: 1) }
+  scope :on_shelf, -> { joins(:shelf).where.not('shelves.name = ?', 'web') }
+  scope :on_web, -> { joins(:shelf).where('shelves.name = ?', 'web') }
   scope :available_for, -> user {
     unless user.try(:has_role?, 'Librarian')
       on_shelf

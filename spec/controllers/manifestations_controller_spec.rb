@@ -297,18 +297,18 @@ describe ManifestationsController do
     describe 'When not logged in' do
       it 'assigns the requested manifestation as @manifestation' do
         get :show, params: {id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00001)
       end
 
       it 'guest should show manifestation mods template' do
-        get :show, params: { id: 22, format: 'mods' }
-        expect(assigns(:manifestation)).to eq Manifestation.find(22)
+        get :show, params: { id: manifestations(:manifestation_00022).id, format: 'mods' }
+        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00022)
         expect(response).to render_template('manifestations/show')
       end
 
       it 'should show manifestation rdf template' do
-        get :show, params: { id: 22, format: 'rdf' }
-        expect(assigns(:manifestation)).to eq Manifestation.find(22)
+        get :show, params: { id: manifestations(:manifestation_00022).id, format: 'rdf' }
+        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00022)
         expect(response).to render_template('manifestations/show')
       end
 
@@ -363,7 +363,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with expression_id' do
-        get :new, params: { expression_id: 1 }
+        get :new, params: { expression_id: manifestations(:manifestation_00001).id }
         expect(response).to be_success
       end
     end
@@ -382,7 +382,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with expression_id' do
-        get :new, params: { expression_id: 1 }
+        get :new, params: { expression_id: manifestations(:manifestation_00001).id }
         expect(response).to be_success
       end
 

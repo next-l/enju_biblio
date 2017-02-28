@@ -265,7 +265,7 @@ describe ItemsController do
   describe 'POST create' do
     before(:each) do
       manifestation = FactoryGirl.create(:manifestation)
-      @attrs = FactoryGirl.attributes_for(:item, manifestation_id: manifestation.id)
+      @attrs = FactoryGirl.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: shelves(:shelf_00002).id)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
 
