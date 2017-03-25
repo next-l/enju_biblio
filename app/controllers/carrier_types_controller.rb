@@ -1,5 +1,5 @@
 class CarrierTypesController < ApplicationController
-  before_action :set_carrier_type, only: [:show, :edit, :update, :destroy]
+  before_action :set_carrier_type, only: [:edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :prepare_options, only: [:new, :edit]
 
@@ -17,6 +17,10 @@ class CarrierTypesController < ApplicationController
   # GET /carrier_types/1
   # GET /carrier_types/1.json
   def show
+    @carrier_type = CarrierType.find(params[:id])
+    unless params[:format] == 'download'
+      authorize @carrier_type
+    end
     if @carrier_type.attachment.path
       if ENV['ENJU_STORAGE'] == 's3'
         file = Faraday.get(@carrier_type.attachment.expiring_url).body.force_encoding('UTF-8')
