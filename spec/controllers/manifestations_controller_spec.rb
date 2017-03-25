@@ -261,6 +261,15 @@ describe ManifestationsController do
         expect(manifestations).not_to be_blank
         expect(manifestations.map{|e| e.id }).to include periodical.id
       end
+
+      describe "with render_views" do
+        render_views
+        it "should accept query & language parameters" do
+          get :index, query: "test"
+          puts response.body
+          expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&query=test"
+        end
+      end
     end
   end
 

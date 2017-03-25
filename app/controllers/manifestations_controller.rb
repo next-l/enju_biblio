@@ -854,7 +854,7 @@ class ManifestationsController < ApplicationController
   end
 
   def filtered_params
-    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page])
+    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page, :query])
   end
 
   helper_method :filtered_params
