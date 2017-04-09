@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "enju_seed", "~> 0.3.0.beta.3"
   s.add_dependency "marc"
-  s.add_dependency "paper_trail", "~> 6.0"
+  s.add_dependency "paper_trail", "~> 7.0"
   s.add_dependency "validates_timeliness", "~> 4.0"
   s.add_dependency "simple_form", "~> 3.4"
   s.add_dependency "dynamic_form"
