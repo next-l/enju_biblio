@@ -269,6 +269,12 @@ describe ManifestationsController do
           puts response.body
           expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&query=test"
         end
+
+        it "should accept facets and query parameters in sort_by menu" do
+          get :index, query: "test", carrier_type: "volume"
+          expect(response.body).to have_selector "div.right input[type=hidden][name=query][value=test]", visible: false
+          expect(response.body).to have_selector "div.right input[type=hidden][name=carrier_type][value=volume]", visible: false
+        end
       end
     end
   end

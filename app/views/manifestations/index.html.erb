@@ -61,6 +61,9 @@
               t('page.sort_criteria.title_desc')].join(" : ") => 'title:desc',
           }, selected: filtered_params[:sort_by] || 'created_at:desc') -%>
           <%= hidden_field_tag 'query', @query -%>
+          <% [ :reservable, :carrier_type, :library, :language, :pub_year ].each do |p| -%>
+            <%= hidden_field_tag p, filtered_params[p] if filtered_params[p] -%>
+          <% end -%>
           <%= submit_tag t('page.show') -%><br />
         </p>
       <%- end -%>
