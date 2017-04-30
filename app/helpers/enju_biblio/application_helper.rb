@@ -4,18 +4,7 @@ module EnjuBiblio
     include AgentsHelper
     include PictureFilesHelper
     def form_icon(carrier_type)
-      case carrier_type.name
-      when 'volume'
-        image_tag('icons/book.png', size: '16x16', alt: carrier_type.display_name)
-      when 'audio_disc'
-        image_tag('icons/cd.png', size: '16x16', alt: carrier_type.display_name)
-      when 'videodisc'
-        image_tag('icons/dvd.png', size: '16x16', alt: carrier_type.display_name)
-      when 'online_resource'
-        image_tag('icons/monitor.png', size: '16x16', alt: carrier_type.display_name)
-      else
-        image_tag('icons/help.png', size: '16x16', alt: t('page.unknown'))
-      end
+      image_tag(carrier_type_path(carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: carrier_type.display_name.localize)
     rescue NoMethodError
       image_tag('icons/help.png', size: '16x16', alt: t('page.unknown'))
     end
