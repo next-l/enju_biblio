@@ -2,6 +2,7 @@ class CarrierTypesController < ApplicationController
   before_action :set_carrier_type, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :prepare_options, only: [:new, :edit]
+  skip_after_action :verify_authorized
 
   # GET /carrier_types
   # GET /carrier_types.json
