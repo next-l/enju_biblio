@@ -29,6 +29,7 @@ namespace :enju_biblio do
     Rake::Task['statesman:backfill_most_recent'].invoke('ImportRequest')
     Rake::Task['statesman:backfill_most_recent'].invoke('ResourceExportFile')
     Rake::Task['statesman:backfill_most_recent'].invoke('ResourceImportFile')
+    update_carrier_type
     puts 'enju_biblio: The upgrade completed successfully.'
   end
 end

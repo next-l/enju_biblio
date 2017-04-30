@@ -10,17 +10,45 @@ def update_carrier_type
 
     case line[1]["name"]
     when "volume"
-    carrier_type = CarrierType.where(name: 'print').first
-    carrier_type.update_attributes!(line[1]) if carrier_type
+      carrier_type = CarrierType.where(name: 'print').first
+      carrier_type.update_attributes!(line[1]) if carrier_type
     when "audio_disc"
-    carrier_type = CarrierType.where(name: 'cd').first
-    carrier_type.update_attributes!(line[1]) if carrier_type
+      carrier_type = CarrierType.where(name: 'cd').first
+      carrier_type.update_attributes!(line[1]) if carrier_type
     when "videodisc"
-    carrier_type = CarrierType.where(name: 'dvd').first
-    carrier_type.update_attributes!(line[1]) if carrier_type
+      carrier_type = CarrierType.where(name: 'dvd').first
+      carrier_type.update_attributes!(line[1]) if carrier_type
     when "online_resource"
-    carrier_type = CarrierType.where(name: 'file').first
-    carrier_type.update_attributes!(line[1]) if carrier_type
+      carrier_type = CarrierType.where(name: 'file').first
+      carrier_type.update_attributes!(line[1]) if carrier_type
+    end
+
+    puts line[1]["name"]
+    case line[1]["name"]
+    when "volume"
+      carrier_type = CarrierType.find_by(name: 'volume')
+      if carrier_type
+        carrier_type.attachment = File.open("#{File.dirname(__FILE__)}/../../app/assets/images/icons/book.png")
+        carrier_type.save!
+      end
+    when "audio_disc"
+      carrier_type = CarrierType.find_by(name: 'audio_disc')
+      if carrier_type
+        carrier_type.attachment = File.open("#{File.dirname(__FILE__)}/../../app/assets/images/icons/cd.png")
+        carrier_type.save!
+      end
+    when "videodisc"
+      carrier_type = CarrierType.find_by(name: 'videodisc')
+      if carrier_type
+        carrier_type.attachment = File.open("#{File.dirname(__FILE__)}/../../app/assets/images/icons/dvd.png")
+        carrier_type.save!
+      end
+    when "online_resource"
+      carrier_type = CarrierType.find_by(name: 'online_resource')
+      if carrier_type
+        carrier_type.attachment = File.open("#{File.dirname(__FILE__)}/../../app/assets/images/icons/monitor.png")
+        carrier_type.save!
+      end
     end
   end
 end
