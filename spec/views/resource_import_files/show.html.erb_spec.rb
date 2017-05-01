@@ -8,7 +8,7 @@ describe "resource_import_files/show" do
     assign(:resource_import_file, file)
     assign(:resource_import_results, 
       Kaminari.paginate_array(file.resource_import_results).page(1))
-    admin = User.find('enjuadmin')
+    admin = User.find_by(username: 'enjuadmin')
     view.stub(:current_user).and_return(admin)
   end
 

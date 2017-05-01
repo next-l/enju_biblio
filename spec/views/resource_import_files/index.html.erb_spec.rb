@@ -5,7 +5,7 @@ describe "resource_import_files/index" do
 
   before(:each) do
     assign(:resource_import_files, ResourceImportFile.page(1))
-    admin = User.find('enjuadmin')
+    admin = User.find_by(username: 'enjuadmin')
     view.stub(:current_resource).and_return(admin)
   end
 

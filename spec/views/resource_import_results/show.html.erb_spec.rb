@@ -5,7 +5,7 @@ describe "resource_import_results/show" do
 
   before(:each) do
     @resource_import_result = resource_import_results(:one)
-    admin = User.find('enjuadmin')
+    admin = User.find_by(username: 'enjuadmin')
     view.stub(:current_user).and_return(admin)
   end
 
