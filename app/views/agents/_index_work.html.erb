@@ -34,8 +34,8 @@
   <%- @agents.each do |agent| -%>
     <tr class="line<%= cycle("0", "1") -%>">
       <td><%= link_to agent.full_name, agent -%></td>
-      <td><%= work.created(agent).create_type.display_name.localize if params[:mode] != 'add' and work.created(agent).try(:create_type) -%></td>
-      <td><%= agent.agent_type.display_name.localize -%></td>
+      <td><%= work.created(agent).create_type.display_name if params[:mode] != 'add' and work.created(agent).try(:create_type) -%></td>
+      <td><%= agent.agent_type.display_name -%></td>
       <td>
         <%- if policy(agent).destroy? -%>
           <%- if params[:mode] == 'add' -%>
