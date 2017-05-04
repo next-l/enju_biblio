@@ -1,9 +1,0 @@
-#history
-  ul.list-group
-    - manifestation.versions.reverse.each_with_index do |version, i|
-      li.list-group-item
-        = link_to l(version.created_at), manifestation_path(manifestation, version_id: version.id)
-        - if i == 0
-          |  (
-          = t('page.current_version')
-          | ) 

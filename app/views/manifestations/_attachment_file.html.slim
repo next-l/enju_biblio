@@ -1,7 +1,0 @@
-- if policy(manifestation).show? && manifestation.attachment
-  tr
-    td
-      = t('manifestation.attachment_file')
-      | :
-    td
-      = link_to manifestation.attachment.metadata['filename'], manifestation_path(manifestation, format: :download)

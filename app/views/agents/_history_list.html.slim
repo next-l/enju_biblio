@@ -1,9 +1,0 @@
-#history
-  ul.list-group
-    - @agent.versions.reverse.each_with_index do |version, i|
-      li.list-group-item
-        = link_to l(version.created_at), agent_path(@agent, version_id: version.id)
-        - if i == 0
-          |  (
-          = t('page.current_version')
-          | ) 
