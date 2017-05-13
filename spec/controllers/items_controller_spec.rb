@@ -92,7 +92,7 @@ describe ItemsController do
       it 'should get index with shelf_id' do
         get :index, params: { shelf_id: shelves(:shelf_00001).id }
         expect(response).to be_success
-        assigns(:shelf).should eq Shelf.find(1)
+        assigns(:shelf).name.should eq 'web'
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
       end
 

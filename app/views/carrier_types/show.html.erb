@@ -15,7 +15,7 @@
 
 <p>
   <strong><%= t('page.file') -%>:</strong>
-  <%= link_to @carrier_type.attachment_file_name, carrier_type_path(@carrier_type, format: :download, size: 'thumb') -%><br />
+  <%= link_to @carrier_type.attachment.metadata['filename'], carrier_type_path(@carrier_type, format: :download, size: 'thumb') -%><br />
 </p>
 
 <% if defined?(EnjuCirculation) %>
