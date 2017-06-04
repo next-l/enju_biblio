@@ -4,9 +4,9 @@ appraise "rails-4.2" do
 end
 
 appraise "rails-5.0" do
-  gem "rails", "~> 5.0.2"
+  gem "rails", "~> 5.0.3"
   gem 'statesman', '~> 2.0'
-  gem 'sinatra', '~> 2.0.0.rc2'
+  gem 'sinatra', '~> 2.0.0'
   gem 'activemodel-serializers-xml'
   gem 'rails-controller-testing'
 end
