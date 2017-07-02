@@ -10,6 +10,7 @@ require 'nkf'
 require 'cocoon'
 require 'shrine'
 require 'image_processing/mini_magick'
+require 'erubis'
 begin
   require 'charlock_holmes/string'
 rescue LoadError
