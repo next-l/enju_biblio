@@ -15,7 +15,10 @@
 
 <p>
   <strong><%= t('page.file') -%>:</strong>
-  <%= link_to @carrier_type.attachment_file_name, carrier_type_path(@carrier_type, format: :download, size: 'thumb') -%><br />
+  <%= link_to carrier_type_path(@carrier_type, format: :download) do -%>
+    <%= image_tag(carrier_type_path(@carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: @carrier_type.display_name.localize) %>
+    <%= @carrier_type.attachment_file_name %>
+  <% end %>
 </p>
 
 <% if defined?(EnjuCirculation) %>
