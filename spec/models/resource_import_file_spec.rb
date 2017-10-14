@@ -263,6 +263,21 @@ resource_import_file_test_edition	2	Revised Ed.
         expect(manifestation.edition_string).to eq "Revised Ed."
       end
     end
+    describe "when it contains transcription fields" do
+      it "should be imported" do
+        import_file = <<-EOF
+original_title	title_transcription
+resource_import_file_test_transcription	transcription
+        EOF
+        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
+        file.user = users(:admin)
+        old_manifestations_count = Manifestation.count
+        result = file.import_start
+        expect(Manifestation.count).to eq old_manifestations_count + 1
+        manifestation = Manifestation.all.find{|m| m.original_title == "resource_import_file_test_transcription" }
+        expect(manifestation.title_transcription).to eq "transcription"
+      end
+    end
   end
 
   describe "when its mode is 'update'" do
