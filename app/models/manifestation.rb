@@ -542,6 +542,8 @@ class Manifestation < ActiveRecord::Base
       extent
       dimensions
       carrier_type
+      edition
+      edition_string
     )
 
     header += IdentifierType.order(:position).pluck(:name)
@@ -615,6 +617,8 @@ class Manifestation < ActiveRecord::Base
         item_lines << extent
         item_lines << dimensions
         item_lines << carrier_type.name
+        item_lines << edition
+        item_lines << edition_string
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
           if identifier_contents(identifier_type.to_sym).first
@@ -692,6 +696,8 @@ class Manifestation < ActiveRecord::Base
       line << extent
       line << dimensions
       line << carrier_type.name
+      line << edition
+      line << edition_string
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
         if identifier_contents(identifier_type.to_sym).first

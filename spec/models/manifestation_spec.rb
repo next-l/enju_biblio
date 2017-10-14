@@ -240,6 +240,17 @@ describe Manifestation, :solr => true do
       csv["dimensions"].compact.should_not be_empty
     end
 
+    it "should export edition fields" do
+      manifestation = FactoryGirl.create(:manifestation, edition: 2, edition_string: "Revised Ed.")
+      lines = Manifestation.export
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["edition"].compact).not_to be_empty
+      expect(csv["edition_string"].compact).not_to be_empty
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      expect(m["edition"]).to eq "2"
+      expect(m["edition_string"]).to eq "Revised Ed."
+    end
+
     it "should respect the role of the user" do
       FactoryGirl.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
       lines = Manifestation.export
