@@ -246,6 +246,23 @@ resource_import_file_test1	007.6	note for the item.
         expect(file.resource_import_results.last.item.note).to eq "note for the item."
       end
     end
+
+    describe "when it contains edition fields" do
+      it "should be imported" do
+        import_file = <<-EOF
+original_title	edition	edition_string
+resource_import_file_test_edition	2	Revised Ed.
+        EOF
+        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
+        file.user = users(:admin)
+        old_manifestations_count = Manifestation.count
+        result = file.import_start
+        expect(Manifestation.count).to eq old_manifestations_count + 1
+        manifestation = Manifestation.all.find{|m| m.original_title == "resource_import_file_test_edition" }
+        expect(manifestation.edition).to eq 2
+        expect(manifestation.edition_string).to eq "Revised Ed."
+      end
+    end
   end
 
   describe "when its mode is 'update'" do
