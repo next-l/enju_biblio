@@ -266,7 +266,6 @@ describe ManifestationsController do
         render_views
         it "should accept query & language parameters" do
           get :index, query: "test"
-          puts response.body
           expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&query=test"
         end
 
