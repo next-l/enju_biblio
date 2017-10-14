@@ -250,6 +250,14 @@ describe Manifestation, :solr => true do
       expect(m["edition"]).to eq "2"
       expect(m["edition_string"]).to eq "Revised Ed."
     end
+    it "should export title_transcription fields" do
+      manifestation = FactoryGirl.create(:manifestation, title_transcription: "Transcripted title")
+      lines = Manifestation.export
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["title_transcription"].compact).not_to be_empty
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      expect(m["title_transcription"]).to eq "Transcripted title"
+    end
 
     it "should respect the role of the user" do
       FactoryGirl.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)

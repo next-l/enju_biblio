@@ -528,6 +528,7 @@ class Manifestation < ActiveRecord::Base
     header = %w(
       manifestation_id
       original_title
+      title_transcription
       creator
       contributor
       publisher
@@ -591,6 +592,7 @@ class Manifestation < ActiveRecord::Base
         item_lines = []
         item_lines << id
         item_lines << original_title
+        item_lines << title_transcription
         if creators.exists?
           item_lines << creators.pluck(:full_name).join("//")
         else
@@ -670,6 +672,7 @@ class Manifestation < ActiveRecord::Base
       line = []
       line << id
       line << original_title
+      line << title_transcription
       if creators.exists?
         line << creators.pluck(:full_name).join("//")
       else
