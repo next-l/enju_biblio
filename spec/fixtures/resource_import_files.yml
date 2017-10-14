@@ -9,7 +9,7 @@ resource_import_file_00002:
 resource_import_file_00003:
   id: 3
   user_id: 1
-  default_shelf_id: 1
+  default_shelf_id: 7b7d18f4-586f-4349-8422-a2dbb2e6084c
 
 # == Schema Information
 #
