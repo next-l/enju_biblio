@@ -163,7 +163,7 @@ describe PictureFilesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 1, image: fixture_file_upload('/../../examples/spinner.gif', 'image/gif') }
+      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 'a3aec5ab-3e6a-4eea-b95d-bd691a0e8ab6', image: fixture_file_upload('/../../examples/spinner.gif', 'image/gif') }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 
@@ -281,7 +281,7 @@ describe PictureFilesController do
   describe 'PUT update' do
     before(:each) do
       @picture_file = picture_files(:picture_file_00001)
-      @attrs = { picture_attachable_id: '1', picture_attachable_type: 'Manifestation' }
+      @attrs = { picture_attachable_id: '1ff5b88a-1964-4db0-acb3-ae1d9e3a307e', picture_attachable_type: 'Manifestation' }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 
