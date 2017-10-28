@@ -10,6 +10,7 @@ namespace :enju_biblio do
     Dir.glob(Rails.root.to_s + '/db/fixtures/enju_biblio/*.yml').each do |file|
       ActiveRecord::FixtureSet.create_fixtures('db/fixtures/enju_biblio', File.basename(file, '.*'))
     end
+    update_carrier_type
   end
 
   desc "import manifestations and items from a TSV file"

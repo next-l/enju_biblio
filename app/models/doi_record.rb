@@ -8,6 +8,7 @@ end
 #
 #  id                  :integer          not null, primary key
 #  body                :string           not null
+#  display_body        :string           not null
 #  registration_agency :string
 #  manifestation_id    :uuid
 #  source              :string

@@ -1,9 +1,0 @@
-h4
-  = t('activerecord.models.carrier_type')
-ul.list-group
-  - @carrier_type_facet.each do |facet|
-    li.list-group-item
-      = carrier_type_facet(facet)
-    - if params[:carrier_type]
-      li.list-group-item
-        = link_to t('page.remove_this_facet'), url_for(params.permit.merge(carrier_type: nil, page: nil, view: nil, only_path: true))

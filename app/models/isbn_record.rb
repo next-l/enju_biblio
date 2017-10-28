@@ -27,11 +27,10 @@ end
 #
 # Table name: isbn_records
 #
-#  id               :integer          not null, primary key
-#  body             :string           not null
-#  isbn_type        :string
-#  source           :string
-#  manifestation_id :uuid
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id         :integer          not null, primary key
+#  body       :string           not null
+#  isbn_type  :string
+#  source     :string
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
 #

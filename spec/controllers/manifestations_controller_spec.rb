@@ -181,7 +181,7 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with library 2 or 3', solr: true do
-        get :index, params: { library_adv: %w(hachioji kamata) }
+        get :index, params: { library_adv: %w[hachioji kamata] }
         expect(response).to be_success
         expect(assigns(:manifestations).size).to eq 2
       end
@@ -249,7 +249,7 @@ describe ManifestationsController do
       login_fixture_admin
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: {id: manifestations(:manifestation_00001).id }
+        get :show, params: { id: manifestations(:manifestation_00001).id }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
     end
@@ -258,7 +258,7 @@ describe ManifestationsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: {id: manifestations(:manifestation_00001).id }
+        get :show, params: { id: manifestations(:manifestation_00001).id }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
@@ -279,7 +279,7 @@ describe ManifestationsController do
       login_fixture_user
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: {id: manifestations(:manifestation_00001).id }
+        get :show, params: { id: manifestations(:manifestation_00001).id }
         expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
@@ -296,7 +296,7 @@ describe ManifestationsController do
 
     describe 'When not logged in' do
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: {id: manifestations(:manifestation_00001).id }
+        get :show, params: { id: manifestations(:manifestation_00001).id }
         expect(assigns(:manifestation)).to eq manifestations(:manifestation_00001)
       end
 
@@ -767,12 +767,12 @@ describe ManifestationsController do
       end
 
       it 'should not destroy the reserved manifestation' do
-        delete :destroy, params: {id: manifestations(:manifestation_00002).id }
+        delete :destroy, params: { id: manifestations(:manifestation_00002).id }
         expect(response).to be_forbidden
       end
 
       it 'should not destroy manifestation contains items' do
-        delete :destroy, params: {id: manifestations(:manifestation_00001).id }
+        delete :destroy, params: { id: manifestations(:manifestation_00001).id }
         expect(response).to be_forbidden
       end
 

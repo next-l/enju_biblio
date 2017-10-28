@@ -79,7 +79,7 @@ module EnjuBiblio
     end
 
     def library_facet(current_libraries, facet)
-      library = Library.where(name: facet.value).select([:name, :display_name_translations]).first
+      library = Library.find_by(name: facet.value)
       return nil unless library
       current = true if current_libraries.include?(library.name)
       content_tag :li, class: 'list-group-item' do

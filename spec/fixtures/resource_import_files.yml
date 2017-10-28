@@ -9,7 +9,7 @@ resource_import_file_00002:
 resource_import_file_00003:
   id: 3
   user_id: 1
-  default_shelf_id: 1
+  default_shelf_id: a3aec5ab-3e6a-4eea-b95d-bd691a0e8ab6
 
 # == Schema Information
 #
@@ -25,6 +25,6 @@ resource_import_file_00003:
 #  resource_import_fingerprint :string
 #  error_message               :text
 #  user_encoding               :string
-#  default_shelf_id            :integer
+#  default_shelf_id            :uuid
 #  attachment_data             :jsonb
 #

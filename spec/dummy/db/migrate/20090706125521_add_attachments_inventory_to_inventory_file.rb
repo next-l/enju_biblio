@@ -1,4 +1,4 @@
-class AddAttachmentsInventoryToInventoryFile < ActiveRecord::Migration
+class AddAttachmentsInventoryToInventoryFile < ActiveRecord::Migration[5.0]
   def self.up
     add_column :inventory_files, :inventory_filename, :string
     add_column :inventory_files, :inventory_content_type, :string
