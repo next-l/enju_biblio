@@ -124,9 +124,9 @@ describe ManifestationsController do
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
+        get :index, params: { manifestation_id: manifestations(:manifestation_00001) }
         expect(response).to be_success
-        expect(assigns(:manifestation)).to eq Manifestation.find(1)
+        expect(assigns(:manifestation)).to eq manifestations.(:manifestation_00001))
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
       end
 
@@ -250,7 +250,7 @@ describe ManifestationsController do
 
       it 'assigns the requested manifestation as @manifestation' do
         get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        expect(assigns(:manifestation)).to eq(Manifestation.find('1ff5b88a-1964-4db0-acb3-ae1d9e3a307e'))
       end
     end
 
@@ -259,12 +259,12 @@ describe ManifestationsController do
 
       it 'assigns the requested manifestation as @manifestation' do
         get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        expect(assigns(:manifestation)).to eq(Manifestation.find('1ff5b88a-1964-4db0-acb3-ae1d9e3a307e'))
       end
 
       it 'should show manifestation with agent who does not produce it' do
-        get :show, params: { id: 3, agent_id: 3 }
-        expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(3)
+        get :show, params: { id: manifestations(:manifestation_00003).id, agent_id: 3 }
+        expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(manifestations(:manifestation_00003).id)
         expect(response).to be_success
       end
 
@@ -280,7 +280,7 @@ describe ManifestationsController do
 
       it 'assigns the requested manifestation as @manifestation' do
         get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestations(:manifestation_00001).id))
       end
 
       it 'should send manifestation detail email' do

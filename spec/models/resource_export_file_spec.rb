@@ -1,9 +1,9 @@
 require 'rails_helper'
-  
+
 describe ResourceExportFile do
   fixtures :all
-  
-  it "should export in background" do
+
+  it 'should export in background' do
     message_count = Message.count
     file = ResourceExportFile.new
     file.user = users(:admin)
@@ -13,7 +13,7 @@ describe ResourceExportFile do
     Message.order(:id).last.subject.should eq 'エクスポートが完了しました'
   end
 
-  it "should respect the role of the user" do
+  it 'should respect the role of the user' do
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
     export_file.save!
@@ -21,17 +21,16 @@ describe ResourceExportFile do
     file = export_file.attachment.download
     lines = File.open(file.path).readlines.map(&:chomp)
     columns = lines.first.split(/\t/)
-    expect(columns).to include "bookstore"
-    expect(columns).to include "budget_type"
-    expect(columns).to include "item_price"
+    expect(columns).to include 'bookstore'
+    expect(columns).to include 'budget_type'
+    expect(columns).to include 'item_price'
   end
 
-  context "NCID export" do
-    it "should export NCID value" do
+  context 'NCID export' do
+    it 'should export NCID value' do
       manifestation = FactoryGirl.create(:manifestation)
-      ncid = IdentifierType.where(name: "ncid").first
-      identifier = FactoryGirl.create(:identifier, identifier_type: ncid, body: "BA91833159")
-      manifestation.identifiers << identifier
+      ncid = IdentifierType.where(name: 'ncid').first
+      manifestation.ncid_record = NcidRecord.new(body: 'BA91833159')
       manifestation.save!
       export_file = ResourceExportFile.new
       export_file.user = users(:admin)
@@ -40,8 +39,8 @@ describe ResourceExportFile do
       file = export_file.attachment.download
       expect(file).to be_truthy
       lines = File.open(file.path).readlines.map(&:chomp)
-      expect(lines.first.split(/\t/)).to include "ncid"
-      expect(lines.last.split(/\t/)).to include "BA91833159"
+      expect(lines.first.split(/\t/)).to include 'ncid'
+      expect(lines.last.split(/\t/)).to include 'BA91833159'
     end
   end
 end

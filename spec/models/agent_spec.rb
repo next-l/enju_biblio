@@ -1,69 +1,69 @@
-# -*- encoding: utf-8 -*-
+
 require 'rails_helper'
 
 describe Agent do
-  #pending "add some examples to (or delete) #{__FILE__}"
+  # pending "add some examples to (or delete) #{__FILE__}"
   fixtures :all
 
-  it "should set a default required_role to Guest" do
+  it 'should set a default required_role to Guest' do
     agent = FactoryGirl.create(:agent)
-    agent.required_role.should eq Role.find_by_name('Guest')
+    agent.required_role.should eq Role.find_by(name: 'Guest')
   end
 
-  it "should set birth_date" do
-    agent = FactoryGirl.create(:agent, :birth_date => '2000')
+  it 'should set birth_date' do
+    agent = FactoryGirl.create(:agent, birth_date: '2000')
     agent.date_of_birth.should eq Time.zone.parse('2000-01-01')
   end
 
-  it "should set death_date" do
-    agent = FactoryGirl.create(:agent, :death_date => '2000')
+  it 'should set death_date' do
+    agent = FactoryGirl.create(:agent, death_date: '2000')
     agent.date_of_death.should eq Time.zone.parse('2000-01-01')
   end
 
-  it "should not set death_date earlier than birth_date" do
-    agent = FactoryGirl.create(:agent, :birth_date => '2010', :death_date => '2000')
+  it 'should not set death_date earlier than birth_date' do
+    agent = FactoryGirl.create(:agent, birth_date: '2010', death_date: '2000')
     agent.should_not be_valid
   end
 
-  it "should be creator" do
+  it 'should be creator' do
     agents(:agent_00001).creator?(manifestations(:manifestation_00001)).should be_truthy
   end
 
-  it "should not be creator" do
+  it 'should not be creator' do
     agents(:agent_00010).creator?(manifestations(:manifestation_00001)).should be_falsy
   end
 
-  it "should be publisher" do
+  it 'should be publisher' do
     agents(:agent_00001).publisher?(manifestations(:manifestation_00001)).should be_truthy
   end
 
-  it "should not be publisher" do
+  it 'should not be publisher' do
     agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_falsy
   end
 
-  describe ".import_agents" do
-    it "should import agents" do
-      agent_list = [{full_name: "Agent 1"}, {full_name: "Agent 2"}]
+  describe '.import_agents' do
+    it 'should import agents' do
+      agent_list = [{ full_name: 'Agent 1' }, { full_name: 'Agent 2' }]
       agents = Agent.import_agents(agent_list)
       expect(agents).to be_truthy
       expect(agents.first).to be_truthy
-      expect(agents.first.full_name).to eq "Agent 1"
+      expect(agents.first.full_name).to eq 'Agent 1'
       expect(agents.last).to be_truthy
-      expect(agents.last.full_name).to eq "Agent 2"
+      expect(agents.last.full_name).to eq 'Agent 2'
     end
-    it "should import place" do
-      agent_list = [{full_name: "Agent 1", place: "place"}]
+    it 'should import place' do
+      agent_list = [{ full_name: 'Agent 1', place: 'place' }]
       agents = Agent.import_agents(agent_list)
       expect(agents.first).to be_truthy
-      expect(agents.first.place).to eq "place"
+      expect(agents.first.place).to eq 'place'
     end
-    it "should unique the same agent" do
-      agent_list = [{full_name: "Agent 1", place: "place"}, {full_name: "Agent 1"}]
+    it 'should unique the same agent' do
+      agent_list = [{ full_name: 'Agent 1', place: 'place' }, { full_name: 'Agent 1' }]
       agents = Agent.import_agents(agent_list)
       expect(agents.size).to be 1
     end
-    it "should distinguish the agents even with the same full_name" do
-      agent_list = [{full_name: "Agent 1", place: "place 1"}, {full_name: "Agent 1", place: "place 2"}]
+    it 'should distinguish the agents even with the same full_name' do
+      agent_list = [{ full_name: 'Agent 1', place: 'place 1' }, { full_name: 'Agent 1', place: 'place 2' }]
       agents = Agent.import_agents(agent_list)
       expect(agents.size).to be 2
     end

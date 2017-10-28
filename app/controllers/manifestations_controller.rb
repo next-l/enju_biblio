@@ -306,7 +306,7 @@ class ManifestationsController < ApplicationController
     end
 
     if defined?(EnjuCirculation)
-      @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id, checked_out_at: nil).count
+      @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id).count
       @reserve = current_user.reserves.where(manifestation_id: @manifestation.id).first if user_signed_in?
     end
 

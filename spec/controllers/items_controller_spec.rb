@@ -358,10 +358,10 @@ describe ItemsController do
       it 'should create another item with already retained' do
         reserve = FactoryGirl.create(:reserve)
         reserve.transition_to!(:requested)
-        post :create, params: { item: FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id) }
+        post :create, params: { item: FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelve_00002) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        post :create, params: { item: FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id) }
+        post :create, params: { item: FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelve_00002) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
       end
@@ -553,12 +553,12 @@ describe ItemsController do
       end
 
       it 'should not destroy item if not checked in' do
-        delete :destroy, params: { id: 1 }
+        delete :destroy, params: { id: items(:item_00001).id }
         expect(response).to be_forbidden
       end
 
       it 'should not destroy a removed item' do
-        delete :destroy, params: { id: 23 }
+        delete :destroy, params: { id: items(:item_00023).id }
         expect(response).to be_forbidden
       end
     end

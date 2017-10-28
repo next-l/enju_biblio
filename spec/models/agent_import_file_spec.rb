@@ -2,19 +2,19 @@ require 'rails_helper'
 
 describe AgentImportFile do
   fixtures :users, :agents, :manifestations, :items, :baskets, :subscriptions,
-    :user_groups, :baskets
+           :user_groups, :baskets
   fixtures :all
 
   describe "when its mode is 'create'" do
     before(:each) do
-      @file = AgentImportFile.create! :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
+      @file = AgentImportFile.create! attachment: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv")
     end
 
-    it "should be imported" do
+    it 'should be imported' do
       old_agents_count = Agent.count
       old_import_results_count = AgentImportResult.count
       @file.current_state.should eq 'pending'
-      @file.import_start.should eq({:agent_imported => 3, :user_imported => 0, :failed => 0})
+      @file.import_start.should eq(agent_imported: 3, user_imported: 0, failed: 0)
       Agent.order('id DESC')[0].full_name.should eq '原田 ushi 隆史'
       Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
       Agent.order('id DESC')[2].date_of_birth.should eq Time.zone.parse('1978-01-01')
@@ -27,16 +27,16 @@ describe AgentImportFile do
     end
   end
 
-  describe "when it is written in shift_jis" do
+  describe 'when it is written in shift_jis' do
     before(:each) do
-      @file = AgentImportFile.create! :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample3.tsv")
+      @file = AgentImportFile.create! attachment: File.new("#{Rails.root}/../../examples/agent_import_file_sample3.tsv")
     end
 
-    it "should be imported" do
+    it 'should be imported' do
       old_agents_count = Agent.count
       old_import_results_count = AgentImportResult.count
       @file.current_state.should eq 'pending'
-      @file.import_start.should eq({:agent_imported => 4, :user_imported => 0, :failed => 0})
+      @file.import_start.should eq(agent_imported: 4, user_imported: 0, failed: 0)
       Agent.count.should eq old_agents_count + 4
       Agent.order('id DESC')[0].full_name.should eq '原田 ushi 隆史'
       Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
@@ -48,8 +48,8 @@ describe AgentImportFile do
   end
 
   describe "when its mode is 'update'" do
-    it "should update users" do
-      @file = AgentImportFile.create :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_update_file.tsv")
+    it 'should update users' do
+      @file = AgentImportFile.create attachment: File.new("#{Rails.root}/../../examples/agent_update_file.tsv")
       @file.modify
       agent_1 = Agent.find(1)
       agent_1.full_name.should eq 'たなべこうすけ'
@@ -61,16 +61,16 @@ describe AgentImportFile do
   end
 
   describe "when its mode is 'destroy'" do
-    it "should remove users" do
+    it 'should remove users' do
       old_count = Agent.count
-      @file = AgentImportFile.create :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_delete_file.tsv")
+      @file = AgentImportFile.create attachment: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv")
       @file.remove
       Agent.count.should eq old_count - 7
     end
   end
 
-  it "should import in background" do
-    file = AgentImportFile.create :attachment => File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
+  it 'should import in background' do
+    file = AgentImportFile.create attachment: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
     AgentImportFileJob.perform_later(file).should be_truthy

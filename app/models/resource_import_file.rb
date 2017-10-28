@@ -358,6 +358,7 @@ class ResourceImportFile < ActiveRecord::Base
       item_identifier = row['item_identifier'].to_s.strip
       item = Item.where(item_identifier: item_identifier).first
       if item
+        item.checked_items.delete_all
         item.destroy if item.removable?
       end
     end

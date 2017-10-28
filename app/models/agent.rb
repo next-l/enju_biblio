@@ -17,7 +17,7 @@ class Agent < ActiveRecord::Base
   has_many :derived_agents, through: :children, source: :child
   has_many :original_agents, through: :parents, source: :parent
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
-  has_many :donates
+  has_many :donates, dependent: :destroy
   has_many :donated_items, through: :donates, source: :item
   has_many :owns, dependent: :destroy
   has_many :items, through: :owns

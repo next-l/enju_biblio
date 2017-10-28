@@ -1,22 +1,22 @@
-# -*- encoding: utf-8 -*-
+
 require 'rails_helper'
-  
+
 describe ResourceImportFile do
   fixtures :all
-  
+
   describe "when its mode is 'create'" do
-    describe "when it is written in utf-8" do
+    describe 'when it is written in utf-8' do
       before(:each) do
-        @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
+        @file = ResourceImportFile.create attachment: File.open("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
         @file.user = users(:admin)
       end
 
-      it "should be imported", vcr: true do
+      it 'should be imported', vcr: true do
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 9, :manifestation_found => 6, :item_found => 3, :failed => 7})
+        @file.import_start.should eq(manifestation_imported: 9, item_imported: 9, manifestation_found: 6, item_found: 3, failed: 7)
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -36,7 +36,7 @@ describe ResourceImportFile do
         manifestation_101.series_statements.first.title_transcription.should eq 'しゅしりーず'
         manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ'
         manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず'
-        manifestation_101.items.order(:id).last.call_number.should eq '007|A'
+        manifestation_101.items.order(created_at: :desc).firist.call_number.should eq '007|A'
 
         item_10101 = Item.where(item_identifier: '10101').first
         item_10101.manifestation.creators.size.should eq 2
@@ -104,8 +104,8 @@ describe ResourceImportFile do
         item_10104.manifestation.height.should be_nil
         item_10104.manifestation.width.should be_nil
         item_10104.manifestation.depth.should be_nil
-        item_10104.manifestation.subjects.order(:id).map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
-        item_10104.manifestation.classifications.order(:id).map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc9" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
+        item_10104.manifestation.subjects.order(:id).map { |s| { s.subject_heading_type.name => s.term } }.should eq [{ 'ndlsh' => 'コンピュータ' }, { 'ndlsh' => '図書館' }]
+        item_10104.manifestation.classifications.order(:id).map { |c| { c.classification_type.name => c.category } }.should eq [{ 'ndc9' => '007' }, { 'ddc' => '003' }, { 'ddc' => '004' }]
 
         manifestation_104 = Manifestation.where(manifestation_identifier: '104').first
         manifestation_104.identifier_contents(:isbn).should eq ['9784797327038']
@@ -123,27 +123,27 @@ describe ResourceImportFile do
         @file.executed_at.should be_truthy
 
         @file.reload
-        @file.error_message.should eq "The following column(s) were ignored: invalid"
+        @file.error_message.should eq 'The following column(s) were ignored: invalid'
       end
 
-      it "should send message when import is completed", vcr: true do
+      it 'should send message when import is completed', vcr: true do
         old_message_count = Message.count
         @file.import_start
         Message.count.should eq old_message_count + 1
-        Message.order(:id).last.subject.should eq 'インポートが完了しました'
+        Message.order(created_at: :desc).first.subject.should eq 'インポートが完了しました'
       end
 
-      it "should be searchable right after the import", solr: true, vcr: true do
+      it 'should be searchable right after the import', solr: true, vcr: true do
         @file.import_start
-        Manifestation.search{ keywords "10101" }.total.should > 0
-        Manifestation.search{ keywords "10101", :fields => [:item_identifier] }.total.should > 0
-        Manifestation.search{ keywords "item_identifier_sm:10101" }.total.should > 0
+        Manifestation.search { keywords '10101' }.total.should > 0
+        Manifestation.search { keywords '10101', fields: [:item_identifier] }.total.should > 0
+        Manifestation.search { keywords 'item_identifier_sm:10101' }.total.should > 0
       end
     end
 
-    describe "ISBN import" do
-      context "with record not found" do
-        it "should record an error message", vcr: true do
+    describe 'ISBN import' do
+      context 'with record not found' do
+        it 'should record an error message', vcr: true do
           file = ResourceImportFile.create attachment: StringIO.new("isbn\n9780007264551"), user: users(:admin)
           result = file.import_start
           expect(result[:failed]).to eq 1
@@ -151,8 +151,8 @@ describe ResourceImportFile do
           expect(resource_import_result.error_message).not_to be_empty
         end
       end
-      context "with ISBN invalid" do
-        it "should record an error message", vcr: true do
+      context 'with ISBN invalid' do
+        it 'should record an error message', vcr: true do
           file = ResourceImportFile.create attachment: StringIO.new("isbn\n978000726455x"), user: users(:admin)
           result = file.import_start
           expect(result[:failed]).to eq 1
@@ -162,8 +162,8 @@ describe ResourceImportFile do
       end
     end
 
-    describe "NCID import" do
-      it "should import ncid value" do
+    describe 'NCID import' do
+      it 'should import ncid value' do
         file = ResourceImportFile.create attachment: StringIO.new("original_title\tncid\noriginal_title_ncid\tBA67656964\n"), user: users(:admin)
         result = file.import_start
         expect(result[:manifestation_imported]).to eq 1
@@ -171,22 +171,22 @@ describe ResourceImportFile do
         expect(resource_import_result.error_message).to be_blank
         expect(resource_import_result.manifestation).not_to be_blank
         manifestation = resource_import_result.manifestation
-        expect(manifestation.identifier_contents(:ncid).first).to eq "BA67656964"
+        expect(manifestation.ncid_record.body).to eq 'BA67656964'
       end
     end
 
-    describe "when it is written in shift_jis" do
+    describe 'when it is written in shift_jis' do
       before(:each) do
-        @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
+        @file = ResourceImportFile.create attachment: File.open("#{Rails.root}/../../examples/resource_import_file_sample2.tsv")
         @file.user = users(:admin)
       end
 
-      it "should be imported", vcr: true do
+      it 'should be imported', vcr: true do
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 8, :manifestation_found => 5, :item_found => 3, :failed => 7})
+        @file.import_start.should eq(manifestation_imported: 9, item_imported: 8, manifestation_found: 5, item_found: 3, failed: 7)
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -211,27 +211,27 @@ describe ResourceImportFile do
       end
     end
 
-    describe "when it has only isbn" do
+    describe 'when it has only isbn' do
       before(:each) do
-        @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
+        @file = ResourceImportFile.create attachment: File.open("#{Rails.root}/../../examples/isbn_sample.txt")
         @file.user = users(:admin)
       end
 
-      it "should be imported", vcr: true do
+      it 'should be imported', vcr: true do
         old_manifestations_count = Manifestation.count
         old_agents_count = Agent.count
         @file.import_start
         Manifestation.count.should eq old_manifestations_count + 1
         Agent.count.should eq old_agents_count + 4
-        Manifestation.order(:id).last.publication_place.should eq '東京'
+        Manifestation.order(created_at: :desc).first.publication_place.should eq '東京'
       end
     end
 
-    describe "when it contains item related fields" do
-      it "should create an item as well" do
-        import_file = <<-EOF
-original_title	call_number	item_note
-resource_import_file_test1	007.6	note for the item.
+    describe 'when it contains item related fields' do
+      it 'should create an item as well' do
+        import_file = <<-EOF.strip_heredoc
+          original_title	call_number	item_note
+          resource_import_file_test1	007.6	note for the item.
         EOF
         file = ResourceImportFile.create(attachment: StringIO.new(import_file))
         file.user = users(:admin)
@@ -241,25 +241,25 @@ resource_import_file_test1	007.6	note for the item.
         expect(Manifestation.count).to eq old_manifestations_count + 1
         expect(Item.count).to eq old_items_count + 1
         expect(file.resource_import_results.last.item).to be_valid
-        expect(file.resource_import_results.last.item.call_number).to eq "007.6"
-        expect(file.resource_import_results.last.item.note).to eq "note for the item."
+        expect(file.resource_import_results.last.item.call_number).to eq '007.6'
+        expect(file.resource_import_results.last.item.note).to eq 'note for the item.'
       end
     end
   end
 
   describe "when its mode is 'update'" do
-    it "should update items", vcr: true do
-      @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
+    it 'should update items', vcr: true do
+      @file = ResourceImportFile.create attachment: File.open("#{Rails.root}/../../examples/item_update_file.tsv"), edit_mode: 'update'
       @file.modify
       expect(@file.resource_import_results.first).to be_truthy
       expect(@file.resource_import_results.first.body).to match /item_identifier/
       item_00001 = Item.where(item_identifier: '00001').first
-      item_00001.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      item_00001.manifestation.creators.order('agents.id').collect(&:full_name).should eq %w[たなべ こうすけ]
       item_00001.binding_item_identifier.should eq '900001'
       item_00001.binding_call_number.should eq '336|A'
       item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
-      item_00001.manifestation.subjects.order(:id).map{|subject| {subject.subject_heading_type.name => subject.term}}.should eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
-      item_00001.manifestation.identifier_contents(:isbn).should eq ["4798002062", "12345678"]
+      item_00001.manifestation.subjects.order(:id).map { |subject| { subject.subject_heading_type.name => subject.term } }.should eq [{ 'ndlsh' => 'test1' }, { 'ndlsh' => 'test2' }]
+      item_00001.manifestation.identifier_contents(:isbn).should eq %w[4798002062 12345678]
       Item.where(item_identifier: '00002').first.manifestation.publishers.collect(&:full_name).should eq ['test2']
 
       item_00003 = Item.where(item_identifier: '00003').first
@@ -267,43 +267,43 @@ resource_import_file_test1	007.6	note for the item.
       item_00003.include_supplements.should be_truthy
 
       Item.where(item_identifier: '00004').first.include_supplements.should be_falsy
-      Item.where(item_identifier: '00025').first.call_number.should eq "547|ヤ"
+      Item.where(item_identifier: '00025').first.call_number.should eq '547|ヤ'
     end
 
-    #it "should update series_statement", vcr: true do
+    # it "should update series_statement", vcr: true do
     #  manifestation = Manifestation.find(10)
     #  file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
     #  file.modify
     #  manifestation.reload
     #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
-    #end
+    # end
 
-    describe "NCID import" do
-      it "should import ncid value" do
-        file = ResourceImportFile.create attachment: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
+    describe 'NCID import' do
+      it 'should import ncid value' do
+        file = ResourceImportFile.create attachment: StringIO.new("manifestation_id\tncid\n1ff5b88a-1964-4db0-acb3-ae1d9e3a307e\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
         result = file.import_start
-        #expect(result[:manifestation_found]).to eq 1
+        # expect(result[:manifestation_found]).to eq 1
         expect(file.error_message).to be_nil
         resource_import_result = file.resource_import_results.last
         expect(resource_import_result.error_message).to be_blank
         expect(resource_import_result.manifestation).not_to be_blank
         manifestation = resource_import_result.manifestation
-        expect(manifestation.identifier_contents(:ncid).first).to eq "BA67656964"
+        expect(manifestation.ncid_record.body).to eq 'BA67656964'
       end
     end
   end
 
   describe "when its mode is 'destroy'" do
-    it "should remove items", vcr: true do
+    it 'should remove items', vcr: true do
       old_count = Item.count
-      @file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
+      @file = ResourceImportFile.create attachment: File.open("#{Rails.root}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
       @file.remove
       Item.count.should eq old_count - 2
     end
   end
 
-  it "should import in background", vcr: true do
-    file = ResourceImportFile.create attachment: File.open("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
+  it 'should import in background', vcr: true do
+    file = ResourceImportFile.create attachment: File.open("#{Rails.root}/../../examples/resource_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
     ResourceImportFileJob.perform_later(file).should be_truthy

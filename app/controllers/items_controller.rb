@@ -284,12 +284,6 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.order(:position)
-    if @item
-      @library = @item.shelf.library
-    else
-      @library = Shelf.find_by(name: 'web').library
-    end
-    @shelves = @library.try(:shelves)
     @bookstores = Bookstore.order(:position)
     @budget_types = BudgetType.order(:position)
     @roles = Role.all

@@ -75,7 +75,7 @@ en:
         note: Note
         repository_content: Repository content
         lock_version: Lock version
-        carrier_type: Manifestation form
+        carrier_type: Carrier type
         language: Language
         lccn: LCCN
         issn: ISSN
