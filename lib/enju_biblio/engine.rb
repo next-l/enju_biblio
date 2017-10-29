@@ -1,4 +1,3 @@
-require 'paper_trail'
 require 'validates_timeliness'
 require 'dynamic_form'
 require 'simple_form'
