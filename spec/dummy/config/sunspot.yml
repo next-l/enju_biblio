@@ -16,7 +16,7 @@ development:
 
 test:
   solr:
-    hostname: localhost
+    hostname: 127.0.0.1
     port: 8981
     log_level: WARNING
     path: /solr/test
