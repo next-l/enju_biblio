@@ -42,14 +42,6 @@ describe Item do
     Item.for_checkout.include?(items(:item_00023)).should be_falsy
   end
 
-  it 'should delete lending policies' do
-    item = items(:item_00001)
-    item.checkout_type = CheckoutType.where(name: 'serial').first
-    item.save
-    item.reload
-    item.lending_policies.count.should eq 0
-  end
-
   it 'should not create item without manifestation_id' do
     item = items(:item_00001)
     item.manifestation_id = nil

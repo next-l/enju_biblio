@@ -87,29 +87,11 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       unless manifestation
-        if row['doi'].present?
-          doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          identifier_type_doi = IdentifierType.where(name: 'doi').first
-          identifier_type_doi = IdentifierType.where(name: 'doi').create! unless identifier_type_doi
-          manifestation = Identifier.where(body: doi, identifier_type_id: identifier_type_doi.id).first.try(:manifestation)
-        end
-      end
-
-      unless manifestation
         if row['jpno'].present?
           jpno = row['jpno'].to_s.strip
           identifier_type_jpno = IdentifierType.where(name: 'jpno').first
           identifier_type_jpno = IdentifierType.where(name: 'jpno').create! unless identifier_type_jpno
           manifestation = Identifier.where(body: jpno, identifier_type_id: identifier_type_jpno.id).first.try(:manifestation)
-        end
-      end
-
-      unless manifestation
-        if row['ncid'].present?
-          ncid = row['ncid'].to_s.strip
-          identifier_type_ncid = IdentifierType.where(name: 'ncid').first
-          identifier_type_ncid = IdentifierType.where(name: 'ncid').create! unless identifier_type_ncid
-          manifestation = Identifier.where(body: ncid, identifier_type_id: identifier_type_ncid.id).first.try(:manifestation)
         end
       end
 
@@ -180,7 +162,6 @@ class ResourceImportFile < ActiveRecord::Base
 
       if row_num % 50 == 0
         Sunspot.commit
-        GC.start
       end
     end
 
@@ -681,15 +662,25 @@ class ResourceImportFile < ActiveRecord::Base
 
       if manifestation.save
         Manifestation.transaction do
-          if options[:edit_mode] == 'update'
-            unless identifier.empty?
-              identifier.map{|_k, v|
-                v.manifestation = manifestation
-                v.save!
-              }
-            end
-          else
-            manifestation.identifiers << identifier.map{|_k, v| v}
+          if row['issn'].present?
+            manifestation.issn_records.delete_all
+            issn_record = IssnRecord.where(body: row['issn']).first_or_initialize
+            issn_record.manifestations << manifestation
+          end
+          if row['isbn'].present?
+            manifestation.isbn_records.delete_all
+            isbn_record = IsbnRecord.where(body: row['isbn']).first_or_initialize
+            isbn_record.manifestations << manifestation
+          end
+          if row['ncid'].present?
+            ncid_record = NcidRecord.where(body: row['ncid']).first_or_initialize
+            ncid_record.manifestation = manifestation
+            ncid_record.save!
+          end
+          if row['doi'].present?
+            doi_record = DoiRecord.where(body: row['doi']).first_or_initialize
+            doi_record.manifestation = manifestation
+            doi_record.save!
           end
         end
 
@@ -722,7 +713,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def set_identifier(row)
     identifier = {}
-    %w(isbn issn doi jpno ncid).each do |id_type|
+    %w(jpno).each do |id_type|
       if row["#{id_type}"].present?
         import_id = Identifier.new(body: row["#{id_type}"])
         identifier_type = IdentifierType.where(name: id_type).first

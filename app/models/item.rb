@@ -99,6 +99,100 @@ class Item < ActiveRecord::Base
       true
     end
   end
+
+  def self.csv_header(options = {col_sep: "\t"})
+    header = %w(
+      manifestation_id
+      original_title
+      creator
+      contributor
+      publisher
+      pub_date
+      statement_of_responsibility
+      manifestation_price
+      manifestation_created_at
+      manifestation_updated_at
+      manifestation_identifier
+      access_address
+      note
+    )
+
+    header += IdentifierType.order(:position).pluck(:name)
+    if defined?(EnjuSubject)
+      header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
+      header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
+    end
+
+    header += %w(
+      item_id
+      item_identifier
+      call_number
+      item_price
+      acquired_at
+      accepted_at
+      bookstore
+      budget_type
+      circulation_status
+      shelf
+      library
+      item_created_at
+      item_updated_at
+    )
+
+    header.to_csv(options)
+  end
+
+  def to_export
+    row = {
+      manifestation_id: manifestation_id,
+      title: manifestation.original_title,
+      creators: manifestation.creators.pluck(:full_name).join('//'),
+      contributors: manifestation.contributors.pluck(:full_name).join('//'),
+      publishers: manifestation.publishers.pluck(:full_name).join('//'),
+      pub_date: manifestation.pub_date,
+      statement_of_responsibility: manifestation.statement_of_responsibility,
+      manifestation_price: manifestation.price,
+      manifestation_created_at: manifestation.created_at,
+      manifestation_updated_at: manifestation.updated_at,
+      manifestation_identifier: manifestation.manifestation_identifier,
+      access_address: manifestation.access_address,
+      manifestation_note: manifestation.note,
+      isbn: isbn_records.pluck(:body).join('//'),
+      issn: issn_records.pluck(:body).join('//'),
+      id: id,
+      item_identifier: item_identifier,
+      call_number: call_number,
+      price: price,
+      acquired_at: acquired_at,
+      accepted_at: accept.try(:created_at),
+      bookstore: bookstore.try(:name),
+      budget_type: budget_type.try(:name),
+      circulation_status: circulation_status.try(:name),
+      shelf: shelf.name,
+      library: shelf.library.name,
+      manifestation_created_at: manifestation.created_at,
+      manifestation_updated_at: manifestation.updated_at,
+      created_at: created_at,
+      updated_at: updated_at
+    }
+    if defined?(EnjuSubject)
+      row[:subject] = manifestation.subjects.map{|subject| "#{subject.subject_heading_type.name}:#{subject.term}"}.join('//')
+      row[:classification] = manifestation.classifications.map{|classification| "#{classification.classification_type.name}:#{classification.category}"}.join('//')
+    end
+  end
+
+  def to_csv
+    to_export.map{|k, v| v}.to_csv(col_sep: "\t")
+  end
+
+  def self.export(options = {format: :txt})
+    file = ''
+    file += Manifestation.csv_header(col_sep: "\t") if options[:format].to_sym == :txt
+    Manifestation.find_each do |manifestation|
+      file += manifestation.to_csv(options)
+    end
+    file
+  end
 end
 
 # == Schema Information
