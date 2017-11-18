@@ -258,6 +258,16 @@ describe Manifestation, :solr => true do
       m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["title_transcription"]).to eq "Transcripted title"
     end
+    it "should export volume fields" do
+      manifestation = FactoryGirl.create(:manifestation, volume_number: 15, volume_number_string: "Vol.15")
+      lines = Manifestation.export
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["volume_number"].compact).not_to be_empty
+      expect(csv["volume_number_string"].compact).not_to be_empty
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      expect(m["volume_number"]).to eq "15"
+      expect(m["volume_number_string"]).to eq "Vol.15"
+    end
 
     it "should respect the role of the user" do
       FactoryGirl.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
