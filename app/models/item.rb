@@ -170,8 +170,6 @@ class Item < ActiveRecord::Base
       circulation_status: circulation_status.try(:name),
       shelf: shelf.name,
       library: shelf.library.name,
-      manifestation_created_at: manifestation.created_at,
-      manifestation_updated_at: manifestation.updated_at,
       created_at: created_at,
       updated_at: updated_at
     }

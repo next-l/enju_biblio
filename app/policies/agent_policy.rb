@@ -8,11 +8,11 @@ class AgentPolicy < ApplicationPolicy
     when 'Administrator'
       true
     when 'Librarian'
-      true if record.required_role.score <= 3
+      true if record.required_role_id <= 3
     when 'User'
-      true if record.required_role.score <= 2
+      true if record.required_role_id <= 2
     else
-      true if record.required_role.score <= 1
+      true if record.required_role_id <= 1
     end
   end
 

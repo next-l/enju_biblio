@@ -6,12 +6,12 @@ describe ManifestationRelationshipsController do
   disconnect_sunspot
 
   def valid_attributes
-    @attrs = FactoryGirl.attributes_for(:manifestation_relationship)
+    @attrs = FactoryBot.attributes_for(:manifestation_relationship)
   end
 
   describe 'GET index' do
     before(:each) do
-      FactoryGirl.create(:manifestation_relationship)
+      FactoryBot.create(:manifestation_relationship)
     end
 
     describe 'When logged in as Administrator' do
@@ -54,7 +54,7 @@ describe ManifestationRelationshipsController do
       login_fixture_admin
 
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :show, params: { id: manifestation_relationship.id }
         expect(assigns(:manifestation_relationship)).to eq(manifestation_relationship)
       end
@@ -64,7 +64,7 @@ describe ManifestationRelationshipsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :show, params: { id: manifestation_relationship.id }
         expect(assigns(:manifestation_relationship)).to eq(manifestation_relationship)
       end
@@ -74,7 +74,7 @@ describe ManifestationRelationshipsController do
       login_fixture_user
 
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :show, params: { id: manifestation_relationship.id }
         expect(assigns(:manifestation_relationship)).to eq(manifestation_relationship)
       end
@@ -82,7 +82,7 @@ describe ManifestationRelationshipsController do
 
     describe 'When not logged in' do
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :show, params: { id: manifestation_relationship.id }
         expect(assigns(:manifestation_relationship)).to eq(manifestation_relationship)
       end
@@ -134,7 +134,7 @@ describe ManifestationRelationshipsController do
       login_fixture_admin
 
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :edit, params: { id: manifestation_relationship.id }
         expect(assigns(:manifestation_relationship)).to eq(manifestation_relationship)
       end
@@ -144,7 +144,7 @@ describe ManifestationRelationshipsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :edit, params: { id: manifestation_relationship.id }
         expect(assigns(:manifestation_relationship)).to eq(manifestation_relationship)
       end
@@ -154,7 +154,7 @@ describe ManifestationRelationshipsController do
       login_fixture_user
 
       it 'assigns the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :edit, params: { id: manifestation_relationship.id }
         expect(response).to be_forbidden
       end
@@ -162,7 +162,7 @@ describe ManifestationRelationshipsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested manifestation_relationship as @manifestation_relationship' do
-        manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+        manifestation_relationship = FactoryBot.create(:manifestation_relationship)
         get :edit, params: { id: manifestation_relationship.id }
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -288,7 +288,7 @@ describe ManifestationRelationshipsController do
 
   describe 'PUT update' do
     before(:each) do
-      @manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+      @manifestation_relationship = FactoryBot.create(:manifestation_relationship)
       @attrs = valid_attributes
       @invalid_attrs = { parent_id: '' }
     end
@@ -390,7 +390,7 @@ describe ManifestationRelationshipsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @manifestation_relationship = FactoryGirl.create(:manifestation_relationship)
+      @manifestation_relationship = FactoryBot.create(:manifestation_relationship)
     end
 
     describe 'When logged in as Administrator' do

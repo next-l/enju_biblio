@@ -23,14 +23,14 @@ class PictureFilesController < ApplicationController
   def show
     case params[:size]
     when 'original'
-      size = 'original'
+      size = :original
     when 'thumb'
-      size = 'thumb'
+      size = :thumb
     else
-      size = 'medium'
+      size = :medium
     end
 
-    file = @picture_file.image[size].download.path
+    file = @picture_file.image.metadata[size].download.path
 
     respond_to do |format|
       format.html # show.html.erb

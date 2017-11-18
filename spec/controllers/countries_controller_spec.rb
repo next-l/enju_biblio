@@ -6,12 +6,12 @@ describe CountriesController do
   disconnect_sunspot
 
   def valid_attributes
-    FactoryGirl.attributes_for(:country)
+    FactoryBot.attributes_for(:country)
   end
 
   describe 'GET index' do
     before(:each) do
-      FactoryGirl.create(:country)
+      FactoryBot.create(:country)
     end
 
     describe 'When logged in as Administrator' do
@@ -51,7 +51,7 @@ describe CountriesController do
 
   describe 'GET show' do
     before(:each) do
-      @country = FactoryGirl.create(:country)
+      @country = FactoryBot.create(:country)
     end
 
     describe 'When logged in as Administrator' do
@@ -134,7 +134,7 @@ describe CountriesController do
       login_fixture_admin
 
       it 'assigns the requested country as @country' do
-        country = FactoryGirl.create(:country)
+        country = FactoryBot.create(:country)
         get :edit, params: { id: country.id }
         assigns(:country).should eq(country)
       end
@@ -144,7 +144,7 @@ describe CountriesController do
       login_fixture_librarian
 
       it 'assigns the requested country as @country' do
-        country = FactoryGirl.create(:country)
+        country = FactoryBot.create(:country)
         get :edit, params: { id: country.id }
         assigns(:country).should eq(country)
       end
@@ -154,7 +154,7 @@ describe CountriesController do
       login_fixture_user
 
       it 'assigns the requested country as @country' do
-        country = FactoryGirl.create(:country)
+        country = FactoryBot.create(:country)
         get :edit, params: { id: country.id }
         assigns(:country).should eq(country)
       end
@@ -162,7 +162,7 @@ describe CountriesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested country as @country' do
-        country = FactoryGirl.create(:country)
+        country = FactoryBot.create(:country)
         get :edit, params: { id: country.id }
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -288,7 +288,7 @@ describe CountriesController do
 
   describe 'PUT update' do
     before(:each) do
-      @country = FactoryGirl.create(:country)
+      @country = FactoryBot.create(:country)
       @attrs = valid_attributes
       @invalid_attrs = { name: '' }
     end
@@ -397,7 +397,7 @@ describe CountriesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @country = FactoryGirl.create(:country)
+      @country = FactoryBot.create(:country)
     end
 
     describe 'When logged in as Administrator' do

@@ -332,7 +332,7 @@ class ManifestationsController < ApplicationController
       format.js
       format.download {
         send_file @manifestation.attachment.download,
-          filename: File.basename(@manifestation.attachment_filename),
+        filename: File.basename(@manifestation.attachment.metadata['filename']),
           type: 'application/octet-stream'
       }
     end
@@ -713,7 +713,6 @@ class ManifestationsController < ApplicationController
     @roles = Role.order(:position)
     @languages = Language.order(:position)
     @frequencies = Frequency.order(:position)
-    @identifier_types = IdentifierType.select([:id, :display_name, :position])
     @nii_types = NiiType.order(:position) if defined?(EnjuNii)
     if defined?(EnjuSubject)
       @subject_types = SubjectType.order(:position)

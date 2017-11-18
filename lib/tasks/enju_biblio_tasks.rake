@@ -2,7 +2,6 @@ require 'active_record/fixtures'
 require 'tasks/agent_type'
 require 'tasks/carrier_type'
 require 'tasks/content_type'
-require 'tasks/identifier_type'
 
 namespace :enju_biblio do
   desc "create initial records for enju_biblio"

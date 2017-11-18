@@ -4,7 +4,7 @@ describe ItemsController do
   fixtures :all
 
   def valid_attributes
-    FactoryGirl.attributes_for(:item)
+    FactoryBot.attributes_for(:item)
   end
 
   describe 'GET index', solr: true do
@@ -106,7 +106,7 @@ describe ItemsController do
 
   describe 'GET show' do
     before(:each) do
-      @item = FactoryGirl.create(:item)
+      @item = FactoryBot.create(:item)
     end
 
     describe 'When logged in as Administrator' do
@@ -153,7 +153,7 @@ describe ItemsController do
 
   describe 'GET new' do
     before(:each) do
-      @manifestation = FactoryGirl.create(:manifestation)
+      @manifestation = FactoryBot.create(:manifestation)
     end
 
     describe 'When logged in as Administrator' do
@@ -170,17 +170,8 @@ describe ItemsController do
         expect(response).to redirect_to(manifestations_url)
       end
 
-      it 'should work without exception, even if library and shelf is unavailable' do
-        Library.real.each do |library|
-          library.try(:shelves).to_a.each(&:destroy)
-          library.destroy
-        end
-        get :new, params: { manifestation_id: @manifestation.id }
-        expect(response).to redirect_to(libraries_url)
-      end
-
       it 'should not get new item for series_master' do
-        manifestation_serial = FactoryGirl.create(:manifestation_serial)
+        manifestation_serial = FactoryBot.create(:manifestation_serial)
         get :new, params: { manifestation_id: manifestation_serial.id }
         expect(response).to redirect_to(manifestations_url(parent_id: manifestation_serial.id))
       end
@@ -220,7 +211,7 @@ describe ItemsController do
       login_fixture_admin
 
       it 'assigns the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, params: { id: item.id }
         expect(assigns(:item)).to eq(item)
       end
@@ -237,7 +228,7 @@ describe ItemsController do
       login_fixture_librarian
 
       it 'assigns the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, params: { id: item.id }
         expect(assigns(:item)).to eq(item)
       end
@@ -247,7 +238,7 @@ describe ItemsController do
       login_fixture_user
 
       it 'assigns the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, params: { id: item.id }
         expect(response).to be_forbidden
       end
@@ -255,7 +246,7 @@ describe ItemsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, params: { id: item.id }
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -264,8 +255,8 @@ describe ItemsController do
 
   describe 'POST create' do
     before(:each) do
-      manifestation = FactoryGirl.create(:manifestation)
-      @attrs = FactoryGirl.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: shelves(:shelf_00002).id)
+      manifestation = FactoryBot.create(:manifestation)
+      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: shelves(:shelf_00002).id)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
 
@@ -282,12 +273,6 @@ describe ItemsController do
           post :create, params: { item: @attrs }
           assigns(:item).manifestation.should_not be_nil
           expect(response).to redirect_to(item_url(assigns(:item)))
-        end
-
-        it 'should create a lending policy' do
-          old_lending_policy_count = LendingPolicy.count
-          post :create, params: { item: @attrs }
-          LendingPolicy.count.should eq old_lending_policy_count
         end
       end
 
@@ -346,22 +331,22 @@ describe ItemsController do
       end
 
       it 'should create reserved item' do
-        post :create, params: { item: { circulation_status_id: 1, manifestation_id: 2 } }
+        post :create, params: { item: { circulation_status_id: 1, shelf_id: shelves(:shelf_00002).id, manifestation_id: manifestations(:manifestation_00002).id } }
         expect(assigns(:item)).to be_valid
 
         expect(response).to redirect_to item_url(assigns(:item))
         flash[:message].should eq I18n.t('item.this_item_is_reserved')
-        assigns(:item).manifestation.should eq Manifestation.find(2)
+        assigns(:item).manifestation.should eq manifestations(:manifestation_00002)
         assigns(:item).should be_retained
       end
 
       it 'should create another item with already retained' do
-        reserve = FactoryGirl.create(:reserve)
+        reserve = FactoryBot.create(:reserve)
         reserve.transition_to!(:requested)
-        post :create, params: { item: FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelve_00002) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelf_00002) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        post :create, params: { item: FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelve_00002) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelf_00002) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
       end
@@ -424,8 +409,8 @@ describe ItemsController do
 
   describe 'PUT update' do
     before(:each) do
-      @item = FactoryGirl.create(:item)
-      @attrs = FactoryGirl.attributes_for(:item)
+      @item = FactoryBot.create(:item)
+      @attrs = FactoryBot.attributes_for(:item)
       @invalid_attrs = { item_identifier: '無効なID' }
     end
 

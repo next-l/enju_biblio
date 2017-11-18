@@ -4,7 +4,7 @@ describe "manifestations/show" do
   fixtures :all
 
   before(:each) do
-    assign(:manifestation, FactoryGirl.create(:manifestation))
+    assign(:manifestation, FactoryBot.create(:manifestation))
   end
 
   it "renders attributes in <p>" do

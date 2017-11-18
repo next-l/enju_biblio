@@ -4,7 +4,7 @@ describe ManifestationsController do
   fixtures :all
 
   def valid_attributes
-    FactoryGirl.attributes_for(:manifestation)
+    FactoryBot.attributes_for(:manifestation)
   end
 
   describe 'GET index', solr: true do
@@ -193,7 +193,7 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with NDC', solr: true do
-        classification = FactoryGirl.create(:classification, category: '007.3', classification_type_id: 1)
+        classification = FactoryBot.create(:classification, category: '007.3', classification_type_id: 1)
         Manifestation.first.classifications << classification
         get :index, params: { classification: '007', classification_type: 1 }
         expect(response).to be_success
@@ -232,8 +232,8 @@ describe ManifestationsController do
       end
 
       it "should get manifestations with series for its children's information" do
-        periodical = FactoryGirl.create(:manifestation_serial)
-        manifestation = FactoryGirl.create(:manifestation, description: 'foo')
+        periodical = FactoryBot.create(:manifestation_serial)
+        manifestation = FactoryBot.create(:manifestation, description: 'foo')
         periodical.derived_manifestations << manifestation
         periodical.save!
         get :index, params: { query: 'foo' }
@@ -269,7 +269,7 @@ describe ManifestationsController do
       end
 
       it 'should not show manifestation with required_role of admin' do
-        manifestation = FactoryGirl.create(:manifestation, required_role_id: 4)
+        manifestation = FactoryBot.create(:manifestation, required_role_id: 4)
         get :show, params: { id: manifestation.id }
         expect(response).not_to be_success
       end
@@ -387,7 +387,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with parent_id' do
-        serial = FactoryGirl.create(:manifestation_serial,
+        serial = FactoryBot.create(:manifestation_serial,
                                     statement_of_responsibility: 'statement_of_responsibility1',
                                     title_alternative: 'title_alternative1',
                                     publication_place: 'publication_place1',
@@ -396,14 +396,14 @@ describe ManifestationsController do
                                     depth: 123,
                                     price: 'price1',
                                     access_address: 'http://example.jp',
-                                    language_id: FactoryGirl.create(:language).id,
-                                    frequency_id: FactoryGirl.create(:frequency).id,
-                                    required_role_id: FactoryGirl.create(:role).id)
-        serial.creators << FactoryGirl.create(:agent)
-        serial.contributors << FactoryGirl.create(:agent)
-        serial.publishers << FactoryGirl.create(:agent)
-        serial.subjects << FactoryGirl.create(:subject)
-        serial.classifications << FactoryGirl.create(:classification)
+                                    language_id: FactoryBot.create(:language).id,
+                                    frequency_id: FactoryBot.create(:frequency).id,
+                                    required_role_id: FactoryBot.create(:role).id)
+        serial.creators << FactoryBot.create(:agent)
+        serial.contributors << FactoryBot.create(:agent)
+        serial.publishers << FactoryBot.create(:agent)
+        serial.subjects << FactoryBot.create(:subject)
+        serial.classifications << FactoryBot.create(:classification)
         serial.save!
         get :new, params: { parent_id: serial.id }
         expect(response).to be_success
@@ -454,7 +454,7 @@ describe ManifestationsController do
       login_fixture_admin
 
       it 'assigns the requested manifestation as @manifestation' do
-        manifestation = FactoryGirl.create(:manifestation)
+        manifestation = FactoryBot.create(:manifestation)
         get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq(manifestation)
       end
@@ -464,20 +464,19 @@ describe ManifestationsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation as @manifestation' do
-        manifestation = FactoryGirl.create(:manifestation)
+        manifestation = FactoryBot.create(:manifestation)
         get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq(manifestation)
       end
 
       render_views
-      it 'assigns the identifiers to @manifestation' do
-        manifestation = FactoryGirl.create(:manifestation)
-        identifier = FactoryGirl.create(:identifier)
-        manifestation.identifiers << identifier
+      it 'assigns the isbn_records to @manifestation' do
+        manifestation = FactoryBot.create(:manifestation)
+        manifestation.isbn_records << isbn_records(:isbn_record_00001)
         get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq manifestation
-        expect(assigns(:manifestation).identifiers).to eq manifestation.identifiers
-        expect(response).to render_template(partial: 'manifestations/_identifier_fields')
+        expect(assigns(:manifestation).isbn_records).to eq manifestation.isbn_records
+        expect(response).to render_template(partial: 'manifestations/_isbn_record_fields')
       end
     end
 
@@ -485,7 +484,7 @@ describe ManifestationsController do
       login_fixture_user
 
       it 'assigns the requested manifestation as @manifestation' do
-        manifestation = FactoryGirl.create(:manifestation)
+        manifestation = FactoryBot.create(:manifestation)
         get :edit, params: { id: manifestation.id }
         expect(response).to be_forbidden
       end
@@ -498,7 +497,7 @@ describe ManifestationsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested manifestation as @manifestation' do
-        manifestation = FactoryGirl.create(:manifestation)
+        manifestation = FactoryBot.create(:manifestation)
         get :edit, params: { id: manifestation.id }
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -635,7 +634,7 @@ describe ManifestationsController do
 
   describe 'PUT update' do
     before(:each) do
-      @manifestation = FactoryGirl.create(:manifestation)
+      @manifestation = FactoryBot.create(:manifestation)
       @manifestation.series_statements = [SeriesStatement.find(1)]
       @attrs = valid_attributes
       @invalid_attrs = { original_title: '' }
@@ -683,11 +682,11 @@ describe ManifestationsController do
           expect(response).to redirect_to(@manifestation)
         end
 
-        it 'assigns identifiers to @manifestation' do
-          identifiers_attrs = {
-            identifier_attributes: [FactoryGirl.create(:identifier)]
+        it 'assigns isbn_records to @manifestation' do
+          isbn_record_attrs = {
+            isbn_record_attributes: [isbn_records(:isbn_record_00001)]
           }
-          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs) }
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(isbn_record_attrs) }
           expect(assigns(:manifestation)).to eq @manifestation
         end
       end
@@ -751,7 +750,7 @@ describe ManifestationsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @manifestation = FactoryGirl.create(:manifestation)
+      @manifestation = FactoryBot.create(:manifestation)
     end
 
     describe 'When logged in as Administrator' do
@@ -777,8 +776,8 @@ describe ManifestationsController do
       end
 
       it 'should not destroy manifestation of series master with children' do
-        @manifestation = FactoryGirl.create(:manifestation_serial)
-        child = FactoryGirl.create(:manifestation)
+        @manifestation = FactoryBot.create(:manifestation_serial)
+        child = FactoryBot.create(:manifestation)
         @manifestation.derived_manifestations << child
         delete :destroy, params: { id: @manifestation.id }
         expect(response).to be_forbidden

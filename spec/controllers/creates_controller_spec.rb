@@ -6,12 +6,12 @@ describe CreatesController do
   disconnect_sunspot
 
   def valid_attributes
-    FactoryGirl.attributes_for(:create)
+    FactoryBot.attributes_for(:create)
   end
 
   describe 'GET index' do
     before(:each) do
-      FactoryGirl.create(:create)
+      FactoryBot.create(:create)
     end
 
     describe 'When logged in as Administrator' do
@@ -54,7 +54,7 @@ describe CreatesController do
       login_fixture_admin
 
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :show, params: { id: create.id }
         expect(assigns(:create)).to eq(create)
       end
@@ -64,7 +64,7 @@ describe CreatesController do
       login_fixture_librarian
 
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :show, params: { id: create.id }
         expect(assigns(:create)).to eq(create)
       end
@@ -74,7 +74,7 @@ describe CreatesController do
       login_fixture_user
 
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :show, params: { id: create.id }
         expect(assigns(:create)).to eq(create)
       end
@@ -82,7 +82,7 @@ describe CreatesController do
 
     describe 'When not logged in' do
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :show, params: { id: create.id }
         expect(assigns(:create)).to eq(create)
       end
@@ -132,7 +132,7 @@ describe CreatesController do
       login_fixture_admin
 
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :edit, params: { id: create.id }
         expect(assigns(:create)).to eq(create)
       end
@@ -142,7 +142,7 @@ describe CreatesController do
       login_fixture_librarian
 
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :edit, params: { id: create.id }
         expect(assigns(:create)).to eq(create)
       end
@@ -152,7 +152,7 @@ describe CreatesController do
       login_fixture_user
 
       it 'assigns the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :edit, params: { id: create.id }
         expect(response).to be_forbidden
       end
@@ -160,7 +160,7 @@ describe CreatesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested create as @create' do
-        create = FactoryGirl.create(:create)
+        create = FactoryBot.create(:create)
         get :edit, params: { id: create.id }
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -394,7 +394,7 @@ describe CreatesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @create = FactoryGirl.create(:create)
+      @create = FactoryBot.create(:create)
     end
 
     describe 'When logged in as Administrator' do

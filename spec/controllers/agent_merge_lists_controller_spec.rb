@@ -43,7 +43,7 @@ describe AgentMergeListsController do
 
   describe 'GET show' do
     before(:each) do
-      @agent_merge_list = FactoryGirl.create(:agent_merge_list)
+      @agent_merge_list = FactoryBot.create(:agent_merge_list)
     end
 
     describe 'When logged in as Administrator' do
@@ -128,7 +128,7 @@ describe AgentMergeListsController do
       login_admin
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        agent_merge_list = FactoryGirl.create(:agent_merge_list)
+        agent_merge_list = FactoryBot.create(:agent_merge_list)
         get :edit, params: { id: agent_merge_list.id }
         assigns(:agent_merge_list).should eq(agent_merge_list)
       end
@@ -138,7 +138,7 @@ describe AgentMergeListsController do
       login_librarian
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        agent_merge_list = FactoryGirl.create(:agent_merge_list)
+        agent_merge_list = FactoryBot.create(:agent_merge_list)
         get :edit, params: { id: agent_merge_list.id }
         assigns(:agent_merge_list).should eq(agent_merge_list)
       end
@@ -148,7 +148,7 @@ describe AgentMergeListsController do
       login_user
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        agent_merge_list = FactoryGirl.create(:agent_merge_list)
+        agent_merge_list = FactoryBot.create(:agent_merge_list)
         get :edit, params: { id: agent_merge_list.id }
         response.should be_forbidden
       end
@@ -156,7 +156,7 @@ describe AgentMergeListsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested agent_merge_list as @agent_merge_list' do
-        agent_merge_list = FactoryGirl.create(:agent_merge_list)
+        agent_merge_list = FactoryBot.create(:agent_merge_list)
         get :edit, params: { id: agent_merge_list.id }
         response.should redirect_to(new_user_session_url)
       end
@@ -165,7 +165,7 @@ describe AgentMergeListsController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = FactoryGirl.attributes_for(:agent_merge_list)
+      @attrs = FactoryBot.attributes_for(:agent_merge_list)
       @invalid_attrs = { title: '' }
     end
 
@@ -282,8 +282,8 @@ describe AgentMergeListsController do
 
   describe 'PUT update' do
     before(:each) do
-      @agent_merge_list = FactoryGirl.create(:agent_merge_list)
-      @attrs = FactoryGirl.attributes_for(:agent_merge_list)
+      @agent_merge_list = FactoryBot.create(:agent_merge_list)
+      @attrs = FactoryBot.attributes_for(:agent_merge_list)
       @invalid_attrs = { title: '' }
     end
 
@@ -400,7 +400,7 @@ describe AgentMergeListsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @agent_merge_list = FactoryGirl.create(:agent_merge_list)
+      @agent_merge_list = FactoryBot.create(:agent_merge_list)
     end
 
     describe 'When logged in as Administrator' do

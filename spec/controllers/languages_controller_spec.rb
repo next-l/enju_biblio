@@ -6,12 +6,12 @@ describe LanguagesController do
   fixtures :all
 
   def valid_attributes
-    FactoryGirl.attributes_for(:language)
+    FactoryBot.attributes_for(:language)
   end
 
   describe 'GET index' do
     before(:each) do
-      FactoryGirl.create(:language)
+      FactoryBot.create(:language)
     end
 
     describe 'When logged in as Administrator' do
@@ -51,7 +51,7 @@ describe LanguagesController do
 
   describe 'GET show' do
     before(:each) do
-      @language = FactoryGirl.create(:language)
+      @language = FactoryBot.create(:language)
     end
 
     describe 'When logged in as Administrator' do
@@ -92,7 +92,7 @@ describe LanguagesController do
 
   describe 'GET edit' do
     before(:each) do
-      @language = FactoryGirl.create(:language)
+      @language = FactoryBot.create(:language)
     end
 
     describe 'When logged in as Administrator' do
@@ -231,7 +231,7 @@ describe LanguagesController do
 
   describe 'PUT update' do
     before(:each) do
-      @language = FactoryGirl.create(:language)
+      @language = FactoryBot.create(:language)
       @attrs = valid_attributes
       @invalid_attrs = { name: '' }
     end
@@ -286,7 +286,7 @@ describe LanguagesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @language = FactoryGirl.create(:language)
+      @language = FactoryBot.create(:language)
     end
 
     describe 'When logged in as Administrator' do

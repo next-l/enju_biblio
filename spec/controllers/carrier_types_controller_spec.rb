@@ -26,7 +26,7 @@ describe CarrierTypesController do
   # CarrierType. As you add validations to CarrierType, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:carrier_type)
+    FactoryBot.attributes_for(:carrier_type)
   end
 
   describe 'GET index' do

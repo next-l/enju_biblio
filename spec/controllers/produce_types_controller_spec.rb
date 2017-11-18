@@ -26,7 +26,7 @@ describe ProduceTypesController do
   # ProduceType. As you add validations to ProduceType, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:produce_type)
+    FactoryBot.attributes_for(:produce_type)
   end
 
   describe 'GET index' do

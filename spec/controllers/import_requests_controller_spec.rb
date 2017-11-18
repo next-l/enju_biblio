@@ -124,7 +124,7 @@ describe ImportRequestsController do
       login_fixture_admin
 
       it 'assigns the requested import_request as @import_request' do
-        import_request = FactoryGirl.create(:import_request, isbn: '9784797350999')
+        import_request = FactoryBot.create(:import_request, isbn: '9784797350999')
         get :edit, params: { id: import_request.id }
         expect(assigns(:import_request)).to eq(import_request)
       end
@@ -134,7 +134,7 @@ describe ImportRequestsController do
       login_fixture_librarian
 
       it 'assigns the requested import_request as @import_request' do
-        import_request = FactoryGirl.create(:import_request, isbn: '9784797350999')
+        import_request = FactoryBot.create(:import_request, isbn: '9784797350999')
         get :edit, params: { id: import_request.id }
         expect(assigns(:import_request)).to eq(import_request)
       end
@@ -144,7 +144,7 @@ describe ImportRequestsController do
       login_fixture_user
 
       it 'assigns the requested import_request as @import_request' do
-        import_request = FactoryGirl.create(:import_request, isbn: '9784797350999')
+        import_request = FactoryBot.create(:import_request, isbn: '9784797350999')
         get :edit, params: { id: import_request.id }
         expect(response).to be_forbidden
       end
@@ -152,7 +152,7 @@ describe ImportRequestsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested import_request as @import_request' do
-        import_request = FactoryGirl.create(:import_request, isbn: '9784797350999')
+        import_request = FactoryBot.create(:import_request, isbn: '9784797350999')
         get :edit, params: { id: import_request.id }
         expect(response).to redirect_to(new_user_session_url)
       end

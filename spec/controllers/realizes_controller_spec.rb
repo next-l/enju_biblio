@@ -46,7 +46,7 @@ describe RealizesController do
       login_fixture_admin
 
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
@@ -56,7 +56,7 @@ describe RealizesController do
       login_fixture_librarian
 
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
@@ -66,7 +66,7 @@ describe RealizesController do
       login_fixture_user
 
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
@@ -74,7 +74,7 @@ describe RealizesController do
 
     describe 'When not logged in' do
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
@@ -124,7 +124,7 @@ describe RealizesController do
       login_fixture_admin
 
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :edit, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
@@ -134,7 +134,7 @@ describe RealizesController do
       login_fixture_librarian
 
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :edit, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
@@ -144,7 +144,7 @@ describe RealizesController do
       login_fixture_user
 
       it 'assigns the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :edit, params: { id: realize.id }
         expect(response).to be_forbidden
       end
@@ -152,7 +152,7 @@ describe RealizesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested realize as @realize' do
-        realize = FactoryGirl.create(:realize)
+        realize = FactoryBot.create(:realize)
         get :edit, params: { id: realize.id }
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -161,7 +161,7 @@ describe RealizesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = FactoryGirl.attributes_for(:realize)
+      @attrs = FactoryBot.attributes_for(:realize)
       @invalid_attrs = { expression_id: '' }
     end
 
@@ -279,7 +279,7 @@ describe RealizesController do
   describe 'PUT update' do
     before(:each) do
       @realize = realizes(:realize_00001)
-      @attrs = FactoryGirl.attributes_for(:realize)
+      @attrs = FactoryBot.attributes_for(:realize)
       @invalid_attrs = { expression_id: '' }
     end
 
@@ -391,7 +391,7 @@ describe RealizesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @realize = FactoryGirl.create(:realize)
+      @realize = FactoryBot.create(:realize)
     end
 
     describe 'When logged in as Administrator' do

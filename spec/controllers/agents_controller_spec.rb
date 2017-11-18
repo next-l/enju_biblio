@@ -4,7 +4,7 @@ describe AgentsController do
   fixtures :all
 
   def valid_attributes
-    FactoryGirl.attributes_for(:agent)
+    FactoryBot.attributes_for(:agent)
   end
 
   describe 'GET index', solr: true do
@@ -91,7 +91,7 @@ describe AgentsController do
 
   describe 'GET show' do
     before(:each) do
-      @agent = FactoryGirl.create(:agent)
+      @agent = FactoryBot.create(:agent)
     end
 
     describe 'When logged in as Administrator' do
@@ -294,7 +294,7 @@ describe AgentsController do
   describe 'POST create' do
     before(:each) do
       @attrs = valid_attributes
-      @invalid_attrs = FactoryGirl.attributes_for(:agent, full_name: '')
+      @invalid_attrs = FactoryBot.attributes_for(:agent, full_name: '')
     end
 
     describe 'When logged in as Administrator' do
@@ -445,9 +445,9 @@ describe AgentsController do
 
   describe 'PUT update' do
     before(:each) do
-      @agent = FactoryGirl.create(:agent)
+      @agent = FactoryBot.create(:agent)
       @attrs = valid_attributes
-      @invalid_attrs = FactoryGirl.attributes_for(:agent, full_name: '')
+      @invalid_attrs = FactoryBot.attributes_for(:agent, full_name: '')
     end
 
     describe 'When logged in as Administrator' do
@@ -568,7 +568,7 @@ describe AgentsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @agent = FactoryGirl.create(:agent)
+      @agent = FactoryBot.create(:agent)
     end
 
     describe 'When logged in as Administrator' do

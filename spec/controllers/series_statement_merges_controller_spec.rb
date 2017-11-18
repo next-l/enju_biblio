@@ -46,7 +46,7 @@ describe SeriesStatementMergesController do
       login_admin
 
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :show, params: { id: series_statement_merge.id }
         assigns(:series_statement_merge).should eq(series_statement_merge)
       end
@@ -56,7 +56,7 @@ describe SeriesStatementMergesController do
       login_librarian
 
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :show, params: { id: series_statement_merge.id }
         assigns(:series_statement_merge).should eq(series_statement_merge)
       end
@@ -66,7 +66,7 @@ describe SeriesStatementMergesController do
       login_user
 
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :show, params: { id: series_statement_merge.id }
         assigns(:series_statement_merge).should eq(series_statement_merge)
       end
@@ -74,7 +74,7 @@ describe SeriesStatementMergesController do
 
     describe 'When not logged in' do
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :show, params: { id: series_statement_merge.id }
         assigns(:series_statement_merge).should eq(series_statement_merge)
       end
@@ -126,7 +126,7 @@ describe SeriesStatementMergesController do
       login_admin
 
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :edit, params: { id: series_statement_merge.id }
         assigns(:series_statement_merge).should eq(series_statement_merge)
       end
@@ -136,7 +136,7 @@ describe SeriesStatementMergesController do
       login_librarian
 
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :edit, params: { id: series_statement_merge.id }
         assigns(:series_statement_merge).should eq(series_statement_merge)
       end
@@ -146,7 +146,7 @@ describe SeriesStatementMergesController do
       login_user
 
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :edit, params: { id: series_statement_merge.id }
         response.should be_forbidden
       end
@@ -154,7 +154,7 @@ describe SeriesStatementMergesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested series_statement_merge as @series_statement_merge' do
-        series_statement_merge = FactoryGirl.create(:series_statement_merge)
+        series_statement_merge = FactoryBot.create(:series_statement_merge)
         get :edit, params: { id: series_statement_merge.id }
         response.should redirect_to(new_user_session_url)
       end
@@ -163,7 +163,7 @@ describe SeriesStatementMergesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = FactoryGirl.attributes_for(:series_statement_merge)
+      @attrs = FactoryBot.attributes_for(:series_statement_merge)
       @invalid_attrs = { series_statement_merge_list_id: '' }
     end
 
@@ -280,8 +280,8 @@ describe SeriesStatementMergesController do
 
   describe 'PUT update' do
     before(:each) do
-      @series_statement_merge = FactoryGirl.create(:series_statement_merge)
-      @attrs = FactoryGirl.attributes_for(:series_statement_merge)
+      @series_statement_merge = FactoryBot.create(:series_statement_merge)
+      @attrs = FactoryBot.attributes_for(:series_statement_merge)
       @invalid_attrs = { series_statement_merge_list_id: '' }
     end
 
@@ -377,7 +377,7 @@ describe SeriesStatementMergesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @series_statement_merge = FactoryGirl.create(:series_statement_merge)
+      @series_statement_merge = FactoryBot.create(:series_statement_merge)
     end
 
     describe 'When logged in as Administrator' do
