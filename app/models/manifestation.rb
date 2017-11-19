@@ -545,6 +545,8 @@ class Manifestation < ActiveRecord::Base
       carrier_type
       edition
       edition_string
+      volume_number
+      volume_number_string
     )
 
     header += IdentifierType.order(:position).pluck(:name)
@@ -621,6 +623,8 @@ class Manifestation < ActiveRecord::Base
         item_lines << carrier_type.name
         item_lines << edition
         item_lines << edition_string
+        item_lines << volume_number
+        item_lines << volume_number_string
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
           if identifier_contents(identifier_type.to_sym).first
@@ -701,6 +705,8 @@ class Manifestation < ActiveRecord::Base
       line << carrier_type.name
       line << edition
       line << edition_string
+      line << volume_number
+      line << volume_number_string
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
         if identifier_contents(identifier_type.to_sym).first
