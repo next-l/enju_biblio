@@ -209,7 +209,7 @@ describe ManifestationsController do
       it 'should accept per_page params' do
         get :index, params: { per_page: 3 }
         expect(assigns(:manifestations).count).to eq 3
-        expect(assigns(:manifestations).total_count).to eq 118
+        expect(assigns(:manifestations).total_count).to eq Manifestation.where(required_role_id: 1).count
       end
 
       it 'should accept page parameter' do

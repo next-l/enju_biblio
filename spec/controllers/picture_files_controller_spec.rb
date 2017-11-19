@@ -5,6 +5,10 @@ describe PictureFilesController do
   fixtures :all
   disconnect_sunspot
 
+  before(:each) do
+    picture_files(:picture_file_00001).update(image: File.open("#{Rails.root}/../../app/assets/images/icons/book.png"))
+  end
+
   describe 'GET index' do
     describe 'When logged in as Administrator' do
       login_fixture_admin

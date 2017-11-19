@@ -30,7 +30,7 @@ class PictureFilesController < ApplicationController
       size = :medium
     end
 
-    file = @picture_file.image.metadata[size].download.path
+    file = @picture_file.image[size].download.path
 
     respond_to do |format|
       format.html # show.html.erb

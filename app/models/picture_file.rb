@@ -2,7 +2,7 @@ class PictureFile < ActiveRecord::Base
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true
 
-  include AttachmentUploader[:image]
+  include ImageUploader[:image]
 
   # http://railsforum.com/viewtopic.php?id=11615
   acts_as_list scope: 'picture_attachable_type=\'#{picture_attachable_type}\''

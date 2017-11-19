@@ -354,7 +354,7 @@ describe AgentsController do
         it 'should create a relationship if item_id is set' do
           post :create, params: { agent: @attrs, item_id: items(:item_00001).id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).manifestations.should eq [items(:item_00001)]
+          assigns(:agent).items.should eq [items(:item_00001)]
         end
       end
 

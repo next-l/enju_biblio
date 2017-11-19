@@ -85,7 +85,7 @@ describe ItemsController do
       it 'should get index with manifestation_id' do
         get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
         expect(response).to be_success
-        assigns(:manifestation).should eq manifestations(:manifestation_00001).id
+        assigns(:manifestation).should eq manifestations(:manifestation_00001)
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
@@ -343,10 +343,10 @@ describe ItemsController do
       it 'should create another item with already retained' do
         reserve = FactoryBot.create(:reserve)
         reserve.transition_to!(:requested)
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelf_00002) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: shelves(:shelf_00002).id) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id), shelf: shelves(:shelf_00002) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: shelves(:shelf_00002).id) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
       end

@@ -9,6 +9,7 @@ require 'nkf'
 require 'cocoon'
 require 'shrine'
 require 'image_processing/mini_magick'
+require 'fastimage'
 require 'erubis'
 require 'activerecord-import'
 begin
