@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160820004638) do
+ActiveRecord::Schema.define(version: 20171119051258) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer  "basket_id"
@@ -674,7 +674,7 @@ ActiveRecord::Schema.define(version: 20160820004638) do
     t.string   "binding_item_identifier"
     t.string   "binding_call_number"
     t.datetime "binded_at"
-    t.integer  "manifestation_id"
+    t.integer  "manifestation_id",                        null: false
   end
 
   add_index "items", ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
