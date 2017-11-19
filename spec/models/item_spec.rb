@@ -54,6 +54,7 @@ end
 # Table name: items
 #
 #  id                      :uuid             not null, primary key
+#  manifestation_id        :uuid             not null
 #  call_number             :string
 #  item_identifier         :string
 #  created_at              :datetime         not null
@@ -72,6 +73,5 @@ end
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime
-#  manifestation_id        :uuid
 #  shelf_id                :uuid             not null
 #

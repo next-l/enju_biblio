@@ -751,6 +751,7 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   end
 
   create_table "items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "manifestation_id", null: false
     t.string "call_number"
     t.string "item_identifier"
     t.datetime "created_at", null: false
@@ -769,7 +770,6 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.string "binding_item_identifier"
     t.string "binding_call_number"
     t.datetime "binded_at"
-    t.uuid "manifestation_id"
     t.uuid "shelf_id", null: false
     t.index ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id"

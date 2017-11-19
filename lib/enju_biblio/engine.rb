@@ -10,6 +10,7 @@ require 'cocoon'
 require 'shrine'
 require 'image_processing/mini_magick'
 require 'erubis'
+require 'activerecord-import'
 begin
   require 'charlock_holmes/string'
 rescue LoadError

@@ -14,9 +14,9 @@ class Item < ActiveRecord::Base
   has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
-  belongs_to :bookstore
+  belongs_to :bookstore, optional: true
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
-  belongs_to :budget_type
+  belongs_to :budget_type, optional: true
   has_many :item_transitions
 
   def state_machine
@@ -198,6 +198,7 @@ end
 # Table name: items
 #
 #  id                      :uuid             not null, primary key
+#  manifestation_id        :uuid             not null
 #  call_number             :string
 #  item_identifier         :string
 #  created_at              :datetime         not null
@@ -216,6 +217,5 @@ end
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime
-#  manifestation_id        :uuid
 #  shelf_id                :uuid             not null
 #
