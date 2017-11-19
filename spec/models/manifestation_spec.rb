@@ -316,8 +316,8 @@ end
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer
-#  fulltext_content                :boolean
-#  serial                          :boolean
+#  fulltext_content                :boolean          default(FALSE), not null
+#  serial                          :boolean          default(FALSE), not null
 #  statement_of_responsibility     :text
 #  publication_place               :text
 #  extent                          :text

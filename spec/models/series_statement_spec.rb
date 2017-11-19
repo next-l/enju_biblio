@@ -30,6 +30,6 @@ end
 #  creator_string                     :text
 #  volume_number_string               :text
 #  volume_number_transcription_string :text
-#  series_master                      :boolean
+#  series_master                      :boolean          default(FALSE), not null
 #  root_manifestation_id              :uuid
 #

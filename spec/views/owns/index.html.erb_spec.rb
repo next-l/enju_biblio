@@ -18,6 +18,6 @@ describe "owns/index" do
     allow(view).to receive(:policy).and_return double(create?: true, destroy?: true)
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", :text => Item.find(1).item_identifier, :count => 2
+    assert_select "tr>td", :text => Item.find('17eaea41-eacb-4e08-8e0b-70c6e62e3ed3').item_identifier, :count => 2
   end
 end

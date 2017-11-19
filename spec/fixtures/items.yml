@@ -293,7 +293,7 @@ item_00025:
 #  lock_version            :integer          default(0), not null
 #  required_role_id        :integer          default(1), not null
 #  acquired_at             :datetime
-#  bookstore_id            :integer
+#  bookstore_id            :uuid
 #  budget_type_id          :integer
 #  circulation_status_id   :integer          default(1), not null
 #  checkout_type_id        :integer          default(1), not null

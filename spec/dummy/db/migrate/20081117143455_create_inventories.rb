@@ -1,4 +1,4 @@
-class CreateInventories < ActiveRecord::Migration[5.0]
+class CreateInventories < ActiveRecord::Migration[5.1]
   def self.up
     create_table :inventories do |t|
       t.integer :item_id

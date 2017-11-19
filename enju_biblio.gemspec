@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/log/*"] - Dir["spec/dummy/solr/{data,pids,default,development,test}/*"] - Dir["spec/dummy/tmp/*"]
 
   s.add_dependency "rails", "~> 5.1.4"
-  s.add_dependency "enju_seed", "~> 0.3.0.beta.3"
+  s.add_dependency "enju_seed", "~> 0.3.0.beta.4"
   s.add_dependency "marc"
   s.add_dependency "validates_timeliness", "~> 4.0"
   s.add_dependency "simple_form", "~> 3.5"
