@@ -126,7 +126,7 @@ describe ManifestationsController do
       it 'should get index with manifestation_id' do
         get :index, params: { manifestation_id: manifestations(:manifestation_00001) }
         expect(response).to be_success
-        expect(assigns(:manifestation)).to eq manifestations.(:manifestation_00001)
+        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00001)
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
       end
 

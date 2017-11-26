@@ -549,7 +549,7 @@ class Manifestation < ActiveRecord::Base
         item_lines << note
 
         isbn_records.each do |isbn_record|
-          item_lines << issn_record.body
+          item_lines << isbn_record.body
         end
         issn_records.each do |issn_record|
           item_lines << issn_record.body

@@ -22,13 +22,13 @@ describe "import_requests/index" do
   end
 
   it "renders a list of import_requests" do
-    allow(view).to receive(:policy).and_return double(create?: true, destroy?: true)
+    allow(view).to receive(:policy).and_return double(destroy?: true)
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td:nth-child(1)", :text => "1"
+    assert_select "tr>td:nth-child(1)", text: "1"
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td:nth-child(2)", /enjuadmin1111111111/
+    assert_select "tr>td:nth-child(2)", /admin\n      1111111111\n/
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td:nth-child(3)", :text => localized_state('pending')
+    assert_select "tr>td:nth-child(3)", text: localized_state('pending')
   end
 end

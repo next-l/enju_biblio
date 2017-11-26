@@ -12,8 +12,8 @@ end
 # Table name: agent_merges
 #
 #  id                  :integer          not null, primary key
-#  agent_id            :integer          not null
-#  agent_merge_list_id :integer          not null
+#  agent_id            :uuid
+#  agent_merge_list_id :integer
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

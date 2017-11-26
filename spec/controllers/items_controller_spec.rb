@@ -51,7 +51,7 @@ describe ItemsController do
         get :index, params: { inventory_file_id: 1 }
         expect(response).to be_success
         assigns(:inventory_file).should eq InventoryFile.find(1)
-        expect(assigns(:items)).to eq Item.inventory_items(assigns(:inventory_file), 'not_on_shelf').order('items.id').page(1)
+        expect(assigns(:items)).to eq Item.inventory_items(assigns(:inventory_file), 'not_on_shelf').order('items.id').page(1).to_a
       end
     end
 
@@ -93,7 +93,7 @@ describe ItemsController do
         get :index, params: { shelf_id: shelves(:shelf_00001).id }
         expect(response).to be_success
         assigns(:shelf).name.should eq 'web'
-        expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
+        expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1).to_a
       end
 
       it 'should not get index with inventory_file_id' do
@@ -514,7 +514,7 @@ describe ItemsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @item = items(:item_00006)
+      @item = FactoryBot.create(:item)
     end
 
     describe 'When logged in as Administrator' do

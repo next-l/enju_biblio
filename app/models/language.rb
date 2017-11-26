@@ -4,6 +4,7 @@ class Language < ActiveRecord::Base
   # alias_attribute :iso1, :iso_639_1
   # alias_attribute :iso2, :iso_639_2
   # alias_attribute :iso3, :iso_639_3
+  acts_as_list
 
   # Validations
   validates_presence_of :iso_639_1, :iso_639_2, :iso_639_3

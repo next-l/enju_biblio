@@ -74,7 +74,7 @@ end
 #
 # Table name: agents
 #
-#  id                                  :integer          not null, primary key
+#  id                                  :uuid             not null, primary key
 #  last_name                           :string
 #  middle_name                         :string
 #  first_name                          :string
