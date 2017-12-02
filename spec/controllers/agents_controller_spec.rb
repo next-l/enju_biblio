@@ -21,9 +21,9 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, params: { agent_id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873' }
         expect(response).to be_success
-        expect(assigns(:agent)).to eq Agent.find(1)
+        expect(assigns(:agent)).to eq Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where('required_role_id >= 1').page(1)
       end
 
@@ -69,9 +69,9 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, params: { agent_id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873' }
         expect(response).to be_success
-        expect(assigns(:agent)).to eq Agent.find(1)
+        expect(assigns(:agent)).to eq Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where(required_role_id: 1).page(1)
       end
 
@@ -172,17 +172,17 @@ describe AgentsController do
       end
 
       it 'should show agent with work' do
-        get :show, params: { id: 1, work_id: manifestations(:manifestation_00001).id }
+        get :show, params: { id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873', work_id: manifestations(:manifestation_00001).id }
         expect(assigns(:agent)).to eq assigns(:work).creators.first
       end
 
       it 'should show agent with manifestation' do
-        get :show, params: { id: 1, manifestation_id: manifestations(:manifestation_00001).id }
+        get :show, params: { id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873', manifestation_id: manifestations(:manifestation_00001).id }
         expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
       end
 
       it "should not show agent when required_role is 'User'" do
-        get :show, params: { id: 5 }
+        get :show, params: { id: 'bdc260fc-e1f7-485a-ac16-9d95e5d9d2ee' }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -231,7 +231,7 @@ describe AgentsController do
       login_fixture_admin
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
@@ -241,7 +241,7 @@ describe AgentsController do
       login_fixture_librarian
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
@@ -266,7 +266,7 @@ describe AgentsController do
       login_fixture_user
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         get :edit, params: { id: agent.id }
         expect(response).to be_forbidden
       end
@@ -284,7 +284,7 @@ describe AgentsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         get :edit, params: { id: agent.id }
         expect(response).to redirect_to(new_user_session_url)
       end

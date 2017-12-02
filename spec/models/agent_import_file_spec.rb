@@ -51,10 +51,10 @@ describe AgentImportFile do
     it 'should update users' do
       @file = AgentImportFile.create attachment: File.new("#{Rails.root}/../../examples/agent_update_file.tsv")
       @file.modify
-      agent_1 = Agent.find(1)
+      agent_1 = agents(:agent_00001)
       agent_1.full_name.should eq 'たなべこうすけ'
       agent_1.address_1.should eq '東京都'
-      agent_2 = Agent.find(2)
+      agent_2 = agents(:agent_00002)
       agent_2.full_name.should eq '田辺浩介'
       agent_2.address_1.should eq '岡山県'
     end

@@ -76,9 +76,9 @@ describe ItemsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, params: { agent_id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873' }
         expect(response).to be_success
-        assigns(:agent).should eq Agent.find(1)
+        assigns(:agent).should eq Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 

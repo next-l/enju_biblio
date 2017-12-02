@@ -6,7 +6,7 @@ describe "produces/edit" do
   before(:each) do
     @produce = assign(:produce, stub_model(Produce,
       :manifestation_id => 1,
-      :agent_id => 1
+      :agent_id => '=> 727eae50-90a8-419b-ab0c-bd8f9a3a2873'
     ))
     @produce_types = ProduceType.all
   end

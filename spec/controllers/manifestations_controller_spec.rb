@@ -263,7 +263,7 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with agent who does not produce it' do
-        get :show, params: { id: manifestations(:manifestation_00003).id, agent_id: 3 }
+        get :show, params: { id: manifestations(:manifestation_00003).id, agent_id: '68851dc9-c884-412a-92fb-a7586ca1dccf' }
         expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(manifestations(:manifestation_00003).id)
         expect(response).to be_success
       end

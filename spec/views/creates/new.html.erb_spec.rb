@@ -6,7 +6,7 @@ describe "creates/new" do
   before(:each) do
     assign(:create, stub_model(Create,
       :work_id => 1,
-      :agent_id => 1
+      :agent_id => '=> 727eae50-90a8-419b-ab0c-bd8f9a3a2873'
     ).as_new_record)
     @create_types = CreateType.all
   end

@@ -5,11 +5,11 @@ describe "creates/index" do
     assign(:creates, Kaminari::paginate_array([
       stub_model(Create,
         :work_id => '1ff5b88a-1964-4db0-acb3-ae1d9e3a307e',
-        :agent_id => 1
+        :agent_id => '727eae50-90a8-419b-ab0c-bd8f9a3a2873'
       ),
       stub_model(Create,
         :work_id => '1ff5b88a-1964-4db0-acb3-ae1d9e3a307e',
-        :agent_id => 2
+        :agent_id => '29ef327d-172b-451f-9e9c-36f8831ccefe'
       )
     ]).page(1))
   end
