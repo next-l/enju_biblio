@@ -47,15 +47,6 @@ class ManifestationPolicy < ApplicationPolicy
           else
             false
           end
-        else
-          case user.try(:role).try(:name)
-          when 'Administrator'
-            true
-          when 'Librarian'
-            true if record.required_role_id <= 3
-          else
-            false
-          end
         end
       end
     end

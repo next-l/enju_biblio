@@ -8,9 +8,9 @@ describe ResourceExportFile do
     file = ResourceExportFile.new
     file.user = users(:admin)
     file.save
-    ResourceExportFileJob.perform_later(file).should be_truthy
+    ResourceExportFileJob.perform_now(file).should be_truthy
     Message.count.should eq message_count + 1
-    Message.order(:id).last.subject.should eq 'エクスポートが完了しました'
+    Message.order(created_at: :desc).first.subject.should eq 'エクスポートが完了しました'
   end
 
   it 'should respect the role of the user' do

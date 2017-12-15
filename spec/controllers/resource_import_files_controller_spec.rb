@@ -129,7 +129,7 @@ describe ResourceImportFilesController do
       end
 
       it 'should create resource_import_file' do
-        post :create, params: { resource_import_file: { attachment: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create', default_shelf_id: 1 } }
+        post :create, params: { resource_import_file: { attachment: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create', default_shelf_id: shelves(:shelf_00002).id } }
         expect(assigns(:resource_import_file)).to be_valid
         assigns(:resource_import_file).user.username.should eq @user.username
         expect(response).to redirect_to resource_import_file_url(assigns(:resource_import_file))

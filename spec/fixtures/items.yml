@@ -269,7 +269,7 @@ item_00025:
   circulation_status_id: 16
   checkout_type_id: 3
   shelf_id: 7dcedc02-df58-4f89-8f5f-9a823430dd8a
-  call_number: 
+  call_number: '547|ヤ'
   manifestation_id: 64c18638-dbd6-448a-8ae4-c837a6c99713
   id: e190d0d4-672e-49b5-a996-b90bf2409b9b
   include_supplements: false

@@ -4,7 +4,7 @@ describe "realizes/show" do
   before(:each) do
     @realize = assign(:realize, stub_model(Realize,
       :expression_id => '1ff5b88a-1964-4db0-acb3-ae1d9e3a307e',
-      :agent_id => '=> 727eae50-90a8-419b-ab0c-bd8f9a3a2873'
+      :agent_id => '727eae50-90a8-419b-ab0c-bd8f9a3a2873'
     ))
   end
 

@@ -173,12 +173,12 @@ describe AgentsController do
 
       it 'should show agent with work' do
         get :show, params: { id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873', work_id: manifestations(:manifestation_00001).id }
-        expect(assigns(:agent)).to eq assigns(:work).creators.first
+        expect(assigns(:agent)).to eq assigns(:work).creators.order(:created_at).first
       end
 
       it 'should show agent with manifestation' do
         get :show, params: { id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873', manifestation_id: manifestations(:manifestation_00001).id }
-        expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
+        expect(assigns(:agent)).to eq assigns(:manifestation).publishers.order(:created_at).first
       end
 
       it "should not show agent when required_role is 'User'" do

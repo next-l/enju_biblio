@@ -211,7 +211,7 @@ class ItemsController < ApplicationController
           if defined?(EnjuCirculation)
             if @item.reserved?
               flash[:message] = t('item.this_item_is_reserved')
-              @item.retain(current_user)
+              @item.retain!(current_user)
             end
           end
         end

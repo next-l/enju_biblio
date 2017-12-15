@@ -1343,6 +1343,15 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.index ["resource_import_file_id"], name: "index_resource_import_results_on_resource_import_file_id"
   end
 
+  create_table "retain_and_checkouts", force: :cascade do |t|
+    t.bigint "retain_id", null: false
+    t.uuid "checkout_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checkout_id"], name: "index_retain_and_checkouts_on_checkout_id"
+    t.index ["retain_id"], name: "index_retain_and_checkouts_on_retain_id"
+  end
+
   create_table "retains", force: :cascade do |t|
     t.uuid "reserve_id", null: false
     t.uuid "item_id", null: false
@@ -1794,6 +1803,8 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   add_foreign_key "reserves", "manifestations"
   add_foreign_key "reserves", "users"
   add_foreign_key "resource_import_files", "users"
+  add_foreign_key "retain_and_checkouts", "checkouts", on_delete: :cascade
+  add_foreign_key "retain_and_checkouts", "retains", on_delete: :cascade
   add_foreign_key "retains", "items", on_delete: :cascade
   add_foreign_key "retains", "reserves", on_delete: :cascade
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"

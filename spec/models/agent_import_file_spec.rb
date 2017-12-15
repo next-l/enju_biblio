@@ -15,11 +15,11 @@ describe AgentImportFile do
       old_import_results_count = AgentImportResult.count
       @file.current_state.should eq 'pending'
       @file.import_start.should eq(agent_imported: 3, user_imported: 0, failed: 0)
-      Agent.order('id DESC')[0].full_name.should eq '原田 ushi 隆史'
-      Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
-      Agent.order('id DESC')[2].date_of_birth.should eq Time.zone.parse('1978-01-01')
+      Agent.order(created_at: :desc)[0].full_name.should eq '原田 ushi 隆史'
+      Agent.order(created_at: :desc)[1].full_name.should eq '田辺浩介'
+      Agent.order(created_at: :desc)[2].date_of_birth.should eq Time.zone.parse('1978-01-01')
       Agent.count.should eq old_agents_count + 3
-      @file.agent_import_results.order(:id).first.body.split("\t").first.should eq 'full_name'
+      @file.agent_import_results.order(:created_at).first.body.split("\t").first.should eq 'full_name'
       AgentImportResult.count.should eq old_import_results_count + 5
 
       @file.agent_import_fingerprint.should be_truthy
@@ -38,8 +38,8 @@ describe AgentImportFile do
       @file.current_state.should eq 'pending'
       @file.import_start.should eq(agent_imported: 4, user_imported: 0, failed: 0)
       Agent.count.should eq old_agents_count + 4
-      Agent.order('id DESC')[0].full_name.should eq '原田 ushi 隆史'
-      Agent.order('id DESC')[1].full_name.should eq '田辺浩介'
+      Agent.order(created_at: :desc)[0].full_name.should eq '原田 ushi 隆史'
+      Agent.order(created_at: :desc)[1].full_name.should eq '田辺浩介'
       AgentImportResult.count.should eq old_import_results_count + 5
 
       @file.agent_import_fingerprint.should be_truthy

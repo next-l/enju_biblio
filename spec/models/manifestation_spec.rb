@@ -110,7 +110,7 @@ describe Manifestation, solr: true do
     sru = Sru.new(query: 'title ALL "awk sed"')
     sru.search
     sru.manifestations.size.should eq 2
-    sru.manifestations.collect(&:id).should eq [184, 116]
+    sru.manifestations.collect(&:id).should eq [manifestations(:manifestation_00184).id, manifestations(:manifestation_00116).id]
     sru = Sru.new(query: 'title ANY "ruby awk sed"')
     sru.search
     sru.manifestations.size.should eq 22
