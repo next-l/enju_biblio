@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe RealizeType do
   it 'should create realize_type' do
-    FactoryGirl.create(:realize_type)
+    FactoryBot.create(:realize_type)
   end
 end
 

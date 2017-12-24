@@ -6,12 +6,12 @@ describe OwnsController do
   disconnect_sunspot
 
   def valid_attributes
-    FactoryGirl.attributes_for(:own)
+    FactoryBot.attributes_for(:own)
   end
 
   describe 'GET index' do
     before(:each) do
-      FactoryGirl.create(:own)
+      FactoryBot.create(:own)
     end
 
     describe 'When logged in as Administrator' do
@@ -54,7 +54,7 @@ describe OwnsController do
       login_fixture_admin
 
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :show, id: own.id
         expect(assigns(:own)).to eq(own)
       end
@@ -64,7 +64,7 @@ describe OwnsController do
       login_fixture_librarian
 
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :show, id: own.id
         expect(assigns(:own)).to eq(own)
       end
@@ -74,7 +74,7 @@ describe OwnsController do
       login_fixture_user
 
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :show, id: own.id
         expect(assigns(:own)).to eq(own)
       end
@@ -82,7 +82,7 @@ describe OwnsController do
 
     describe 'When not logged in' do
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :show, id: own.id
         expect(assigns(:own)).to eq(own)
       end
@@ -134,7 +134,7 @@ describe OwnsController do
       login_fixture_admin
 
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :edit, id: own.id
         expect(assigns(:own)).to eq(own)
       end
@@ -144,7 +144,7 @@ describe OwnsController do
       login_fixture_librarian
 
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :edit, id: own.id
         expect(assigns(:own)).to eq(own)
       end
@@ -154,7 +154,7 @@ describe OwnsController do
       login_fixture_user
 
       it 'assigns the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :edit, id: own.id
         expect(response).to be_forbidden
       end
@@ -162,7 +162,7 @@ describe OwnsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested own as @own' do
-        own = FactoryGirl.create(:own)
+        own = FactoryBot.create(:own)
         get :edit, id: own.id
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -288,7 +288,7 @@ describe OwnsController do
 
   describe 'PUT update' do
     before(:each) do
-      @own = FactoryGirl.create(:own)
+      @own = FactoryBot.create(:own)
       @attrs = valid_attributes
       @invalid_attrs = { item_id: '' }
     end
@@ -390,7 +390,7 @@ describe OwnsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @own = FactoryGirl.create(:own)
+      @own = FactoryBot.create(:own)
     end
 
     describe 'When logged in as Administrator' do

@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :role, :class => Role do |f|
     f.sequence(:name) do |n|
       idx = "a"

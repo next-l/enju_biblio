@@ -6,7 +6,7 @@ describe DonatesController do
   disconnect_sunspot
 
   def valid_attributes
-    FactoryGirl.attributes_for(:donate)
+    FactoryBot.attributes_for(:donate)
   end
 
   describe 'GET index' do
@@ -50,7 +50,7 @@ describe DonatesController do
       login_fixture_admin
 
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :show, id: donate.id
         expect(assigns(:donate)).to eq(donate)
       end
@@ -60,7 +60,7 @@ describe DonatesController do
       login_fixture_librarian
 
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :show, id: donate.id
         expect(assigns(:donate)).to eq(donate)
       end
@@ -70,7 +70,7 @@ describe DonatesController do
       login_fixture_user
 
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :show, id: donate.id
         expect(assigns(:donate)).to eq(donate)
       end
@@ -78,7 +78,7 @@ describe DonatesController do
 
     describe 'When not logged in' do
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :show, id: donate.id
         expect(assigns(:donate)).to eq(donate)
       end
@@ -128,7 +128,7 @@ describe DonatesController do
       login_fixture_admin
 
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :edit, id: donate.id
         expect(assigns(:donate)).to eq(donate)
       end
@@ -138,7 +138,7 @@ describe DonatesController do
       login_fixture_librarian
 
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :edit, id: donate.id
         expect(assigns(:donate)).to eq(donate)
       end
@@ -148,7 +148,7 @@ describe DonatesController do
       login_fixture_user
 
       it 'assigns the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :edit, id: donate.id
         expect(response).to be_forbidden
       end
@@ -156,7 +156,7 @@ describe DonatesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested donate as @donate' do
-        donate = FactoryGirl.create(:donate)
+        donate = FactoryBot.create(:donate)
         get :edit, id: donate.id
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -282,7 +282,7 @@ describe DonatesController do
 
   describe 'PUT update' do
     before(:each) do
-      @donate = FactoryGirl.create(:donate)
+      @donate = FactoryBot.create(:donate)
       @attrs = valid_attributes
       @invalid_attrs = { item_id: '' }
     end
@@ -383,7 +383,7 @@ describe DonatesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @donate = FactoryGirl.create(:donate)
+      @donate = FactoryBot.create(:donate)
     end
 
     describe 'When logged in as Administrator' do

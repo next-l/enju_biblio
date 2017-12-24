@@ -5,14 +5,14 @@ describe "items/index" do
   before(:each) do
     @items = assign(:items,
       Kaminari.paginate_array( [
-        FactoryGirl.create(:item),
+        FactoryBot.create(:item),
       ], total_count: 1).page(1)
     )
     facet1 = double("Facet for available on shelf")
     allow(facet1).to receive(:count).and_return(1)
     allow(facet1).to receive(:value).and_return("Available On Shelf")
     @circulation_status_facet = assign(:circulation_status_facet, [facet1])
-    user = FactoryGirl.create(:librarian)
+    user = FactoryBot.create(:librarian)
     allow(view).to receive(:policy) do |record|
       Pundit.policy(user, record)
     end

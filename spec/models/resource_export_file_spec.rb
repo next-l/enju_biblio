@@ -28,9 +28,9 @@ describe ResourceExportFile do
   end
 
   it "should export NCID value" do
-    manifestation = FactoryGirl.create(:manifestation)
+    manifestation = FactoryBot.create(:manifestation)
     ncid = IdentifierType.where(name: "ncid").first
-    identifier = FactoryGirl.create(:identifier, identifier_type: ncid, body: "BA91833159")
+    identifier = FactoryBot.create(:identifier, identifier_type: ncid, body: "BA91833159")
     manifestation.identifiers << identifier
     manifestation.save!
     export_file = ResourceExportFile.new
@@ -45,8 +45,8 @@ describe ResourceExportFile do
   end
 
   it "should export carrier_type" do
-    carrier_type = FactoryGirl.create(:carrier_type)
-    manifestation = FactoryGirl.create(:manifestation, carrier_type: carrier_type)
+    carrier_type = FactoryBot.create(:carrier_type)
+    manifestation = FactoryBot.create(:manifestation, carrier_type: carrier_type)
     manifestation.save!
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
@@ -67,9 +67,9 @@ describe ResourceExportFile do
   end
 
   it "should export total_checkouts" do
-    item1 = FactoryGirl.create(:item)
-    item2 = FactoryGirl.create(:item)
-    checkout = FactoryGirl.create(:checkout, item: item2)
+    item1 = FactoryBot.create(:item)
+    item2 = FactoryBot.create(:item)
+    checkout = FactoryBot.create(:checkout, item: item2)
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
     export_file.save!

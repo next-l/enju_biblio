@@ -26,7 +26,7 @@ describe FormOfWorksController do
   # FormOfWork. As you add validations to FormOfWork, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:form_of_work)
+    FactoryBot.attributes_for(:form_of_work)
   end
 
   describe 'GET index' do

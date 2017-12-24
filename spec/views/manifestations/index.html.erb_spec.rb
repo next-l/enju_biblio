@@ -4,7 +4,7 @@ describe "manifestations/index" do
   before(:each) do
     @manifestations = assign(:manifestations,
       Kaminari.paginate_array( [
-        FactoryGirl.create(:manifestation),
+        FactoryBot.create(:manifestation),
       ], total_count: 1).page(1)
     )
     @index_agent = {}

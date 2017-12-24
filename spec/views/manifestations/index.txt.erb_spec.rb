@@ -2,8 +2,8 @@ require "rails_helper.rb"
 
 describe "manifestations/index.txt.erb" do
   before(:each) do
-    manifestation = FactoryGirl.create(:manifestation)
-    manifestation.items << FactoryGirl.create(:item, bookstore_id: 1, budget_type_id: 1, price: 100)
+    manifestation = FactoryBot.create(:manifestation)
+    manifestation.items << FactoryBot.create(:item, bookstore_id: 1, budget_type_id: 1, price: 100)
     @manifestations = assign(:manifestations, [ manifestation ] )
   end
 

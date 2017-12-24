@@ -4,7 +4,7 @@ describe SeriesStatementsController do
   fixtures :users
 
   def valid_attributes
-    FactoryGirl.attributes_for(:series_statement)
+    FactoryBot.attributes_for(:series_statement)
   end
 
   describe 'GET index', solr: true do
@@ -52,7 +52,7 @@ describe SeriesStatementsController do
       login_fixture_admin
 
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :show, id: series_statement.id
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
@@ -63,7 +63,7 @@ describe SeriesStatementsController do
       login_fixture_librarian
 
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :show, id: series_statement.id
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
@@ -74,7 +74,7 @@ describe SeriesStatementsController do
       login_fixture_user
 
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :show, id: series_statement.id
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
@@ -83,7 +83,7 @@ describe SeriesStatementsController do
 
     describe 'When not logged in' do
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :show, id: series_statement.id
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
@@ -134,7 +134,7 @@ describe SeriesStatementsController do
       login_fixture_admin
 
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :edit, id: series_statement.id
         expect(assigns(:series_statement)).to eq(series_statement)
       end
@@ -144,7 +144,7 @@ describe SeriesStatementsController do
       login_fixture_librarian
 
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :edit, id: series_statement.id
         expect(assigns(:series_statement)).to eq(series_statement)
       end
@@ -154,7 +154,7 @@ describe SeriesStatementsController do
       login_fixture_user
 
       it 'assigns the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :edit, id: series_statement.id
         expect(response).to be_forbidden
       end
@@ -162,7 +162,7 @@ describe SeriesStatementsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested series_statement as @series_statement' do
-        series_statement = FactoryGirl.create(:series_statement)
+        series_statement = FactoryBot.create(:series_statement)
         get :edit, id: series_statement.id
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -288,7 +288,7 @@ describe SeriesStatementsController do
 
   describe 'PUT update' do
     before(:each) do
-      @series_statement = FactoryGirl.create(:series_statement)
+      @series_statement = FactoryBot.create(:series_statement)
       @attrs = valid_attributes
       @invalid_attrs = { original_title: '' }
     end
@@ -394,7 +394,7 @@ describe SeriesStatementsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @series_statement = FactoryGirl.create(:series_statement)
+      @series_statement = FactoryBot.create(:series_statement)
     end
 
     describe 'When logged in as Administrator' do

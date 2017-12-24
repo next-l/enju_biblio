@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe CreateType do
   it 'should create create_type' do
-    FactoryGirl.create(:create_type)
+    FactoryBot.create(:create_type)
   end
 end
 

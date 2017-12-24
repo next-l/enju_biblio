@@ -26,7 +26,7 @@ describe ContentTypesController do
   # ContentType. As you add validations to ContentType, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:content_type)
+    FactoryBot.attributes_for(:content_type)
   end
 
   describe 'GET index' do
@@ -59,8 +59,8 @@ describe ContentTypesController do
       expect(assigns(:content_type)).to eq(content_type)
     end
     it 'assigns the content_type even if it associates manifestation(s)' do
-      content_type = FactoryGirl.create(:content_type)
-      manifestation = FactoryGirl.create(:manifestation, content_type_id: content_type.id)
+      content_type = FactoryBot.create(:content_type)
+      manifestation = FactoryBot.create(:manifestation, content_type_id: content_type.id)
       get :edit, id: content_type.id
       expect(assigns(:content_type)).to eq content_type
       expect(response).to be_success

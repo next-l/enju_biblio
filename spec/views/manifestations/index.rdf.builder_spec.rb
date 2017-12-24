@@ -2,7 +2,7 @@ require "rails_helper.rb"
 
 describe "manifestations/index.rdf.builder" do
   before(:each) do
-    manifestation = FactoryGirl.create(:manifestation)
+    manifestation = FactoryBot.create(:manifestation)
     @manifestations = assign(:manifestations, [ manifestation ] )
     @library_group = LibraryGroup.first
     view.stub(:filtered_params).and_return(ActionController::Parameters.new(per_page: 50))

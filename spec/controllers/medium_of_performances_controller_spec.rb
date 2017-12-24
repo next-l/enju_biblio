@@ -26,7 +26,7 @@ describe MediumOfPerformancesController do
   # MediumOfPerformance. As you add validations to MediumOfPerformance, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:medium_of_performance)
+    FactoryBot.attributes_for(:medium_of_performance)
   end
 
   describe 'GET index' do

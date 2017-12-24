@@ -5,7 +5,7 @@ describe AgentMergesController do
 
   describe 'GET index' do
     before(:each) do
-      FactoryGirl.create(:agent_merge)
+      FactoryBot.create(:agent_merge)
     end
 
     describe 'When logged in as Administrator' do
@@ -50,7 +50,7 @@ describe AgentMergesController do
       login_admin
 
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :show, id: agent_merge.id
         assigns(:agent_merge).should eq(agent_merge)
       end
@@ -60,7 +60,7 @@ describe AgentMergesController do
       login_librarian
 
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :show, id: agent_merge.id
         assigns(:agent_merge).should eq(agent_merge)
       end
@@ -70,7 +70,7 @@ describe AgentMergesController do
       login_user
 
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :show, id: agent_merge.id
         assigns(:agent_merge).should eq(agent_merge)
       end
@@ -78,7 +78,7 @@ describe AgentMergesController do
 
     describe 'When not logged in' do
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :show, id: agent_merge.id
         assigns(:agent_merge).should eq(agent_merge)
       end
@@ -130,7 +130,7 @@ describe AgentMergesController do
       login_admin
 
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :edit, id: agent_merge.id
         assigns(:agent_merge).should eq(agent_merge)
       end
@@ -140,7 +140,7 @@ describe AgentMergesController do
       login_librarian
 
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :edit, id: agent_merge.id
         assigns(:agent_merge).should eq(agent_merge)
       end
@@ -150,7 +150,7 @@ describe AgentMergesController do
       login_user
 
       it 'assigns the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :edit, id: agent_merge.id
         response.should be_forbidden
       end
@@ -158,7 +158,7 @@ describe AgentMergesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested agent_merge as @agent_merge' do
-        agent_merge = FactoryGirl.create(:agent_merge)
+        agent_merge = FactoryBot.create(:agent_merge)
         get :edit, id: agent_merge.id
         response.should redirect_to(new_user_session_url)
       end
@@ -167,7 +167,7 @@ describe AgentMergesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = FactoryGirl.attributes_for(:agent_merge)
+      @attrs = FactoryBot.attributes_for(:agent_merge)
       @invalid_attrs = { agent_id: 'invalid', agent_merge_list_id: 'invalid' }
     end
 
@@ -284,8 +284,8 @@ describe AgentMergesController do
 
   describe 'PUT update' do
     before(:each) do
-      @agent_merge = FactoryGirl.create(:agent_merge)
-      @attrs = FactoryGirl.attributes_for(:agent_merge)
+      @agent_merge = FactoryBot.create(:agent_merge)
+      @attrs = FactoryBot.attributes_for(:agent_merge)
       @invalid_attrs = { agent_merge_list_id: '' }
     end
 
@@ -381,7 +381,7 @@ describe AgentMergesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @agent_merge = FactoryGirl.create(:agent_merge)
+      @agent_merge = FactoryBot.create(:agent_merge)
     end
 
     describe 'When logged in as Administrator' do

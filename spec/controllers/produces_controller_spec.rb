@@ -6,7 +6,7 @@ describe ProducesController do
   disconnect_sunspot
 
   def valid_attributes
-    FactoryGirl.attributes_for(:produce)
+    FactoryBot.attributes_for(:produce)
   end
 
   describe 'GET index' do
@@ -50,7 +50,7 @@ describe ProducesController do
       login_fixture_admin
 
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :show, id: produce.id
         expect(assigns(:produce)).to eq(produce)
       end
@@ -60,7 +60,7 @@ describe ProducesController do
       login_fixture_librarian
 
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :show, id: produce.id
         expect(assigns(:produce)).to eq(produce)
       end
@@ -70,7 +70,7 @@ describe ProducesController do
       login_fixture_user
 
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :show, id: produce.id
         expect(assigns(:produce)).to eq(produce)
       end
@@ -78,7 +78,7 @@ describe ProducesController do
 
     describe 'When not logged in' do
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :show, id: produce.id
         expect(assigns(:produce)).to eq(produce)
       end
@@ -128,7 +128,7 @@ describe ProducesController do
       login_fixture_admin
 
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :edit, id: produce.id
         expect(assigns(:produce)).to eq(produce)
       end
@@ -138,7 +138,7 @@ describe ProducesController do
       login_fixture_librarian
 
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :edit, id: produce.id
         expect(assigns(:produce)).to eq(produce)
       end
@@ -148,7 +148,7 @@ describe ProducesController do
       login_fixture_user
 
       it 'assigns the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :edit, id: produce.id
         expect(response).to be_forbidden
       end
@@ -156,7 +156,7 @@ describe ProducesController do
 
     describe 'When not logged in' do
       it 'should not assign the requested produce as @produce' do
-        produce = FactoryGirl.create(:produce)
+        produce = FactoryBot.create(:produce)
         get :edit, id: produce.id
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -390,7 +390,7 @@ describe ProducesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @produce = FactoryGirl.create(:produce)
+      @produce = FactoryBot.create(:produce)
     end
 
     describe 'When logged in as Administrator' do

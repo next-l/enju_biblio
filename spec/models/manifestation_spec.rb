@@ -8,20 +8,20 @@ describe Manifestation, :solr => true do
   end
 
   it "should set year_of_publication" do
-    manifestation = FactoryGirl.create(:manifestation, :pub_date => '2000')
+    manifestation = FactoryBot.create(:manifestation, :pub_date => '2000')
     manifestation.year_of_publication.should eq 2000
     manifestation.date_of_publication.should eq Time.zone.parse('2000-01-01')
   end
 
   it "should set date_of_publication" do
-    manifestation = FactoryGirl.create(:manifestation, :pub_date => '2000-01')
+    manifestation = FactoryBot.create(:manifestation, :pub_date => '2000-01')
     manifestation.year_of_publication.should eq 2000
     manifestation.month_of_publication.should eq 1
     manifestation.date_of_publication.should eq Time.zone.parse('2000-01-01')
   end
 
   it "should set volume_number" do
-    manifestation = FactoryGirl.create(:manifestation, :volume_number_string => '第1巻', :issue_number_string => '20号分冊1', :edition_string => '第3版')
+    manifestation = FactoryBot.create(:manifestation, :volume_number_string => '第1巻', :issue_number_string => '20号分冊1', :edition_string => '第3版')
     manifestation.volume_number.should eq 1
     manifestation.issue_number.should eq 20
     manifestation.edition.should eq 3
@@ -241,7 +241,7 @@ describe Manifestation, :solr => true do
     end
 
     it "should export edition fields" do
-      manifestation = FactoryGirl.create(:manifestation, edition: 2, edition_string: "Revised Ed.")
+      manifestation = FactoryBot.create(:manifestation, edition: 2, edition_string: "Revised Ed.")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["edition"].compact).not_to be_empty
@@ -251,7 +251,7 @@ describe Manifestation, :solr => true do
       expect(m["edition_string"]).to eq "Revised Ed."
     end
     it "should export title_transcription fields" do
-      manifestation = FactoryGirl.create(:manifestation, title_transcription: "Transcripted title")
+      manifestation = FactoryBot.create(:manifestation, title_transcription: "Transcripted title")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["title_transcription"].compact).not_to be_empty
@@ -259,7 +259,7 @@ describe Manifestation, :solr => true do
       expect(m["title_transcription"]).to eq "Transcripted title"
     end
     it "should export volume fields" do
-      manifestation = FactoryGirl.create(:manifestation, volume_number: 15, volume_number_string: "Vol.15")
+      manifestation = FactoryBot.create(:manifestation, volume_number: 15, volume_number_string: "Vol.15")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["volume_number"].compact).not_to be_empty
@@ -270,7 +270,7 @@ describe Manifestation, :solr => true do
     end
 
     it "should respect the role of the user" do
-      FactoryGirl.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
+      FactoryBot.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).to be_empty

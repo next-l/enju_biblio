@@ -1,12 +1,12 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :reserve do |f|
     before(:create) do |reserve|
-      profile = FactoryGirl.create(:profile)
-      user = FactoryGirl.create(:admin)
+      profile = FactoryBot.create(:profile)
+      user = FactoryBot.create(:admin)
       user.profile = profile
       reserve.user = user
     end
-    f.manifestation_id{FactoryGirl.create(:manifestation).id}
-#    f.user{FactoryGirl.create(:user)}
+    f.manifestation_id{FactoryBot.create(:manifestation).id}
+#    f.user{FactoryBot.create(:user)}
   end
 end

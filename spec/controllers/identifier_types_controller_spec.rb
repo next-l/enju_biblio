@@ -26,7 +26,7 @@ describe IdentifierTypesController do
   # IdentifierType. As you add validations to IdentifierType, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:identifier_type)
+    FactoryBot.attributes_for(:identifier_type)
   end
 
   describe 'GET index' do

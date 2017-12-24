@@ -5,7 +5,7 @@ describe ItemsController do
   fixtures :all
 
   def valid_attributes
-    FactoryGirl.attributes_for(:item)
+    FactoryBot.attributes_for(:item)
   end
 
   describe 'GET index', solr: true do
@@ -107,7 +107,7 @@ describe ItemsController do
 
   describe 'GET show' do
     before(:each) do
-      @item = FactoryGirl.create(:item)
+      @item = FactoryBot.create(:item)
     end
 
     describe 'When logged in as Administrator' do
@@ -154,7 +154,7 @@ describe ItemsController do
 
   describe 'GET new' do
     before(:each) do
-      @manifestation = FactoryGirl.create(:manifestation)
+      @manifestation = FactoryBot.create(:manifestation)
     end
 
     describe 'When logged in as Administrator' do
@@ -181,7 +181,7 @@ describe ItemsController do
       end
 
       it 'should not get new item for series_master' do
-        manifestation_serial = FactoryGirl.create(:manifestation_serial)
+        manifestation_serial = FactoryBot.create(:manifestation_serial)
         get :new, manifestation_id: manifestation_serial.id
         expect(response).to redirect_to(manifestations_url(parent_id: manifestation_serial.id))
       end
@@ -221,7 +221,7 @@ describe ItemsController do
       login_fixture_admin
 
       it 'assigns the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, id: item.id
         expect(assigns(:item)).to eq(item)
       end
@@ -238,7 +238,7 @@ describe ItemsController do
       login_fixture_librarian
 
       it 'assigns the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, id: item.id
         expect(assigns(:item)).to eq(item)
       end
@@ -248,7 +248,7 @@ describe ItemsController do
       login_fixture_user
 
       it 'assigns the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, id: item.id
         expect(response).to be_forbidden
       end
@@ -256,7 +256,7 @@ describe ItemsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested item as @item' do
-        item = FactoryGirl.create(:item)
+        item = FactoryBot.create(:item)
         get :edit, id: item.id
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -265,8 +265,8 @@ describe ItemsController do
 
   describe 'POST create' do
     before(:each) do
-      manifestation = FactoryGirl.create(:manifestation)
-      @attrs = FactoryGirl.attributes_for(:item, manifestation_id: manifestation.id)
+      manifestation = FactoryBot.create(:manifestation)
+      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
 
@@ -357,12 +357,12 @@ describe ItemsController do
       end
 
       it "should create another item with already retained" do
-        reserve = FactoryGirl.create(:reserve)
+        reserve = FactoryBot.create(:reserve)
         reserve.transition_to!(:requested)
-        post :create, :item => FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id)
+        post :create, :item => FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id)
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        post :create, :item => FactoryGirl.attributes_for(:item, manifestation_id: reserve.manifestation.id)
+        post :create, :item => FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id)
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
       end
@@ -425,8 +425,8 @@ describe ItemsController do
 
   describe 'PUT update' do
     before(:each) do
-      @item = FactoryGirl.create(:item)
-      @attrs = FactoryGirl.attributes_for(:item)
+      @item = FactoryBot.create(:item)
+      @attrs = FactoryBot.attributes_for(:item)
       @invalid_attrs = { item_identifier: '無効なID' }
     end
 

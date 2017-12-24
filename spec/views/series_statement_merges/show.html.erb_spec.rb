@@ -1,7 +1,7 @@
 require 'rails_helper'
 describe "series_statement_merges/show" do
   before(:each) do
-    @series_statement_merge = assign(:series_statement_merge, FactoryGirl.create(:series_statement_merge))
+    @series_statement_merge = assign(:series_statement_merge, FactoryBot.create(:series_statement_merge))
   end
 
   it "renders attributes in <p>" do

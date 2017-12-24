@@ -26,7 +26,7 @@ describe FrequenciesController do
   # Frequency. As you add validations to Frequency, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:frequency)
+    FactoryBot.attributes_for(:frequency)
   end
 
   describe 'GET index' do
@@ -59,8 +59,8 @@ describe FrequenciesController do
       assigns(:frequency).should eq(frequency)
     end
     it 'assigns the frequency even if it associates manifestation(s)' do
-      frequency = FactoryGirl.create(:frequency)
-      manifestation = FactoryGirl.create(:manifestation, frequency_id: frequency.id)
+      frequency = FactoryBot.create(:frequency)
+      manifestation = FactoryBot.create(:manifestation, frequency_id: frequency.id)
       get :edit, id: frequency.id
       expect(assigns(:frequency)).to eq frequency
       expect(response).to be_success

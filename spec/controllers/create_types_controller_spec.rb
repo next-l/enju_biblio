@@ -26,7 +26,7 @@ describe CreateTypesController do
   # CreateType. As you add validations to CreateType, be sure to
   # update the return value of this method accordingly.
   def valid_attributes
-    FactoryGirl.attributes_for(:create_type)
+    FactoryBot.attributes_for(:create_type)
   end
 
   describe 'GET index' do
