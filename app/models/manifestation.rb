@@ -547,6 +547,9 @@ class Manifestation < ActiveRecord::Base
       edition_string
       volume_number
       volume_number_string
+      issue_number
+      issue_number_string
+      serial_number
     )
 
     header += IdentifierType.order(:position).pluck(:name)
@@ -625,6 +628,9 @@ class Manifestation < ActiveRecord::Base
         item_lines << edition_string
         item_lines << volume_number
         item_lines << volume_number_string
+        item_lines << issue_number
+        item_lines << issue_number_string
+        item_lines << serial_number
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
           if identifier_contents(identifier_type.to_sym).first
@@ -707,6 +713,9 @@ class Manifestation < ActiveRecord::Base
       line << edition_string
       line << volume_number
       line << volume_number_string
+      line << issue_number
+      line << issue_number_string
+      line << serial_number
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
         if identifier_contents(identifier_type.to_sym).first
