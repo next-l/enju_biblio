@@ -31,7 +31,7 @@ class PictureFilesController < ApplicationController
       size = 'medium'
     end
 
-    if @picture_file.picture.path
+    if @picture_file.picture.exists?
       if ENV['ENJU_STORAGE'] == 's3'
         file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
       else
