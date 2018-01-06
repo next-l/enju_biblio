@@ -563,6 +563,7 @@ class Manifestation < ActiveRecord::Base
       item_id
       item_identifier
       call_number
+      item_note
     )
     case role.to_sym
     when :Administrator, :Librarian
@@ -661,6 +662,7 @@ class Manifestation < ActiveRecord::Base
         item_lines << i.id
         item_lines << i.item_identifier
         item_lines << i.call_number
+        item_lines << i.note.try(:gsub, /\r?\n/, '\n')
         case options[:role].to_sym
         when :Administrator, :Librarian
           item_lines << i.price

@@ -286,13 +286,16 @@ describe Manifestation, :solr => true do
 
     it 'should escape LF/CR to "\n"' do
       manifestation = FactoryBot.create(:manifestation, description: "test\ntest", note: "test\ntest")
+      item = FactoryBot.create(:item, manifestation: manifestation, note: "test\ntest")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["description"].compact).not_to be_empty
       expect(csv["note"].compact).not_to be_empty
+      expect(csv["item_note"].compact).not_to be_empty
       m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["description"]).to eq 'test\ntest'
       expect(m["note"]).to eq 'test\ntest'
+      expect(m["item_note"]).to eq 'test\ntest'
     end
   end
 
