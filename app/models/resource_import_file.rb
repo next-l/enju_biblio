@@ -338,7 +338,7 @@ class ResourceImportFile < ActiveRecord::Base
         end
 
         item.price = row['item_price'] if row['item_price'].present?
-        item.note = row['item_note'] if row['item_note'].present?
+        item.note = row['item_note'].try(:gsub, /\\n/, "\n") if row['item_note'].present?
         item.url = row['item_url'] if row['item_url'].present?
 
         if row['include_supplements']
@@ -522,7 +522,7 @@ class ResourceImportFile < ActiveRecord::Base
       binding_call_number: row['binding_call_number'],
       binded_at: binded_at,
       url: row['item_url'],
-      note: row['item_note']
+      note: row['item_note'].try(:gsub, /\\n/, "\n")
     )
     manifestation.items << item
     if defined?(EnjuCirculation)
@@ -641,9 +641,9 @@ class ResourceImportFile < ActiveRecord::Base
         :depth => row['depth'],
         :height => row['height'],
         :price => row['manifestation_price'],
-        :description => row['description'],
+        :description => row['description'].try(:gsub, /\\n/, "\n"),
         #:description_transcription => row['description_transcription'],
-        :note => row['note'],
+        :note => row['note'].try(:gsub, /\\n/, "\n"),
         :statement_of_responsibility => row['statement_of_responsibility'],
         :access_address => row['access_address'],
         :manifestation_identifier => row['manifestation_identifier'],

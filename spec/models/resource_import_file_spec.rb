@@ -278,6 +278,25 @@ resource_import_file_test_transcription	transcription
         expect(manifestation.title_transcription).to eq "transcription"
       end
     end
+
+    describe "when it contains escaped fields" do
+      it "should be imported as escaped" do
+        import_file = <<-EOF
+original_title	description	note	call_number	item_note
+resource_import_file_test_description	test\\ntest	test\\ntest	test_description	test\\ntest
+        EOF
+        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
+        file.user = users(:admin)
+        old_manifestations_count = Manifestation.count
+        result = file.import_start
+        expect(Manifestation.count).to eq old_manifestations_count + 1
+        manifestation = Manifestation.all.find{|m| m.original_title == "resource_import_file_test_description" }
+        expect(manifestation.description).to eq "test\ntest"
+        expect(manifestation.note).to eq "test\ntest"
+        p manifestation.items
+        expect(manifestation.items.first.note).to eq "test\ntest"
+      end
+    end
   end
 
   describe "when its mode is 'update'" do
