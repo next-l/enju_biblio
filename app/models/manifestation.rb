@@ -539,6 +539,7 @@ class Manifestation < ActiveRecord::Base
       manifestation_updated_at
       manifestation_identifier
       access_address
+      description
       note
       extent
       dimensions
@@ -620,7 +621,8 @@ class Manifestation < ActiveRecord::Base
         item_lines << updated_at
         item_lines << manifestation_identifier
         item_lines << access_address
-        item_lines << note
+        item_lines << description.try(:gsub, /\r?\n/, '\n')
+        item_lines << note.try(:gsub, /\r?\n/, '\n')
         item_lines << extent
         item_lines << dimensions
         item_lines << carrier_type.name
@@ -705,7 +707,8 @@ class Manifestation < ActiveRecord::Base
       line << updated_at
       line << manifestation_identifier
       line << access_address
-      line << note
+      line << description.try(:gsub, /\r?\n/, '\n')
+      line << note.try(:gsub, /\r?\n/, '\n')
       line << extent
       line << dimensions
       line << carrier_type.name
