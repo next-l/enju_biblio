@@ -19,29 +19,33 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 08 Jan 2016 17:46:16 GMT
+      - Sun, 07 Jan 2018 08:00:47 GMT
+      X-Runtime:
+      - '0.158310'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
       X-Ua-Compatible:
       - IE=Edge,chrome=1
       Etag:
-      - '"c0cedadfacbbda60a8672bf7526ed69e"'
-      Cache-Control:
-      - max-age=0, private, must-revalidate
-      X-Runtime:
-      - '0.025636'
+      - '"9092650e6a30bcf69bfe7fab64f0d02e"'
       Status:
       - '200'
       Content-Type:
       - application/xml; charset=utf-8
       Set-Cookie:
-      - ROUTEID=.ps24; path=/
-      - TS01cb7804=011338590a7e1c419518d9aab15268019502b629f3a1c50a0ed9f0d2625d9087e11787f373a7c22abbcd6b5aab6e7dfa31fa34c5d2;
-        path=/; domain=.iss.ndl.go.jp
-      - TS01f3cfdf=011338590a8c0711b631a4ac1f99fd52e0052fe32cf61a6eca591dc3f18d39e787df3fa61554605c2d9fd51c41dc2ea0d455e6fef7ad81ce8a8559cd4042df690ad263e98cd0944de8d573bc67ab07a32d3a15934a;
+      - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
+        00:00:00 GMT
+      - ROUTEID=.ps20; path=/
+      - TS0162cc8a=011338590afab66bb1faf4d4f704af0a2c8ea3a77ccda06a1a9edd8703ee0229283daafbadfa5c8aa86d1565bbc90ac796ac150ebece9b1791aea6098e71b9d9afda47f85abe0327c000f67f972a3fa11108a4ecea;
+        path=/; domain=.ndl.go.jp
+      - TS01f3cfdf=011338590ae5fb8f4d6615bf886c8151deccc3a48adf9033c9e8fd6db34985ae31d8f28292065b62cf5384d440a2edc8a45228ef59547be7b134692fec498388ca4a0c74cfad6e7a19739bb6f76d0f10b66f669de4e2cf7dd3e792b08f32e73cba07e5546a;
         Path=/
-      - _front_session_id=520bf1df600b358bc7e3be5fae7a282b; domain=.iss.ndl.go.jp;
-        path=/; expires=Fri, 08-Jan-2016 18:46:16 GMT; HttpOnly
+      - _front_session_id=0635cc6c571c0476d7421b832183cebb; path=/; expires=Sun, 07-Jan-2018
+        09:00:48 GMT; HttpOnly
+      - cookieId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
       - ndl.go.jp=rd2o00000000000000000000ffff0a024f69o80; path=/
       - serverid=1101; path=/
+      - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
       Vary:
       - Accept-Encoding,User-Agent
       X-Content-Type-Options:
@@ -49,37 +53,15 @@ http_interactions:
       X-Frame-Options:
       - SAMEORIGIN
       Content-Length:
-      - '511'
+      - '513'
       Connection:
       - close
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4
-        bWxuczpkY3Rlcm1zPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvIiB2ZXJz
-        aW9uPSIyLjAiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9Y
-        TUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMu
-        b3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOmRjPSJodHRwOi8vcHVy
-        bC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cmRmPSJodHRwOi8vd3d3
-        LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIiB4bWxuczpvcGVu
-        U2VhcmNoPSJodHRwOi8vYTkuY29tLy0vc3BlYy9vcGVuc2VhcmNocnNzLzEu
-        MC8iIHhtbG5zOmRjbmRsPSJodHRwOi8vbmRsLmdvLmpwL2RjbmRsL3Rlcm1z
-        LyIgeG1sbnM6ZGNtaXR5cGU9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlw
-        ZS8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4MDAwNzI2NDU1MSBp
-        c3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4Eg
-        T3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5n
-        by5qcC9hcGkvb3BlbnNlYXJjaD9jbnQ9MTAmYW1wO2lzYm49OTc4MDAwNzI2
-        NDU1MSZhbXA7bWVkaWF0eXBlPTEmYW1wO2RwaWQ9aXNzLW5kbC1vcGFjJmFt
-        cDtpZHg9MTwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0
-        cyBmb3IgY250PTEwIGlzYm49OTc4MDAwNzI2NDU1MSBkcGlkPWlzcy1uZGwt
-        b3BhYyBtZWRpYXR5cGU9MSA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdl
-        PmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4w
-        PC9vcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0
-        YXJ0SW5kZXg+MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5T
-        ZWFyY2g6aXRlbXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFn
-        ZT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB2ZXJzaW9uPSIyLjAiIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVjL29wZW5zZWFyY2hyc3MvMS4wLyIgeG1sbnM6ZGNuZGw9Imh0dHA6Ly9uZGwuZ28uanAvZGNuZGwvdGVybXMvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6ZGN0ZXJtcz0iaHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zLyIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4MDAwNzI2NDU1MSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5nby5qcC9hcGkvb3BlbnNlYXJjaD9pZHg9MSZhbXA7ZHBpZD1pc3MtbmRsLW9wYWMmYW1wO2lzYm49OTc4MDAwNzI2NDU1MSZhbXA7Y250PTEwJmFtcDttZWRpYXR5cGU9MTwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0cyBmb3IgbWVkaWF0eXBlPTEgaXNibj05NzgwMDA3MjY0NTUxIGRwaWQ9aXNzLW5kbC1vcGFjIGNudD0xMCA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdlPmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4wPC9vcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0YXJ0SW5kZXg+MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5TZWFyY2g6aXRlbXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
     http_version: 
-  recorded_at: Fri, 08 Jan 2016 17:46:16 GMT
+  recorded_at: Sun, 07 Jan 2018 08:00:48 GMT
 - request:
     method: get
     uri: http://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=0007264550&mediatype=1
@@ -99,29 +81,33 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Fri, 08 Jan 2016 17:46:16 GMT
-      X-Ua-Compatible:
-      - IE=Edge,chrome=1
+      - Sun, 07 Jan 2018 08:00:48 GMT
       X-Runtime:
-      - '0.021080'
+      - '0.034010'
       Cache-Control:
       - max-age=0, private, must-revalidate
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
       Etag:
-      - '"751c9ee3d147a09ae2eede4d8dc87892"'
+      - '"10dc35dde502cb1b89cd806fa53d590b"'
       Status:
       - '200'
       Content-Type:
       - application/xml; charset=utf-8
       Set-Cookie:
-      - ROUTEID=.ps21; path=/
-      - TS01cb7804=011338590a3f5462ea43836ea3c8fa5d55ed3bf8093c140dc63f9b7e32547b30aa2fe07d432858b30dea7fe3555a3a8bd831eaca8e;
-        path=/; domain=.iss.ndl.go.jp
-      - TS01f3cfdf=011338590ab2d574a96a841a4f6a74c20f91ae8fac9aae7daeb4c24cb8549be2848588043eddc48519e3b6869572ab1c6ad9889798cc5e0af3dbe9533b861e2c3930f5ab9ae11518bd8907623c0fe10bd226dfe29d;
+      - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
+        00:00:00 GMT
+      - ROUTEID=.ps20; path=/
+      - TS0162cc8a=011338590a00ce11898eee47eefaa5ab0730430b2eb0cdcead9ec8fb9507ef3cb28b48eb96553067a94bfc6884459a1dc588aa3d9287430fd94d8968f3e11f62db53de197fff73afce27e270397ab90455474f9a1d;
+        path=/; domain=.ndl.go.jp
+      - TS01f3cfdf=011338590a8e7bd6592d866eb58ff8d34ae678ebcb50990b9d0fd1f013e9fe07d550b538421742da5420c1dd150549ebc65389e633b9e2b5f06192f812010c84d92fa70fc06d132e6ac5422b0e05d47da85ce4bbbdcbf461a7a4d145fa6540d8fa97686560;
         Path=/
-      - _front_session_id=214d4e71aa94c39682ae6024d621b7c5; domain=.iss.ndl.go.jp;
-        path=/; expires=Fri, 08-Jan-2016 18:46:16 GMT; HttpOnly
-      - ndl.go.jp=rd2o00000000000000000000ffff0a024f6co80; path=/
+      - _front_session_id=4f4f6e0ca50bffe5843e83561b11d9b6; path=/; expires=Sun, 07-Jan-2018
+        09:00:48 GMT; HttpOnly
+      - cookieId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
+      - ndl.go.jp=rd2o00000000000000000000ffff0a024f68o80; path=/
       - serverid=1101; path=/
+      - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
       Vary:
       - Accept-Encoding,User-Agent
       X-Content-Type-Options:
@@ -129,35 +115,13 @@ http_interactions:
       X-Frame-Options:
       - SAMEORIGIN
       Content-Length:
-      - '512'
+      - '508'
       Connection:
       - close
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4
-        bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHht
-        bG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5z
-        dGFuY2UiIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVj
-        L29wZW5zZWFyY2hyc3MvMS4wLyIgeG1sbnM6ZGNuZGw9Imh0dHA6Ly9uZGwu
-        Z28uanAvZGNuZGwvdGVybXMvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1
-        cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6cmRmPSJodHRwOi8vd3d3Lncz
-        Lm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIiB4bWxuczpyZGZzPSJo
-        dHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjIiB4bWxuczpk
-        Y3Rlcm1zPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvIiB2ZXJzaW9uPSIy
-        LjAiPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjAwMDcyNjQ1NTAgMSBpc3Mt
-        bmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3Bl
-        blNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5nby5q
-        cC9hcGkvb3BlbnNlYXJjaD9jbnQ9MTAmYW1wO2lzYm49MDAwNzI2NDU1MCZh
-        bXA7bWVkaWF0eXBlPTEmYW1wO2lkeD0xJmFtcDtkcGlkPWlzcy1uZGwtb3Bh
-        YzwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0cyBmb3Ig
-        bWVkaWF0eXBlPTEgaXNibj0wMDA3MjY0NTUwIGNudD0xMCBkcGlkPWlzcy1u
-        ZGwtb3BhYyA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdlPmphPC9sYW5n
-        dWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4wPC9vcGVuU2Vh
-        cmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0YXJ0SW5kZXg+
-        MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5TZWFyY2g6aXRl
-        bXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4KICA8L2No
-        YW5uZWw+CjwvcnNzPgo=
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB2ZXJzaW9uPSIyLjAiIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVjL29wZW5zZWFyY2hyc3MvMS4wLyIgeG1sbnM6ZGNuZGw9Imh0dHA6Ly9uZGwuZ28uanAvZGNuZGwvdGVybXMvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6ZGN0ZXJtcz0iaHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zLyIgeG1sbnM6eHNpPSJodHRwOi8vd3d3LnczLm9yZy8yMDAxL1hNTFNjaGVtYS1pbnN0YW5jZSIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjAwMDcyNjQ1NTAgMSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5nby5qcC9hcGkvb3BlbnNlYXJjaD9pZHg9MSZhbXA7ZHBpZD1pc3MtbmRsLW9wYWMmYW1wO2lzYm49MDAwNzI2NDU1MCZhbXA7Y250PTEwJmFtcDttZWRpYXR5cGU9MTwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0cyBmb3IgbWVkaWF0eXBlPTEgaXNibj0wMDA3MjY0NTUwIGRwaWQ9aXNzLW5kbC1vcGFjIGNudD0xMCA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdlPmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4wPC9vcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0YXJ0SW5kZXg+MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5TZWFyY2g6aXRlbXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
     http_version: 
-  recorded_at: Fri, 08 Jan 2016 17:46:16 GMT
-recorded_with: VCR 3.0.1
+  recorded_at: Sun, 07 Jan 2018 08:00:48 GMT
+recorded_with: VCR 4.0.0
