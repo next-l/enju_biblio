@@ -18,7 +18,7 @@ class ResourceExportFile < ActiveRecord::Base
   end
   validates_attachment_content_type :resource_export, content_type: /\Atext\/plain\Z/
 
-  has_many :resource_export_file_transitions
+  has_many :resource_export_file_transitions, autosave: false
 
   def state_machine
     ResourceExportFileStateMachine.new(self, transition_class: ResourceExportFileTransition)

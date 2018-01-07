@@ -10,7 +10,7 @@ class ImportRequest < ActiveRecord::Base
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_nii_cinii_books if defined?(EnjuNii)
 
-  has_many :import_request_transitions
+  has_many :import_request_transitions, autosave: false
 
   def state_machine
     ImportRequestStateMachine.new(self, transition_class: ImportRequestTransition)

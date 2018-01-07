@@ -32,7 +32,7 @@ class ResourceImportFile < ActiveRecord::Base
   belongs_to :user, validate: true
   belongs_to :default_shelf, class_name: 'Shelf'
   has_many :resource_import_results
-  has_many :resource_import_file_transitions
+  has_many :resource_import_file_transitions, autosave: false
 
   attr_accessor :mode, :library_id
 

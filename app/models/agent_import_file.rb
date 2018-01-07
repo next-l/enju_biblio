@@ -30,7 +30,7 @@ class AgentImportFile < ActiveRecord::Base
   belongs_to :user, validate: true
   has_many :agent_import_results
 
-  has_many :agent_import_file_transitions
+  has_many :agent_import_file_transitions, autosave: false
 
   attr_accessor :mode
 
