@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170121121927) do
+ActiveRecord::Schema.define(version: 20180104152615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,10 +18,10 @@ ActiveRecord::Schema.define(version: 20170121121927) do
 
   create_table "accepts", force: :cascade do |t|
     t.uuid "basket_id"
-    t.uuid "item_id"
     t.bigint "librarian_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "item_id", null: false
     t.index ["basket_id"], name: "index_accepts_on_basket_id"
     t.index ["item_id"], name: "index_accepts_on_item_id"
     t.index ["librarian_id"], name: "index_accepts_on_librarian_id"
@@ -386,9 +386,9 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   end
 
   create_table "colors", force: :cascade do |t|
-    t.integer "library_group_id"
-    t.string "property"
-    t.string "code"
+    t.bigint "library_group_id"
+    t.string "property", null: false
+    t.string "code", null: false
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -816,7 +816,7 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.text "note"
     t.integer "call_number_rows", default: 1, null: false
     t.string "call_number_delimiter", default: "|", null: false
-    t.integer "library_group_id", default: 1, null: false
+    t.uuid "library_group_id", null: false
     t.integer "users_count", default: 0, null: false
     t.integer "position"
     t.integer "country_id"
@@ -831,18 +831,18 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.index ["name"], name: "index_libraries_on_name", unique: true
   end
 
-  create_table "library_groups", force: :cascade do |t|
+  create_table "library_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.jsonb "display_name_translations"
     t.string "short_name", null: false
-    t.cidr "my_networks"
+    t.text "my_networks"
     t.jsonb "login_banner_translations"
     t.text "note"
     t.integer "country_id"
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.cidr "admin_networks"
+    t.text "admin_networks"
     t.boolean "allow_bookmark_external_url", default: false, null: false
     t.string "url", default: "http://localhost:3000/"
     t.jsonb "settings"
@@ -854,6 +854,9 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.string "screenshot_generator"
     t.integer "pub_year_facet_range_interval", default: 10
     t.bigint "user_id"
+    t.boolean "csv_charset_conversion", default: false, null: false
+    t.jsonb "header_logo_data"
+    t.string "email", null: false
     t.index ["name"], name: "index_library_groups_on_name", unique: true
     t.index ["short_name"], name: "index_library_groups_on_short_name", unique: true
     t.index ["user_id"], name: "index_library_groups_on_user_id"
@@ -1343,15 +1346,6 @@ ActiveRecord::Schema.define(version: 20170121121927) do
     t.index ["resource_import_file_id"], name: "index_resource_import_results_on_resource_import_file_id"
   end
 
-  create_table "retain_and_checkouts", force: :cascade do |t|
-    t.bigint "retain_id", null: false
-    t.uuid "checkout_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["checkout_id"], name: "index_retain_and_checkouts_on_checkout_id"
-    t.index ["retain_id"], name: "index_retain_and_checkouts_on_retain_id"
-  end
-
   create_table "retains", force: :cascade do |t|
     t.uuid "reserve_id", null: false
     t.uuid "item_id", null: false
@@ -1724,10 +1718,10 @@ ActiveRecord::Schema.define(version: 20170121121927) do
 
   create_table "withdraws", force: :cascade do |t|
     t.uuid "basket_id"
-    t.uuid "item_id"
     t.bigint "librarian_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.uuid "item_id", null: false
     t.index ["basket_id"], name: "index_withdraws_on_basket_id"
     t.index ["item_id"], name: "index_withdraws_on_item_id"
     t.index ["librarian_id"], name: "index_withdraws_on_librarian_id"
@@ -1788,6 +1782,7 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   add_foreign_key "jpno_records", "manifestations"
   add_foreign_key "lending_policies", "items"
   add_foreign_key "lending_policies", "user_groups"
+  add_foreign_key "libraries", "library_groups"
   add_foreign_key "library_groups", "users"
   add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "owns", "agents"
@@ -1803,8 +1798,6 @@ ActiveRecord::Schema.define(version: 20170121121927) do
   add_foreign_key "reserves", "manifestations"
   add_foreign_key "reserves", "users"
   add_foreign_key "resource_import_files", "users"
-  add_foreign_key "retain_and_checkouts", "checkouts", on_delete: :cascade
-  add_foreign_key "retain_and_checkouts", "retains", on_delete: :cascade
   add_foreign_key "retains", "items", on_delete: :cascade
   add_foreign_key "retains", "reserves", on_delete: :cascade
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
