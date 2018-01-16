@@ -6,7 +6,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files
   # GET /resource_import_files.json
   def index
-    @resource_import_files = ResourceImportFile.page(params[:page])
+    @resource_import_files = ResourceImportFile.order(created_at: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -21,8 +21,8 @@ class ResourceImportFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @resource_import_file }
       format.download {
-        send_file @resource_import_file.resource_import.download,
-          filename: File.basename(@resource_import_file.resource_import_filename),
+        send_file @resource_import_file.attachment.download,
+          filename: File.basename(@resource_import_file.attachment.metadata['filename']),
           type: 'application/octet-stream'
       }
     end

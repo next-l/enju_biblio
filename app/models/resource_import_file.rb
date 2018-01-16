@@ -5,7 +5,6 @@ class ResourceImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  validates :attachment, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user
   belongs_to :default_shelf, class_name: 'Shelf'
