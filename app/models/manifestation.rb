@@ -191,7 +191,7 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  include AttachmentUploader[:attachment]
+  has_one_attached :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language

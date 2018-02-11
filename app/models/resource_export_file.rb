@@ -1,7 +1,7 @@
 class ResourceExportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   include ExportFile
-  include AttachmentUploader[:attachment]
+  has_one_attached :attachment
 
   has_many :resource_export_file_transitions
 
