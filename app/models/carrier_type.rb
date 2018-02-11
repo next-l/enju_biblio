@@ -2,7 +2,7 @@ class CarrierType < ActiveRecord::Base
   include MasterModel
   has_many :manifestations
   translates :display_name
-  has_one_attached :attachment
+  include AttachmentUploader[:attachment]
 
   def mods_type
     case name
