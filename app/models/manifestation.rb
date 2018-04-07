@@ -583,6 +583,7 @@ class Manifestation < ActiveRecord::Base
     end
     header += %w(
       circulation_status
+      use_restriction
       shelf
       library
       item_created_at
@@ -676,6 +677,7 @@ class Manifestation < ActiveRecord::Base
           item_lines << Checkout.where(:item_id => i.id).size
         end
         item_lines << i.circulation_status.try(:name)
+        item_lines << i.use_restriction.try(:name)
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
         item_lines << i.created_at
