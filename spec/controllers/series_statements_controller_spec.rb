@@ -56,7 +56,7 @@ describe SeriesStatementsController do
         series_statement = FactoryBot.create(:series_statement)
         get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -67,7 +67,7 @@ describe SeriesStatementsController do
         series_statement = FactoryBot.create(:series_statement)
         get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -78,7 +78,7 @@ describe SeriesStatementsController do
         series_statement = FactoryBot.create(:series_statement)
         get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -87,7 +87,7 @@ describe SeriesStatementsController do
         series_statement = FactoryBot.create(:series_statement)
         get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end

@@ -52,7 +52,7 @@ describe AgentMergeListsController do
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
         get :show, params: { id: @agent_merge_list.id }
         assigns(:agent_merge_list).should eq(@agent_merge_list)
-        response.should be_success
+        response.should be_successful
       end
     end
 
@@ -62,7 +62,7 @@ describe AgentMergeListsController do
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
         get :show, params: { id: @agent_merge_list.id }
         assigns(:agent_merge_list).should eq(@agent_merge_list)
-        response.should be_success
+        response.should be_successful
       end
     end
 

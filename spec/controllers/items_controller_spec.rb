@@ -49,7 +49,7 @@ describe ItemsController do
 
       it 'should not get index with inventory_file_id' do
         get :index, params: { inventory_file_id: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:inventory_file).should eq InventoryFile.find(1)
         expect(assigns(:items)).to eq Item.inventory_items(assigns(:inventory_file), 'not_on_shelf').order('items.id').page(1).to_a
       end
@@ -77,21 +77,21 @@ describe ItemsController do
 
       it 'should get index with agent_id' do
         get :index, params: { agent_id: '727eae50-90a8-419b-ab0c-bd8f9a3a2873' }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:agent).should eq Agent.find('727eae50-90a8-419b-ab0c-bd8f9a3a2873')
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it 'should get index with manifestation_id' do
         get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:manifestation).should eq manifestations(:manifestation_00001)
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
       it 'should get index with shelf_id' do
         get :index, params: { shelf_id: shelves(:shelf_00001).id }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:shelf).name.should eq 'web'
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1).to_a
       end
@@ -162,7 +162,7 @@ describe ItemsController do
       it 'assigns the requested item as @item' do
         get :new, params: { manifestation_id: @manifestation.id }
         expect(assigns(:item)).to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should not get new without manifestation_id' do
@@ -183,7 +183,7 @@ describe ItemsController do
       it 'assigns the requested item as @item' do
         get :new, params: { manifestation_id: @manifestation.id }
         expect(assigns(:item)).to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -299,7 +299,7 @@ describe ItemsController do
       it 'should not create item already created' do
         post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: manifestations(:manifestation_00001).id } }
         expect(assigns(:item)).to_not be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

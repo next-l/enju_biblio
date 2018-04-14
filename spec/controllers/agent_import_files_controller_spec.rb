@@ -86,7 +86,7 @@ describe AgentImportFilesController do
       it 'assigns the requested agent_import_file as @agent_import_file' do
         get :new
         expect(assigns(:agent_import_file)).to_not be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -96,7 +96,7 @@ describe AgentImportFilesController do
       it 'should not assign the requested agent_import_file as @agent_import_file' do
         get :new
         expect(assigns(:agent_import_file)).to_not be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

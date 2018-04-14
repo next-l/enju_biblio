@@ -47,13 +47,13 @@ describe ManifestationsController do
 
       it 'assigns all manifestations as @manifestations in xml format without operation' do
         get :index, params: { format: 'xml' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).to_not be_nil
       end
 
       it 'assigns all manifestations as @manifestations in txt format without operation' do
         get :index, params: { format: 'txt' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
@@ -125,70 +125,70 @@ describe ManifestationsController do
 
       it 'should get index with manifestation_id' do
         get :index, params: { manifestation_id: manifestations(:manifestation_00001) }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestation)).to eq manifestations(:manifestation_00001)
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
       end
 
       it 'should get index with query' do
         get :index, params: { query: '2005' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).to_not be_blank
       end
 
       it 'should get index with page number' do
         get :index, params: { query: '2005', number_of_pages_at_least: 1, number_of_pages_at_most: 100 }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:query).should eq '2005 number_of_pages_i:[1 TO 100]'
       end
 
       it 'should get index with pub_date_from' do
         get :index, params: { query: '2005', pub_date_from: '2000' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).to be_truthy
         assigns(:query).should eq '2005 date_of_publication_d:[2000-01-01T00:00:00Z TO *]'
       end
 
       it 'should get index with pub_date_until' do
         get :index, params: { query: '2005', pub_date_until: '2000' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).to be_truthy
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T23:59:59Z]'
       end
 
       it 'should get tag_cloud' do
         get :index, params: { query: '2005', view: 'tag_cloud' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(response).to render_template('manifestations/_tag_cloud')
       end
 
       it 'should show manifestation with isbn', solr: true do
         get :index, params: { isbn: '4798002062' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations).count).to eq 1
       end
 
       it 'should not show missing manifestation with isbn', solr: true do
         get :index, params: { isbn: '47980020620' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).to be_empty
       end
 
       it 'should show manifestation with library 3', solr: true do
         get :index, params: { library_adv: ['hachioji'] }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations).size).to eq 1
       end
 
       it 'should show manifestation with library 2 or 3', solr: true do
         get :index, params: { library_adv: %w[hachioji kamata] }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations).size).to eq 2
       end
 
       it 'should show manifestation with call_number', solr: true do
         get :index, params: { call_number: '547|ヤ' }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).not_to be_empty
       end
 
@@ -196,13 +196,13 @@ describe ManifestationsController do
         classification = FactoryBot.create(:classification, category: '007.3', classification_type_id: 1)
         Manifestation.first.classifications << classification
         get :index, params: { classification: '007', classification_type: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:manifestations)).not_to be_empty
       end
 
       it 'should not search with classification if classification is blank' do
         get :index, params: { classification: '', classification_type: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:query)).not_to match /classification/
       end
 
@@ -265,13 +265,13 @@ describe ManifestationsController do
       it 'should show manifestation with agent who does not produce it' do
         get :show, params: { id: manifestations(:manifestation_00003).id, agent_id: '68851dc9-c884-412a-92fb-a7586ca1dccf' }
         expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(manifestations(:manifestation_00003).id)
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should not show manifestation with required_role of admin' do
         manifestation = FactoryBot.create(:manifestation, required_role_id: 4)
         get :show, params: { id: manifestation.id }
-        expect(response).not_to be_success
+        expect(response).not_to be_successful
       end
     end
 
@@ -290,7 +290,7 @@ describe ManifestationsController do
 
       # it "should show myself" do
       #  get :show, :id => users(:user1).agent
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
     end
 
@@ -314,31 +314,31 @@ describe ManifestationsController do
 
       it 'should show manifestation with holding' do
         get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'holding' }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should show manifestation with tag_edit' do
         get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_edit' }
         expect(response).to render_template('manifestations/_tag_edit')
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should show manifestation with tag_list' do
         get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_list' }
         expect(response).to render_template('manifestations/_tag_list')
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should show manifestation with show_creators' do
         get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'show_creators' }
         expect(response).to render_template('manifestations/_show_creators')
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should show manifestation with show_all_creators' do
         get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'show_all_creators' }
         expect(response).to render_template('manifestations/_show_creators')
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it "should not send manifestation's detail email" do
@@ -359,12 +359,12 @@ describe ManifestationsController do
 
       it 'should get new template without expression_id' do
         get :new
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should get new template with expression_id' do
         get :new, params: { expression_id: manifestations(:manifestation_00001).id }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -378,12 +378,12 @@ describe ManifestationsController do
 
       it 'should get new template without expression_id' do
         get :new
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should get new template with expression_id' do
         get :new, params: { expression_id: manifestations(:manifestation_00001).id }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should get new template with parent_id' do
@@ -406,7 +406,7 @@ describe ManifestationsController do
         serial.classifications << FactoryBot.create(:classification)
         serial.save!
         get :new, params: { parent_id: serial.id }
-        expect(response).to be_success
+        expect(response).to be_successful
         manifestation = assigns(:manifestation)
         parent = assigns(:parent)
         expect(parent).to be_truthy
@@ -491,7 +491,7 @@ describe ManifestationsController do
 
       it 'should edit manifestation with tag_edit' do
         get :edit, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_edit' }
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

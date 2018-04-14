@@ -1234,6 +1234,14 @@ ActiveRecord::Schema.define(version: 2018_01_04_152615) do
     t.index ["name"], name: "index_request_types_on_name", unique: true
   end
 
+  create_table "reserve_and_expiring_dates", force: :cascade do |t|
+    t.uuid "reserve_id", null: false
+    t.date "expire_on", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["reserve_id"], name: "index_reserve_and_expiring_dates_on_reserve_id"
+  end
+
   create_table "reserve_stat_has_manifestations", force: :cascade do |t|
     t.integer "manifestation_reserve_stat_id", null: false
     t.uuid "manifestation_id", null: false
@@ -1344,6 +1352,15 @@ ActiveRecord::Schema.define(version: 2018_01_04_152615) do
     t.index ["item_id"], name: "index_resource_import_results_on_item_id"
     t.index ["manifestation_id"], name: "index_resource_import_results_on_manifestation_id"
     t.index ["resource_import_file_id"], name: "index_resource_import_results_on_resource_import_file_id"
+  end
+
+  create_table "retain_and_checkouts", force: :cascade do |t|
+    t.bigint "retain_id", null: false
+    t.uuid "checkout_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["checkout_id"], name: "index_retain_and_checkouts_on_checkout_id"
+    t.index ["retain_id"], name: "index_retain_and_checkouts_on_retain_id"
   end
 
   create_table "retains", force: :cascade do |t|
@@ -1792,12 +1809,15 @@ ActiveRecord::Schema.define(version: 2018_01_04_152615) do
   add_foreign_key "produces", "manifestations"
   add_foreign_key "realizes", "agents"
   add_foreign_key "realizes", "manifestations", column: "expression_id"
+  add_foreign_key "reserve_and_expiring_dates", "reserves"
   add_foreign_key "reserve_stat_has_manifestations", "manifestations"
   add_foreign_key "reserves", "items"
   add_foreign_key "reserves", "libraries", column: "pickup_location_id"
   add_foreign_key "reserves", "manifestations"
   add_foreign_key "reserves", "users"
   add_foreign_key "resource_import_files", "users"
+  add_foreign_key "retain_and_checkouts", "checkouts", on_delete: :cascade
+  add_foreign_key "retain_and_checkouts", "retains", on_delete: :cascade
   add_foreign_key "retains", "items", on_delete: :cascade
   add_foreign_key "retains", "reserves", on_delete: :cascade
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
