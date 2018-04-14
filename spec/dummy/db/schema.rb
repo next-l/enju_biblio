@@ -10,11 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180104152615) do
+ActiveRecord::Schema.define(version: 2018_01_04_152615) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "plpgsql"
   enable_extension "pgcrypto"
+  enable_extension "plpgsql"
 
   create_table "accepts", force: :cascade do |t|
     t.uuid "basket_id"
@@ -68,8 +68,8 @@ ActiveRecord::Schema.define(version: 20180104152615) do
   end
 
   create_table "agent_merges", force: :cascade do |t|
-    t.uuid "agent_id"
-    t.bigint "agent_merge_list_id"
+    t.uuid "agent_id", null: false
+    t.bigint "agent_merge_list_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_agent_merges_on_agent_id"
