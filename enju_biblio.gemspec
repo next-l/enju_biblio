@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_dependency "erubis"
   s.add_dependency "activerecord-import"
 
-  s.add_development_dependency "pg", "~> 0.21"
+  s.add_development_dependency "pg"
   s.add_development_dependency "rspec-rails", "~> 3.5"
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "vcr", "~> 4.0"
@@ -49,5 +49,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sunspot-rails-tester"
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "redis-rails"
-  s.add_development_dependency "codeclimate-test-reporter", "~> 1.0.0"
 end
