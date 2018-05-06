@@ -113,7 +113,7 @@
 
 <p>
   <strong><%= t('activerecord.attributes.item.note') -%>:</strong>
-  <%= @item.note %>
+  <%= simple_format(@item.note) %>
 </p>
 
 <p>
