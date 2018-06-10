@@ -15,7 +15,7 @@ xml.rss('version' => "2.0",
       xml.tag! "opensearch:totalResults", @count[:query_result]
       xml.tag! "opensearch:startIndex", @agents.offset + 1
       xml.tag! "opensearch:itemsPerPage", @agents.per_page
-      xml.tag! "opensearch:Query", role: 'request', :searchTerms => h(params[:query]), :startPage => (h(params[:page]) || 1)
+      xml.tag! "opensearch:Query", role: 'request', searchTerms: h(params[:query]), startPage: (h(params[:page]) || 1)
     end
     @agents.each do |agent|
       xml.item do
@@ -24,7 +24,7 @@ xml.rss('version' => "2.0",
         # rfc822
         xml.pubDate agent.created_at.utc.rfc822
         xml.link agent_url(agent)
-        xml.guid agent_url(agent), :isPermaLink => "true"
+        xml.guid agent_url(agent), isPermaLink: "true"
         #agent.tags.each do |tag|
         #  xml.category tag
         #end

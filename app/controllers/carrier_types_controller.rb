@@ -103,7 +103,7 @@ class CarrierTypesController < ApplicationController
       :name, :display_name, :note, :position, :attachment,
       # EnjuCirculation
       {
-        :carrier_type_has_checkout_types_attributes => [
+        carrier_type_has_checkout_types_attributes: [
           :id, :checkout_type_id, :_destroy
         ]
       }
