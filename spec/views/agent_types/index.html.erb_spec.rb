@@ -5,16 +5,16 @@ describe "agent_types/index" do
   before(:each) do
     assign(:agent_types, [
       stub_model(AgentType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       ),
       stub_model(AgentType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       )
     ])
   end

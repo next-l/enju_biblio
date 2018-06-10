@@ -3,8 +3,8 @@ require 'rails_helper'
 describe "realizes/show" do
   before(:each) do
     @realize = assign(:realize, stub_model(Realize,
-      :expression_id => 1,
-      :agent_id => 1
+      expression_id: 1,
+      agent_id: 1
     ))
   end
 

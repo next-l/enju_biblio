@@ -5,16 +5,16 @@ describe "realize_types/index" do
   before(:each) do
     assign(:realize_types, [
       stub_model(RealizeType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       ),
       stub_model(RealizeType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       )
     ])
   end

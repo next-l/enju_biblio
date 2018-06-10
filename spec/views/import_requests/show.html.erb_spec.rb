@@ -3,8 +3,8 @@ require 'rails_helper'
 describe "import_requests/show" do
   before(:each) do
     @import_request = assign(:import_request, stub_model(ImportRequest,
-      :isbn => "1111111111",
-      :created_at => Time.zone.now
+      isbn: "1111111111",
+      created_at: Time.zone.now
     ))
   end
 

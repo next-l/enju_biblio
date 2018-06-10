@@ -28,7 +28,7 @@ class Sru
   attr_reader :manifestations, :extra_response_data, :number_of_records, :next_record_position
 
   def sort_by
-    sort = {:sort_by => 'created_at', :order => 'desc'}
+    sort = {sort_by: 'created_at', order: 'desc'}
     unless '1.1' == @version
       @path, @ascending = @cql.sort_by.split('/')
     else
@@ -57,7 +57,7 @@ class Sru
     search = Sunspot.new_search(Manifestation)
     search.build do
       fulltext sunspot_query
-      paginate :page => 1, :per_page => 10000
+      paginate page: 1, per_page: 10000
     end
     @manifestations = search.execute!.results
     @extra_response_data = get_extra_response_data

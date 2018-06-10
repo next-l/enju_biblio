@@ -18,25 +18,25 @@ class Openurl
   LOGIC_MULTI_OR = [:ndl_dpid] # OR検索
 
   # 桁チェックが必要な項目
-  NUM_CHECK = {:issn => 8, :isbn => 13}
+  NUM_CHECK = {issn: 8, isbn: 13}
 
   # 集約される項目
   SYNONYMS = [:title, :aulast, :aufirst]
 
   # enjuのフィールド名（検索用）管理
-  ENJU_FIELD = {:aulast => 'au_text', # aulast=au
-                :aufirst => 'au_text', # aufirst=au
-                :au => 'au_text',
-                :title => 'btitle_text',  # title=btitle
-                :atitle => 'atitle_text',
-                :btitle => 'btitle_text',
-                :jtitle => 'jtitle_text',
-                :pub => 'publisher_text',
-                :issn => 'issn_sm',
-                :isbn => 'isbn_sm',
-                :ndl_jpno => 'ndl_jpno_text', # TODO:現在対応項目はないので保留。
-                :ndl_dpid => 'ndl_dpid_sm',   # TODO:現在対応項目はないので保留。これのみ完全一致であることに注意。
-                :associate => ''              # TODO:フィールド名ではないので削除？
+  ENJU_FIELD = {aulast: 'au_text', # aulast=au
+                aufirst: 'au_text', # aufirst=au
+                au: 'au_text',
+                title: 'btitle_text',  # title=btitle
+                atitle: 'atitle_text',
+                btitle: 'btitle_text',
+                jtitle: 'jtitle_text',
+                pub: 'publisher_text',
+                issn: 'issn_sm',
+                isbn: 'isbn_sm',
+                ndl_jpno: 'ndl_jpno_text', # TODO:現在対応項目はないので保留。
+                ndl_dpid: 'ndl_dpid_sm',   # TODO:現在対応項目はないので保留。これのみ完全一致であることに注意。
+                associate: ''              # TODO:フィールド名ではないので削除？
   }
 
   def initialize(params)

@@ -16,7 +16,7 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 9, :manifestation_found => 6, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({manifestation_imported: 9, item_imported: 9, manifestation_found: 6, item_found: 3, failed: 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
@@ -137,7 +137,7 @@ describe ResourceImportFile do
       it "should be searchable right after the import", solr: true, vcr: true do
         @file.import_start
         Manifestation.search{ keywords "10101" }.total.should > 0
-        Manifestation.search{ keywords "10101", :fields => [:item_identifier] }.total.should > 0
+        Manifestation.search{ keywords "10101", fields: [:item_identifier] }.total.should > 0
         Manifestation.search{ keywords "item_identifier_sm:10101" }.total.should > 0
       end
     end
@@ -187,7 +187,7 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({:manifestation_imported => 9, :item_imported => 8, :manifestation_found => 5, :item_found => 3, :failed => 7})
+        @file.import_start.should eq({manifestation_imported: 9, item_imported: 8, manifestation_found: 5, item_found: 3, failed: 7})
         manifestation = Item.where(item_identifier: '11111').first.manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'

@@ -4,12 +4,12 @@ describe "owns/index" do
   before(:each) do
     assign(:owns, Kaminari::paginate_array([
       stub_model(Own,
-        :item_id => 1,
-        :agent_id => 1
+        item_id: 1,
+        agent_id: 1
       ),
       stub_model(Own,
-        :item_id => 1,
-        :agent_id => 2
+        item_id: 1,
+        agent_id: 2
       )
     ]).page(1))
   end

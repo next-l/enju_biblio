@@ -7,16 +7,16 @@ describe "import_requests/index" do
   before(:each) do
     assign(:import_requests, Kaminari::paginate_array([
       stub_model(ImportRequest,
-        :id => 1,
-        :isbn => "1111111111",
-        :created_at => Time.zone.now,
-        :user_id => 1
+        id: 1,
+        isbn: "1111111111",
+        created_at: Time.zone.now,
+        user_id: 1
       ),
       stub_model(ImportRequest,
-        :id => 2,
-        :isbn => "1111111112",
-        :created_at => Time.zone.now,
-        :user_id => 2
+        id: 2,
+        isbn: "1111111112",
+        created_at: Time.zone.now,
+        user_id: 2
       )
     ]).page(1))
   end

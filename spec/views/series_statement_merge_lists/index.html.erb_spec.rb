@@ -4,12 +4,12 @@ describe "series_statement_merge_lists/index" do
   before(:each) do
     assign(:series_statement_merge_lists, Kaminari::paginate_array([
       stub_model(SeriesStatementMergeList,
-        :title => "Title",
-        :created_at => Time.zone.now
+        title: "Title",
+        created_at: Time.zone.now
       ),
       stub_model(SeriesStatementMergeList,
-        :title => "Title",
-        :created_at => Time.zone.now
+        title: "Title",
+        created_at: Time.zone.now
       )
     ]).page(1))
   end

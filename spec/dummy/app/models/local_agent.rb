@@ -7,7 +7,7 @@ class LocalAgent
 
   def initialize(attributes = {})
     if attributes[:username]
-      user = User.where(:username => attributes[:username]).first
+      user = User.where(username: attributes[:username]).first
       if user
         send('email=', user.email)
       end

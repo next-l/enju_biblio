@@ -5,16 +5,16 @@ describe "create_types/index" do
   before(:each) do
     assign(:create_types, [
       stub_model(CreateType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       ),
       stub_model(CreateType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       )
     ])
   end

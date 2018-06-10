@@ -44,7 +44,7 @@ describe Item do
 
   it "should delete lending policies" do
     item = items(:item_00001)
-    item.checkout_type = CheckoutType.where(:name => 'serial').first
+    item.checkout_type = CheckoutType.where(name: 'serial').first
     item.save
     item.reload
     item.lending_policies.count.should eq 0

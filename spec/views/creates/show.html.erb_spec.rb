@@ -3,8 +3,8 @@ require 'rails_helper'
 describe "creates/show" do
   before(:each) do
     @create = assign(:create, stub_model(Create,
-      :work_id => 1,
-      :agent_id => 1
+      work_id: 1,
+      agent_id: 1
     ))
   end
 

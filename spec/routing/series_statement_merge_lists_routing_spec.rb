@@ -12,11 +12,11 @@ describe SeriesStatementMergeListsController do
     end
 
     it "routes to #show" do
-      get("/series_statement_merge_lists/1").should route_to("series_statement_merge_lists#show", :id => "1")
+      get("/series_statement_merge_lists/1").should route_to("series_statement_merge_lists#show", id: "1")
     end
 
     it "routes to #edit" do
-      get("/series_statement_merge_lists/1/edit").should route_to("series_statement_merge_lists#edit", :id => "1")
+      get("/series_statement_merge_lists/1/edit").should route_to("series_statement_merge_lists#edit", id: "1")
     end
 
     it "routes to #create" do
@@ -24,11 +24,11 @@ describe SeriesStatementMergeListsController do
     end
 
     it "routes to #update" do
-      put("/series_statement_merge_lists/1").should route_to("series_statement_merge_lists#update", :id => "1")
+      put("/series_statement_merge_lists/1").should route_to("series_statement_merge_lists#update", id: "1")
     end
 
     it "routes to #destroy" do
-      delete("/series_statement_merge_lists/1").should route_to("series_statement_merge_lists#destroy", :id => "1")
+      delete("/series_statement_merge_lists/1").should route_to("series_statement_merge_lists#destroy", id: "1")
     end
 
   end

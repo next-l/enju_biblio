@@ -4,12 +4,12 @@ describe "realizes/index" do
   before(:each) do
     assign(:realizes, Kaminari::paginate_array([
       stub_model(Realize,
-        :expression_id => 1,
-        :agent_id => 2
+        expression_id: 1,
+        agent_id: 2
       ),
       stub_model(Realize,
-        :expression_id => 1,
-        :agent_id => 2
+        expression_id: 1,
+        agent_id: 2
       )
     ]).page(1))
   end

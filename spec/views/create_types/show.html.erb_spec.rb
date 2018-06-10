@@ -3,10 +3,10 @@ require 'rails_helper'
 describe "create_types/show" do
   before(:each) do
     @create_type = assign(:create_type, stub_model(CreateType,
-      :name => "Name",
-      :display_name => "MyText",
-      :note => "MyText",
-      :position => 1
+      name: "Name",
+      display_name: "MyText",
+      note: "MyText",
+      position: 1
     ))
   end
 

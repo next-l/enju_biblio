@@ -3,10 +3,10 @@ require 'rails_helper'
 describe "realize_types/show" do
   before(:each) do
     @realize_type = assign(:realize_type, stub_model(RealizeType,
-      :name => "Name",
-      :display_name => "MyText",
-      :note => "MyText",
-      :position => 1
+      name: "Name",
+      display_name: "MyText",
+      note: "MyText",
+      position: 1
     ))
   end
 

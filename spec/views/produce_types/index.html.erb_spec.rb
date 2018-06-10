@@ -5,16 +5,16 @@ describe "produce_types/index" do
   before(:each) do
     assign(:produce_types, [
       stub_model(ProduceType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       ),
       stub_model(ProduceType,
-        :name => "Name",
-        :display_name => "ja: テキスト",
-        :note => "MyText",
-        :position => 1
+        name: "Name",
+        display_name: "ja: テキスト",
+        note: "MyText",
+        position: 1
       )
     ])
   end

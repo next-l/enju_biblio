@@ -3,8 +3,8 @@ require 'rails_helper'
 describe "owns/show" do
   before(:each) do
     @own = assign(:own, stub_model(Own,
-      :item_id => 1,
-      :agent_id => 1
+      item_id: 1,
+      agent_id: 1
     ))
   end
 

@@ -3,7 +3,7 @@ require 'rails_helper'
 describe "series_statement_merge_lists/show" do
   before(:each) do
     @series_statement_merge_list = assign(:series_statement_merge_list, stub_model(SeriesStatementMergeList,
-      :title => "Title"
+      title: "Title"
     ))
   end
 

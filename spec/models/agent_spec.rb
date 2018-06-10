@@ -11,17 +11,17 @@ describe Agent do
   end
 
   it "should set birth_date" do
-    agent = FactoryBot.create(:agent, :birth_date => '2000')
+    agent = FactoryBot.create(:agent, birth_date: '2000')
     agent.date_of_birth.should eq Time.zone.parse('2000-01-01')
   end
 
   it "should set death_date" do
-    agent = FactoryBot.create(:agent, :death_date => '2000')
+    agent = FactoryBot.create(:agent, death_date: '2000')
     agent.date_of_death.should eq Time.zone.parse('2000-01-01')
   end
 
   it "should not set death_date earlier than birth_date" do
-    agent = FactoryBot.create(:agent, :birth_date => '2010', :death_date => '2000')
+    agent = FactoryBot.create(:agent, birth_date: '2010', death_date: '2000')
     agent.should_not be_valid
   end
 

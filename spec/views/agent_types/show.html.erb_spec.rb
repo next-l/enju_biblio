@@ -3,10 +3,10 @@ require 'rails_helper'
 describe "agent_types/show" do
   before(:each) do
     @agent_type = assign(:agent_type, stub_model(AgentType,
-      :name => "Name",
-      :display_name => "MyText",
-      :note => "MyText",
-      :position => 1
+      name: "Name",
+      display_name: "MyText",
+      note: "MyText",
+      position: 1
     ))
   end
 
