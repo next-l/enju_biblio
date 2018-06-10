@@ -103,9 +103,9 @@ describe FormOfWorksController do
         form_of_work = FormOfWork.create! valid_attributes
         # Assuming there are no other form_of_works in the database, this
         # specifies that the FormOfWork created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        FormOfWork.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        FormOfWork.any_instance.should_receive(:update).with('name' => 'test')
         put :update, id: form_of_work.id, form_of_work: { 'name' => 'test' }
       end
 

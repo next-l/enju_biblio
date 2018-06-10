@@ -103,9 +103,9 @@ describe AgentTypesController do
         agent_type = AgentType.create! valid_attributes
         # Assuming there are no other agent_types in the database, this
         # specifies that the AgentType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        AgentType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        AgentType.any_instance.should_receive(:update).with('name' => 'test')
         put :update, id: agent_type.id, agent_type: { 'name' => 'test' }
       end
 

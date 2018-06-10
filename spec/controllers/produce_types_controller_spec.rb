@@ -103,9 +103,9 @@ describe ProduceTypesController do
         produce_type = ProduceType.create! valid_attributes
         # Assuming there are no other produce_types in the database, this
         # specifies that the ProduceType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        ProduceType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        ProduceType.any_instance.should_receive(:update).with('name' => 'test')
         put :update, id: produce_type.id, produce_type: { 'name' => 'test' }
       end
 

@@ -1,3 +1,5 @@
+AllCops:
+  TargetRubyVersion: 2.2
 Rails:
   Enabled: true
 Layout/SpaceInsideHashLiteralBraces:
@@ -20,4 +22,3 @@ Metrics/LineLength:
   Enabled: false
 Metrics/BlockLength:
   Enabled: false
-

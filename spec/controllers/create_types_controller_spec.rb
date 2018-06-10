@@ -103,9 +103,9 @@ describe CreateTypesController do
         create_type = CreateType.create! valid_attributes
         # Assuming there are no other create_types in the database, this
         # specifies that the CreateType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        CreateType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        CreateType.any_instance.should_receive(:update).with('name' => 'test')
         put :update, id: create_type.id, create_type: { 'name' => 'test' }
       end
 

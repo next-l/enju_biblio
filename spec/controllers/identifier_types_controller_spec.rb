@@ -103,9 +103,9 @@ describe IdentifierTypesController do
         identifier_type = IdentifierType.create! valid_attributes
         # Assuming there are no other identifier_types in the database, this
         # specifies that the IdentifierType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        IdentifierType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        IdentifierType.any_instance.should_receive(:update).with('name' => 'test')
         put :update, id: identifier_type.id, identifier_type: { 'name' => 'test' }
       end
 
