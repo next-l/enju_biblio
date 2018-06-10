@@ -74,7 +74,7 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1.json
   def update
     respond_to do |format|
-      if @agent_import_file.update_attributes(agent_import_file_params)
+      if @agent_import_file.update(agent_import_file_params)
         if @agent_import_file.mode == 'import'
           AgentImportFileJob.perform_later(@agent_import_file)
         end

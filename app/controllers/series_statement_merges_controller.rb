@@ -67,7 +67,7 @@ class SeriesStatementMergesController < ApplicationController
   # PUT /series_statement_merges/1.json
   def update
     respond_to do |format|
-      if @series_statement_merge.update_attributes(series_statement_merge_params)
+      if @series_statement_merge.update(series_statement_merge_params)
         flash[:notice] = t('controller.successfully_updated', model: t('activerecord.models.series_statement_merge'))
         format.html { redirect_to(@series_statement_merge) }
         format.json { head :no_content }

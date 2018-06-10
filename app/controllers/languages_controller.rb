@@ -62,7 +62,7 @@ class LanguagesController < ApplicationController
     end
 
     respond_to do |format|
-      if @language.update_attributes(language_params)
+      if @language.update(language_params)
         format.html { redirect_to @language, notice: t('controller.successfully_updated', model: t('activerecord.models.language')) }
         format.json { head :no_content }
       else

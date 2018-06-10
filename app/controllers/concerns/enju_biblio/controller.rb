@@ -71,23 +71,23 @@ module EnjuBiblio
           with(:publisher_ids).equal_to agent.id if agent
           with(:original_manifestation_ids).equal_to manifestation.id if manifestation
           with(:reservable).equal_to reservable unless reservable.nil?
-          unless carrier_type.blank?
+          if carrier_type.present?
             with(:carrier_type).equal_to carrier_type
           end
-          unless library.blank?
+          if library.present?
             library_list = library.split.uniq
             library_list.each do |lib|
               with(:library).equal_to lib
             end
           end
-          unless language.blank?
+          if language.present?
             language_list = language.split.uniq
             language_list.each do |language|
               with(:language).equal_to language
             end
           end
           if defined?(EnjuSubject)
-            unless subject.blank?
+            if subject.present?
               with(:subject).equal_to subject_by_term.term
             end
           end

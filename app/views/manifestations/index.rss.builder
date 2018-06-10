@@ -12,7 +12,7 @@ xml.rss('version' => "2.0",
     xml.tag! "atom:link", rel: 'self', href: "#{request.protocol}#{request.host_with_port}#{url_for(filtered_params.merge(format: :rss, only_path: true))}"
     xml.tag! "atom:link", rel: 'alternate', href: manifestations_url
     xml.tag! "atom:link", rel: 'search', type: 'application/opensearchdescription+xml', href: page_opensearch_url
-    unless params[:query].blank?
+    if params[:query].present?
       xml.tag! "opensearch:totalResults", @manifestations.total_count
       xml.tag! "opensearch:startIndex", @manifestations.offset_value + 1
       xml.tag! "opensearch:itemsPerPage", @manifestations.limit_value

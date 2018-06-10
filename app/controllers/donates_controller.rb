@@ -57,7 +57,7 @@ class DonatesController < ApplicationController
   # PUT /donates/1.json
   def update
     respond_to do |format|
-      if @donate.update_attributes(donate_params)
+      if @donate.update(donate_params)
         format.html { redirect_to @donate, notice: t('controller.successfully_updated', model: t('activerecord.models.donate')) }
         format.json { head :no_content }
       else

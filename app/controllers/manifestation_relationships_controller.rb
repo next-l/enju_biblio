@@ -72,7 +72,7 @@ class ManifestationRelationshipsController < ApplicationController
     end
 
     respond_to do |format|
-      if @manifestation_relationship.update_attributes(manifestation_relationship_params)
+      if @manifestation_relationship.update(manifestation_relationship_params)
         format.html { redirect_to @manifestation_relationship, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship')) }
         format.json { head :no_content }
       else

@@ -116,7 +116,7 @@ class PictureFilesController < ApplicationController
     end
 
     respond_to do |format|
-      if @picture_file.update_attributes(picture_file_params)
+      if @picture_file.update(picture_file_params)
         format.html { redirect_to @picture_file, notice: t('controller.successfully_updated', model: t('activerecord.models.picture_file')) }
         format.json { head :no_content }
       else

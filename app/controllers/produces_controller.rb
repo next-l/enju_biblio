@@ -82,7 +82,7 @@ class ProducesController < ApplicationController
     end
 
     respond_to do |format|
-      if @produce.update_attributes(produce_params)
+      if @produce.update(produce_params)
         format.html { redirect_to @produce, notice: t('controller.successfully_updated', model: t('activerecord.models.produce')) }
         format.json { head :no_content }
       else

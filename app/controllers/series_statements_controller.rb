@@ -11,7 +11,7 @@ class SeriesStatementsController < ApplicationController
     query = params[:query].to_s.strip
     page = params[:page] || 1
 
-    unless query.blank?
+    if query.present?
       @query = query.dup
       query = query.gsub('　', ' ')
     end
@@ -92,7 +92,7 @@ class SeriesStatementsController < ApplicationController
     end
 
     respond_to do |format|
-      if @series_statement.update_attributes(series_statement_params)
+      if @series_statement.update(series_statement_params)
         format.html { redirect_to @series_statement, notice: t('controller.successfully_updated', model: t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else

@@ -6,10 +6,10 @@ def update_agent_type
     case l["name"]
     when "person"
       agent_type = AgentType.where(name: 'Person').first
-      agent_type.update_attributes!(l) if agent_type
+      agent_type.update!(l) if agent_type
     when "corporate_body"
       agent_type = AgentType.where(name: 'CorporateBody').first
-      agent_type.update_attributes!(l) if agent_type
+      agent_type.update!(l) if agent_type
     end
   end
 end

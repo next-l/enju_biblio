@@ -78,7 +78,7 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1.json
   def update
     respond_to do |format|
-      if @resource_import_file.update_attributes(resource_import_file_params)
+      if @resource_import_file.update(resource_import_file_params)
         if @resource_import_file.mode == 'import'
           ResourceImportFileJob.perform_later(@resource_import_file)
         end

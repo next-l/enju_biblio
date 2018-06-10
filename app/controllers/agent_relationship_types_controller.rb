@@ -62,7 +62,7 @@ class AgentRelationshipTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_relationship_type.update_attributes(agent_relationship_type_params)
+      if @agent_relationship_type.update(agent_relationship_type_params)
         format.html { redirect_to @agent_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_relationship_type')) }
         format.json { head :no_content }
       else

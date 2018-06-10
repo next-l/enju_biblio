@@ -76,7 +76,7 @@ class ResourceExportFilesController < ApplicationController
   # PUT /resource_export_files/1.json
   def update
     respond_to do |format|
-      if @resource_export_file.update_attributes(resource_export_file_params)
+      if @resource_export_file.update(resource_export_file_params)
         if @resource_export_file.mode == 'export'
           ResourceExportFileJob.perform_later(@resource_export_file)
         end

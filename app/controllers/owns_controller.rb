@@ -74,7 +74,7 @@ class OwnsController < ApplicationController
     end
 
     respond_to do |format|
-      if @own.update_attributes(own_params)
+      if @own.update(own_params)
         format.html { redirect_to @own, notice: t('controller.successfully_updated', model: t('activerecord.models.own')) }
         format.json { head :no_content }
       else

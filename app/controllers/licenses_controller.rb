@@ -62,7 +62,7 @@ class LicensesController < ApplicationController
     end
 
     respond_to do |format|
-      if @license.update_attributes(license_params)
+      if @license.update(license_params)
         format.html { redirect_to @license, notice: t('controller.successfully_updated', model: t('activerecord.models.license')) }
         format.json { head :no_content }
       else

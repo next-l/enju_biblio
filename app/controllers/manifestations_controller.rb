@@ -92,7 +92,7 @@ class ManifestationsController < ApplicationController
       end
 
       search.build do
-        fulltext query unless query.blank?
+        fulltext query if query.present?
         order_by sort[:sort_by], sort[:order]
         if defined?(EnjuSubject)
           with(:subject_ids).equal_to subject.id if subject
@@ -430,7 +430,7 @@ class ManifestationsController < ApplicationController
   def update
     creators_params = manifestation_params[:creators_attributes]
     Manifestation.transaction do
-      @manifestation.update_attributes(manifestation_params.delete_if{|k, v|
+      @manifestation.update(manifestation_params.delete_if{|k, v|
         k == 'creators_attributes'
       })
       @manifestation.creators = Agent.new_agents(creators_params)
@@ -567,7 +567,7 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} carrier_type_s:#{options[:carrier_type]}"
     #end
 
-    unless options[:library_adv].blank?
+    if options[:library_adv].present?
       library_list = options[:library_adv].split.uniq.join(' OR ')
       query = "#{query} library_sm:(#{library_list})"
     end
@@ -578,7 +578,7 @@ class ManifestationsController < ApplicationController
         shelf_list << "#{library_name}_#{shelf}"
       end
     end
-    unless shelf_list.blank?
+    if shelf_list.present?
       query += " shelf_sm:(#{shelf_list.join(" OR ")})"
     end
 
@@ -586,10 +586,10 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} language_sm:#{options[:language]}"
     #end
 
-    unless options[:subject].blank?
+    if options[:subject].present?
       query = "#{query} subject_sm:#{options[:subject]}"
     end
-    unless options[:subject_text].blank?
+    if options[:subject_text].present?
       query = "#{query} subject_text:#{options[:subject_text]}"
     end
     if options[:classification].present? and options[:classification_type].present?

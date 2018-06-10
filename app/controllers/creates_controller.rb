@@ -78,7 +78,7 @@ class CreatesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create.update_attributes(create_params)
+      if @create.update(create_params)
         format.html { redirect_to @create, notice: t('controller.successfully_updated', model: t('activerecord.models.create')) }
         format.json { head :no_content }
       else

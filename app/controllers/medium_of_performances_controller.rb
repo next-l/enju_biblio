@@ -62,7 +62,7 @@ class MediumOfPerformancesController < ApplicationController
     end
 
     respond_to do |format|
-      if @medium_of_performance.update_attributes(medium_of_performance_params)
+      if @medium_of_performance.update(medium_of_performance_params)
         format.html { redirect_to @medium_of_performance, notice: t('controller.successfully_updated', model: t('activerecord.models.medium_of_performance')) }
         format.json { head :no_content }
       else

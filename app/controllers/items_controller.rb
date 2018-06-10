@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
       set_role_query(current_user, search)
 
       @query = query.dup
-      unless query.blank?
+      if query.present?
         search.build do
           fulltext query
         end
@@ -226,7 +226,7 @@ class ItemsController < ApplicationController
   # PUT /items/1.json
   def update
     respond_to do |format|
-      if @item.update_attributes(item_params)
+      if @item.update(item_params)
         format.html { redirect_to @item, notice: t('controller.successfully_updated', model: t('activerecord.models.item')) }
         format.json { head :no_content }
       else

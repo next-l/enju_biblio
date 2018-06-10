@@ -80,7 +80,7 @@ class CarrierTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @carrier_type.update_attributes(carrier_type_params)
+      if @carrier_type.update(carrier_type_params)
         format.html { redirect_to @carrier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.carrier_type')) }
         format.json { head :no_content }
       else

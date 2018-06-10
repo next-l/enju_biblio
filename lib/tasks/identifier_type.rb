@@ -4,7 +4,7 @@ def update_identifier_type
     l = line[1].select!{|k, v| %w(name display_name note).include?(k)}
     identifier_type = IdentifierType.where(name: l["name"]).first
     if identifier_type
-      identifier_type.update_attributes!(l)
+      identifier_type.update!(l)
     else
       IdentifierType.create!(l)
     end

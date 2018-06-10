@@ -77,7 +77,7 @@ class ImportRequestsController < ApplicationController
   # PUT /import_requests/1.json
   def update
     respond_to do |format|
-      if @import_request.update_attributes(import_request_params)
+      if @import_request.update(import_request_params)
         @import_request.import!
         format.html { redirect_to @import_request, notice: t('controller.successfully_updated', model: t('activerecord.models.import_request')) }
         format.json { head :no_content }

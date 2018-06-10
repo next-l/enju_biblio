@@ -65,7 +65,7 @@ class AgentMergesController < ApplicationController
   # PUT /agent_merges/1.json
   def update
     respond_to do |format|
-      if @agent_merge.update_attributes(agent_merge_params)
+      if @agent_merge.update(agent_merge_params)
         format.html { redirect_to(@agent_merge, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_merge'))) }
         format.json { head :no_content }
       else

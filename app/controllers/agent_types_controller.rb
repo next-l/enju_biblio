@@ -62,7 +62,7 @@ class AgentTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_type.update_attributes(agent_type_params)
+      if @agent_type.update(agent_type_params)
         format.html { redirect_to @agent_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_type')) }
         format.json { head :no_content }
       else

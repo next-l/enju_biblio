@@ -78,7 +78,7 @@ class RealizesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize.update_attributes(realize_params)
+      if @realize.update(realize_params)
         format.html { redirect_to @realize, notice: t('controller.successfully_updated', model: t('activerecord.models.realize')) }
         format.json { head :no_content }
       else

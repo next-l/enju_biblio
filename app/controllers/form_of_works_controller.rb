@@ -62,7 +62,7 @@ class FormOfWorksController < ApplicationController
     end
 
     respond_to do |format|
-      if @form_of_work.update_attributes(form_of_work_params)
+      if @form_of_work.update(form_of_work_params)
         format.html { redirect_to @form_of_work, notice: t('controller.successfully_updated', model: t('activerecord.models.form_of_work')) }
         format.json { head :no_content }
       else

@@ -238,7 +238,7 @@ class ResourceImportFile < ActiveRecord::Base
     manifestation = expression
     manifestation.during_import = true
     manifestation.reload
-    manifestation.update_attributes!(options)
+    manifestation.update!(options)
     manifestation.publishers = agents.uniq unless agents.empty?
     manifestation.reload
     manifestation

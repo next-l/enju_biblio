@@ -62,7 +62,7 @@ class FrequenciesController < ApplicationController
     end
 
     respond_to do |format|
-      if @frequency.update_attributes(frequency_params)
+      if @frequency.update(frequency_params)
         format.html { redirect_to @frequency, notice: t('controller.successfully_updated', model: t('activerecord.models.frequency')) }
         format.json { head :no_content }
       else

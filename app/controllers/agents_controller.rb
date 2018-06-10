@@ -41,7 +41,7 @@ class AgentsController < ApplicationController
     if params[:mode] == 'recent'
       query = "#{query} created_at_d:[NOW-1MONTH TO NOW]"
     end
-    unless query.blank?
+    if query.present?
       search.build do
         fulltext query
       end
@@ -175,7 +175,7 @@ class AgentsController < ApplicationController
   # PUT /agents/1.json
   def update
     respond_to do |format|
-      if @agent.update_attributes(agent_params)
+      if @agent.update(agent_params)
         format.html { redirect_to @agent, notice: t('controller.successfully_updated', model: t('activerecord.models.agent')) }
         format.json { head :no_content }
       else

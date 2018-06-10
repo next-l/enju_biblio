@@ -62,7 +62,7 @@ class IdentifierTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @identifier_type.update_attributes(identifier_type_params)
+      if @identifier_type.update(identifier_type_params)
         format.html { redirect_to @identifier_type, notice: t('controller.successfully_updated', model: t('activerecord.models.identifier_type')) }
         format.json { head :no_content }
       else

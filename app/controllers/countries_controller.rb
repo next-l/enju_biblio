@@ -62,7 +62,7 @@ class CountriesController < ApplicationController
     end
 
     respond_to do |format|
-      if @country.update_attributes(country_params)
+      if @country.update(country_params)
         format.html { redirect_to @country, notice: t('controller.successfully_updated', model: t('activerecord.models.country')) }
         format.json { head :no_content }
       else
