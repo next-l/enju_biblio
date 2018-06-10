@@ -18,7 +18,7 @@ if @sru
 end
 
 def search_retrieve_response!(xml)
-  xml.searchRetrieveResponse :xmlns => "http://www.loc.gov/zing/srw/" do
+  xml.searchRetrieveResponse xmlns: "http://www.loc.gov/zing/srw/" do
     xml.version @version
     xml.numberOfRecords @number_of_records
     extra_response_data!(xml) if @extra_response
@@ -48,9 +48,9 @@ def extra_response_data!(xml)
 end
 
 def lst_tag!(xml, lst_name, tag_name, hash)
-  xml.lst :name => lst_name do
+  xml.lst name: lst_name do
     value_sort(hash).each do |item|
-      xml.tag! tag_name, {:name => item[0]}, item[1]
+      xml.tag! tag_name, {name: item[0]}, item[1]
     end
   end
 end
@@ -96,6 +96,6 @@ def value_sort(hash)
   end
 end
 
-xml = Builder::XmlMarkup.new :indent => 2
-xml.instruct! directive_tag=:xml, :encoding => 'UTF-8'
+xml = Builder::XmlMarkup.new indent: 2
+xml.instruct! directive_tag=:xml, encoding: 'UTF-8'
 search_retrieve_response!(xml)

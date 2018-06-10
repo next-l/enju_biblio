@@ -273,7 +273,7 @@ class ItemsController < ApplicationController
       :lock_version, :manifestation_id, :library_id, :required_role_id,
       :binding_item_identifier, :binding_call_number, :binded_at,
       :use_restriction_id,
-      :item_has_use_restriction_attributes => :use_restriction_id # EnjuCirculation
+      item_has_use_restriction_attributes: :use_restriction_id # EnjuCirculation
     )
   end
 

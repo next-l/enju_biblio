@@ -423,7 +423,7 @@ class Manifestation < ActiveRecord::Base
   def self.find_by_isbn(isbn)
     identifier_type = IdentifierType.where(name: 'isbn').first
     return nil unless identifier_type
-    Manifestation.includes(identifiers: :identifier_type).where(:"identifiers.body" => isbn, :"identifier_types.name" => 'isbn')
+    Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
   end
 
   def index_series_statement
@@ -674,7 +674,7 @@ class Manifestation < ActiveRecord::Base
         when :Administrator, :Librarian
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
-          item_lines << Checkout.where(:item_id => i.id).size
+          item_lines << Checkout.where(item_id: i.id).size
         end
         item_lines << i.circulation_status.try(:name)
         item_lines << i.use_restriction.try(:name)
