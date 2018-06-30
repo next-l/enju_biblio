@@ -40,7 +40,7 @@ describe AgentTypesController do
   describe 'GET show' do
     it 'assigns the requested agent_type as @agent_type' do
       agent_type = AgentType.create! valid_attributes
-      get :show, id: agent_type.id
+      get :show, params: { id: agent_type.id }
       expect(assigns(:agent_type)).to eq(agent_type)
     end
   end
@@ -55,7 +55,7 @@ describe AgentTypesController do
   describe 'GET edit' do
     it 'assigns the requested agent_type as @agent_type' do
       agent_type = AgentType.create! valid_attributes
-      get :edit, id: agent_type.id
+      get :edit, params: { id: agent_type.id }
       expect(assigns(:agent_type)).to eq(agent_type)
     end
   end
@@ -64,18 +64,18 @@ describe AgentTypesController do
     describe 'with valid params' do
       it 'creates a new AgentType' do
         expect do
-          post :create, agent_type: valid_attributes
+          post :create, params: { agent_type: valid_attributes }
         end.to change(AgentType, :count).by(1)
       end
 
       it 'assigns a newly created agent_type as @agent_type' do
-        post :create, agent_type: valid_attributes
+        post :create, params: { agent_type: valid_attributes }
         expect(assigns(:agent_type)).to be_a(AgentType)
         expect(assigns(:agent_type)).to be_persisted
       end
 
       it 'redirects to the created agent_type' do
-        post :create, agent_type: valid_attributes
+        post :create, params: { agent_type: valid_attributes }
         expect(response).to redirect_to(AgentType.last)
       end
     end
@@ -84,14 +84,14 @@ describe AgentTypesController do
       it 'assigns a newly created but unsaved agent_type as @agent_type' do
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        post :create, agent_type: { name: 'test' }
+        post :create, params: { agent_type: { name: 'test' } }
         expect(assigns(:agent_type)).to be_a_new(AgentType)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        post :create, agent_type: { name: 'test' }
+        post :create, params: { agent_type: { name: 'test' } }
         expect(response).to render_template('new')
       end
     end
@@ -106,25 +106,25 @@ describe AgentTypesController do
         # receives the :update message with whatever params are
         # submitted in the request.
         AgentType.any_instance.should_receive(:update).with('name' => 'test')
-        put :update, id: agent_type.id, agent_type: { 'name' => 'test' }
+        put :update, params: { id: agent_type.id, agent_type: { 'name' => 'test' } }
       end
 
       it 'assigns the requested agent_type as @agent_type' do
         agent_type = AgentType.create! valid_attributes
-        put :update, id: agent_type.id, agent_type: valid_attributes
+        put :update, params: { id: agent_type.id, agent_type: valid_attributes }
         expect(assigns(:agent_type)).to eq(agent_type)
       end
 
       it 'redirects to the agent_type' do
         agent_type = AgentType.create! valid_attributes
-        put :update, id: agent_type.id, agent_type: valid_attributes
+        put :update, params: { id: agent_type.id, agent_type: valid_attributes }
         expect(response).to redirect_to(agent_type)
       end
 
       it 'moves its position when specified' do
         agent_type = AgentType.create! valid_attributes
         position = agent_type.position
-        put :update, id: agent_type.id, move: 'higher'
+        put :update, params: { id: agent_type.id, move: 'higher' }
         expect(response).to redirect_to agent_types_url
         assigns(:agent_type).reload.position.should eq position - 1
       end
@@ -135,7 +135,7 @@ describe AgentTypesController do
         agent_type = AgentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        put :update, id: agent_type.id, agent_type: { name: 'test' }
+        put :update, params: { id: agent_type.id, agent_type: { name: 'test' } }
         expect(assigns(:agent_type)).to eq(agent_type)
       end
 
@@ -143,7 +143,7 @@ describe AgentTypesController do
         agent_type = AgentType.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         AgentType.any_instance.stub(:save).and_return(false)
-        put :update, id: agent_type.id, agent_type: { name: 'test' }
+        put :update, params: { id: agent_type.id, agent_type: { name: 'test' } }
         expect(response).to render_template('edit')
       end
     end
@@ -153,18 +153,18 @@ describe AgentTypesController do
     it 'destroys the requested agent_type' do
       agent_type = AgentType.create! valid_attributes
       expect do
-        delete :destroy, id: agent_type.id
+        delete :destroy, params: { id: agent_type.id }
       end.to change(AgentType, :count).by(-1)
     end
 
     it 'redirects to the agent_types list' do
       agent_type = AgentType.create! valid_attributes
-      delete :destroy, id: agent_type.id
+      delete :destroy, params: { id: agent_type.id }
       expect(response).to redirect_to(agent_types_url)
     end
 
     it 'should not destroy agent_type that contains agents' do
-      delete :destroy, id: agent_types(:agent_type_00001)
+      delete :destroy, params: { id: agent_types(:agent_type_00001) }
       expect(response).to be_forbidden
     end
   end

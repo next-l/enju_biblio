@@ -21,14 +21,14 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, agent_id: 1
+        get :index, params: { agent_id: 1 }
         expect(response).to be_success
         expect(assigns(:agent)).to eq Agent.find(1)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where('required_role_id >= 1').page(1)
       end
 
       it 'should get index with query' do
-        get :index, query: 'Librarian1'
+        get :index, params: { query: 'Librarian1' }
         expect(assigns(:agents)).not_to be_empty
         expect(response).to be_success
       end
@@ -69,20 +69,20 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, agent_id: 1
+        get :index, params: { agent_id: 1 }
         expect(response).to be_success
         expect(assigns(:agent)).to eq Agent.find(1)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where(required_role_id: 1).page(1)
       end
 
       it 'should get index with manifestation_id' do
-        get :index, manifestation_id: 1
+        get :index, params: { manifestation_id: 1 }
         assigns(:manifestation).should eq Manifestation.find(1)
         expect(assigns(:agents)).to eq assigns(:manifestation).publishers.where(required_role_id: 1).page(1)
       end
 
       it 'should get index with query' do
-        get :index, query: 'Librarian1'
+        get :index, params: { query: 'Librarian1' }
         expect(assigns(:agents)).to be_empty
         expect(response).to be_success
       end
@@ -98,7 +98,7 @@ describe AgentsController do
       login_fixture_admin
 
       it 'assigns the requested agent as @agent' do
-        get :show, id: @agent.id
+        get :show, params: { id: @agent.id }
         expect(assigns(:agent)).to eq(@agent)
       end
     end
@@ -107,7 +107,7 @@ describe AgentsController do
       login_fixture_librarian
 
       it 'assigns the requested agent as @agent' do
-        get :show, id: @agent.id
+        get :show, params: { id: @agent.id }
         expect(assigns(:agent)).to eq(@agent)
       end
 
@@ -125,14 +125,14 @@ describe AgentsController do
 
       it 'should not show agent who does not create a work' do
         lambda do
-          get :show, id: 3, work_id: 3
+          get :show, params: { id: 3, work_id: 3 }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
 
       it 'should not show agent who does not produce a manifestation' do
         lambda do
-          get :show, id: 4, manifestation_id: 4
+          get :show, params: { id: 4, manifestation_id: 4 }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
@@ -148,7 +148,7 @@ describe AgentsController do
       login_fixture_user
 
       it 'assigns the requested agent as @agent' do
-        get :show, id: @agent.id
+        get :show, params: { id: @agent.id }
         expect(assigns(:agent)).to eq(@agent)
       end
 
@@ -167,22 +167,22 @@ describe AgentsController do
 
     describe 'When not logged in' do
       it 'assigns the requested agent as @agent' do
-        get :show, id: @agent.id
+        get :show, params: { id: @agent.id }
         expect(assigns(:agent)).to eq(@agent)
       end
 
       it 'should show agent with work' do
-        get :show, id: 1, work_id: 1
+        get :show, params: { id: 1, work_id: 1 }
         expect(assigns(:agent)).to eq assigns(:work).creators.first
       end
 
       it 'should show agent with manifestation' do
-        get :show, id: 1, manifestation_id: 1
+        get :show, params: { id: 1, manifestation_id: 1 }
         expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
       end
 
       it "should not show agent when required_role is 'User'" do
-        get :show, id: 5
+        get :show, params: { id: 5 }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -232,7 +232,7 @@ describe AgentsController do
 
       it 'assigns the requested agent as @agent' do
         agent = Agent.find(1)
-        get :edit, id: agent.id
+        get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
     end
@@ -242,7 +242,7 @@ describe AgentsController do
 
       it 'assigns the requested agent as @agent' do
         agent = Agent.find(1)
-        get :edit, id: agent.id
+        get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
 
@@ -267,7 +267,7 @@ describe AgentsController do
 
       it 'assigns the requested agent as @agent' do
         agent = Agent.find(1)
-        get :edit, id: agent.id
+        get :edit, params: { id: agent.id }
         expect(response).to be_forbidden
       end
 
@@ -285,7 +285,7 @@ describe AgentsController do
     describe 'When not logged in' do
       it 'should not assign the requested agent as @agent' do
         agent = Agent.find(1)
-        get :edit, id: agent.id
+        get :edit, params: { id: agent.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -302,24 +302,24 @@ describe AgentsController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent as @agent' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(assigns(:agent)).to be_valid
         end
 
         it 'redirects to the created agent' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent as @agent' do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(assigns(:agent)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -330,29 +330,29 @@ describe AgentsController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent as @agent' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(assigns(:agent)).to be_valid
         end
 
         it 'redirects to the created agent' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
         end
 
         it 'should create a relationship if work_id is set' do
-          post :create, agent: @attrs, work_id: 1
+          post :create, params: { agent: @attrs, work_id: 1 }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
           assigns(:agent).works.should eq [Manifestation.find(1)]
         end
 
         it 'should create a relationship if manifestation_id is set' do
-          post :create, agent: @attrs, manifestation_id: 1
+          post :create, params: { agent: @attrs, manifestation_id: 1 }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
           assigns(:agent).manifestations.should eq [Manifestation.find(1)]
         end
 
         it 'should create a relationship if item_id is set' do
-          post :create, agent: @attrs, item_id: 1
+          post :create, params: { agent: @attrs, item_id: 1 }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
           assigns(:agent).items.should eq [Item.find(1)]
         end
@@ -360,19 +360,19 @@ describe AgentsController do
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent as @agent' do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(assigns(:agent)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
 
       # TODO: full_name以外での判断
       it 'should create agent without full_name' do
-        post :create, agent: { first_name: 'test' }
+        post :create, params: { agent: { first_name: 'test' } }
         expect(response).to redirect_to agent_url(assigns(:agent))
       end
     end
@@ -382,24 +382,24 @@ describe AgentsController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent as @agent' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(assigns(:agent)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent as @agent' do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(assigns(:agent)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -419,24 +419,24 @@ describe AgentsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created agent as @agent' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(assigns(:agent)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent: @attrs
+          post :create, params: { agent: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent as @agent' do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(assigns(:agent)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent: @invalid_attrs
+          post :create, params: { agent: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -455,18 +455,18 @@ describe AgentsController do
 
       describe 'with valid params' do
         it 'updates the requested agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
         end
 
         it 'assigns the requested agent as @agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
           expect(assigns(:agent)).to eq(@agent)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested agent as @agent' do
-          put :update, id: @agent.id, agent: @invalid_attrs
+          put :update, params: { id: @agent.id, agent: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -477,11 +477,11 @@ describe AgentsController do
 
       describe 'with valid params' do
         it 'updates the requested agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
         end
 
         it 'assigns the requested agent as @agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
           expect(assigns(:agent)).to eq(@agent)
           expect(response).to redirect_to(@agent)
         end
@@ -489,12 +489,12 @@ describe AgentsController do
 
       describe 'with invalid params' do
         it 'assigns the agent as @agent' do
-          put :update, id: @agent, agent: @invalid_attrs
+          put :update, params: { id: @agent, agent: @invalid_attrs }
           expect(assigns(:agent)).not_to be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @agent, agent: @invalid_attrs
+          put :update, params: { id: @agent, agent: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -510,11 +510,11 @@ describe AgentsController do
 
       describe 'with valid params' do
         it 'updates the requested agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
         end
 
         it 'assigns the requested agent as @agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
           expect(assigns(:agent)).to eq(@agent)
           expect(response).to be_forbidden
         end
@@ -522,7 +522,7 @@ describe AgentsController do
 
       describe 'with invalid params' do
         it 'assigns the requested agent as @agent' do
-          put :update, id: @agent.id, agent: @invalid_attrs
+          put :update, params: { id: @agent.id, agent: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -548,18 +548,18 @@ describe AgentsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested agent' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @agent.id, agent: @attrs
+          put :update, params: { id: @agent.id, agent: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested agent as @agent' do
-          put :update, id: @agent.id, agent: @invalid_attrs
+          put :update, params: { id: @agent.id, agent: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -575,11 +575,11 @@ describe AgentsController do
       login_fixture_admin
 
       it 'destroys the requested agent' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
       end
 
       it 'redirects to the agents list' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
         expect(response).to redirect_to(agents_url)
       end
 
@@ -598,11 +598,11 @@ describe AgentsController do
       login_fixture_librarian
 
       it 'destroys the requested agent' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
       end
 
       it 'redirects to the agents list' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
         expect(response).to redirect_to(agents_url)
       end
 
@@ -616,11 +616,11 @@ describe AgentsController do
       login_fixture_user
 
       it 'destroys the requested agent' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
         expect(response).to be_forbidden
       end
 
@@ -632,11 +632,11 @@ describe AgentsController do
 
     describe 'When not logged in' do
       it 'destroys the requested agent' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @agent.id
+        delete :destroy, params: { id: @agent.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

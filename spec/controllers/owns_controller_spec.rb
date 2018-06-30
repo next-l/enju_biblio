@@ -55,7 +55,7 @@ describe OwnsController do
 
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :show, id: own.id
+        get :show, params: { id: own.id }
         expect(assigns(:own)).to eq(own)
       end
     end
@@ -65,7 +65,7 @@ describe OwnsController do
 
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :show, id: own.id
+        get :show, params: { id: own.id }
         expect(assigns(:own)).to eq(own)
       end
     end
@@ -75,7 +75,7 @@ describe OwnsController do
 
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :show, id: own.id
+        get :show, params: { id: own.id }
         expect(assigns(:own)).to eq(own)
       end
     end
@@ -83,7 +83,7 @@ describe OwnsController do
     describe 'When not logged in' do
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :show, id: own.id
+        get :show, params: { id: own.id }
         expect(assigns(:own)).to eq(own)
       end
     end
@@ -135,7 +135,7 @@ describe OwnsController do
 
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :edit, id: own.id
+        get :edit, params: { id: own.id }
         expect(assigns(:own)).to eq(own)
       end
     end
@@ -145,7 +145,7 @@ describe OwnsController do
 
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :edit, id: own.id
+        get :edit, params: { id: own.id }
         expect(assigns(:own)).to eq(own)
       end
     end
@@ -155,7 +155,7 @@ describe OwnsController do
 
       it 'assigns the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :edit, id: own.id
+        get :edit, params: { id: own.id }
         expect(response).to be_forbidden
       end
     end
@@ -163,7 +163,7 @@ describe OwnsController do
     describe 'When not logged in' do
       it 'should not assign the requested own as @own' do
         own = FactoryBot.create(:own)
-        get :edit, id: own.id
+        get :edit, params: { id: own.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -180,24 +180,24 @@ describe OwnsController do
 
       describe 'with valid params' do
         it 'assigns a newly created own as @own' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(assigns(:own)).to be_valid
         end
 
         it 'redirects to the created agent' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(response).to redirect_to(assigns(:own))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved own as @own' do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(assigns(:own)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -208,24 +208,24 @@ describe OwnsController do
 
       describe 'with valid params' do
         it 'assigns a newly created own as @own' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(assigns(:own)).to be_valid
         end
 
         it 'redirects to the created agent' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(response).to redirect_to(assigns(:own))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved own as @own' do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(assigns(:own)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -236,24 +236,24 @@ describe OwnsController do
 
       describe 'with valid params' do
         it 'assigns a newly created own as @own' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(assigns(:own)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved own as @own' do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(assigns(:own)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -262,24 +262,24 @@ describe OwnsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created own as @own' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(assigns(:own)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, own: @attrs
+          post :create, params: { own: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved own as @own' do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(assigns(:own)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, own: @invalid_attrs
+          post :create, params: { own: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -298,24 +298,24 @@ describe OwnsController do
 
       describe 'with valid params' do
         it 'updates the requested own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
         end
 
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
           expect(assigns(:own)).to eq(@own)
           expect(response).to redirect_to(@own)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @own.id, own: @attrs, item_id: @own.item.id, move: 'lower'
+          put :update, params: { id: @own.id, own: @attrs, item_id: @own.item.id, move: 'lower' }
           expect(response).to redirect_to(owns_url(item_id: @own.item_id))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @invalid_attrs
+          put :update, params: { id: @own.id, own: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -326,11 +326,11 @@ describe OwnsController do
 
       describe 'with valid params' do
         it 'updates the requested own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
         end
 
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
           expect(assigns(:own)).to eq(@own)
           expect(response).to redirect_to(@own)
         end
@@ -338,7 +338,7 @@ describe OwnsController do
 
       describe 'with invalid params' do
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @invalid_attrs
+          put :update, params: { id: @own.id, own: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -349,11 +349,11 @@ describe OwnsController do
 
       describe 'with valid params' do
         it 'updates the requested own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
         end
 
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
           expect(assigns(:own)).to eq(@own)
           expect(response).to be_forbidden
         end
@@ -361,7 +361,7 @@ describe OwnsController do
 
       describe 'with invalid params' do
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @invalid_attrs
+          put :update, params: { id: @own.id, own: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -370,18 +370,18 @@ describe OwnsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested own' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @own.id, own: @attrs
+          put :update, params: { id: @own.id, own: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested own as @own' do
-          put :update, id: @own.id, own: @invalid_attrs
+          put :update, params: { id: @own.id, own: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -397,11 +397,11 @@ describe OwnsController do
       login_fixture_admin
 
       it 'destroys the requested own' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
       end
 
       it 'redirects to the owns list' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
         expect(response).to redirect_to(owns_url)
       end
     end
@@ -410,11 +410,11 @@ describe OwnsController do
       login_fixture_librarian
 
       it 'destroys the requested own' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
       end
 
       it 'redirects to the owns list' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
         expect(response).to redirect_to(owns_url)
       end
     end
@@ -423,22 +423,22 @@ describe OwnsController do
       login_fixture_user
 
       it 'destroys the requested own' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested own' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @own.id
+        delete :destroy, params: { id: @own.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

@@ -58,7 +58,7 @@ describe CountriesController do
       login_fixture_admin
 
       it 'assigns the requested country as @country' do
-        get :show, id: @country.id
+        get :show, params: { id: @country.id }
         assigns(:country).should eq(@country)
       end
     end
@@ -67,7 +67,7 @@ describe CountriesController do
       login_fixture_librarian
 
       it 'assigns the requested country as @country' do
-        get :show, id: @country.id
+        get :show, params: { id: @country.id }
         assigns(:country).should eq(@country)
       end
     end
@@ -76,14 +76,14 @@ describe CountriesController do
       login_fixture_user
 
       it 'assigns the requested country as @country' do
-        get :show, id: @country.id
+        get :show, params: { id: @country.id }
         assigns(:country).should eq(@country)
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested country as @country' do
-        get :show, id: @country.id
+        get :show, params: { id: @country.id }
         assigns(:country).should eq(@country)
       end
     end
@@ -135,7 +135,7 @@ describe CountriesController do
 
       it 'assigns the requested country as @country' do
         country = FactoryBot.create(:country)
-        get :edit, id: country.id
+        get :edit, params: { id: country.id }
         assigns(:country).should eq(country)
       end
     end
@@ -145,7 +145,7 @@ describe CountriesController do
 
       it 'assigns the requested country as @country' do
         country = FactoryBot.create(:country)
-        get :edit, id: country.id
+        get :edit, params: { id: country.id }
         assigns(:country).should eq(country)
       end
     end
@@ -155,7 +155,7 @@ describe CountriesController do
 
       it 'assigns the requested country as @country' do
         country = FactoryBot.create(:country)
-        get :edit, id: country.id
+        get :edit, params: { id: country.id }
         assigns(:country).should eq(country)
       end
     end
@@ -163,7 +163,7 @@ describe CountriesController do
     describe 'When not logged in' do
       it 'should not assign the requested country as @country' do
         country = FactoryBot.create(:country)
-        get :edit, id: country.id
+        get :edit, params: { id: country.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -180,24 +180,24 @@ describe CountriesController do
 
       describe 'with valid params' do
         it 'assigns a newly created country as @country' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           assigns(:country).should be_valid
         end
 
         it 'redirects to the created country' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           expect(response).to redirect_to(assigns(:country))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved country as @country' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           assigns(:country).should_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -208,24 +208,24 @@ describe CountriesController do
 
       describe 'with valid params' do
         it 'assigns a newly created country as @country' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           assigns(:country).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved country as @country' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           assigns(:country).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -236,24 +236,24 @@ describe CountriesController do
 
       describe 'with valid params' do
         it 'assigns a newly created country as @country' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           assigns(:country).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved country as @country' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           assigns(:country).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -262,24 +262,24 @@ describe CountriesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created country as @country' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           assigns(:country).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, country: @attrs
+          post :create, params: { country: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved country as @country' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           assigns(:country).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, country: @invalid_attrs
+          post :create, params: { country: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -298,23 +298,23 @@ describe CountriesController do
 
       describe 'with valid params' do
         it 'updates the requested country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
         end
 
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
           assigns(:country).should eq(@country)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @country.id, country: @attrs, move: 'lower'
+          put :update, params: { id: @country.id, country: @attrs, move: 'lower' }
           expect(response).to redirect_to(countries_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @invalid_attrs
+          put :update, params: { id: @country.id, country: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -325,23 +325,23 @@ describe CountriesController do
 
       describe 'with valid params' do
         it 'updates the requested country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
         end
 
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
           assigns(:country).should eq(@country)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @country.id, country: @attrs, move: 'lower'
+          put :update, params: { id: @country.id, country: @attrs, move: 'lower' }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @invalid_attrs
+          put :update, params: { id: @country.id, country: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -352,23 +352,23 @@ describe CountriesController do
 
       describe 'with valid params' do
         it 'updates the requested country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
         end
 
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
           assigns(:country).should eq(@country)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @country.id, country: @attrs, move: 'lower'
+          put :update, params: { id: @country.id, country: @attrs, move: 'lower' }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @invalid_attrs
+          put :update, params: { id: @country.id, country: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -377,18 +377,18 @@ describe CountriesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested country' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @country.id, country: @attrs
+          put :update, params: { id: @country.id, country: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested country as @country' do
-          put :update, id: @country.id, country: @invalid_attrs
+          put :update, params: { id: @country.id, country: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -404,11 +404,11 @@ describe CountriesController do
       login_fixture_admin
 
       it 'destroys the requested country' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
       end
 
       it 'redirects to the countries list' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
         expect(response).to redirect_to(countries_url)
       end
     end
@@ -417,11 +417,11 @@ describe CountriesController do
       login_fixture_librarian
 
       it 'destroys the requested country' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
         expect(response).to be_forbidden
       end
     end
@@ -430,22 +430,22 @@ describe CountriesController do
       login_fixture_user
 
       it 'destroys the requested country' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested country' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @country.id
+        delete :destroy, params: { id: @country.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

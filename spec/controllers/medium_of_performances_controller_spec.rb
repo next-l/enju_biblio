@@ -40,7 +40,7 @@ describe MediumOfPerformancesController do
   describe 'GET show' do
     it 'assigns the requested medium_of_performance as @medium_of_performance' do
       medium_of_performance = MediumOfPerformance.create! valid_attributes
-      get :show, id: medium_of_performance.id
+      get :show, params: { id: medium_of_performance.id }
       expect(assigns(:medium_of_performance)).to eq(medium_of_performance)
     end
   end
@@ -55,7 +55,7 @@ describe MediumOfPerformancesController do
   describe 'GET edit' do
     it 'assigns the requested medium_of_performance as @medium_of_performance' do
       medium_of_performance = MediumOfPerformance.create! valid_attributes
-      get :edit, id: medium_of_performance.id
+      get :edit, params: { id: medium_of_performance.id }
       expect(assigns(:medium_of_performance)).to eq(medium_of_performance)
     end
   end
@@ -64,18 +64,18 @@ describe MediumOfPerformancesController do
     describe 'with valid params' do
       it 'creates a new MediumOfPerformance' do
         expect do
-          post :create, medium_of_performance: valid_attributes
+          post :create, params: { medium_of_performance: valid_attributes }
         end.to change(MediumOfPerformance, :count).by(1)
       end
 
       it 'assigns a newly created medium_of_performance as @medium_of_performance' do
-        post :create, medium_of_performance: valid_attributes
+        post :create, params: { medium_of_performance: valid_attributes }
         expect(assigns(:medium_of_performance)).to be_a(MediumOfPerformance)
         expect(assigns(:medium_of_performance)).to be_persisted
       end
 
       it 'redirects to the created medium_of_performance' do
-        post :create, medium_of_performance: valid_attributes
+        post :create, params: { medium_of_performance: valid_attributes }
         expect(response).to redirect_to(MediumOfPerformance.last)
       end
     end
@@ -84,14 +84,14 @@ describe MediumOfPerformancesController do
       it 'assigns a newly created but unsaved medium_of_performance as @medium_of_performance' do
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        post :create, medium_of_performance: { name: 'test' }
+        post :create, params: { medium_of_performance: { name: 'test' } }
         expect(assigns(:medium_of_performance)).to be_a_new(MediumOfPerformance)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        post :create, medium_of_performance: { name: 'test' }
+        post :create, params: { medium_of_performance: { name: 'test' } }
         # expect(response).to render_template("new")
       end
     end
@@ -106,25 +106,25 @@ describe MediumOfPerformancesController do
         # receives the :update message with whatever params are
         # submitted in the request.
         MediumOfPerformance.any_instance.should_receive(:update).with('name' => 'test')
-        put :update, id: medium_of_performance.id, medium_of_performance: { 'name' => 'test' }
+        put :update, params: { id: medium_of_performance.id, medium_of_performance: { 'name' => 'test' } }
       end
 
       it 'assigns the requested medium_of_performance as @medium_of_performance' do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
-        put :update, id: medium_of_performance.id, medium_of_performance: valid_attributes
+        put :update, params: { id: medium_of_performance.id, medium_of_performance: valid_attributes }
         expect(assigns(:medium_of_performance)).to eq(medium_of_performance)
       end
 
       it 'redirects to the medium_of_performance' do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
-        put :update, id: medium_of_performance.id, medium_of_performance: valid_attributes
+        put :update, params: { id: medium_of_performance.id, medium_of_performance: valid_attributes }
         expect(response).to redirect_to(medium_of_performance)
       end
 
       it 'moves its position when specified' do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
         position = medium_of_performance.position
-        put :update, id: medium_of_performance.id, move: 'higher'
+        put :update, params: { id: medium_of_performance.id, move: 'higher' }
         expect(response).to redirect_to medium_of_performances_url
         assigns(:medium_of_performance).reload.position.should eq position - 1
       end
@@ -135,7 +135,7 @@ describe MediumOfPerformancesController do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        put :update, id: medium_of_performance.id, medium_of_performance: { name: 'test' }
+        put :update, params: { id: medium_of_performance.id, medium_of_performance: { name: 'test' } }
         expect(assigns(:medium_of_performance)).to eq(medium_of_performance)
       end
 
@@ -143,7 +143,7 @@ describe MediumOfPerformancesController do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         MediumOfPerformance.any_instance.stub(:save).and_return(false)
-        put :update, id: medium_of_performance.id, medium_of_performance: { name: 'test' }
+        put :update, params: { id: medium_of_performance.id, medium_of_performance: { name: 'test' } }
         # expect(response).to render_template("edit")
       end
     end
@@ -153,13 +153,13 @@ describe MediumOfPerformancesController do
     it 'destroys the requested medium_of_performance' do
       medium_of_performance = MediumOfPerformance.create! valid_attributes
       expect do
-        delete :destroy, id: medium_of_performance.id
+        delete :destroy, params: { id: medium_of_performance.id }
       end.to change(MediumOfPerformance, :count).by(-1)
     end
 
     it 'redirects to the medium_of_performances list' do
       medium_of_performance = MediumOfPerformance.create! valid_attributes
-      delete :destroy, id: medium_of_performance.id
+      delete :destroy, params: { id: medium_of_performance.id }
       expect(response).to redirect_to(medium_of_performances_url)
     end
   end

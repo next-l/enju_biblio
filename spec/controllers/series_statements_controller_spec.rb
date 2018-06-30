@@ -53,7 +53,7 @@ describe SeriesStatementsController do
 
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :show, id: series_statement.id
+        get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
       end
@@ -64,7 +64,7 @@ describe SeriesStatementsController do
 
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :show, id: series_statement.id
+        get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
       end
@@ -75,7 +75,7 @@ describe SeriesStatementsController do
 
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :show, id: series_statement.id
+        get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
       end
@@ -84,7 +84,7 @@ describe SeriesStatementsController do
     describe 'When not logged in' do
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :show, id: series_statement.id
+        get :show, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
         expect(response).to be_success
       end
@@ -135,7 +135,7 @@ describe SeriesStatementsController do
 
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :edit, id: series_statement.id
+        get :edit, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
       end
     end
@@ -145,7 +145,7 @@ describe SeriesStatementsController do
 
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :edit, id: series_statement.id
+        get :edit, params: { id: series_statement.id }
         expect(assigns(:series_statement)).to eq(series_statement)
       end
     end
@@ -155,7 +155,7 @@ describe SeriesStatementsController do
 
       it 'assigns the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :edit, id: series_statement.id
+        get :edit, params: { id: series_statement.id }
         expect(response).to be_forbidden
       end
     end
@@ -163,7 +163,7 @@ describe SeriesStatementsController do
     describe 'When not logged in' do
       it 'should not assign the requested series_statement as @series_statement' do
         series_statement = FactoryBot.create(:series_statement)
-        get :edit, id: series_statement.id
+        get :edit, params: { id: series_statement.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -180,24 +180,24 @@ describe SeriesStatementsController do
 
       describe 'with valid params' do
         it 'assigns a newly created series_statement as @series_statement' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(assigns(:series_statement)).to be_valid
         end
 
         it 'redirects to the created series_statement' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(response).to redirect_to(series_statement_url(assigns(:series_statement)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved series_statement as @series_statement' do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -208,24 +208,24 @@ describe SeriesStatementsController do
 
       describe 'with valid params' do
         it 'assigns a newly created series_statement as @series_statement' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(assigns(:series_statement)).to be_valid
         end
 
         it 'redirects to the created series_statement' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(response).to redirect_to(series_statement_url(assigns(:series_statement)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved series_statement as @series_statement' do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -236,24 +236,24 @@ describe SeriesStatementsController do
 
       describe 'with valid params' do
         it 'assigns a newly created series_statement as @series_statement' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(assigns(:series_statement)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved series_statement as @series_statement' do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(assigns(:series_statement)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -262,24 +262,24 @@ describe SeriesStatementsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created series_statement as @series_statement' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(assigns(:series_statement)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, series_statement: @attrs
+          post :create, params: { series_statement: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved series_statement as @series_statement' do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(assigns(:series_statement)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, series_statement: @invalid_attrs
+          post :create, params: { series_statement: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -298,23 +298,23 @@ describe SeriesStatementsController do
 
       describe 'with valid params' do
         it 'updates the requested series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
         end
 
         it 'assigns the requested series_statement as @series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
           expect(assigns(:series_statement)).to eq(@series_statement)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @series_statement.id, move: 'lower'
+          put :update, params: { id: @series_statement.id, move: 'lower' }
           expect(response).to redirect_to(series_statements_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested series_statement as @series_statement' do
-          put :update, id: @series_statement.id, series_statement: @invalid_attrs
+          put :update, params: { id: @series_statement.id, series_statement: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -325,11 +325,11 @@ describe SeriesStatementsController do
 
       describe 'with valid params' do
         it 'updates the requested series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
         end
 
         it 'assigns the requested series_statement as @series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
           expect(assigns(:series_statement)).to eq(@series_statement)
           expect(response).to redirect_to(@series_statement)
         end
@@ -337,12 +337,12 @@ describe SeriesStatementsController do
 
       describe 'with invalid params' do
         it 'assigns the series_statement as @series_statement' do
-          put :update, id: @series_statement, series_statement: @invalid_attrs
+          put :update, params: { id: @series_statement, series_statement: @invalid_attrs }
           expect(assigns(:series_statement)).not_to be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @series_statement, series_statement: @invalid_attrs
+          put :update, params: { id: @series_statement, series_statement: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -353,11 +353,11 @@ describe SeriesStatementsController do
 
       describe 'with valid params' do
         it 'updates the requested series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
         end
 
         it 'assigns the requested series_statement as @series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
           expect(assigns(:series_statement)).to eq(@series_statement)
           expect(response).to be_forbidden
         end
@@ -365,7 +365,7 @@ describe SeriesStatementsController do
 
       describe 'with invalid params' do
         it 'assigns the requested series_statement as @series_statement' do
-          put :update, id: @series_statement.id, series_statement: @invalid_attrs
+          put :update, params: { id: @series_statement.id, series_statement: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -374,18 +374,18 @@ describe SeriesStatementsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested series_statement' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @series_statement.id, series_statement: @attrs
+          put :update, params: { id: @series_statement.id, series_statement: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested series_statement as @series_statement' do
-          put :update, id: @series_statement.id, series_statement: @invalid_attrs
+          put :update, params: { id: @series_statement.id, series_statement: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -401,11 +401,11 @@ describe SeriesStatementsController do
       login_fixture_admin
 
       it 'destroys the requested series_statement' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
       end
 
       it 'redirects to the series_statements list' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
         expect(response).to redirect_to(series_statements_url)
       end
     end
@@ -414,11 +414,11 @@ describe SeriesStatementsController do
       login_fixture_librarian
 
       it 'destroys the requested series_statement' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
         expect(response).to redirect_to(series_statements_url)
       end
     end
@@ -427,22 +427,22 @@ describe SeriesStatementsController do
       login_fixture_user
 
       it 'destroys the requested series_statement' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested series_statement' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @series_statement.id
+        delete :destroy, params: { id: @series_statement.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

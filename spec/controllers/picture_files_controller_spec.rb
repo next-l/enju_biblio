@@ -47,7 +47,7 @@ describe PictureFilesController do
 
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :show, id: picture_file.id
+        get :show, params: { id: picture_file.id }
         expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
@@ -57,7 +57,7 @@ describe PictureFilesController do
 
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :show, id: picture_file.id
+        get :show, params: { id: picture_file.id }
         expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
@@ -67,7 +67,7 @@ describe PictureFilesController do
 
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :show, id: picture_file.id
+        get :show, params: { id: picture_file.id }
         expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
@@ -75,7 +75,7 @@ describe PictureFilesController do
     describe 'When not logged in' do
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :show, id: picture_file.id
+        get :show, params: { id: picture_file.id }
         expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
@@ -127,7 +127,7 @@ describe PictureFilesController do
 
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :edit, id: picture_file.id
+        get :edit, params: { id: picture_file.id }
         expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
@@ -137,7 +137,7 @@ describe PictureFilesController do
 
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :edit, id: picture_file.id
+        get :edit, params: { id: picture_file.id }
         expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
@@ -147,7 +147,7 @@ describe PictureFilesController do
 
       it 'assigns the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :edit, id: picture_file.id
+        get :edit, params: { id: picture_file.id }
         expect(response).to be_forbidden
       end
     end
@@ -155,7 +155,7 @@ describe PictureFilesController do
     describe 'When not logged in' do
       it 'should not assign the requested picture_file as @picture_file' do
         picture_file = PictureFile.find(1)
-        get :edit, id: picture_file.id
+        get :edit, params: { id: picture_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -172,24 +172,24 @@ describe PictureFilesController do
 
       describe 'with valid params' do
         it 'assigns a newly created picture_file as @picture_file' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(assigns(:picture_file)).to be_valid
         end
 
         it 'redirects to the created picture_file' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(response).to redirect_to(picture_file_url(assigns(:picture_file)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved picture_file as @picture_file' do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(assigns(:picture_file)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -200,24 +200,24 @@ describe PictureFilesController do
 
       describe 'with valid params' do
         it 'assigns a newly created picture_file as @picture_file' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(assigns(:picture_file)).to be_valid
         end
 
         it 'redirects to the created picture_file' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(response).to redirect_to(picture_file_url(assigns(:picture_file)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved picture_file as @picture_file' do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(assigns(:picture_file)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -228,24 +228,24 @@ describe PictureFilesController do
 
       describe 'with valid params' do
         it 'assigns a newly created picture_file as @picture_file' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(assigns(:picture_file)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved picture_file as @picture_file' do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(assigns(:picture_file)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -254,24 +254,24 @@ describe PictureFilesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created picture_file as @picture_file' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(assigns(:picture_file)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, picture_file: @attrs
+          post :create, params: { picture_file: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved picture_file as @picture_file' do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(assigns(:picture_file)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, picture_file: @invalid_attrs
+          post :create, params: { picture_file: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -290,23 +290,23 @@ describe PictureFilesController do
 
       describe 'with valid params' do
         it 'updates the requested picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
         end
 
         it 'assigns the requested picture_file as @picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
           expect(assigns(:picture_file)).to eq(@picture_file)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @picture_file.id, move: 'lower'
+          put :update, params: { id: @picture_file.id, move: 'lower' }
           expect(response).to redirect_to(picture_files_url(shelf_id: @picture_file.picture_attachable_id))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested picture_file as @picture_file' do
-          put :update, id: @picture_file.id, picture_file: @invalid_attrs
+          put :update, params: { id: @picture_file.id, picture_file: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -317,11 +317,11 @@ describe PictureFilesController do
 
       describe 'with valid params' do
         it 'updates the requested picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
         end
 
         it 'assigns the requested picture_file as @picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
           expect(assigns(:picture_file)).to eq(@picture_file)
           expect(response).to redirect_to(@picture_file)
         end
@@ -329,12 +329,12 @@ describe PictureFilesController do
 
       describe 'with invalid params' do
         it 'assigns the picture_file as @picture_file' do
-          put :update, id: @picture_file, picture_file: @invalid_attrs
+          put :update, params: { id: @picture_file, picture_file: @invalid_attrs }
           expect(assigns(:picture_file)).not_to be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @picture_file, picture_file: @invalid_attrs
+          put :update, params: { id: @picture_file, picture_file: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -345,11 +345,11 @@ describe PictureFilesController do
 
       describe 'with valid params' do
         it 'updates the requested picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
         end
 
         it 'assigns the requested picture_file as @picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
           expect(assigns(:picture_file)).to eq(@picture_file)
           expect(response).to be_forbidden
         end
@@ -357,7 +357,7 @@ describe PictureFilesController do
 
       describe 'with invalid params' do
         it 'assigns the requested picture_file as @picture_file' do
-          put :update, id: @picture_file.id, picture_file: @invalid_attrs
+          put :update, params: { id: @picture_file.id, picture_file: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -366,18 +366,18 @@ describe PictureFilesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested picture_file' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @picture_file.id, picture_file: @attrs
+          put :update, params: { id: @picture_file.id, picture_file: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested picture_file as @picture_file' do
-          put :update, id: @picture_file.id, picture_file: @invalid_attrs
+          put :update, params: { id: @picture_file.id, picture_file: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -393,11 +393,11 @@ describe PictureFilesController do
       login_fixture_admin
 
       it 'destroys the requested picture_file' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
       end
 
       it 'redirects to the picture_files list' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
         expect(response).to redirect_to(picture_files_url(shelf_id: @picture_file.picture_attachable_id))
       end
     end
@@ -406,11 +406,11 @@ describe PictureFilesController do
       login_fixture_librarian
 
       it 'destroys the requested picture_file' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
         expect(response).to redirect_to(picture_files_url(shelf_id: @picture_file.picture_attachable_id))
       end
     end
@@ -419,22 +419,22 @@ describe PictureFilesController do
       login_fixture_user
 
       it 'destroys the requested picture_file' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested picture_file' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @picture_file.id
+        delete :destroy, params: { id: @picture_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

@@ -47,7 +47,7 @@ describe RealizesController do
 
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :show, id: realize.id
+        get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
     end
@@ -57,7 +57,7 @@ describe RealizesController do
 
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :show, id: realize.id
+        get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
     end
@@ -67,7 +67,7 @@ describe RealizesController do
 
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :show, id: realize.id
+        get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
     end
@@ -75,7 +75,7 @@ describe RealizesController do
     describe 'When not logged in' do
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :show, id: realize.id
+        get :show, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
     end
@@ -125,7 +125,7 @@ describe RealizesController do
 
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :edit, id: realize.id
+        get :edit, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
     end
@@ -135,7 +135,7 @@ describe RealizesController do
 
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :edit, id: realize.id
+        get :edit, params: { id: realize.id }
         expect(assigns(:realize)).to eq(realize)
       end
     end
@@ -145,7 +145,7 @@ describe RealizesController do
 
       it 'assigns the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :edit, id: realize.id
+        get :edit, params: { id: realize.id }
         expect(response).to be_forbidden
       end
     end
@@ -153,7 +153,7 @@ describe RealizesController do
     describe 'When not logged in' do
       it 'should not assign the requested realize as @realize' do
         realize = FactoryBot.create(:realize)
-        get :edit, id: realize.id
+        get :edit, params: { id: realize.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -170,24 +170,24 @@ describe RealizesController do
 
       describe 'with valid params' do
         it 'assigns a newly created realize as @realize' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(assigns(:realize)).to be_valid
         end
 
         it 'redirects to the created realize' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(response).to redirect_to(realize_url(assigns(:realize)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved realize as @realize' do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(assigns(:realize)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -198,24 +198,24 @@ describe RealizesController do
 
       describe 'with valid params' do
         it 'assigns a newly created realize as @realize' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(assigns(:realize)).to be_valid
         end
 
         it 'redirects to the created realize' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(response).to redirect_to(realize_url(assigns(:realize)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved realize as @realize' do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(assigns(:realize)).not_to be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(response).to render_template('new')
         end
       end
@@ -226,24 +226,24 @@ describe RealizesController do
 
       describe 'with valid params' do
         it 'assigns a newly created realize as @realize' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(assigns(:realize)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(response).to be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved realize as @realize' do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(assigns(:realize)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -252,24 +252,24 @@ describe RealizesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created realize as @realize' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(assigns(:realize)).to be_nil
         end
 
         it 'should redirect to new_user_session_url' do
-          post :create, realize: @attrs
+          post :create, params: { realize: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved realize as @realize' do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(assigns(:realize)).to be_nil
         end
 
         it 'should redirect to new_user_session_url' do
-          post :create, realize: @invalid_attrs
+          post :create, params: { realize: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -288,11 +288,11 @@ describe RealizesController do
 
       describe 'with valid params' do
         it 'updates the requested realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
         end
 
         it 'assigns the requested realize as @realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
           expect(assigns(:realize)).to eq(@realize)
           expect(response).to redirect_to(@realize)
         end
@@ -300,11 +300,11 @@ describe RealizesController do
 
       describe 'with invalid params' do
         it 'assigns the requested realize as @realize' do
-          put :update, id: @realize.id, realize: @invalid_attrs
+          put :update, params: { id: @realize.id, realize: @invalid_attrs }
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @realize.id, realize: @invalid_attrs
+          put :update, params: { id: @realize.id, realize: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -315,18 +315,18 @@ describe RealizesController do
 
       describe 'with valid params' do
         it 'updates the requested realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
         end
 
         it 'assigns the requested realize as @realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
           expect(assigns(:realize)).to eq(@realize)
           expect(response).to redirect_to(@realize)
         end
 
         it 'moves its position when specified' do
           position = @realize.position
-          put :update, id: @realize.id, expression_id: @realize.expression.id, move: 'lower'
+          put :update, params: { id: @realize.id, expression_id: @realize.expression.id, move: 'lower' }
           expect(response).to redirect_to realizes_url(expression_id: @realize.expression_id)
           assigns(:realize).reload.position.should eq position + 1
         end
@@ -334,12 +334,12 @@ describe RealizesController do
 
       describe 'with invalid params' do
         it 'assigns the realize as @realize' do
-          put :update, id: @realize.id, realize: @invalid_attrs
+          put :update, params: { id: @realize.id, realize: @invalid_attrs }
           expect(assigns(:realize)).not_to be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @realize.id, realize: @invalid_attrs
+          put :update, params: { id: @realize.id, realize: @invalid_attrs }
           expect(response).to render_template('edit')
         end
       end
@@ -350,11 +350,11 @@ describe RealizesController do
 
       describe 'with valid params' do
         it 'updates the requested realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
         end
 
         it 'assigns the requested realize as @realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
           expect(assigns(:realize)).to eq(@realize)
           expect(response).to be_forbidden
         end
@@ -362,7 +362,7 @@ describe RealizesController do
 
       describe 'with invalid params' do
         it 'assigns the requested realize as @realize' do
-          put :update, id: @realize.id, realize: @invalid_attrs
+          put :update, params: { id: @realize.id, realize: @invalid_attrs }
           expect(response).to be_forbidden
         end
       end
@@ -371,18 +371,18 @@ describe RealizesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested realize' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @realize.id, realize: @attrs
+          put :update, params: { id: @realize.id, realize: @attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested realize as @realize' do
-          put :update, id: @realize.id, realize: @invalid_attrs
+          put :update, params: { id: @realize.id, realize: @invalid_attrs }
           expect(response).to redirect_to(new_user_session_url)
         end
       end
@@ -398,11 +398,11 @@ describe RealizesController do
       login_fixture_admin
 
       it 'destroys the requested realize' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
       end
 
       it 'redirects to the realizes list' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
         expect(response).to redirect_to(realizes_url)
       end
     end
@@ -411,11 +411,11 @@ describe RealizesController do
       login_fixture_librarian
 
       it 'destroys the requested realize' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
       end
 
       it 'redirects to the realizes list' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
         expect(response).to redirect_to(realizes_url)
       end
     end
@@ -424,22 +424,22 @@ describe RealizesController do
       login_fixture_user
 
       it 'destroys the requested realize' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested realize' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @realize.id
+        delete :destroy, params: { id: @realize.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

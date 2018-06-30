@@ -46,7 +46,7 @@ describe AgentImportFilesController do
       login_fixture_admin
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, id: 1
+        get :show, params: { id: 1 }
         expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
       end
     end
@@ -55,7 +55,7 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, id: 1
+        get :show, params: { id: 1 }
         expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
       end
     end
@@ -64,14 +64,14 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, id: 1
+        get :show, params: { id: 1 }
         expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, id: 1
+        get :show, params: { id: 1 }
         expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
         expect(response).to redirect_to(new_user_session_url)
       end
@@ -123,7 +123,7 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it 'should create agent_import_file' do
-        post :create, agent_import_file: { agent_import: fixture_file_upload('/../../examples/agent_import_file_sample1.tsv', 'text/csv') }
+        post :create, params: { agent_import_file: { agent_import: fixture_file_upload('/../../examples/agent_import_file_sample1.tsv', 'text/csv') } }
         expect(assigns(:agent_import_file)).to be_valid
         assigns(:agent_import_file).user.username.should eq @user.username
         expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
@@ -131,7 +131,7 @@ describe AgentImportFilesController do
 
       it 'should import user' do
         old_agents_count = Agent.count
-        post :create, agent_import_file: { agent_import: fixture_file_upload('/../../examples/agent_import_file_sample2.tsv', 'text/csv') }
+        post :create, params: { agent_import_file: { agent_import: fixture_file_upload('/../../examples/agent_import_file_sample2.tsv', 'text/csv') } }
         assigns(:agent_import_file).import_start
         Agent.count.should eq old_agents_count + 3
         expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
@@ -142,14 +142,14 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'should be forbidden' do
-        post :create, agent_import_file: { agent_import: fixture_file_upload('/../..//examples/agent_import_file_sample1.tsv', 'text/csv') }
+        post :create, params: { agent_import_file: { agent_import: fixture_file_upload('/../..//examples/agent_import_file_sample1.tsv', 'text/csv') } }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should be redirect to new session url' do
-        post :create, agent_import_file: { agent_import: fixture_file_upload('/../../examples/agent_import_file_sample1.tsv', 'text/csv') }
+        post :create, params: { agent_import_file: { agent_import: fixture_file_upload('/../../examples/agent_import_file_sample1.tsv', 'text/csv') } }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -161,7 +161,7 @@ describe AgentImportFilesController do
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
         agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, id: agent_import_file.id
+        get :edit, params: { id: agent_import_file.id }
         expect(assigns(:agent_import_file)).to eq(agent_import_file)
       end
     end
@@ -171,7 +171,7 @@ describe AgentImportFilesController do
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
         agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, id: agent_import_file.id
+        get :edit, params: { id: agent_import_file.id }
         expect(assigns(:agent_import_file)).to eq(agent_import_file)
       end
     end
@@ -181,7 +181,7 @@ describe AgentImportFilesController do
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
         agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, id: agent_import_file.id
+        get :edit, params: { id: agent_import_file.id }
         expect(response).to be_forbidden
       end
     end
@@ -189,7 +189,7 @@ describe AgentImportFilesController do
     describe 'When not logged in' do
       it 'should not assign the requested agent_import_file as @agent_import_file' do
         agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, id: agent_import_file.id
+        get :edit, params: { id: agent_import_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -200,7 +200,7 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it 'should update agent_import_file' do
-        put :update, id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' }
+        put :update, params: { id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' } }
         expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
@@ -209,14 +209,14 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'should not update agent_import_file' do
-        put :update, id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' }
+        put :update, params: { id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' } }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not update agent_import_file' do
-        put :update, id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' }
+        put :update, params: { id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' } }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -231,11 +231,11 @@ describe AgentImportFilesController do
       login_fixture_admin
 
       it 'destroys the requested agent_import_file' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
       end
 
       it 'redirects to the agent_import_files list' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
         expect(response).to redirect_to(agent_import_files_url)
       end
     end
@@ -244,11 +244,11 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it 'destroys the requested agent_import_file' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
       end
 
       it 'redirects to the agent_import_files list' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
         expect(response).to redirect_to(agent_import_files_url)
       end
     end
@@ -257,22 +257,22 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'destroys the requested agent_import_file' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested agent_import_file' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @agent_import_file.id
+        delete :destroy, params: { id: @agent_import_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

@@ -58,14 +58,14 @@ describe LanguagesController do
       login_fixture_admin
 
       it 'assigns the requested language as @language' do
-        get :show, id: @language.id
+        get :show, params: { id: @language.id }
         expect(assigns(:language)).to eq(@language)
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested language as @language' do
-        get :show, id: @language.id
+        get :show, params: { id: @language.id }
         expect(assigns(:language)).to eq(@language)
       end
     end
@@ -99,14 +99,14 @@ describe LanguagesController do
       login_fixture_admin
 
       it 'assigns the requested language as @language' do
-        get :edit, id: @language.id
+        get :edit, params: { id: @language.id }
         expect(assigns(:language)).to eq(@language)
       end
     end
 
     describe 'When not logged in' do
       it 'should not assign the requested language as @language' do
-        get :edit, id: @language.id
+        get :edit, params: { id: @language.id }
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -123,24 +123,24 @@ describe LanguagesController do
 
       describe 'with valid params' do
         it 'assigns a newly created language as @language' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           expect(assigns(:language)).to be_valid
         end
 
         it 'redirects to the created language' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           response.should redirect_to(assigns(:language))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved language as @language' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           expect(assigns(:language)).to_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           response.should render_template('new')
         end
       end
@@ -151,24 +151,24 @@ describe LanguagesController do
 
       describe 'with valid params' do
         it 'assigns a newly created language as @language' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           expect(assigns(:language)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           response.should be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved language as @language' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           expect(assigns(:language)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           response.should be_forbidden
         end
       end
@@ -179,24 +179,24 @@ describe LanguagesController do
 
       describe 'with valid params' do
         it 'assigns a newly created language as @language' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           expect(assigns(:language)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           response.should be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved language as @language' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           expect(assigns(:language)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           response.should be_forbidden
         end
       end
@@ -205,24 +205,24 @@ describe LanguagesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created language as @language' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           expect(assigns(:language)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, language: @attrs
+          post :create, params: { language: @attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved language as @language' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           expect(assigns(:language)).to be_nil
         end
 
         it 'should be forbidden' do
-          post :create, language: @invalid_attrs
+          post :create, params: { language: @invalid_attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
@@ -241,23 +241,23 @@ describe LanguagesController do
 
       describe 'with valid params' do
         it 'updates the requested language' do
-          put :update, id: @language.id, language: @attrs
+          put :update, params: { id: @language.id, language: @attrs }
         end
 
         it 'assigns the requested language as @language' do
-          put :update, id: @language.id, language: @attrs
+          put :update, params: { id: @language.id, language: @attrs }
           expect(assigns(:language)).to eq(@language)
         end
 
         it 'moves its position when specified' do
-          put :update, id: @language.id, language: @attrs, move: 'lower'
+          put :update, params: { id: @language.id, language: @attrs, move: 'lower' }
           response.should redirect_to(languages_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested language as @language' do
-          put :update, id: @language.id, language: @invalid_attrs
+          put :update, params: { id: @language.id, language: @invalid_attrs }
           response.should render_template('edit')
         end
       end
@@ -266,18 +266,18 @@ describe LanguagesController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested language' do
-          put :update, id: @language.id, language: @attrs
+          put :update, params: { id: @language.id, language: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @language.id, language: @attrs
+          put :update, params: { id: @language.id, language: @attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested language as @language' do
-          put :update, id: @language.id, language: @invalid_attrs
+          put :update, params: { id: @language.id, language: @invalid_attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
@@ -293,22 +293,22 @@ describe LanguagesController do
       login_fixture_admin
 
       it 'destroys the requested language' do
-        delete :destroy, id: @language.id
+        delete :destroy, params: { id: @language.id }
       end
 
       it 'redirects to the languagees list' do
-        delete :destroy, id: @language.id
+        delete :destroy, params: { id: @language.id }
         response.should redirect_to(languages_url)
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested language' do
-        delete :destroy, id: @language.id
+        delete :destroy, params: { id: @language.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @language.id
+        delete :destroy, params: { id: @language.id }
         response.should redirect_to(new_user_session_url)
       end
     end

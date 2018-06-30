@@ -50,7 +50,7 @@ describe AgentMergeListsController do
       login_admin
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        get :show, id: @agent_merge_list.id
+        get :show, params: { id: @agent_merge_list.id }
         assigns(:agent_merge_list).should eq(@agent_merge_list)
         response.should be_success
       end
@@ -60,7 +60,7 @@ describe AgentMergeListsController do
       login_librarian
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        get :show, id: @agent_merge_list.id
+        get :show, params: { id: @agent_merge_list.id }
         assigns(:agent_merge_list).should eq(@agent_merge_list)
         response.should be_success
       end
@@ -70,7 +70,7 @@ describe AgentMergeListsController do
       login_user
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        get :show, id: @agent_merge_list.id
+        get :show, params: { id: @agent_merge_list.id }
         assigns(:agent_merge_list).should eq(@agent_merge_list)
         response.should be_forbidden
       end
@@ -78,7 +78,7 @@ describe AgentMergeListsController do
 
     describe 'When not logged in' do
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
-        get :show, id: @agent_merge_list.id
+        get :show, params: { id: @agent_merge_list.id }
         assigns(:agent_merge_list).should eq(@agent_merge_list)
         response.should redirect_to new_user_session_url
       end
@@ -129,7 +129,7 @@ describe AgentMergeListsController do
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
         agent_merge_list = FactoryBot.create(:agent_merge_list)
-        get :edit, id: agent_merge_list.id
+        get :edit, params: { id: agent_merge_list.id }
         assigns(:agent_merge_list).should eq(agent_merge_list)
       end
     end
@@ -139,7 +139,7 @@ describe AgentMergeListsController do
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
         agent_merge_list = FactoryBot.create(:agent_merge_list)
-        get :edit, id: agent_merge_list.id
+        get :edit, params: { id: agent_merge_list.id }
         assigns(:agent_merge_list).should eq(agent_merge_list)
       end
     end
@@ -149,7 +149,7 @@ describe AgentMergeListsController do
 
       it 'assigns the requested agent_merge_list as @agent_merge_list' do
         agent_merge_list = FactoryBot.create(:agent_merge_list)
-        get :edit, id: agent_merge_list.id
+        get :edit, params: { id: agent_merge_list.id }
         response.should be_forbidden
       end
     end
@@ -157,7 +157,7 @@ describe AgentMergeListsController do
     describe 'When not logged in' do
       it 'should not assign the requested agent_merge_list as @agent_merge_list' do
         agent_merge_list = FactoryBot.create(:agent_merge_list)
-        get :edit, id: agent_merge_list.id
+        get :edit, params: { id: agent_merge_list.id }
         response.should redirect_to(new_user_session_url)
       end
     end
@@ -174,24 +174,24 @@ describe AgentMergeListsController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           assigns(:agent_merge_list).should be_valid
         end
 
         it 'redirects to the created agent_merge_list' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           response.should redirect_to(agent_merge_list_url(assigns(:agent_merge_list)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           assigns(:agent_merge_list).should_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           response.should render_template('new')
         end
       end
@@ -202,24 +202,24 @@ describe AgentMergeListsController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           assigns(:agent_merge_list).should be_valid
         end
 
         it 'redirects to the created agent_merge_list' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           response.should redirect_to(agent_merge_list_url(assigns(:agent_merge_list)))
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           assigns(:agent_merge_list).should_not be_valid
         end
 
         it "re-renders the 'new' template" do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           response.should render_template('new')
         end
       end
@@ -230,24 +230,24 @@ describe AgentMergeListsController do
 
       describe 'with valid params' do
         it 'assigns a newly created agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           assigns(:agent_merge_list).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           response.should be_forbidden
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           assigns(:agent_merge_list).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           response.should be_forbidden
         end
       end
@@ -256,24 +256,24 @@ describe AgentMergeListsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'assigns a newly created agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           assigns(:agent_merge_list).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent_merge_list: @attrs
+          post :create, params: { agent_merge_list: @attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns a newly created but unsaved agent_merge_list as @agent_merge_list' do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           assigns(:agent_merge_list).should be_nil
         end
 
         it 'should be forbidden' do
-          post :create, agent_merge_list: @invalid_attrs
+          post :create, params: { agent_merge_list: @invalid_attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
@@ -292,11 +292,11 @@ describe AgentMergeListsController do
 
       describe 'with valid params' do
         it 'updates the requested agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
         end
 
         it 'assigns the requested agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
           assigns(:agent_merge_list).should eq(@agent_merge_list)
           response.should redirect_to(@agent_merge_list)
         end
@@ -304,11 +304,11 @@ describe AgentMergeListsController do
 
       describe 'with invalid params' do
         it 'assigns the requested agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @invalid_attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @invalid_attrs }
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @invalid_attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @invalid_attrs }
           response.should render_template('edit')
         end
       end
@@ -319,11 +319,11 @@ describe AgentMergeListsController do
 
       describe 'with valid params' do
         it 'updates the requested agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
         end
 
         it 'assigns the requested agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
           assigns(:agent_merge_list).should eq(@agent_merge_list)
           response.should redirect_to(@agent_merge_list)
         end
@@ -331,24 +331,24 @@ describe AgentMergeListsController do
 
       describe 'with invalid params' do
         it 'assigns the agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @invalid_attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @invalid_attrs }
           assigns(:agent_merge_list).should_not be_valid
         end
 
         it "re-renders the 'edit' template" do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @invalid_attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @invalid_attrs }
           response.should render_template('edit')
         end
       end
 
       it 'should not merge agents without selected_agent_id' do
-        put :update, id: agent_merge_lists(:agent_merge_list_00001).id, mode: 'merge'
+        put :update, params: { id: agent_merge_lists(:agent_merge_list_00001).id, mode: 'merge' }
         flash[:notice].should eq I18n.t('merge_list.specify_id', model: I18n.t('activerecord.models.agent'))
         response.should redirect_to agent_merge_list_url(assigns(:agent_merge_list))
       end
 
       it 'should merge agents with selected_agent_idand merge_mode' do
-        put :update, id: agent_merge_lists(:agent_merge_list_00001).id, selected_agent_id: 3, mode: 'merge'
+        put :update, params: { id: agent_merge_lists(:agent_merge_list_00001).id, selected_agent_id: 3, mode: 'merge' }
         flash[:notice].should eq I18n.t('merge_list.successfully_merged', model: I18n.t('activerecord.models.agent'))
         response.should redirect_to agent_merge_list_url(assigns(:agent_merge_list))
       end
@@ -359,11 +359,11 @@ describe AgentMergeListsController do
 
       describe 'with valid params' do
         it 'updates the requested agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
         end
 
         it 'assigns the requested agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
           assigns(:agent_merge_list).should eq(@agent_merge_list)
           response.should be_forbidden
         end
@@ -371,7 +371,7 @@ describe AgentMergeListsController do
 
       describe 'with invalid params' do
         it 'assigns the requested agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @invalid_attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @invalid_attrs }
           response.should be_forbidden
         end
       end
@@ -380,18 +380,18 @@ describe AgentMergeListsController do
     describe 'When not logged in' do
       describe 'with valid params' do
         it 'updates the requested agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
         end
 
         it 'should be forbidden' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
 
       describe 'with invalid params' do
         it 'assigns the requested agent_merge_list as @agent_merge_list' do
-          put :update, id: @agent_merge_list.id, agent_merge_list: @invalid_attrs
+          put :update, params: { id: @agent_merge_list.id, agent_merge_list: @invalid_attrs }
           response.should redirect_to(new_user_session_url)
         end
       end
@@ -407,11 +407,11 @@ describe AgentMergeListsController do
       login_admin
 
       it 'destroys the requested agent_merge_list' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
       end
 
       it 'redirects to the agent_merge_lists list' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
         response.should redirect_to(agent_merge_lists_url)
       end
     end
@@ -420,11 +420,11 @@ describe AgentMergeListsController do
       login_librarian
 
       it 'destroys the requested agent_merge_list' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
       end
 
       it 'redirects to the agent_merge_lists list' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
         response.should redirect_to(agent_merge_lists_url)
       end
     end
@@ -433,22 +433,22 @@ describe AgentMergeListsController do
       login_user
 
       it 'destroys the requested agent_merge_list' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
         response.should be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'destroys the requested agent_merge_list' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
       end
 
       it 'should be forbidden' do
-        delete :destroy, id: @agent_merge_list.id
+        delete :destroy, params: { id: @agent_merge_list.id }
         response.should redirect_to(new_user_session_url)
       end
     end

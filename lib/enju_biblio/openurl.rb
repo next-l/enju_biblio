@@ -70,7 +70,7 @@ class Openurl
   # 個々のパラメータに合わせて検索文を組立てメソッドを呼ぶ。この時、引数は、enjuのフィールド名と値。
   def to_sunspot(params)
     query = []
-    params.each_key do |key|
+    params.each_pair do |key, _value|
       key = key.to_sym
       if MATCH_EXACT.include?(key) then # 完全一致
         query << to_sunspot_match_exact(ENJU_FIELD[key], params[key].strip)
