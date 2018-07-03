@@ -24,7 +24,7 @@ class Agent < ActiveRecord::Base
   has_many :agent_merges, dependent: :destroy
   has_many :agent_merge_lists, through: :agent_merges
   belongs_to :agent_type
-  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id', validate: true
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :language
   belongs_to :country
   has_one :agent_import_result

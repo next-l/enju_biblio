@@ -27,10 +27,10 @@ class AgentImportFile < ActiveRecord::Base
     'application/vnd.ms-excel'
   ]
   validates_attachment_presence :agent_import
-  belongs_to :user, validate: true
-  has_many :agent_import_results
+  belongs_to :user
+  has_many :agent_import_results, dependent: :destroy
 
-  has_many :agent_import_file_transitions, autosave: false
+  has_many :agent_import_file_transitions, autosave: false, dependent: :destroy
 
   attr_accessor :mode
 

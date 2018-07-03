@@ -1,6 +1,6 @@
 class AgentMerge < ActiveRecord::Base
-  belongs_to :agent, validate: true
-  belongs_to :agent_merge_list, validate: true
+  belongs_to :agent
+  belongs_to :agent_merge_list
   validates_presence_of :agent, :agent_merge_list
   validates_associated :agent, :agent_merge_list
 

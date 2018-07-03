@@ -29,10 +29,10 @@ class ResourceImportFile < ActiveRecord::Base
   validates_attachment_presence :resource_import
   validates :resource_import, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
-  belongs_to :user, validate: true
+  belongs_to :user
   belongs_to :default_shelf, class_name: 'Shelf'
-  has_many :resource_import_results
-  has_many :resource_import_file_transitions, autosave: false
+  has_many :resource_import_results, dependent: :destroy
+  has_many :resource_import_file_transitions, autosave: false, dependent: :destroy
 
   attr_accessor :mode, :library_id
 
@@ -87,7 +87,7 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       item_identifier = row['item_identifier'].to_s.strip
-      item = Item.where(item_identifier: item_identifier).first
+      item = Item.find_by(item_identifier: item_identifier)
       if item
         import_result.item = item
         import_result.manifestation = item.manifestation
@@ -98,7 +98,7 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       if row['manifestation_identifier'].present?
-        manifestation = Manifestation.where(manifestation_identifier: row['manifestation_identifier'].to_s.strip).first
+        manifestation = Manifestation.find_by(manifestation_identifier: row['manifestation_identifier'].to_s.strip)
       end
 
       unless manifestation
@@ -110,8 +110,8 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          identifier_type_doi = IdentifierType.where(name: 'doi').first
-          identifier_type_doi = IdentifierType.where(name: 'doi').create! unless identifier_type_doi
+          identifier_type_doi = IdentifierType.find_by(name: 'doi')
+          identifier_type_doi = IdentifierType.create!(name: 'doi') unless identifier_type_doi
           manifestation = Identifier.where(body: doi, identifier_type_id: identifier_type_doi.id).first.try(:manifestation)
         end
       end
@@ -119,8 +119,8 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['jpno'].present?
           jpno = row['jpno'].to_s.strip
-          identifier_type_jpno = IdentifierType.where(name: 'jpno').first
-          identifier_type_jpno = IdentifierType.where(name: 'jpno').create! unless identifier_type_jpno
+          identifier_type_jpno = IdentifierType.find_by(name: 'jpno')
+          identifier_type_jpno = IdentifierType.create!(name: 'jpno') unless identifier_type_jpno
           manifestation = Identifier.where(body: jpno, identifier_type_id: identifier_type_jpno.id).first.try(:manifestation)
         end
       end
@@ -181,7 +181,7 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.manifestation = manifestation
 
       if manifestation
-        if item_identifier.present? or row['shelf'].present? or row['call_number'].present?
+        if item_identifier.present? || row['shelf'].present? || row['call_number'].present?
           import_result.item = create_item(row, manifestation)
         else
           if manifestation.fulltext_content?
@@ -303,13 +303,13 @@ class ResourceImportFile < ActiveRecord::Base
       row_num += 1
       import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
       item_identifier = row['item_identifier'].to_s.strip
-      item = Item.where(item_identifier: item_identifier).first if item_identifier.present?
+      item = Item.find_by(item_identifier: item_identifier) if item_identifier.present?
       if item
         if item.manifestation
           fetch(row, edit_mode: 'update')
         end
-        shelf = Shelf.where(name: row['shelf'].to_s.strip).first
-        circulation_status = CirculationStatus.where(name: row['circulation_status']).first
+        shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
+        circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
         checkout_type = CheckoutType.where(name: row['checkout_type']).first
         bookstore = Bookstore.where(name: row['bookstore']).first
         required_role = Role.where(name: row['required_role']).first
@@ -348,13 +348,14 @@ class ResourceImportFile < ActiveRecord::Base
             item.include_supplements = false if item.include_supplements
           end
         end
+        item.manifestation.reload
         item.save!
         import_result.item = item
       else
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
-        manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first if manifestation_identifier.present?
+        manifestation = Manifestation.find_by(manifestation_identifier: manifestation_identifier) if manifestation_identifier.present?
         unless manifestation
-          manifestation = Manifestation.where(id: row['manifestation_id']).first
+          manifestation = Manifestation.find_by(id: row['manifestation_id'])
         end
         if manifestation
           fetch(row, edit_mode: 'update')
@@ -380,7 +381,7 @@ class ResourceImportFile < ActiveRecord::Base
     rows.each do |row|
       row_num += 1
       item_identifier = row['item_identifier'].to_s.strip
-      item = Item.where(item_identifier: item_identifier).first
+      item = Item.find_by(item_identifier: item_identifier)
       if item
         item.destroy if item.removable?
       end
@@ -401,15 +402,15 @@ class ResourceImportFile < ActiveRecord::Base
 
     rows.each do |row|
       item_identifier = row['item_identifier'].to_s.strip
-      item = Item.where(item_identifier: item_identifier).first
+      item = Item.find_by(item_identifier: item_identifier)
       unless item
-        item = Item.where(id: row['item_id'].to_s.strip).first
+        item = Item.find_by(id: row['item_id'].to_s.strip)
       end
 
       manifestation_identifier = row['manifestation_identifier'].to_s.strip
-      manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first
+      manifestation = Manifestation.find_by(manifestation_identifier: manifestation_identifier)
       unless manifestation
-        manifestation = Manifestation.where(id: row['manifestation_id'].to_s.strip).first
+        manifestation = Manifestation.find_by(id: row['manifestation_id'].to_s.strip)
       end
 
       if item && manifestation
@@ -473,12 +474,12 @@ class ResourceImportFile < ActiveRecord::Base
       type = column_name.split(':').last
       subject_list = row[column_name].to_s.split('//')
       subject_list.map{|value|
-        subject_heading_type = SubjectHeadingType.where(name: type).first
+        subject_heading_type = SubjectHeadingType.find_by(name: type)
         next unless subject_heading_type
         subject = Subject.new(term: value)
         subject.subject_heading_type = subject_heading_type
         # TODO: Subject typeの設定
-        subject.subject_type = SubjectType.where(name: 'concept').first
+        subject.subject_type = SubjectType.find_by(name: 'concept')
         subject.save!
         subjects << subject
       }
@@ -492,7 +493,7 @@ class ResourceImportFile < ActiveRecord::Base
       type = column_name.split(':').last
       classification_list = row[column_name].to_s.split('//')
       classification_list.map{|value|
-        classification_type = ClassificationType.where(name: type).first
+        classification_type = ClassificationType.find_by(name: type)
         next unless classification_type
         classification = Classification.new(category: value)
         classification.classification_type = classification_type
@@ -504,12 +505,12 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def create_item(row, manifestation)
-    shelf = Shelf.where(name: row['shelf'].to_s.strip).first
+    shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
     unless shelf
       shelf = default_shelf || Shelf.web
     end
-    bookstore = Bookstore.where(name: row['bookstore'].to_s.strip).first
-    budget_type = BudgetType.where(name: row['budget_type'].to_s.strip).first
+    bookstore = Bookstore.find_by(name: row['bookstore'].to_s.strip)
+    budget_type = BudgetType.find_by(name: row['budget_type'].to_s.strip)
     acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
     binded_at = Time.zone.parse(row['binded_at']) rescue nil
     item = Item.new(
@@ -526,11 +527,11 @@ class ResourceImportFile < ActiveRecord::Base
     )
     manifestation.items << item
     if defined?(EnjuCirculation)
-      circulation_status = CirculationStatus.where(name: row['circulation_status'].to_s.strip).first || CirculationStatus.where(name: 'In Process').first
+      circulation_status = CirculationStatus.find_by(name: row['circulation_status'].to_s.strip) || CirculationStatus.find_by(name: 'In Process')
       item.circulation_status = circulation_status
-      use_restriction = UseRestriction.where(name: row['use_restriction'].to_s.strip).first
+      use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
       unless use_restriction
-        use_restriction = UseRestriction.where(name: 'Not For Loan').first
+        use_restriction = UseRestriction.find_by(name: 'Not For Loan')
       end
       item.use_restriction = use_restriction
     end
@@ -551,11 +552,11 @@ class ResourceImportFile < ActiveRecord::Base
     when 'create'
       manifestation = nil
     when 'update'
-      manifestation = Item.where(item_identifier: row['item_identifier'].to_s.strip).first.try(:manifestation)
+      manifestation = Item.find_by(item_identifier: row['item_identifier'].to_s.strip).try(:manifestation)
       unless manifestation
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
-        manifestation = Manifestation.where(manifestation_identifier: manifestation_identifier).first if manifestation_identifier
-        manifestation = Manifestation.where(id: row['manifestation_id']).first unless manifestation
+        manifestation = Manifestation.find_by(manifestation_identifier: manifestation_identifier) if manifestation_identifier
+        manifestation = Manifestation.find_by(id: row['manifestation_id']) unless manifestation
       end
     end
 
@@ -748,8 +749,8 @@ class ResourceImportFile < ActiveRecord::Base
     %w(isbn issn doi jpno ncid).each do |id_type|
       if row["#{id_type}"].present?
         import_id = Identifier.new(body: row["#{id_type}"])
-        identifier_type = IdentifierType.where(name: id_type).first
-        identifier_type = IdentifierType.where(name: id_type).create! unless identifier_type
+        identifier_type = IdentifierType.find_by(name: id_type)
+        identifier_type = IdentifierType.create!(name: id_type) unless identifier_type
         import_id.identifier_type = identifier_type
         identifier[:"#{id_type}"] = import_id if import_id.valid?
       end

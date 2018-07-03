@@ -1,6 +1,6 @@
 class SeriesStatementMerge < ActiveRecord::Base
-  belongs_to :series_statement, validate: true
-  belongs_to :series_statement_merge_list, validate: true
+  belongs_to :series_statement
+  belongs_to :series_statement_merge_list
   validates_presence_of :series_statement, :series_statement_merge_list
   validates_associated :series_statement, :series_statement_merge_list
 

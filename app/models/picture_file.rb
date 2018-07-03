@@ -1,6 +1,6 @@
 class PictureFile < ActiveRecord::Base
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
-  belongs_to :picture_attachable, polymorphic: true, validate: true
+  belongs_to :picture_attachable, polymorphic: true
   before_save :extract_dimensions
 
   if ENV['ENJU_STORAGE'] == 's3'
