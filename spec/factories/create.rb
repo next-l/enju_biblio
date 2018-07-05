@@ -1,6 +1,7 @@
 FactoryBot.define do
-  factory :create do |f|
-    f.work_id{FactoryBot.create(:manifestation).id}
-    f.agent_id{FactoryBot.create(:agent).id}
+  factory :create do
+    work_id{FactoryBot.create(:manifestation).id}
+    agent_id{FactoryBot.create(:agent).id}
+    association :create_type
   end
 end
