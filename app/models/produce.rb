@@ -1,7 +1,7 @@
 class Produce < ActiveRecord::Base
   belongs_to :agent
   belongs_to :manifestation, touch: true
-  belongs_to :produce_type
+  belongs_to :produce_type, optional: true
   delegate :original_title, to: :manifestation, prefix: true
 
   validates_associated :agent, :manifestation

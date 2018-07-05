@@ -1,7 +1,7 @@
 class Create < ActiveRecord::Base
   belongs_to :agent
   belongs_to :work, class_name: 'Manifestation', foreign_key: 'work_id', touch: true
-  belongs_to :create_type
+  belongs_to :create_type, optional: true
 
   validates_associated :agent, :work
   validates_presence_of :agent_id, :work_id
