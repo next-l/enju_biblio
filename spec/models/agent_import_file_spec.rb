@@ -5,7 +5,7 @@ describe AgentImportFile do
 
   describe "when its mode is 'create'" do
     before(:each) do
-      @file = AgentImportFile.create! agent_import: File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv")
+      @file = AgentImportFile.create! agent_import: File.new("#{Rails.root.to_s}/../../examples/agent_import_file_sample1.tsv"), user: users(:admin)
     end
 
     it "should be imported" do

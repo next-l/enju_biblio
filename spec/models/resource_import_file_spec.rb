@@ -6,8 +6,11 @@ describe ResourceImportFile do
   describe "when its mode is 'create'" do
     describe "when it is written in utf-8" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"), default_shelf_id: 3
-        @file.user = users(:admin)
+        @file = ResourceImportFile.create(
+          resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"),
+          default_shelf_id: 3,
+          user: users(:admin)
+        )
       end
 
       it "should be imported", vcr: true do
@@ -354,9 +357,10 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
   end
 
   it "should import in background", vcr: true do
-    file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv")
-    file.user = users(:admin)
-    file.save
+    file = ResourceImportFile.create!(
+      resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"),
+      user: users(:admin)
+    )
     ResourceImportFileJob.perform_later(file).should be_truthy
   end
 end

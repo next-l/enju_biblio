@@ -1,7 +1,7 @@
 class SeriesStatement < ActiveRecord::Base
   has_many :series_statement_merges, dependent: :destroy
   has_many :series_statement_merge_lists, through: :series_statement_merges
-  belongs_to :manifestation, touch: true
+  belongs_to :manifestation, touch: true, optional: true
   belongs_to :root_manifestation, foreign_key: :root_manifestation_id, class_name: 'Manifestation', touch: true, optional: true
   validates_presence_of :original_title
   validates :root_manifestation_id, uniqueness: true, allow_nil: true
