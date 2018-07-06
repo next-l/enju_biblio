@@ -236,8 +236,10 @@ describe ResourceImportFile do
 original_title	call_number	item_note
 resource_import_file_test1	007.6	note for the item.
         EOF
-        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
-        file.user = users(:admin)
+        file = ResourceImportFile.create(
+          resource_import: StringIO.new(import_file),
+          user: users(:admin)
+        )
         old_manifestations_count = Manifestation.count
         old_items_count = Item.count
         result = file.import_start
@@ -255,8 +257,10 @@ resource_import_file_test1	007.6	note for the item.
 original_title	edition	edition_string
 resource_import_file_test_edition	2	Revised Ed.
         EOF
-        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
-        file.user = users(:admin)
+        file = ResourceImportFile.create(
+          resource_import: StringIO.new(import_file),
+          user: users(:admin)
+        )
         old_manifestations_count = Manifestation.count
         result = file.import_start
         expect(Manifestation.count).to eq old_manifestations_count + 1
@@ -271,8 +275,10 @@ resource_import_file_test_edition	2	Revised Ed.
 original_title	title_transcription
 resource_import_file_test_transcription	transcription
         EOF
-        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
-        file.user = users(:admin)
+        file = ResourceImportFile.create(
+          resource_import: StringIO.new(import_file),
+          user: users(:admin)
+        )
         old_manifestations_count = Manifestation.count
         result = file.import_start
         expect(Manifestation.count).to eq old_manifestations_count + 1
@@ -287,8 +293,10 @@ resource_import_file_test_transcription	transcription
 original_title	description	note	call_number	item_note
 resource_import_file_test_description	test\\ntest	test\\ntest	test_description	test\\ntest
         EOF
-        file = ResourceImportFile.create(resource_import: StringIO.new(import_file))
-        file.user = users(:admin)
+        file = ResourceImportFile.create(
+          resource_import: StringIO.new(import_file),
+          user: users(:admin)
+        )
         old_manifestations_count = Manifestation.count
         result = file.import_start
         expect(Manifestation.count).to eq old_manifestations_count + 1
