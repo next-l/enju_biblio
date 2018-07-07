@@ -30,7 +30,7 @@ class ResourceImportFile < ActiveRecord::Base
   validates :resource_import, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user
-  belongs_to :default_shelf, class_name: 'Shelf'
+  belongs_to :default_shelf, class_name: 'Shelf', optional: true
   has_many :resource_import_results, dependent: :destroy
   has_many :resource_import_file_transitions, autosave: false, dependent: :destroy
 

@@ -1,7 +1,6 @@
 class Identifier < ActiveRecord::Base
-  #attr_accessible :body, :identifier_type_id, :manifestation_id, :primary, :position
   belongs_to :identifier_type
-  belongs_to :manifestation, touch: true
+  belongs_to :manifestation, touch: true, optional: true
 
   validates_presence_of :body
   validates_uniqueness_of :body, scope: [:identifier_type_id, :manifestation_id]

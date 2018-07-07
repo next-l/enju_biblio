@@ -303,7 +303,11 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
 
   describe "when its mode is 'update'" do
     it "should update items", vcr: true do
-      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"), edit_mode: 'update'
+      @file = ResourceImportFile.create!(
+        resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"),
+        user: users(:admin),
+        edit_mode: 'update'
+      )
       @file.modify
       expect(@file.resource_import_results.first).to be_truthy
       expect(@file.resource_import_results.first.body).to match /item_identifier/
