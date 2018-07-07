@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "owns/index" do
   before(:each) do
-    assign(:owns, Kaminari::paginate_array([
+    assign(:owns, Kaminari.paginate_array([
       stub_model(Own,
         item_id: 1,
         agent_id: 1

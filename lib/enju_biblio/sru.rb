@@ -33,7 +33,7 @@ class Sru
     else
       @path, @ascending = @sort_key.split(',') if @sort_key
     end
-    #TODO ソート基準が入手しやすさの場合の処理
+    # TODO ソート基準が入手しやすさの場合の処理
     if SORT_KEYS.include?(@path)
       if MULTI_KEY_MAP.keys.include?(@path)
         sort[:sort_by] = MULTI_KEY_MAP[@path]
@@ -66,14 +66,14 @@ class Sru
   end
 
   def get_extra_response_data
-    #TODO: NDL で必要な項目が決定し、更に enju にそのフィールドが設けられた後で正式な実装を行なう。
+    # TODO: NDL で必要な項目が決定し、更に enju にそのフィールドが設けられた後で正式な実装を行なう。
     if @search.respond_to?(:erd)
       @schema == 'dc' ? @search.erd : {}
     end
   end
 
   def get_number_of_records
-    #TODO: sunspot での取得方法が分かり次第、正式な実装を行なう。
+    # TODO: sunspot での取得方法が分かり次第、正式な実装を行なう。
     @schema == 'dc' ? [1405, 1406] : [40,11]
   end
 end

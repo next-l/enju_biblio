@@ -1,7 +1,7 @@
 # https://github.com/resque/resque/wiki/RSpec-and-Resque
 RSpec.configure do |config|
-  REDIS_PID = "#{Rails.root.to_s}/tmp/pids/redis-test.pid"
-  REDIS_CACHE_PATH = "#{Rails.root.to_s}/tmp/cache/"
+  REDIS_PID = "#{Rails.root}/tmp/pids/redis-test.pid"
+  REDIS_CACHE_PATH = "#{Rails.root}/tmp/cache/"
 
   unless ENV["TRAVIS"]
     config.before(:suite) do

@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "creates/index" do
   before(:each) do
-    assign(:creates, Kaminari::paginate_array([
+    assign(:creates, Kaminari.paginate_array([
       stub_model(Create,
         work_id: 1,
         agent_id: 1

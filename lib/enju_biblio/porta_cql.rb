@@ -140,16 +140,16 @@ class Clause
     if ss.scan(INDEX) or ss.scan(SORT_BY)
       index = ss[0]
     end
-    #else
+    # else
     #  raise ScannerError, "index or the sortBy is requested in '#{text}'"
-    #end
+    # end
     ss.scan(/\s+/)
     if ss.scan(RELATION)
       relation = ss[0].upcase
     end
-    #else
+    # else
     #  raise ScannerError, "relation is requested in '#{text}'"
-    #end
+    # end
     ss.scan(/\s+/)
     if ss.scan(/.+/)
       terms = ss[0].gsub(/(\A\"|\"\Z)/, '').split

@@ -4,7 +4,7 @@ describe "series_statement_merges/index" do
   fixtures :all
 
   before(:each) do
-    assign(:series_statement_merges, Kaminari::paginate_array([
+    assign(:series_statement_merges, Kaminari.paginate_array([
       stub_model(SeriesStatementMerge,
         series_statement_id: 1,
         series_statement_merge_list_id: 1

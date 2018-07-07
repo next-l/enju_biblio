@@ -4,7 +4,7 @@ describe "import_requests/index" do
   fixtures :users
 
   before(:each) do
-    assign(:import_requests, Kaminari::paginate_array([
+    assign(:import_requests, Kaminari.paginate_array([
       stub_model(ImportRequest,
         id: 1,
         isbn: "1111111111",

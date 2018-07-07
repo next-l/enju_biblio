@@ -7,7 +7,7 @@ describe ResourceImportFile do
     describe "when it is written in utf-8" do
       before(:each) do
         @file = ResourceImportFile.create(
-          resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"),
+          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
           default_shelf_id: 3,
           user: users(:admin)
         )
@@ -180,7 +180,7 @@ describe ResourceImportFile do
 
     describe "when it is written in shift_jis" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample2.tsv")
+        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv")
         @file.user = users(:admin)
       end
 
@@ -216,7 +216,7 @@ describe ResourceImportFile do
 
     describe "when it has only isbn" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/isbn_sample.txt")
+        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root}/../../examples/isbn_sample.txt")
         @file.user = users(:admin)
       end
 
@@ -312,7 +312,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
   describe "when its mode is 'update'" do
     it "should update items", vcr: true do
       @file = ResourceImportFile.create!(
-        resource_import: File.new("#{Rails.root.to_s}/../../examples/item_update_file.tsv"),
+        resource_import: File.new("#{Rails.root}/../../examples/item_update_file.tsv"),
         user: users(:admin),
         edit_mode: 'update'
       )
@@ -362,7 +362,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
   describe "when its mode is 'destroy'" do
     it "should remove items", vcr: true do
       old_count = Item.count
-      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
+      @file = ResourceImportFile.create resource_import: File.new("#{Rails.root}/../../examples/item_delete_file.tsv"), edit_mode: 'destroy'
       @file.remove
       Item.count.should eq old_count - 2
     end
@@ -370,7 +370,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
 
   it "should import in background", vcr: true do
     file = ResourceImportFile.create!(
-      resource_import: File.new("#{Rails.root.to_s}/../../examples/resource_import_file_sample1.tsv"),
+      resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
       user: users(:admin)
     )
     ResourceImportFileJob.perform_later(file).should be_truthy
