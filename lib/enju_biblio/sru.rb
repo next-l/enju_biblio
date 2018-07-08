@@ -8,15 +8,15 @@ class Sru
   SORT_KEYS = ASC_KEYS + DESC_KEYS unless Object.const_defined?(:SORY_KEYS)
   MULTI_KEY_MAP = {'title' => 'sort_title'} unless Object.const_defined?(:MULTI_KEY_MAP)
   def initialize(params)
-    raise QueryArgumentError, 'sru :query is required item.' unless params.has_key?(:query)
+    raise QueryArgumentError, 'sru :query is required item.' unless params.key?(:query)
 
     @cql = Cql.new(params[:query])
-    @version = params.has_key?(:version) ? params[:version] : '1.2'
-    @start = params.has_key?(:startRecord) ? params[:startRecord].to_i : 1
-    @maximum = params.has_key?(:maximumRecords) ? params[:maximumRecords].to_i : 200
+    @version = params.key?(:version) ? params[:version] : '1.2'
+    @start = params.key?(:startRecord) ? params[:startRecord].to_i : 1
+    @maximum = params.key?(:maximumRecords) ? params[:maximumRecords].to_i : 200
     @maximum = 1000 if 1000 < @maximum
-    @packing = params.has_key?(:recordPacking) ? params[:recordPacking] : 'string'
-    @schema = params.has_key?(:recordSchema) ? params[:recordSchema] : 'dc'
+    @packing = params.key?(:recordPacking) ? params[:recordPacking] : 'string'
+    @schema = params.key?(:recordSchema) ? params[:recordSchema] : 'dc'
     @sort_key = params[:sortKeys]
 
     @manifestations = []

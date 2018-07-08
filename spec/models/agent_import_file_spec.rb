@@ -27,7 +27,10 @@ describe AgentImportFile do
 
   describe "when it is written in shift_jis" do
     before(:each) do
-      @file = AgentImportFile.create! agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample3.tsv")
+      @file = AgentImportFile.create!(
+        agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample3.tsv"),
+        user: users(:admin)
+      )
     end
 
     it "should be imported" do
@@ -47,8 +50,11 @@ describe AgentImportFile do
 
   describe "when its mode is 'update'" do
     it "should update users" do
-      @file = AgentImportFile.create agent_import: File.new("#{Rails.root}/../../examples/agent_update_file.tsv")
-      @file.modify
+      file = AgentImportFile.create!(
+        agent_import: File.new("#{Rails.root}/../../examples/agent_update_file.tsv"),
+        user: users(:admin)
+      )
+      file.modify
       agent_1 = Agent.find(1)
       agent_1.full_name.should eq 'たなべこうすけ'
       agent_1.address_1.should eq '東京都'
@@ -61,8 +67,11 @@ describe AgentImportFile do
   describe "when its mode is 'destroy'" do
     it "should remove users" do
       old_count = Agent.count
-      @file = AgentImportFile.create agent_import: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv")
-      @file.remove
+      file = AgentImportFile.create!(
+        agent_import: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv"),
+        user: users(:admin)
+      )
+      file.remove
       Agent.count.should eq old_count - 7
     end
   end

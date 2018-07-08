@@ -145,7 +145,7 @@ describe Manifestation, solr: true do
     sru.sort_by.should eq({sort_by: 'creator', order: 'asc'})
     sru = Sru.new({query: 'title=Ruby AND sortBy="title'})
     sru.sort_by.should eq({sort_by: 'sort_title', order: 'asc'})
-    #TODO ソート基準が入手しやすさの場合の処理
+    # TODO ソート基準が入手しやすさの場合の処理
   end
 
   it "should accept ranges in sru" do
@@ -200,7 +200,7 @@ describe Manifestation, solr: true do
   end
 
   it "should respond to pickup" do
-    lambda{Manifestation.pickup}.should_not raise_error #(ActiveRecord::RecordNotFound)
+    lambda{Manifestation.pickup}.should_not raise_error # (ActiveRecord::RecordNotFound)
   end
 
   it "should be periodical if its series_statement is periodical" do
@@ -213,14 +213,14 @@ describe Manifestation, solr: true do
     manifestation.should_not be_valid
   end
 
-  #it "should set series_statement if the manifestation is periodical" do
+  # it "should set series_statement if the manifestation is periodical" do
   #  manifestation = series_statements(:two).manifestations.new
   #  manifestation.set_series_statements([series_statements(:two)])
   #  #manifestation.original_title.should eq 'テスト雑誌２月号'
   #  #manifestation.serial_number.should eq 3
   #  #manifestation.issue_number.should eq 3
   #  #manifestation.volume_number.should eq 1
-  #end
+  # end
 
   context ".export" do
     it "should export a header line" do

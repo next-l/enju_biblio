@@ -40,7 +40,7 @@ class Openurl
 
   def initialize(params)
     # @openurl_queryに検索項目ごとの検索文を格納
-    if params.has_key?(:any) then
+    if params.key?(:any) then
       # anyの場合は他に条件が指定されていても無視
       @openurl_query = [params[:any].strip]
     else

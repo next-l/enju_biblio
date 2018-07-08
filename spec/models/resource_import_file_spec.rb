@@ -180,8 +180,10 @@ describe ResourceImportFile do
 
     describe "when it is written in shift_jis" do
       before(:each) do
-        @file = ResourceImportFile.create resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv")
-        @file.user = users(:admin)
+        @file = ResourceImportFile.create!(
+          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv"),
+          user: users(:admin)
+        )
       end
 
       it "should be imported", vcr: true do
@@ -336,19 +338,19 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       Item.where(item_identifier: '00025').first.call_number.should eq "547|ヤ"
     end
 
-    #it "should update series_statement", vcr: true do
+    # it "should update series_statement", vcr: true do
     #  manifestation = Manifestation.find(10)
     #  file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
     #  file.modify
     #  manifestation.reload
     #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
-    #end
+    # end
 
     describe "NCID import" do
       it "should import ncid value" do
         file = ResourceImportFile.create resource_import: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), user: users(:admin), edit_mode: 'update'
         result = file.import_start
-        #expect(result[:manifestation_found]).to eq 1
+        # expect(result[:manifestation_found]).to eq 1
         expect(file.error_message).to be_nil
         resource_import_result = file.resource_import_results.last
         expect(resource_import_result.error_message).to be_blank
