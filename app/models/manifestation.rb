@@ -393,15 +393,15 @@ class Manifestation < ActiveRecord::Base
   end
 
   def created(agent)
-    creates.where(agent_id: agent.id).first
+    creates.find_by(agent_id: agent.id)
   end
 
   def realized(agent)
-    realizes.where(agent_id: agent.id).first
+    realizes.find_by(agent_id: agent.id)
   end
 
   def produced(agent)
-    produces.where(agent_id: agent.id).first
+    produces.find_by(agent_id: agent.id)
   end
 
   def sort_title
@@ -421,7 +421,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    identifier_type = IdentifierType.where(name: 'isbn').first
+    identifier_type = IdentifierType.find_by(name: 'isbn')
     return nil unless identifier_type
     Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
   end
@@ -440,33 +440,33 @@ class Manifestation < ActiveRecord::Base
   end
 
   def web_item
-    items.where(shelf_id: Shelf.web.id).first
+    items.find_by(shelf_id: Shelf.web.id)
   end
 
   def set_agent_role_type(agent_lists, options = {scope: :creator})
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
+        agent = Agent.find_by(agent_identifier: agent_list[:agent_identifier])
       end
-      agent = Agent.where(full_name: name_and_role[0]).first unless agent
+      agent = Agent.find_by(full_name: name_and_role[0]) unless agent
       next unless agent
       type = name_and_role[1].to_s.strip
 
       case options[:scope]
       when :creator
         type = 'author' if type.blank?
-        role_type = CreateType.where(name: type).first
-        create = Create.where(work_id: id, agent_id: agent.id).first
+        role_type = CreateType.find_by(name: type)
+        create = Create.find_by(work_id: id, agent_id: agent.id)
         if create
           create.create_type = role_type
           create.save(validate: false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
-        produce = Produce.where(manifestation_id: id, agent_id: agent.id).first
+        produce = Produce.find_by(manifestation_id: id, agent_id: agent.id)
         if produce
-          produce.produce_type = ProduceType.where(name: type).first
+          produce.produce_type = ProduceType.find_by(name: type)
           produce.save(validate: false)
         end
       else
@@ -515,7 +515,7 @@ class Manifestation < ActiveRecord::Base
     if Rails::VERSION::MAJOR > 3
       identifiers.id_type(name).order(:position).pluck(:body)
     else
-      identifier_type = IdentifierType.where(name: name).first
+      identifier_type = IdentifierType.find_by(name: name)
       if identifier_type
         identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
       else
@@ -768,7 +768,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def root_series_statement
-    series_statements.where(root_manifestation_id: id).first
+    series_statements.find_by(root_manifestation_id: id)
   end
 
   def isbn_characters
