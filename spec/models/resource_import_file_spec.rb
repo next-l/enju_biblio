@@ -318,7 +318,6 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         manifestation = Manifestation.all.find{|m| m.original_title == "resource_import_file_test_description" }
         expect(manifestation.description).to eq "test\ntest"
         expect(manifestation.note).to eq "test\ntest"
-        p manifestation.items
         expect(manifestation.items.first.note).to eq "test\ntest"
       end
     end
