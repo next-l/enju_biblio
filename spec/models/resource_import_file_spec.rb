@@ -142,6 +142,17 @@ describe ResourceImportFile do
         Manifestation.search{ keywords "10101", fields: [:item_identifier] }.total.should > 0
         Manifestation.search{ keywords "item_identifier_sm:10101" }.total.should > 0
       end
+
+      it "should import multiple ISBNs", vcr: true do
+        file = ResourceImportFile.create resource_import: StringIO.new("original_title\tisbn\noriginal_title_multiple_isbns\t978-4840239219//978-4043898039\n"), user: users(:admin)
+        result = file.import_start
+        expect(result[:manifestation_imported]).to eq 1
+        resource_import_result = file.resource_import_results.last
+        expect(resource_import_result.manifestation).not_to be_blank
+        manifestation = resource_import_result.manifestation
+        expect(manifestation.identifier_contents(:isbn)).to include("9784840239219")
+        expect(manifestation.identifier_contents(:isbn)).to include("9784043898039")
+      end
     end
 
     describe "ISBN import" do

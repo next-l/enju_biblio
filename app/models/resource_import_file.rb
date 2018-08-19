@@ -708,19 +708,19 @@ class ResourceImportFile < ActiveRecord::Base
         end
       end
 
-      identifier = set_identifier(row)
+      identifiers = set_identifier(row)
 
       if manifestation.save
         Manifestation.transaction do
           if options[:edit_mode] == 'update'
-            unless identifier.empty?
-              identifier.map{|_k, v|
+            unless identifiers.empty?
+              identifiers.each do |v|
                 v.manifestation = manifestation
                 v.save!
-              }
+              end
             end
           else
-            manifestation.identifiers << identifier.map{|_k, v| v}
+            manifestation.identifiers << identifiers
           end
         end
 
@@ -752,17 +752,19 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   def set_identifier(row)
-    identifier = {}
+    identifiers = []
     %w(isbn issn doi jpno ncid).each do |id_type|
       if row["#{id_type}"].present?
-        import_id = Identifier.new(body: row["#{id_type}"])
-        identifier_type = IdentifierType.find_by(name: id_type)
-        identifier_type = IdentifierType.create!(name: id_type) unless identifier_type
-        import_id.identifier_type = identifier_type
-        identifier[:"#{id_type}"] = import_id if import_id.valid?
+        row[id_type].split(/\/\//).each do |identifier_s|
+          import_id = Identifier.new(body: identifier_s)
+          identifier_type = IdentifierType.find_by(name: id_type)
+          identifier_type = IdentifierType.create!(name: id_type) unless identifier_type
+          import_id.identifier_type = identifier_type
+          identifiers << import_id if import_id.valid?
+        end
       end
     end
-    identifier
+    identifiers
   end
 end
 
