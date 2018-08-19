@@ -637,8 +637,9 @@ class Manifestation < ActiveRecord::Base
         item_lines << serial_number
 
         IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-          if identifier_contents(identifier_type.to_sym).first
-            item_lines << identifier_contents(identifier_type.to_sym).first
+          identifier_list = identifier_contents(identifier_type.to_sym)
+          if identifier_list
+            item_lines << identifier_list.join("//")
           else
             item_lines << nil
           end
@@ -725,8 +726,9 @@ class Manifestation < ActiveRecord::Base
       line << serial_number
 
       IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-        if identifier_contents(identifier_type.to_sym).first
-          line << identifier_contents(identifier_type.to_sym).first
+        identifier_list = identifier_contents(identifier_type.to_sym)
+        if identifier_list
+          line << identifier_list.join("//")
         else
           line << nil
         end

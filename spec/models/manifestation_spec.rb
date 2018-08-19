@@ -267,6 +267,16 @@ describe Manifestation, solr: true do
       expect(m["volume_number"]).to eq "15"
       expect(m["volume_number_string"]).to eq "Vol.15"
     end
+    it "should export multiple identifiers" do
+      manifestation = FactoryBot.create(:manifestation)
+      isbn_type = IdentifierType.where(name: :isbn).first
+      manifestation.identifiers << FactoryBot.create(:identifier, body: "978-4043898039", identifier_type: isbn_type)
+      manifestation.identifiers << FactoryBot.create(:identifier, body: "978-4840239219", identifier_type: isbn_type)
+      lines = Manifestation.export()
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      expect(m["isbn"]).to eq "9784043898039//9784840239219"
+    end
 
     it "should respect the role of the user" do
       FactoryBot.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
