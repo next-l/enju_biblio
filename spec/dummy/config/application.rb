@@ -4,6 +4,9 @@ require 'rails/all'
 
 Bundler.require(*Rails.groups)
 require "enju_biblio"
+require "enju_manifestation_viewer"
+require "enju_circulation"
+require "enju_ndl"
 require 'resque/server'
 
 module Dummy
