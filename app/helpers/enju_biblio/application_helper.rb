@@ -1,5 +1,5 @@
 module EnjuBiblio
-  module BiblioHelper
+  module ApplicationHelper
     def form_icon(carrier_type)
       image_tag(carrier_type_path(carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: carrier_type.display_name.localize)
     rescue NoMethodError
