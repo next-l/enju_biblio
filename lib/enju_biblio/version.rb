@@ -1,3 +1,3 @@
 module EnjuBiblio
-  VERSION = "0.3.0.beta2"
+  VERSION = "0.3.0.beta.2"
 end

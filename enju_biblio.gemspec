@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/{log,private,solr,tmp}/**/*"] - Dir["spec/dummy/db/*.sqlite3"]
 
-  s.add_dependency "enju_library", "~> 0.3.0.beta1"
+  s.add_dependency "enju_library", "~> 0.3.0.beta.1"
   s.add_dependency "marc"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
@@ -24,15 +24,15 @@ Gem::Specification.new do |s|
   s.add_dependency "lisbn"
   s.add_dependency "faraday"
 
-  # s.add_development_dependency "enju_leaf", "~> 1.3.0.beta1"
-  s.add_development_dependency "enju_manifestation_viewer", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_subject", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_inventory", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_bookmark", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_event", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_circulation", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_ndl", "~> 0.3.0.beta1"
-  s.add_development_dependency "enju_oai", "~> 0.3.0.beta1"
+  # s.add_development_dependency "enju_leaf", "~> 1.3.0.beta.1"
+  s.add_development_dependency "enju_manifestation_viewer", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_subject", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_inventory", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_bookmark", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_event", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_circulation", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_ndl", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_oai", "~> 0.3.0.beta.1"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "mysql2"
   s.add_development_dependency "pg"
