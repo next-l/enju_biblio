@@ -11,6 +11,6 @@ class AddAdditionalAttributesToUser < ActiveRecord::Migration[4.2]
     add_column :users, :confirmed_at, :datetime
 
     add_index :users, :username, unique: true
-    add_index :users, :unlock_token,         unique: true
+    add_index :users, :unlock_token, unique: true
   end
 end

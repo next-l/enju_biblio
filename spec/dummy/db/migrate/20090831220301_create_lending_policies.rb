@@ -12,7 +12,7 @@ class CreateLendingPolicies < ActiveRecord::Migration[4.2]
 
       t.timestamps
     end
-    add_index :lending_policies, [:item_id, :user_group_id], unique: true
+    add_index :lending_policies, %i[item_id user_group_id], unique: true
   end
 
   def self.down

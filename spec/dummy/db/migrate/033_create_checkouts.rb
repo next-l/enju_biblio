@@ -14,7 +14,7 @@ class CreateCheckouts < ActiveRecord::Migration[4.2]
     add_index :checkouts, :user_id
     add_index :checkouts, :item_id
     add_index :checkouts, :basket_id
-    add_index :checkouts, [:item_id, :basket_id], unique: true
+    add_index :checkouts, %i[item_id basket_id], unique: true
     add_index :checkouts, :librarian_id
     add_index :checkouts, :checkin_id
   end

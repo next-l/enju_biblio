@@ -13,6 +13,6 @@ class CreateEventExportFileTransitions < ActiveRecord::Migration[4.2]
     end
 
     add_index :event_export_file_transitions, :event_export_file_id, name: "index_event_export_file_transitions_on_file_id"
-    add_index :event_export_file_transitions, [:sort_key, :event_export_file_id], unique: true, name: "index_event_export_file_transitions_on_sort_key_and_file_id"
+    add_index :event_export_file_transitions, %i[sort_key event_export_file_id], unique: true, name: "index_event_export_file_transitions_on_sort_key_and_file_id"
   end
 end

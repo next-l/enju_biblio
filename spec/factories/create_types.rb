@@ -2,9 +2,9 @@
 
 FactoryBot.define do
   factory :create_type do
-    name "mystring"
-    display_name "MyText"
-    note "MyText"
+    name { "mystring" }
+    display_name { "MyText" }
+    note { "MyText" }
   end
 end
 
