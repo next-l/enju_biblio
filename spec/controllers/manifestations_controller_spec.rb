@@ -156,12 +156,6 @@ describe ManifestationsController do
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T23:59:59Z]'
       end
 
-      it 'should get tag_cloud' do
-        get :index, params: { query: '2005', view: 'tag_cloud' }
-        expect(response).to be_success
-        expect(response).to render_template('manifestations/_tag_cloud')
-      end
-
       it 'should show manifestation with isbn', solr: true do
         get :index, params: { isbn: '4798002062' }
         expect(response).to be_success
@@ -351,18 +345,6 @@ describe ManifestationsController do
         expect(response).to be_success
       end
 
-      it 'should show manifestation with tag_edit' do
-        get :show, params: { id: 1, mode: 'tag_edit' }
-        expect(response).to render_template('manifestations/_tag_edit')
-        expect(response).to be_success
-      end
-
-      it 'should show manifestation with tag_list' do
-        get :show, params: { id: 1, mode: 'tag_list' }
-        expect(response).to render_template('manifestations/_tag_list')
-        expect(response).to be_success
-      end
-
       it 'should show manifestation with show_creators' do
         get :show, params: { id: 1, mode: 'show_creators' }
         expect(response).to render_template('manifestations/_show_creators')
@@ -523,11 +505,6 @@ describe ManifestationsController do
         manifestation = FactoryBot.create(:manifestation)
         get :edit, params: { id: manifestation.id }
         expect(response).to be_forbidden
-      end
-
-      it 'should edit manifestation with tag_edit' do
-        get :edit, params: { id: 1, mode: 'tag_edit' }
-        expect(response).to be_success
       end
     end
 

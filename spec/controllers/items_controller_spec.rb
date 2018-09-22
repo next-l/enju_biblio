@@ -46,13 +46,6 @@ describe ItemsController do
         expect(assigns(:items)).to_not be_nil
         expect(assigns(:items).count).to eq 1
       end
-
-      it 'should not get index with inventory_file_id' do
-        get :index, params: { inventory_file_id: 1 }
-        expect(response).to be_success
-        assigns(:inventory_file).should eq InventoryFile.find(1)
-        expect(assigns(:items)).to eq Item.inventory_items(assigns(:inventory_file), 'not_on_shelf').order('items.id').page(1)
-      end
     end
 
     describe 'When logged in as User' do
@@ -61,11 +54,6 @@ describe ItemsController do
       it 'assigns all items as @items' do
         get :index
         expect(assigns(:items)).to_not be_nil
-      end
-
-      it 'should not get index with inventory_file_id' do
-        get :index, params: { inventory_file_id: 1 }
-        expect(response).to be_forbidden
       end
     end
 
@@ -94,12 +82,6 @@ describe ItemsController do
         expect(response).to be_success
         assigns(:shelf).should eq Shelf.find(1)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
-      end
-
-      it 'should not get index with inventory_file_id' do
-        get :index, params: { inventory_file_id: 1 }
-        expect(response).to redirect_to new_user_session_url
-        assigns(:inventory_file).should_not be_nil
       end
     end
   end
