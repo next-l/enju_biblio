@@ -96,7 +96,7 @@ describe AgentRelationshipTypesController do
       it 'assigns the requested agent_relationship_type as @agent_relationship_type' do
         get :new
         expect(assigns(:agent_relationship_type)).not_to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -198,7 +198,7 @@ describe AgentRelationshipTypesController do
 
         it 'should be successful' do
           post :create, params: { agent_relationship_type: @invalid_attrs }
-          expect(response).to be_success
+          expect(response).to be_successful
         end
       end
     end

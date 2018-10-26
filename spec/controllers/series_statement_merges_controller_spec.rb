@@ -88,7 +88,7 @@ describe SeriesStatementMergesController do
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
         get :new
         assigns(:series_statement_merge).should_not be_valid
-        response.should be_success
+        response.should be_successful
       end
     end
 
@@ -98,7 +98,7 @@ describe SeriesStatementMergesController do
       it 'assigns the requested series_statement_merge as @series_statement_merge' do
         get :new
         assigns(:series_statement_merge).should_not be_valid
-        response.should be_success
+        response.should be_successful
       end
     end
 

@@ -96,7 +96,7 @@ describe CountriesController do
       it 'assigns the requested country as @country' do
         get :new
         assigns(:country).should_not be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
