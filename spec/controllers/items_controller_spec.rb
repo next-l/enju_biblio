@@ -65,21 +65,21 @@ describe ItemsController do
 
       it 'should get index with agent_id' do
         get :index, params: { agent_id: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:agent).should eq Agent.find(1)
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it 'should get index with manifestation_id' do
         get :index, params: { manifestation_id: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:manifestation).should eq Manifestation.find(1)
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
       it 'should get index with shelf_id' do
         get :index, params: { shelf_id: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         assigns(:shelf).should eq Shelf.find(1)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
       end
@@ -144,7 +144,7 @@ describe ItemsController do
       it 'assigns the requested item as @item' do
         get :new, params: { manifestation_id: @manifestation.id }
         expect(assigns(:item)).to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
 
       it 'should not get new without manifestation_id' do
@@ -174,7 +174,7 @@ describe ItemsController do
       it 'assigns the requested item as @item' do
         get :new, params: { manifestation_id: @manifestation.id }
         expect(assigns(:item)).to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -296,7 +296,7 @@ describe ItemsController do
       it 'should not create item already created' do
         post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
         expect(assigns(:item)).to_not be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

@@ -92,7 +92,7 @@ describe AgentMergesController do
       it 'assigns the requested agent_merge as @agent_merge' do
         get :new
         assigns(:agent_merge).should_not be_valid
-        response.should be_success
+        response.should be_successful
       end
     end
 
@@ -102,7 +102,7 @@ describe AgentMergesController do
       it 'assigns the requested agent_merge as @agent_merge' do
         get :new
         assigns(:agent_merge).should_not be_valid
-        response.should be_success
+        response.should be_successful
       end
     end
 

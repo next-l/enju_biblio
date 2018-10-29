@@ -48,7 +48,7 @@ describe ResourceExportFilesController do
       it 'assigns the requested resource_export_file as @resource_export_file' do
         get :show, params: { id: resource_export_files(:resource_export_file_00003).id }
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -58,7 +58,7 @@ describe ResourceExportFilesController do
       it 'assigns the requested resource_export_file as @resource_export_file' do
         get :show, params: { id: resource_export_files(:resource_export_file_00003).id }
         expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -88,7 +88,7 @@ describe ResourceExportFilesController do
       it 'assigns the requested resource_export_file as @resource_export_file' do
         get :new
         expect(assigns(:resource_export_file)).to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -98,7 +98,7 @@ describe ResourceExportFilesController do
       it 'should not assign the requested resource_export_file as @resource_export_file' do
         get :new
         expect(assigns(:resource_export_file)).to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

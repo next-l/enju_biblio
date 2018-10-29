@@ -63,7 +63,7 @@ describe ContentTypesController do
       manifestation = FactoryBot.create(:manifestation, content_type_id: content_type.id)
       get :edit, params: { id: content_type.id }
       expect(assigns(:content_type)).to eq content_type
-      expect(response).to be_success
+      expect(response).to be_successful
     end
   end
 

@@ -48,7 +48,7 @@ describe ResourceImportFilesController do
       it 'assigns the requested resource_import_file as @resource_import_file' do
         get :show, params: { id: resource_import_files(:resource_import_file_00003).id }
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -58,7 +58,7 @@ describe ResourceImportFilesController do
       it 'assigns the requested resource_import_file as @resource_import_file' do
         get :show, params: { id: resource_import_files(:resource_import_file_00003).id }
         expect(assigns(:resource_import_file)).to eq(resource_import_files(:resource_import_file_00003))
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -88,7 +88,7 @@ describe ResourceImportFilesController do
       it 'assigns the requested resource_import_file as @resource_import_file' do
         get :new
         expect(assigns(:resource_import_file)).not_to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -98,7 +98,7 @@ describe ResourceImportFilesController do
       it 'should not assign the requested resource_import_file as @resource_import_file' do
         get :new
         expect(assigns(:resource_import_file)).not_to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -139,7 +139,7 @@ describe ResourceImportFilesController do
         post :create, params: { resource_import_file: { resource_import: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv'), edit_mode: 'create' } }
         expect(assigns(:resource_import_file)).not_to be_valid
         assigns(:resource_import_file).user.username.should eq @user.username
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 

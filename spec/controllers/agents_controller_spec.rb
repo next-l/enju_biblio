@@ -22,7 +22,7 @@ describe AgentsController do
 
       it 'should get index with agent_id' do
         get :index, params: { agent_id: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:agent)).to eq Agent.find(1)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where('required_role_id >= 1').page(1)
       end
@@ -30,7 +30,7 @@ describe AgentsController do
       it 'should get index with query' do
         get :index, params: { query: 'Librarian1' }
         expect(assigns(:agents)).not_to be_empty
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -70,7 +70,7 @@ describe AgentsController do
 
       it 'should get index with agent_id' do
         get :index, params: { agent_id: 1 }
-        expect(response).to be_success
+        expect(response).to be_successful
         expect(assigns(:agent)).to eq Agent.find(1)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where(required_role_id: 1).page(1)
       end
@@ -84,7 +84,7 @@ describe AgentsController do
       it 'should get index with query' do
         get :index, params: { query: 'Librarian1' }
         expect(assigns(:agents)).to be_empty
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
   end
@@ -114,13 +114,13 @@ describe AgentsController do
       # it "should show agent when required_role is user" do
       #  get :show, :id => users(:user2).agent.id
       #  expect(assigns(:agent)).to eq(users(:user2).agent)
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should show patron when required_role is librarian" do
       #  get :show, :id => users(:user1).agent.id
       #  expect(assigns(:agent)).to eq(users(:user1).agent)
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       it 'should not show agent who does not create a work' do
@@ -155,7 +155,7 @@ describe AgentsController do
       # it "should show user" do
       #  get :show, :id => users(:user2).agent.id
       #  assigns(:agent).required_role.name.should eq 'User'
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should not show agent when required_role is 'Librarian'" do
@@ -248,12 +248,12 @@ describe AgentsController do
 
       # it "should edit agent when its required_role is 'User'" do
       #  get :edit, :id => users(:user2).agent.id
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should edit agent when its required_role is 'Librarian'" do
       #  get :edit, :id => users(:user1).agent.id
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should edit admin" do
@@ -273,7 +273,7 @@ describe AgentsController do
 
       # it "should edit myself" do
       #  get :edit, :id => users(:user1).agent.id
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should not edit other user's agent profile" do
@@ -407,7 +407,7 @@ describe AgentsController do
       # it "should not create agent myself" do
       #  post :create, :agent => { :full_name => 'test', :user_username => users(:user1).username }
       #  expect(assigns(:agent)).not_to be_valid
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should not create other agent" do
@@ -536,7 +536,7 @@ describe AgentsController do
       # it "should not update myself without name" do
       #  put :update, :id => users(:user1).agent.id, :agent => { :first_name => '', :last_name => '', :full_name => '' }
       #  expect(assigns(:agent)).not_to be_valid
-      #  expect(response).to be_success
+      #  expect(response).to be_successful
       # end
 
       # it "should not update other agent" do

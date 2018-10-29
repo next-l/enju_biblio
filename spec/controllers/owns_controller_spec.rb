@@ -96,7 +96,7 @@ describe OwnsController do
       it 'assigns the requested own as @own' do
         get :new
         expect(assigns(:own)).not_to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
@@ -106,7 +106,7 @@ describe OwnsController do
       it 'assigns the requested own as @own' do
         get :new
         expect(assigns(:own)).not_to be_valid
-        expect(response).to be_success
+        expect(response).to be_successful
       end
     end
 
