@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_26_064038) do
+ActiveRecord::Schema.define(version: 2018_10_30_072731) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -260,7 +260,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
     t.string "name", null: false
     t.text "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "attachment_file_name"
@@ -391,7 +391,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
     t.string "name", null: false
     t.text "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -422,7 +422,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
   create_table "creates", id: :serial, force: :cascade do |t|
     t.integer "agent_id", null: false
     t.integer "work_id", null: false
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "create_type_id"
@@ -541,7 +541,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
     t.string "name", null: false
     t.text "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -755,7 +755,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
     t.string "name", null: false
     t.string "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -970,7 +970,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
   create_table "owns", id: :serial, force: :cascade do |t|
     t.integer "agent_id", null: false
     t.integer "item_id", null: false
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["agent_id"], name: "index_owns_on_agent_id"
@@ -1019,7 +1019,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
   create_table "produces", id: :serial, force: :cascade do |t|
     t.integer "agent_id", null: false
     t.integer "manifestation_id", null: false
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "produce_type_id"
@@ -1062,7 +1062,7 @@ ActiveRecord::Schema.define(version: 2018_10_26_064038) do
   create_table "realizes", id: :serial, force: :cascade do |t|
     t.integer "agent_id", null: false
     t.integer "expression_id", null: false
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "realize_type_id"
