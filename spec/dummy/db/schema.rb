@@ -108,7 +108,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_072731) do
     t.string "name", null: false
     t.text "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -532,7 +532,7 @@ ActiveRecord::Schema.define(version: 2018_10_30_072731) do
     t.string "name", null: false
     t.text "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end

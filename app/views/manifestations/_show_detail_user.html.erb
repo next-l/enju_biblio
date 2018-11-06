@@ -1,6 +1,6 @@
-  <div id="tabs">
-    <%= render 'manifestations/tab_menu', manifestation: manifestation %>
-    <div id="detail">
+<div id="tabs">
+  <%= render 'manifestations/tab_menu', manifestation: manifestation %>
+  <div id="detail">
     <% cache([manifestation, fragment: 'show_detail_user_html', role: current_user_role_name, locale: @locale]) do %>
       <table class="table table-striped" id="resource_detail">
         <%= embed_content(manifestation) -%>
@@ -103,9 +103,11 @@
         <% end %>
       </table>
     <% end %>
+    <% if defined?(EnjuCirculation) %>
       <%- if manifestation.items.for_checkout.on_shelf.exists? -%>
         <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items.for_checkout.on_shelf %>
       <%- end -%>
-    </div>
-    <%= render 'manifestations/tab_list', manifestation: manifestation %>
+    <%- end -%>
   </div>
+  <%= render 'manifestations/tab_list', manifestation: manifestation %>
+</div>

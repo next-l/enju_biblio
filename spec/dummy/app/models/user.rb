@@ -7,14 +7,9 @@ class User < ActiveRecord::Base
   # Setup accessible (or protected) attributes for your model
 
   include EnjuSeed::EnjuUser
-  include EnjuCirculation::EnjuUser
   include EnjuMessage::EnjuUser
 end
 
-CarrierType.include(EnjuCirculation::EnjuCarrierType)
-Manifestation.include(EnjuCirculation::EnjuManifestation)
 Manifestation.include(EnjuSubject::EnjuManifestation)
-Item.include(EnjuCirculation::EnjuItem)
+Manifestation.include(EnjuNdl::EnjuManifestation)
 Item.include(EnjuLibrary::EnjuItem)
-Profile.include(EnjuCirculation::EnjuProfile)
-UserGroup.include(EnjuCirculation::EnjuUserGroup)
