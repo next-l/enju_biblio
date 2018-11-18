@@ -583,12 +583,15 @@ class Manifestation < ActiveRecord::Base
     end
     header += %w(
       circulation_status
-      use_restriction
       shelf
       library
       item_created_at
       item_updated_at
     )
+    case role.to_sym
+    when :Administrator, :Librarian
+      header << "use_restriction"
+    end
 
     header.to_csv(options)
   end
@@ -678,11 +681,14 @@ class Manifestation < ActiveRecord::Base
           item_lines << Checkout.where(item_id: i.id).size
         end
         item_lines << i.circulation_status.try(:name)
-        item_lines << i.use_restriction.try(:name)
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
         item_lines << i.created_at
         item_lines << i.updated_at
+        case options[:role].to_sym
+        when :Administrator, :Librarian
+          item_lines << i.use_restriction.try(:name)
+        end
         lines << item_lines
       end
     else

@@ -306,6 +306,19 @@ describe Manifestation, solr: true do
       expect(m["note"]).to eq 'test\ntest'
       expect(m["item_note"]).to eq 'test\ntest'
     end
+
+    it "should not export use_restriction for Guest" do
+      manifestation = FactoryBot.create(:manifestation)
+      use_restriction = UseRestriction.find(1)
+      item = FactoryBot.create(:item, manifestation: manifestation, use_restriction: use_restriction)
+      lines = Manifestation.export(format: :txt, role: "Guest")
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["use_restriction"].compact).to be_empty
+
+      lines = Manifestation.export(format: :txt, role: "Administrator")
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["use_restriction"].compact).not_to be_empty
+    end
   end
 
   if defined?(EnjuCirculation)
