@@ -8,7 +8,11 @@ jobs:
           BUNDLE_JOBS: 3
           BUNDLE_PATH: vendor/bundle
           PGHOST: 127.0.0.1
+          PGUSER: postgres
       - image: circleci/postgres:9.6-alpine
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: enju_biblio_dummy_test
     steps:
       - checkout
       - restore_cache:
@@ -19,7 +23,7 @@ jobs:
       - run:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
-          command: apt install openjdk-8-jre-headless
+          command: sudo apt install -y openjdk-8-jre-headless
       - run: bundle exec rake db:create RAILS_ENV=test
       - run: bundle exec rake db:migrate RAILS_ENV=test
       - run: bundle exec rake app:sunspot:solr:start RAILS_ENV=test
