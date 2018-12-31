@@ -1,7 +1,7 @@
 class ProducesController < ApplicationController
   before_action :set_produce, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent, :set_parent_manifestation
+  before_action :get_agent, :get_manifestation
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /produces
@@ -82,7 +82,7 @@ class ProducesController < ApplicationController
     end
 
     respond_to do |format|
-      if @produce.update_attributes(produce_params)
+      if @produce.update(produce_params)
         format.html { redirect_to @produce, notice: t('controller.successfully_updated', model: t('activerecord.models.produce')) }
         format.json { head :no_content }
       else
@@ -131,6 +131,6 @@ class ProducesController < ApplicationController
   end
 
   def prepare_options
-    @produce_types = ProduceType.order(:position)
+    @produce_types = ProduceType.all
   end
 end

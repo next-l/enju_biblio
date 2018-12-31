@@ -1,5 +1,5 @@
 class ResourceExportFileTransition < ActiveRecord::Base
-  #include Statesman::Adapters::ActiveRecordTransition
+  include Statesman::Adapters::ActiveRecordTransition
 
   
   belongs_to :resource_export_file, inverse_of: :resource_export_file_transitions
@@ -12,10 +12,10 @@ end
 #
 #  id                      :integer          not null, primary key
 #  to_state                :string
-#  metadata                :jsonb
+#  metadata                :text             default({})
 #  sort_key                :integer
 #  resource_export_file_id :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  most_recent             :boolean
+#  created_at              :datetime
+#  updated_at              :datetime
+#  most_recent             :boolean          not null
 #

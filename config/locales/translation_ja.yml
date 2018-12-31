@@ -42,6 +42,7 @@ ja:
       agent_merge: 人物・団体の統合
       series_statement_merge_list: シリーズ情報統合リスト
       series_statement_merge: シリーズ情報の統合
+      periodical: 逐次刊行物
 
     attributes:
       manifestation:
@@ -54,6 +55,7 @@ ja:
         pub_date: 出版日
         deleted_at: 削除時刻
         access_address: アクセスアドレス
+        number_of_page_string: ページ数（文字列）
         start_page: 最初のページ
         end_page: 最後のページ
         height: 高さ
@@ -154,9 +156,9 @@ ja:
         email: 電子メール
         url: URL
       agent_import_file:
-        agent_import_filename: ファイル名
+        agent_import_file_name: ファイル名
         agent_import_content_type: Content-Type
-        agent_import_size: ファイルサイズ
+        agent_import_file_size: ファイルサイズ
         agent_import_fingerprint: ファイルのハッシュ
         note: 注記
         executed_at: 実行時刻
@@ -175,9 +177,9 @@ ja:
         note: 注記
         position: 位置
       resource_import_file:
-        resource_import_filename: ファイル名
+        resource_import_file_name: ファイル名
         resource_import_content_type: Content-Type
-        resource_import_size: ファイルサイズ
+        resource_import_file_size: ファイルサイズ
         resource_import_fingerprint: ファイルのハッシュ
         note: 注記
         executed_at: 実行時刻
@@ -255,7 +257,7 @@ ja:
         picture_file_size: ファイルサイズ
         picture_content_type: Content-Type
         title: タイトル
-        picture_filename: ファイル名
+        picture_file_name: ファイル名
         height: 高さ
         width: 幅
         thumbnail: サムネイル
@@ -296,6 +298,7 @@ ja:
       resource_import_result:
         body: 本文
         error_message: エラーメッセージ
+        lineno: 行数
       agent_import_result:
         body: 本文
       create_type:
@@ -319,11 +322,11 @@ ja:
         manifestation_id: 体現形
         primary: 主に使用
       resource_export_file:
-        resource_export_filename: ファイル名
+        resource_export_file_name: ファイル名
         resource_export_file_size: ファイルサイズ
         state: 状態
       agent_export_file:
-        agent_export_filename: ファイル名
+        agent_export_file_name: ファイル名
         agent_export_file_size: ファイルサイズ
         state: 状態
       agent_merge_list:
@@ -379,6 +382,7 @@ ja:
     invalid_isbn: "無効なISBNです。"
     already_imported: "すでにインポートされています。"
     record_not_found: "資料が見つかりませんでした。"
+    record_not_added: "資料がまだ登録されていません。"
     add: "資料を追加する"
     specify_expression: "協力した資料を指定してください。"
     pickup: "ピックアップ"
@@ -393,6 +397,8 @@ ja:
     attachment_file: "添付ファイル"
     add_derivation: "派生資料を追加"
     new_item: "新規作成"
+    this_year_checkouts: "過去一年間の貸出回数"
+    total_checkouts: "累計貸出回数"
 
   item:
     current_checkout: "現在の貸出"
@@ -437,3 +443,9 @@ ja:
   import:
     manifestation_found: "書誌インポート省略: すでに登録されている書誌が見つかりました。"
     item_found: "所蔵インポート省略: すでに登録されている個別資料が見つかりました。"
+    isbn_invalid: "ISBNインポートエラー: ISBNは不正な値です。"
+    isbn_record_not_found: "ISBNインポートエラー: 外部サービスにおいてISBNに該当する書誌データが見つかりませんでした。"
+
+  import_request:
+    record_not_found: 書誌レコードが見つかりませんでした。
+    error: インポート中にエラーが発生しました。

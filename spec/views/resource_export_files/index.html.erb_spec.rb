@@ -4,7 +4,7 @@ describe "resource_export_files/index" do
   fixtures :all
 
   before(:each) do
-    assign(:resource_export_files, Kaminari::paginate_array([
+    assign(:resource_export_files, Kaminari.paginate_array([
       stub_model(ResourceExportFile, user_id: 1),
       stub_model(ResourceExportFile, user_id: 1)
     ]).page(1))

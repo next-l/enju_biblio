@@ -1,8 +1,8 @@
-
 require 'rails_helper'
 
 describe AgentRelationship do
   # pending "add some examples to (or delete) #{__FILE__}"
+
 end
 
 # == Schema Information
@@ -10,10 +10,10 @@ end
 # Table name: agent_relationships
 #
 #  id                         :integer          not null, primary key
-#  parent_id                  :uuid             not null
-#  child_id                   :uuid             not null
-#  agent_relationship_type_id :integer          not null
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
+#  parent_id                  :integer
+#  child_id                   :integer
+#  agent_relationship_type_id :integer
+#  created_at                 :datetime
+#  updated_at                 :datetime
 #  position                   :integer
 #

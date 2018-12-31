@@ -62,7 +62,7 @@ class MediumOfPerformancesController < ApplicationController
     end
 
     respond_to do |format|
-      if @medium_of_performance.update_attributes(medium_of_performance_params)
+      if @medium_of_performance.update(medium_of_performance_params)
         format.html { redirect_to @medium_of_performance, notice: t('controller.successfully_updated', model: t('activerecord.models.medium_of_performance')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class MediumOfPerformancesController < ApplicationController
   def set_medium_of_performance
     @medium_of_performance = MediumOfPerformance.find(params[:id])
     authorize @medium_of_performance
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

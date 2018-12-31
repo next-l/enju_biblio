@@ -58,7 +58,7 @@ class AgentMergeListsController < ApplicationController
   # PUT /agent_merge_lists/1.json
   def update
     respond_to do |format|
-      if @agent_merge_list.update_attributes(agent_merge_list_params)
+      if @agent_merge_list.update(agent_merge_list_params)
         if params[:mode] == 'merge'
           selected_agent = Agent.where(id: params[:selected_agent_id]).first
           if selected_agent

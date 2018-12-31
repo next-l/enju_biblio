@@ -1,22 +1,21 @@
-# -*- encoding: utf-8 -*-
 require 'rails_helper'
 
 describe "import_requests/index" do
   fixtures :users
 
   before(:each) do
-    assign(:import_requests, Kaminari::paginate_array([
+    assign(:import_requests, Kaminari.paginate_array([
       stub_model(ImportRequest,
-        :id => 1,
-        :isbn => "1111111111",
-        :created_at => Time.zone.now,
-        :user_id => 1
+        id: 1,
+        isbn: "1111111111",
+        created_at: Time.zone.now,
+        user_id: 1
       ),
       stub_model(ImportRequest,
-        :id => 2,
-        :isbn => "1111111112",
-        :created_at => Time.zone.now,
-        :user_id => 2
+        id: 2,
+        isbn: "1111111112",
+        created_at: Time.zone.now,
+        user_id: 2
       )
     ]).page(1))
   end

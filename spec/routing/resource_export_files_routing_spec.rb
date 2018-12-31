@@ -1,18 +1,4 @@
-# == Schema Information
-#
-# Table name: resource_export_files
-#
-#  id                       :integer          not null, primary key
-#  user_id                  :integer
-#  executed_at              :datetime
-#  created_at               :datetime
-#  updated_at               :datetime
-#  resource_export_id       :string
-#  resource_export_size     :integer
-#  resource_export_filename :string
-#
-
-require "spec_helper"
+require 'rails_helper'
 
 describe ResourceExportFilesController do
   describe "routing" do
@@ -26,11 +12,11 @@ describe ResourceExportFilesController do
     end
 
     it "routes to #show" do
-      get("/resource_export_files/1").should route_to("resource_export_files#show", :id => "1")
+      get("/resource_export_files/1").should route_to("resource_export_files#show", id: "1")
     end
 
     it "routes to #edit" do
-      get("/resource_export_files/1/edit").should route_to("resource_export_files#edit", :id => "1")
+      get("/resource_export_files/1/edit").should route_to("resource_export_files#edit", id: "1")
     end
 
     it "routes to #create" do
@@ -38,11 +24,11 @@ describe ResourceExportFilesController do
     end
 
     it "routes to #update" do
-      put("/resource_export_files/1").should route_to("resource_export_files#update", :id => "1")
+      put("/resource_export_files/1").should route_to("resource_export_files#update", id: "1")
     end
 
     it "routes to #destroy" do
-      delete("/resource_export_files/1").should route_to("resource_export_files#destroy", :id => "1")
+      delete("/resource_export_files/1").should route_to("resource_export_files#destroy", id: "1")
     end
 
   end

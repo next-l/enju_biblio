@@ -16,13 +16,21 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files/1
   # GET /agent_import_files/1.json
   def show
+    if @agent_import_file.agent_import.path
+      unless ENV['ENJU_STORAGE'] == 's3'
+        file = @agent_import_file.agent_import.path
+      end
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @agent_import_file }
       format.download {
-        send_file @agent_import_file.agent_import.download,
-          filename: File.basename(@agent_import_file.agent_import_filename),
-          type: 'application/octet-stream'
+        if ENV['ENJU_STORAGE'] == 's3'
+          redirect_to @agent_import_file.agent_import.expiring_url(10)
+        else
+          send_file file, filename: @agent_import_file.agent_import_file_name, type: 'application/octet-stream'
+        end
       }
     end
   end
@@ -66,7 +74,7 @@ class AgentImportFilesController < ApplicationController
   # PUT /agent_import_files/1.json
   def update
     respond_to do |format|
-      if @agent_import_file.update_attributes(agent_import_file_params)
+      if @agent_import_file.update(agent_import_file_params)
         if @agent_import_file.mode == 'import'
           AgentImportFileJob.perform_later(@agent_import_file)
         end
@@ -94,7 +102,6 @@ class AgentImportFilesController < ApplicationController
   def set_agent_import_file
     @agent_import_file = AgentImportFile.find(params[:id])
     authorize @agent_import_file
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy
@@ -103,7 +110,7 @@ class AgentImportFilesController < ApplicationController
 
   def agent_import_file_params
     params.require(:agent_import_file).permit(
-      :attachment, :edit_mode, :user_encoding, :mode
+      :agent_import, :edit_mode, :user_encoding, :mode
     )
   end
 end

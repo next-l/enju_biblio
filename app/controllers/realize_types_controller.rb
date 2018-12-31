@@ -62,7 +62,7 @@ class RealizeTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize_type.update_attributes(realize_type_params)
+      if @realize_type.update(realize_type_params)
         format.html { redirect_to @realize_type, notice: t('controller.successfully_updated', model: t('activerecord.models.realize_type')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class RealizeTypesController < ApplicationController
   def set_realize_type
     @realize_type = RealizeType.find(params[:id])
     authorize @realize_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

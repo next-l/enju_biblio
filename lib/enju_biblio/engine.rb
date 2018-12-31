@@ -1,14 +1,10 @@
-require 'validates_timeliness'
+require 'enju_library'
 require 'dynamic_form'
 require 'simple_form'
 require 'library_stdnums'
 require 'lisbn'
-require 'statesman'
 require 'faraday'
 require 'nkf'
-require 'cocoon'
-require 'erubis'
-require 'activerecord-import'
 begin
   require 'charlock_holmes/string'
 rescue LoadError

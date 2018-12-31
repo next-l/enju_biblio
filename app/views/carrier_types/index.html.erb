@@ -23,11 +23,11 @@
       <%- end -%>
     </td>
     <td>
-      <%= image_tag(carrier_type_path(carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: carrier_type.display_name) %>
+      <%= image_tag(carrier_type_path(carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: carrier_type.display_name.localize) %>
       <%= carrier_type.name -%>
     </td>
     <td>
-      <%= link_to carrier_type.display_name, carrier_type -%>
+      <%= link_to carrier_type.display_name.localize, carrier_type -%>
       <br />
       <%= carrier_type.note %>
     </td>

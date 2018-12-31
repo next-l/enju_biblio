@@ -23,27 +23,27 @@ class Manifestation < ActiveRecord::Base
   has_many :series_statements
   belongs_to :frequency
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
-  belongs_to :periodical
   has_one :resource_import_result
-  has_one :doi_record, dependent: :destroy
-  has_many :isbn_record_and_manifestations, dependent: :destroy
-  has_many :isbn_records, through: :isbn_record_and_manifestations
-  has_many :issn_record_and_manifestations, dependent: :destroy
-  has_many :issn_records, through: :issn_record_and_manifestations
-
+  has_many :identifiers, dependent: :destroy
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
       titles
     end
-    text :fulltext, :note, :creator, :contributor, :publisher, :description,
-      :statement_of_responsibility
+    [ :fulltext, :note, :creator, :contributor, :publisher, :description, :statement_of_responsibility ].each do |field|
+      text field do
+        if series_master?
+          derived_manifestations.map{|c| c.send(field) }.flatten.compact
+        else
+          self.send(field)
+        end
+      end
+    end
     text :item_identifier do
       if series_master?
         root_series_statement.root_manifestation.items.pluck(:item_identifier, :binding_item_identifier).flatten.compact
@@ -68,10 +68,20 @@ class Manifestation < ActiveRecord::Base
       publisher.join('').gsub(/\s/, '').downcase
     end
     string :isbn, multiple: true do
-      isbn_records.pluck(:body)
+      isbn_characters
     end
     string :issn, multiple: true do
-      issn_records.pluck(:body)
+      if series_statements.exists?
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+      else
+        identifier_contents(:issn)
+      end
+    end
+    string :lccn, multiple: true do
+      identifier_contents(:lccn)
+    end
+    string :jpno, multiple: true do
+      identifier_contents(:jpno)
     end
     string :carrier_type do
       carrier_type.name
@@ -98,6 +108,7 @@ class Manifestation < ActiveRecord::Base
     end
     time :created_at
     time :updated_at
+    time :deleted_at
     time :pub_date, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.pub_dates
@@ -162,14 +173,18 @@ class Manifestation < ActiveRecord::Base
       end
     end
     text :isbn do  # 前方一致検索のためtext指定を追加
-      isbn_records.pluck(:body)
+      isbn_characters
     end
     text :issn do # 前方一致検索のためtext指定を追加
-      issn_records.pluck(:body)
+      if series_statements.exists?
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+      else
+        identifier_contents(:issn)
+      end
     end
     string :sort_title
     string :doi, multiple: true do
-      doi_record.try(:body)
+      identifier_contents(:doi)
     end
     boolean :serial do
       serial?
@@ -191,7 +206,21 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  include AttachmentUploader[:attachment]
+  if ENV['ENJU_STORAGE'] == 's3'
+    has_attached_file :attachment, storage: :s3,
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME'],
+        s3_region: ENV["S3_REGION"]
+      },
+      s3_permissions: :private
+  else
+    has_attached_file :attachment,
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+  end
+  do_not_validate_attachment_file_type :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
@@ -339,16 +368,20 @@ class Manifestation < ActiveRecord::Base
   end
 
   def extract_text
-    return nil unless attachment
+    return nil if attachment.path.nil?
     return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
+    if ENV['ENJU_STORAGE'] == 's3'
+      body = Faraday.get(attachment.expiring_url(10)).body.force_encoding('UTF-8')
+    else
+      body = File.open(attachment.path).read
+    end
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
-      conn.proxy ENV['SOLR_PROXY_URL'].to_s
     end
     response = client.post('update/extract?extractOnly=true&wt=json&extractFormat=text') do |req|
       req.headers['Content-type'] = 'text/html'
-      req.body = attachment.read
+      req.body = body
     end
     update_column(:fulltext, JSON.parse(response.body)[""])
   end
@@ -360,15 +393,15 @@ class Manifestation < ActiveRecord::Base
   end
 
   def created(agent)
-    creates.where(agent_id: agent.id).first
+    creates.find_by(agent_id: agent.id)
   end
 
   def realized(agent)
-    realizes.where(agent_id: agent.id).first
+    realizes.find_by(agent_id: agent.id)
   end
 
   def produced(agent)
-    produces.where(agent_id: agent.id).first
+    produces.find_by(agent_id: agent.id)
   end
 
   def sort_title
@@ -388,7 +421,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    IsbnRecord.find_by(body: isbn).try(:manifestation)
+    identifier_type = IdentifierType.find_by(name: 'isbn')
+    return nil unless identifier_type
+    Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
   end
 
   def index_series_statement
@@ -405,16 +440,16 @@ class Manifestation < ActiveRecord::Base
   end
 
   def web_item
-    items.where(shelf_id: Shelf.web.id).first
+    items.find_by(shelf_id: Shelf.web.id)
   end
 
   def set_agent_role_type(agent_lists, options = {scope: :creator})
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
+        agent = Agent.find_by(agent_identifier: agent_list[:agent_identifier])
       end
-      agent = Agent.where(full_name: name_and_role[0]).first unless agent
+      agent = Agent.find_by(full_name: name_and_role[0]) unless agent
       next unless agent
       type = name_and_role[1].to_s.strip
 
@@ -422,16 +457,16 @@ class Manifestation < ActiveRecord::Base
       when :creator
         type = 'author' if type.blank?
         role_type = CreateType.find_by(name: type)
-        create = Create.where(work_id: id, agent_id: agent.id).first
+        create = Create.find_by(work_id: id, agent_id: agent.id)
         if create
           create.create_type = role_type
           create.save(validate: false)
         end
       when :publisher
         type = 'publisher' if role_type.blank?
-        produce = Produce.where(manifestation_id: id, agent_id: agent.id).first
+        produce = Produce.find_by(manifestation_id: id, agent_id: agent.id)
         if produce
-          produce.produce_type = ProduceType.where(name: type).first
+          produce.produce_type = ProduceType.find_by(name: type)
           produce.save(validate: false)
         end
       else
@@ -476,10 +511,24 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.csv_header(options = {col_sep: "\t"})
+  def identifier_contents(name)
+    if Rails::VERSION::MAJOR > 3
+      identifiers.id_type(name).order(:position).pluck(:body)
+    else
+      identifier_type = IdentifierType.find_by(name: name)
+      if identifier_type
+        identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
+      else
+        []
+      end
+    end
+  end
+
+  def self.csv_header(role, options = {col_sep: "\t", role: :Guest})
     header = %w(
       manifestation_id
       original_title
+      title_transcription
       creator
       contributor
       publisher
@@ -490,9 +539,21 @@ class Manifestation < ActiveRecord::Base
       manifestation_updated_at
       manifestation_identifier
       access_address
+      description
       note
+      extent
+      dimensions
+      carrier_type
+      edition
+      edition_string
+      volume_number
+      volume_number_string
+      issue_number
+      issue_number_string
+      serial_number
     )
 
+    header += IdentifierType.order(:position).pluck(:name)
     if defined?(EnjuSubject)
       header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
       header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
@@ -502,12 +563,27 @@ class Manifestation < ActiveRecord::Base
       item_id
       item_identifier
       call_number
-      item_price
+      item_note
+    )
+    case role.to_sym
+    when :Administrator, :Librarian
+      header << "item_price"
+    end
+    header += %w(
       acquired_at
       accepted_at
-      bookstore
-      budget_type
+    )
+    case role.to_sym
+    when :Administrator, :Librarian
+      header += %w(
+        bookstore
+        budget_type
+        total_checkouts
+      )
+    end
+    header += %w(
       circulation_status
+      use_restriction
       shelf
       library
       item_created_at
@@ -517,13 +593,14 @@ class Manifestation < ActiveRecord::Base
     header.to_csv(options)
   end
 
-  def to_csv(options = {format: :txt})
+  def to_csv(options = {format: :txt, role: :Guest})
     lines = []
     if items.exists?
       items.includes(shelf: :library).each do |i|
         item_lines = []
         item_lines << id
         item_lines << original_title
+        item_lines << title_transcription
         if creators.exists?
           item_lines << creators.pluck(:full_name).join("//")
         else
@@ -546,13 +623,26 @@ class Manifestation < ActiveRecord::Base
         item_lines << updated_at
         item_lines << manifestation_identifier
         item_lines << access_address
-        item_lines << note
+        item_lines << description.try(:gsub, /\r?\n/, '\n')
+        item_lines << note.try(:gsub, /\r?\n/, '\n')
+        item_lines << extent
+        item_lines << dimensions
+        item_lines << carrier_type.name
+        item_lines << edition
+        item_lines << edition_string
+        item_lines << volume_number
+        item_lines << volume_number_string
+        item_lines << issue_number
+        item_lines << issue_number_string
+        item_lines << serial_number
 
-        isbn_records.each do |isbn_record|
-          item_lines << isbn_record.body
-        end
-        issn_records.each do |issn_record|
-          item_lines << issn_record.body
+        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+          identifier_list = identifier_contents(identifier_type.to_sym)
+          if identifier_list
+            item_lines << identifier_list.join("//")
+          else
+            item_lines << nil
+          end
         end
         if defined?(EnjuSubject)
           SubjectHeadingType.order(:position).each do |subject_heading_type|
@@ -574,12 +664,21 @@ class Manifestation < ActiveRecord::Base
         item_lines << i.id
         item_lines << i.item_identifier
         item_lines << i.call_number
-        item_lines << i.price
+        item_lines << i.note.try(:gsub, /\r?\n/, '\n')
+        case options[:role].to_sym
+        when :Administrator, :Librarian
+          item_lines << i.price
+        end
         item_lines << i.acquired_at
         item_lines << i.accept.try(:created_at)
-        item_lines << i.bookstore.try(:name)
-        item_lines << i.budget_type.try(:name)
+        case options[:role].to_sym
+        when :Administrator, :Librarian
+          item_lines << i.bookstore.try(:name)
+          item_lines << i.budget_type.try(:name)
+          item_lines << Checkout.where(item_id: i.id).size
+        end
         item_lines << i.circulation_status.try(:name)
+        item_lines << i.use_restriction.try(:name)
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
         item_lines << i.created_at
@@ -590,6 +689,7 @@ class Manifestation < ActiveRecord::Base
       line = []
       line << id
       line << original_title
+      line << title_transcription
       if creators.exists?
         line << creators.pluck(:full_name).join("//")
       else
@@ -612,15 +712,27 @@ class Manifestation < ActiveRecord::Base
       line << updated_at
       line << manifestation_identifier
       line << access_address
-      line << note
+      line << description.try(:gsub, /\r?\n/, '\n')
+      line << note.try(:gsub, /\r?\n/, '\n')
+      line << extent
+      line << dimensions
+      line << carrier_type.name
+      line << edition
+      line << edition_string
+      line << volume_number
+      line << volume_number_string
+      line << issue_number
+      line << issue_number_string
+      line << serial_number
 
-      isbn_records.each do |isbn_record|
-        line << isbn_record.body
+      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+        identifier_list = identifier_contents(identifier_type.to_sym)
+        if identifier_list
+          line << identifier_list.join("//")
+        else
+          line << nil
+        end
       end
-      issn_records.each do |issn_record|
-        line << issn_record.body
-      end
-
       if defined?(EnjuSubject)
         SubjectHeadingType.order(:position).each do |subject_heading_type|
           if subjects.exists?
@@ -648,9 +760,9 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.export(options = {format: :txt})
+  def self.export(options = {format: :txt, role: :Guest})
     file = ''
-    file += Manifestation.csv_header(col_sep: "\t") if options[:format].to_sym == :txt
+    file += Manifestation.csv_header(options[:role], col_sep: "\t") if options[:format].to_sym == :txt
     Manifestation.find_each do |manifestation|
       file += manifestation.to_csv(options)
     end
@@ -658,7 +770,20 @@ class Manifestation < ActiveRecord::Base
   end
 
   def root_series_statement
-    series_statements.where(root_manifestation_id: id).first
+    series_statements.find_by(root_manifestation_id: id)
+  end
+
+  def isbn_characters
+    identifier_contents(:isbn).map{|i|
+      isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
+      isbn10 = Lisbn.new(i).isbn10
+      isbn13 =  Lisbn.new(i).isbn13
+      isbn10_dash = Lisbn.new(isbn10).isbn_with_dash if isbn10
+      isbn13_dash = Lisbn.new(isbn13).isbn_with_dash if isbn13
+      [
+        isbn10, isbn13, isbn10_dash, isbn13_dash
+      ]
+    }.flatten
   end
 end
 
@@ -666,7 +791,7 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :uuid             not null, primary key
+#  id                              :integer          not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
@@ -674,11 +799,12 @@ end
 #  manifestation_identifier        :string
 #  date_of_publication             :datetime
 #  date_copyrighted                :datetime
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  deleted_at                      :datetime
 #  access_address                  :string
 #  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          not null
+#  carrier_type_id                 :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -694,9 +820,13 @@ end
 #  repository_content              :boolean          default(FALSE), not null
 #  lock_version                    :integer          default(0), not null
 #  required_role_id                :integer          default(1), not null
+#  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  nii_type_id                     :integer
+#  attachment_file_name            :string
+#  attachment_content_type         :string
+#  attachment_file_size            :integer
+#  attachment_updated_at           :datetime
 #  title_alternative_transcription :text
 #  description                     :text
 #  abstract                        :text
@@ -714,11 +844,10 @@ end
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer
-#  fulltext_content                :boolean          default(FALSE), not null
-#  serial                          :boolean          default(FALSE), not null
+#  fulltext_content                :boolean
+#  serial                          :boolean
 #  statement_of_responsibility     :text
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
-#  attachment_data                 :jsonb
 #

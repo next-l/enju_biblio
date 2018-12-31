@@ -1,7 +1,7 @@
 class SeriesStatementMergesController < ApplicationController
   before_action :set_series_statement_merge, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_series_statement, :set_series_statement_merge_list
+  before_action :get_series_statement, :get_series_statement_merge_list
 
   # GET /series_statement_merges
   # GET /series_statement_merges.json
@@ -67,7 +67,7 @@ class SeriesStatementMergesController < ApplicationController
   # PUT /series_statement_merges/1.json
   def update
     respond_to do |format|
-      if @series_statement_merge.update_attributes(series_statement_merge_params)
+      if @series_statement_merge.update(series_statement_merge_params)
         flash[:notice] = t('controller.successfully_updated', model: t('activerecord.models.series_statement_merge'))
         format.html { redirect_to(@series_statement_merge) }
         format.json { head :no_content }

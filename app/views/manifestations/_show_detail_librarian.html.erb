@@ -15,8 +15,8 @@
             <td style="width: 200px"><%= t('activerecord.models.series_statement') -%>:</td>
             <td style="width: 500px">
               <%= render 'show_series_detail', manifestation: manifestation %>
-              <%- unless manifestation.issn_records.empty? -%>
-                (<%= t('activerecord.attributes.manifestation.issn') -%>: <%= manifestation.issn_records.pluck(:body).join(" ") -%>)
+              <%- unless manifestation.identifier_contents(:issn).empty? -%>
+                (<%= t('activerecord.attributes.manifestation.issn') -%>: <%= manifestation.identifier_contents(:issn).join(" ") -%>)
               <%- end -%>
             </td>
           </tr>
@@ -25,13 +25,13 @@
         <tr>
           <td style="width: 200px"><%= t('page.form') -%>:</td>
           <td style="width: 500px">
-            <%= form_icon(manifestation.carrier_type) -%> <%= manifestation.carrier_type.display_name -%> /
-            <%= content_type_icon(manifestation.manifestation_content_type) -%> <%= manifestation.manifestation_content_type.display_name if manifestation.manifestation_content_type -%>
+            <%= form_icon(manifestation.carrier_type) -%> <%= manifestation.carrier_type.display_name.localize -%> /
+            <%= content_type_icon(manifestation.manifestation_content_type) -%> <%= manifestation.manifestation_content_type.display_name.localize if manifestation.manifestation_content_type -%>
           </td>
         </tr>
         <tr>
           <td><%= t('activerecord.models.language') -%>:</td>
-          <td><span itemprop="inLanguage"><%= manifestation.language.display_name -%></span></td>
+          <td><span itemprop="inLanguage"><%= manifestation.language.display_name.localize -%></span></td>
         </tr>
         <tr>
           <td><%= t('activerecord.attributes.manifestation.publication_place') -%>:</td>
@@ -63,10 +63,10 @@
           <td><%= t('page.identifier') -%>:</td>
           <td>
             <ul>
-              <% manifestation.isbn_records.each do |isbn_record| %>
+              <% manifestation.identifiers.each do |identifier| %>
                 <li>
-                  ISBN: 
-                  <%= isbn_record.body %>
+                  <%= identifier.identifier_type.display_name.localize %>:
+                  <%= identifier_link(identifier) %>
                 </li>
               <% end %>
               <% if manifestation.manifestation_identifier %>
@@ -78,7 +78,7 @@
             </ul>
           </td>
         </tr>
-        <%- if manifestation.attachment -%>
+        <%- unless manifestation.attachment_file_name.blank? -%>
           <%= render 'manifestations/attachment_file', manifestation: manifestation -%>
         <%- end -%>
         <tr>

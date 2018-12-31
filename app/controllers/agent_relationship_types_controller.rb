@@ -62,7 +62,7 @@ class AgentRelationshipTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_relationship_type.update_attributes(agent_relationship_type_params)
+      if @agent_relationship_type.update(agent_relationship_type_params)
         format.html { redirect_to @agent_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_relationship_type')) }
         format.json { head :no_content }
       else
@@ -87,12 +87,12 @@ class AgentRelationshipTypesController < ApplicationController
   def set_agent_relationship_type
     @agent_relationship_type = AgentRelationshipType.find(params[:id])
     authorize @agent_relationship_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy
     authorize AgentRelationshipType
   end
+
   def agent_relationship_type_params
     params.require(:agent_relationship_type).permit(:name, :display_name, :note)
   end

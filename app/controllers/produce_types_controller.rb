@@ -62,7 +62,7 @@ class ProduceTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @produce_type.update_attributes(produce_type_params)
+      if @produce_type.update(produce_type_params)
         format.html { redirect_to @produce_type, notice: t('controller.successfully_updated', model: t('activerecord.models.produce_type')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class ProduceTypesController < ApplicationController
   def set_produce_type
     @produce_type = ProduceType.find(params[:id])
     authorize @produce_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

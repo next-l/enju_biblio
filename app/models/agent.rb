@@ -17,7 +17,7 @@ class Agent < ActiveRecord::Base
   has_many :derived_agents, through: :children, source: :child
   has_many :original_agents, through: :parents, source: :parent
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
-  has_many :donates, dependent: :destroy
+  has_many :donates
   has_many :donated_items, through: :donates, source: :item
   has_many :owns, dependent: :destroy
   has_many :items, through: :owns
@@ -28,8 +28,7 @@ class Agent < ActiveRecord::Base
   belongs_to :language
   belongs_to :country
   has_one :agent_import_result
-  belongs_to :profile
-  has_many :agent_names
+  belongs_to :profile, optional: true
 
   validates_presence_of :language, :agent_type, :country
   validates_associated :language, :agent_type, :country
@@ -225,7 +224,9 @@ class Agent < ActiveRecord::Base
       if agent_list[:agent_identifier].present?
         agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       else
-        agent = Agent.where(full_name: name_and_role[0]).first
+        agents_matched = Agent.where(full_name: name_and_role[0])
+        agents_matched = agents_matched.where(place: agent_list[:place]) if agent_list[:place]
+        agent = agents_matched.first
       end
       role_type = name_and_role[1].to_s.strip
       unless agent
@@ -233,13 +234,15 @@ class Agent < ActiveRecord::Base
           full_name: name_and_role[0],
           full_name_transcription: agent_list[:full_name_transcription],
           agent_identifier: agent_list[:agent_identifier],
-          language_id: 1
+          place: agent_list[:place],
+          language_id: 1,
         )
         agent.required_role = Role.where(name: 'Guest').first
         agent.save
       end
       agents << agent
     end
+    agents.uniq!
     agents
   end
 
@@ -272,7 +275,7 @@ end
 #
 # Table name: agents
 #
-#  id                                  :uuid             not null, primary key
+#  id                                  :integer          not null, primary key
 #  last_name                           :string
 #  middle_name                         :string
 #  first_name                          :string
@@ -284,8 +287,9 @@ end
 #  full_name                           :string
 #  full_name_transcription             :text
 #  full_name_alternative               :text
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
+#  created_at                          :datetime
+#  updated_at                          :datetime
+#  deleted_at                          :datetime
 #  zip_code_1                          :string
 #  zip_code_2                          :string
 #  address_1                           :text
@@ -310,6 +314,7 @@ end
 #  lock_version                        :integer          default(0), not null
 #  note                                :text
 #  required_role_id                    :integer          default(1), not null
+#  required_score                      :integer          default(0), not null
 #  email                               :text
 #  url                                 :text
 #  full_name_alternative_transcription :text

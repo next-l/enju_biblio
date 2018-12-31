@@ -1,11 +1,10 @@
-
 require 'rails_helper'
 
 describe ImportRequest do
   fixtures :all
 
-  context 'import' do
-    it 'should import bibliographic record', vcr: true do
+  context "import" do
+    it "should import bibliographic record", vcr: true do
       old_count = Manifestation.count
       import_request = ImportRequest.create(isbn: '9784797350999')
       import_request.import!
@@ -20,8 +19,8 @@ end
 #
 #  id               :integer          not null, primary key
 #  isbn             :string
-#  manifestation_id :uuid
+#  manifestation_id :integer
 #  user_id          :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #

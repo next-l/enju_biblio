@@ -1,7 +1,7 @@
 class CreatesController < ApplicationController
   before_action :set_create, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent, :set_work
+  before_action :get_agent, :get_work
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /creates
@@ -78,7 +78,7 @@ class CreatesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create.update_attributes(create_params)
+      if @create.update(create_params)
         format.html { redirect_to @create, notice: t('controller.successfully_updated', model: t('activerecord.models.create')) }
         format.json { head :no_content }
       else
@@ -127,6 +127,6 @@ class CreatesController < ApplicationController
   end
 
   def prepare_options
-    @create_types = CreateType.order(:position)
+    @create_types = CreateType.all
   end
 end

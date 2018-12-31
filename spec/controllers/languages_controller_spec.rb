@@ -19,7 +19,7 @@ describe LanguagesController do
 
       it 'assigns all languages as @languages' do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
 
@@ -28,7 +28,7 @@ describe LanguagesController do
 
       it 'assigns all languages as @languages' do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
 
@@ -37,14 +37,14 @@ describe LanguagesController do
 
       it 'assigns all languages as @languages' do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
 
     describe 'When not logged in' do
       it 'assigns all languages as @languages' do
         get :index
-        expect(assigns(:languages)).to eq(Language.order(:position).page(1))
+        expect(assigns(:languages)).to eq(Language.page(1))
       end
     end
   end

@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :role, :class => Role do |f|
+  factory :role, class: Role do |f|
     f.sequence(:name) do |n|
       idx = "a"
       n.times{ idx = idx.next }

@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 #-------------------------------------------
 # OpenurlQuerySyntaxErrorクラス
 # 文法上の誤りをエラーとする
@@ -18,30 +17,30 @@ class Openurl
   LOGIC_MULTI_OR = [:ndl_dpid] # OR検索
 
   # 桁チェックが必要な項目
-  NUM_CHECK = {:issn => 8, :isbn => 13}
+  NUM_CHECK = {issn: 8, isbn: 13}
 
   # 集約される項目
   SYNONYMS = [:title, :aulast, :aufirst]
 
   # enjuのフィールド名（検索用）管理
-  ENJU_FIELD = {:aulast => 'au_text', # aulast=au
-                :aufirst => 'au_text', # aufirst=au
-                :au => 'au_text',
-                :title => 'btitle_text',  # title=btitle
-                :atitle => 'atitle_text',
-                :btitle => 'btitle_text',
-                :jtitle => 'jtitle_text',
-                :pub => 'publisher_text',
-                :issn => 'issn_sm',
-                :isbn => 'isbn_sm',
-                :ndl_jpno => 'ndl_jpno_text', # TODO:現在対応項目はないので保留。
-                :ndl_dpid => 'ndl_dpid_sm',   # TODO:現在対応項目はないので保留。これのみ完全一致であることに注意。
-                :associate => ''              # TODO:フィールド名ではないので削除？
+  ENJU_FIELD = {aulast: 'au_text', # aulast=au
+                aufirst: 'au_text', # aufirst=au
+                au: 'au_text',
+                title: 'btitle_text',  # title=btitle
+                atitle: 'atitle_text',
+                btitle: 'btitle_text',
+                jtitle: 'jtitle_text',
+                pub: 'publisher_text',
+                issn: 'issn_sm',
+                isbn: 'isbn_sm',
+                ndl_jpno: 'ndl_jpno_text', # TODO:現在対応項目はないので保留。
+                ndl_dpid: 'ndl_dpid_sm',   # TODO:現在対応項目はないので保留。これのみ完全一致であることに注意。
+                associate: ''              # TODO:フィールド名ではないので削除？
   }
 
   def initialize(params)
     # @openurl_queryに検索項目ごとの検索文を格納
-    if params.has_key?(:any) then
+    if params.key?(:any) then
       # anyの場合は他に条件が指定されていても無視
       @openurl_query = [params[:any].strip]
     else
@@ -71,7 +70,7 @@ class Openurl
   # 個々のパラメータに合わせて検索文を組立てメソッドを呼ぶ。この時、引数は、enjuのフィールド名と値。
   def to_sunspot(params)
     query = []
-    params.each do |key, value|
+    params.each_pair do |key, _value|
       key = key.to_sym
       if MATCH_EXACT.include?(key) then # 完全一致
         query << to_sunspot_match_exact(ENJU_FIELD[key], params[key].strip)
@@ -111,7 +110,7 @@ class Openurl
     else
       "%s:%s" % [field, val]  # fieldに対して語が１つならばこれ
     end
- end
+  end
 
   # 前方一致の項目の検索文組立て
   def to_sunspot_match_ahead(key, field, val)

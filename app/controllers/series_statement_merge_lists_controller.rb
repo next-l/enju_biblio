@@ -58,7 +58,7 @@ class SeriesStatementMergeListsController < ApplicationController
   # PUT /series_statement_merge_lists/1.json
   def update
     respond_to do |format|
-      if @series_statement_merge_list.update_attributes(series_statement_merge_list_params)
+      if @series_statement_merge_list.update(series_statement_merge_list_params)
         if params[:mode] == 'merge'
           selected_series_statement = SeriesStatement.find(params[:selected_series_statement_id]) rescue nil
           if selected_series_statement

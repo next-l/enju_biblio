@@ -4,7 +4,7 @@
 
   <div class="field">
     <%= f.label t('activerecord.models.agent_type') -%>
-    <%= f.select(:agent_type_id, @agent_types.collect{|p| [p.display_name, p.id]}) -%>
+    <%= f.select(:agent_type_id, @agent_types.collect{|p| [p.display_name.localize, p.id]}) -%>
   </div>
 
   <div class="field">
@@ -52,12 +52,12 @@
 
   <div class="field">
     <%= f.label t('activerecord.models.language') -%>
-    <%= f.select(:language_id, @languages.collect{|l| [l.display_name, l.id]}) -%>
+    <%= f.select(:language_id, @languages.collect{|l| [l.display_name.localize, l.id]}) -%>
   </div>
 
   <div class="field">
     <%= f.label t('activerecord.models.country') -%>
-    <%= f.select(:country_id, @countries.collect{|c| [c.display_name, c.id]}) -%>
+    <%= f.select(:country_id, @countries.collect{|c| [c.display_name.localize, c.id]}) -%>
   </div>
 
   <div class="field">
@@ -72,7 +72,7 @@
 
   <div class="field">
     <%= f.label t('role.required_role') -%>
-    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}) -%>
+    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}) -%>
   </div>
 
   <div class="actions">

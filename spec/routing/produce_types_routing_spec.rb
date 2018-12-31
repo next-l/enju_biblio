@@ -1,17 +1,4 @@
-# == Schema Information
-#
-# Table name: produce_types
-#
-#  id           :integer          not null, primary key
-#  name         :string
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
-require "spec_helper"
+require 'rails_helper'
 
 describe ProduceTypesController do
   describe "routing" do
@@ -25,11 +12,11 @@ describe ProduceTypesController do
     end
 
     it "routes to #show" do
-      get("/produce_types/1").should route_to("produce_types#show", :id => "1")
+      get("/produce_types/1").should route_to("produce_types#show", id: "1")
     end
 
     it "routes to #edit" do
-      get("/produce_types/1/edit").should route_to("produce_types#edit", :id => "1")
+      get("/produce_types/1/edit").should route_to("produce_types#edit", id: "1")
     end
 
     it "routes to #create" do
@@ -37,11 +24,11 @@ describe ProduceTypesController do
     end
 
     it "routes to #update" do
-      put("/produce_types/1").should route_to("produce_types#update", :id => "1")
+      put("/produce_types/1").should route_to("produce_types#update", id: "1")
     end
 
     it "routes to #destroy" do
-      delete("/produce_types/1").should route_to("produce_types#destroy", :id => "1")
+      delete("/produce_types/1").should route_to("produce_types#destroy", id: "1")
     end
 
   end

@@ -1,15 +1,4 @@
-# == Schema Information
-#
-# Table name: series_statement_merges
-#
-#  id                             :integer          not null, primary key
-#  series_statement_id            :integer          not null
-#  series_statement_merge_list_id :integer          not null
-#  created_at                     :datetime
-#  updated_at                     :datetime
-#
-
-require "spec_helper"
+require 'rails_helper'
 
 describe SeriesStatementMergesController do
   describe "routing" do
@@ -23,11 +12,11 @@ describe SeriesStatementMergesController do
     end
 
     it "routes to #show" do
-      get("/series_statement_merges/1").should route_to("series_statement_merges#show", :id => "1")
+      get("/series_statement_merges/1").should route_to("series_statement_merges#show", id: "1")
     end
 
     it "routes to #edit" do
-      get("/series_statement_merges/1/edit").should route_to("series_statement_merges#edit", :id => "1")
+      get("/series_statement_merges/1/edit").should route_to("series_statement_merges#edit", id: "1")
     end
 
     it "routes to #create" do
@@ -35,11 +24,11 @@ describe SeriesStatementMergesController do
     end
 
     it "routes to #update" do
-      put("/series_statement_merges/1").should route_to("series_statement_merges#update", :id => "1")
+      put("/series_statement_merges/1").should route_to("series_statement_merges#update", id: "1")
     end
 
     it "routes to #destroy" do
-      delete("/series_statement_merges/1").should route_to("series_statement_merges#destroy", :id => "1")
+      delete("/series_statement_merges/1").should route_to("series_statement_merges#destroy", id: "1")
     end
 
   end

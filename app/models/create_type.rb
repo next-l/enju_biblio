@@ -1,5 +1,6 @@
 class CreateType < ActiveRecord::Base
   include MasterModel
+  default_scope { order('create_types.position') }
 end
 
 # == Schema Information
@@ -11,6 +12,6 @@ end
 #  display_name :text
 #  note         :text
 #  position     :integer
-#  created_at   :datetime         not null
-#  updated_at   :datetime         not null
+#  created_at   :datetime
+#  updated_at   :datetime
 #

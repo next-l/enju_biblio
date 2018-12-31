@@ -1,4 +1,3 @@
-# -*- encoding: utf-8 -*-
 require 'strscan'
 
 class QueryError < RuntimeError; end
@@ -82,12 +81,12 @@ class Cql
       when /\A\d{4}\Z/
         (text + '-01-01')
       else
-        raise QuerySyntaxError, "#{text}"
+        raise QuerySyntaxError, text.to_s
       end
       begin
         Time.zone.parse(date_text).utc.iso8601.to_s
       rescue
-        raise QuerySyntaxError, "#{date}"
+        raise QuerySyntaxError, date.to_s
       end
     else
       '*'
@@ -141,16 +140,16 @@ class Clause
     if ss.scan(INDEX) or ss.scan(SORT_BY)
       index = ss[0]
     end
-    #else
+    # else
     #  raise ScannerError, "index or the sortBy is requested in '#{text}'"
-    #end
+    # end
     ss.scan(/\s+/)
     if ss.scan(RELATION)
       relation = ss[0].upcase
     end
-    #else
+    # else
     #  raise ScannerError, "relation is requested in '#{text}'"
-    #end
+    # end
     ss.scan(/\s+/)
     if ss.scan(/.+/)
       terms = ss[0].gsub(/(\A\"|\"\Z)/, '').split
@@ -270,7 +269,7 @@ class Clause
   private
   def multiple_to_sunspot(terms, relation)
     boolean = relation == :any ? ' OR ' : ' AND '
-    "#{terms.map{|t| trim_ahead(t)}.join(boolean)}"
+    (terms.map{|t| trim_ahead(t)}.join(boolean)).to_s
   end
 
   def trim_ahead(term)

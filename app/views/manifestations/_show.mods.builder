@@ -74,8 +74,8 @@
     end
     xml.abstract manifestation.description
     xml.note manifestation.note
-    manifestation.isbn_records.each do |i|
-      xml.identifier i.body, type: 'isbn'
+    manifestation.identifier_contents(:isbn).each do |i|
+      xml.identifier i, type: 'isbn'
     end
     manifestation.identifier_contents(:lccn).each do |l|
       xml.identifier l, type: 'lccn'

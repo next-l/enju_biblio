@@ -3,26 +3,13 @@
 one:
   id: 1
   name: unknown
-  display_name_translations: {"en": "unknown"}
+  display_name: unknown
   note: unknown
   position: 1
 
 two:
   id: 2
   name: mit
-  display_name_translations: {"en": "MIT"}
+  display_name: MIT
   note: MIT
   position: 2
-
-# == Schema Information
-#
-# Table name: licenses
-#
-#  id                        :integer          not null, primary key
-#  name                      :string           not null
-#  display_name_translations :jsonb
-#  note                      :text
-#  position                  :integer
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#

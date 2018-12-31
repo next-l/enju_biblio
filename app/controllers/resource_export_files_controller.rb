@@ -5,7 +5,7 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files
   # GET /resource_export_files.json
   def index
-    @resource_export_files = ResourceExportFile.order(created_at: :desc).page(params[:page])
+    @resource_export_files = ResourceExportFile.order('id DESC').page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,13 +16,22 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files/1
   # GET /resource_export_files/1.json
   def show
+    if @resource_export_file.resource_export.path
+      unless ENV['ENJU_STORAGE'] == 's3'
+        file = @resource_export_file.resource_export.path
+      end
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @resource_export_file }
       format.download {
-        send_file @resource_export_file.resource_export.download,
-          filename: File.basename(@resource_export_file.resource_export_filename),
-          type: 'application/octet-stream'
+        if ENV['ENJU_STORAGE'] == 's3'
+          send_data Faraday.get(@resource_export_file.resource_export.expiring_url).body.force_encoding('UTF-8'),
+            filename: File.basename(@resource_export_file.resource_export_file_name), type: 'application/octet-stream'
+        else
+          send_file file, filename: @resource_export_file.resource_export_file_name, type: 'application/octet-stream'
+        end
       }
     end
   end
@@ -67,7 +76,7 @@ class ResourceExportFilesController < ApplicationController
   # PUT /resource_export_files/1.json
   def update
     respond_to do |format|
-      if @resource_export_file.update_attributes(resource_export_file_params)
+      if @resource_export_file.update(resource_export_file_params)
         if @resource_export_file.mode == 'export'
           ResourceExportFileJob.perform_later(@resource_export_file)
         end

@@ -11,13 +11,7 @@ class AgentMergeList < ActiveRecord::Base
       Produce.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
       Own.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
       Donate.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
-      unless agent == selected_agent
-        agent.creates.delete_all
-        agent.produces.delete_all
-        agent.owns.delete_all
-        agent.donates.delete_all
-        agent.destroy
-      end
+      agent.destroy unless agent == selected_agent
     end
   end
 end
@@ -28,6 +22,6 @@ end
 #
 #  id         :integer          not null, primary key
 #  title      :string
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  created_at :datetime
+#  updated_at :datetime
 #

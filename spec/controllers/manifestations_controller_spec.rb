@@ -46,20 +46,20 @@ describe ManifestationsController do
       end
 
       it 'assigns all manifestations as @manifestations in xml format without operation' do
-        get :index, params: { format: 'xml' }
+        get :index, format: 'xml'
         expect(response).to be_successful
         expect(assigns(:manifestations)).to_not be_nil
       end
 
       it 'assigns all manifestations as @manifestations in txt format without operation' do
-        get :index, params: { format: 'txt' }
+        get :index, format: 'txt'
         expect(response).to be_successful
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
 
       it 'assigns all manifestations as @manifestations in sru format without operation' do
-        get :index, params: { format: 'sru' }
+        get :index, format: 'sru'
         assert_response :success
         expect(assigns(:manifestations)).to be_nil
         expect(response).to render_template('manifestations/explain')
@@ -112,21 +112,21 @@ describe ManifestationsController do
       end
 
       it 'assigns all manifestations as @manifestations in mods format' do
-        get :index, params: { format: 'mods' }
+        get :index, format: 'mods'
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
 
       it 'assigns all manifestations as @manifestations in rdf format' do
-        get :index, params: { format: 'rdf' }
+        get :index, format: 'rdf'
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: manifestations(:manifestation_00001) }
+        get :index, params: { manifestation_id: 1 }
         expect(response).to be_successful
-        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00001)
+        expect(assigns(:manifestation)).to eq Manifestation.find(1)
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
       end
 
@@ -156,12 +156,6 @@ describe ManifestationsController do
         assigns(:query).should eq '2005 date_of_publication_d:[* TO 2000-12-31T23:59:59Z]'
       end
 
-      it 'should get tag_cloud' do
-        get :index, params: { query: '2005', view: 'tag_cloud' }
-        expect(response).to be_successful
-        expect(response).to render_template('manifestations/_tag_cloud')
-      end
-
       it 'should show manifestation with isbn', solr: true do
         get :index, params: { isbn: '4798002062' }
         expect(response).to be_successful
@@ -181,9 +175,19 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with library 2 or 3', solr: true do
-        get :index, params: { library_adv: %w[hachioji kamata] }
+        get :index, params: { library_adv: %w(hachioji kamata) }
         expect(response).to be_successful
         expect(assigns(:manifestations).size).to eq 2
+      end
+
+      it "should show manifestation with shelf", solr: true do
+        shelf = FactoryBot.create(:shelf)
+        library = shelf.library
+        item = FactoryBot.create(:item, shelf: shelf)
+        get :index, params: { :"#{library.name}_shelf" => [shelf.name] }
+        expect(response).to be_successful
+        expect(assigns(:manifestations).size).to eq 1
+        expect(assigns(:manifestations).first).to eq item.manifestation
       end
 
       it 'should show manifestation with call_number', solr: true do
@@ -206,10 +210,20 @@ describe ManifestationsController do
         expect(assigns(:query)).not_to match /classification/
       end
 
+      it 'should show manifestation with subject', solr: true do
+        subject = FactoryBot.create(:subject, term: 'test_subject')
+        manifestation = FactoryBot.create(:manifestation)
+        manifestation.subjects << subject
+        get :index, params: { subject_text: 'test_subject' }
+        expect(response).to be_successful
+        expect(assigns(:manifestations)).not_to be_empty
+        expect(assigns(:manifestations).first).to eq manifestation
+      end
+
       it 'should accept per_page params' do
         get :index, params: { per_page: 3 }
         expect(assigns(:manifestations).count).to eq 3
-        expect(assigns(:manifestations).total_count).to eq Manifestation.where(required_role_id: 1).count
+        expect(assigns(:manifestations).total_count).to eq 118
       end
 
       it 'should accept page parameter' do
@@ -233,13 +247,27 @@ describe ManifestationsController do
 
       it "should get manifestations with series for its children's information" do
         periodical = FactoryBot.create(:manifestation_serial)
-        manifestation = FactoryBot.create(:manifestation, description: 'foo')
+        manifestation = FactoryBot.create(:manifestation, description: "foo")
         periodical.derived_manifestations << manifestation
         periodical.save!
-        get :index, params: { query: 'foo' }
+        get :index, params: { query: "foo" }
         manifestations = assigns(:manifestations)
         expect(manifestations).not_to be_blank
-        expect(manifestations.map(&:id)).to include periodical.id
+        expect(manifestations.map{|e| e.id }).to include periodical.id
+      end
+
+      describe "with render_views" do
+        render_views
+        it "should accept query & language parameters" do
+          get :index, params: { query: "test" }
+          expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&query=test"
+        end
+
+        it "should accept facets and query parameters in sort_by menu" do
+          get :index, params: { query: "test", carrier_type: "volume" }
+          expect(response.body).to have_selector "div.right input[type=hidden][name=query][value=test]", visible: false
+          expect(response.body).to have_selector "div.right input[type=hidden][name=carrier_type][value=volume]", visible: false
+        end
       end
     end
   end
@@ -249,8 +277,8 @@ describe ManifestationsController do
       login_fixture_admin
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find('1ff5b88a-1964-4db0-acb3-ae1d9e3a307e'))
+        get :show, params: { id: 1 }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
     end
 
@@ -258,13 +286,13 @@ describe ManifestationsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find('1ff5b88a-1964-4db0-acb3-ae1d9e3a307e'))
+        get :show, params: { id: 1 }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
       it 'should show manifestation with agent who does not produce it' do
-        get :show, params: { id: manifestations(:manifestation_00003).id, agent_id: '68851dc9-c884-412a-92fb-a7586ca1dccf' }
-        expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(manifestations(:manifestation_00003).id)
+        get :show, params: { id: 3, agent_id: 3 }
+        expect(assigns(:manifestation)).to eq assigns(:agent).manifestations.find(3)
         expect(response).to be_successful
       end
 
@@ -279,12 +307,12 @@ describe ManifestationsController do
       login_fixture_user
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestations(:manifestation_00001).id))
+        get :show, params: { id: 1 }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
       it 'should send manifestation detail email' do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'send_email' }
+        get :show, params: { id: 1, mode: 'send_email' }
         expect(response).to redirect_to manifestation_url(assigns(:manifestation))
       end
 
@@ -296,53 +324,41 @@ describe ManifestationsController do
 
     describe 'When not logged in' do
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestations(:manifestation_00001).id }
-        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00001)
+        get :show, params: { id: 1 }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
       end
 
       it 'guest should show manifestation mods template' do
-        get :show, params: { id: manifestations(:manifestation_00022).id, format: 'mods' }
-        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00022)
+        get :show, params: { id: 22, format: 'mods' }
+        expect(assigns(:manifestation)).to eq Manifestation.find(22)
         expect(response).to render_template('manifestations/show')
       end
 
       it 'should show manifestation rdf template' do
-        get :show, params: { id: manifestations(:manifestation_00022).id, format: 'rdf' }
-        expect(assigns(:manifestation)).to eq manifestations(:manifestation_00022)
+        get :show, params: { id: 22, format: 'rdf' }
+        expect(assigns(:manifestation)).to eq Manifestation.find(22)
         expect(response).to render_template('manifestations/show')
       end
 
       it 'should show manifestation with holding' do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'holding' }
-        expect(response).to be_successful
-      end
-
-      it 'should show manifestation with tag_edit' do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_edit' }
-        expect(response).to render_template('manifestations/_tag_edit')
-        expect(response).to be_successful
-      end
-
-      it 'should show manifestation with tag_list' do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_list' }
-        expect(response).to render_template('manifestations/_tag_list')
+        get :show, params: { id: 1, mode: 'holding' }
         expect(response).to be_successful
       end
 
       it 'should show manifestation with show_creators' do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'show_creators' }
+        get :show, params: { id: 1, mode: 'show_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_successful
       end
 
       it 'should show manifestation with show_all_creators' do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'show_all_creators' }
+        get :show, params: { id: 1, mode: 'show_all_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_successful
       end
 
       it "should not send manifestation's detail email" do
-        get :show, params: { id: manifestations(:manifestation_00001).id, mode: 'send_email' }
+        get :show, params: { id: 1, mode: 'send_email' }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -363,7 +379,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with expression_id' do
-        get :new, params: { expression_id: manifestations(:manifestation_00001).id }
+        get :new, params: { expression_id: 1 }
         expect(response).to be_successful
       end
     end
@@ -382,7 +398,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with expression_id' do
-        get :new, params: { expression_id: manifestations(:manifestation_00001).id }
+        get :new, params: { expression_id: 1 }
         expect(response).to be_successful
       end
 
@@ -402,6 +418,7 @@ describe ManifestationsController do
         serial.creators << FactoryBot.create(:agent)
         serial.contributors << FactoryBot.create(:agent)
         serial.publishers << FactoryBot.create(:agent)
+        serial.reload
         serial.subjects << FactoryBot.create(:subject)
         serial.classifications << FactoryBot.create(:classification)
         serial.save!
@@ -470,13 +487,14 @@ describe ManifestationsController do
       end
 
       render_views
-      it 'assigns the isbn_records to @manifestation' do
+      it 'assigns the identifiers to @manifestation' do
         manifestation = FactoryBot.create(:manifestation)
-        manifestation.isbn_records << isbn_records(:isbn_record_00001)
+        identifier = FactoryBot.create(:identifier)
+        manifestation.identifiers << identifier
         get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq manifestation
-        expect(assigns(:manifestation).isbn_records).to eq manifestation.isbn_records
-        expect(response).to render_template(partial: 'manifestations/_isbn_record_fields')
+        expect(assigns(:manifestation).identifiers).to eq manifestation.identifiers
+        expect(response).to render_template(partial: 'manifestations/_identifier_fields')
       end
     end
 
@@ -487,11 +505,6 @@ describe ManifestationsController do
         manifestation = FactoryBot.create(:manifestation)
         get :edit, params: { id: manifestation.id }
         expect(response).to be_forbidden
-      end
-
-      it 'should edit manifestation with tag_edit' do
-        get :edit, params: { id: manifestations(:manifestation_00001).id, mode: 'tag_edit' }
-        expect(response).to be_successful
       end
     end
 
@@ -682,11 +695,11 @@ describe ManifestationsController do
           expect(response).to redirect_to(@manifestation)
         end
 
-        it 'assigns isbn_records to @manifestation' do
-          isbn_record_attrs = {
-            isbn_record_attributes: [isbn_records(:isbn_record_00001)]
+        it 'assigns identifiers to @manifestation' do
+          identifiers_attrs = {
+            identifier_attributes: [FactoryBot.create(:identifier)]
           }
-          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(isbn_record_attrs) }
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs) }
           expect(assigns(:manifestation)).to eq @manifestation
         end
       end
@@ -766,12 +779,12 @@ describe ManifestationsController do
       end
 
       it 'should not destroy the reserved manifestation' do
-        delete :destroy, params: { id: manifestations(:manifestation_00002).id }
+        delete :destroy, params: { id: 2 }
         expect(response).to be_forbidden
       end
 
       it 'should not destroy manifestation contains items' do
-        delete :destroy, params: { id: manifestations(:manifestation_00001).id }
+        delete :destroy, params: { id: 1 }
         expect(response).to be_forbidden
       end
 

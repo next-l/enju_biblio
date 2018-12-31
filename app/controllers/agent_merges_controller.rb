@@ -1,7 +1,7 @@
 class AgentMergesController < ApplicationController
   before_action :set_agent_merge, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent, :set_agent_merge_list
+  before_action :get_agent, :get_agent_merge_list
 
   # GET /agent_merges
   # GET /agent_merges.json
@@ -65,7 +65,7 @@ class AgentMergesController < ApplicationController
   # PUT /agent_merges/1.json
   def update
     respond_to do |format|
-      if @agent_merge.update_attributes(agent_merge_params)
+      if @agent_merge.update(agent_merge_params)
         format.html { redirect_to(@agent_merge, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_merge'))) }
         format.json { head :no_content }
       else

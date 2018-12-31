@@ -42,6 +42,7 @@ en:
       agent_merge: Patron merge
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
+      periodical: Periodical
 
     attributes:
       manifestation:
@@ -54,6 +55,7 @@ en:
         pub_date: Date of publication
         deleted_at: Deleted at
         access_address: Access address
+        number_of_page_string: Number of page (string)
         start_page: Start page
         end_page: End page
         height: Height
@@ -75,7 +77,7 @@ en:
         note: Note
         repository_content: Repository content
         lock_version: Lock version
-        carrier_type: Carrier type
+        carrier_type: Manifestation form
         language: Language
         lccn: LCCN
         issn: ISSN
@@ -154,9 +156,9 @@ en:
         email: Email
         url: URL
       agent_import_file:
-        agent_import_filename: Filename
+        agent_import_file_name: Filename
         agent_import_content_type: Content type
-        agent_import_size: Size
+        agent_import_file_size: Size
         agent_import_fingerprint: File hash
         note: Note
         executed_at: Executed at
@@ -175,9 +177,9 @@ en:
         note: Note
         position: Position
       resource_import_file:
-        resource_import_filename: Filename
+        resource_import_file_name: Filename
         resource_import_content_type: Content type
-        resource_import_size: Size
+        resource_import_file_size: Size
         resource_import_fingerprint: File hash
         note: Note
         executed_at: Executed at
@@ -255,7 +257,7 @@ en:
         picture_file_size: Size
         picture_content_type: Content type
         title: Title
-        picture_filename: Filename
+        picture_file_name: Filename
         height: Height
         width: Width
         thumbnail: Thumbnail
@@ -296,6 +298,7 @@ en:
       resource_import_result:
         body: Body
         error_message: Error message
+        lineno: Line
       agent_import_result:
         body: Body
       create_type:
@@ -319,12 +322,8 @@ en:
         manifestation_id: Manifestation
         primary: Primary
       resource_export_file:
-        resource_export_filename: Filename
+        resource_export_file_name: Filename
         resource_export_file_size: Size
-        state: State
-      agent_export_file:
-        agent_export_filename: Filename
-        agent_export_file_size: Size
         state: State
       agent_merge_list:
         title: Title
@@ -379,6 +378,7 @@ en:
     invalid_isbn: "Invalid ISBN."
     already_imported: "This manifestation is already imported."
     record_not_found: "Record not found."
+    record_not_added: "Record not added."
     add: "Add a manifestation"
     specify_expression: "Specify the expression."
     pickup: "Pick up"
@@ -393,6 +393,8 @@ en:
     attachment_file: "Attachment file"
     add_derivation: "Add a derivation"
     new_item: "New item"
+    this_year_checkouts: "Checkouts for the past year"
+    total_checkouts: "Total checkouts"
 
   item:
     current_checkout: "Current checkout"
@@ -437,3 +439,8 @@ en:
   import:
     manifestation_found: 'Manifestation skipped: This manifestation is already created.'
     item_found: 'Item skipped: This item is already created.'
+    isbn_invalid: "ISBN import error: ISBN string is invalid."
+    isbn_record_not_found: "ISBN import error: Bibliographic record is not found in the external service."
+  import_request:
+    record_not_found: Record not found.
+    error: An error occured during import.

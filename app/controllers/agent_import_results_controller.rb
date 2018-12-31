@@ -1,6 +1,6 @@
 class AgentImportResultsController < ApplicationController
   before_action :set_agent_import_result, only: [:show, :edit, :update, :destroy]
-  before_action :check_policy, only: [:index, :new, :create]
+  before_action :check_policy, only: [:index]
 
   # GET /agent_import_results
   # GET /agent_import_results.json

@@ -33,7 +33,7 @@ describe ContentTypesController do
     it 'assigns all content_types as @content_types' do
       content_type = ContentType.create! valid_attributes
       get :index
-      expect(assigns(:content_types)).to eq(ContentType.order(:position))
+      expect(assigns(:content_types)).to eq(ContentType.all)
     end
   end
 
@@ -110,9 +110,9 @@ describe ContentTypesController do
         content_type = ContentType.create! valid_attributes
         # Assuming there are no other content_types in the database, this
         # specifies that the ContentType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        ContentType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        ContentType.any_instance.should_receive(:update).with('name' => 'test')
         put :update, params: { id: content_type.id, content_type: { 'name' => 'test' } }
       end
 

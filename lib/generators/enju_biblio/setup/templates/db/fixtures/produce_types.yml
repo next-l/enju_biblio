@@ -16,15 +16,17 @@ seller:
   position: 2
   id: 2
 
+
 # == Schema Information
 #
-# Table name: produce_types
+# Table name: create_types
 #
-#  id           :integer          not null, primary key
-#  name         :string
+#  id           :integer         not null, primary key
+#  name         :string(255)
 #  display_name :text
 #  note         :text
 #  position     :integer
 #  created_at   :datetime
 #  updated_at   :datetime
 #
+

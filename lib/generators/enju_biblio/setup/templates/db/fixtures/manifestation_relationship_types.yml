@@ -1,28 +1,14 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  name: successor
-  display_name: successor
-  note: 
+--- 
+manifestation_relationship_type_00001: 
   position: 1
+  name: reproduction
   id: 1
+  display_name: "en: Reproduction\r\n\
+    ja: 複製"
 
-two:
-  name: copy
-  display_name: copy
-  note: 
+manifestation_relationship_type_00002: 
   position: 2
+  name: alternate
   id: 2
-
-# == Schema Information
-#
-# Table name: manifestation_relationship_types
-#
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
+  display_name: "en: Alternate\r\n\
+    ja: 代替"

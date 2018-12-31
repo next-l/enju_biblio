@@ -62,7 +62,7 @@ class AgentTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_type.update_attributes(agent_type_params)
+      if @agent_type.update(agent_type_params)
         format.html { redirect_to @agent_type, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_type')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class AgentTypesController < ApplicationController
   def set_agent_type
     @agent_type = AgentType.find(params[:id])
     authorize @agent_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

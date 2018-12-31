@@ -1,7 +1,8 @@
 class PictureFilesController < ApplicationController
   before_action :set_picture_file, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_attachable, only: [:index, :new]
+  before_action :get_attachable, only: [:index, :new]
+  skip_before_action :store_current_location, only: :show
 
   # GET /picture_files
   # GET /picture_files.json
@@ -23,14 +24,20 @@ class PictureFilesController < ApplicationController
   def show
     case params[:size]
     when 'original'
-      size = :original
+      size = 'original'
     when 'thumb'
-      size = :thumb
+      size = 'thumb'
     else
-      size = :medium
+      size = 'medium'
     end
 
-    file = @picture_file.image[size].download.path
+    if @picture_file.picture.exists?
+      if ENV['ENJU_STORAGE'] == 's3'
+        file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
+      else
+        file = @picture_file.picture.path(size.to_sym)
+      end
+    end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -109,7 +116,7 @@ class PictureFilesController < ApplicationController
     end
 
     respond_to do |format|
-      if @picture_file.update_attributes(picture_file_params)
+      if @picture_file.update(picture_file_params)
         format.html { redirect_to @picture_file, notice: t('controller.successfully_updated', model: t('activerecord.models.picture_file')) }
         format.json { head :no_content }
       else
@@ -163,36 +170,29 @@ class PictureFilesController < ApplicationController
 
   def picture_file_params
     params.require(:picture_file).permit(
-      :image, :picture_attachable_id, :picture_attachable_type
+      :picture, :picture_attachable_id, :picture_attachable_type
     )
   end
 
-  def set_attachable
-    set_parent_manifestation
+  def get_attachable
+    get_manifestation
     if @manifestation
       @attachable = @manifestation
       return
     end
-    set_parent_agent
+    get_agent
     if @agent
       @attachable = @agent
       return
     end
-    if defined?(EnjuEvent)
-      set_parent_event
-      if @event
-        @attachable = @event
-        return
-      end
-    end
-    set_shelf
-    if @shelf
-      @attachable = @shelf
+    get_event
+    if @event
+      @attachable = @event
       return
     end
-    @carrier_type = CarrierType.where(id: params[:carrier_type_id]).first
-    if @carrier_type
-      @attachable = @carrier_type
+    get_shelf
+    if @shelf
+      @attachable = @shelf
       return
     end
   end
@@ -205,7 +205,14 @@ class PictureFilesController < ApplicationController
       disposition = 'inline'
     end
 
-    send_file file, filename: File.basename(@picture_file.image[:original].metadata['filename']),
-      type: @picture_file.image[:original].content_type, disposition: disposition
+    if @picture_file.picture.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        send_data file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
+      else
+        if File.exist?(file) && File.file?(file)
+          send_file file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
+        end
+      end
+    end
   end
 end

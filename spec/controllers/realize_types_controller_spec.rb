@@ -103,9 +103,9 @@ describe RealizeTypesController do
         realize_type = RealizeType.create! valid_attributes
         # Assuming there are no other realize_types in the database, this
         # specifies that the RealizeType created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        RealizeType.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        RealizeType.any_instance.should_receive(:update).with('name' => 'test')
         put :update, params: { id: realize_type.id, realize_type: { 'name' => 'test' } }
       end
 

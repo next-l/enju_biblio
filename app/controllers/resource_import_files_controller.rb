@@ -6,7 +6,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files
   # GET /resource_import_files.json
   def index
-    @resource_import_files = ResourceImportFile.order(created_at: :desc).page(params[:page])
+    @resource_import_files = ResourceImportFile.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,13 +17,22 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/1
   # GET /resource_import_files/1.json
   def show
+    if @resource_import_file.resource_import.path
+      unless ENV['ENJU_STORAGE'] == 's3'
+        file = @resource_import_file.resource_import.path
+      end
+    end
+    @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @resource_import_file }
       format.download {
-        send_file @resource_import_file.attachment.download,
-          filename: File.basename(@resource_import_file.attachment.metadata['filename']),
-          type: 'application/octet-stream'
+        if ENV['ENJU_STORAGE'] == 's3'
+          redirect_to @resource_import_file.resource_import.expiring_url(10)
+        else
+          send_file file, filename: @resource_import_file.resource_import_file_name, type: 'application/octet-stream'
+        end
       }
     end
   end
@@ -69,7 +78,7 @@ class ResourceImportFilesController < ApplicationController
   # PUT /resource_import_files/1.json
   def update
     respond_to do |format|
-      if @resource_import_file.update_attributes(resource_import_file_params)
+      if @resource_import_file.update(resource_import_file_params)
         if @resource_import_file.mode == 'import'
           ResourceImportFileJob.perform_later(@resource_import_file)
         end
@@ -98,7 +107,6 @@ class ResourceImportFilesController < ApplicationController
   def set_resource_import_file
     @resource_import_file = ResourceImportFile.find(params[:id])
     authorize @resource_import_file
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy
@@ -107,7 +115,7 @@ class ResourceImportFilesController < ApplicationController
 
   def resource_import_file_params
     params.require(:resource_import_file).permit(
-      :attachment, :edit_mode, :user_encoding, :mode,
+      :resource_import, :edit_mode, :user_encoding, :mode,
       :default_shelf_id, :library_id
     )
   end

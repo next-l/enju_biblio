@@ -5,7 +5,7 @@ class ContentTypesController < ApplicationController
   # GET /content_types
   # GET /content_types.json
   def index
-    @content_types = ContentType.order(:position)
+    @content_types = ContentType.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -62,7 +62,7 @@ class ContentTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @content_type.update_attributes(content_type_params)
+      if @content_type.update(content_type_params)
         format.html { redirect_to @content_type, notice: t('controller.successfully_updated', model: t('activerecord.models.content_type')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class ContentTypesController < ApplicationController
   def set_content_type
     @content_type = ContentType.find(params[:id])
     authorize @content_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy
@@ -95,8 +94,6 @@ class ContentTypesController < ApplicationController
   end
 
   def content_type_params
-    params.require(:content_type).permit(
-      :name, :display_name, :note, :attachment
-    )
+    params.require(:content_type).permit(:name, :display_name, :note)
   end
 end

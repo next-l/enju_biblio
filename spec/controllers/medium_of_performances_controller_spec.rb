@@ -103,9 +103,9 @@ describe MediumOfPerformancesController do
         medium_of_performance = MediumOfPerformance.create! valid_attributes
         # Assuming there are no other medium_of_performances in the database, this
         # specifies that the MediumOfPerformance created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        MediumOfPerformance.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        MediumOfPerformance.any_instance.should_receive(:update).with('name' => 'test')
         put :update, params: { id: medium_of_performance.id, medium_of_performance: { 'name' => 'test' } }
       end
 

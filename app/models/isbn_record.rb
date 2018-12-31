@@ -27,7 +27,7 @@ end
 #
 # Table name: isbn_records
 #
-#  id         :integer          not null, primary key
+#  id         :bigint(8)        not null, primary key
 #  body       :string           not null
 #  isbn_type  :string
 #  source     :string

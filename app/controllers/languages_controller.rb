@@ -5,7 +5,7 @@ class LanguagesController < ApplicationController
   # GET /languages
   # GET /languages.json
   def index
-    @languages = Language.order(:position).page(params[:page])
+    @languages = Language.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -62,7 +62,7 @@ class LanguagesController < ApplicationController
     end
 
     respond_to do |format|
-      if @language.update_attributes(language_params)
+      if @language.update(language_params)
         format.html { redirect_to @language, notice: t('controller.successfully_updated', model: t('activerecord.models.language')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class LanguagesController < ApplicationController
   def set_language
     @language = Language.find(params[:id])
     authorize @language
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

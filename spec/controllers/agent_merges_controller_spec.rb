@@ -1,8 +1,6 @@
 require 'rails_helper'
 
 describe AgentMergesController do
-  fixtures :users, :libraries, :user_groups, :profiles, :manifestations, :items,
-           :baskets, :subscriptions, :agents
   fixtures :all
 
   describe 'GET index' do

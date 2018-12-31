@@ -5,7 +5,7 @@ class ImportRequestsController < ApplicationController
   # GET /import_requests
   # GET /import_requests.json
   def index
-    @import_requests = ImportRequest.order(created_at: :desc).page(params[:page])
+    @import_requests = ImportRequest.page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -45,17 +45,25 @@ class ImportRequestsController < ApplicationController
 
     respond_to do |format|
       if @import_request.save
-        @import_request.import!
+        @error_type = @import_request.import!
         format.html {
           if @import_request.manifestation
             redirect_to @import_request.manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.import_request'))
-          else
-            redirect_to new_import_request_url, notice: t('import_request.record_not_found')
+          elsif @error_type
+            redirect_to new_import_request_url, notice: t("import_request.#{@error_type}")
           end
         }
+        #format.html.phone {
+        #  if @import_request.manifestation
+        #    redirect_to @import_request.manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.import_request'))
+        #  else
+        #    redirect_to new_import_request_url, notice: t('import_request.record_not_found')
+        #  end
+        #}
         format.json { render json: @import_request, status: :created, location: @import_request }
       else
         format.html { render action: "new" }
+        #format.html.phone { render action: "new" }
         format.json { render json: @import_request.errors, status: :unprocessable_entity }
       end
     end
@@ -69,7 +77,7 @@ class ImportRequestsController < ApplicationController
   # PUT /import_requests/1.json
   def update
     respond_to do |format|
-      if @import_request.update_attributes(import_request_params)
+      if @import_request.update(import_request_params)
         @import_request.import!
         format.html { redirect_to @import_request, notice: t('controller.successfully_updated', model: t('activerecord.models.import_request')) }
         format.json { head :no_content }

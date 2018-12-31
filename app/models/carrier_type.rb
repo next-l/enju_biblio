@@ -1,8 +1,24 @@
 class CarrierType < ActiveRecord::Base
   include MasterModel
+  default_scope { order("carrier_types.position") }
   has_many :manifestations
-  translates :display_name
-  include AttachmentUploader[:attachment]
+  if ENV['ENJU_STORAGE'] == 's3'
+    has_attached_file :attachment, storage: :s3,
+      styles: { thumb: "16x16#" },
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME'],
+        s3_region: ENV['S3_REGION']
+      },
+      s3_permissions: :private
+  else
+    has_attached_file :attachment,
+      styles: { thumb: "16x16#" },
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+  end
+  validates_attachment_content_type :attachment, content_type: /\Aimage\/.*\Z/
 
   def mods_type
     case name
@@ -19,12 +35,15 @@ end
 #
 # Table name: carrier_types
 #
-#  id                        :integer          not null, primary key
-#  name                      :string           not null
-#  display_name_translations :jsonb
-#  note                      :text
-#  position                  :integer
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
-#  attachment_data           :jsonb
+#  id                      :integer          not null, primary key
+#  name                    :string           not null
+#  display_name            :text
+#  note                    :text
+#  position                :integer          default(1), not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  attachment_file_name    :string
+#  attachment_content_type :string
+#  attachment_file_size    :bigint(8)
+#  attachment_updated_at   :datetime
 #

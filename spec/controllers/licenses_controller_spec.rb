@@ -103,9 +103,9 @@ describe LicensesController do
         license = License.create! valid_attributes
         # Assuming there are no other licenses in the database, this
         # specifies that the License created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        License.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        License.any_instance.should_receive(:update).with('name' => 'test')
         put :update, params: { id: license.id, license: { 'name' => 'test' } }
       end
 

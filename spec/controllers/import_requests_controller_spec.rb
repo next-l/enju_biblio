@@ -11,7 +11,7 @@ describe ImportRequestsController do
 
       it 'assigns all import_requests as @import_requests' do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.order(created_at: :desc).page(1))
+        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
       end
     end
 
@@ -20,7 +20,7 @@ describe ImportRequestsController do
 
       it 'assigns all import_requests as @import_requests' do
         get :index
-        expect(assigns(:import_requests)).to eq(ImportRequest.order(created_at: :desc).page(1))
+        expect(assigns(:import_requests)).to eq(ImportRequest.page(1))
       end
     end
 
@@ -192,9 +192,9 @@ describe ImportRequestsController do
         end
       end
 
-      describe 'with isbn which is already imported' do
-        it 'assigns a newly created import_request as @import_request', vcr: true do
-          post :create, params: { import_request: { isbn: manifestations(:manifestation_00001).isbn_records.first.body } }
+      describe 'with isbn which is already imported', vcr: true do
+        it 'assigns a newly created import_request as @import_request' do
+          post :create, params: { import_request: { isbn: manifestations(:manifestation_00001).identifier_contents(:isbn).first } }
           expect(assigns(:import_request)).to be_valid
         end
 
@@ -203,8 +203,8 @@ describe ImportRequestsController do
           expect(response).to redirect_to manifestation_url(assigns(:import_request).manifestation)
         end
       end
-      it 'should import without errors', vcr: true do
-        expect { post :create, params: { import_request: { isbn: '0744521815' } } }.not_to raise_error
+      it "should import without errors", vcr: true do
+        expect{ post :create, params: { import_request: { isbn: "0744521815" } } }.not_to raise_error
       end
     end
 

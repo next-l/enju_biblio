@@ -1,17 +1,4 @@
-# == Schema Information
-#
-# Table name: realize_types
-#
-#  id           :integer          not null, primary key
-#  name         :string
-#  display_name :text
-#  note         :text
-#  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
-#
-
-require "spec_helper"
+require 'rails_helper'
 
 describe RealizeTypesController do
   describe "routing" do
@@ -25,11 +12,11 @@ describe RealizeTypesController do
     end
 
     it "routes to #show" do
-      get("/realize_types/1").should route_to("realize_types#show", :id => "1")
+      get("/realize_types/1").should route_to("realize_types#show", id: "1")
     end
 
     it "routes to #edit" do
-      get("/realize_types/1/edit").should route_to("realize_types#edit", :id => "1")
+      get("/realize_types/1/edit").should route_to("realize_types#edit", id: "1")
     end
 
     it "routes to #create" do
@@ -37,11 +24,11 @@ describe RealizeTypesController do
     end
 
     it "routes to #update" do
-      put("/realize_types/1").should route_to("realize_types#update", :id => "1")
+      put("/realize_types/1").should route_to("realize_types#update", id: "1")
     end
 
     it "routes to #destroy" do
-      delete("/realize_types/1").should route_to("realize_types#destroy", :id => "1")
+      delete("/realize_types/1").should route_to("realize_types#destroy", id: "1")
     end
 
   end

@@ -2,15 +2,15 @@ class ManifestationsController < ApplicationController
   before_action :set_manifestation, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
   before_action :authenticate_user!, only: :edit
-  before_action :set_parent_agent, :set_parent_manifestation, except: [:create, :update, :destroy]
-  before_action :set_expression, only: :new
+  before_action :get_agent, :get_manifestation, except: [:create, :update, :destroy]
+  before_action :get_expression, only: :new
   if defined?(EnjuSubject)
-    before_action :set_parent_subject, except: [:create, :update, :destroy]
+    before_action :get_subject, except: [:create, :update, :destroy]
   end
-  before_action :set_series_statement, only: [:index, :new, :edit]
-  before_action :set_parent_item, :set_libraries, only: :index
+  before_action :get_series_statement, only: [:index, :new, :edit]
+  before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
-  before_action :set_version, only: [:show]
+  before_action :get_version, only: [:show]
   after_action :convert_charset, only: :index
 
   # GET /manifestations
@@ -71,7 +71,7 @@ class ManifestationsController < ApplicationController
         reservable = nil
       end
 
-      agent = set_index_agent
+      agent = get_index_agent
       @index_agent = agent
       manifestation = @manifestation if @manifestation
       series_statement = @series_statement if @series_statement
@@ -92,8 +92,7 @@ class ManifestationsController < ApplicationController
       end
 
       search.build do
-        fulltext query unless query.blank?
-        with(:username).equal_to params[:username] if params[:username]
+        fulltext query if query.present?
         order_by sort[:sort_by], sort[:order]
         if defined?(EnjuSubject)
           with(:subject_ids).equal_to subject.id if subject
@@ -143,13 +142,11 @@ class ManifestationsController < ApplicationController
         :edition_string,
         :edition,
         :serial,
-        :statement_of_responsibility,
-        :manifestation_identifier
+        :statement_of_responsibility
       ] if params[:format] == 'html' or params[:format].nil?
       all_result = search.execute
       @count[:query_result] = all_result.total
       @reservable_facet = all_result.facet(:reservable).rows if defined?(EnjuCirculation)
-
       max_number_of_results = @library_group.max_number_of_results
       if max_number_of_results == 0
         @max_number_of_results = @count[:query_result]
@@ -306,12 +303,20 @@ class ManifestationsController < ApplicationController
     end
 
     if defined?(EnjuCirculation)
-      @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id).count
+      @reserved_count = Reserve.waiting.where(manifestation_id: @manifestation.id, checked_out_at: nil).count
       @reserve = current_user.reserves.where(manifestation_id: @manifestation.id).first if user_signed_in?
     end
 
     if defined?(EnjuQuestion)
       @questions = @manifestation.questions(user: current_user, page: params[:question_page])
+    end
+
+    if @manifestation.attachment.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        data = Faraday.get(@manifestation.attachment.expiring_url).body.force_encoding('UTF-8')
+      else
+        file = @manifestation.attachment.path
+      end
     end
 
     respond_to do |format|
@@ -331,9 +336,17 @@ class ManifestationsController < ApplicationController
       format.txt
       format.js
       format.download {
-        send_file @manifestation.attachment.download,
-        filename: File.basename(@manifestation.attachment.metadata['filename']),
-          type: 'application/octet-stream'
+        if @manifestation.attachment.path
+          if ENV['ENJU_STORAGE'] == 's3'
+            send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
+          else
+            if File.exist?(file) && File.file?(file)
+              send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
+            end
+          end
+        else
+          render template: 'page/404', status: 404
+        end
       }
     end
   end
@@ -387,19 +400,16 @@ class ManifestationsController < ApplicationController
     })
     parent = Manifestation.where(id: @manifestation.parent_id).first
     unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment.metadata['filename'] if @manifestation.attachment
+      @manifestation.original_title = @manifestation.attachment_file_name
     end
 
     respond_to do |format|
       if @manifestation.save
         Manifestation.transaction do
           @manifestation.creators = Agent.new_agents(creators_params)
-          @manifestation.isbn_records = IsbnRecord.new_records(creators_params)
-          @manifestation.issn_records = IssnRecord.new_records(creators_params)
           parent.derived_manifestations << @manifestation if parent
         end
         if parent
-          parent.derived_manifestations << @manifestation
           parent.index
           @manifestation.index
         end
@@ -420,7 +430,7 @@ class ManifestationsController < ApplicationController
   def update
     creators_params = manifestation_params[:creators_attributes]
     Manifestation.transaction do
-      @manifestation.update_attributes(manifestation_params.delete_if{|k, v|
+      @manifestation.update(manifestation_params.delete_if{|k, v|
         k == 'creators_attributes'
       })
       @manifestation.creators = Agent.new_agents(creators_params)
@@ -442,11 +452,12 @@ class ManifestationsController < ApplicationController
   # DELETE /manifestations/1.json
   def destroy
     # workaround
-    #@manifestation.creators.destroy_all
-    #@manifestation.contributors.destroy_all
-    #@manifestation.publishers.destroy_all
-    #@manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
-    #@manifestation.reload
+    @manifestation.identifiers.destroy_all
+    @manifestation.creators.destroy_all
+    @manifestation.contributors.destroy_all
+    @manifestation.publishers.destroy_all
+    @manifestation.bookmarks.destroy_all if defined?(EnjuBookmark)
+    @manifestation.reload
     @manifestation.destroy
 
     respond_to do |format|
@@ -469,7 +480,7 @@ class ManifestationsController < ApplicationController
     params.require(:manifestation).permit(
       :original_title, :title_alternative, :title_transcription,
       :manifestation_identifier, :date_copyrighted,
-      :access_address, :language_id, :carrier_type_id, :extent, :start_page,
+      :access_address, :language_id, :carrier_type_id, :start_page,
       :end_page, :height, :width, :depth, :publication_place,
       :price, :fulltext, :volume_number_string,
       :issue_number_string, :serial_number_string, :edition, :note,
@@ -479,7 +490,7 @@ class ManifestationsController < ApplicationController
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
       :dimensions, :fulltext_content, :extent,
-      :number_of_page_string, :parent_id,
+      :parent_id,
       :serial, :statement_of_responsibility,
       {creators_attributes: [
         :id, :last_name, :middle_name, :first_name,
@@ -556,18 +567,31 @@ class ManifestationsController < ApplicationController
     #  query = "#{query} carrier_type_s:#{options[:carrier_type]}"
     #end
 
-    unless options[:library_adv].blank?
+    if options[:library_adv].present?
       library_list = options[:library_adv].split.uniq.join(' OR ')
       query = "#{query} library_sm:(#{library_list})"
+    end
+    shelf_list = []
+    options.keys.grep(/_shelf\Z/).each do |library_shelf|
+      library_name = library_shelf.sub(/_shelf\Z/, "")
+      options[library_shelf].each do |shelf|
+        shelf_list << "#{library_name}_#{shelf}"
+      end
+    end
+    if shelf_list.present?
+      query += " shelf_sm:(#{shelf_list.join(" OR ")})"
     end
 
     #unless options[:language].blank?
     #  query = "#{query} language_sm:#{options[:language]}"
     #end
 
-    #unless options[:subject].blank?
-    #  query = "#{query} subject_sm:#{options[:subject]}"
-    #end
+    if options[:subject].present?
+      query = "#{query} subject_sm:#{options[:subject]}"
+    end
+    if options[:subject_text].present?
+      query = "#{query} subject_text:#{options[:subject_text]}"
+    end
     if options[:classification].present? and options[:classification_type].present?
       classification_type = ClassificationType.find(options[:classification_type]).name
       query = "#{query} classification_sm:#{classification_type}_#{options[:classification]}*"
@@ -708,20 +732,21 @@ class ManifestationsController < ApplicationController
   end
 
   def prepare_options
-    @carrier_types = CarrierType.order(:position)
-    @content_types = ContentType.order(:position)
-    @roles = Role.order(:position)
-    @languages = Language.order(:position)
-    @frequencies = Frequency.order(:position)
-    @nii_types = NiiType.order(:position) if defined?(EnjuNii)
+    @carrier_types = CarrierType.select([:id, :display_name, :position])
+    @content_types = ContentType.select([:id, :display_name, :position])
+    @roles = Role.select([:id, :display_name, :position])
+    @languages = Language.select([:id, :display_name, :position])
+    @frequencies = Frequency.select([:id, :display_name, :position])
+    @identifier_types = IdentifierType.select([:id, :display_name, :position])
+    @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
     if defined?(EnjuSubject)
-      @subject_types = SubjectType.order(:position)
-      @subject_heading_types = SubjectHeadingType.order(:position)
-      @classification_types = ClassificationType.order(:position)
+      @subject_types = SubjectType.select([:id, :display_name, :position])
+      @subject_heading_types = SubjectHeadingType.select([:id, :display_name, :position])
+      @classification_types = ClassificationType.select([:id, :display_name, :position])
     end
   end
 
-  def set_index_agent
+  def get_index_agent
     agent = {}
     case
     when params[:agent_id]
@@ -829,7 +854,7 @@ class ManifestationsController < ApplicationController
   end
 
   def filtered_params
-    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page])
+    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page, :query])
   end
 
   helper_method :filtered_params

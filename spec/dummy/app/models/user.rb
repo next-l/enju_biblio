@@ -8,17 +8,8 @@ class User < ActiveRecord::Base
 
   include EnjuSeed::EnjuUser
   include EnjuMessage::EnjuUser
-  include EnjuCirculation::EnjuUser
-  include EnjuBookmark::EnjuUser
 end
 
-CarrierType.include(EnjuCirculation::EnjuCarrierType)
-Manifestation.include(EnjuCirculation::EnjuManifestation)
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
-Manifestation.include(EnjuNii::EnjuManifestation)
-Item.include(EnjuCirculation::EnjuItem)
 Item.include(EnjuLibrary::EnjuItem)
-Item.include(EnjuInventory::EnjuItem)
-Profile.include(EnjuCirculation::EnjuProfile)
-UserGroup.include(EnjuCirculation::EnjuUserGroup)

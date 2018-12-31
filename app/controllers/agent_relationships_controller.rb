@@ -1,7 +1,7 @@
 class AgentRelationshipsController < ApplicationController
   before_action :set_agent_relationship, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent
+  before_action :get_agent
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /agent_relationships
@@ -72,7 +72,7 @@ class AgentRelationshipsController < ApplicationController
     end
 
     respond_to do |format|
-      if @agent_relationship.update_attributes(agent_relationship_params)
+      if @agent_relationship.update(agent_relationship_params)
         format.html { redirect_to @agent_relationship, notice: t('controller.successfully_updated', model: t('activerecord.models.agent_relationship')) }
         format.json { head :no_content }
       else

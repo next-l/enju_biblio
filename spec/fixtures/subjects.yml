@@ -5,11 +5,11 @@ subject_00001:
   scope_note: 
   subject_type_id: 1
   term_transcription: next-l
-  id: d58cb6cb-3fbc-40cc-94b8-9a1ad2d76ef9
+  id: 1
   note: 
   parent_id: 
   created_at: 2008-03-01 17:53:06.118389 +09:00
-  manifestation_id: 1ff5b88a-1964-4db0-acb3-ae1d9e3a307e
+  manifestation_id: 1
   subject_heading_type_id: 1
 subject_00002: 
   updated_at: 2008-03-02 03:19:57.946759 +09:00
@@ -17,7 +17,7 @@ subject_00002:
   scope_note: 
   subject_type_id: 1
   term_transcription: test2
-  id: 1b6aa468-9783-4d06-9a44-2e669ebfab05
+  id: 2
   note: 
   parent_id: 
   created_at: 2008-03-01 17:50:34.658349 +09:00
@@ -28,7 +28,7 @@ subject_00003:
   scope_note: 
   subject_type_id: 1
   term_transcription: test3
-  id: 4884593a-6182-46fe-a442-d37cae85869f
+  id: 3
   note: 
   parent_id: 
   created_at: 2008-03-01 17:51:39.448430 +09:00
@@ -39,7 +39,7 @@ subject_00004:
   scope_note: 
   subject_type_id: 1
   term_transcription: test4
-  id: 894d31b2-3344-4896-bddb-4a3589c4b44a
+  id: 4
   note: 
   parent_id: 
   created_at: 2008-03-01 17:51:39.448430 +09:00
@@ -50,7 +50,7 @@ subject_00005:
   scope_note: 
   subject_type_id: 1
   term_transcription: test5
-  id: fdc23def-a2e0-439e-96be-86f9bb56c7f5
+  id: 5
   note: 
   parent_id: 
   created_at: 2008-03-01 17:51:39.448430 +09:00
@@ -60,7 +60,7 @@ subject_00005:
 #
 # Table name: subjects
 #
-#  id                      :uuid             not null, primary key
+#  id                      :integer          not null, primary key
 #  parent_id               :integer
 #  use_term_id             :integer
 #  term                    :string
@@ -70,8 +70,8 @@ subject_00005:
 #  note                    :text
 #  required_role_id        :integer          default(1), not null
 #  lock_version            :integer          default(0), not null
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #  deleted_at              :datetime
 #  url                     :string
 #  manifestation_id        :integer

@@ -1,7 +1,7 @@
 class RealizesController < ApplicationController
   before_action :set_realize, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent, :set_expression
+  before_action :get_agent, :get_expression
   before_action :prepare_options, only: [:new, :edit]
 
   # GET /realizes
@@ -78,7 +78,7 @@ class RealizesController < ApplicationController
     end
 
     respond_to do |format|
-      if @realize.update_attributes(realize_params)
+      if @realize.update(realize_params)
         format.html { redirect_to @realize, notice: t('controller.successfully_updated', model: t('activerecord.models.realize')) }
         format.json { head :no_content }
       else
@@ -127,6 +127,6 @@ class RealizesController < ApplicationController
   end
 
   def prepare_options
-    @realize_types = RealizeType.order(:position)
+    @realize_types = RealizeType.all
   end
 end

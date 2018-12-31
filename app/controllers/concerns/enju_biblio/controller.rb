@@ -4,44 +4,48 @@ module EnjuBiblio
 
     private
 
-    def set_work
+    def get_work
       @work = Manifestation.find(params[:work_id]) if params[:work_id]
-      authorize @work if @work
+      authorize @work, :show? if @work
     end
 
-    def set_expression
+    def get_expression
       @expression = Manifestation.find(params[:expression_id]) if params[:expression_id]
-      authorize @expression if @expression
+      authorize @expression, :show? if @expression
     end
 
-    def set_parent_manifestation
+    def get_manifestation
       @manifestation = Manifestation.find(params[:manifestation_id]) if params[:manifestation_id]
-      authorize @manifestation if @manifestation
+      authorize @manifestation, :show? if @manifestation
     end
 
-    def set_parent_item
+    def get_item
       @item = Item.find(params[:item_id]) if params[:item_id]
-      authorize @item if @item
+      authorize @item, :show? if @item
     end
 
-    def set_carrier_type
+    def get_carrier_type
       @carrier_type = CarrierType.find(params[:carrier_type_id]) if params[:carrier_type_id]
     end
 
-    def set_parent_agent
+    def get_agent
       @agent = Agent.find(params[:agent_id]) if params[:agent_id]
       authorize @agent if @agent
     end
 
-    def set_series_statement
+    def get_series_statement
       @series_statement = SeriesStatement.find(params[:series_statement_id]) if params[:series_statement_id]
     end
 
-    def set_agent_merge_list
+    def get_basket
+      @basket = Basket.find(params[:basket_id]) if params[:basket_id]
+    end
+
+    def get_agent_merge_list
       @agent_merge_list = AgentMergeList.find(params[:agent_merge_list_id]) if params[:agent_merge_list_id]
     end
 
-    def set_series_statement_merge_list
+    def get_series_statement_merge_list
       @series_statement_merge_list = SeriesStatementMergeList.find(params[:series_statement_merge_list_id]) if params[:series_statement_merge_list_id]
     end
 
@@ -67,23 +71,23 @@ module EnjuBiblio
           with(:publisher_ids).equal_to agent.id if agent
           with(:original_manifestation_ids).equal_to manifestation.id if manifestation
           with(:reservable).equal_to reservable unless reservable.nil?
-          unless carrier_type.blank?
+          if carrier_type.present?
             with(:carrier_type).equal_to carrier_type
           end
-          unless library.blank?
+          if library.present?
             library_list = library.split.uniq
             library_list.each do |lib|
               with(:library).equal_to lib
             end
           end
-          unless language.blank?
+          if language.present?
             language_list = language.split.uniq
             language_list.each do |language|
               with(:language).equal_to language
             end
           end
           if defined?(EnjuSubject)
-            unless subject.blank?
+            if subject.present?
               with(:subject).equal_to subject_by_term.term
             end
           end

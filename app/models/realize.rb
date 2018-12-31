@@ -1,7 +1,7 @@
 class Realize < ActiveRecord::Base
   belongs_to :agent
   belongs_to :expression, class_name: 'Manifestation', foreign_key: 'expression_id', touch: true
-  belongs_to :realize_type
+  belongs_to :realize_type, optional: true
 
   validates_associated :agent, :expression
   validates_presence_of :agent, :expression
@@ -22,10 +22,10 @@ end
 # Table name: realizes
 #
 #  id              :integer          not null, primary key
-#  agent_id        :uuid             not null
-#  expression_id   :uuid             not null
-#  position        :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  agent_id        :integer          not null
+#  expression_id   :integer          not null
+#  position        :integer          default(1), not null
+#  created_at      :datetime
+#  updated_at      :datetime
 #  realize_type_id :integer
 #

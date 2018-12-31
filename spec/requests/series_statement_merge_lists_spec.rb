@@ -1,14 +1,4 @@
-# == Schema Information
-#
-# Table name: series_statement_merge_lists
-#
-#  id         :integer          not null, primary key
-#  title      :string
-#  created_at :datetime
-#  updated_at :datetime
-#
-
-require 'spec_helper'
+require 'rails_helper'
 
 describe "SeriesStatementMergeLists" do
   describe "GET /series_statement_merge_lists" do

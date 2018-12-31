@@ -1,6 +1,7 @@
 class ImportRequest < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
-  belongs_to :manifestation
+  default_scope { order('import_requests.id DESC') }
+  belongs_to :manifestation, optional: true
   belongs_to :user
   validates_presence_of :isbn
   validate :check_isbn
@@ -9,7 +10,7 @@ class ImportRequest < ActiveRecord::Base
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_nii_cinii_books if defined?(EnjuNii)
 
-  has_many :import_request_transitions
+  has_many :import_request_transitions, autosave: false
 
   def state_machine
     ImportRequestStateMachine.new(self, transition_class: ImportRequestTransition)
@@ -26,36 +27,40 @@ class ImportRequest < ActiveRecord::Base
 
   def check_imported
     if isbn.present?
-      if IsbnRecord.find_by(body: isbn)
+      identifier_type = IdentifierType.where(name: 'isbn').first
+      identifier_type = IdentifierType.where(name: 'isbn').create! unless identifier_type
+      if Identifier.where(body: isbn, identifier_type_id: identifier_type.id).first.try(:manifestation)
         errors.add(:isbn, I18n.t('import_request.isbn_taken'))
       end
     end
   end
 
   def import!
-    return nil unless Manifestation.respond_to?(:import_isbn)
-    unless manifestation
-      manifestation = Manifestation.import_isbn(isbn)
-      if manifestation
-        self.manifestation = manifestation
-        transition_to!(:completed)
-        manifestation.index
-        Sunspot.commit
-      else
-        transition_to!(:failed)
+    exceptions = [ ActiveRecord::RecordInvalid, NameError, URI::InvalidURIError ]
+    not_found_exceptions = []
+    not_found_exceptions << EnjuNdl::RecordNotFound if defined? EnjuNdl
+    not_found_exceptions << EnjuNii::RecordNotFound if defined? EnjuNii
+    begin
+      return nil unless Manifestation.respond_to?(:import_isbn)
+      unless manifestation
+        manifestation = Manifestation.import_isbn(isbn)
+        if manifestation
+          self.manifestation = manifestation
+          transition_to!(:completed)
+          manifestation.index
+          Sunspot.commit
+        else
+          transition_to!(:failed)
+        end
       end
-    #else
-    #  transition_to!(:failed)
+      save
+    rescue *not_found_exceptions => e
+      transition_to!(:failed)
+      return :record_not_found
+    rescue *exceptions => e
+      transition_to!(:failed)
+      return :error
     end
-    save
-  rescue ActiveRecord::RecordInvalid
-    transition_to!(:failed)
-  rescue NameError
-    transition_to!(:failed)
-  rescue EnjuNdl::RecordNotFound
-    transition_to!(:failed)
-  rescue EnjuNii::RecordNotFound
-    transition_to!(:failed)
   end
 
   private
@@ -74,8 +79,8 @@ end
 #
 #  id               :integer          not null, primary key
 #  isbn             :string
-#  manifestation_id :uuid
+#  manifestation_id :integer
 #  user_id          :integer
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  created_at       :datetime
+#  updated_at       :datetime
 #

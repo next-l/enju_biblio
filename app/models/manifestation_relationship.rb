@@ -1,7 +1,7 @@
 class ManifestationRelationship < ActiveRecord::Base
   belongs_to :parent, foreign_key: 'parent_id', class_name: 'Manifestation'
   belongs_to :child, foreign_key: 'child_id', class_name: 'Manifestation'
-  belongs_to :manifestation_relationship_type
+  belongs_to :manifestation_relationship_type, optional: true
   validate :check_parent
   validates_presence_of :parent_id, :child_id
   acts_as_list scope: :parent_id
@@ -19,10 +19,10 @@ end
 # Table name: manifestation_relationships
 #
 #  id                                 :integer          not null, primary key
-#  parent_id                          :uuid
-#  child_id                           :uuid
+#  parent_id                          :integer
+#  child_id                           :integer
 #  manifestation_relationship_type_id :integer
-#  created_at                         :datetime         not null
-#  updated_at                         :datetime         not null
+#  created_at                         :datetime
+#  updated_at                         :datetime
 #  position                           :integer
 #

@@ -1,8 +1,8 @@
-
 require 'rails_helper'
 
 describe ResourceImportResult do
   # pending "add some examples to (or delete) #{__FILE__}"
+
 end
 
 # == Schema Information
@@ -11,10 +11,10 @@ end
 #
 #  id                      :integer          not null, primary key
 #  resource_import_file_id :integer
-#  manifestation_id        :uuid
-#  item_id                 :uuid
+#  manifestation_id        :integer
+#  item_id                 :integer
 #  body                    :text
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #  error_message           :text
 #

@@ -1,8 +1,8 @@
-
 require 'rails_helper'
 
 describe AgentImportResult do
   # pending "add some examples to (or delete) #{__FILE__}"
+
 end
 
 # == Schema Information
@@ -13,6 +13,6 @@ end
 #  agent_import_file_id :integer
 #  agent_id             :integer
 #  body                 :text
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
+#  created_at           :datetime
+#  updated_at           :datetime
 #

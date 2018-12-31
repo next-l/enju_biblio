@@ -5,7 +5,7 @@ class ManifestationRelationshipTypesController < ApplicationController
   # GET /manifestation_relationship_types
   # GET /manifestation_relationship_types.json
   def index
-    @manifestation_relationship_types = ManifestationRelationshipType.order(:position)
+    @manifestation_relationship_types = ManifestationRelationshipType.all
 
     respond_to do |format|
       format.html # index.html.erb
@@ -62,7 +62,7 @@ class ManifestationRelationshipTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @manifestation_relationship_type.update_attributes(manifestation_relationship_type_params)
+      if @manifestation_relationship_type.update(manifestation_relationship_type_params)
         format.html { redirect_to @manifestation_relationship_type, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_relationship_type')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class ManifestationRelationshipTypesController < ApplicationController
   def set_manifestation_relationship_type
     @manifestation_relationship_type = ManifestationRelationshipType.find(params[:id])
     authorize @manifestation_relationship_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

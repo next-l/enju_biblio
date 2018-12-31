@@ -20,3 +20,4 @@
 "104"	"99999"		"△ identifier重複、item_identifier非重複、タイトルなし。manifestation_identifierはmanifestation_idに優先する"																																							"11113"																		
 	"1"		"△ manifestation_id重複、item_identifier非重複、タイトルなし"																																							"11114"																		
 "101"			"△identifier重複、item_identifierなし、タイトルなし"																																					"first_shelf"	"007|A"																			
+"105"		"逐次刊行物"	"○serialがtrue"			true																																		"first_shelf"	"007|A"																			

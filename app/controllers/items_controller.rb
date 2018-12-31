@@ -1,13 +1,13 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent, :set_parent_manifestation, :set_shelf, except: [:create, :update, :destroy]
+  before_action :get_agent, :get_manifestation, :get_shelf, except: [:create, :update, :destroy]
   if defined?(EnjuInventory)
-    before_action :set_inventory_file
+    before_action :get_inventory_file
   end
-  before_action :set_parent_item, except: [:create, :update, :destroy]
-  before_action :prepare_options, only: [:edit]
-  before_action :set_version, only: [:show]
+  before_action :get_library, :get_item, except: [:create, :update, :destroy]
+  before_action :prepare_options, only: [:new, :edit]
+  before_action :get_version, only: [:show]
   after_action :convert_charset, only: :index
 
   # GET /items
@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
       set_role_query(current_user, search)
 
       @query = query.dup
-      unless query.blank?
+      if query.present?
         search.build do
           fulltext query
         end
@@ -160,8 +160,6 @@ class ItemsController < ApplicationController
       return
     end
     @item = Item.new
-    prepare_options
-    set_library
     @item.shelf = @library.shelves.first
     @item.manifestation = @manifestation
     if defined?(EnjuCirculation)
@@ -187,7 +185,6 @@ class ItemsController < ApplicationController
 
   # GET /items/1/edit
   def edit
-    set_library
     @item.library_id = @item.shelf.library_id
     @manifestation = @item.manifestation
     if defined?(EnjuCirculation)
@@ -211,7 +208,7 @@ class ItemsController < ApplicationController
           if defined?(EnjuCirculation)
             if @item.reserved?
               flash[:message] = t('item.this_item_is_reserved')
-              @item.retain!(current_user)
+              @item.retain(current_user)
             end
           end
         end
@@ -219,7 +216,6 @@ class ItemsController < ApplicationController
         format.json { render json: @item, status: :created, location: @item }
       else
         prepare_options
-        set_library
         format.html { render action: "new" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -230,12 +226,11 @@ class ItemsController < ApplicationController
   # PUT /items/1.json
   def update
     respond_to do |format|
-      if @item.update_attributes(item_params)
+      if @item.update(item_params)
         format.html { redirect_to @item, notice: t('controller.successfully_updated', model: t('activerecord.models.item')) }
         format.json { head :no_content }
       else
         prepare_options
-        set_library
         format.html { render action: "edit" }
         format.json { render json: @item.errors, status: :unprocessable_entity }
       end
@@ -284,6 +279,12 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.order(:position)
+    if @item
+      @library = @item.shelf.library
+    else
+      @library = Library.real.includes(:shelves).order(:position).first
+    end
+    @shelves = @library.try(:shelves)
     @bookstores = Bookstore.order(:position)
     @budget_types = BudgetType.order(:position)
     @roles = Role.all
@@ -296,15 +297,6 @@ class ItemsController < ApplicationController
         @checkout_types = CheckoutType.order(:position)
       end
     end
-  end
-
-  def set_library
-    if @item.new_record?
-      @library = Library.real.includes(:shelves).order(:position).first
-    else
-      @library = @item.shelf.library
-    end
-    @shelves = @library.shelves
   end
 
   def filtered_params

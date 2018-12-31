@@ -1,17 +1,37 @@
 class AgentImportFile < ActiveRecord::Base
   include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
-  include AttachmentUploader[:attachment]
+  default_scope { order('agent_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
-  validates :attachment, presence: true, on: :create
+  if ENV['ENJU_STORAGE'] == 's3'
+    has_attached_file :agent_import, storage: :s3,
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME'],
+        s3_region: ENV['S3_REGION']
+      },
+      s3_permissions: :private
+  else
+    has_attached_file :agent_import,
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+  end
+  validates_attachment_content_type :agent_import, content_type: [
+    'text/csv',
+    'text/plain',
+    'text/tab-separated-values',
+    'application/octet-stream',
+    'application/vnd.ms-excel'
+  ]
+  validates_attachment_presence :agent_import
   belongs_to :user
-  has_many :agent_import_results
+  has_many :agent_import_results, dependent: :destroy
 
-  has_many :agent_import_file_transitions
+  has_many :agent_import_file_transitions, autosave: false, dependent: :destroy
 
-  before_create :set_fingerprint
   attr_accessor :mode
 
   def state_machine
@@ -40,7 +60,7 @@ class AgentImportFile < ActiveRecord::Base
     rows = open_import_file
     field = rows.first
     row_num = 1
-    if [field['first_name'], field['last_name'], field['full_name']].reject{|f| f.to_s.strip == ""}.empty?
+    if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
     #rows.shift
@@ -148,7 +168,12 @@ class AgentImportFile < ActiveRecord::Base
 
   def open_import_file
     tempfile = Tempfile.new(self.class.name.underscore)
-    open(attachment.download.path){|f|
+    if ENV['ENJU_STORAGE'] == 's3'
+      uploaded_file_path = agent_import.expiring_url(10)
+    else
+      uploaded_file_path = agent_import.path
+    end
+    open(uploaded_file_path){|f|
       f.each{|line|
         tempfile.puts(convert_encoding(line))
       }
@@ -200,25 +225,27 @@ class AgentImportFile < ActiveRecord::Base
     agent.country = country if country
     agent
   end
-
-  def set_fingerprint
-    self.agent_import_fingerprint = Digest::SHA1.file(attachment.download.path).hexdigest
-  end
 end
 
 # == Schema Information
 #
 # Table name: agent_import_files
 #
-#  id                       :integer          not null, primary key
-#  user_id                  :integer
-#  note                     :text
-#  executed_at              :datetime
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  agent_import_fingerprint :string
-#  error_message            :text
-#  edit_mode                :string
-#  user_encoding            :string
-#  attachment_data          :jsonb
+#  id                        :integer          not null, primary key
+#  parent_id                 :integer
+#  content_type              :string
+#  size                      :integer
+#  user_id                   :integer
+#  note                      :text
+#  executed_at               :datetime
+#  agent_import_file_name    :string
+#  agent_import_content_type :string
+#  agent_import_file_size    :integer
+#  agent_import_updated_at   :datetime
+#  created_at                :datetime
+#  updated_at                :datetime
+#  agent_import_fingerprint  :string
+#  error_message             :text
+#  edit_mode                 :string
+#  user_encoding             :string
 #

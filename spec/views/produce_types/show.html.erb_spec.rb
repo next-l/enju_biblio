@@ -3,10 +3,10 @@ require 'rails_helper'
 describe "produce_types/show" do
   before(:each) do
     @produce_type = assign(:produce_type, stub_model(ProduceType,
-      :name => "Name",
-      :display_name => "MyText",
-      :note => "MyText",
-      :position => 1
+      name: "Name",
+      display_name: "MyText",
+      note: "MyText",
+      position: 1
     ))
   end
 

@@ -1,10 +1,10 @@
 class AgentsController < ApplicationController
   before_action :set_agent, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_work, :set_expression, :set_parent_manifestation, :set_parent_item, :set_parent_agent, except: [:update, :destroy]
-  before_action :set_agent_merge_list, except: [:create, :update, :destroy]
+  before_action :get_work, :get_expression, :get_manifestation, :get_item, :get_agent, except: [:update, :destroy]
+  before_action :get_agent_merge_list, except: [:create, :update, :destroy]
   before_action :prepare_options, only: [:new, :edit]
-  before_action :set_version, only: [:show]
+  before_action :get_version, only: [:show]
 
   # GET /agents
   # GET /agents.json
@@ -41,7 +41,7 @@ class AgentsController < ApplicationController
     if params[:mode] == 'recent'
       query = "#{query} created_at_d:[NOW-1MONTH TO NOW]"
     end
-    unless query.blank?
+    if query.present?
       search.build do
         fulltext query
       end
@@ -79,7 +79,7 @@ class AgentsController < ApplicationController
       format.xml  { render xml: @agents }
       format.rss  { render layout: false }
       format.atom
-      format.json { render json: @agents }
+      format.json
       format.html.phone
     end
   end
@@ -175,7 +175,7 @@ class AgentsController < ApplicationController
   # PUT /agents/1.json
   def update
     respond_to do |format|
-      if @agent.update_attributes(agent_params)
+      if @agent.update(agent_params)
         format.html { redirect_to @agent, notice: t('controller.successfully_updated', model: t('activerecord.models.agent')) }
         format.json { head :no_content }
       else
@@ -227,4 +227,10 @@ class AgentsController < ApplicationController
     @languages = Language.all
     @agent_type = AgentType.where(name: 'person').first
   end
+
+  def filtered_params
+    params.permit([:view, :format, :page, :language, :sort_by, :per_page])
+  end
+
+  helper_method :filtered_params
 end

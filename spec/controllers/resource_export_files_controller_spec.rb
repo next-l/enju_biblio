@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 describe ResourceExportFilesController do
-  fixtures :shelves, :libraries
   fixtures :all
 
   describe 'GET index' do
@@ -10,7 +9,7 @@ describe ResourceExportFilesController do
 
       it 'assigns all resource_export_files as @resource_export_files' do
         get :index
-        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order(created_at: :desc).page(1))
+        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order('id DESC').page(1))
       end
     end
 
@@ -19,7 +18,7 @@ describe ResourceExportFilesController do
 
       it 'assigns all resource_export_files as @resource_export_files' do
         get :index
-        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order(created_at: :desc).page(1))
+        expect(assigns(:resource_export_files)).to eq(ResourceExportFile.order('id DESC').page(1))
       end
     end
 

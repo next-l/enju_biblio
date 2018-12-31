@@ -62,7 +62,7 @@ class CreateTypesController < ApplicationController
     end
 
     respond_to do |format|
-      if @create_type.update_attributes(create_type_params)
+      if @create_type.update(create_type_params)
         format.html { redirect_to @create_type, notice: t('controller.successfully_updated', model: t('activerecord.models.create_type')) }
         format.json { head :no_content }
       else
@@ -87,7 +87,6 @@ class CreateTypesController < ApplicationController
   def set_create_type
     @create_type = CreateType.find(params[:id])
     authorize @create_type
-    access_denied unless LibraryGroup.site_config.network_access_allowed?(request.ip)
   end
 
   def check_policy

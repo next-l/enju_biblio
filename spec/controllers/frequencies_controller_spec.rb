@@ -110,9 +110,9 @@ describe FrequenciesController do
         frequency = Frequency.create! valid_attributes
         # Assuming there are no other frequencies in the database, this
         # specifies that the Frequency created on the previous line
-        # receives the :update_attributes message with whatever params are
+        # receives the :update message with whatever params are
         # submitted in the request.
-        Frequency.any_instance.should_receive(:update_attributes).with('name' => 'test')
+        Frequency.any_instance.should_receive(:update).with('name' => 'test')
         put :update, params: { id: frequency.id, frequency: { 'name' => 'test' } }
       end
 

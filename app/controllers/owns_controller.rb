@@ -1,7 +1,7 @@
 class OwnsController < ApplicationController
   before_action :set_own, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_agent, :set_parent_item
+  before_action :get_agent, :get_item
 
   # GET /owns
   # GET /owns.json
@@ -74,7 +74,7 @@ class OwnsController < ApplicationController
     end
 
     respond_to do |format|
-      if @own.update_attributes(own_params)
+      if @own.update(own_params)
         format.html { redirect_to @own, notice: t('controller.successfully_updated', model: t('activerecord.models.own')) }
         format.json { head :no_content }
       else

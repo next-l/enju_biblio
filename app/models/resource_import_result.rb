@@ -5,8 +5,8 @@ class ResourceImportResult < ActiveRecord::Base
   scope :skipped, -> { where('error_message IS NOT NULL') }
 
   belongs_to :resource_import_file
-  belongs_to :manifestation
-  belongs_to :item
+  belongs_to :manifestation, optional: true
+  belongs_to :item, optional: true
 
   validates_presence_of :resource_import_file_id
 end
@@ -17,10 +17,10 @@ end
 #
 #  id                      :integer          not null, primary key
 #  resource_import_file_id :integer
-#  manifestation_id        :uuid
-#  item_id                 :uuid
+#  manifestation_id        :integer
+#  item_id                 :integer
 #  body                    :text
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #  error_message           :text
 #

@@ -10,12 +10,12 @@
 
 <p>
   <strong><%= t('activerecord.attributes.agent_import_file.agent_import_file_name') -%>:</strong>
-  <%= link_to @agent_import_file.attachment.metadata['filename'], agent_import_file_path(@agent_import_file, format: :download) %>
+  <%= link_to @agent_import_file.agent_import_file_name, agent_import_file_path(@agent_import_file, format: :download) if @agent_import_file.agent_import_file_name %>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.agent_import_file.agent_import_content_type') -%>:</strong>
-  <%= @agent_import_file.attachment.metadata['mime_type'] -%>
+  <%= @agent_import_file.agent_import_content_type -%>
 </p>
 
 <p>

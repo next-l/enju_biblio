@@ -1,5 +1,7 @@
 require 'simplecov'
-SimpleCov.start
+require 'coveralls'
+SimpleCov.start 'rails'
+Coveralls.wear!
 
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 ENV['RAILS_ENV'] ||= 'test'
@@ -13,6 +15,7 @@ require 'vcr'
 require 'factory_bot'
 require 'rspec/active_model/mocks'
 require 'pundit/rspec'
+require "capybara/rspec"
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each { |f| require f }
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -59,8 +62,6 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.extend ControllerMacros, type: :controller
-
-  config.include ActiveJob::TestHelper
 end
 
 FactoryBot.definition_file_paths << "#{::Rails.root}/../../spec/factories"

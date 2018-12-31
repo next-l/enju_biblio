@@ -1,8 +1,8 @@
 class SeriesStatementsController < ApplicationController
   before_action :set_series_statement, only: [:show, :edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :set_parent_manifestation, except: [:create, :update, :destroy]
-  before_action :set_series_statement_merge_list, except: [:create, :update, :destroy]
+  before_action :get_manifestation, except: [:create, :update, :destroy]
+  before_action :get_series_statement_merge_list, except: [:create, :update, :destroy]
 
   # GET /series_statements
   # GET /series_statements.json
@@ -11,7 +11,7 @@ class SeriesStatementsController < ApplicationController
     query = params[:query].to_s.strip
     page = params[:page] || 1
 
-    unless query.blank?
+    if query.present?
       @query = query.dup
       query = query.gsub('　', ' ')
     end
@@ -45,7 +45,7 @@ class SeriesStatementsController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @series_statement }
       #format.js
-      #format.html.phone
+      #format.mobile
     end
   end
 
@@ -76,7 +76,7 @@ class SeriesStatementsController < ApplicationController
         format.html { redirect_to @series_statement, notice: t('controller.successfully_created', model: t('activerecord.models.series_statement')) }
         format.json { render json: @series_statement, status: :created, location: @series_statement }
       else
-        @frequencies = Frequency.order(:position)
+        @frequencies = Frequency.all
         format.html { render action: "new" }
         format.json { render json: @series_statement.errors, status: :unprocessable_entity }
       end
@@ -92,11 +92,11 @@ class SeriesStatementsController < ApplicationController
     end
 
     respond_to do |format|
-      if @series_statement.update_attributes(series_statement_params)
+      if @series_statement.update(series_statement_params)
         format.html { redirect_to @series_statement, notice: t('controller.successfully_updated', model: t('activerecord.models.series_statement')) }
         format.json { head :no_content }
       else
-        @frequencies = Frequency.order(:position)
+        @frequencies = Frequency.all
         format.html { render action: "edit" }
         format.json { render json: @series_statement.errors, status: :unprocessable_entity }
       end

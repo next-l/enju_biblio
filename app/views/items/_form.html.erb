@@ -2,7 +2,7 @@
 <p>
   <%= t('activerecord.models.classification') -%>:
   <%- @item.manifestation.classifications.each do |classification| -%>
-    <%= link_to "#{classification.classification_type.display_name}: #{classification.category}", manifestations_path(query: "classification_sm:#{classification.classification_type.name}_#{classification.category}") -%>
+    <%= link_to "#{classification.classification_type.display_name.localize}: #{classification.category}", manifestations_path(query: "classification_sm:#{classification.classification_type.name}_#{classification.category}") -%>
   <%- end -%>
 </p>
 <%= render 'page/required_field' %>
@@ -12,26 +12,26 @@
 
   <div class="field">
     <%= f.label "#{t('activerecord.models.library')} / #{t('activerecord.models.shelf')}" -%>
-    <%= f.select :library_id, @libraries.map{|l| [l.display_name, l.id]} %>
-    <%= f.select :shelf_id, @shelves.map{|s| [s.display_name, s.id]} %>
+    <%= f.select :library_id, @libraries.map{|l| [l.display_name.localize, l.id]} %>
+    <%= f.select :shelf_id, @shelves.map{|s| [s.display_name.localize, s.id]} %>
     <%= render 'observe_field' %>
   </div>
 
   <% if defined?(EnjuCirculation) %>
     <div class="field">
       <%= f.label t('activerecord.models.checkout_type') -%>
-      <%= f.select(:checkout_type_id, @checkout_types.collect{|c| [c.display_name, c.id]}) -%>
+      <%= f.select(:checkout_type_id, @checkout_types.collect{|c| [c.display_name.localize, c.id]}) -%>
     </div>
 
     <div class="field">
       <%= f.label t('activerecord.models.circulation_status') -%>
-      <%= f.select(:circulation_status_id, @circulation_statuses.collect{|c| [c.display_name, c.id]}) -%>
+      <%= f.select(:circulation_status_id, @circulation_statuses.collect{|c| [c.display_name.localize, c.id]}) -%>
     </div>
 
     <div class="field">
       <%= f.label t('activerecord.models.use_restriction') -%>
       <%= f.fields_for :item_has_use_restriction do |i| %>
-        <%= i.select :use_restriction_id, @use_restrictions.collect{|r| [r.display_name, r.id]} %>
+        <%= i.select :use_restriction_id, @use_restrictions.collect{|r| [r.display_name.localize, r.id]} %>
       <% end %>
     </div>
   <% end %>
@@ -48,7 +48,7 @@
 
   <div class="field">
     <%= f.label t('activerecord.models.budget_type') -%>
-    <%= f.select(:budget_type_id, @budget_types.collect{|b| [b.display_name, b.id]}, include_blank: true) -%>
+    <%= f.select(:budget_type_id, @budget_types.collect{|b| [b.display_name.localize, b.id]}, include_blank: true) -%>
 
     <%= f.label t('activerecord.models.bookstore') -%>
     <%= f.select(:bookstore_id, @bookstores.collect{|b| [b.name, b.id]}, include_blank: true) -%>
@@ -66,7 +66,7 @@
 
   <div class="field">
     <%= f.label t('role.required_role') -%>
-    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}) -%>
+    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}) -%>
   </div>
 
   <div class="field">
