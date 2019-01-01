@@ -27,11 +27,15 @@ class Manifestation < ActiveRecord::Base
   has_many :identifiers, dependent: :destroy
   has_many :isbn_record_and_manifestations, dependent: :destroy
   has_many :isbn_records, through: :isbn_record_and_manifestations
+  has_many :issn_record_and_manifestations, dependent: :destroy
+  has_many :issn_records, through: :issn_record_and_manifestations
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
