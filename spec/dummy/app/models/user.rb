@@ -10,6 +10,11 @@ class User < ActiveRecord::Base
   include EnjuMessage::EnjuUser
 end
 
+CarrierType.include(EnjuCirculation::EnjuCarrierType)
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
+Manifestation.include(EnjuLoc::EnjuManifestation)
+Manifestation.include(EnjuCirculation::EnjuManifestation)
 Item.include(EnjuLibrary::EnjuItem)
+Item.include(EnjuCirculation::EnjuItem)
+User.include(EnjuCirculation::EnjuUser)

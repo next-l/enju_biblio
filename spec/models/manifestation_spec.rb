@@ -269,9 +269,8 @@ describe Manifestation, solr: true do
     end
     it "should export multiple identifiers" do
       manifestation = FactoryBot.create(:manifestation)
-      isbn_type = IdentifierType.where(name: :isbn).first
-      manifestation.identifiers << FactoryBot.create(:identifier, body: "978-4043898039", identifier_type: isbn_type)
-      manifestation.identifiers << FactoryBot.create(:identifier, body: "978-4840239219", identifier_type: isbn_type)
+      manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4043898039")
+      manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4840239219")
       lines = Manifestation.export()
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }

@@ -1,6 +1,7 @@
 class IsbnRecordAndManifestation < ApplicationRecord
   belongs_to :isbn_record
   belongs_to :manifestation
+  validates :isbn_record_id, uniqueness: {scope: :manifestation_id}
   acts_as_list
 end
 

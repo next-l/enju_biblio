@@ -153,8 +153,8 @@ describe ResourceImportFile do
         resource_import_result = file.resource_import_results.last
         expect(resource_import_result.manifestation).not_to be_blank
         manifestation = resource_import_result.manifestation
-        expect(manifestation.identifier_contents(:isbn)).to include("9784840239219")
-        expect(manifestation.identifier_contents(:isbn)).to include("9784043898039")
+        expect(manifestation.isbn_records.pluck(:body)).to include("9784840239219")
+        expect(manifestation.isbn_records.pluck(:body)).to include("9784043898039")
       end
     end
 

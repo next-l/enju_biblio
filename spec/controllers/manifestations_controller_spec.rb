@@ -487,14 +487,14 @@ describe ManifestationsController do
       end
 
       render_views
-      it 'assigns the identifiers to @manifestation' do
+      it 'assigns the isbn_records to @manifestation' do
         manifestation = FactoryBot.create(:manifestation)
-        identifier = FactoryBot.create(:identifier)
-        manifestation.identifiers << identifier
+        isbn_record = FactoryBot.create(:isbn_record)
+        manifestation.isbn_records << isbn_record
         get :edit, params: { id: manifestation.id }
         expect(assigns(:manifestation)).to eq manifestation
-        expect(assigns(:manifestation).identifiers).to eq manifestation.identifiers
-        expect(response).to render_template(partial: 'manifestations/_identifier_fields')
+        expect(assigns(:manifestation).isbn_records).to eq manifestation.isbn_records
+        expect(response).to render_template(partial: 'manifestations/_isbn_record_fields')
       end
     end
 
@@ -695,11 +695,11 @@ describe ManifestationsController do
           expect(response).to redirect_to(@manifestation)
         end
 
-        it 'assigns identifiers to @manifestation' do
-          identifiers_attrs = {
-            identifier_attributes: [FactoryBot.create(:identifier)]
+        it 'assigns isbn_records to @manifestation' do
+          isbn_records_attrs = {
+            isbn_records_attributes: [FactoryBot.create(:isbn_record)]
           }
-          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs) }
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(isbn_records_attrs) }
           expect(assigns(:manifestation)).to eq @manifestation
         end
       end

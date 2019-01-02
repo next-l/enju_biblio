@@ -7,9 +7,6 @@ class Identifier < ActiveRecord::Base
   validate :check_identifier
   before_validation :normalize
   before_save :convert_isbn
-  scope :id_type, -> type {
-    where(identifier_type: IdentifierType.where(name: type).first)
-  }
 
   acts_as_list scope: :manifestation_id
   strip_attributes only: :body

@@ -109,28 +109,26 @@ class ResourceImportFile < ActiveRecord::Base
 
       unless manifestation
         if row['doi'].present?
-          doi = URI.parse(row['doi']).path.gsub(/^\//, "")
-          identifier_type_doi = IdentifierType.find_by(name: 'doi')
-          identifier_type_doi = IdentifierType.create!(name: 'doi') unless identifier_type_doi
-          manifestation = Identifier.find_by(body: doi, identifier_type_id: identifier_type_doi.id).try(:manifestation)
+          doi = URI.parse(row['doi']).path.gsub(/^\//, "").downcase
+          manifestation = DoiRecord.find_by(body: doi).try(:manifestation)
         end
       end
 
-      unless manifestation
-        if row['jpno'].present?
-          jpno = row['jpno'].to_s.strip
-          identifier_type_jpno = IdentifierType.find_by(name: 'jpno')
-          identifier_type_jpno = IdentifierType.create!(name: 'jpno') unless identifier_type_jpno
-          manifestation = Identifier.find_by(body: jpno, identifier_type_id: identifier_type_jpno.id).try(:manifestation)
+      if defined?(EnjuNdl)
+        unless manifestation
+          if row['jpno'].present?
+            jpno = row['jpno'].to_s.strip
+            manifestation = JpnoRecord.find_by(body: jpno).try(:manifestation)
+          end
         end
       end
 
-      unless manifestation
-        if row['ncid'].present?
-          ncid = row['ncid'].to_s.strip
-          identifier_type_ncid = IdentifierType.find_by(name: 'ncid')
-          identifier_type_ncid = IdentifierType.where(name: 'ncid').create! unless identifier_type_ncid
-          manifestation = Identifier.find_by(body: ncid, identifier_type_id: identifier_type_ncid.id).try(:manifestation)
+      if defined?(EnjuNii)
+        unless manifestation
+          if row['ncid'].present?
+            ncid = row['ncid'].to_s.strip
+            manifestation = NcidRecord.find_by(body: ncid).try(:manifestation)
+          end
         end
       end
 
@@ -138,9 +136,10 @@ class ResourceImportFile < ActiveRecord::Base
         if row['isbn'].present?
           if StdNum::ISBN.valid?(row['isbn'])
             isbn = StdNum::ISBN.normalize(row['isbn'])
-            identifier_type_isbn = IdentifierType.find_by(name: 'isbn')
-            identifier_type_isbn = IdentifierType.where(name: 'isbn').create! unless identifier_type_isbn
-            m = Identifier.find_by(body: isbn, identifier_type_id: identifier_type_isbn.id).try(:manifestation)
+            isbn_record = IsbnRecord.find_by(body: isbn)
+            if isbn_record
+              m = isbn_record.manifestations.first
+            end
             if m
               if m.series_statements.exists?
                 manifestation = m
@@ -708,22 +707,8 @@ class ResourceImportFile < ActiveRecord::Base
         end
       end
 
-      identifiers = set_identifier(row)
-
       if manifestation.save
-        Manifestation.transaction do
-          if options[:edit_mode] == 'update'
-            unless identifiers.empty?
-              identifiers.each do |v|
-                v.manifestation = manifestation
-                v.save!
-              end
-            end
-          else
-            manifestation.identifiers << identifiers
-          end
-        end
-
+        set_identifier(manifestation, row)
         if defined?(EnjuSubject)
           classifications = import_classification(row)
           if classifications.present?
@@ -751,20 +736,17 @@ class ResourceImportFile < ActiveRecord::Base
     :pending
   end
 
-  def set_identifier(row)
-    identifiers = []
-    %w(isbn issn doi jpno ncid).each do |id_type|
-      if row["#{id_type}"].present?
-        row[id_type].split(/\/\//).each do |identifier_s|
-          import_id = Identifier.new(body: identifier_s)
-          identifier_type = IdentifierType.find_by(name: id_type)
-          identifier_type = IdentifierType.create!(name: id_type) unless identifier_type
-          import_id.identifier_type = identifier_type
-          identifiers << import_id if import_id.valid?
-        end
+  def set_identifier(manifestation, row)
+    Manifestation.transaction do
+      if row['isbn'].present?
+        isbn_record = IsbnRecord.where(body: row['isbn']).first_or_create
+        IsbnRecordAndManifestation.create(manifestation: manifestation, isbn_record: isbn_record)
+      end
+      if row['issn'].present?
+        issn_record = IssnRecord.where(body: row['issn']).first_or_create
+        IssnRecordAndManifestation.create(manifestation: manifestation, issn_record: issn_record)
       end
     end
-    identifiers
   end
 end
 

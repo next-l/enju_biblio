@@ -544,8 +544,12 @@ class ManifestationsController < ApplicationController
         :id, :parent_id, :category, :note, :classification_type_id,
         :_destroy
       ]},
-      {identifiers_attributes: [
-        :id, :body, :identifier_type_id,
+      {isbn_records_attributes: [
+        :id, :body,
+        :_destroy
+      ]},
+      {issn_records_attributes: [
+        :id, :body,
         :_destroy
       ]}
     )
@@ -737,7 +741,6 @@ class ManifestationsController < ApplicationController
     @roles = Role.select([:id, :display_name, :position])
     @languages = Language.select([:id, :display_name, :position])
     @frequencies = Frequency.select([:id, :display_name, :position])
-    @identifier_types = IdentifierType.select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
     if defined?(EnjuSubject)
       @subject_types = SubjectType.select([:id, :display_name, :position])

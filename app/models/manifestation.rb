@@ -29,6 +29,7 @@ class Manifestation < ActiveRecord::Base
   has_many :isbn_records, through: :isbn_record_and_manifestations
   has_many :issn_record_and_manifestations, dependent: :destroy
   has_many :issn_records, through: :issn_record_and_manifestations
+  has_one :doi_record
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
@@ -78,9 +79,9 @@ class Manifestation < ActiveRecord::Base
     end
     string :issn, multiple: true do
       if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+        [issn_records.pluck(:body), (series_statements.map{|s| s.manifestation.issn_records.pluck(:body)})].flatten.uniq.compact
       else
-        identifier_contents(:issn)
+        issn_records.pluck(:body)
       end
     end
     string :lccn, multiple: true do
@@ -183,14 +184,14 @@ class Manifestation < ActiveRecord::Base
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+        [issn_records.pluck(:body), (series_statements.map{|s| s.manifestation.issn_records.pluck(:body)})].flatten.uniq.compact
       else
-        identifier_contents(:issn)
+        issn_records.pluck(:body)
       end
     end
     string :sort_title
-    string :doi, multiple: true do
-      identifier_contents(:doi)
+    string :doi do
+      doi_record.try(:body)
     end
     boolean :serial do
       serial?
@@ -427,9 +428,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def self.find_by_isbn(isbn)
-    identifier_type = IdentifierType.find_by(name: 'isbn')
-    return nil unless identifier_type
-    Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
+    IsbnRecord.find_by(body: isbn).manifestations.first
   end
 
   def index_series_statement
@@ -518,15 +517,13 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    if Rails::VERSION::MAJOR > 3
-      identifiers.id_type(name).order(:position).pluck(:body)
+    case name
+    when 'isbn'
+      isbn_records.pluck(:body)
+    when 'issn'
+      issn_records.pluck(:body)
     else
-      identifier_type = IdentifierType.find_by(name: name)
-      if identifier_type
-        identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
-      else
-        []
-      end
+      []
     end
   end
 
@@ -557,9 +554,10 @@ class Manifestation < ActiveRecord::Base
       issue_number
       issue_number_string
       serial_number
+      isbn
+      issn
     )
 
-    header += IdentifierType.order(:position).pluck(:name)
     if defined?(EnjuSubject)
       header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
       header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
@@ -641,15 +639,9 @@ class Manifestation < ActiveRecord::Base
         item_lines << issue_number
         item_lines << issue_number_string
         item_lines << serial_number
+        item_lines << isbn_records.pluck(:body).join('//')
+        item_lines << issn_records.pluck(:body).join('//')
 
-        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-          identifier_list = identifier_contents(identifier_type.to_sym)
-          if identifier_list
-            item_lines << identifier_list.join("//")
-          else
-            item_lines << nil
-          end
-        end
         if defined?(EnjuSubject)
           SubjectHeadingType.order(:position).each do |subject_heading_type|
             if subjects.exists?
@@ -730,15 +722,9 @@ class Manifestation < ActiveRecord::Base
       line << issue_number
       line << issue_number_string
       line << serial_number
+      line << isbn_records.pluck(:body).join('//')
+      line << issn_records.pluck(:body).join('//')
 
-      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-        identifier_list = identifier_contents(identifier_type.to_sym)
-        if identifier_list
-          line << identifier_list.join("//")
-        else
-          line << nil
-        end
-      end
       if defined?(EnjuSubject)
         SubjectHeadingType.order(:position).each do |subject_heading_type|
           if subjects.exists?
@@ -780,7 +766,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def isbn_characters
-    identifier_contents(:isbn).map{|i|
+    isbn_records.pluck(:body).map{|i|
       isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
       isbn10 = Lisbn.new(i).isbn10
       isbn13 =  Lisbn.new(i).isbn13
