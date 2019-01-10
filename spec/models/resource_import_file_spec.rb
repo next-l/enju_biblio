@@ -188,7 +188,7 @@ describe ResourceImportFile do
         expect(resource_import_result.error_message).to be_blank
         expect(resource_import_result.manifestation).not_to be_blank
         manifestation = resource_import_result.manifestation
-        expect(manifestation.ncid_records.pluck(:body)).to eq ['BA67656964']
+        expect(manifestation.ncid_record.body).to eq 'BA67656964'
       end
     end
 

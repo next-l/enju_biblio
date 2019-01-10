@@ -84,11 +84,11 @@ class Manifestation < ActiveRecord::Base
         issn_records.pluck(:body)
       end
     end
-    string :lccn, multiple: true do
-      identifier_contents(:lccn)
+    string :lccn do
+      lccn_record.try(:body)
     end
-    string :jpno, multiple: true do
-      identifier_contents(:jpno)
+    string :jpno do
+      jpno_record.try(:body)
     end
     string :carrier_type do
       carrier_type.name

@@ -13,6 +13,7 @@ end
 CarrierType.include(EnjuCirculation::EnjuCarrierType)
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
+Manifestation.include(EnjuNii::EnjuManifestation)
 Manifestation.include(EnjuLoc::EnjuManifestation)
 Manifestation.include(EnjuCirculation::EnjuManifestation)
 Item.include(EnjuLibrary::EnjuItem)
