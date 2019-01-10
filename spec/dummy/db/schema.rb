@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_02_034126) do
+ActiveRecord::Schema.define(version: 2019_01_10_145847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -978,7 +978,7 @@ ActiveRecord::Schema.define(version: 2019_01_02_034126) do
     t.text "dimensions"
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
-    t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier", unique: true
+    t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier"
     t.index ["updated_at"], name: "index_manifestations_on_updated_at"
   end
 
@@ -1054,6 +1054,15 @@ ActiveRecord::Schema.define(version: 2019_01_02_034126) do
     t.index ["parent_id"], name: "index_messages_on_parent_id"
     t.index ["receiver_id"], name: "index_messages_on_receiver_id"
     t.index ["sender_id"], name: "index_messages_on_sender_id"
+  end
+
+  create_table "ncid_records", force: :cascade do |t|
+    t.string "body", null: false
+    t.bigint "manifestation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["body"], name: "index_ncid_records_on_body", unique: true
+    t.index ["manifestation_id"], name: "index_ncid_records_on_manifestation_id"
   end
 
   create_table "ndla_records", force: :cascade do |t|
@@ -1733,6 +1742,7 @@ ActiveRecord::Schema.define(version: 2019_01_02_034126) do
   add_foreign_key "library_groups", "users"
   add_foreign_key "manifestation_checkout_stats", "users"
   add_foreign_key "manifestation_reserve_stats", "users"
+  add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
   add_foreign_key "reserve_stat_has_manifestations", "manifestations"
   add_foreign_key "reserve_stat_has_users", "user_reserve_stats"

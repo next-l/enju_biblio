@@ -427,10 +427,6 @@ class Manifestation < ActiveRecord::Base
     end
   end
 
-  def self.find_by_isbn(isbn)
-    IsbnRecord.find_by(body: isbn).manifestations.first
-  end
-
   def index_series_statement
     series_statements.map{|s| s.index; s.root_manifestation.try(:index)}
   end

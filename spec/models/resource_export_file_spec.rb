@@ -28,9 +28,8 @@ describe ResourceExportFile do
 
   it "should export NCID value" do
     manifestation = FactoryBot.create(:manifestation)
-    ncid = IdentifierType.where(name: "ncid").first
-    identifier = FactoryBot.create(:identifier, identifier_type: ncid, body: "BA91833159")
-    manifestation.identifiers << identifier
+    ncid_record = NcidRecord.create(body: "BA91833159")
+    manifestation.ncid_records << ncid_record
     manifestation.save!
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
