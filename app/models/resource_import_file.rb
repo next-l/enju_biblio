@@ -134,19 +134,21 @@ class ResourceImportFile < ActiveRecord::Base
 
       unless manifestation
         if row['isbn'].present?
-          if StdNum::ISBN.valid?(row['isbn'])
-            isbn = StdNum::ISBN.normalize(row['isbn'])
-            isbn_record = IsbnRecord.find_by(body: isbn)
-            if isbn_record
-              m = isbn_record.manifestations.first
-            end
-            if m
-              if m.series_statements.exists?
-                manifestation = m
+          row['isbn'].split('//').each do |identifier|
+            if StdNum::ISBN.valid?(identifier)
+              isbn = StdNum::ISBN.normalize(identifier)
+              isbn_record = IsbnRecord.find_by(body: isbn)
+              if isbn_record
+                m = isbn_record.manifestations.first
               end
+              if m
+                if m.series_statements.exists?
+                  manifestation = m
+                end
+              end
+            else
+              import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
             end
-          else
-            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
           end
         end
       end
@@ -158,17 +160,22 @@ class ResourceImportFile < ActiveRecord::Base
 
       if row['original_title'].blank?
         unless manifestation
-          begin
-            manifestation = Manifestation.import_isbn(isbn) if isbn
-            if manifestation
-              num[:manifestation_imported] += 1
+          if row['isbn'].present?
+            row['isbn'].split('//').each do |identifier|
+              isbn = StdNum::ISBN.normalize(identifier)
+              begin
+                manifestation = Manifestation.import_isbn(isbn) if isbn
+                if manifestation
+                  num[:manifestation_imported] += 1
+                end
+              rescue EnjuNdl::InvalidIsbn
+                manifestation = nil
+                import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
+              rescue EnjuNdl::RecordNotFound
+                manifestation = nil
+                import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_record_not_found')}"
+              end
             end
-          rescue EnjuNdl::InvalidIsbn
-            manifestation = nil
-            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
-          rescue EnjuNdl::RecordNotFound
-            manifestation = nil
-            import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_record_not_found')}"
           end
         end
         if manifestation.nil? and row['ndl_bib_id']
@@ -739,8 +746,13 @@ class ResourceImportFile < ActiveRecord::Base
   def set_identifier(manifestation, row)
     Manifestation.transaction do
       if row['isbn'].present?
-        isbn_record = IsbnRecord.where(body: row['isbn']).first_or_create
-        IsbnRecordAndManifestation.create(manifestation: manifestation, isbn_record: isbn_record)
+        row['isbn'].split('//').each do |identifier|
+          isbn = Lisbn.new(identifier).isbn13
+          if isbn
+            isbn_record = IsbnRecord.where(body: isbn).first_or_create
+            IsbnRecordAndManifestation.create(manifestation: manifestation, isbn_record: isbn_record)
+          end
+        end
       end
       if row['issn'].present?
         issn_record = IssnRecord.where(body: row['issn']).first_or_create
