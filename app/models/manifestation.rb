@@ -85,10 +85,10 @@ class Manifestation < ActiveRecord::Base
       end
     end
     string :lccn do
-      lccn_record.try(:body)
+      lccn_record.try(:body) if defined?(EnjuLoc)
     end
     string :jpno do
-      jpno_record.try(:body)
+      jpno_record.try(:body) if defined?(EnjuNdl)
     end
     string :carrier_type do
       carrier_type.name
