@@ -68,7 +68,6 @@ class ResourceImportFile < ActiveRecord::Base
       failed: 0
     }
     rows = open_import_file(create_import_temp_file(resource_import))
-    rows.shift
     #if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
     #  f.to_s.strip == ''
     #}.empty?
@@ -134,7 +133,7 @@ class ResourceImportFile < ActiveRecord::Base
 
       unless manifestation
         if row['isbn'].present?
-          row['isbn'].split('//').each do |identifier|
+          row['isbn'].to_s.split('//').each do |identifier|
             if StdNum::ISBN.valid?(identifier)
               isbn = StdNum::ISBN.normalize(identifier)
               isbn_record = IsbnRecord.find_by(body: isbn)
@@ -161,7 +160,7 @@ class ResourceImportFile < ActiveRecord::Base
       if row['original_title'].blank?
         unless manifestation
           if row['isbn'].present?
-            row['isbn'].split('//').each do |identifier|
+            row['isbn'].to_s.split('//').each do |identifier|
               isbn = StdNum::ISBN.normalize(identifier)
               begin
                 manifestation = Manifestation.import_isbn(isbn) if isbn
@@ -211,16 +210,14 @@ class ResourceImportFile < ActiveRecord::Base
       end
 
       import_result.save!
-      num[:item_imported] +=1 if import_result.item
+      num[:item_imported] += 1 if import_result.item
 
       if row_num % 50 == 0
         Sunspot.commit
-        GC.start
       end
     end
 
     Sunspot.commit
-    rows.close
     transition_to!(:completed)
     send_message
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
@@ -307,7 +304,6 @@ class ResourceImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file(create_import_temp_file(resource_import))
-    rows.shift
     row_num = 1
 
     ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
@@ -387,7 +383,6 @@ class ResourceImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file(create_import_temp_file(resource_import))
-    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -474,10 +469,11 @@ class ResourceImportFile < ActiveRecord::Base
       self.error_message = I18n.t('import.following_column_were_ignored', column: ignored_columns.join(', '))
       save!
     end
-    rows = CSV.open(tempfile, headers: header, col_sep: "\t")
+    rows = CSV.read(tempfile, headers: header, col_sep: "\t", converters: nil)
     #ResourceImportResult.create!(resource_import_file_id: id, body: header.join("\t"))
     tempfile.close(true)
     file.close
+    rows.delete(0)
     rows
   end
 
@@ -689,8 +685,8 @@ class ResourceImportFile < ActiveRecord::Base
       manifestation.carrier_type = carrier_type if carrier_type
       manifestation.manifestation_content_type = content_type if content_type
       manifestation.frequency = frequency if frequency
-      #manifestation.start_page = row[:start_page].to_i if row[:start_page]
-      #manifestation.end_page = row[:end_page].to_i if row[:end_page]
+      #manifestation.start_page = row['start_page'].to_i if row['start_page']
+      #manifestation.end_page = row['end_page'].to_i if row['end_page']
       manifestation.serial = serial if row['serial']
       manifestation.fulltext_content = fulltext_content if row['fulltext_content']
 
@@ -746,7 +742,7 @@ class ResourceImportFile < ActiveRecord::Base
   def set_identifier(manifestation, row)
     Manifestation.transaction do
       if row['isbn'].present?
-        row['isbn'].split('//').each do |identifier|
+        row['isbn'].to_s.split('//').each do |identifier|
           isbn = Lisbn.new(identifier).isbn13
           if isbn
             isbn_record = IsbnRecord.where(body: isbn).first_or_create

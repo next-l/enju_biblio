@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
+
+two:
+  id: 1
+  body: 99999999
+
+identifier_00201:
+  id: 2
+  body: "09130000"
+
+# == Schema Information
+#
+# Table name: identifiers
+#
+#  id                 :integer          not null, primary key
+#  body               :string           not null
+#  identifier_type_id :integer          not null
+#  manifestation_id   :integer
+#  primary            :boolean
+#  position           :integer
+#  created_at         :datetime
+#  updated_at         :datetime
+#
