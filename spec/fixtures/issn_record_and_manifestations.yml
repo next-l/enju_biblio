@@ -10,10 +10,10 @@ identifier_00002:
 
 # == Schema Information
 #
-# Table name: isbn_record_and_manifestations
+# Table name: issn_record_and_manifestations
 #
 #  id               :bigint(8)        not null, primary key
-#  isbn_record_id   :bigint(8)        not null
+#  issn_record_id   :bigint(8)        not null
 #  manifestation_id :bigint(8)        not null
 #  position         :integer
 #  created_at       :datetime         not null

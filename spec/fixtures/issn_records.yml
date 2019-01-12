@@ -10,14 +10,13 @@ identifier_00201:
 
 # == Schema Information
 #
-# Table name: identifiers
+# Table name: issn_records
 #
-#  id                 :integer          not null, primary key
-#  body               :string           not null
-#  identifier_type_id :integer          not null
-#  manifestation_id   :integer
-#  primary            :boolean
-#  position           :integer
-#  created_at         :datetime
-#  updated_at         :datetime
+#  id               :bigint(8)        not null, primary key
+#  body             :string           not null
+#  issn_type        :string
+#  source           :string
+#  manifestation_id :bigint(8)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
 #
