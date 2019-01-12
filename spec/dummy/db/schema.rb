@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_10_145847) do
+ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -744,21 +744,13 @@ ActiveRecord::Schema.define(version: 2019_01_10_145847) do
     t.index ["name"], name: "index_languages_on_name", unique: true
   end
 
-  create_table "lccn_record_and_manifestations", force: :cascade do |t|
-    t.bigint "lccn_record_id", null: false
+  create_table "lccn_records", force: :cascade do |t|
+    t.string "body", null: false
     t.bigint "manifestation_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["lccn_record_id", "manifestation_id"], name: "index_lccn_record_and_manifestations_on_lccn_and_manifestation", unique: true
-    t.index ["lccn_record_id"], name: "index_lccn_record_and_manifestations_on_lccn_record_id"
-    t.index ["manifestation_id"], name: "index_lccn_record_and_manifestations_on_manifestation_id"
-  end
-
-  create_table "lccn_records", force: :cascade do |t|
-    t.string "body", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.index ["body"], name: "index_lccn_records_on_body", unique: true
+    t.index ["manifestation_id"], name: "index_lccn_records_on_manifestation_id"
   end
 
   create_table "lending_policies", id: :serial, force: :cascade do |t|
@@ -1734,8 +1726,7 @@ ActiveRecord::Schema.define(version: 2019_01_10_145847) do
   add_foreign_key "item_has_use_restrictions", "use_restrictions"
   add_foreign_key "items", "manifestations"
   add_foreign_key "jpno_records", "manifestations"
-  add_foreign_key "lccn_record_and_manifestations", "lccn_records"
-  add_foreign_key "lccn_record_and_manifestations", "manifestations"
+  add_foreign_key "lccn_records", "manifestations"
   add_foreign_key "lending_policies", "items"
   add_foreign_key "lending_policies", "user_groups"
   add_foreign_key "libraries", "library_groups"
