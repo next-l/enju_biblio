@@ -63,7 +63,6 @@ class AgentImportFile < ActiveRecord::Base
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
-    #rows.shift
 
     AgentImportResult.create!(agent_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
@@ -79,14 +78,12 @@ class AgentImportFile < ActiveRecord::Base
         num[:agent_imported] += 1
         if row_num % 50 == 0
           Sunspot.commit
-          GC.start
         end
       end
 
       import_result.save!
     end
     Sunspot.commit
-    rows.close
     transition_to!(:completed)
     return num
   rescue => e
@@ -106,7 +103,6 @@ class AgentImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file
-    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -137,7 +133,6 @@ class AgentImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file
-    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -182,9 +177,10 @@ class AgentImportFile < ActiveRecord::Base
 
     file = CSV.open(tempfile, col_sep: "\t")
     header = file.first
-    rows = CSV.open(tempfile, headers: header, col_sep: "\t")
+    rows = CSV.read(tempfile, headers: header, col_sep: "\t")
     tempfile.close(true)
     file.close
+    rows.delete(0)
     rows
   end
 

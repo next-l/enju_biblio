@@ -354,7 +354,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       item_00001.binding_call_number.should eq '336|A'
       item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
       item_00001.manifestation.subjects.order(:id).map{|subject| {subject.subject_heading_type.name => subject.term}}.should eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
-      item_00001.manifestation.isbn_records.pluck(:body).should eq ["4798002062", "12345678"]
+      item_00001.manifestation.isbn_records.pluck(:body).should eq ["4798002062"]
       Item.find_by(item_identifier: '00002').manifestation.publishers.collect(&:full_name).should eq ['test2']
 
       item_00003 = Item.find_by(item_identifier: '00003')

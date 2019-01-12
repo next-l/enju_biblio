@@ -68,11 +68,6 @@ class ResourceImportFile < ActiveRecord::Base
       failed: 0
     }
     rows = open_import_file(create_import_temp_file(resource_import))
-    #if [field['manifestation_id'], field['manifestation_identifier'], field['isbn'], field['original_title']].reject{|f|
-    #  f.to_s.strip == ''
-    #}.empty?
-    #  raise "You should specify isbn or original_title in the first line"
-    #end
     row_num = 1
 
     ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
@@ -135,14 +130,11 @@ class ResourceImportFile < ActiveRecord::Base
         if row['isbn'].present?
           row['isbn'].to_s.split('//').each do |identifier|
             if StdNum::ISBN.valid?(identifier)
-              isbn = StdNum::ISBN.normalize(identifier)
-              isbn_record = IsbnRecord.find_by(body: isbn)
+              isbn = Lisbn.new(identifier)
+              isbn_record = IsbnRecord.find_by(body: isbn.isbn13) || IsbnRecord.find_by(body: isbn.isbn10)
               if isbn_record
-                m = isbn_record.manifestations.first
-              end
-              if m
-                if m.series_statements.exists?
-                  manifestation = m
+                isbn_record.manifestations.each do |m|
+                  manifestation = m if m.series_statements.exists?
                 end
               end
             else
@@ -743,16 +735,32 @@ class ResourceImportFile < ActiveRecord::Base
     Manifestation.transaction do
       if row['isbn'].present?
         row['isbn'].to_s.split('//').each do |identifier|
-          isbn = Lisbn.new(identifier).isbn13
+          isbn = Lisbn.new(identifier)
           if isbn
-            isbn_record = IsbnRecord.where(body: isbn).first_or_create
+            isbn_record = IsbnRecord.find_by(body: isbn.isbn13) || IsbnRecord.find_by(body: isbn.isbn10)
+            isbn_record = IsbnRecord.create(body: identifier) unless isbn_record
             IsbnRecordAndManifestation.create(manifestation: manifestation, isbn_record: isbn_record)
           end
         end
       end
+
       if row['issn'].present?
-        issn_record = IssnRecord.where(body: row['issn']).first_or_create
+        issn = StdNum::ISSN.normalize(row['issn'])
+        issn_record = IssnRecord.where(body: issn).first_or_create
         IssnRecordAndManifestation.create(manifestation: manifestation, issn_record: issn_record)
+      end
+
+      if row['ncid'].present?
+        ncid_record = NcidRecord.where(body: row['ncid']).first_or_initialize
+        ncid_record.manifestation = manifestation
+        ncid_record.save
+      end
+
+      if row['doi'].present?
+        doi_record = DoiRecord.where(body: row['doi'].downcase).first_or_initialize
+        doi_record.display_body = row['doi']
+        doi_record.manifestation = manifestation
+        doi_record.save
       end
     end
   end

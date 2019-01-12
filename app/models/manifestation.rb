@@ -554,6 +554,18 @@ class Manifestation < ActiveRecord::Base
       issn
     )
 
+    if defined?(EnjuNdl)
+      header += %w( jpno )
+    end
+
+    if defined?(EnjuNii)
+      header += %w( ncid )
+    end
+
+    if defined?(EnjuLoc)
+      header += %w( lccn )
+    end
+
     if defined?(EnjuSubject)
       header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
       header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
@@ -637,6 +649,9 @@ class Manifestation < ActiveRecord::Base
         item_lines << serial_number
         item_lines << isbn_records.pluck(:body).join('//')
         item_lines << issn_records.pluck(:body).join('//')
+        item_lines << jpno_record.try(:body) if defined?(EnjuNdl)
+        item_lines << ncid_record.try(:body) if defined?(EnjuNii)
+        item_lines << lccn_record.try(:body) if defined?(EnjuLoc)
 
         if defined?(EnjuSubject)
           SubjectHeadingType.order(:position).each do |subject_heading_type|
@@ -720,6 +735,9 @@ class Manifestation < ActiveRecord::Base
       line << serial_number
       line << isbn_records.pluck(:body).join('//')
       line << issn_records.pluck(:body).join('//')
+      line << jpno_record.try(:body) if defined?(EnjuNdl)
+      line << ncid_record.try(:body) if defined?(EnjuNii)
+      line << lccn_record.try(:body) if defined?(EnjuLoc)
 
       if defined?(EnjuSubject)
         SubjectHeadingType.order(:position).each do |subject_heading_type|
