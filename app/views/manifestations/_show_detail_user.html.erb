@@ -77,6 +77,16 @@
                   <%= issn_record.body %>
                 </li>
               <% end %>
+              <% if defined?(EnjuNdl) %>
+                <% if manifestation.jpno_record %>
+                  <li>JPNO: <%= manifestation.jpno_record.body %></li>
+                <% end %>
+              <% end %>
+              <% if defined?(EnjuNii) %>
+                <% if manifestation.ncid_record %>
+                  <li>NCID: <%= link_to manifestation.ncid_record.body, "https://ci.nii.ac.jp/ncid/#{manifestation.ncid_record.body}" %></li>
+                <% end %>
+              <% end %>
               <% if manifestation.manifestation_identifier %>
                 <li>
                   <%= t('activerecord.attributes.manifestation.manifestation_identifier') %>:

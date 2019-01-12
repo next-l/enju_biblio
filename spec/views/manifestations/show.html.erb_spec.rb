@@ -18,7 +18,7 @@ describe "manifestations/show" do
     it "renders a link to CiNii Books" do
       assign(:manifestation, manifestations(:manifestation_00217))
       render
-      rendered.should include '<a href="http://ci.nii.ac.jp/ncid/BN15603730">BN15603730</a>'
+      rendered.should include '<a href="https://ci.nii.ac.jp/ncid/BN15603730">BN15603730</a>'
     end
   end
 

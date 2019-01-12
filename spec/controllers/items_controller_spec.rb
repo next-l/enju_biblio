@@ -511,7 +511,7 @@ describe ItemsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @item = items(:item_00006)
+      @item = items(:item_00010)
     end
 
     describe 'When logged in as Administrator' do
