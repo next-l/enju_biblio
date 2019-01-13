@@ -945,6 +945,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "attachment_content_type"
     t.integer "attachment_file_size"
     t.datetime "attachment_updated_at"
+    t.integer "nii_type_id"
     t.text "title_alternative_transcription"
     t.text "description"
     t.text "abstract"
@@ -971,6 +972,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
     t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier"
+    t.index ["nii_type_id"], name: "index_manifestations_on_nii_type_id"
     t.index ["updated_at"], name: "index_manifestations_on_updated_at"
   end
 
@@ -1064,6 +1066,16 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_ndla_records_on_agent_id"
     t.index ["body"], name: "index_ndla_records_on_body", unique: true
+  end
+
+  create_table "nii_types", id: :serial, force: :cascade do |t|
+    t.string "name", null: false
+    t.text "display_name"
+    t.text "note"
+    t.integer "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["name"], name: "index_nii_types_on_name", unique: true
   end
 
   create_table "owns", id: :serial, force: :cascade do |t|
