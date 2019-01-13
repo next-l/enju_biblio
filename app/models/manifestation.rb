@@ -84,12 +84,6 @@ class Manifestation < ActiveRecord::Base
         issn_records.pluck(:body)
       end
     end
-    string :lccn do
-      lccn_record.try(:body) if defined?(EnjuLoc)
-    end
-    string :jpno do
-      jpno_record.try(:body) if defined?(EnjuNdl)
-    end
     string :carrier_type do
       carrier_type.name
     end
