@@ -131,10 +131,12 @@ class ResourceImportFile < ActiveRecord::Base
           row['isbn'].to_s.split('//').each do |identifier|
             if StdNum::ISBN.valid?(identifier)
               isbn = Lisbn.new(identifier)
-              isbn_record = IsbnRecord.find_by(body: isbn.isbn13) || IsbnRecord.find_by(body: isbn.isbn10)
-              if isbn_record
-                isbn_record.manifestations.each do |m|
-                  manifestation = m if m.series_statements.exists?
+              if isbn.present?
+                isbn_record = IsbnRecord.find_by(body: isbn.isbn13) || IsbnRecord.find_by(body: isbn.isbn10)
+                if isbn_record
+                  isbn_record.manifestations.each do |m|
+                    manifestation = m unless m.series_statements.exists?
+                  end
                 end
               end
             else
@@ -736,7 +738,7 @@ class ResourceImportFile < ActiveRecord::Base
       if row['isbn'].present?
         row['isbn'].to_s.split('//').each do |identifier|
           isbn = Lisbn.new(identifier)
-          if isbn
+          if isbn.present?
             isbn_record = IsbnRecord.find_by(body: isbn.isbn13) || IsbnRecord.find_by(body: isbn.isbn10)
             isbn_record = IsbnRecord.create(body: identifier) unless isbn_record
             IsbnRecordAndManifestation.create(manifestation: manifestation, isbn_record: isbn_record)

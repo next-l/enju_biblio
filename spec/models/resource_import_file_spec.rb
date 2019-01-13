@@ -26,9 +26,9 @@ describe ResourceImportFile do
         manifestation.produces.first.produce_type.name.should eq 'publisher'
         manifestation.creates.first.create_type.name.should eq 'author'
         manifestation.issn_records.pluck(:body).should eq ['03875806']
-        Manifestation.count.should eq old_manifestations_count + 10
+        Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 10
-        Agent.count.should eq old_agents_count + 9
+        Agent.count.should eq old_agents_count + 6
         @file.resource_import_results.order(:id).first.body.split("\t").first.should eq 'manifestation_identifier'
         ResourceImportResult.count.should eq old_import_results_count + 23
 
