@@ -224,7 +224,7 @@ describe ResourceImportFile do
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
         Manifestation.count.should eq old_manifestations_count + 8
         Item.count.should eq old_items_count + 8
-        Agent.count.should eq old_agents_count + 9
+        Agent.count.should eq old_agents_count + 6
         ResourceImportResult.count.should eq old_import_results_count + 21
         Item.find_by(item_identifier: '10101').manifestation.creators.size.should eq 2
         Item.find_by(item_identifier: '10101').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
