@@ -217,12 +217,12 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({manifestation_imported: 9, item_imported: 8, manifestation_found: 5, item_found: 3, failed: 7})
+        @file.import_start.should eq({manifestation_imported: 8, item_imported: 8, manifestation_found: 6, item_found: 3, failed: 7})
         manifestation = Item.find_by(item_identifier: '11111').manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
-        Manifestation.count.should eq old_manifestations_count + 9
+        Manifestation.count.should eq old_manifestations_count + 8
         Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 9
         ResourceImportResult.count.should eq old_import_results_count + 21
