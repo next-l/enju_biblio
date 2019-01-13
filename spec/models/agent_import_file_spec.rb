@@ -88,7 +88,7 @@ end
 #
 # Table name: agent_import_files
 #
-#  id                        :integer          not null, primary key
+#  id                        :bigint(8)        not null, primary key
 #  parent_id                 :integer
 #  content_type              :string
 #  size                      :integer
@@ -99,8 +99,8 @@ end
 #  agent_import_content_type :string
 #  agent_import_file_size    :integer
 #  agent_import_updated_at   :datetime
-#  created_at                :datetime
-#  updated_at                :datetime
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
 #  agent_import_fingerprint  :string
 #  error_message             :text
 #  edit_mode                 :string

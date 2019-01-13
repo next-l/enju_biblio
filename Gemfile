@@ -27,4 +27,5 @@ gem 'enju_ndl', github: 'next-l/enju_ndl'
 gem 'enju_nii', github: 'next-l/enju_nii'
 gem 'enju_loc', github: 'next-l/enju_loc'
 gem 'enju_circulation', github: 'next-l/enju_circulation'
+gem 'enju_bookmark', github: 'next-l/enju_bookmark'
 gem 'rspec_junit_formatter', group: :test

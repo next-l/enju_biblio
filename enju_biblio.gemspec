@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_leaf", "~> 1.4.0.beta.1"
   s.add_development_dependency "enju_manifestation_viewer", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_subject", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_bookmark", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_bookmark", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_event", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_ndl", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_oai", "~> 0.3.0.beta.1"

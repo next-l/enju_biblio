@@ -9,12 +9,12 @@ end
 #
 # Table name: identifiers
 #
-#  id                 :integer          not null, primary key
+#  id                 :bigint(8)        not null, primary key
 #  body               :string           not null
 #  identifier_type_id :integer          not null
 #  manifestation_id   :integer
 #  primary            :boolean
 #  position           :integer
-#  created_at         :datetime
-#  updated_at         :datetime
+#  created_at         :datetime         not null
+#  updated_at         :datetime         not null
 #
