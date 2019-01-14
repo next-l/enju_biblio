@@ -1,10 +1,4 @@
 class Manifestation < ActiveRecord::Base
-  enju_manifestation_viewer if defined?(EnjuManifestationViewer)
-  enju_ndl_ndl_search if defined?(EnjuNdl)
-  enju_loc_search if defined?(EnjuLoc)
-  enju_nii_cinii_books if defined?(EnjuNii)
-  enju_bookmark_manifestation_model if defined?(EnjuBookmark)
-
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
   has_many :creators, through: :creates, source: :agent #, order: 'creates.position'
   has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'
@@ -109,7 +103,6 @@ class Manifestation < ActiveRecord::Base
     end
     time :created_at
     time :updated_at
-    time :deleted_at
     time :pub_date, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.pub_dates
