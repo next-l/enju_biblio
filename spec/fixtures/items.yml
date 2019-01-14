@@ -295,7 +295,7 @@ item_00025:
 #  required_role_id        :integer          default(1), not null
 #  required_score          :integer          default(0), not null
 #  acquired_at             :datetime
-#  bookstore_id            :integer
+#  bookstore_id            :bigint(8)
 #  budget_type_id          :integer
 #  circulation_status_id   :integer          default(5), not null
 #  checkout_type_id        :integer          default(1), not null

@@ -415,10 +415,9 @@ end
 # Table name: resource_import_files
 #
 #  id                           :bigint(8)        not null, primary key
-#  parent_id                    :integer
 #  content_type                 :string
 #  size                         :integer
-#  user_id                      :integer
+#  user_id                      :bigint(8)
 #  note                         :text
 #  executed_at                  :datetime
 #  resource_import_file_name    :string
@@ -431,5 +430,5 @@ end
 #  resource_import_fingerprint  :string
 #  error_message                :text
 #  user_encoding                :string
-#  default_shelf_id             :integer
+#  default_shelf_id             :bigint(8)
 #
