@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: http://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=0744521815&mediatype=1
+    uri: https://ci.nii.ac.jp/books/opensearch/search?format=rss&isbn=0744521815
     body:
       encoding: US-ASCII
       string: ''
@@ -19,101 +19,35 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sat, 12 Jan 2019 15:38:41 GMT
-      X-Runtime:
-      - '0.170299'
-      Cache-Control:
-      - max-age=0, private, must-revalidate
-      Etag:
-      - '"739a088de47742c2c5537e005747b0c4"'
-      X-Ua-Compatible:
-      - IE=Edge,chrome=1
-      Content-Length:
-      - '2663'
-      Status:
-      - '200'
+      - Mon, 14 Jan 2019 16:09:19 GMT
       Content-Type:
-      - application/xml; charset=utf-8
+      - application/rss+xml;charset=UTF-8
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - "*"
       Set-Cookie:
-      - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
-        00:00:00 GMT
-      - ROUTEID=.ps07; path=/
-      - TS0162cc8a=011338590a582a3d17dddf8979bdf3c101ca65c1f545e2e2dd2e56cd51ba1ef3bc852d416757a198f19fcb4e2611d288070d756d3c3a6a0c15eed83ca8abfce9c24dc5103896178eff453f83a20d195a1dc42d0a5f;
-        path=/; domain=.ndl.go.jp
-      - TS01f3cfdf=011338590af9cdfe604b8cc4b1f2761d240b062b9f33ba6fe418ed59d0afdf54176f9c22a1ac5bad04876f2af78c0f25838ff634870c5ca44276c16dfcc5ebd8f37195c3571047ced4558e1ecb3a837f334b878783a094c534a2cf8ec664a7f6918458098f;
+      - TS01b7c0b3=01bdee8456204f2ffd13b1a4ee0ac376df5c1ffd5a7499cea8c14892069f25173099528b5edbb3e1627ca57fa4a83244b21ffa9e03;
         Path=/
-      - _front_session_id=6a9cbbb28aea1871bf006999d0c096e0; path=/; expires=Sat, 12-Jan-2019
-        16:38:41 GMT; HttpOnly
-      - cookieId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
-      - ndl.go.jp=rd2o00000000000000000000ffff0a024f77o80; path=/
-      - serverid=1103; path=/
-      - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
+      Transfer-Encoding:
+      - chunked
     body:
-      encoding: ASCII-8BIT
-      string: !binary |-
-        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4bWxuczpkY3Rlcm1zPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvIiB4bWxuczpyZGZzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjIiB2ZXJzaW9uPSIyLjAiIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpkY21pdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL2RjbWl0eXBlLyIgeG1sbnM6b3BlblNlYXJjaD0iaHR0cDovL2E5LmNvbS8tL3NwZWMvb3BlbnNlYXJjaHJzcy8xLjAvIiB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4bWxuczpkY25kbD0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjA3NDQ1MjE4MTUgMSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5nby5qcC9hcGkvb3BlbnNlYXJjaD9pc2JuPTA3NDQ1MjE4MTUmYW1wO2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTAmYW1wO21lZGlhdHlwZT0xJmFtcDtpZHg9MTwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0cyBmb3IgbWVkaWF0eXBlPTEgaXNibj0wNzQ0NTIxODE1IGNudD0xMCBkcGlkPWlzcy1uZGwtb3BhYyA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdlPmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4xPC9vcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0YXJ0SW5kZXg+MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5TZWFyY2g6aXRlbXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4KICAgIDxpdGVtPgogICAgICA8dGl0bGU+VGhlIGxpdHRsZSBib2F0IC8gd3JpdHRlbiBieSBLYXRoeSBIZW5kZXJzb24gOyBpbGx1c3RyYXRlZCBieSBQYXRyaWNrIEJlbnNvbjwvdGl0bGU+CiAgICAgIDxsaW5rPmh0dHA6Ly9pc3MubmRsLmdvLmpwL2Jvb2tzL1IxMDAwMDAwMDItSTAwMDAwMzUyMzQwNi0wMDwvbGluaz4KPGRlc2NyaXB0aW9uPgo8IVtDREFUQVs8cD5XYWxrZXIgQm9va3MsMDc0NDUyMTgxNTwvcD4KPHVsPjxsaT7jgr/jgqTjg4jjg6vvvJogVGhlIGxpdHRsZSBib2F0IC8gd3JpdHRlbiBieSBLYXRoeSBIZW5kZXJzb24gOyBpbGx1c3RyYXRlZCBieSBQYXRyaWNrIEJlbnNvbjwvbGk+CjwvdWw+XV0+CjwvZGVzY3JpcHRpb24+CiAgICAgIDxhdXRob3I+QmVuc29uLCBQYXRyaWNrLCAxOTU2LSxIZW5kZXJzb24sIEthdGh5LCAxOTQ5LSw8L2F1dGhvcj4KICAgICAgPGNhdGVnb3J5PuWFkOerpeabuDwvY2F0ZWdvcnk+CiAgICAgIDxndWlkIGlzUGVybWFMaW5rPSJ0cnVlIj5odHRwOi8vaXNzLm5kbC5nby5qcC9ib29rcy9SMTAwMDAwMDAyLUkwMDAwMDM1MjM0MDYtMDA8L2d1aWQ+CiAgICAgIDxwdWJEYXRlPk1vbiwgMjYgSnVuIDIwMTcgMDk6MDA6MDAgKzA5MDA8L3B1YkRhdGU+CiAgICAgIDxkYzp0aXRsZT5UaGUgbGl0dGxlIGJvYXQgLyB3cml0dGVuIGJ5IEthdGh5IEhlbmRlcnNvbiA7IGlsbHVzdHJhdGVkIGJ5IFBhdHJpY2sgQmVuc29uPC9kYzp0aXRsZT4KICAgICAgPGRjOmNyZWF0b3I+QmVuc29uLCBQYXRyaWNrLCAxOTU2LTwvZGM6Y3JlYXRvcj4KICAgICAgPGRjOmNyZWF0b3I+SGVuZGVyc29uLCBLYXRoeSwgMTk0OS08L2RjOmNyZWF0b3I+CiAgICAgIDxkYzpwdWJsaXNoZXI+V2Fsa2VyIEJvb2tzPC9kYzpwdWJsaXNoZXI+CiAgICAgIDxkY3Rlcm1zOmlzc3VlZCB4c2k6dHlwZT0iZGN0ZXJtczpXM0NEVEYiPjE5OTU8L2RjdGVybXM6aXNzdWVkPgogICAgICA8ZGM6ZXh0ZW50PjEgdi4gKHVucGFnZWQpIDogY29sLiBpbGwuIDsgMjUgeCAyOSBjbTwvZGM6ZXh0ZW50PgogICAgICA8ZGM6aWRlbnRpZmllciB4c2k6dHlwZT0iZGNuZGw6SVNCTiI+MDc0NDUyMTgxNTwvZGM6aWRlbnRpZmllcj4KICAgICAgPGRjOmlkZW50aWZpZXIgeHNpOnR5cGU9ImRjbmRsOk5ETEJpYklEIj4wMDAwMDM1MjM0MDY8L2RjOmlkZW50aWZpZXI+CiAgICAgIDxkYzppZGVudGlmaWVyIHhzaTp0eXBlPSJkY25kbDpVU01BUkNOTyI+OTQwNDE3ODk8L2RjOmlkZW50aWZpZXI+CiAgICAgIDxkYzpzdWJqZWN0PlNhaWxib2F0cyAtLSBGaWN0aW9uPC9kYzpzdWJqZWN0PgogICAgICA8ZGM6c3ViamVjdD5TZWFzaG9yZSAtLSBGaWN0aW9uPC9kYzpzdWJqZWN0PgogICAgICA8ZGM6c3ViamVjdD5PY2VhbiAtLSBGaWN0aW9uPC9kYzpzdWJqZWN0PgogICAgICA8ZGM6c3ViamVjdCB4c2k6dHlwZT0iZGNuZGw6TkRMQyI+WTE3PC9kYzpzdWJqZWN0PgogICAgICA8ZGM6c3ViamVjdCB4c2k6dHlwZT0iZGN0ZXJtczpMQ0MiPlBaNy5IODMwNTwvZGM6c3ViamVjdD4KICAgICAgPGRjOnN1YmplY3QgeHNpOnR5cGU9ImRjdGVybXM6RERDIj5bRV08L2RjOnN1YmplY3Q+CiAgICAgIDxyZGZzOnNlZUFsc28gcmRmOnJlc291cmNlPSJodHRwOi8vaWQubmRsLmdvLmpwL2JpYi8wMDAwMDM1MjM0MDYiLz4KICAgIDwvaXRlbT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
+      encoding: UTF-8
+      string: |
+        <?xml version="1.0" encoding="UTF-8"?><rdf:RDF xml:lang="ja" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/" xmlns:cinii="http://ci.nii.ac.jp/ns/1.0/" xmlns="http://purl.org/rss/1.0/">
+        <channel rdf:about="http://ci.nii.ac.jp/books/opensearch/search?isbn=0744521815&amp;format=rss">
+        <title>CiNii Books OpenSearch - 0744521815</title>
+        <description>CiNii Books OpenSearch - 0744521815</description>
+        <link>http://ci.nii.ac.jp/books/opensearch/search?isbn=0744521815&amp;format=rss</link>
+        <dc:date>2019-01-15T01:09:19+09:00</dc:date>
+        <opensearch:totalResults>0</opensearch:totalResults>
+        <opensearch:startIndex>0</opensearch:startIndex>
+        <opensearch:itemsPerPage>0</opensearch:itemsPerPage>
+        <items>
+        <rdf:Seq/>
+        </items>
+        </channel>
+        </rdf:RDF>
     http_version: 
-  recorded_at: Sat, 12 Jan 2019 15:38:41 GMT
-- request:
-    method: get
-    uri: http://iss.ndl.go.jp/books/R100000002-I000003523406-00.rdf
-    body:
-      encoding: US-ASCII
-      string: ''
-    headers:
-      User-Agent:
-      - Faraday v0.15.4
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
-      Accept:
-      - "*/*"
-  response:
-    status:
-      code: 200
-      message: OK
-    headers:
-      Date:
-      - Sat, 12 Jan 2019 15:38:41 GMT
-      Etag:
-      - '"a448cdf300d455282b64a0512da1e9ce"'
-      Cache-Control:
-      - max-age=0, private, must-revalidate
-      X-Runtime:
-      - '0.253073'
-      X-Ua-Compatible:
-      - IE=Edge,chrome=1
-      Content-Length:
-      - '4939'
-      Status:
-      - '200'
-      Content-Type:
-      - application/rdf+xml; charset=utf-8
-      Set-Cookie:
-      - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
-        00:00:00 GMT
-      - ROUTEID=.ps06; path=/
-      - TS0162cc8a=011338590ada9160b322f655cc813a38ea9830448999f7d4ee66d1b5f3b9afa5ea77a7aae66add7dc3770353fbab537853bff14f346c8eca62c7f19ddc93ce5247147a5d00510b5af7b28b92d00905551902ae30e1;
-        path=/; domain=.ndl.go.jp
-      - TS01f3cfdf=011338590ac3a166736540a1557bedccb4306c69167be2ad007de9b8d4beb5bc3eb2dc540541cafb793b3bd6c28966470daeef9c3dbfd94c815e09d6cd51e051f6e638bbb945146fa2b84f2b14e07bc584a3dcb21eb354fdbc87c319f36172d8029a836a27;
-        Path=/
-      - _front_session_id=247117b86ab97322e1bf15d64cb30780; path=/; expires=Sat, 12-Jan-2019
-        16:38:42 GMT; HttpOnly
-      - cookieId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
-      - ndl.go.jp=rd2o00000000000000000000ffff0a024f76o80; path=/
-      - serverid=1103; path=/
-      - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
-      X-Content-Type-Options:
-      - nosniff
-      X-Frame-Options:
-      - SAMEORIGIN
-    body:
-      encoding: ASCII-8BIT
-      string: !binary |-
-        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJkZjpSREYgeG1sbnM6b3dsPSJodHRwOi8vd3d3LnczLm9yZy8yMDAyLzA3L293bCMiIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6ZGNuZGw9Imh0dHA6Ly9uZGwuZ28uanAvZGNuZGwvdGVybXMvIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOmZvYWY9Imh0dHA6Ly94bWxucy5jb20vZm9hZi8wLjEvIiB4bWxuczpyZGZzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjIj4KICA8ZGNuZGw6QmliQWRtaW5SZXNvdXJjZSByZGY6YWJvdXQ9Imh0dHA6Ly9pc3MubmRsLmdvLmpwL2Jvb2tzL1IxMDAwMDAwMDItSTAwMDAwMzUyMzQwNi0wMCI+CiAgICA8ZGNuZGw6Y2F0YWxvZ2luZ1N0YXR1cz5DNzwvZGNuZGw6Y2F0YWxvZ2luZ1N0YXR1cz4KICAgIDxkY25kbDpiaWJSZWNvcmRDYXRlZ29yeT5SMTAwMDAwMDAyPC9kY25kbDpiaWJSZWNvcmRDYXRlZ29yeT4KICAgIDxkY25kbDpyZWNvcmQgcmRmOnJlc291cmNlPSJodHRwOi8vaXNzLm5kbC5nby5qcC9ib29rcy9SMTAwMDAwMDAyLUkwMDAwMDM1MjM0MDYtMDAjbWF0ZXJpYWwiLz4KICA8L2RjbmRsOkJpYkFkbWluUmVzb3VyY2U+CiAgPGRjbmRsOkJpYlJlc291cmNlIHJkZjphYm91dD0iaHR0cDovL2lzcy5uZGwuZ28uanAvYm9va3MvUjEwMDAwMDAwMi1JMDAwMDAzNTIzNDA2LTAwI21hdGVyaWFsIj4KICAgIDxkY3Rlcm1zOmlkZW50aWZpZXIgcmRmOmRhdGF0eXBlPSJodHRwOi8vbmRsLmdvLmpwL2RjbmRsL3Rlcm1zL1VTTUFSQ05PIj45NDA0MTc4OTwvZGN0ZXJtczppZGVudGlmaWVyPgogICAgPGRjdGVybXM6aWRlbnRpZmllciByZGY6ZGF0YXR5cGU9Imh0dHA6Ly9uZGwuZ28uanAvZGNuZGwvdGVybXMvSVNCTiI+MDc0NDUyMTgxNTwvZGN0ZXJtczppZGVudGlmaWVyPgogICAgPHJkZnM6c2VlQWxzbyByZGY6cmVzb3VyY2U9Imh0dHA6Ly9pc3MubmRsLmdvLmpwL2lzYm4vMDc0NDUyMTgxNSIvPgogICAgPHJkZnM6c2VlQWxzbyByZGY6cmVzb3VyY2U9Imh0dHA6Ly9sY2NuLmxvYy5nb3YvOTQwNDE3ODkiLz4KICAgIDxkY3Rlcm1zOnRpdGxlPlRoZSBsaXR0bGUgYm9hdCAvIHdyaXR0ZW4gYnkgS2F0aHkgSGVuZGVyc29uIDsgaWxsdXN0cmF0ZWQgYnkgUGF0cmljayBCZW5zb248L2RjdGVybXM6dGl0bGU+CiAgICA8ZGM6dGl0bGU+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24+CiAgICAgICAgPHJkZjp2YWx1ZT5UaGUgbGl0dGxlIGJvYXQgLyB3cml0dGVuIGJ5IEthdGh5IEhlbmRlcnNvbiA7IGlsbHVzdHJhdGVkIGJ5IFBhdHJpY2sgQmVuc29uPC9yZGY6dmFsdWU+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICAgPC9kYzp0aXRsZT4KICAgIDxkY3Rlcm1zOmNyZWF0b3I+CiAgICAgIDxmb2FmOkFnZW50IHJkZjphYm91dD0iaHR0cDovL2lkLm5kbC5nby5qcC9hdXRoL2VudGl0eS8wMDQ2MzExNCI+CiAgICAgICAgPGZvYWY6bmFtZT5CZW5zb24sIFBhdHJpY2ssIDE5NTYtPC9mb2FmOm5hbWU+CiAgICAgIDwvZm9hZjpBZ2VudD4KICAgIDwvZGN0ZXJtczpjcmVhdG9yPgogICAgPGRjdGVybXM6Y3JlYXRvcj4KICAgICAgPGZvYWY6QWdlbnQgcmRmOmFib3V0PSJodHRwOi8vaWQubmRsLmdvLmpwL2F1dGgvZW50aXR5LzAxMTA0Nzc1Ij4KICAgICAgICA8Zm9hZjpuYW1lPkhlbmRlcnNvbiwgS2F0aHksIDE5NDktPC9mb2FmOm5hbWU+CiAgICAgIDwvZm9hZjpBZ2VudD4KICAgIDwvZGN0ZXJtczpjcmVhdG9yPgogICAgPGRjdGVybXM6cHVibGlzaGVyPgogICAgICA8Zm9hZjpBZ2VudD4KICAgICAgICA8Zm9hZjpuYW1lPldhbGtlciBCb29rczwvZm9hZjpuYW1lPgogICAgICAgIDxkY25kbDpsb2NhdGlvbj5Mb25kb248L2RjbmRsOmxvY2F0aW9uPgogICAgICA8L2ZvYWY6QWdlbnQ+CiAgICA8L2RjdGVybXM6cHVibGlzaGVyPgogICAgPGRjbmRsOnB1YmxpY2F0aW9uUGxhY2UgcmRmOmRhdGF0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvdGVybXMvSVNPMzE2NiI+R0I8L2RjbmRsOnB1YmxpY2F0aW9uUGxhY2U+CiAgICA8ZGN0ZXJtczpkYXRlPjE5OTU8L2RjdGVybXM6ZGF0ZT4KICAgIDxkY3Rlcm1zOmlzc3VlZCByZGY6ZGF0YXR5cGU9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy9XM0NEVEYiPjE5OTU8L2RjdGVybXM6aXNzdWVkPgogICAgPGRjdGVybXM6c3ViamVjdD4KICAgICAgPHJkZjpEZXNjcmlwdGlvbj4KICAgICAgICA8cmRmOnZhbHVlPlNhaWxib2F0cyAtLSBGaWN0aW9uPC9yZGY6dmFsdWU+CiAgICAgIDwvcmRmOkRlc2NyaXB0aW9uPgogICAgPC9kY3Rlcm1zOnN1YmplY3Q+CiAgICA8ZGN0ZXJtczpzdWJqZWN0PgogICAgICA8cmRmOkRlc2NyaXB0aW9uPgogICAgICAgIDxyZGY6dmFsdWU+U2Vhc2hvcmUgLS0gRmljdGlvbjwvcmRmOnZhbHVlPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgIDwvZGN0ZXJtczpzdWJqZWN0PgogICAgPGRjdGVybXM6c3ViamVjdD4KICAgICAgPHJkZjpEZXNjcmlwdGlvbj4KICAgICAgICA8cmRmOnZhbHVlPk9jZWFuIC0tIEZpY3Rpb248L3JkZjp2YWx1ZT4KICAgICAgPC9yZGY6RGVzY3JpcHRpb24+CiAgICA8L2RjdGVybXM6c3ViamVjdD4KICAgIDxkY3Rlcm1zOnN1YmplY3QgcmRmOnJlc291cmNlPSJodHRwOi8vaWQubmRsLmdvLmpwL2NsYXNzL25kbGMvWTE3Ii8+CiAgICA8ZGN0ZXJtczpzdWJqZWN0IHJkZjpyZXNvdXJjZT0iaHR0cDovL2Rld2V5LmluZm8vY2xhc3MvW0VdL2Fib3V0Ii8+CiAgICA8ZGM6c3ViamVjdCByZGY6ZGF0YXR5cGU9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy9MQ0MiPlBaNy5IODMwNTwvZGM6c3ViamVjdD4KICAgIDxkY3Rlcm1zOmxhbmd1YWdlIHJkZjpkYXRhdHlwZT0iaHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zL0lTTzYzOS0yIj5lbmc8L2RjdGVybXM6bGFuZ3VhZ2U+CiAgICA8ZGN0ZXJtczphYnN0cmFjdD5BIGxpdHRsZSBib3kgcGxheWluZyBhdCB0aGUgc2Vhc2hvcmUgbWFrZXMgYSB0b3kgc2FpbGJvYXQgdGhhdCBpcyBzd2VwdCBvdXQgdG8gc2VhLCBhbmQsIGFmdGVyIGJyYXZpbmcgc3Rvcm1zLCBodW5ncnkgZmlzaCwgYW5kIGJpZ2dlciBib2F0cywgaXMgZmluYWxseSBmb3VuZCBieSBhIGxpdHRsZSBnaXJsIGF0IHRoZSBvcHBvc2l0ZSBzaG9yZTwvZGN0ZXJtczphYnN0cmFjdD4KICAgIDxkY3Rlcm1zOmV4dGVudD4xIHYuICh1bnBhZ2VkKSA6IGNvbC4gaWxsLiA7IDI1IHggMjkgY208L2RjdGVybXM6ZXh0ZW50PgogICAgPGRjbmRsOm1hdGVyaWFsVHlwZSByZGY6cmVzb3VyY2U9Imh0dHA6Ly9uZGwuZ28uanAvbmRsdHlwZS9Cb29rIiByZGZzOmxhYmVsPSLlm7Pmm7giLz4KICAgIDxkY3Rlcm1zOmFjY2Vzc1JpZ2h0cz5TMDFQOTlVOTk8L2RjdGVybXM6YWNjZXNzUmlnaHRzPgogIDwvZGNuZGw6QmliUmVzb3VyY2U+CiAgPGRjbmRsOkJpYlJlc291cmNlIHJkZjphYm91dD0iaHR0cDovL2lzcy5uZGwuZ28uanAvYm9va3MvUjEwMDAwMDAwMi1JMDAwMDAzNTIzNDA2LTAwI21hdGVyaWFsIj4KICAgIDxkY25kbDpyZWNvcmQgcmRmOnJlc291cmNlPSJodHRwOi8vaXNzLm5kbC5nby5qcC9ib29rcy9SMTAwMDAwMDAyLUkwMDAwMDM1MjM0MDYtMDAjaXRlbSIvPgogICAgPGRjbmRsOnJlY29yZCByZGY6cmVzb3VyY2U9Imh0dHA6Ly9pc3MubmRsLmdvLmpwL2Jvb2tzL1IxMDAwMDAwMDQtSTAwMDcyMDIzOS0wMCNpdGVtIi8+CiAgPC9kY25kbDpCaWJSZXNvdXJjZT4KICA8ZGNuZGw6SXRlbSByZGY6YWJvdXQ9Imh0dHA6Ly9pc3MubmRsLmdvLmpwL2Jvb2tzL1IxMDAwMDAwMDItSTAwMDAwMzUyMzQwNi0wMCNpdGVtIj4KICAgIDxkY25kbDpob2xkaW5nQWdlbnQ+CiAgICAgIDxmb2FmOkFnZW50PgogICAgICAgIDxmb2FmOm5hbWU+5Zu956uL5Zu95Lya5Zuz5pu46aSoPC9mb2FmOm5hbWU+CiAgICAgICAgPGRjdGVybXM6aWRlbnRpZmllciByZGY6ZGF0YXR5cGU9Imh0dHA6Ly9uZGwuZ28uanAvZGNuZGwvdGVybXMvTkRMTGliQ29kZSI+MDAwMDwvZGN0ZXJtczppZGVudGlmaWVyPgogICAgICA8L2ZvYWY6QWdlbnQ+CiAgICA8L2RjbmRsOmhvbGRpbmdBZ2VudD4KICAgIDxyZGZzOnNlZUFsc28gcmRmOnJlc291cmNlPSJodHRwOi8vaWQubmRsLmdvLmpwL2JpYi8wMDAwMDM1MjM0MDYiLz4KICAgIDxkY3Rlcm1zOmlkZW50aWZpZXIgcmRmOmRhdGF0eXBlPSJodHRwOi8vbmRsLmdvLmpwL2RjbmRsL3Rlcm1zL05ETEJpYklEIj4wMDAwMDM1MjM0MDY8L2RjdGVybXM6aWRlbnRpZmllcj4KICAgIDxkY25kbDpjYWxsTnVtYmVyPlkxNy1BMTUzNjwvZGNuZGw6Y2FsbE51bWJlcj4KICAgIDxkY25kbDpsb2NhbENhbGxOdW1iZXI+WTE3LUI0NzQtQTE1MzY8L2RjbmRsOmxvY2FsQ2FsbE51bWJlcj4KICA8L2RjbmRsOkl0ZW0+CiAgPGRjbmRsOkl0ZW0gcmRmOmFib3V0PSJodHRwOi8vaXNzLm5kbC5nby5qcC9ib29rcy9SMTAwMDAwMDA0LUkwMDA3MjAyMzktMDAjaXRlbSI+CiAgICA8ZGNuZGw6aG9sZGluZ0FnZW50PgogICAgICA8Zm9hZjpBZ2VudD4KICAgICAgICA8Zm9hZjpuYW1lPuadseS6rOmDveeri+WkmuaRqeWbs+abuOmkqDwvZm9hZjpuYW1lPgogICAgICAgIDxkY3Rlcm1zOmlkZW50aWZpZXIgcmRmOmRhdGF0eXBlPSJodHRwOi8vbmRsLmdvLmpwL2RjbmRsL3Rlcm1zL05ETExpYkNvZGUiPjEzMTQ8L2RjdGVybXM6aWRlbnRpZmllcj4KICAgICAgPC9mb2FmOkFnZW50PgogICAgPC9kY25kbDpob2xkaW5nQWdlbnQ+CiAgICA8ZGN0ZXJtczppZGVudGlmaWVyIHJkZjpkYXRhdHlwZT0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy9zb21va3VCaWJJRCI+MTM0MDAyMTMzMjwvZGN0ZXJtczppZGVudGlmaWVyPgogIDwvZGNuZGw6SXRlbT4KPC9yZGY6UkRGPg==
-    http_version: 
-  recorded_at: Sat, 12 Jan 2019 15:38:42 GMT
+  recorded_at: Mon, 14 Jan 2019 16:09:18 GMT
 recorded_with: VCR 4.0.0

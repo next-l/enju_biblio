@@ -23,7 +23,7 @@ describe "items/index" do
       view.stub(:filtered_params).and_return(ActionController::Parameters.new().permit)
       render
       expect(rendered).to have_selector "div#submenu ul li a"
-      expect(rendered).to have_link "Available On Shelf (1)", href: "/items?circulation_status=Available+On+Shelf"
+      expect(rendered).to have_link "在架（利用可能 (1)", href: "/items?circulation_status=Available+On+Shelf"
       view.stub(:filtered_params).and_return(ActionController::Parameters.new(acquired_from: '2012-01-01').permit([:acquired_from]))
       render
       expect(rendered).to have_link "Available On Shelf (1)", href: '/items?acquired_from=2012-01-01&circulation_status=Available+On+Shelf'
