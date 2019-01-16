@@ -25,13 +25,13 @@
         <tr>
           <td style="width: 200px"><%= t('page.form') -%>:</td>
           <td style="width: 500px">
-            <%= form_icon(manifestation.carrier_type) -%> <%= manifestation.carrier_type.display_name.localize -%> /
-            <%= content_type_icon(manifestation.manifestation_content_type) -%> <%= manifestation.manifestation_content_type.display_name.localize if manifestation.manifestation_content_type -%>
+            <%= form_icon(manifestation.carrier_type) -%> <%= manifestation.carrier_type.display_name -%> /
+            <%= content_type_icon(manifestation.manifestation_content_type) -%> <%= manifestation.manifestation_content_type.display_name if manifestation.manifestation_content_type -%>
           </td>
         </tr>
         <tr>
           <td><%= t('activerecord.models.language') -%>:</td>
-          <td><span itemprop="inLanguage"><%= manifestation.language.display_name.localize -%></span></td>
+          <td><span itemprop="inLanguage"><%= manifestation.language.display_name -%></span></td>
         </tr>
         <tr>
           <td><%= t('activerecord.attributes.manifestation.publication_place') -%>:</td>
