@@ -1,5 +1,7 @@
 class ContentType < ActiveRecord::Base
   include MasterModel
+  include Mobility
+  translates :display_name
   default_scope { order('content_types.position') }
   has_many :manifestations
 end
