@@ -3,14 +3,14 @@
 one:
   id: 1
   name: unaccompanied
-  display_name: Unaccompanied
+  display_name: {"en": "Unaccompanied"}
   note: MyText
   position: 1
 
 two:
   id: 2
   name: accompanied
-  display_name: Accompanied
+  display_name: {"en": "Accompanied"}
   note: MyText
   position: 2
 
@@ -20,7 +20,7 @@ two:
 #
 #  id           :bigint(8)        not null, primary key
 #  name         :string           not null
-#  display_name :text
+#  display_name :jsonb            not null
 #  note         :text
 #  position     :integer
 #  created_at   :datetime         not null

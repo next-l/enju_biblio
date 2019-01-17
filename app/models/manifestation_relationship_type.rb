@@ -1,5 +1,7 @@
 class ManifestationRelationshipType < ActiveRecord::Base
   include MasterModel
+  include Mobility
+  translates :display_name
   default_scope { order('manifestation_relationship_types.position') }
   has_many :manifestation_relationships
 end
@@ -10,7 +12,7 @@ end
 #
 #  id           :bigint(8)        not null, primary key
 #  name         :string           not null
-#  display_name :text
+#  display_name :jsonb            not null
 #  note         :text
 #  position     :integer
 #  created_at   :datetime         not null
