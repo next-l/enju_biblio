@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_bookmark", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_event", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_ndl", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_oai", "~> 0.3.0.beta.1"
+  s.add_development_dependency "enju_oai", "~> 0.4.0.beta.1"
   s.add_development_dependency "pg"
   s.add_development_dependency "rspec-rails", "~> 3.7"
   s.add_development_dependency "factory_bot_rails"
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "simplecov"
   s.add_development_dependency "webmock"
   s.add_development_dependency "rspec-activemodel-mocks"
-  s.add_development_dependency "resque", "~> 1.27"
+  s.add_development_dependency "resque"
   s.add_development_dependency "coveralls"
   s.add_development_dependency "capybara", "~> 3.11"
 end
