@@ -191,7 +191,7 @@ class ResourceImportFile < ActiveRecord::Base
         else
           if manifestation.fulltext_content?
             item = create_item(row, manifestation)
-            item.circulation_status = CirculationStatus.find_by(name: 'Available On Shelf')
+            item.circulation_status = CirculationStatus.find_by(name: 'Available On Shelf') if defined?(EnjuCirculation)
             begin
               item.acquired_at = Time.zone.parse(row['acquired_at'].to_s.strip)
             rescue ArgumentError

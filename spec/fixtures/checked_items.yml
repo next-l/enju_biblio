@@ -1,7 +1,7 @@
 --- 
 checked_item_00001:
   id: 1
-  item_id: 1
+  item_id: 10
   basket_id: 1
   due_date: <%= 1.week.from_now.to_s(:db) %>
 checked_item_00002:

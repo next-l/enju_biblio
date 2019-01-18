@@ -299,6 +299,7 @@ resource_import_file_test_edition	2	Revised Ed.
         expect(manifestation.edition_string).to eq "Revised Ed."
       end
     end
+
     describe "when it contains transcription fields" do
       it "should be imported" do
         import_file = <<-EOF
