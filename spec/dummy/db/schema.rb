@@ -233,8 +233,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "budget_types", force: :cascade do |t|
-    t.string "name"
-    t.text "display_name"
+    t.string "name", null: false
+    t.jsonb "display_name", default: {}, null: false
     t.text "note"
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -764,7 +764,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "libraries", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.string "short_display_name", null: false
     t.string "zip_code"
     t.text "street"
@@ -788,12 +788,12 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.float "longitude"
     t.index ["country_id"], name: "index_libraries_on_country_id"
     t.index ["library_group_id"], name: "index_libraries_on_library_group_id"
-    t.index ["name"], name: "index_libraries_on_name"
+    t.index ["name"], name: "index_libraries_on_name", unique: true
   end
 
   create_table "library_groups", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.string "short_name", null: false
     t.text "my_networks"
     t.text "old_login_banner"
@@ -821,6 +821,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.text "header_logo_meta"
     t.jsonb "login_banner", default: {}, null: false
     t.jsonb "footer_banner", default: {}, null: false
+    t.index ["name"], name: "index_library_groups_on_name", unique: true
     t.index ["short_name"], name: "index_library_groups_on_short_name"
     t.index ["user_id"], name: "index_library_groups_on_user_id"
   end
@@ -1177,7 +1178,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "request_status_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.text "note"
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -1186,7 +1187,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "request_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.text "note"
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -1332,7 +1333,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "search_engines", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.string "url", null: false
     t.text "base_url", null: false
     t.text "http_method", null: false
@@ -1385,7 +1386,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "shelves", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.text "note"
     t.bigint "library_id", null: false
     t.integer "items_count", default: 0, null: false
@@ -1561,7 +1562,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "user_groups", force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
+    t.jsonb "display_name", default: {}, null: false
     t.text "note"
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
