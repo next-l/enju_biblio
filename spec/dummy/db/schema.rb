@@ -599,8 +599,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "import_requests", force: :cascade do |t|
     t.string "isbn"
-    t.integer "manifestation_id"
-    t.integer "user_id"
+    t.bigint "manifestation_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["isbn"], name: "index_import_requests_on_isbn"
@@ -1264,7 +1264,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "resource_export_files", force: :cascade do |t|
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "resource_export_file_name"
     t.string "resource_export_content_type"
     t.bigint "resource_export_file_size"
@@ -1272,6 +1272,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.datetime "executed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_resource_export_files_on_user_id"
   end
 
   create_table "resource_import_file_transitions", force: :cascade do |t|
@@ -1724,6 +1725,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"
   add_foreign_key "doi_records", "manifestations"
+  add_foreign_key "import_requests", "users"
   add_foreign_key "isbn_record_and_manifestations", "isbn_records"
   add_foreign_key "isbn_record_and_manifestations", "manifestations"
   add_foreign_key "issn_record_and_manifestations", "issn_records"
@@ -1751,6 +1753,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "reserves", "libraries", column: "pickup_location_id"
   add_foreign_key "reserves", "manifestations"
   add_foreign_key "reserves", "users"
+  add_foreign_key "resource_export_files", "users"
   add_foreign_key "resource_import_files", "users"
   add_foreign_key "user_checkout_stats", "users"
   add_foreign_key "user_group_has_checkout_types", "checkout_types"

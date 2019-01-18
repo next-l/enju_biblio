@@ -90,7 +90,7 @@ end
 # Table name: resource_export_files
 #
 #  id                           :bigint(8)        not null, primary key
-#  user_id                      :integer
+#  user_id                      :bigint(8)
 #  resource_export_file_name    :string
 #  resource_export_content_type :string
 #  resource_export_file_size    :bigint(8)
