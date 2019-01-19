@@ -247,7 +247,7 @@ describe ItemsController do
   describe 'POST create' do
     before(:each) do
       manifestation = FactoryBot.create(:manifestation)
-      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id)
+      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: 1)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
 
@@ -328,7 +328,7 @@ describe ItemsController do
       end
 
       it 'should create reserved item' do
-        post :create, params: { item: { circulation_status_id: 1, manifestation_id: 2 } }
+        post :create, params: { item: { circulation_status_id: 1, manifestation_id: 2, shelf_id: 1 } }
         expect(assigns(:item)).to be_valid
 
         expect(response).to redirect_to item_url(assigns(:item))
@@ -340,10 +340,10 @@ describe ItemsController do
       it "should create another item with already retained" do
         reserve = FactoryBot.create(:reserve)
         reserve.transition_to!(:requested)
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: 1) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: 1) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
       end

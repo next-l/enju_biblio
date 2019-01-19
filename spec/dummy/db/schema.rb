@@ -843,9 +843,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "manifestation_checkout_stat_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "manifestation_checkout_stat_id"
+    t.bigint "manifestation_checkout_stat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -888,9 +888,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "manifestation_reserve_stat_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "manifestation_reserve_stat_id"
+    t.bigint "manifestation_reserve_stat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -1234,9 +1234,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "reserve_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "reserve_id"
+    t.bigint "reserve_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -1511,9 +1511,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "user_checkout_stat_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "user_checkout_stat_id"
+    t.bigint "user_checkout_stat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -1649,9 +1649,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "user_reserve_stat_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "user_reserve_stat_id"
+    t.bigint "user_reserve_stat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false

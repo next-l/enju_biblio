@@ -279,7 +279,7 @@ class ItemsController < ApplicationController
 
   def prepare_options
     @libraries = Library.order(:position)
-    if @item
+    if @item.try(:shelf)
       @library = @item.shelf.library
     else
       @library = Library.real.includes(:shelves).order(:position).first
