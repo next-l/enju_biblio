@@ -1,5 +1,4 @@
 class ResourceImportFileTransition < ActiveRecord::Base
-  include Statesman::Adapters::ActiveRecordTransition
 
   
   belongs_to :resource_import_file, inverse_of: :resource_import_file_transitions
@@ -12,9 +11,9 @@ end
 #
 #  id                      :bigint(8)        not null, primary key
 #  to_state                :string
-#  metadata                :text             default({})
+#  metadata                :jsonb
 #  sort_key                :integer
-#  resource_import_file_id :integer
+#  resource_import_file_id :bigint(8)
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
 #  most_recent             :boolean          not null
