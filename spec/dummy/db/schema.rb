@@ -60,12 +60,13 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "agent_import_results", force: :cascade do |t|
-    t.integer "agent_import_file_id"
+    t.bigint "agent_import_file_id", null: false
     t.bigint "agent_id"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_agent_import_results_on_agent_id"
+    t.index ["agent_import_file_id"], name: "index_agent_import_results_on_agent_import_file_id"
   end
 
   create_table "agent_merge_lists", force: :cascade do |t|
@@ -75,8 +76,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "agent_merges", force: :cascade do |t|
-    t.integer "agent_id", null: false
-    t.integer "agent_merge_list_id", null: false
+    t.bigint "agent_id", null: false
+    t.bigint "agent_merge_list_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_agent_merges_on_agent_id"
@@ -93,9 +94,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "agent_relationships", force: :cascade do |t|
-    t.integer "parent_id"
-    t.integer "child_id"
-    t.integer "agent_relationship_type_id"
+    t.bigint "parent_id", null: false
+    t.bigint "child_id", null: false
+    t.bigint "agent_relationship_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
@@ -871,9 +872,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "manifestation_relationships", force: :cascade do |t|
-    t.integer "parent_id"
-    t.integer "child_id"
-    t.integer "manifestation_relationship_type_id"
+    t.bigint "parent_id", null: false
+    t.bigint "child_id", null: false
+    t.bigint "manifestation_relationship_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
@@ -1095,8 +1096,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "picture_files", force: :cascade do |t|
-    t.integer "picture_attachable_id"
-    t.string "picture_attachable_type"
+    t.bigint "picture_attachable_id", null: false
+    t.string "picture_attachable_type", null: false
     t.string "content_type"
     t.text "title"
     t.string "thumbnail"
@@ -1112,6 +1113,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.integer "picture_width"
     t.integer "picture_height"
     t.index ["picture_attachable_id", "picture_attachable_type"], name: "index_picture_files_on_picture_attachable_id_and_type"
+    t.index ["picture_attachable_id"], name: "index_picture_files_on_picture_attachable_id"
   end
 
   create_table "produce_types", force: :cascade do |t|
@@ -1311,9 +1313,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "resource_import_results", force: :cascade do |t|
-    t.integer "resource_import_file_id"
-    t.integer "manifestation_id"
-    t.integer "item_id"
+    t.bigint "resource_import_file_id"
+    t.bigint "manifestation_id"
+    t.bigint "item_id"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1373,7 +1375,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.text "title_transcription"
     t.text "title_alternative"
     t.string "series_statement_identifier"
-    t.integer "manifestation_id"
+    t.bigint "manifestation_id"
     t.text "note"
     t.text "title_subseries_transcription"
     t.text "creator_string"
@@ -1706,6 +1708,10 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   add_foreign_key "agent_import_files", "users"
+  add_foreign_key "agent_import_results", "agent_import_files"
+  add_foreign_key "agent_merges", "agents"
+  add_foreign_key "agent_relationships", "agents", column: "child_id"
+  add_foreign_key "agent_relationships", "agents", column: "parent_id"
   add_foreign_key "agents", "profiles"
   add_foreign_key "carrier_type_has_checkout_types", "carrier_types"
   add_foreign_key "carrier_type_has_checkout_types", "checkout_types"
@@ -1749,6 +1755,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "libraries", "library_groups"
   add_foreign_key "library_groups", "users"
   add_foreign_key "manifestation_checkout_stats", "users"
+  add_foreign_key "manifestation_relationships", "agents", column: "child_id"
+  add_foreign_key "manifestation_relationships", "agents", column: "parent_id"
   add_foreign_key "manifestation_reserve_stats", "users"
   add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
@@ -1760,8 +1768,12 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "reserves", "users"
   add_foreign_key "resource_export_files", "users"
   add_foreign_key "resource_import_files", "users"
+  add_foreign_key "resource_import_results", "items"
+  add_foreign_key "resource_import_results", "manifestations"
+  add_foreign_key "resource_import_results", "resource_import_files"
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
   add_foreign_key "series_statement_merges", "series_statements"
+  add_foreign_key "series_statements", "manifestations"
   add_foreign_key "user_checkout_stats", "users"
   add_foreign_key "user_group_has_checkout_types", "checkout_types"
   add_foreign_key "user_group_has_checkout_types", "user_groups"

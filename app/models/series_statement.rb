@@ -61,7 +61,7 @@ end
 #  title_transcription                :text
 #  title_alternative                  :text
 #  series_statement_identifier        :string
-#  manifestation_id                   :integer
+#  manifestation_id                   :bigint(8)
 #  note                               :text
 #  title_subseries_transcription      :text
 #  creator_string                     :text
