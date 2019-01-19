@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "birth_date"
     t.string "death_date"
     t.string "agent_identifier"
-    t.integer "profile_id"
+    t.bigint "profile_id"
     t.index ["agent_identifier"], name: "index_agents_on_agent_identifier"
     t.index ["country_id"], name: "index_agents_on_country_id"
     t.index ["full_name"], name: "index_agents_on_full_name"
@@ -1705,6 +1705,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   add_foreign_key "agent_import_files", "users"
+  add_foreign_key "agents", "profiles"
   add_foreign_key "carrier_type_has_checkout_types", "carrier_types"
   add_foreign_key "carrier_type_has_checkout_types", "checkout_types"
   add_foreign_key "checked_items", "baskets"
