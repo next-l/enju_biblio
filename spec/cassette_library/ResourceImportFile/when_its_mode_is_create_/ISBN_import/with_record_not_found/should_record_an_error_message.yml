@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://ci.nii.ac.jp/books/opensearch/search?format=rss&isbn=9780007264551
+    uri: http://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=9780007264551&mediatype=1
     body:
       encoding: US-ASCII
       string: ''
@@ -19,40 +19,48 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 15 Jan 2019 15:56:33 GMT
+      - Sat, 19 Jan 2019 05:34:49 GMT
+      Etag:
+      - '"86e24ad9a885e4ef4c19525c5d416b65"'
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Runtime:
+      - '0.031497'
+      Content-Length:
+      - '1013'
+      Status:
+      - '200'
       Content-Type:
-      - application/rss+xml;charset=UTF-8
-      Connection:
-      - keep-alive
-      Access-Control-Allow-Origin:
-      - "*"
+      - application/xml; charset=utf-8
       Set-Cookie:
-      - TS01b7c0b3=01bdee8456a33ed35363d403e623ff0c4ecb69ce0e29ea3f042791adf23f16d80231caa03063a18d24801b7134c976758d7cb14c04;
+      - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
+        00:00:00 GMT
+      - ROUTEID=.ps26; path=/
+      - TS0162cc8a=011338590ad327b2732846908edc327d40145b9933d3c5b2a4464c7fca88a331ef327805ba8358eee71a4a724f52fc4ab6f83d4f93e6338f2fbbdcb9bffa3a1189f4b5a0367cf04303b31db763d4aef1524fa1202e;
+        path=/; domain=.ndl.go.jp
+      - TS01f3cfdf=011338590afbc033aecc4c64c46540496f2824ce25a0623410c7318372deedd57a8119db55d9ec2209b70515697ea1aa786d87b16571832919312fbb9e4131e6a4c285f79aed5064d4056a30a28eadb4c9e25aeeb6862fe64492017ca4c0b968320e5f630d;
         Path=/
-      Transfer-Encoding:
-      - chunked
+      - _front_session_id=45f3c077f7849f85fbad2c2c17d1934b; path=/; expires=Sat, 19-Jan-2019
+        06:34:49 GMT; HttpOnly
+      - cookieId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
+      - ndl.go.jp=rd2o00000000000000000000ffff0a024f76o80; path=/
+      - serverid=1103; path=/
+      - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
     body:
-      encoding: UTF-8
-      string: |
-        <?xml version="1.0" encoding="UTF-8"?><rdf:RDF xml:lang="ja" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/" xmlns:cinii="http://ci.nii.ac.jp/ns/1.0/" xmlns="http://purl.org/rss/1.0/">
-        <channel rdf:about="http://ci.nii.ac.jp/books/opensearch/search?isbn=9780007264551&amp;format=rss">
-        <title>CiNii Books OpenSearch - 9780007264551</title>
-        <description>CiNii Books OpenSearch - 9780007264551</description>
-        <link>http://ci.nii.ac.jp/books/opensearch/search?isbn=9780007264551&amp;format=rss</link>
-        <dc:date>2019-01-16T00:56:33+09:00</dc:date>
-        <opensearch:totalResults>0</opensearch:totalResults>
-        <opensearch:startIndex>0</opensearch:startIndex>
-        <opensearch:itemsPerPage>0</opensearch:itemsPerPage>
-        <items>
-        <rdf:Seq/>
-        </items>
-        </channel>
-        </rdf:RDF>
+      encoding: ASCII-8BIT
+      string: !binary |-
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB2ZXJzaW9uPSIyLjAiIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOmRjbmRsPSJodHRwOi8vbmRsLmdvLmpwL2RjbmRsL3Rlcm1zLyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpyZGZzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVjL29wZW5zZWFyY2hyc3MvMS4wLyIgeG1sbnM6ZGNtaXR5cGU9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4MDAwNzI2NDU1MSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5nby5qcC9hcGkvb3BlbnNlYXJjaD9pZHg9MSZhbXA7bWVkaWF0eXBlPTEmYW1wO2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTAmYW1wO2lzYm49OTc4MDAwNzI2NDU1MTwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0cyBmb3IgaXNibj05NzgwMDA3MjY0NTUxIG1lZGlhdHlwZT0xIGNudD0xMCBkcGlkPWlzcy1uZGwtb3BhYyA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdlPmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4wPC9vcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0YXJ0SW5kZXg+MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5TZWFyY2g6aXRlbXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
     http_version: 
-  recorded_at: Tue, 15 Jan 2019 15:56:33 GMT
+  recorded_at: Sat, 19 Jan 2019 05:34:49 GMT
 - request:
     method: get
-    uri: https://ci.nii.ac.jp/books/opensearch/search?format=rss&isbn=0007264550
+    uri: http://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=0007264550&mediatype=1
     body:
       encoding: US-ASCII
       string: ''
@@ -69,35 +77,43 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 15 Jan 2019 15:56:33 GMT
+      - Sat, 19 Jan 2019 05:34:50 GMT
+      Etag:
+      - '"8915ac494faf59e8ed49f962e267a6fc"'
+      Cache-Control:
+      - max-age=0, private, must-revalidate
+      X-Runtime:
+      - '0.033591'
+      X-Ua-Compatible:
+      - IE=Edge,chrome=1
+      Content-Length:
+      - '1004'
+      Status:
+      - '200'
       Content-Type:
-      - application/rss+xml;charset=UTF-8
-      Connection:
-      - keep-alive
-      Access-Control-Allow-Origin:
-      - "*"
+      - application/xml; charset=utf-8
       Set-Cookie:
-      - TS01b7c0b3=01bdee8456a5bbaac2799534359d2bc0e397b89b817a0873752c24e4ae46a61985f68e4a4e59c6226db5ba51a3fffe14d5e16f4472;
+      - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
+        00:00:00 GMT
+      - ROUTEID=.ps05; path=/
+      - TS0162cc8a=011338590aa9665e6cd3c6d35315ef3704a11abbb8ddea8d2ee1bfad35b55986b9638f86355acee2a8ecd1f9e5adbbdc5b67c05052817d5f14a49e480ba1a8091f735fd0bab52e4525a2c48607a9d9002ea2671e9e;
+        path=/; domain=.ndl.go.jp
+      - TS01f3cfdf=011338590ad9c5ae46000fc9d16cb1f11dca96fa68cb1c63fa3741059340de6a4ca1d5fad77cf08c680f959651cf836fff5d582ae90d1a47c9a988673a47224e38ea41c928462761e4256a61230ed0cb648d9009a1fc161795ed9086f871f6aad39a346c95;
         Path=/
-      Transfer-Encoding:
-      - chunked
+      - _front_session_id=be4980d23a62102a072e5fab599d1d89; path=/; expires=Sat, 19-Jan-2019
+        06:34:50 GMT; HttpOnly
+      - cookieId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
+      - ndl.go.jp=rd2o00000000000000000000ffff0a024f77o80; path=/
+      - serverid=1103; path=/
+      - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
     body:
-      encoding: UTF-8
-      string: |
-        <?xml version="1.0" encoding="UTF-8"?><rdf:RDF xml:lang="ja" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prism="http://prismstandard.org/namespaces/basic/2.0/" xmlns:cinii="http://ci.nii.ac.jp/ns/1.0/" xmlns="http://purl.org/rss/1.0/">
-        <channel rdf:about="http://ci.nii.ac.jp/books/opensearch/search?isbn=0007264550&amp;format=rss">
-        <title>CiNii Books OpenSearch - 0007264550</title>
-        <description>CiNii Books OpenSearch - 0007264550</description>
-        <link>http://ci.nii.ac.jp/books/opensearch/search?isbn=0007264550&amp;format=rss</link>
-        <dc:date>2019-01-16T00:56:33+09:00</dc:date>
-        <opensearch:totalResults>0</opensearch:totalResults>
-        <opensearch:startIndex>0</opensearch:startIndex>
-        <opensearch:itemsPerPage>0</opensearch:itemsPerPage>
-        <items>
-        <rdf:Seq/>
-        </items>
-        </channel>
-        </rdf:RDF>
+      encoding: ASCII-8BIT
+      string: !binary |-
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4bWxuczpkY25kbD0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6ZGN0ZXJtcz0iaHR0cDovL3B1cmwub3JnL2RjL3Rlcm1zLyIgeG1sbnM6b3BlblNlYXJjaD0iaHR0cDovL2E5LmNvbS8tL3NwZWMvb3BlbnNlYXJjaHJzcy8xLjAvIiB2ZXJzaW9uPSIyLjAiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6ZGNtaXR5cGU9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjAwMDcyNjQ1NTAgMSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwOi8vaXNzLm5kbC5nby5qcC9hcGkvb3BlbnNlYXJjaD9pc2JuPTAwMDcyNjQ1NTAmYW1wO2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTAmYW1wO21lZGlhdHlwZT0xJmFtcDtpZHg9MTwvbGluaz4KICAgIDxkZXNjcmlwdGlvbj5TZWFyY2ggcmVzdWx0cyBmb3IgY250PTEwIG1lZGlhdHlwZT0xIGlzYm49MDAwNzI2NDU1MCBkcGlkPWlzcy1uZGwtb3BhYyA8L2Rlc2NyaXB0aW9uPgogICAgPGxhbmd1YWdlPmphPC9sYW5ndWFnZT4KICAgIDxvcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4wPC9vcGVuU2VhcmNoOnRvdGFsUmVzdWx0cz4KICAgIDxvcGVuU2VhcmNoOnN0YXJ0SW5kZXg+MTwvb3BlblNlYXJjaDpzdGFydEluZGV4PgogICAgPG9wZW5TZWFyY2g6aXRlbXNQZXJQYWdlPjEwPC9vcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4KICA8L2NoYW5uZWw+CjwvcnNzPgo=
     http_version: 
-  recorded_at: Tue, 15 Jan 2019 15:56:33 GMT
+  recorded_at: Sat, 19 Jan 2019 05:34:50 GMT
 recorded_with: VCR 4.0.0

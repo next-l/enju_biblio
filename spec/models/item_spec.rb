@@ -5,11 +5,11 @@ describe Item do
   fixtures :all
 
   it "should be rent" do
-    items(:item_00001).rent?.should be_truthy
+    items(:item_00010).rent?.should be_truthy
   end
 
   it "should not be rent" do
-    items(:item_00010).rent?.should be_falsy
+    items(:item_00001).rent?.should be_falsy
   end
 
   it "should be checked out" do
