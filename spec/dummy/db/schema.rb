@@ -1551,7 +1551,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "user_export_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.bigint "user_export_file_id"
     t.datetime "created_at", null: false
@@ -1559,7 +1559,6 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.boolean "most_recent", null: false
     t.index ["sort_key", "user_export_file_id"], name: "index_user_export_file_transitions_on_sort_key_and_file_id", unique: true
     t.index ["user_export_file_id", "most_recent"], name: "index_user_export_file_transitions_parent_most_recent", unique: true, where: "most_recent"
-    t.index ["user_export_file_id"], name: "index_user_export_file_transitions_on_file_id"
     t.index ["user_export_file_id"], name: "index_user_export_file_transitions_on_user_export_file_id"
   end
 
@@ -1619,7 +1618,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "user_import_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.bigint "user_import_file_id"
     t.datetime "created_at", null: false
