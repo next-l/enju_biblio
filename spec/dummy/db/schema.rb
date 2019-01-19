@@ -61,10 +61,11 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "agent_import_results", force: :cascade do |t|
     t.integer "agent_import_file_id"
-    t.integer "agent_id"
+    t.bigint "agent_id"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_agent_import_results_on_agent_id"
   end
 
   create_table "agent_merge_lists", force: :cascade do |t|
@@ -457,8 +458,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "donates", force: :cascade do |t|
-    t.integer "agent_id", null: false
-    t.integer "item_id", null: false
+    t.bigint "agent_id", null: false
+    t.bigint "item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_donates_on_agent_id"
@@ -575,12 +576,12 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   create_table "identifiers", force: :cascade do |t|
     t.string "body", null: false
     t.integer "identifier_type_id", null: false
-    t.integer "manifestation_id"
+    t.bigint "manifestation_id", null: false
     t.boolean "primary"
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["body", "identifier_type_id"], name: "index_identifiers_on_body_and_identifier_type_id"
+    t.index ["identifier_type_id"], name: "index_identifiers_on_identifier_type_id"
     t.index ["manifestation_id"], name: "index_identifiers_on_manifestation_id"
   end
 
@@ -704,7 +705,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "binding_item_identifier"
     t.string "binding_call_number"
     t.datetime "binded_at"
-    t.integer "manifestation_id", null: false
+    t.bigint "manifestation_id", null: false
     t.index ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id"
     t.index ["checkout_type_id"], name: "index_items_on_checkout_type_id"
@@ -1726,6 +1727,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"
   add_foreign_key "doi_records", "manifestations"
+  add_foreign_key "donates", "agents"
+  add_foreign_key "donates", "items"
+  add_foreign_key "identifiers", "manifestations"
   add_foreign_key "import_requests", "users"
   add_foreign_key "isbn_record_and_manifestations", "isbn_records"
   add_foreign_key "isbn_record_and_manifestations", "manifestations"
