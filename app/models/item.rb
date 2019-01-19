@@ -6,7 +6,6 @@ class Item < ActiveRecord::Base
       on_shelf
     end
   }
-  delegate :display_name, to: :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns
   has_many :donates
@@ -16,6 +15,10 @@ class Item < ActiveRecord::Base
   belongs_to :bookstore, optional: true
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :budget_type, optional: true
+  has_one :accept
+  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
+
+  belongs_to :shelf, counter_cache: true
 
   validates_associated :bookstore
   validates :manifestation_id, presence: true
@@ -34,6 +37,9 @@ class Item < ActiveRecord::Base
       :binding_item_identifier
     string :item_identifier, multiple: true do
       [item_identifier, binding_item_identifier]
+    end
+    string :library do
+      shelf.library.name
     end
     integer :required_role_id
     integer :manifestation_id
