@@ -161,10 +161,10 @@ class ResourceImportFile < ActiveRecord::Base
                 if manifestation
                   num[:manifestation_imported] += 1
                 end
-              rescue EnjuNdl::InvalidIsbn
+              rescue Manifestation::InvalidIsbn
                 manifestation = nil
                 import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
-              rescue EnjuNdl::RecordNotFound
+              rescue Manifestation::RecordNotFound
                 manifestation = nil
                 import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_record_not_found')}"
               end
@@ -311,23 +311,24 @@ class ResourceImportFile < ActiveRecord::Base
           fetch(row, edit_mode: 'update')
         end
         shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
-        circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
-        checkout_type = CheckoutType.find_by(name: row['checkout_type'])
         bookstore = Bookstore.find_by(name: row['bookstore'])
         required_role = Role.find_by(name: row['required_role'])
-        use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
-
-        item.shelf = shelf if shelf
-        item.circulation_status = circulation_status if circulation_status
-        item.checkout_type = checkout_type if checkout_type
-        item.bookstore = bookstore if bookstore
-        item.required_role = required_role if required_role
-        item.use_restriction = use_restriction if use_restriction
-
         acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
         binded_at = Time.zone.parse(row['binded_at']) rescue nil
+        item.shelf = shelf if shelf
+        item.bookstore = bookstore if bookstore
+        item.required_role = required_role if required_role
         item.acquired_at = acquired_at if acquired_at
         item.binded_at = binded_at if binded_at
+
+        if defined?(EnjuCirculation)
+          circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
+          checkout_type = CheckoutType.find_by(name: row['checkout_type'])
+          use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
+          item.circulation_status = circulation_status if circulation_status
+          item.checkout_type = checkout_type if checkout_type
+          item.use_restriction = use_restriction if use_restriction
+        end
 
         item_columns = %w(
           call_number

@@ -778,6 +778,12 @@ class Manifestation < ActiveRecord::Base
       ]
     }.flatten
   end
+
+  class RecordNotFound < StandardError
+  end
+
+  class InvalidIsbn < StandardError
+  end
 end
 
 # == Schema Information
