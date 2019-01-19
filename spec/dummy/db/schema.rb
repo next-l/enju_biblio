@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_12_151019) do
+ActiveRecord::Schema.define(version: 2019_01_19_144223) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -29,9 +29,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "agent_import_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "agent_import_file_id"
+    t.bigint "agent_import_file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -690,14 +690,12 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "item_identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "shelf_id", default: 1, null: false
     t.boolean "include_supplements", default: false, null: false
     t.text "note"
     t.string "url"
     t.integer "price"
     t.integer "lock_version", default: 0, null: false
     t.integer "required_role_id", default: 1, null: false
-    t.integer "required_score", default: 0, null: false
     t.datetime "acquired_at"
     t.bigint "bookstore_id"
     t.integer "budget_type_id"
@@ -707,13 +705,13 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "binding_call_number"
     t.datetime "binded_at"
     t.bigint "manifestation_id", null: false
+    t.bigint "shelf_id", null: false
     t.index ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id"
     t.index ["checkout_type_id"], name: "index_items_on_checkout_type_id"
     t.index ["circulation_status_id"], name: "index_items_on_circulation_status_id"
-    t.index ["item_identifier"], name: "index_items_on_item_identifier"
+    t.index ["item_identifier"], name: "index_items_on_item_identifier", unique: true
     t.index ["manifestation_id"], name: "index_items_on_manifestation_id"
-    t.index ["required_role_id"], name: "index_items_on_required_role_id"
     t.index ["shelf_id"], name: "index_items_on_shelf_id"
   end
 
@@ -935,7 +933,6 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.boolean "repository_content", default: false, null: false
     t.integer "lock_version", default: 0, null: false
     t.integer "required_role_id", default: 1, null: false
-    t.integer "required_score", default: 0, null: false
     t.integer "frequency_id", default: 1, null: false
     t.boolean "subscription_master", default: false, null: false
     t.string "attachment_file_name"
@@ -968,7 +965,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.text "dimensions"
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
-    t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier"
+    t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier", unique: true
     t.index ["nii_type_id"], name: "index_manifestations_on_nii_type_id"
     t.index ["updated_at"], name: "index_manifestations_on_updated_at"
   end
@@ -1255,9 +1252,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "resource_export_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.integer "resource_export_file_id"
+    t.bigint "resource_export_file_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -1445,7 +1442,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "subscribes", force: :cascade do |t|
     t.bigint "subscription_id", null: false
-    t.integer "work_id", null: false
+    t.bigint "work_id", null: false
     t.datetime "start_at", null: false
     t.datetime "end_at", null: false
     t.datetime "created_at", null: false
@@ -1748,6 +1745,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "items", "checkout_types"
   add_foreign_key "items", "circulation_statuses"
   add_foreign_key "items", "manifestations"
+  add_foreign_key "items", "shelves"
   add_foreign_key "jpno_records", "manifestations"
   add_foreign_key "lccn_records", "manifestations"
   add_foreign_key "lending_policies", "items"
@@ -1755,8 +1753,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "libraries", "library_groups"
   add_foreign_key "library_groups", "users"
   add_foreign_key "manifestation_checkout_stats", "users"
-  add_foreign_key "manifestation_relationships", "agents", column: "child_id"
-  add_foreign_key "manifestation_relationships", "agents", column: "parent_id"
+  add_foreign_key "manifestation_relationships", "manifestations", column: "child_id"
+  add_foreign_key "manifestation_relationships", "manifestations", column: "parent_id"
   add_foreign_key "manifestation_reserve_stats", "users"
   add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
@@ -1768,12 +1766,12 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "reserves", "users"
   add_foreign_key "resource_export_files", "users"
   add_foreign_key "resource_import_files", "users"
-  add_foreign_key "resource_import_results", "items"
-  add_foreign_key "resource_import_results", "manifestations"
   add_foreign_key "resource_import_results", "resource_import_files"
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
   add_foreign_key "series_statement_merges", "series_statements"
   add_foreign_key "series_statements", "manifestations"
+  add_foreign_key "subscribes", "manifestations", column: "work_id"
+  add_foreign_key "subscribes", "subscriptions"
   add_foreign_key "user_checkout_stats", "users"
   add_foreign_key "user_group_has_checkout_types", "checkout_types"
   add_foreign_key "user_group_has_checkout_types", "user_groups"

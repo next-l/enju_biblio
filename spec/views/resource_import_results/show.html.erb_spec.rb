@@ -13,12 +13,4 @@ describe "resource_import_results/show" do
     render
     expect(rendered).to match /MyString/
   end
-
-  it "renders even if a resource_import_file is deleted" do
-    #@resource_import_result.resource_import_file = nil
-    @resource_import_result.resource_import_file.delete
-    @resource_import_result.resource_import_file = nil
-    render
-    expect(rendered).to match /MyText/
-  end
 end
