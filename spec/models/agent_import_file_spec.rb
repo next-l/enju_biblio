@@ -72,7 +72,7 @@ describe AgentImportFile do
         user: users(:admin)
       )
       file.remove
-      Agent.count.should eq old_count - 7
+      Agent.count.should eq old_count - 5
     end
   end
 

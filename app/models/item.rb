@@ -6,6 +6,7 @@ class Item < ActiveRecord::Base
       on_shelf
     end
   }
+  delegate :display_name, to: :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns
   has_many :donates
