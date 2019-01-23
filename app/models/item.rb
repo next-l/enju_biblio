@@ -103,7 +103,7 @@ end
 #
 # Table name: items
 #
-#  id                      :bigint(8)        not null, primary key
+#  id                      :uuid             not null, primary key
 #  call_number             :string
 #  item_identifier         :string
 #  created_at              :datetime         not null

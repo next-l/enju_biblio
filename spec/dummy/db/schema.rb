@@ -158,7 +158,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "birth_date"
     t.string "death_date"
     t.string "agent_identifier"
-    t.bigint "profile_id"
+    t.uuid "profile_id"
     t.index ["agent_identifier"], name: "index_agents_on_agent_identifier"
     t.index ["country_id"], name: "index_agents_on_country_id"
     t.index ["full_name"], name: "index_agents_on_full_name"
@@ -270,7 +270,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "checked_items", force: :cascade do |t|
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.bigint "basket_id", null: false
     t.bigint "librarian_id"
     t.datetime "due_date", null: false
@@ -284,7 +284,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "checkins", force: :cascade do |t|
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.bigint "librarian_id"
     t.bigint "basket_id"
     t.datetime "created_at", null: false
@@ -329,7 +329,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "checkouts", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.bigint "checkin_id"
     t.bigint "librarian_id"
     t.bigint "basket_id"
@@ -439,7 +439,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "demands", force: :cascade do |t|
     t.bigint "user_id"
-    t.bigint "item_id"
+    t.uuid "item_id"
     t.bigint "message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -462,7 +462,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "donates", force: :cascade do |t|
     t.bigint "agent_id", null: false
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["agent_id"], name: "index_donates_on_agent_id"
@@ -598,7 +598,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "name"
     t.string "email"
     t.string "password_digest"
-    t.bigint "profile_id"
+    t.uuid "profile_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "provider"
@@ -698,7 +698,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "item_has_use_restrictions", force: :cascade do |t|
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.bigint "use_restriction_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -706,7 +706,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["use_restriction_id"], name: "index_item_has_use_restrictions_on_use_restriction_id"
   end
 
-  create_table "items", force: :cascade do |t|
+  create_table "items", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "call_number"
     t.string "item_identifier"
     t.datetime "created_at", null: false
@@ -770,8 +770,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "lending_policies", force: :cascade do |t|
-    t.bigint "item_id", null: false
-    t.bigint "user_group_id", null: false
+    t.uuid "item_id", null: false
+    t.uuid "user_group_id", null: false
     t.integer "loan_period", default: 0, null: false
     t.datetime "fixed_due_date"
     t.integer "renewal", default: 0, null: false
@@ -1100,7 +1100,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "owns", force: :cascade do |t|
     t.bigint "agent_id", null: false
-    t.bigint "item_id", null: false
+    t.uuid "item_id", null: false
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1171,8 +1171,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["manifestation_id"], name: "index_produces_on_manifestation_id"
   end
 
-  create_table "profiles", force: :cascade do |t|
-    t.bigint "user_group_id"
+  create_table "profiles", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "user_group_id", null: false
     t.bigint "library_id"
     t.string "locale"
     t.string "user_number"
@@ -1267,7 +1267,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   create_table "reserves", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.bigint "manifestation_id", null: false
-    t.bigint "item_id"
+    t.uuid "item_id"
     t.bigint "request_status_type_id", null: false
     t.datetime "checked_out_at"
     t.datetime "created_at", null: false
@@ -1349,7 +1349,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   create_table "resource_import_results", force: :cascade do |t|
     t.bigint "resource_import_file_id"
     t.bigint "manifestation_id"
-    t.bigint "item_id"
+    t.uuid "item_id"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1587,7 +1587,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "user_group_has_checkout_types", force: :cascade do |t|
-    t.bigint "user_group_id", null: false
+    t.uuid "user_group_id", null: false
     t.bigint "checkout_type_id", null: false
     t.integer "checkout_limit", default: 0, null: false
     t.integer "checkout_period", default: 0, null: false
@@ -1605,8 +1605,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["user_group_id"], name: "index_user_group_has_checkout_types_on_user_group_id"
   end
 
-  create_table "user_groups", force: :cascade do |t|
-    t.string "name"
+  create_table "user_groups", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "name", null: false
     t.jsonb "display_name", default: {}, null: false
     t.text "note"
     t.integer "position", default: 1, null: false
@@ -1656,7 +1656,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.datetime "updated_at", null: false
     t.string "user_encoding"
     t.bigint "default_library_id"
-    t.bigint "default_user_group_id"
+    t.uuid "default_user_group_id"
     t.index ["default_library_id"], name: "index_user_import_files_on_default_library_id"
     t.index ["default_user_group_id"], name: "index_user_import_files_on_default_user_group_id"
     t.index ["user_id"], name: "index_user_import_files_on_user_id"
@@ -1719,7 +1719,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.datetime "confirmed_at"
-    t.bigint "profile_id"
+    t.uuid "profile_id"
     t.index ["checkout_icalendar_token"], name: "index_users_on_checkout_icalendar_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["profile_id"], name: "index_users_on_profile_id"
@@ -1820,7 +1820,6 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
   add_foreign_key "series_statement_merges", "series_statements"
   add_foreign_key "series_statements", "manifestations"
-  add_foreign_key "subscribes", "manifestations", column: "work_id"
   add_foreign_key "subscribes", "subscriptions"
   add_foreign_key "user_checkout_stats", "users"
   add_foreign_key "user_group_has_checkout_types", "checkout_types"

@@ -38,7 +38,7 @@ describe ResourceImportFile do
         manifestation_101.series_statements.first.title_transcription.should eq 'しゅしりーず'
         manifestation_101.series_statements.first.title_subseries.should eq '副シリーズ'
         manifestation_101.series_statements.first.title_subseries_transcription.should eq 'ふくしりーず'
-        manifestation_101.items.order(:id).last.call_number.should eq '007|A'
+        manifestation_101.items.order(:created_at).last.call_number.should eq '007|A'
         manifestation_101.serial.should be_falsy
 
         item_10101 = Item.find_by(item_identifier: '10101')

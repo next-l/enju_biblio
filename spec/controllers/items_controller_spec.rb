@@ -535,12 +535,12 @@ describe ItemsController do
       end
 
       it 'should not destroy item if not checked in' do
-        delete :destroy, params: { id: 10 }
+        delete :destroy, params: { id: items(:item_00010) }
         expect(response).to be_forbidden
       end
 
       it 'should not destroy a removed item' do
-        delete :destroy, params: { id: 23 }
+        delete :destroy, params: { id: items(:item_00023) }
         expect(response).to be_forbidden
       end
     end

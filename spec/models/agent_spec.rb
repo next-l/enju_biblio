@@ -118,5 +118,5 @@ end
 #  birth_date                          :string
 #  death_date                          :string
 #  agent_identifier                    :string
-#  profile_id                          :bigint(8)
+#  profile_id                          :uuid
 #

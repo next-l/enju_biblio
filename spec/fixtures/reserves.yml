@@ -112,7 +112,7 @@ reserve_00014:
   id: 14
   created_at: 2007-09-01 14:20:05.530854 +09:00
   expired_at: <%= 1.day.from_now.to_s(:db) %>
-  item_id: 21
+  item_id: 926c4800-25b2-468a-9c28-97a35507ab99
 reserve_00015: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
   manifestation_id: 11
