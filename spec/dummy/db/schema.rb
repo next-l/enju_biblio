@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "accepts", force: :cascade do |t|
     t.bigint "basket_id"
-    t.bigint "item_id"
+    t.uuid "item_id"
     t.bigint "librarian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -547,7 +547,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["event_import_file_id"], name: "index_event_import_results_on_event_import_file_id"
   end
 
-  create_table "events", force: :cascade do |t|
+  create_table "events", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "library_id", null: false
     t.bigint "event_category_id", null: false
     t.string "name", null: false
@@ -1110,7 +1110,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "participates", force: :cascade do |t|
     t.bigint "agent_id", null: false
-    t.bigint "event_id", null: false
+    t.uuid "event_id", null: false
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1749,6 +1749,9 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["librarian_id"], name: "index_withdraws_on_librarian_id"
   end
 
+  add_foreign_key "accepts", "baskets"
+  add_foreign_key "accepts", "items"
+  add_foreign_key "accepts", "users", column: "librarian_id"
   add_foreign_key "agent_import_files", "users"
   add_foreign_key "agent_import_results", "agent_import_files"
   add_foreign_key "agent_merges", "agents"
@@ -1783,6 +1786,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "event_export_files", "users"
   add_foreign_key "event_import_files", "users"
   add_foreign_key "events", "event_categories"
+  add_foreign_key "events", "libraries"
   add_foreign_key "identifiers", "manifestations"
   add_foreign_key "import_requests", "users"
   add_foreign_key "isbn_record_and_manifestations", "isbn_records"
@@ -1808,6 +1812,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "manifestation_reserve_stats", "users"
   add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
+  add_foreign_key "participates", "events"
   add_foreign_key "reserve_stat_has_manifestations", "manifestations"
   add_foreign_key "reserve_stat_has_users", "user_reserve_stats"
   add_foreign_key "reserve_stat_has_users", "users"
