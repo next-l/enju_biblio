@@ -32,6 +32,10 @@ class IsbnRecord < ActiveRecord::Base
       errors.add(:body)
     end
   end
+
+  def valid_isbn?
+    StdNum::ISBN.valid?(body)
+  end
 end
 
 # == Schema Information

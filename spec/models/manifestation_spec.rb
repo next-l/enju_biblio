@@ -109,13 +109,13 @@ describe Manifestation, solr: true do
     sru = Sru.new({query: 'title ALL "awk sed"'})
     sru.search
     sru.manifestations.size.should eq 2
-    sru.manifestations.collect{|m| m.id}.should eq [184, 116]
+    sru.manifestations.collect{|m| m.id}.should eq [manifestations(:manifestation_00184).id, manifestations(:manifestation_00116).id]
     sru = Sru.new({query: 'title ANY "ruby awk sed"'})
     sru.search
     sru.manifestations.size.should eq 22
     sru = Sru.new({query: 'isbn=9784756137470'})
     sru.search
-    sru.manifestations.first.id.should eq 114
+    sru.manifestations.first.id.should eq manifestations(:manifestation_00114).id
     sru = Sru.new({query: "creator=テスト"})
     sru.search
     sru.manifestations.size.should eq 1
@@ -125,7 +125,7 @@ describe Manifestation, solr: true do
     sru = Sru.new({query: "from = 2000-09 AND until = 2000-11-01"})
     sru.search
     sru.manifestations.size.should eq 1
-    sru.manifestations.first.id.should eq 120
+    sru.manifestations.first.id.should eq manifestations(:manifestation_00120).id
     sru = Sru.new({query: "from = 1993-02-24"})
     sru.search
     sru.manifestations.size.should eq 5
@@ -245,35 +245,38 @@ describe Manifestation, solr: true do
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["edition"].compact).not_to be_empty
       expect(csv["edition_string"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
       expect(m["edition"]).to eq "2"
       expect(m["edition_string"]).to eq "Revised Ed."
     end
+
     it "should export title_transcription fields" do
       manifestation = FactoryBot.create(:manifestation, title_transcription: "Transcripted title")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["title_transcription"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
       expect(m["title_transcription"]).to eq "Transcripted title"
     end
+
     it "should export volume fields" do
       manifestation = FactoryBot.create(:manifestation, volume_number: 15, volume_number_string: "Vol.15")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["volume_number"].compact).not_to be_empty
       expect(csv["volume_number_string"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
       expect(m["volume_number"]).to eq "15"
       expect(m["volume_number_string"]).to eq "Vol.15"
     end
+
     it "should export multiple identifiers" do
       manifestation = FactoryBot.create(:manifestation)
       manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4043898039")
       manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4840239219")
       lines = Manifestation.export()
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
       expect(m["isbn"]).to eq "9784043898039//9784840239219"
     end
 
@@ -300,7 +303,7 @@ describe Manifestation, solr: true do
       expect(csv["description"].compact).not_to be_empty
       expect(csv["note"].compact).not_to be_empty
       expect(csv["item_note"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
       expect(m["description"]).to eq 'test\ntest'
       expect(m["note"]).to eq 'test\ntest'
       expect(m["item_note"]).to eq 'test\ntest'
@@ -319,7 +322,7 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :bigint(8)        not null, primary key
+#  id                              :uuid             not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text

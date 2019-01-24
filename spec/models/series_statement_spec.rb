@@ -24,12 +24,12 @@ end
 #  title_transcription                :text
 #  title_alternative                  :text
 #  series_statement_identifier        :string
-#  manifestation_id                   :bigint(8)
+#  manifestation_id                   :uuid
 #  note                               :text
 #  title_subseries_transcription      :text
 #  creator_string                     :text
 #  volume_number_string               :text
 #  volume_number_transcription_string :text
 #  series_master                      :boolean
-#  root_manifestation_id              :integer
+#  root_manifestation_id              :uuid
 #

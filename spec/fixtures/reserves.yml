@@ -1,7 +1,7 @@
 --- 
 reserve_00003: 
   updated_at: 2007-09-02 17:46:52.791614 +09:00
-  manifestation_id: 6
+  manifestation_id: 0518b3dc-dc94-4823-b657-13042c8ec8fe
   user_id: 3
   request_status_type_id: 4
   id: 3
@@ -9,7 +9,7 @@ reserve_00003:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00004: 
   updated_at: 2007-09-02 18:37:25.576087 +09:00
-  manifestation_id: 7
+  manifestation_id: 068457b6-d3c4-4f55-b2dd-95a3d92a501c
   user_id: 1
   request_status_type_id: 4
   id: 4
@@ -17,7 +17,7 @@ reserve_00004:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00005: 
   updated_at: 2007-09-02 19:16:55.714812 +09:00
-  manifestation_id: 8
+  manifestation_id: 9990ffe4-a403-4742-b619-1bbb363cc911
   user_id: 2
   request_status_type_id: 4
   id: 5
@@ -25,7 +25,7 @@ reserve_00005:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00001: 
   updated_at: 2007-09-02 17:51:54.887849 +09:00
-  manifestation_id: 4
+  manifestation_id: 73d5778f-d328-46c2-940e-825d48e8b84a
   user_id: 1
   request_status_type_id: 4
   id: 1
@@ -33,7 +33,7 @@ reserve_00001:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00002: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 5
+  manifestation_id: 7540de3a-ef3c-46b8-bdf4-ac919326097a
   user_id: 2
   request_status_type_id: 4
   id: 2
@@ -41,7 +41,7 @@ reserve_00002:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00006: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 4
+  manifestation_id: 73d5778f-d328-46c2-940e-825d48e8b84a
   user_id: 2
   request_status_type_id: 4
   id: 6
@@ -49,7 +49,7 @@ reserve_00006:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00007: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 2
+  manifestation_id: b70ba31e-5220-446f-8648-b0324d1918c7
   user_id: 4
   request_status_type_id: 4
   id: 7
@@ -57,7 +57,7 @@ reserve_00007:
   expired_at: <%= 1.week.from_now.to_s(:db) %>
 reserve_00008: 
   updated_at: 2007-09-02 17:46:52.791614 +09:00
-  manifestation_id: 6
+  manifestation_id: 0518b3dc-dc94-4823-b657-13042c8ec8fe
   user_id: 3
   request_status_type_id: 3
   id: 8
@@ -65,7 +65,7 @@ reserve_00008:
   expired_at: <%= 1.week.ago.to_s(:db) %>
 reserve_00009: 
   updated_at: 2007-09-02 17:46:52.791614 +09:00
-  manifestation_id: 7
+  manifestation_id: 068457b6-d3c4-4f55-b2dd-95a3d92a501c
   user_id: 5
   request_status_type_id: 3
   id: 9
@@ -73,7 +73,7 @@ reserve_00009:
   expired_at: <%= 1.day.ago.to_s(:db) %>
 reserve_00010: 
   updated_at: 2007-09-02 17:46:52.791614 +09:00
-  manifestation_id: 8
+  manifestation_id: 9990ffe4-a403-4742-b619-1bbb363cc911
   user_id: 5
   request_status_type_id: 3
   id: 10
@@ -82,7 +82,7 @@ reserve_00010:
   checked_out_at: <%= 1.week.ago.to_s(:db) %>
 reserve_00011: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 7
+  manifestation_id: 068457b6-d3c4-4f55-b2dd-95a3d92a501c
   user_id: 2
   request_status_type_id: 3
   id: 11
@@ -90,7 +90,7 @@ reserve_00011:
   expired_at: <%= 1.day.ago.to_s(:db) %>
 reserve_00012: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 8
+  manifestation_id: 9990ffe4-a403-4742-b619-1bbb363cc911
   user_id: 2
   request_status_type_id: 4
   id: 12
@@ -98,7 +98,7 @@ reserve_00012:
   expired_at: <%= 1.day.ago.to_s(:db) %>
 reserve_00013: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 11
+  manifestation_id: c16fbafe-24a2-4ded-96b9-867b24fe6557
   user_id: 4
   request_status_type_id: 3
   id: 13
@@ -106,7 +106,7 @@ reserve_00013:
   expired_at: <%= 1.day.ago.to_s(:db) %>
 reserve_00014: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 11
+  manifestation_id: c16fbafe-24a2-4ded-96b9-867b24fe6557
   user_id: 4
   request_status_type_id: 3
   id: 14
@@ -115,7 +115,7 @@ reserve_00014:
   item_id: 926c4800-25b2-468a-9c28-97a35507ab99
 reserve_00015: 
   updated_at: 2007-09-01 14:20:05.530854 +09:00
-  manifestation_id: 11
+  manifestation_id: c16fbafe-24a2-4ded-96b9-867b24fe6557
   user_id: 4
   request_status_type_id: 3
   id: 15

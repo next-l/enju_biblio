@@ -76,8 +76,8 @@ describe AgentsController do
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
-        assigns(:manifestation).should eq Manifestation.find(1)
+        get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
+        assigns(:manifestation).should eq Manifestation.find(manifestations(:manifestation_00001).id)
         expect(assigns(:agents)).to eq assigns(:manifestation).publishers.where(required_role_id: 1).page(1)
       end
 
@@ -136,12 +136,6 @@ describe AgentsController do
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
-
-      # it "should not show agent when required_role is 'Administrator'" do
-      #  sign_in users(:librarian2)
-      #  get :show, :id => users(:librarian1).agent.id
-      #  expect(response).to be_forbidden
-      # end
     end
 
     describe 'When logged in as User' do
@@ -151,18 +145,6 @@ describe AgentsController do
         get :show, params: { id: @agent.id }
         expect(assigns(:agent)).to eq(@agent)
       end
-
-      # it "should show user" do
-      #  get :show, :id => users(:user2).agent.id
-      #  assigns(:agent).required_role.name.should eq 'User'
-      #  expect(response).to be_successful
-      # end
-
-      # it "should not show agent when required_role is 'Librarian'" do
-      #  sign_in users(:user2)
-      #  get :show, :id => users(:user1).agent.id
-      #  expect(response).to be_forbidden
-      # end
     end
 
     describe 'When not logged in' do
@@ -172,12 +154,12 @@ describe AgentsController do
       end
 
       it 'should show agent with work' do
-        get :show, params: { id: 1, work_id: 1 }
+        get :show, params: { id: 1, work_id: manifestations(:manifestation_00001).id }
         expect(assigns(:agent)).to eq assigns(:work).creators.first
       end
 
       it 'should show agent with manifestation' do
-        get :show, params: { id: 1, manifestation_id: 1 }
+        get :show, params: { id: 1, manifestation_id: manifestations(:manifestation_00001).id }
         expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
       end
 
@@ -245,21 +227,6 @@ describe AgentsController do
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
-
-      # it "should edit agent when its required_role is 'User'" do
-      #  get :edit, :id => users(:user2).agent.id
-      #  expect(response).to be_successful
-      # end
-
-      # it "should edit agent when its required_role is 'Librarian'" do
-      #  get :edit, :id => users(:user1).agent.id
-      #  expect(response).to be_successful
-      # end
-
-      # it "should edit admin" do
-      #  get :edit, :id => users(:admin).agent.id
-      #  expect(response).to be_forbidden
-      # end
     end
 
     describe 'When logged in as User' do
@@ -270,16 +237,6 @@ describe AgentsController do
         get :edit, params: { id: agent.id }
         expect(response).to be_forbidden
       end
-
-      # it "should edit myself" do
-      #  get :edit, :id => users(:user1).agent.id
-      #  expect(response).to be_successful
-      # end
-
-      # it "should not edit other user's agent profile" do
-      #  get :edit, :id => users(:user2).agent.id
-      #  expect(response).to be_forbidden
-      # end
     end
 
     describe 'When not logged in' do
@@ -342,13 +299,13 @@ describe AgentsController do
         it 'should create a relationship if work_id is set' do
           post :create, params: { agent: @attrs, work_id: 1 }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).works.should eq [Manifestation.find(1)]
+          assigns(:agent).works.should eq [Manifestation.find(manifestations(:manifestation_00001).id)]
         end
 
         it 'should create a relationship if manifestation_id is set' do
-          post :create, params: { agent: @attrs, manifestation_id: 1 }
+          post :create, params: { agent: @attrs, manifestation_id: manifestations(:manifestation_00001).id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).manifestations.should eq [Manifestation.find(1)]
+          assigns(:agent).manifestations.should eq [Manifestation.find(manifestations(:manifestation_00001))]
         end
 
         it 'should create a relationship if item_id is set' do
@@ -403,17 +360,6 @@ describe AgentsController do
           expect(response).to be_forbidden
         end
       end
-
-      # it "should not create agent myself" do
-      #  post :create, :agent => { :full_name => 'test', :user_username => users(:user1).username }
-      #  expect(assigns(:agent)).not_to be_valid
-      #  expect(response).to be_successful
-      # end
-
-      # it "should not create other agent" do
-      #  post :create, :agent => { :full_name => 'test', :user_id => users(:user2).username }
-      #  expect(response).to be_forbidden
-      # end
     end
 
     describe 'When not logged in' do
@@ -498,11 +444,6 @@ describe AgentsController do
           expect(response).to render_template('edit')
         end
       end
-
-      # it "should update other agent" do
-      #  put :update, :id => users(:user2).agent.id, :agent => { :full_name => 'test' }
-      #  expect(response).to redirect_to agent_url(assigns(:agent))
-      # end
     end
 
     describe 'When logged in as User' do
@@ -526,23 +467,6 @@ describe AgentsController do
           expect(response).to be_forbidden
         end
       end
-
-      # it "should update myself" do
-      #  put :update, :id => users(:user1).agent.id, :agent => { :full_name => 'test' }
-      #  expect(assigns(:agent)).to be_valid
-      #  expect(response).to redirect_to agent_url(assigns(:agent))
-      # end
-
-      # it "should not update myself without name" do
-      #  put :update, :id => users(:user1).agent.id, :agent => { :first_name => '', :last_name => '', :full_name => '' }
-      #  expect(assigns(:agent)).not_to be_valid
-      #  expect(response).to be_successful
-      # end
-
-      # it "should not update other agent" do
-      #  put :update, :id => users(:user2).agent.id, :agent => { :full_name => 'test' }
-      #  expect(response).to be_forbidden
-      # end
     end
 
     describe 'When not logged in' do

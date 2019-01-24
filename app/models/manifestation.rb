@@ -117,9 +117,9 @@ class Manifestation < ActiveRecord::Base
     integer :creator_ids, multiple: true
     integer :contributor_ids, multiple: true
     integer :publisher_ids, multiple: true
-    integer :item_ids, multiple: true
-    integer :original_manifestation_ids, multiple: true
-    integer :parent_ids, multiple: true do
+    string :item_ids, multiple: true
+    string :original_manifestation_ids, multiple: true
+    string :parent_ids, multiple: true do
       original_manifestations.pluck(:id)
     end
     integer :required_role_id
@@ -790,7 +790,7 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :bigint(8)        not null, primary key
+#  id                              :uuid             not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text

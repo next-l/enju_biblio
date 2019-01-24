@@ -17,7 +17,7 @@ end
 #
 #  id                      :bigint(8)        not null, primary key
 #  resource_import_file_id :bigint(8)
-#  manifestation_id        :bigint(8)
+#  manifestation_id        :uuid
 #  item_id                 :uuid
 #  body                    :text
 #  created_at              :datetime         not null

@@ -73,7 +73,7 @@ describe ItemsController do
       it 'should get index with manifestation_id' do
         get :index, params: { manifestation_id: 1 }
         expect(response).to be_successful
-        assigns(:manifestation).should eq Manifestation.find(1)
+        assigns(:manifestation).should eq Manifestation.find(manifestations(:manifestation_00001))
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
@@ -333,7 +333,7 @@ describe ItemsController do
 
         expect(response).to redirect_to item_url(assigns(:item))
         flash[:message].should eq I18n.t('item.this_item_is_reserved')
-        assigns(:item).manifestation.should eq Manifestation.find(2)
+        assigns(:item).manifestation.should eq Manifestation.find(manifestations(:manifestation_00002))
         assigns(:item).should be_retained
       end
 
