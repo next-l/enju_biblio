@@ -123,7 +123,7 @@ describe ResourceImportFile do
         ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
 
         Item.find_by(item_identifier: '11113').manifestation.original_title.should eq 'test10'
-        Item.find_by(item_identifier: '11114').manifestation.id.should eq 1
+        Item.find_by(item_identifier: '11114').manifestation.id.should eq manifestations(:manifestation_00001).id
 
         @file.resource_import_fingerprint.should be_truthy
         @file.executed_at.should be_truthy
@@ -243,7 +243,7 @@ describe ResourceImportFile do
         @file.import_start
         Manifestation.count.should eq old_manifestations_count + 1
         Agent.count.should eq old_agents_count + 4
-        Manifestation.order(:id).last.publication_place.should eq '東京'
+        Manifestation.order(:created_at).last.publication_place.should eq '東京'
       end
     end
 

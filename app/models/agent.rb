@@ -64,9 +64,9 @@ class Agent < ActiveRecord::Base
     time :updated_at
     time :date_of_birth
     time :date_of_death
-    integer :work_ids, multiple: true
-    integer :expression_ids, multiple: true
-    integer :manifestation_ids, multiple: true
+    string :work_ids, multiple: true
+    string :expression_ids, multiple: true
+    string :manifestation_ids, multiple: true
     integer :agent_merge_list_ids, multiple: true
     integer :original_agent_ids, multiple: true
     integer :required_role_id

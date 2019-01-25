@@ -43,8 +43,8 @@ class Item < ActiveRecord::Base
       shelf.library.name
     end
     integer :required_role_id
-    integer :manifestation_id
-    integer :shelf_id
+    string :manifestation_id
+    string :shelf_id
     integer :agent_ids, multiple: true
     time :created_at
     time :updated_at

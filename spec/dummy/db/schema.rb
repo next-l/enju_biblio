@@ -267,6 +267,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "attachment_content_type"
     t.bigint "attachment_file_size"
     t.datetime "attachment_updated_at"
+    t.index ["name"], name: "index_carrier_types_on_name", unique: true
   end
 
   create_table "checked_items", force: :cascade do |t|
@@ -357,6 +358,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_circulation_statuses_on_name", unique: true
   end
 
   create_table "classification_types", force: :cascade do |t|
@@ -623,8 +625,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "import_requests", force: :cascade do |t|
-    t.string "isbn"
-    t.bigint "manifestation_id"
+    t.string "isbn", null: false
+    t.uuid "manifestation_id"
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1534,6 +1536,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_use_restrictions_on_name", unique: true
   end
 
   create_table "user_checkout_stat_transitions", force: :cascade do |t|
@@ -1791,6 +1794,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "events", "event_categories"
   add_foreign_key "events", "libraries"
   add_foreign_key "identifiers", "manifestations"
+  add_foreign_key "import_requests", "manifestations"
   add_foreign_key "import_requests", "users"
   add_foreign_key "isbn_record_and_manifestations", "isbn_records"
   add_foreign_key "isbn_record_and_manifestations", "manifestations"

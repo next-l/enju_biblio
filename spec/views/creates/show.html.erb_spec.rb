@@ -1,9 +1,11 @@
 require 'rails_helper'
 
 describe "creates/show" do
+  fixtures :manifestations
+
   before(:each) do
     @create = assign(:create, stub_model(Create,
-      work_id: 1,
+      work_id: manifestations(:manifestation_00001).id,
       agent_id: 1
     ))
   end

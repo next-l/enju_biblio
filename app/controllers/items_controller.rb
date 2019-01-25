@@ -36,7 +36,7 @@ class ItemsController < ApplicationController
             else
               mode = 'not_on_shelf'
             end
-            order = 'items.id'
+            order = 'items.created_at'
             @items = Item.inventory_items(@inventory_file, mode).order(order).page(params[:page]).per(per_page)
           else
             access_denied

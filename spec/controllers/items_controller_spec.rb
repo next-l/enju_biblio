@@ -71,9 +71,9 @@ describe ItemsController do
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
+        get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
         expect(response).to be_successful
-        assigns(:manifestation).should eq Manifestation.find(manifestations(:manifestation_00001))
+        assigns(:manifestation).should eq Manifestation.find(manifestations(:manifestation_00001).id)
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
@@ -150,15 +150,6 @@ describe ItemsController do
       it 'should not get new without manifestation_id' do
         get :new
         expect(response).to redirect_to(manifestations_url)
-      end
-
-      it 'should work without exception, even if library and shelf is unavailable' do
-        Library.real.each do |library|
-          library.try(:shelves).to_a.each(&:destroy)
-          library.destroy
-        end
-        get :new, params: { manifestation_id: @manifestation.id }
-        expect(response).to redirect_to(libraries_url)
       end
 
       it 'should not get new item for series_master' do
@@ -294,7 +285,7 @@ describe ItemsController do
       end
 
       it 'should not create item already created' do
-        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
+        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: manifestations(:manifestation_00001) } }
         expect(assigns(:item)).to_not be_valid
         expect(response).to be_successful
       end
@@ -328,12 +319,12 @@ describe ItemsController do
       end
 
       it 'should create reserved item' do
-        post :create, params: { item: { circulation_status_id: 1, manifestation_id: 2, shelf_id: 1 } }
+        post :create, params: { item: { circulation_status_id: 1, manifestation_id: manifestations(:manifestation_00002).id, shelf_id: shelves(:shelf_00001).id } }
         expect(assigns(:item)).to be_valid
 
         expect(response).to redirect_to item_url(assigns(:item))
         flash[:message].should eq I18n.t('item.this_item_is_reserved')
-        assigns(:item).manifestation.should eq Manifestation.find(manifestations(:manifestation_00002))
+        assigns(:item).manifestation.should eq manifestations(:manifestation_00002)
         assigns(:item).should be_retained
       end
 
