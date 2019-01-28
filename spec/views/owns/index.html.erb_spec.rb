@@ -1,16 +1,18 @@
 require 'rails_helper'
 
 describe "owns/index" do
+  fixtures :agents
+
   before(:each) do
     @item = FactoryBot.create(:item)
     assign(:owns, Kaminari.paginate_array([
       stub_model(Own,
         item_id: @item.id,
-        agent_id: 1
+        agent_id: agents(:agent_00001).id
       ),
       stub_model(Own,
         item_id: @item.id,
-        agent_id: 2
+        agent_id: agents(:agent_00002).id
       )
     ]).page(1))
   end

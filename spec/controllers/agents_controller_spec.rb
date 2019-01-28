@@ -21,9 +21,9 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, params: { agent_id: agents(:agent_00001).id }
         expect(response).to be_successful
-        expect(assigns(:agent)).to eq Agent.find(1)
+        expect(assigns(:agent)).to eq agents(:agent_00001)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where('required_role_id >= 1').page(1)
       end
 
@@ -69,9 +69,9 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, params: { agent_id: agents(:agent_00001).id }
         expect(response).to be_successful
-        expect(assigns(:agent)).to eq Agent.find(1)
+        expect(assigns(:agent)).to eq agents(:agent_00001)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where(required_role_id: 1).page(1)
       end
 
@@ -125,14 +125,14 @@ describe AgentsController do
 
       it 'should not show agent who does not create a work' do
         lambda do
-          get :show, params: { id: 3, work_id: 3 }
+          get :show, params: { id: agents(:agent_00003).id, work_id: manifestations(:manifestation_00003).id }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
 
       it 'should not show agent who does not produce a manifestation' do
         lambda do
-          get :show, params: { id: 4, manifestation_id: 4 }
+          get :show, params: { id: agents(:agent_00004).id, manifestation_id: manifestations(:manifestation_00004).id }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
@@ -154,17 +154,17 @@ describe AgentsController do
       end
 
       it 'should show agent with work' do
-        get :show, params: { id: 1, work_id: manifestations(:manifestation_00001).id }
-        expect(assigns(:agent)).to eq assigns(:work).creators.first
+        get :show, params: { id: agents(:agent_00001).id, work_id: manifestations(:manifestation_00001).id }
+        expect(assigns(:work).creators.include?(agents(:agent_00001))).to eq true
       end
 
       it 'should show agent with manifestation' do
-        get :show, params: { id: 1, manifestation_id: manifestations(:manifestation_00001).id }
-        expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
+        get :show, params: { id: agents(:agent_00001).id, manifestation_id: manifestations(:manifestation_00001).id }
+        expect(assigns(:manifestation).publishers.include?(agents(:agent_00001))).to eq true
       end
 
       it "should not show agent when required_role is 'User'" do
-        get :show, params: { id: 5 }
+        get :show, params: { id: agents(:agent_00005).id }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -213,7 +213,7 @@ describe AgentsController do
       login_fixture_admin
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = agents(:agent_00001)
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
@@ -223,7 +223,7 @@ describe AgentsController do
       login_fixture_librarian
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = agents(:agent_00001)
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
@@ -233,7 +233,7 @@ describe AgentsController do
       login_fixture_user
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = agents(:agent_00001)
         get :edit, params: { id: agent.id }
         expect(response).to be_forbidden
       end
@@ -241,7 +241,7 @@ describe AgentsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = agents(:agent_00001)
         get :edit, params: { id: agent.id }
         expect(response).to redirect_to(new_user_session_url)
       end

@@ -15,7 +15,7 @@ end
 #
 #  id                   :bigint(8)        not null, primary key
 #  agent_import_file_id :bigint(8)        not null
-#  agent_id             :bigint(8)
+#  agent_id             :uuid
 #  body                 :text
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null

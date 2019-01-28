@@ -22,7 +22,7 @@ end
 # Table name: creates
 #
 #  id             :bigint(8)        not null, primary key
-#  agent_id       :bigint(8)        not null
+#  agent_id       :uuid             not null
 #  work_id        :uuid             not null
 #  position       :integer          default(1), not null
 #  created_at     :datetime         not null

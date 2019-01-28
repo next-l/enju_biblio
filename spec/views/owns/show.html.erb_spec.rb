@@ -1,10 +1,12 @@
 require 'rails_helper'
 
 describe "owns/show" do
+  fixtures :agents
+
   before(:each) do
     @own = assign(:own, stub_model(Own,
       item_id: FactoryBot.create(:item).id,
-      agent_id: 1
+      agent_id: agents(:agent_00001).id
     ))
   end
 

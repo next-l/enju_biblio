@@ -1,17 +1,17 @@
 require 'rails_helper'
 
 describe "creates/index" do
-  fixtures :manifestations
+  fixtures :manifestations, :agents
 
   before(:each) do
     assign(:creates, Kaminari.paginate_array([
       stub_model(Create,
         work_id: manifestations(:manifestation_00001).id,
-        agent_id: 1
+        agent_id: agents(:agent_00001).id
       ),
       stub_model(Create,
         work_id: manifestations(:manifestation_00001).id,
-        agent_id: 2
+        agent_id: agents(:agent_00002).id
       )
     ]).page(1))
   end

@@ -114,9 +114,9 @@ class Manifestation < ActiveRecord::Base
     integer :pub_year do
       date_of_publication.try(:year)
     end
-    integer :creator_ids, multiple: true
-    integer :contributor_ids, multiple: true
-    integer :publisher_ids, multiple: true
+    string :creator_ids, multiple: true
+    string :contributor_ids, multiple: true
+    string :publisher_ids, multiple: true
     string :item_ids, multiple: true
     string :original_manifestation_ids, multiple: true
     string :parent_ids, multiple: true do

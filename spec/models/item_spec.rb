@@ -65,7 +65,7 @@ end
 #  item_identifier         :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  shelf_id                :bigint(8)
+#  shelf_id                :uuid
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string

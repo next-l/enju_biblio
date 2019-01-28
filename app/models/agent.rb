@@ -68,7 +68,7 @@ class Agent < ActiveRecord::Base
     string :expression_ids, multiple: true
     string :manifestation_ids, multiple: true
     integer :agent_merge_list_ids, multiple: true
-    integer :original_agent_ids, multiple: true
+    string :original_agent_ids, multiple: true
     integer :required_role_id
     integer :agent_type_id
   end
@@ -76,7 +76,7 @@ class Agent < ActiveRecord::Base
   paginates_per 10
 
   def set_role_and_name
-    self.required_role = Role.where(name: 'Librarian').first if required_role_id.nil?
+    self.required_role = Role.find_by(name: 'Librarian') if required_role_id.nil?
     set_full_name
   end
 
@@ -202,19 +202,19 @@ class Agent < ActiveRecord::Base
   end
 
   def created(work)
-    creates.where(work_id: work.id).first
+    creates.find_by(work_id: work.id)
   end
 
   def realized(expression)
-    realizes.where(expression_id: expression.id).first
+    realizes.find_by(expression_id: expression.id)
   end
 
   def produced(manifestation)
-    produces.where(manifestation_id: manifestation.id).first
+    produces.find_by(manifestation_id: manifestation.id)
   end
 
   def owned(item)
-    owns.where(item_id: item.id)
+    owns.find_by(item_id: item.id)
   end
 
   def self.import_agents(agent_lists)
@@ -222,7 +222,7 @@ class Agent < ActiveRecord::Base
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
+        agent = Agent.find_by(agent_identifier: agent_list[:agent_identifier])
       else
         agents_matched = Agent.where(full_name: name_and_role[0])
         agents_matched = agents_matched.where(place: agent_list[:place]) if agent_list[:place]
@@ -237,7 +237,7 @@ class Agent < ActiveRecord::Base
           place: agent_list[:place],
           language_id: 1,
         )
-        agent.required_role = Role.where(name: 'Guest').first
+        agent.required_role = Role.find_by(name: 'Guest')
         agent.save
       end
       agents << agent
@@ -275,7 +275,7 @@ end
 #
 # Table name: agents
 #
-#  id                                  :bigint(8)        not null, primary key
+#  id                                  :uuid             not null, primary key
 #  last_name                           :string
 #  middle_name                         :string
 #  first_name                          :string

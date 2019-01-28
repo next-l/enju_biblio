@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe "realizes/show" do
-  fixtures :manifestations
+  fixtures :manifestations, :agents
 
   before(:each) do
     @realize = assign(:realize, stub_model(Realize,
       expression_id: manifestations(:manifestation_00001).id,
-      agent_id: 1
+      agent_id: agents(:agent_00001).id
     ))
   end
 

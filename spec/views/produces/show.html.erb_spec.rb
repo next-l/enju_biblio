@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 describe "produces/show" do
-  fixtures :manifestations
+  fixtures :manifestations, :agents
 
   before(:each) do
     @produce = assign(:produce, stub_model(Produce,
       manifestation_id: manifestations(:manifestation_00001).id,
-      agent_id: 1
+      agent_id: agents(:agent_00001).id
     ))
   end
 

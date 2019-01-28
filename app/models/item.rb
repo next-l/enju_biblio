@@ -1,6 +1,6 @@
 class Item < ActiveRecord::Base
-  scope :on_shelf, -> { where('shelf_id != 1') }
-  scope :on_web, -> { where(shelf_id: 1) }
+  scope :on_shelf, -> { includes(:shelf).references(:shelf).where('shelves.name != ?', 'web') }
+  scope :on_web, -> { includes(:shelf).references(:shelf).where('shelves.name = ?', 'web') }
   scope :available_for, -> user {
     unless user.try(:has_role?, 'Librarian')
       on_shelf
@@ -45,7 +45,7 @@ class Item < ActiveRecord::Base
     integer :required_role_id
     string :manifestation_id
     string :shelf_id
-    integer :agent_ids, multiple: true
+    string :agent_ids, multiple: true
     time :created_at
     time :updated_at
     time :acquired_at
@@ -81,7 +81,7 @@ class Item < ActiveRecord::Base
   end
 
   def owned(agent)
-    owns.where(agent_id: agent.id).first
+    owns.find_by(agent_id: agent.id)
   end
 
   def manifestation_url
@@ -108,7 +108,7 @@ end
 #  item_identifier         :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  shelf_id                :bigint(8)
+#  shelf_id                :uuid
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string

@@ -8,7 +8,7 @@ describe ResourceImportFile do
       before(:each) do
         @file = ResourceImportFile.create(
           resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
-          default_shelf_id: 3,
+          default_shelf: shelves(:shelf_00003),
           user: users(:admin)
         )
       end
@@ -20,11 +20,11 @@ describe ResourceImportFile do
         old_import_results_count = ResourceImportResult.count
         @file.import_start.should eq({manifestation_imported: 10, item_imported: 10, manifestation_found: 6, item_found: 3, failed: 7})
         manifestation = Item.find_by(item_identifier: '11111').manifestation
-        manifestation.publishers.first.full_name.should eq 'test4'
-        manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
-        manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
-        manifestation.produces.first.produce_type.name.should eq 'publisher'
-        manifestation.creates.first.create_type.name.should eq 'author'
+        manifestation.publishers.order(:created_at).first.full_name.should eq 'test4'
+        manifestation.publishers.order(:created_at).first.full_name_transcription.should eq 'てすと4'
+        manifestation.publishers.order(:created_at).second.full_name_transcription.should eq 'てすと5'
+        manifestation.produces.order(:created_at).first.produce_type.name.should eq 'publisher'
+        manifestation.creates.order(:created_at).first.create_type.name.should eq 'author'
         manifestation.issn_records.pluck(:body).should eq ['03875806']
         Manifestation.count.should eq old_manifestations_count + 9
         Item.count.should eq old_items_count + 10
@@ -80,7 +80,7 @@ describe ResourceImportFile do
 
         Manifestation.find_by(manifestation_identifier: '103').original_title.should eq 'ダブル"クォート"を含む資料'
         item = Item.find_by(item_identifier: '11111')
-        item.shelf.name.should eq Shelf.find(3).name
+        item.shelf.name.should eq shelves(:shelf_00003).name
         item.manifestation.price.should eq 1000
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
@@ -136,7 +136,7 @@ describe ResourceImportFile do
         old_message_count = Message.count
         @file.import_start
         Message.count.should eq old_message_count + 1
-        Message.order(:id).last.subject.should eq 'インポートが完了しました'
+        Message.order(:created_at).last.subject.should eq 'インポートが完了しました'
       end
 
       it "should be searchable right after the import", solr: true, vcr: true do
@@ -206,9 +206,9 @@ describe ResourceImportFile do
         old_import_results_count = ResourceImportResult.count
         @file.import_start.should eq({manifestation_imported: 8, item_imported: 8, manifestation_found: 6, item_found: 3, failed: 7})
         manifestation = Item.find_by(item_identifier: '11111').manifestation
-        manifestation.publishers.first.full_name.should eq 'test4'
-        manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
-        manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
+        manifestation.publishers.order(:created_at).first.full_name.should eq 'test4'
+        manifestation.publishers.order(:created_at).first.full_name_transcription.should eq 'てすと4'
+        manifestation.publishers.order(:created_at).second.full_name_transcription.should eq 'てすと5'
         Manifestation.count.should eq old_manifestations_count + 8
         Item.count.should eq old_items_count + 8
         Agent.count.should eq old_agents_count + 6
@@ -337,7 +337,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       expect(file.resource_import_results.first).to be_truthy
       expect(file.resource_import_results.first.body).to match /item_identifier/
       item_00001 = Item.find_by(item_identifier: '00001')
-      item_00001.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      item_00001.manifestation.creators.order('agents.created_at').collect(&:full_name).should eq ['たなべ', 'こうすけ']
       item_00001.binding_item_identifier.should eq '900001'
       item_00001.binding_call_number.should eq '336|A'
       item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
@@ -405,5 +405,5 @@ end
 #  resource_import_fingerprint  :string
 #  error_message                :text
 #  user_encoding                :string
-#  default_shelf_id             :bigint(8)
+#  default_shelf_id             :uuid
 #

@@ -64,9 +64,9 @@ describe ItemsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        get :index, params: { agent_id: agents(:agent_00001).id }
         expect(response).to be_successful
-        assigns(:agent).should eq Agent.find(1)
+        assigns(:agent).should eq agents(:agent_00001)
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
@@ -78,9 +78,9 @@ describe ItemsController do
       end
 
       it 'should get index with shelf_id' do
-        get :index, params: { shelf_id: 1 }
+        get :index, params: { shelf_id: shelves(:shelf_00001).id }
         expect(response).to be_successful
-        assigns(:shelf).should eq Shelf.find(1)
+        assigns(:shelf).should eq shelves(:shelf_00001)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
       end
     end
@@ -238,7 +238,7 @@ describe ItemsController do
   describe 'POST create' do
     before(:each) do
       manifestation = FactoryBot.create(:manifestation)
-      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: 1)
+      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: shelves(:shelf_00001).id)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
 
@@ -331,10 +331,10 @@ describe ItemsController do
       it "should create another item with already retained" do
         reserve = FactoryBot.create(:reserve)
         reserve.transition_to!(:requested)
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: 1) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: shelves(:shelf_00001).id) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: 1) }
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: shelves(:shelf_00001).id) }
         expect(assigns(:item)).to be_valid
         expect(response).to redirect_to item_url(assigns(:item))
       end

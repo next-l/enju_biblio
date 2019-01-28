@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "agent_import_results", force: :cascade do |t|
     t.bigint "agent_import_file_id", null: false
-    t.bigint "agent_id"
+    t.uuid "agent_id"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -76,7 +76,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "agent_merges", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.uuid "agent_id", null: false
     t.bigint "agent_merge_list_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -94,8 +94,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "agent_relationships", force: :cascade do |t|
-    t.bigint "parent_id", null: false
-    t.bigint "child_id", null: false
+    t.uuid "parent_id", null: false
+    t.uuid "child_id", null: false
     t.bigint "agent_relationship_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -113,7 +113,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "agents", force: :cascade do |t|
+  create_table "agents", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "last_name"
     t.string "middle_name"
     t.string "first_name"
@@ -243,6 +243,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_budget_types_on_name", unique: true
   end
 
   create_table "carrier_type_has_checkout_types", force: :cascade do |t|
@@ -339,7 +340,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.integer "lock_version", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "shelf_id"
+    t.uuid "shelf_id"
     t.bigint "library_id"
     t.index ["basket_id"], name: "index_checkouts_on_basket_id"
     t.index ["checkin_id"], name: "index_checkouts_on_checkin_id"
@@ -431,7 +432,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "creates", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.uuid "agent_id", null: false
     t.uuid "work_id", null: false
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -444,7 +445,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   create_table "demands", force: :cascade do |t|
     t.bigint "user_id"
     t.uuid "item_id"
-    t.bigint "message_id"
+    t.uuid "message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_demands_on_item_id"
@@ -465,7 +466,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "donates", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.uuid "agent_id", null: false
     t.uuid "item_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -713,7 +714,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "item_identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "shelf_id"
+    t.uuid "shelf_id"
     t.boolean "include_supplements", default: false, null: false
     t.text "note"
     t.string "url"
@@ -1020,7 +1021,6 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.bigint "receiver_id"
     t.bigint "message_template_id"
     t.datetime "sent_at"
-    t.datetime "deleted_at"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1044,7 +1044,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "to_state"
     t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.bigint "message_id"
+    t.uuid "message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -1053,14 +1053,14 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["sort_key", "message_id"], name: "index_message_transitions_on_sort_key_and_message_id", unique: true
   end
 
-  create_table "messages", force: :cascade do |t|
+  create_table "messages", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "read_at"
     t.bigint "sender_id"
     t.bigint "receiver_id"
     t.string "subject", null: false
     t.text "body"
     t.bigint "message_request_id"
-    t.bigint "parent_id"
+    t.uuid "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "lft"
@@ -1082,7 +1082,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "ndla_records", force: :cascade do |t|
-    t.bigint "agent_id"
+    t.uuid "agent_id", null: false
     t.string "body", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1101,7 +1101,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "owns", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.uuid "agent_id", null: false
     t.uuid "item_id", null: false
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -1121,7 +1121,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "picture_files", force: :cascade do |t|
-    t.bigint "picture_attachable_id", null: false
+    t.uuid "picture_attachable_id", null: false
     t.string "picture_attachable_type", null: false
     t.string "content_type"
     t.text "title"
@@ -1163,7 +1163,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "produces", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.uuid "agent_id", null: false
     t.uuid "manifestation_id", null: false
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -1205,7 +1205,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   create_table "realizes", force: :cascade do |t|
-    t.bigint "agent_id", null: false
+    t.uuid "agent_id", null: false
     t.uuid "expression_id", null: false
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
@@ -1343,7 +1343,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.string "resource_import_fingerprint"
     t.text "error_message"
     t.string "user_encoding"
-    t.bigint "default_shelf_id"
+    t.uuid "default_shelf_id"
     t.index ["default_shelf_id"], name: "index_resource_import_files_on_default_shelf_id"
     t.index ["user_id"], name: "index_resource_import_files_on_user_id"
   end
@@ -1424,7 +1424,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.index ["series_statement_identifier"], name: "index_series_statements_on_series_statement_identifier"
   end
 
-  create_table "shelves", force: :cascade do |t|
+  create_table "shelves", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.jsonb "display_name", default: {}, null: false
     t.text "note"
@@ -1481,7 +1481,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "subscribes", force: :cascade do |t|
     t.bigint "subscription_id", null: false
-    t.bigint "work_id", null: false
+    t.uuid "work_id", null: false
     t.datetime "start_at", null: false
     t.datetime "end_at", null: false
     t.datetime "created_at", null: false
@@ -1620,6 +1620,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
     t.integer "number_of_day_to_notify_overdue", default: 1, null: false
     t.integer "number_of_day_to_notify_due_date", default: 7, null: false
     t.integer "number_of_time_to_notify_overdue", default: 3, null: false
+    t.index ["name"], name: "index_user_groups_on_name", unique: true
   end
 
   create_table "user_has_roles", force: :cascade do |t|
@@ -1743,7 +1744,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
 
   create_table "withdraws", force: :cascade do |t|
     t.bigint "basket_id"
-    t.bigint "item_id"
+    t.uuid "item_id"
     t.bigint "librarian_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -1753,7 +1754,6 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   end
 
   add_foreign_key "accepts", "baskets"
-  add_foreign_key "accepts", "items"
   add_foreign_key "accepts", "users", column: "librarian_id"
   add_foreign_key "agent_import_files", "users"
   add_foreign_key "agent_import_results", "agent_import_files"
@@ -1761,6 +1761,7 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "agent_relationships", "agents", column: "child_id"
   add_foreign_key "agent_relationships", "agents", column: "parent_id"
   add_foreign_key "agents", "profiles"
+  add_foreign_key "baskets", "users"
   add_foreign_key "bookmark_stat_has_manifestations", "bookmark_stats"
   add_foreign_key "bookmarks", "manifestations"
   add_foreign_key "bookmarks", "users"
@@ -1782,6 +1783,8 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "checkouts", "users", column: "librarian_id"
   add_foreign_key "classifications", "classifications", column: "parent_id"
   add_foreign_key "classifications", "manifestations"
+  add_foreign_key "colors", "library_groups"
+  add_foreign_key "creates", "agents"
   add_foreign_key "creates", "manifestations", column: "work_id"
   add_foreign_key "demands", "items"
   add_foreign_key "demands", "messages"
@@ -1816,11 +1819,13 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "manifestation_relationships", "manifestations", column: "child_id"
   add_foreign_key "manifestation_relationships", "manifestations", column: "parent_id"
   add_foreign_key "manifestation_reserve_stats", "users"
+  add_foreign_key "messages", "messages", column: "parent_id"
   add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
   add_foreign_key "participates", "events"
   add_foreign_key "produces", "agents"
   add_foreign_key "produces", "manifestations"
+  add_foreign_key "realizes", "agents"
   add_foreign_key "realizes", "manifestations", column: "expression_id"
   add_foreign_key "reserve_stat_has_manifestations", "manifestations"
   add_foreign_key "reserve_stat_has_users", "user_reserve_stats"
@@ -1835,14 +1840,22 @@ ActiveRecord::Schema.define(version: 2019_01_12_151019) do
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
   add_foreign_key "series_statement_merges", "series_statements"
   add_foreign_key "series_statements", "manifestations"
+  add_foreign_key "shelves", "libraries"
   add_foreign_key "subjects", "manifestations"
   add_foreign_key "subjects", "subjects", column: "parent_id"
   add_foreign_key "subscribes", "subscriptions"
+  add_foreign_key "subscriptions", "users"
   add_foreign_key "user_checkout_stats", "users"
+  add_foreign_key "user_export_files", "users"
   add_foreign_key "user_group_has_checkout_types", "checkout_types"
   add_foreign_key "user_group_has_checkout_types", "user_groups"
   add_foreign_key "user_has_roles", "roles"
   add_foreign_key "user_has_roles", "users"
+  add_foreign_key "user_import_files", "users"
+  add_foreign_key "user_import_results", "user_import_files"
+  add_foreign_key "user_import_results", "users"
   add_foreign_key "user_reserve_stats", "users"
   add_foreign_key "users", "profiles", on_delete: :cascade
+  add_foreign_key "withdraws", "baskets"
+  add_foreign_key "withdraws", "users", column: "librarian_id"
 end
