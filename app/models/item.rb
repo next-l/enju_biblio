@@ -89,13 +89,9 @@ class Item < ActiveRecord::Base
   end
 
   def removable?
-    if defined?(EnjuCirculation)
-      return false if circulation_status.name == 'Removed'
-      return false if checkouts.exists?
-      true
-    else
-      true
-    end
+    super
+  rescue NoMethodError
+    true
   end
 end
 
