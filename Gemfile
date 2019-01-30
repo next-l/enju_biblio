@@ -29,3 +29,4 @@ gem 'enju_circulation', github: 'next-l/enju_circulation'
 gem 'enju_bookmark', github: 'next-l/enju_bookmark'
 gem 'rails-controller-testing', group: :test
 gem 'rspec_junit_formatter', group: :test
+gem 'chromedriver-helper', group: :test

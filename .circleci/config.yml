@@ -19,6 +19,7 @@ jobs:
          environment:
            POSTGRES_USER: postgres
            POSTGRES_DB: enju_biblio_dummy_test
+       - image: selenium/standalone-chrome:latest
 
     working_directory: ~/repo
 
