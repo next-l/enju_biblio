@@ -94,6 +94,11 @@ class FormOfWorksController < ApplicationController
   end
 
   def form_of_work_params
-    params.require(:form_of_work).permit(:name, :display_name, :note)
+    params.require(:form_of_work).permit(
+      :name, :display_name, :note,
+      I18n.available_locales.map{|locale|
+        :"display_name_#{locale.to_s}"
+      }
+    )
   end
 end

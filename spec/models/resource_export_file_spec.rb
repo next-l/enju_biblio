@@ -39,8 +39,8 @@ describe ResourceExportFile do
     csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
     csv.each do |row|
       expect(row).to have_key "carrier_type"
-      case row["manifestation_id"].to_i
-      when 1
+      case row["manifestation_id"]
+      when manifestations(:manifestation_00001).id
         expect(row["carrier_type"]).to eq "volume"
       when manifestation.id
         expect(row["carrier_type"]).to eq carrier_type.name

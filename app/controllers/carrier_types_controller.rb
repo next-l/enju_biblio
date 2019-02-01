@@ -116,6 +116,9 @@ class CarrierTypesController < ApplicationController
     params.require(:carrier_type).permit(
       :name, :display_name, :note, :position,
       :attachment,
+      I18n.available_locales.map{|locale|
+        :"display_name_#{locale.to_s}"
+      },
       # EnjuCirculation
       {
         carrier_type_has_checkout_types_attributes: [
