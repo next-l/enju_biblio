@@ -5,28 +5,7 @@ class ResourceImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :resource_import, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME'],
-        s3_host_name: ENV['S3_HOST_NAME'],
-        s3_region: ENV['S3_REGION']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :resource_import,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  validates_attachment_content_type :resource_import, content_type: [
-    'text/csv',
-    'text/plain',
-    'text/tab-separated-values',
-    'application/octet-stream',
-    'application/vnd.ms-excel'
-  ]
-  validates_attachment_presence :resource_import
+  has_one_attached :resource_import
   validates :resource_import, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user
@@ -67,7 +46,7 @@ class ResourceImportFile < ActiveRecord::Base
       item_found: 0,
       failed: 0
     }
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file
     row_num = 1
 
     ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
@@ -297,7 +276,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def modify
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file
     row_num = 1
 
     ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
@@ -377,7 +356,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def remove
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file
     row_num = 1
 
     rows.each do |row|
@@ -398,7 +377,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def update_relationship
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file
     rows.shift
     row_num = 1
 
@@ -430,7 +409,12 @@ class ResourceImportFile < ActiveRecord::Base
   end
 
   private
-  def open_import_file(tempfile)
+  def open_import_file
+    tempfile = Tempfile.open do |f|
+      f.binmode
+      f.write ActiveStorage::Blob.service.download(resource_import.key)
+      f
+    end
     file = CSV.open(tempfile, col_sep: "\t")
     header_columns = %w(
       original_title manifestation_identifier item_identifier shelf note

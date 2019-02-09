@@ -200,21 +200,7 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :attachment, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME'],
-        s3_host_name: ENV['S3_HOST_NAME'],
-        s3_region: ENV["S3_REGION"]
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :attachment,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  do_not_validate_attachment_file_type :attachment
+  has_one_attached :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
@@ -362,13 +348,9 @@ class Manifestation < ActiveRecord::Base
   end
 
   def extract_text
-    return nil if attachment.path.nil?
+    return nil if attachment.nil?
     return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
-    if ENV['ENJU_STORAGE'] == 's3'
-      body = Faraday.get(attachment.expiring_url(10)).body.force_encoding('UTF-8')
-    else
-      body = File.open(attachment.path).read
-    end
+    body = File.open(attachment).read
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
@@ -590,6 +572,16 @@ class Manifestation < ActiveRecord::Base
     )
 
     header.to_csv(options)
+  end
+
+  def to_h
+    attributes.merge(
+      creator: creators.map(&:attributes),
+      contributor: contributors.map(&:attributes),
+      publisher: publishers.map(&:attributes),
+      isbn: isbn_records.pluck(:body),
+      issn: issn_records.pluck(:body)
+    )
   end
 
   def to_csv(options = {format: :txt, role: :Guest})

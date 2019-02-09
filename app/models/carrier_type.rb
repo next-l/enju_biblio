@@ -4,23 +4,7 @@ class CarrierType < ActiveRecord::Base
   translates :display_name
   default_scope { order("carrier_types.position") }
   has_many :manifestations
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :attachment, storage: :s3,
-      styles: { thumb: "16x16#" },
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME'],
-        s3_host_name: ENV['S3_HOST_NAME'],
-        s3_region: ENV['S3_REGION']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :attachment,
-      styles: { thumb: "16x16#" },
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  validates_attachment_content_type :attachment, content_type: /\Aimage\/.*\Z/
+  has_one_attached :attachment
 
   def mods_type
     case name

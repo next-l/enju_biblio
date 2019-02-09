@@ -5,7 +5,8 @@ describe AgentImportFile do
 
   describe "when its mode is 'create'" do
     before(:each) do
-      @file = AgentImportFile.create! agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"), user: users(:admin)
+      @file = AgentImportFile.create!(user: users(:admin))
+      @file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"), filename: 'attachment.txt')
     end
 
     it "should be imported" do
@@ -20,7 +21,7 @@ describe AgentImportFile do
       @file.agent_import_results.order(:id).first.body.split("\t").first.should eq 'full_name'
       AgentImportResult.count.should eq old_import_results_count + 5
 
-      @file.agent_import_fingerprint.should be_truthy
+      @file.agent_import.checksum.should be_truthy
       @file.executed_at.should be_truthy
     end
   end
@@ -28,9 +29,9 @@ describe AgentImportFile do
   describe "when it is written in shift_jis" do
     before(:each) do
       @file = AgentImportFile.create!(
-        agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample3.tsv"),
         user: users(:admin)
       )
+      @file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_import_file_sample3.tsv"), filename: 'attachment.txt')
     end
 
     it "should be imported" do
@@ -51,9 +52,9 @@ describe AgentImportFile do
   describe "when its mode is 'update'" do
     it "should update users" do
       file = AgentImportFile.create!(
-        agent_import: File.new("#{Rails.root}/../../examples/agent_update_file.tsv"),
         user: users(:admin)
       )
+      file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_update_file.tsv"), filename: 'attachment.txt')
       file.modify
       agent_1 = Agent.find(agents(:agent_00001).id)
       agent_1.full_name.should eq 'たなべこうすけ'
@@ -68,18 +69,17 @@ describe AgentImportFile do
     it "should remove users" do
       old_count = Agent.count
       file = AgentImportFile.create!(
-        agent_import: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv"),
         user: users(:admin)
       )
+      file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv"), filename: 'attachment.txt')
       file.remove
       Agent.count.should eq old_count - 5
     end
   end
 
   it "should import in background" do
-    file = AgentImportFile.create agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv")
-    file.user = users(:admin)
-    file.save
+    file = AgentImportFile.create!(user: users(:admin))
+    file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"), filename: 'attachment.txt')
     AgentImportFileJob.perform_later(file).should be_truthy
   end
 end
