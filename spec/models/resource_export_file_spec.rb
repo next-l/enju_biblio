@@ -18,8 +18,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    file = export_file.resource_export
-    lines = File.open(file.path).readlines.map(&:chomp)
+    lines = StringIO.new(export_file.resource_export.download).readlines.map(&:chomp)
     columns = lines.first.split(/\t/)
     expect(columns).to include "bookstore"
     expect(columns).to include "budget_type"
@@ -36,7 +35,7 @@ describe ResourceExportFile do
     export_file.export!
     file = export_file.resource_export
     expect(file).to be_truthy
-    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
+    csv = CSV.parse(file.download, {headers: true, col_sep: "\t"})
     csv.each do |row|
       expect(row).to have_key "carrier_type"
       case row["manifestation_id"]
@@ -58,7 +57,7 @@ describe ResourceExportFile do
     export_file.export!
     file = export_file.resource_export
     expect(file).to be_truthy
-    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
+    csv = CSV.parse(file.download, {headers: true, col_sep: "\t"})
     csv.each do |row|
       expect(row).to have_key "total_checkouts"
       case row["item_id"].to_i
@@ -75,13 +74,9 @@ end
 #
 # Table name: resource_export_files
 #
-#  id                           :bigint(8)        not null, primary key
-#  user_id                      :bigint(8)
-#  resource_export_file_name    :string
-#  resource_export_content_type :string
-#  resource_export_file_size    :bigint(8)
-#  resource_export_updated_at   :datetime
-#  executed_at                  :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  id          :bigint(8)        not null, primary key
+#  user_id     :bigint(8)
+#  executed_at :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #

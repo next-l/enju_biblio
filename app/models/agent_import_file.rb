@@ -141,18 +141,14 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def open_import_file
-    tempfile = Tempfile.open do |f|
-      f.binmode
-      f.write ActiveStorage::Blob.service.download(agent_import.key)
-      f
+    byte = ActiveStorage::Blob.service.download(agent_import.key)
+    if defined?(CharlockHolmes)
+      string = CharlockHolmes::Converter.convert(byte, user_encoding || byte.detect_encoding[:encoding], 'utf-8')
+    else
+      string = NKF.nkf("--ic=#{user_encoding || NKF.guess(byte).to_s} --oc=utf-8", byte)
     end
-    file = CSV.open(tempfile, col_sep: "\t")
-    header = file.first
-    rows = CSV.read(tempfile, headers: header, col_sep: "\t")
-    tempfile.close(true)
-    file.close
-    rows.delete(0)
-    rows
+
+    CSV.parse(string, col_sep: "\t", encoding: 'utf-8', headers: true)
   end
 
   def set_agent_value(agent, row)

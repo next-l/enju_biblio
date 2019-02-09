@@ -10,7 +10,7 @@ describe ResourceImportFile do
           default_shelf: shelves(:shelf_00003),
           user: users(:admin)
         )
-        @file.resource_import(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
+        @file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
       end
 
       it "should be imported", vcr: true do
@@ -125,7 +125,7 @@ describe ResourceImportFile do
         Item.find_by(item_identifier: '11113').manifestation.original_title.should eq 'test10'
         Item.find_by(item_identifier: '11114').manifestation.id.should eq manifestations(:manifestation_00001).id
 
-        @file.resource_import_fingerprint.should be_truthy
+        @file.resource_import.checksum.should be_truthy
         @file.executed_at.should be_truthy
 
         @file.reload
@@ -228,7 +228,7 @@ describe ResourceImportFile do
         item.price.should eq 0
         item.manifestation.publishers.size.should eq 2
 
-        @file.resource_import_fingerprint.should be_truthy
+        @file.resource_import.checksum.should be_truthy
         @file.executed_at.should be_truthy
       end
     end

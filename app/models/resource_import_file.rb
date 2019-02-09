@@ -378,7 +378,6 @@ class ResourceImportFile < ActiveRecord::Base
   def update_relationship
     transition_to!(:started)
     rows = open_import_file
-    rows.shift
     row_num = 1
 
     rows.each do |row|
@@ -410,12 +409,14 @@ class ResourceImportFile < ActiveRecord::Base
 
   private
   def open_import_file
-    tempfile = Tempfile.open do |f|
-      f.binmode
-      f.write ActiveStorage::Blob.service.download(resource_import.key)
-      f
+    byte = ActiveStorage::Blob.service.download(resource_import.key)
+    if defined?(CharlockHolmes)
+      string = CharlockHolmes::Converter.convert(byte, user_encoding || byte.detect_encoding[:encoding], 'utf-8')
+    else
+      string = NKF.nkf("--ic=#{user_encoding || NKF.guess(byte).to_s} --oc=utf-8", byte)
     end
-    file = CSV.open(tempfile, col_sep: "\t")
+
+    rows = CSV.parse(string, col_sep: "\t", encoding: 'utf-8', headers: true)
     header_columns = %w(
       original_title manifestation_identifier item_identifier shelf note
       title_transcription title_alternative title_alternative_transcription
@@ -442,17 +443,11 @@ class ResourceImportFile < ActiveRecord::Base
       header_columns += ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}
       header_columns += SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}
     end
-    header = file.first
-    ignored_columns = header - header_columns
+    ignored_columns = rows.headers - header_columns
     unless ignored_columns.empty?
       self.error_message = I18n.t('import.following_column_were_ignored', column: ignored_columns.join(', '))
       save!
     end
-    rows = CSV.read(tempfile, headers: header, col_sep: "\t", converters: nil)
-    #ResourceImportResult.create!(resource_import_file_id: id, body: header.join("\t"))
-    tempfile.close(true)
-    file.close
-    rows.delete(0)
     rows
   end
 

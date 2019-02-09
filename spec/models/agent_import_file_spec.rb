@@ -44,7 +44,7 @@ describe AgentImportFile do
       Agent.order('created_at DESC')[1].full_name.should eq '田辺浩介'
       AgentImportResult.count.should eq old_import_results_count + 5
 
-      @file.agent_import_fingerprint.should be_truthy
+      @file.agent_import.checksum.should be_truthy
       @file.executed_at.should be_truthy
     end
   end
