@@ -812,10 +812,6 @@ end
 #  required_role_id                :integer          default(1), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  attachment_file_name            :string
-#  attachment_content_type         :string
-#  attachment_file_size            :integer
-#  attachment_updated_at           :datetime
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text
@@ -832,7 +828,6 @@ end
 #  serial_number                   :integer
 #  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
-#  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
 #  serial                          :boolean

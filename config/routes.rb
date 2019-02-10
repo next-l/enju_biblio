@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :resource_export_files
-
+  resources :identifier_types
 
   get "/manifestations/:manifestation_id/items" => redirect("/items?manifestation_id=%{manifestation_id}")
 

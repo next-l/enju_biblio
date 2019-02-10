@@ -600,14 +600,25 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "identifier_types", force: :cascade do |t|
+    t.string "name", null: false
+    t.jsonb "display_name", default: {}, null: false
+    t.text "note"
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_identifier_types_on_name", unique: true
+  end
+
   create_table "identifiers", force: :cascade do |t|
     t.string "body", null: false
-    t.integer "identifier_type_id", null: false
+    t.bigint "identifier_type_id", null: false
     t.uuid "manifestation_id", null: false
     t.boolean "primary"
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["body"], name: "index_identifiers_on_body"
     t.index ["identifier_type_id"], name: "index_identifiers_on_identifier_type_id"
     t.index ["manifestation_id"], name: "index_identifiers_on_manifestation_id"
   end
@@ -968,10 +979,6 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.integer "required_role_id", default: 1, null: false
     t.integer "frequency_id", default: 1, null: false
     t.boolean "subscription_master", default: false, null: false
-    t.string "attachment_file_name"
-    t.string "attachment_content_type"
-    t.integer "attachment_file_size"
-    t.datetime "attachment_updated_at"
     t.integer "nii_type_id"
     t.text "title_alternative_transcription"
     t.text "description"
@@ -988,7 +995,6 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.integer "serial_number"
     t.integer "content_type_id", default: 1
     t.integer "year_of_publication"
-    t.text "attachment_meta"
     t.integer "month_of_publication"
     t.boolean "fulltext_content"
     t.boolean "serial"
@@ -1793,6 +1799,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
   add_foreign_key "event_import_files", "users"
   add_foreign_key "events", "event_categories"
   add_foreign_key "events", "libraries"
+  add_foreign_key "identifiers", "identifier_types"
   add_foreign_key "identifiers", "manifestations"
   add_foreign_key "import_requests", "manifestations"
   add_foreign_key "import_requests", "users"

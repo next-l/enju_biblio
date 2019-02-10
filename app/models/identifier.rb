@@ -71,7 +71,7 @@ end
 #
 #  id                 :bigint(8)        not null, primary key
 #  body               :string           not null
-#  identifier_type_id :integer          not null
+#  identifier_type_id :bigint(8)        not null
 #  manifestation_id   :uuid             not null
 #  primary            :boolean
 #  position           :integer
