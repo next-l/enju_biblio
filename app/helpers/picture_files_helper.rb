@@ -1,5 +1,7 @@
 module PictureFilesHelper
   def show_image(picture_file, options = {size: :medium})
+    return nil unless picture_file.picture.attached?
+
     case options[:size]
     when :medium
       if picture_file.picture_width.to_i >= 600
