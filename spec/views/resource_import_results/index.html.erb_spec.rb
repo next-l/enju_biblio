@@ -11,7 +11,7 @@ describe "resource_import_results/index" do
 
   it "renders a list of resource_import_results" do
     render
-    expect(rendered).to match /MyString/
+    expect(rendered).to match /#{resource_import_result_path(1)}/
   end
 
   context "with @resource_import_file" do
@@ -22,7 +22,7 @@ describe "resource_import_results/index" do
     it "renders a list of resource_import_results for the resource_import_file" do
       render
       expect(view).to render_template "resource_import_results/_list_lines"
-      expect(rendered).to match /MyString/
+      expect(rendered).to match /#{resource_import_result_path(1)}/
       expect(rendered).to match /<td>1<\/td>/
     end
   end

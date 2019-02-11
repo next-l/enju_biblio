@@ -8,18 +8,18 @@
   <%= @resource_import_file.id -%>
 </p>
 
-<p>
-  <strong><%= t('activerecord.attributes.resource_import_file.resource_import_file_name') -%>:</strong>
-  <% if @resource_import_file.resource_import.filename %>
+<% if @resource_import_file.resource_import.attached? %>
+  <p>
+    <strong><%= t('activerecord.attributes.resource_import_file.resource_import_file_name') -%>:</strong>
     <%= link_to @resource_import_file.resource_import.filename, resource_import_file_path(@resource_import_file, format: :download) %>
     (<%= @resource_import_file.resource_import.content_type -%>)
-  <% end %>
-</p>
+  </p>
 
-<p>
-  <strong><%= t('activerecord.attributes.resource_import_file.resource_import_file_size') -%>:</strong>
-  <%= @resource_import_file.resource_import.filesize -%>
-</p>
+  <p>
+    <strong><%= t('activerecord.attributes.resource_import_file.resource_import_file_size') -%>:</strong>
+    <%= @resource_import_file.resource_import.filesize -%>
+  </p>
+<% end %>
 
 <p>
   <strong><%= t('page.created_at') -%>:</strong>

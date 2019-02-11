@@ -11,6 +11,6 @@ describe "resource_import_results/show" do
 
   it "renders a resource_import_result" do
     render
-    expect(rendered).to match /MyString/
+    expect(rendered).to match /MyText/
   end
 end
