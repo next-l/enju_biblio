@@ -1,4 +1,4 @@
-<%= simple_form_for(@language, validate: true) do |f| %>
+<%= form_with(model: @language, local: true) do |f| %>
   <%= f.error_messages %>
 
   <div class="field">

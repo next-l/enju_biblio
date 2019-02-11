@@ -1,9 +1,9 @@
-<%= simple_form_for(@form_of_work, validate: true) do |f| %>
+<%= form_with(model: @form_of_work, local: true) do |f| %>
   <%= f.error_messages %>
 
   <div class="field">
     <%= f.label :name %><br />
-    <%= f.text_field :name %>
+    <%= f.text_field :name, required: true %>
   </div>
   <% I18n.available_locales.each do |locale| %>
     <div class="field">
