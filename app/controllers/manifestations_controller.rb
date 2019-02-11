@@ -327,7 +327,6 @@ class ManifestationsController < ApplicationController
       format.json { render json: @manifestation }
       format.txt
       format.js
-      format.download
     end
   end
 
