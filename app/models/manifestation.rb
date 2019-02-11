@@ -348,7 +348,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def extract_text
-    return nil if attachment.nil?
+    return nil unless attachment.attached?
     return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
     body = File.open(attachment).read
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
