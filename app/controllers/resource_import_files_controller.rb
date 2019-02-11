@@ -22,7 +22,6 @@ class ResourceImportFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @resource_import_file }
-      format.download
     end
   end
 

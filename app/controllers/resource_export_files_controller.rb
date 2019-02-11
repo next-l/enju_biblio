@@ -19,7 +19,6 @@ class ResourceExportFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @resource_export_file }
-      format.download
     end
   end
 

@@ -35,7 +35,6 @@ class PictureFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @picture_file }
       format.html.phone
-      format.download
     end
   end
 

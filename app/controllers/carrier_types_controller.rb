@@ -19,7 +19,7 @@ class CarrierTypesController < ApplicationController
   # GET /carrier_types/1.json
   def show
     @carrier_type = CarrierType.find(params[:id])
-    unless params[:format] == 'download'
+    if request.format.html?
       authorize @carrier_type
     end
 

@@ -19,7 +19,6 @@ class AgentImportFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @agent_import_file }
-      format.download
     end
   end
 
