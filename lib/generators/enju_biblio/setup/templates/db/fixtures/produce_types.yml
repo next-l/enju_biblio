@@ -2,14 +2,14 @@
 
 publisher:
   name: publisher
-  display_name: {"en": "Publisher", "ja": "出版者"}
+  display_name_translations: {"en": "Publisher", "ja": "出版者"}
   note: 
   position: 1
   id: 1
 
 seller:
   name: seller
-  display_name: {"en": "Seller", "ja": "販売者"}
+  display_name_translations: {"en": "Seller", "ja": "販売者"}
   note: 
   position: 2
   id: 2

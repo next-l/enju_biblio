@@ -1,21 +1,21 @@
 --- 
 carrier_type_00001: 
   name: volume
-  display_name: {"en": "Volume", "ja": "冊子体"}
+  display_name_translations: {"en": "Volume", "ja": "冊子体"}
   id: 1
   position: 1
 carrier_type_00002: 
   name: audio_disc
-  display_name: {"en": "Audio disc", "ja": "オーディオディスク"}
+  display_name_translations: {"en": "Audio disc", "ja": "オーディオディスク"}
   id: 2
   position: 2
 carrier_type_00003: 
   name: videodisc
-  display_name: {"en": "Videodisc", "ja": "ビデオディスク"}
+  display_name_translations: {"en": "Videodisc", "ja": "ビデオディスク"}
   id: 3
   position: 3
 carrier_type_00004: 
   name: online_resource
-  display_name: {"en": "Online resource", "ja": "オンラインリソース"}
+  display_name_translations: {"en": "Online resource", "ja": "オンラインリソース"}
   id: 4
   position: 4

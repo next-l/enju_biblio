@@ -3,13 +3,13 @@
 one:
   id: 1
   name: unknown
-  display_name: {"en": "unknown", "ja": "不明"}
+  display_name_translations: {"en": "unknown", "ja": "不明"}
   note: unknown
   position: 1
 
 two:
   id: 2
   name: mit
-  display_name: {"en": "MIT", "ja": "MIT"}
+  display_name_translations: {"en": "MIT", "ja": "MIT"}
   note: MIT
   position: 2
