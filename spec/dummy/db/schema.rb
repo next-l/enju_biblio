@@ -332,7 +332,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
 
   create_table "checkout_types", force: :cascade do |t|
     t.string "name", null: false
-    t.jsonb "display_name", default: {}, null: false
+    t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -365,7 +365,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
 
   create_table "circulation_statuses", force: :cascade do |t|
     t.string "name", null: false
-    t.jsonb "display_name", default: {}, null: false
+    t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -1526,7 +1526,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
 
   create_table "use_restrictions", force: :cascade do |t|
     t.string "name", null: false
-    t.jsonb "display_name", default: {}, null: false
+    t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
     t.integer "position"
     t.datetime "created_at", null: false
