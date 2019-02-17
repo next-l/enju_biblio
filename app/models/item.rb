@@ -1,6 +1,7 @@
 class Item < ActiveRecord::Base
   scope :on_shelf, -> { includes(:shelf).references(:shelf).where('shelves.name != ?', 'web') }
   scope :on_web, -> { includes(:shelf).references(:shelf).where('shelves.name = ?', 'web') }
+  scope :available, -> { left_joins(:withdraw).where(withdraws: {item_id: nil}) }
   scope :available_for, -> user {
     unless user.try(:has_role?, 'Librarian')
       on_shelf
@@ -17,6 +18,7 @@ class Item < ActiveRecord::Base
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :budget_type, optional: true
   has_one :accept
+  has_one :withdraw
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
   belongs_to :shelf, counter_cache: true
