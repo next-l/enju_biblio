@@ -1,7 +1,6 @@
 class Item < ActiveRecord::Base
   scope :on_shelf, -> { includes(:shelf).references(:shelf).where('shelves.name != ?', 'web') }
   scope :on_web, -> { includes(:shelf).references(:shelf).where('shelves.name = ?', 'web') }
-  scope :available, -> { left_joins(:withdraw).where(withdraws: {item_id: nil}) }
   scope :available_for, -> user {
     unless user.try(:has_role?, 'Librarian')
       on_shelf
