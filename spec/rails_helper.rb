@@ -73,6 +73,3 @@ end
 FactoryBot.definition_file_paths << "#{::Rails.root}/../../spec/factories"
 FactoryBot.find_definitions
 
-Capybara.register_driver :selenium do |app|
-  Capybara::Selenium::Driver.new(app, browser: :chrome)
-end
