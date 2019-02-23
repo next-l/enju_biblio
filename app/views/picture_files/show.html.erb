@@ -20,28 +20,23 @@
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_file_name') -%>:</strong>
-  <%= link_to @picture_file.picture.filename, @picture_file.picture -%><br />
+  <%= link_to @picture_file.picture.filename, url_for(@picture_file.picture) -%><br />
   <%= render 'picture_files/link', picture_file: @picture_file %>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.width') -%>:</strong>
-  <%= @picture_file.picture_width -%>
+  <%= @picture_file.picture.metadata['width'] -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.height') -%>:</strong>
-  <%= @picture_file.picture_height -%>
+  <%= @picture_file.picture.metadata['height'] -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_fingerprint') -%>:</strong>
-  <%= @picture_file.picture_fingerprint -%>
-</p>
-
-<p>
-  <strong><%= t('activerecord.attributes.picture_file.picture_updated_at') -%>:</strong>
-  <%= l(@picture_file.picture_updated_at) if @picture_file.picture_updated_at -%>
+  <%= @picture_file.picture.checksum -%>
 </p>
 
 </div>
