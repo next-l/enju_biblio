@@ -13,7 +13,6 @@ RSpec.describe 'Manifestations', type: :system do
     end
 
     it 'should show withdrawn item' do
-      pending "attach image files"
       visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).to have_content @item.item_identifier
     end
