@@ -1,5 +1,4 @@
 class AgentImportResult < ActiveRecord::Base
-  default_scope { order('agent_import_results.id') }
   scope :file_id, proc{|file_id| where(agent_import_file_id: file_id)}
   scope :failed, -> { where(agent_id: nil) }
 
@@ -13,8 +12,8 @@ end
 #
 # Table name: agent_import_results
 #
-#  id                   :bigint(8)        not null, primary key
-#  agent_import_file_id :bigint(8)        not null
+#  id                   :uuid             not null, primary key
+#  agent_import_file_id :uuid             not null
 #  agent_id             :uuid
 #  body                 :text
 #  created_at           :datetime         not null

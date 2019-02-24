@@ -17,12 +17,10 @@ end
 #
 # Table name: picture_files
 #
-#  id                      :bigint(8)        not null, primary key
+#  id                      :uuid             not null, primary key
 #  picture_attachable_id   :uuid             not null
 #  picture_attachable_type :string           not null
-#  content_type            :string
 #  title                   :text
-#  thumbnail               :string
 #  position                :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null

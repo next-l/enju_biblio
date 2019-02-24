@@ -4,6 +4,12 @@ describe AgentImportFilesController do
   fixtures :all
 
   describe 'GET index' do
+    before do
+      3.times do
+        FactoryBot.create(:agent_import_file)
+      end
+    end
+
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
@@ -42,12 +48,16 @@ describe AgentImportFilesController do
   end
 
   describe 'GET show' do
+    before do
+      @agent_import_file = FactoryBot.create(:agent_import_file)
+    end
+
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, params: { id: 1 }
-        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
+        get :show, params: { id: @agent_import_file.id }
+        expect(assigns(:agent_import_file)).to eq(@agent_import_file)
       end
     end
 
@@ -55,8 +65,8 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, params: { id: 1 }
-        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
+        get :show, params: { id: @agent_import_file.id }
+        expect(assigns(:agent_import_file)).to eq(@agent_import_file)
       end
     end
 
@@ -64,15 +74,15 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, params: { id: 1 }
-        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
+        get :show, params: { id: @agent_import_file.id }
+        expect(assigns(:agent_import_file)).to eq(@agent_import_file)
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        get :show, params: { id: 1 }
-        expect(assigns(:agent_import_file)).to eq(AgentImportFile.find(1))
+        get :show, params: { id: @agent_import_file.id }
+        expect(assigns(:agent_import_file)).to eq(@agent_import_file)
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -156,13 +166,16 @@ describe AgentImportFilesController do
   end
 
   describe 'GET edit' do
+    before do
+      @agent_import_file = FactoryBot.create(:agent_import_file)
+    end
+
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, params: { id: agent_import_file.id }
-        expect(assigns(:agent_import_file)).to eq(agent_import_file)
+        get :edit, params: { id: @agent_import_file.id }
+        expect(assigns(:agent_import_file)).to eq(@agent_import_file)
       end
     end
 
@@ -170,9 +183,8 @@ describe AgentImportFilesController do
       login_fixture_librarian
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, params: { id: agent_import_file.id }
-        expect(assigns(:agent_import_file)).to eq(agent_import_file)
+        get :edit, params: { id: @agent_import_file.id }
+        expect(assigns(:agent_import_file)).to eq(@agent_import_file)
       end
     end
 
@@ -180,27 +192,29 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'assigns the requested agent_import_file as @agent_import_file' do
-        agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, params: { id: agent_import_file.id }
+        get :edit, params: { id: @agent_import_file.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not assign the requested agent_import_file as @agent_import_file' do
-        agent_import_file = agent_import_files(:agent_import_file_00001)
-        get :edit, params: { id: agent_import_file.id }
+        get :edit, params: { id: @agent_import_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
 
   describe 'PUT update' do
+    before(:each) do
+      @agent_import_file = FactoryBot.create(:agent_import_file)
+    end
+
     describe 'When logged in as Librarian' do
       login_fixture_librarian
 
       it 'should update agent_import_file' do
-        put :update, params: { id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' } }
+        put :update, params: { id: @agent_import_file.id, agent_import_file: { mode: 'modify' } }
         expect(response).to redirect_to agent_import_file_url(assigns(:agent_import_file))
       end
     end
@@ -209,14 +223,14 @@ describe AgentImportFilesController do
       login_fixture_user
 
       it 'should not update agent_import_file' do
-        put :update, params: { id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' } }
+        put :update, params: { id: @agent_import_file.id, agent_import_file: { mode: 'modify' } }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not update agent_import_file' do
-        put :update, params: { id: agent_import_files(:agent_import_file_00003).id, agent_import_file: { mode: 'modify' } }
+        put :update, params: { id: @agent_import_file.id, agent_import_file: { mode: 'modify' } }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -224,7 +238,7 @@ describe AgentImportFilesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @agent_import_file = agent_import_files(:agent_import_file_00001)
+      @agent_import_file = FactoryBot.create(:agent_import_file)
     end
 
     describe 'When logged in as Administrator' do

@@ -9,8 +9,8 @@ end
 #
 # Table name: resource_import_results
 #
-#  id                      :bigint(8)        not null, primary key
-#  resource_import_file_id :bigint(8)
+#  id                      :uuid             not null, primary key
+#  resource_import_file_id :uuid
 #  manifestation_id        :uuid
 #  item_id                 :uuid
 #  body                    :text

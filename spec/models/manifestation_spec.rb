@@ -334,7 +334,6 @@ end
 #  updated_at                      :datetime         not null
 #  access_address                  :string
 #  language_id                     :integer          default(1), not null
-#  carrier_type_id                 :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -352,6 +351,7 @@ end
 #  required_role_id                :integer          default(1), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
+#  carrier_type_id                 :uuid             not null
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text

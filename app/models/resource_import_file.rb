@@ -204,6 +204,7 @@ class ResourceImportFile < ActiveRecord::Base
 
   def self.import_work(title, agents, options = {edit_mode: 'create'})
     work = Manifestation.new(title)
+    work.carrier_type = CarrierType.find_by(name: 'volume')
     work.save
     work.creators = agents.uniq unless agents.empty?
     work
@@ -219,6 +220,7 @@ class ResourceImportFile < ActiveRecord::Base
   def self.import_manifestation(expression, agents, options = {}, edit_options = {edit_mode: 'create'})
     manifestation = expression
     manifestation.during_import = true
+    #manifestation.save!
     manifestation.reload
     manifestation.update!(options)
     manifestation.publishers = agents.uniq unless agents.empty?
@@ -245,7 +247,7 @@ class ResourceImportFile < ActiveRecord::Base
     # TODO
     for record in reader
       manifestation = Manifestation.new(original_title: expression.original_title)
-      manifestation.carrier_type = CarrierType.find(1)
+      manifestation.carrier_type = CarrierType.find_by(name: 'volume')
       manifestation.frequency = Frequency.find(1)
       manifestation.language = Language.find(1)
       manifestation.save
@@ -564,7 +566,7 @@ class ResourceImportFile < ActiveRecord::Base
     language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
     language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
     
-    carrier_type = CarrierType.find_by(name: row['carrier_type'].to_s.strip)
+    carrier_type = CarrierType.find_by(name: row['carrier_type'].to_s.strip) || CarrierType.find_by(name: 'volume')
     content_type = ContentType.find_by(name: row['content_type'].to_s.strip)
     frequency = Frequency.find_by(name: row['frequency'].to_s.strip)
 
@@ -720,29 +722,29 @@ class ResourceImportFile < ActiveRecord::Base
           isbn = Lisbn.new(identifier)
           if isbn.present?
             isbn_record = IsbnRecord.find_by(body: isbn.isbn13) || IsbnRecord.find_by(body: isbn.isbn10)
-            isbn_record = IsbnRecord.create(body: identifier) unless isbn_record
-            IsbnRecordAndManifestation.create(manifestation: manifestation, isbn_record: isbn_record)
+            isbn_record = IsbnRecord.create!(body: identifier) unless isbn_record
+            IsbnRecordAndManifestation.create!(manifestation: manifestation, isbn_record: isbn_record)
           end
         end
       end
 
       if row['issn'].present?
         issn = StdNum::ISSN.normalize(row['issn'])
-        issn_record = IssnRecord.where(body: issn).first_or_create
-        IssnRecordAndManifestation.create(manifestation: manifestation, issn_record: issn_record)
+        issn_record = IssnRecord.where(body: issn).first_or_create!
+        IssnRecordAndManifestation.create!(manifestation: manifestation, issn_record: issn_record)
       end
 
       if row['ncid'].present?
         ncid_record = NcidRecord.where(body: row['ncid']).first_or_initialize
         ncid_record.manifestation = manifestation
-        ncid_record.save
+        ncid_record.save!
       end
 
       if row['doi'].present?
         doi_record = DoiRecord.where(body: row['doi'].downcase).first_or_initialize
         doi_record.display_body = row['doi']
         doi_record.manifestation = manifestation
-        doi_record.save
+        doi_record.save!
       end
     end
   end
@@ -752,7 +754,7 @@ end
 #
 # Table name: resource_import_files
 #
-#  id                          :bigint(8)        not null, primary key
+#  id                          :uuid             not null, primary key
 #  user_id                     :bigint(8)
 #  note                        :text
 #  executed_at                 :datetime
