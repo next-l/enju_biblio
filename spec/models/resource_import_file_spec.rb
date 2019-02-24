@@ -208,15 +208,15 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({manifestation_imported: 8, item_imported: 8, manifestation_found: 6, item_found: 3, failed: 7})
+        @file.import_start.should eq({manifestation_imported: 10, item_imported: 10, manifestation_found: 6, item_found: 3, failed: 7})
         manifestation = Item.find_by(item_identifier: '11111').manifestation
         manifestation.publishers.order(:created_at).first.full_name.should eq 'test4'
         manifestation.publishers.order(:created_at).first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.order(:created_at).second.full_name_transcription.should eq 'てすと5'
-        Manifestation.count.should eq old_manifestations_count + 8
-        Item.count.should eq old_items_count + 8
+        Manifestation.count.should eq old_manifestations_count + 9
+        Item.count.should eq old_items_count + 10
         Agent.count.should eq old_agents_count + 6
-        ResourceImportResult.count.should eq old_import_results_count + 21
+        ResourceImportResult.count.should eq old_import_results_count + 23
         Item.find_by(item_identifier: '10101').manifestation.creators.size.should eq 2
         Item.find_by(item_identifier: '10101').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.find_by(item_identifier: '10102').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
