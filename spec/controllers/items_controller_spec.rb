@@ -502,7 +502,7 @@ describe ItemsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @item = items(:item_00001)
+      @item = items(:item_00018)
     end
 
     describe 'When logged in as Administrator' do
@@ -523,11 +523,6 @@ describe ItemsController do
           delete :destroy, params: { id: 'missing' }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
-      end
-
-      it 'should not destroy item if not checked in' do
-        delete :destroy, params: { id: items(:item_00010) }
-        expect(response).to be_forbidden
       end
 
       it 'should not destroy a removed item' do
