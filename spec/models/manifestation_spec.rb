@@ -163,14 +163,6 @@ describe Manifestation, solr: true do
     sru.manifestations.size.should eq 6
   end
 
-  it "should be reserved" do
-    manifestations(:manifestation_00007).is_reserved_by?(users(:admin)).should be_truthy
-  end
-
-  it "should not be reserved" do
-    manifestations(:manifestation_00007).is_reserved_by?(users(:user1)).should be_falsy
-  end
-
   it "should_get_number_of_pages" do
     manifestations(:manifestation_00001).number_of_pages.should eq 100
   end
@@ -189,10 +181,6 @@ describe Manifestation, solr: true do
 
   it "should respond to extract_text" do
     manifestations(:manifestation_00001).extract_text.should be_nil
-  end
-
-  it "should not be reserved it it has no item" do
-    manifestations(:manifestation_00008).is_reservable_by?(users(:admin)).should be_falsy
   end
 
   it "should respond to title" do

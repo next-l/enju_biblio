@@ -256,12 +256,6 @@ describe ItemsController do
           assigns(:item).manifestation.should_not be_nil
           expect(response).to redirect_to(item_url(assigns(:item)))
         end
-
-        it 'should create a lending policy' do
-          old_lending_policy_count = LendingPolicy.count
-          post :create, params: { item: @attrs }
-          LendingPolicy.count.should eq old_lending_policy_count
-        end
       end
 
       describe 'with invalid params' do
@@ -278,14 +272,14 @@ describe ItemsController do
 
       it 'should not create item without manifestation_id' do
         lambda do
-          post :create, params: { item: { circulation_status_id: 1 } }
+          post :create, params: { item: { item_identifier: '00001' } }
         end.should raise_error(ActiveRecord::RecordNotFound)
         expect(assigns(:item)).to_not be_valid
         # expect(response).to be_missing
       end
 
       it 'should not create item already created' do
-        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: manifestations(:manifestation_00001) } }
+        post :create, params: { item: { item_identifier: '00001', manifestation_id: manifestations(:manifestation_00001) } }
         expect(assigns(:item)).to_not be_valid
         expect(response).to be_successful
       end
@@ -316,27 +310,6 @@ describe ItemsController do
           post :create, params: { item: @invalid_attrs }
           expect(response).to render_template('new')
         end
-      end
-
-      it 'should create reserved item' do
-        post :create, params: { item: { circulation_status_id: 1, manifestation_id: manifestations(:manifestation_00002).id, shelf_id: shelves(:shelf_00001).id } }
-        expect(assigns(:item)).to be_valid
-
-        expect(response).to redirect_to item_url(assigns(:item))
-        flash[:message].should eq I18n.t('item.this_item_is_reserved')
-        assigns(:item).manifestation.should eq manifestations(:manifestation_00002)
-        assigns(:item).should be_retained
-      end
-
-      it "should create another item with already retained" do
-        reserve = FactoryBot.create(:reserve)
-        reserve.transition_to!(:requested)
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: shelves(:shelf_00001).id) }
-        expect(assigns(:item)).to be_valid
-        expect(response).to redirect_to item_url(assigns(:item))
-        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id, shelf_id: shelves(:shelf_00001).id) }
-        expect(assigns(:item)).to be_valid
-        expect(response).to redirect_to item_url(assigns(:item))
       end
     end
 
@@ -523,11 +496,6 @@ describe ItemsController do
           delete :destroy, params: { id: 'missing' }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
-      end
-
-      it 'should not destroy a removed item' do
-        delete :destroy, params: { id: items(:item_00023) }
-        expect(response).to be_forbidden
       end
     end
 

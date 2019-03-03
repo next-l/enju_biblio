@@ -37,21 +37,8 @@ class ManifestationPolicy < ApplicationPolicy
 
   def destroy?
     if record.items.empty?
-      if !record.try(:is_reserved?)
-        if record.series_master?
-          if record.children.empty?
-            case user.try(:role).try(:name)
-            when 'Administrator'
-              true
-            when 'Librarian'
-              true if record.required_role_id <= 3
-            else
-              false
-            end
-          else
-            false
-          end
-        else
+      if record.series_master?
+        if record.children.empty?
           case user.try(:role).try(:name)
           when 'Administrator'
             true
@@ -60,6 +47,17 @@ class ManifestationPolicy < ApplicationPolicy
           else
             false
           end
+        else
+          false
+        end
+      else
+        case user.try(:role).try(:name)
+        when 'Administrator'
+          true
+        when 'Librarian'
+          true if record.required_role_id <= 3
+        else
+          false
         end
       end
     end

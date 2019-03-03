@@ -7,9 +7,9 @@ class Item < ActiveRecord::Base
     end
   }
   delegate :display_name, to: :shelf, prefix: true
-  has_many :owns
+  has_many :owns, dependent: :destroy
   has_many :agents, through: :owns
-  has_many :donates
+  has_many :donates, dependent: :destroy
   has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
@@ -115,8 +115,6 @@ end
 #  acquired_at             :datetime
 #  bookstore_id            :bigint(8)
 #  budget_type_id          :integer
-#  circulation_status_id   :bigint(8)        default(5), not null
-#  checkout_type_id        :bigint(8)        default(1), not null
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime

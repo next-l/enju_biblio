@@ -11,15 +11,10 @@ class User < ActiveRecord::Base
   include EnjuBookmark::EnjuUser
 end
 
-CarrierType.include(EnjuCirculation::EnjuCarrierType)
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
 #Manifestation.include(EnjuLoc::EnjuManifestation)
-Manifestation.include(EnjuCirculation::EnjuManifestation)
 Manifestation.include(EnjuBookmark::EnjuManifestation)
 Manifestation.include(EnjuManifestationViewer::EnjuManifestation)
 Item.include(EnjuLibrary::EnjuItem)
-Item.include(EnjuCirculation::EnjuItem)
 User.include(EnjuBiblio::EnjuUser)
-User.include(EnjuCirculation::EnjuUser)
-UserGroup.include(EnjuCirculation::EnjuUserGroup)

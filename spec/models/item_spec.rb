@@ -34,8 +34,6 @@ end
 #  acquired_at             :datetime
 #  bookstore_id            :bigint(8)
 #  budget_type_id          :integer
-#  circulation_status_id   :bigint(8)        default(5), not null
-#  checkout_type_id        :bigint(8)        default(1), not null
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime

@@ -663,10 +663,19 @@ class Manifestation < ActiveRecord::Base
         when :Administrator, :Librarian
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
-          item_lines << Checkout.where(item_id: i.id).size
+          if defined?(EnjuCirculation)
+            item_lines << Checkout.where(item_id: i.id).size
+          else
+            item_lines << nil
+          end
         end
-        item_lines << i.circulation_status.try(:name)
-        item_lines << i.use_restriction.try(:name)
+        if defined?(EnjuCirculation)
+          item_lines << i.circulation_status.try(:name)
+          item_lines << i.use_restriction.try(:name)
+        else
+          item_lines << nil
+          item_lines << nil
+        end
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
         item_lines << i.created_at

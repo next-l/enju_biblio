@@ -13,7 +13,6 @@ RSpec.describe 'Items', type: :system do
       visit item_path(items(:item_00001).id, locale: :ja)
       expect(page).to have_content '予算種別'
       expect(page).to have_content '書店'
-      expect(page).to have_content '利用制限'
       expect(page).to have_content '購入価格'
     end
   end
@@ -27,7 +26,6 @@ RSpec.describe 'Items', type: :system do
       visit item_path(items(:item_00001).id, locale: :ja)
       expect(page).not_to have_content '予算種別'
       expect(page).not_to have_content '書店'
-      expect(page).not_to have_content '利用制限'
       expect(page).not_to have_content '購入価格'
     end
   end
@@ -37,7 +35,6 @@ RSpec.describe 'Items', type: :system do
       visit item_path(items(:item_00001).id, locale: :ja)
       expect(page).not_to have_content '予算種別'
       expect(page).not_to have_content '書店'
-      expect(page).not_to have_content '利用制限'
       expect(page).not_to have_content '購入価格'
     end
   end
