@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
 
   include EnjuLibrary::Controller
   include EnjuBiblio::Controller
-  include EnjuEvent::Controller
   include EnjuSubject::Controller
   #include EnjuInventory::Controller
   after_action :verify_authorized
