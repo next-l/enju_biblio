@@ -290,8 +290,8 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "classifications", force: :cascade do |t|
-    t.bigint "parent_id"
+  create_table "classifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "parent_id"
     t.string "category", null: false
     t.text "note"
     t.bigint "classification_type_id", null: false
@@ -458,32 +458,6 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.index ["isbn"], name: "index_import_requests_on_isbn"
     t.index ["manifestation_id"], name: "index_import_requests_on_manifestation_id"
     t.index ["user_id"], name: "index_import_requests_on_user_id"
-  end
-
-  create_table "inventories", id: :serial, force: :cascade do |t|
-    t.integer "item_id"
-    t.integer "inventory_file_id"
-    t.text "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["inventory_file_id"], name: "index_inventories_on_inventory_file_id"
-    t.index ["item_id"], name: "index_inventories_on_item_id"
-  end
-
-  create_table "inventory_files", id: :serial, force: :cascade do |t|
-    t.string "filename"
-    t.string "content_type"
-    t.integer "size"
-    t.integer "user_id"
-    t.text "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "inventory_file_name"
-    t.string "inventory_content_type"
-    t.integer "inventory_file_size"
-    t.datetime "inventory_updated_at"
-    t.string "inventory_fingerprint"
-    t.index ["user_id"], name: "index_inventory_files_on_user_id"
   end
 
   create_table "isbn_record_and_manifestations", force: :cascade do |t|
@@ -1109,8 +1083,8 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "subjects", force: :cascade do |t|
-    t.bigint "parent_id"
+  create_table "subjects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "parent_id"
     t.integer "use_term_id"
     t.string "term"
     t.text "term_transcription"
