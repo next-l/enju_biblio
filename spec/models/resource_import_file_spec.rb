@@ -108,8 +108,8 @@ describe ResourceImportFile do
         item_10104.manifestation.height.should be_nil
         item_10104.manifestation.width.should be_nil
         item_10104.manifestation.depth.should be_nil
-        item_10104.manifestation.subjects.order(:id).map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
-        item_10104.manifestation.classifications.order(:id).map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc9" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
+        item_10104.manifestation.subjects.order(:created_at).map{|s| {s.subject_heading_type.name => s.term}}.should eq [{"ndlsh" => "コンピュータ"}, {"ndlsh" => "図書館"}]
+        item_10104.manifestation.classifications.order(:created_at).map{|c| {c.classification_type.name => c.category}}.should eq [{"ndc9" => "007"}, {"ddc" => "003"}, {"ddc" => "004"}]
 
         manifestation_104 = Manifestation.find_by(manifestation_identifier: '104')
         manifestation_104.isbn_records.pluck(:body).should eq ['9784797327038']
@@ -347,7 +347,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       item_00001.binding_item_identifier.should eq '900001'
       item_00001.binding_call_number.should eq '336|A'
       item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
-      item_00001.manifestation.subjects.order(:id).map{|subject| {subject.subject_heading_type.name => subject.term}}.should eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
+      item_00001.manifestation.subjects.order(:created_at).map{|subject| {subject.subject_heading_type.name => subject.term}}.should eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
       item_00001.manifestation.isbn_records.pluck(:body).should eq ["4798002062"]
       Item.find_by(item_identifier: '00002').manifestation.publishers.collect(&:full_name).should eq ['test2']
 
