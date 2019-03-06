@@ -195,11 +195,11 @@ class ResourceImportFile < ActiveRecord::Base
     send_message
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
     num
-  rescue => e
-    self.error_message = "line #{row_num}: #{e.message}"
-    save
-    transition_to!(:failed)
-    raise e
+  #rescue => e
+  #  self.error_message = "line #{row_num}: #{e.message}"
+  #  save
+  #  transition_to!(:failed)
+  #  raise e
   end
 
   def self.import_work(title, agents, options = {edit_mode: 'create'})
@@ -588,6 +588,9 @@ class ResourceImportFile < ActiveRecord::Base
     publishers = row['publisher'].to_s.split('//')
     publisher_transcriptions = row['publisher_transcription'].to_s.split('//')
     publishers_list = publishers.zip(publisher_transcriptions).map{|f,t| {full_name: f.to_s.strip, full_name_transcription: t.to_s.strip}}
+    p creators_list
+    p contributors_list
+    p publishers_list
     ResourceImportFile.transaction do
       creator_agents = Agent.import_agents(creators_list)
       contributor_agents = Agent.import_agents(contributors_list)

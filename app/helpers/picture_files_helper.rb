@@ -4,9 +4,9 @@ module PictureFilesHelper
 
     case options[:size]
     when :medium
-      return image_tag picture_file.picture.variant(resize: '600x'), alt: "*", width: picture_file.picture.metadata['width']
+      return image_tag picture_file.picture.variant(resize: '600x'), alt: "*"
     when :thumb
-      return image_tag picture_file.picture.variant(resize: '100x'), alt: "*", width: picture_file.picture.metadata['width']
+      return image_tag picture_file.picture.variant(resize: '100x'), alt: "*"
     end
     image_tag picture_file.picture, alt: "*", width: picture_file.picture.metadata['width'], height: picture_file.picture.metadata['height']
   end

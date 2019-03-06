@@ -4,6 +4,16 @@ class IssnRecord < ActiveRecord::Base
   has_many :issn_record_and_periodicals, dependent: :destroy
   has_many :periodicals, through: :issn_record_and_periodicals
   validates :body, presence: true, uniqueness: {scope: :issn_type}
+  before_save :normalize_issn
+  strip_attributes
+
+  def normalize_issn
+    if StdNum::ISSN.valid?(body)
+      self.body = StdNum::ISSN.normalize(body)
+    else
+      errors.add(:body)
+    end
+  end
 
   def self.new_records(issn_records_params)
     return [] unless issn_records_params
@@ -11,8 +21,8 @@ class IssnRecord < ActiveRecord::Base
     IssnRecord.transaction do
       issn_records_params.each do |k, v|
         next if v['_destroy'] == '1'
-        if v['issn_record_id'].present?
-          issn_record = IssnRecord.find(v['issn_record_id'])
+        if v['body'].present?
+          issn_record = IssnRecord.where(body: v['body'].gsub(/[^0-9x]/i, '')).first_or_create!
         elsif v['id'].present?
           issn_record = IssnRecord.find(v['id'])
         else
