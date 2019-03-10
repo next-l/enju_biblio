@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe "series_statement_merge_lists/edit" do
+  fixtures :series_statement_merge_lists
+
   before(:each) do
-    @series_statement_merge_list = assign(:series_statement_merge_list, stub_model(SeriesStatementMergeList,
-      title: "MyString"
-    ))
+    @series_statement_merge_list = series_statement_merge_lists(:series_statement_merge_list_00001)
   end
 
   it "renders the edit series_statement_merge_list form" do
