@@ -361,7 +361,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
 
-  create_table "doi_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "doi_records", force: :cascade do |t|
     t.string "body", null: false
     t.string "display_body", null: false
     t.string "source"
