@@ -25,7 +25,7 @@ end
 #
 # Table name: doi_records
 #
-#  id               :bigint(8)        not null, primary key
+#  id               :uuid             not null, primary key
 #  body             :string           not null
 #  display_body     :string           not null
 #  source           :string

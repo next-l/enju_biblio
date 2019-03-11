@@ -16,7 +16,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
   enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
-  create_table "accepts", force: :cascade do |t|
+  create_table "accepts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "basket_id"
     t.uuid "item_id"
     t.bigint "librarian_id"
@@ -361,7 +361,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
 
-  create_table "doi_records", force: :cascade do |t|
+  create_table "doi_records", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "body", null: false
     t.string "display_body", null: false
     t.string "source"
@@ -427,7 +427,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.string "to_state"
     t.jsonb "metadata", default: {}
     t.integer "sort_key"
-    t.bigint "import_request_id"
+    t.uuid "import_request_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "most_recent", null: false
@@ -1256,7 +1256,7 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.index ["username"], name: "index_users_on_username", unique: true
   end
 
-  create_table "withdraws", force: :cascade do |t|
+  create_table "withdraws", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "basket_id"
     t.uuid "item_id"
     t.bigint "librarian_id"
