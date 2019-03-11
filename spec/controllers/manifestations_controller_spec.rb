@@ -528,7 +528,7 @@ describe ManifestationsController do
         end
 
         it 'assigns a series_statement' do
-          post :create, params: { manifestation: @attrs.merge(series_statements_attributes: { '0' => { original_title: SeriesStatement.find(1).original_title } }) }
+          post :create, params: { manifestation: @attrs.merge(series_statements_attributes: { '0' => { original_title: series_statements(:one).original_title } }) }
           assigns(:manifestation).reload
           assigns(:manifestation).series_statements.pluck(:original_title).include?(series_statements(:one).original_title).should be_truthy
         end
@@ -643,7 +643,7 @@ describe ManifestationsController do
   describe 'PUT update' do
     before(:each) do
       @manifestation = FactoryBot.create(:manifestation)
-      @manifestation.series_statements = [SeriesStatement.find(1)]
+      @manifestation.series_statements = [series_statements(:one)]
       @attrs = valid_attributes
       @invalid_attrs = { original_title: '' }
     end

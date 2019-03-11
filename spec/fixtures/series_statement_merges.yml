@@ -2,18 +2,18 @@
 series_statement_merge_00001: 
   updated_at: 2008-02-17 18:51:36.776009 +09:00
   id: 1
-  series_statement_id: 1
+  series_statement_id: 4d35e82d-1a19-45a1-a5e8-6dd80ae8debb
   series_statement_merge_list_id: c1cd5b66-ffe0-4af1-9c6c-c72a2bc87753
   created_at: 2008-02-17 18:51:36.776009 +09:00
 series_statement_merge_00002: 
   updated_at: 2008-02-17 19:14:03.461761 +09:00
   id: 2
-  series_statement_id: 2
+  series_statement_id: e06d7f20-def7-46a9-b19d-b3095653670c
   series_statement_merge_list_id: c1cd5b66-ffe0-4af1-9c6c-c72a2bc87753
   created_at: 2008-02-17 19:10:36.282814 +09:00
 series_statement_merge_00003: 
   updated_at: 2008-02-17 19:19:19.265557 +09:00
-  series_statement_id: 3
+  series_statement_id: 298af67f-03b8-42a1-8748-507d40e0e22b
   series_statement_merge_list_id: c1cd5b66-ffe0-4af1-9c6c-c72a2bc87753
   id: 3
   created_at: 2008-02-17 19:19:19.265557 +09:00
@@ -23,7 +23,7 @@ series_statement_merge_00003:
 # Table name: series_statement_merges
 #
 #  id                             :bigint(8)        not null, primary key
-#  series_statement_id            :bigint(8)        not null
+#  series_statement_id            :uuid             not null
 #  series_statement_merge_list_id :uuid             not null
 #  created_at                     :datetime         not null
 #  updated_at                     :datetime         not null
