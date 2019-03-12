@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_08_135957) do
+ActiveRecord::Schema.define(version: 2019_03_12_033839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -810,6 +810,24 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
     t.index ["item_id"], name: "index_owns_on_item_id"
   end
 
+  create_table "periodical_and_manifestations", force: :cascade do |t|
+    t.uuid "periodical_id", null: false
+    t.uuid "manifestation_id", null: false
+    t.boolean "periodical_master", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manifestation_id"], name: "index_periodical_and_manifestations_on_manifestation_id"
+    t.index ["periodical_id"], name: "index_periodical_and_manifestations_on_periodical_id"
+  end
+
+  create_table "periodicals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.text "original_title"
+    t.bigint "frequency_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["frequency_id"], name: "index_periodicals_on_frequency_id"
+  end
+
   create_table "picture_files", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "picture_attachable_id", null: false
     t.string "picture_attachable_type", null: false
@@ -1308,6 +1326,9 @@ ActiveRecord::Schema.define(version: 2019_02_08_135957) do
   add_foreign_key "messages", "messages", column: "parent_id"
   add_foreign_key "ncid_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
+  add_foreign_key "periodical_and_manifestations", "manifestations"
+  add_foreign_key "periodical_and_manifestations", "periodicals"
+  add_foreign_key "periodicals", "frequencies"
   add_foreign_key "produces", "agents"
   add_foreign_key "produces", "manifestations"
   add_foreign_key "realizes", "agents"
