@@ -90,8 +90,6 @@ class Item < ActiveRecord::Base
   end
 
   def removable?
-    super
-  rescue NoMethodError
     true
   end
 end
