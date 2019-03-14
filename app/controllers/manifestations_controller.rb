@@ -344,7 +344,7 @@ class ManifestationsController < ApplicationController
       ].each do |attribute|
         @manifestation.send("#{attribute}=", @parent.send(attribute))
       end
-      [ :creates, :realizes, :produces, :creators, :contributors, :publishers, :classifications, :subjects ].each do |attribute|
+      [ :creators, :contributors, :publishers, :classifications, :subjects ].each do |attribute|
         @manifestation.send(attribute).build(@parent.send(attribute).collect(&:attributes))
       end
     end

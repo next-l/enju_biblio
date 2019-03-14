@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_14_163959) do
+ActiveRecord::Schema.define(version: 2019_03_14_151124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -327,15 +327,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_163959) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "contributors", force: :cascade do |t|
-    t.bigint "realize_id", null: false
-    t.uuid "agent_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agent_id"], name: "index_contributors_on_agent_id"
-    t.index ["realize_id"], name: "index_contributors_on_realize_id"
-  end
-
   create_table "countries", force: :cascade do |t|
     t.string "name", null: false
     t.text "display_name"
@@ -369,15 +360,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_163959) do
     t.jsonb "full_name_translations", default: {}
     t.index ["agent_id"], name: "index_creates_on_agent_id"
     t.index ["work_id"], name: "index_creates_on_work_id"
-  end
-
-  create_table "creators", force: :cascade do |t|
-    t.bigint "create_id", null: false
-    t.uuid "agent_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agent_id"], name: "index_creators_on_agent_id"
-    t.index ["create_id"], name: "index_creators_on_create_id"
   end
 
   create_table "doi_records", force: :cascade do |t|
@@ -915,15 +897,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_163959) do
     t.index ["user_group_id"], name: "index_profiles_on_user_group_id"
   end
 
-  create_table "publishers", force: :cascade do |t|
-    t.bigint "produce_id", null: false
-    t.uuid "agent_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["agent_id"], name: "index_publishers_on_agent_id"
-    t.index ["produce_id"], name: "index_publishers_on_produce_id"
-  end
-
   create_table "realize_types", force: :cascade do |t|
     t.string "name", null: false
     t.jsonb "display_name_translations", default: {}, null: false
@@ -1332,12 +1305,8 @@ ActiveRecord::Schema.define(version: 2019_03_14_163959) do
   add_foreign_key "classifications", "classifications", column: "parent_id"
   add_foreign_key "classifications", "manifestations"
   add_foreign_key "colors", "library_groups"
-  add_foreign_key "contributors", "agents"
-  add_foreign_key "contributors", "realizes"
   add_foreign_key "creates", "agents"
   add_foreign_key "creates", "manifestations", column: "work_id"
-  add_foreign_key "creators", "agents"
-  add_foreign_key "creators", "creates"
   add_foreign_key "doi_records", "manifestations"
   add_foreign_key "donates", "agents"
   add_foreign_key "donates", "items"
@@ -1366,8 +1335,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_163959) do
   add_foreign_key "periodicals", "frequencies"
   add_foreign_key "produces", "agents"
   add_foreign_key "produces", "manifestations"
-  add_foreign_key "publishers", "agents"
-  add_foreign_key "publishers", "produces"
   add_foreign_key "realizes", "agents"
   add_foreign_key "realizes", "manifestations", column: "expression_id"
   add_foreign_key "resource_export_files", "users"

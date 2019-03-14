@@ -3,7 +3,9 @@ class Create < ActiveRecord::Base
   belongs_to :work, class_name: 'Manifestation', foreign_key: 'work_id', touch: true
   belongs_to :create_type, optional: true
 
-  validates :work_id, presence: true #, uniqueness: true
+  validates_associated :agent, :work
+  validates_presence_of :agent_id, :work_id
+  validates_uniqueness_of :work_id, scope: :agent_id
   after_save :reindex
   after_destroy :reindex
 
@@ -11,7 +13,8 @@ class Create < ActiveRecord::Base
   translates :full_name
 
   def reindex
-    work.index
+    agent.try(:index)
+    work.try(:index)
   end
 end
 

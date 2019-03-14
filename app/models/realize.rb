@@ -3,7 +3,9 @@ class Realize < ActiveRecord::Base
   belongs_to :expression, class_name: 'Manifestation', foreign_key: 'expression_id', touch: true
   belongs_to :realize_type, optional: true
 
-  validates :expression_id, presence: true #, uniqueness: true
+  validates_associated :agent, :expression
+  validates_presence_of :agent, :expression
+  validates_uniqueness_of :expression_id, scope: :agent_id
   after_save :reindex
   after_destroy :reindex
 
@@ -11,7 +13,8 @@ class Realize < ActiveRecord::Base
   translates :full_name
 
   def reindex
-    expression.index
+    agent.try(:index)
+    expression.try(:index)
   end
 end
 

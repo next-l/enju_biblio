@@ -4,7 +4,9 @@ class Produce < ActiveRecord::Base
   belongs_to :produce_type, optional: true
   delegate :original_title, to: :manifestation, prefix: true
 
-  validates :manifestation, presence: true #, uniqueness: true
+  validates_associated :agent, :manifestation
+  validates_presence_of :agent, :manifestation
+  validates_uniqueness_of :manifestation_id, scope: :agent_id
   after_save :reindex
   after_destroy :reindex
 
@@ -12,7 +14,8 @@ class Produce < ActiveRecord::Base
   translates :full_name
 
   def reindex
-    manifestation.index
+    agent.try(:index)
+    manifestation.try(:index)
   end
 end
 
