@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_12_033839) do
+ActiveRecord::Schema.define(version: 2019_03_14_151124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -357,6 +357,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_033839) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "create_type_id"
+    t.jsonb "full_name_translations", default: {}
     t.index ["agent_id"], name: "index_creates_on_agent_id"
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
@@ -872,6 +873,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_033839) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "produce_type_id"
+    t.jsonb "full_name_translations", default: {}
     t.index ["agent_id"], name: "index_produces_on_agent_id"
     t.index ["manifestation_id"], name: "index_produces_on_manifestation_id"
   end
@@ -911,6 +913,7 @@ ActiveRecord::Schema.define(version: 2019_03_12_033839) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "realize_type_id"
+    t.jsonb "full_name_translations", default: {}
     t.index ["agent_id"], name: "index_realizes_on_agent_id"
     t.index ["expression_id"], name: "index_realizes_on_expression_id"
   end
