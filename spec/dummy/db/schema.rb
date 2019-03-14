@@ -818,11 +818,12 @@ ActiveRecord::Schema.define(version: 2019_03_12_033839) do
     t.datetime "updated_at", null: false
     t.index ["manifestation_id"], name: "index_periodical_and_manifestations_on_manifestation_id"
     t.index ["periodical_id"], name: "index_periodical_and_manifestations_on_periodical_id"
+    t.index ["periodical_master"], name: "index_periodical_and_manifestations_on_periodical_master", unique: true, where: "(periodical_master IS TRUE)"
   end
 
   create_table "periodicals", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "original_title"
-    t.bigint "frequency_id"
+    t.text "original_title", null: false
+    t.bigint "frequency_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["frequency_id"], name: "index_periodicals_on_frequency_id"
