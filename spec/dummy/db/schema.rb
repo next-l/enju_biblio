@@ -192,7 +192,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   end
 
   create_table "bookmark_stat_has_manifestations", force: :cascade do |t|
-    t.bigint "bookmark_stat_id", null: false
+    t.uuid "bookmark_stat_id", null: false
     t.uuid "manifestation_id"
     t.integer "bookmarks_count"
     t.datetime "created_at", null: false
@@ -214,7 +214,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.index ["sort_key", "bookmark_stat_id"], name: "index_bookmark_stat_transitions_on_sort_key_and_stat_id", unique: true
   end
 
-  create_table "bookmark_stats", force: :cascade do |t|
+  create_table "bookmark_stats", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.datetime "start_date"
     t.datetime "end_date"
     t.datetime "started_at"
@@ -224,7 +224,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "bookmarks", force: :cascade do |t|
+  create_table "bookmarks", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.bigint "user_id", null: false
     t.uuid "manifestation_id", null: false
     t.text "title"
