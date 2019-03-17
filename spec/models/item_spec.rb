@@ -32,7 +32,7 @@ end
 #  lock_version            :integer          default(0), not null
 #  required_role_id        :integer          default(1), not null
 #  acquired_at             :datetime
-#  bookstore_id            :bigint(8)
+#  bookstore_id            :uuid
 #  budget_type_id          :integer
 #  binding_item_identifier :string
 #  binding_call_number     :string
