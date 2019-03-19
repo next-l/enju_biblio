@@ -269,7 +269,7 @@ describe Manifestation, solr: true do
     end
 
     it "should respect the role of the user" do
-      FactoryBot.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
+      FactoryBot.create(:item, bookstore_id: bookstores(:bookstore_00001).id, price: 100, budget_type_id: 1)
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).to be_empty
