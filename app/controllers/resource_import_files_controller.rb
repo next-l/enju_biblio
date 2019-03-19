@@ -6,7 +6,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files
   # GET /resource_import_files.json
   def index
-    @resource_import_files = ResourceImportFile.page(params[:page])
+    @resource_import_files = ResourceImportFile.order(created_at: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +17,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/1
   # GET /resource_import_files/1.json
   def show
-    @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
+    @resource_import_results = @resource_import_file.resource_import_results.order(created_at: :asc).page(params[:page])
 
     respond_to do |format|
       format.html # show.html.erb
