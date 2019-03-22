@@ -9,7 +9,7 @@ describe ResourceImportFilesController do
 
       it 'assigns all resource_import_files as @resource_import_files' do
         get :index
-        expect(assigns(:resource_import_files)).to eq(ResourceImportFile.page(1))
+        expect(assigns(:resource_import_files)).to eq(ResourceImportFile.order(created_at: :desc).page(1))
       end
     end
 
@@ -18,7 +18,7 @@ describe ResourceImportFilesController do
 
       it 'assigns all resource_import_files as @resource_import_files' do
         get :index
-        expect(assigns(:resource_import_files)).to eq(ResourceImportFile.page(1))
+        expect(assigns(:resource_import_files)).to eq(ResourceImportFile.order(created_at: :desc).page(1))
       end
     end
 
