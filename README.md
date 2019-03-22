@@ -1,4 +1,4 @@
-# EnjuNews
+# EnjuBiblio
 [![CircleCI](https://circleci.com/gh/next-l/enju_biblio.svg?style=svg)](https://circleci.com/gh/next-l/enju_biblio)
 [![Coverage Status](https://coveralls.io/repos/github/next-l/enju_biblio/badge.svg?branch=master)](https://coveralls.io/github/next-l/enju_biblio?branch=master)
 [![security](https://hakiri.io/github/next-l/enju_biblio/master.svg)](https://hakiri.io/github/next-l/enju_biblio/master)
