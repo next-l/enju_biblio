@@ -13,8 +13,8 @@ end
 #
 # Table name: series_statements
 #
-#  id                                 :bigint(8)        not null, primary key
-#  original_title                     :text
+#  id                                 :uuid             not null, primary key
+#  original_title                     :text             not null
 #  numbering                          :text
 #  title_subseries                    :text
 #  numbering_subseries                :text

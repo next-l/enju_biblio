@@ -1,6 +1,6 @@
 class CreateBookmarkStats < ActiveRecord::Migration[5.2]
   def change
-    create_table :bookmark_stats do |t|
+    create_table :bookmark_stats, id: :uuid do |t|
       t.datetime :start_date
       t.datetime :end_date
       t.datetime :started_at

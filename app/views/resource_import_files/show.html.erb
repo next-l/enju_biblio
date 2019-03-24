@@ -59,7 +59,7 @@
 <div>
   <strong><%= t('page.notice') -%>:</strong>
 <ul>
-  <% @resource_import_file.resource_import_results.skipped.each do |resource_import_result| %>
+  <% @resource_import_file.resource_import_results.order(created_at: :asc).skipped.each do |resource_import_result| %>
     <li><%= resource_import_result.error_message %></li>
   <% end %>
 </ul>

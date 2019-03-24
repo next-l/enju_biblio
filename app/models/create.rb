@@ -10,6 +10,7 @@ class Create < ActiveRecord::Base
   after_destroy :reindex
 
   acts_as_list scope: :work
+  translates :full_name
 
   def reindex
     agent.try(:index)
@@ -21,11 +22,12 @@ end
 #
 # Table name: creates
 #
-#  id             :bigint(8)        not null, primary key
-#  agent_id       :uuid             not null
-#  work_id        :uuid             not null
-#  position       :integer          default(1), not null
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
-#  create_type_id :integer
+#  id                     :bigint(8)        not null, primary key
+#  agent_id               :uuid             not null
+#  work_id                :uuid             not null
+#  position               :integer          default(1), not null
+#  created_at             :datetime         not null
+#  updated_at             :datetime         not null
+#  create_type_id         :integer
+#  full_name_translations :jsonb
 #

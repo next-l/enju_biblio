@@ -24,6 +24,11 @@ class Manifestation < ActiveRecord::Base
   has_many :issn_record_and_manifestations, dependent: :destroy
   has_many :issn_records, through: :issn_record_and_manifestations
   has_one :doi_record
+  has_one :periodical_and_manifestation, dependent: :destroy
+  has_one :periodical, through: :periodical_and_manifestation
+  accepts_nested_attributes_for :creates, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :realizes, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :produces, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank

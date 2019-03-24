@@ -73,7 +73,7 @@ end
 #
 # Table name: import_requests
 #
-#  id               :bigint(8)        not null, primary key
+#  id               :uuid             not null, primary key
 #  isbn             :string           not null
 #  manifestation_id :uuid
 #  user_id          :bigint(8)
