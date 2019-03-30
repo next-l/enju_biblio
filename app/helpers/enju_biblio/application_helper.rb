@@ -50,7 +50,7 @@ module EnjuBiblio
     def identifier_link(identifier)
       case identifier.identifier_type.name
       when 'iss_itemno'
-        link_to identifier.body, "http://iss.ndl.go.jp/books/#{identifier.body}"
+        link_to identifier.body, "https://iss.ndl.go.jp/books/#{identifier.body}"
       else
         identifier.body
       end
