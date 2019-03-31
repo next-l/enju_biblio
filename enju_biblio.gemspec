@@ -31,7 +31,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "enju_bookmark", "~> 0.3.0"
   s.add_development_dependency "enju_event", "~> 0.3.1"
   s.add_development_dependency "enju_circulation", "~> 0.3.0"
-  s.add_development_dependency "enju_ndl", "~> 0.3.0"
+  s.add_development_dependency "enju_ndl", "~> 0.3.1"
   s.add_development_dependency "enju_oai", "~> 0.3.0"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "mysql2"
