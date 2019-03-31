@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/{log,private,solr,tmp}/**/*"] - Dir["spec/dummy/db/*.sqlite3"]
 
-  s.add_dependency "enju_library", "~> 0.3.0"
+  s.add_dependency "enju_library", "~> 0.3.1"
   s.add_dependency "marc"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
@@ -36,7 +36,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency "mysql2"
   s.add_development_dependency "pg"
-  s.add_development_dependency "rspec-rails", "~> 3.7"
+  s.add_development_dependency "rspec-rails", "~> 3.8"
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "vcr", "~> 4.0"
   s.add_development_dependency "sunspot_solr", "~> 2.3"
