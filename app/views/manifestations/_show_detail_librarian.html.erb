@@ -4,6 +4,12 @@
     <% cache([manifestation, fragment: 'show_detail_librarian_html', role: current_user_role_name, locale: @locale]) do %>
       <table class="table table-striped" id="resource_detail">
         <%= embed_content(manifestation) -%>
+        <% if manifestation.title_transcription? %>
+          <tr>
+            <td style="width: 200px"><%= t('activerecord.attributes.manifestation.title_transcription') -%>:</td>
+            <td style="width: 500px"><%= manifestation.title_transcription -%></td>
+          </tr>
+        <% end %>
         <% if manifestation.title_alternative? %>
           <tr>
             <td style="width: 200px"><%= t('activerecord.attributes.manifestation.title_alternative') -%>:</td>
