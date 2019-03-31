@@ -27,5 +27,4 @@ gem 'enju_bookmark', github: 'next-l/enju_bookmark'
 gem 'rails-controller-testing', group: :test
 gem 'rspec_junit_formatter', group: :test
 gem 'webdrivers', group: :test
-gem 'json_translate'
 gem 'sassc-rails'
