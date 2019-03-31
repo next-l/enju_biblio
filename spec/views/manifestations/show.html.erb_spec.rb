@@ -18,7 +18,7 @@ describe "manifestations/show" do
     it "renders a link to CiNii Books" do
       assign(:manifestation, manifestations(:manifestation_00217))
       render
-      rendered.should include '<a href="http://ci.nii.ac.jp/ncid/BN15603730">BN15603730</a>'
+      rendered.should include '<a href="https://ci.nii.ac.jp/ncid/BN15603730">BN15603730</a>'
     end
   end
 
@@ -39,6 +39,7 @@ describe "manifestations/show" do
       expect(rendered).to have_css "div.manifestation_total_checkouts", text: /\A\s*.*?: \d+/
     end
   end
+
   describe "when logged in as User" do
     before(:each) do
       user = assign(:profile, FactoryBot.create(:user))
@@ -50,5 +51,4 @@ describe "manifestations/show" do
       expect(rendered).to match /\s+;\s+/
     end
   end
-
 end
