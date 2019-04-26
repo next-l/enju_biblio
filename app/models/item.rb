@@ -98,12 +98,12 @@ end
 #
 # Table name: items
 #
-#  id                      :uuid             not null, primary key
+#  id                      :bigint(8)        not null, primary key
 #  call_number             :string
 #  item_identifier         :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  shelf_id                :uuid
+#  shelf_id                :bigint(8)
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string
@@ -111,10 +111,10 @@ end
 #  lock_version            :integer          default(0), not null
 #  required_role_id        :integer          default(1), not null
 #  acquired_at             :datetime
-#  bookstore_id            :uuid
+#  bookstore_id            :bigint(8)
 #  budget_type_id          :integer
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime
-#  manifestation_id        :uuid             not null
+#  manifestation_id        :bigint(8)        not null
 #

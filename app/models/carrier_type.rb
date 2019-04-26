@@ -20,7 +20,7 @@ end
 #
 # Table name: carrier_types
 #
-#  id                        :uuid             not null, primary key
+#  id                        :bigint(8)        not null, primary key
 #  name                      :string           not null
 #  display_name_translations :jsonb            not null
 #  note                      :text

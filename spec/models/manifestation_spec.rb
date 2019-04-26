@@ -233,7 +233,7 @@ describe Manifestation, solr: true do
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["edition"].compact).not_to be_empty
       expect(csv["edition_string"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
       expect(m["edition"]).to eq "2"
       expect(m["edition_string"]).to eq "Revised Ed."
     end
@@ -243,7 +243,7 @@ describe Manifestation, solr: true do
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["title_transcription"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
       expect(m["title_transcription"]).to eq "Transcripted title"
     end
 
@@ -253,7 +253,7 @@ describe Manifestation, solr: true do
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["volume_number"].compact).not_to be_empty
       expect(csv["volume_number_string"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
       expect(m["volume_number"]).to eq "15"
       expect(m["volume_number_string"]).to eq "Vol.15"
     end
@@ -264,7 +264,7 @@ describe Manifestation, solr: true do
       manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4840239219")
       lines = Manifestation.export()
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
       expect(m["isbn"]).to eq "9784043898039//9784840239219"
     end
 
@@ -291,7 +291,7 @@ describe Manifestation, solr: true do
       expect(csv["description"].compact).not_to be_empty
       expect(csv["note"].compact).not_to be_empty
       expect(csv["item_note"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id }
+      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
       expect(m["description"]).to eq 'test\ntest'
       expect(m["note"]).to eq 'test\ntest'
       expect(m["item_note"]).to eq 'test\ntest'
@@ -310,7 +310,7 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :uuid             not null, primary key
+#  id                              :bigint(8)        not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
@@ -339,7 +339,7 @@ end
 #  required_role_id                :integer          default(1), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  carrier_type_id                 :uuid             not null
+#  carrier_type_id                 :bigint(8)        not null
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text

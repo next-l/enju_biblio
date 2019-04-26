@@ -25,7 +25,7 @@ end
 #
 # Table name: periodicals
 #
-#  id             :uuid             not null, primary key
+#  id             :bigint(8)        not null, primary key
 #  original_title :text             not null
 #  frequency_id   :bigint(8)        not null
 #  created_at     :datetime         not null

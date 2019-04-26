@@ -796,7 +796,7 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :uuid             not null, primary key
+#  id                              :bigint(8)        not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
@@ -825,7 +825,7 @@ end
 #  required_role_id                :integer          default(1), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  carrier_type_id                 :uuid             not null
+#  carrier_type_id                 :bigint(8)        not null
 #  nii_type_id                     :integer
 #  title_alternative_transcription :text
 #  description                     :text

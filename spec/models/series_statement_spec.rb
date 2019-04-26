@@ -13,7 +13,7 @@ end
 #
 # Table name: series_statements
 #
-#  id                                 :uuid             not null, primary key
+#  id                                 :bigint(8)        not null, primary key
 #  original_title                     :text             not null
 #  numbering                          :text
 #  title_subseries                    :text
@@ -24,12 +24,12 @@ end
 #  title_transcription                :text
 #  title_alternative                  :text
 #  series_statement_identifier        :string
-#  manifestation_id                   :uuid
+#  manifestation_id                   :bigint(8)
 #  note                               :text
 #  title_subseries_transcription      :text
 #  creator_string                     :text
 #  volume_number_string               :text
 #  volume_number_transcription_string :text
 #  series_master                      :boolean
-#  root_manifestation_id              :uuid
+#  root_manifestation_id              :bigint(8)
 #

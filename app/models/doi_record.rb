@@ -30,7 +30,7 @@ end
 #  display_body     :string           not null
 #  source           :string
 #  response         :jsonb            not null
-#  manifestation_id :uuid             not null
+#  manifestation_id :bigint(8)        not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

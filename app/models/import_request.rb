@@ -73,9 +73,9 @@ end
 #
 # Table name: import_requests
 #
-#  id               :uuid             not null, primary key
+#  id               :bigint(8)        not null, primary key
 #  isbn             :string           not null
-#  manifestation_id :uuid
+#  manifestation_id :bigint(8)
 #  user_id          :bigint(8)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
