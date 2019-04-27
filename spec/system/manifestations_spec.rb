@@ -4,11 +4,8 @@ RSpec.describe 'Manifestations', type: :system do
   include Devise::Test::IntegrationHelpers
   fixtures :all
   before do
-    @manifestation = manifestations(:manifestation_00001)
-    @removed_manifestation = manifestations(:manifestation_00102)
-    @item = FactoryBot.create(:item, manifestation: @manifestation)
+    @item = FactoryBot.create(:item, shelf: shelves(:shelf_00002))
     CarrierType.find_by(name: 'volume').update(attachment: File.open("#{Rails.root.to_s}/../../app/assets/images/icons/book.png"))
-    @manifestation.picture_files.first.update(picture: File.open("#{Rails.root.to_s}/../../app/assets/images/icons/dvd.png"))
     FactoryBot.create(:withdraw, item: @item)
   end
 
