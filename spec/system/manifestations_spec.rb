@@ -17,13 +17,8 @@ RSpec.describe 'Manifestations', type: :system do
       sign_in users(:librarian1)
     end
 
-    it 'should show removed item' do
-      visit manifestation_path(@removed_manifestation.id, locale: :ja)
-      expect(page).to have_content @removed_manifestation.items.first.item_identifier
-    end
-
-    it 'should show withdrawn item' do
-      visit manifestation_path(@manifestation.id, locale: :ja)
+    it 'should show default item' do
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).to have_content @item.item_identifier
     end
   end
@@ -33,21 +28,16 @@ RSpec.describe 'Manifestations', type: :system do
       sign_in users(:user1)
     end
 
-    it 'should not show removed item' do
-      visit manifestation_path(@removed_manifestation.id, locale: :ja)
-      expect(page).not_to have_content @removed_manifestation.items.first.item_identifier
-    end
-
-    it 'should not show withdrawn item' do
-      visit manifestation_path(@manifestation.id, locale: :ja)
-      expect(page).not_to have_content @item.item_identifier
+    it 'should show default item' do
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).to have_content @item.item_identifier
     end
   end
 
   describe 'When not logged in' do
-    it 'should not show withdrawn item' do
-      visit manifestation_path(@manifestation.id, locale: :ja)
-      expect(page).not_to have_content @item.item_identifier
+    it 'should show default item' do
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).to have_content @item.item_identifier
     end
   end
 end

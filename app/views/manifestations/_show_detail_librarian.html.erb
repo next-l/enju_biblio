@@ -116,8 +116,8 @@
           (<%= t('manifestation.this_year_checkouts') %>: <%= manifestation.checkouts(Date.today-1.year, Date.today).size %>)
         </div>
       <% end %>
-      <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items %>
     <%- end -%>
+    <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items %>
     <%- if policy(Item).create? -%>
       <p><%= link_to t('page.new', model: t('activerecord.models.item')), new_item_path(manifestation_id: manifestation.id) -%></p>
     <%- end -%>
