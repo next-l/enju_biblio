@@ -12,9 +12,9 @@ RSpec.describe 'Manifestations', type: :system do
       sign_in users(:librarian1)
     end
 
-    it 'should show not show default item' do
+    it 'should show default item' do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
-      expect(page).not_to have_content @item.item_identifier
+      expect(page).to have_content @item.item_identifier
     end
   end
 
@@ -23,16 +23,16 @@ RSpec.describe 'Manifestations', type: :system do
       sign_in users(:user1)
     end
 
-    it 'should show not show default item' do
+    it 'should show default item' do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
-      expect(page).not_to have_content @item.item_identifier
+      expect(page).to have_content @item.item_identifier
     end
   end
 
   describe 'When not logged in' do
-    it 'should show not show default item' do
+    it 'should show default item' do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
-      expect(page).not_to have_content @item.item_identifier
+      expect(page).to have_content @item.item_identifier
     end
   end
 end

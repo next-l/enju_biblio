@@ -131,10 +131,8 @@
         <% end %>
       </table>
     <% end %>
-    <% if defined?(EnjuCirculation) %>
-      <%- if manifestation.items.on_shelf.exists? -%>
-        <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items.on_shelf %>
-      <%- end -%>
+    <%- if manifestation.items.available.on_shelf.exists? -%>
+      <%= render 'manifestations/show_holding', manifestation: manifestation, items: manifestation.items.available.on_shelf %>
     <%- end -%>
   </div>
   <%= render 'manifestations/tab_list', manifestation: manifestation %>

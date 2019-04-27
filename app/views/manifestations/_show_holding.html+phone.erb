@@ -6,7 +6,7 @@
     <th><%= t('activerecord.attributes.item.item_identifier') -%></th>
     <th><%= t('activerecord.models.circulation_status') -%></th>
   </tr>
-  <%- manifestation.items.on_shelf.each do |item| -%>
+  <%- items.each do |item| -%>
     <tr>
       <td>
         <%= item.shelf.library.display_name %>
