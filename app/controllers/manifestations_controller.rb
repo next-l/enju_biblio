@@ -267,7 +267,7 @@ class ManifestationsController < ApplicationController
       format.rdf  { render layout: false }
       format.atom
       format.mods
-      format.json { render json: @manifestations }
+      format.json
       format.js
     end
   end
