@@ -1,4 +1,4 @@
-以下の資料のインポートが完了しました。
+以下の資料のインポートに失敗しました。
 
 ID: <%= @resource_import_file.id %>
 作成時刻: <%= @resource_import_file.created_at %>
