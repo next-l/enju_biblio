@@ -444,3 +444,9 @@ en:
   import_request:
     record_not_found: Record not found.
     error: An error occured during import.
+
+  resource_import_mailer:
+    completed:
+      subject: 'Import completed'
+    failed:
+      subject: 'Import failed'

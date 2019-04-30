@@ -216,6 +216,7 @@ class ResourceImportFile < ActiveRecord::Base
     Sunspot.commit
     rows.close
     transition_to!(:completed)
+    ResourceImportMailer.completed(self)
     send_message
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
     num
@@ -223,6 +224,7 @@ class ResourceImportFile < ActiveRecord::Base
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
+    ResourceImportMailer.failed(self)
     raise e
   end
 
@@ -371,10 +373,12 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.save!
     end
     transition_to!(:completed)
+    ResourceImportMailer.completed(self)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
+    ResourceImportMailer.failed(self)
     raise e
   end
 
@@ -393,10 +397,12 @@ class ResourceImportFile < ActiveRecord::Base
       end
     end
     transition_to!(:completed)
+    ResourceImportMailer.completed(self)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
+    ResourceImportMailer.failed(self)
     raise e
   end
 
