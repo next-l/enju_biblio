@@ -88,8 +88,8 @@ end
 #
 # Table name: agent_import_files
 #
-#  id                       :bigint(8)        not null, primary key
-#  user_id                  :bigint(8)
+#  id                       :bigint           not null, primary key
+#  user_id                  :bigint
 #  note                     :text
 #  executed_at              :datetime
 #  created_at               :datetime         not null

@@ -133,6 +133,7 @@ describe ResourceImportFile do
       end
 
       it "should send message when import is completed", vcr: true do
+        pending "send notification using Message model #{__FILE__}"
         old_message_count = Message.count
         @file.import_start
         Message.count.should eq old_message_count + 1
@@ -395,8 +396,8 @@ end
 #
 # Table name: resource_import_files
 #
-#  id                          :bigint(8)        not null, primary key
-#  user_id                     :bigint(8)
+#  id                          :bigint           not null, primary key
+#  user_id                     :bigint
 #  note                        :text
 #  executed_at                 :datetime
 #  created_at                  :datetime         not null
@@ -405,5 +406,5 @@ end
 #  resource_import_fingerprint :string
 #  error_message               :text
 #  user_encoding               :string
-#  default_shelf_id            :bigint(8)
+#  default_shelf_id            :bigint
 #

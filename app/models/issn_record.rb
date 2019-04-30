@@ -40,7 +40,7 @@ end
 #
 # Table name: issn_records
 #
-#  id         :bigint(8)        not null, primary key
+#  id         :bigint           not null, primary key
 #  body       :string           not null
 #  issn_type  :string
 #  source     :string
