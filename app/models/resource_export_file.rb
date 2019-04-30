@@ -22,12 +22,12 @@ class ResourceExportFile < ActiveRecord::Base
     end
     tempfile.close
     self.resource_export.attach(io: File.new(tempfile.path, "r"), filename: "resource_export.txt")
-    if save
-      send_message
-    end
+    save!
     transition_to!(:completed)
+    ResourceExportMailer.completed(self).deliver_later
   rescue => e
     transition_to!(:failed)
+    ResourceExportMailer.failed(self).deliver_later
     raise e
   end
 

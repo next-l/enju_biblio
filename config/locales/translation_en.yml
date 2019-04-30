@@ -450,3 +450,8 @@ en:
       subject: 'Import completed'
     failed:
       subject: 'Import failed'
+  resource_export_mailer:
+    completed:
+      subject: 'Export completed'
+    failed:
+      subject: 'Export failed'
