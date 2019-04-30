@@ -4,6 +4,7 @@ describe ResourceExportFile do
   fixtures :all
   
   it "should export in background" do
+    pending "send notification using Message model #{__FILE__}"
     message_count = Message.count
     file = ResourceExportFile.new
     file.user = users(:admin)
