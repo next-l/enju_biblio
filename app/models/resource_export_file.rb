@@ -40,7 +40,6 @@ class ResourceExportFile < ActiveRecord::Base
     save!
     transition_to!(:completed)
     ResourceExportMailer.completed(self).deliver_later
-    self.resource_export.attach(io: File.new(tempfile.path, "r"), filename: "resource_export.txt")
   rescue => e
     transition_to!(:failed)
     ResourceExportMailer.failed(self).deliver_later
