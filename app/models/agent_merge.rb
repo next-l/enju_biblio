@@ -11,9 +11,9 @@ end
 #
 # Table name: agent_merges
 #
-#  id                  :bigint(8)        not null, primary key
-#  agent_id            :bigint(8)        not null
-#  agent_merge_list_id :bigint(8)        not null
+#  id                  :bigint           not null, primary key
+#  agent_id            :bigint           not null
+#  agent_merge_list_id :bigint           not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
 #

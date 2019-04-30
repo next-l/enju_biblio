@@ -275,7 +275,7 @@ end
 #
 # Table name: agents
 #
-#  id                                  :bigint(8)        not null, primary key
+#  id                                  :bigint           not null, primary key
 #  last_name                           :string
 #  middle_name                         :string
 #  first_name                          :string
@@ -320,5 +320,5 @@ end
 #  birth_date                          :string
 #  death_date                          :string
 #  agent_identifier                    :string
-#  profile_id                          :bigint(8)
+#  profile_id                          :bigint
 #

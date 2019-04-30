@@ -17,8 +17,8 @@ end
 #
 # Table name: picture_files
 #
-#  id                      :bigint(8)        not null, primary key
-#  picture_attachable_id   :bigint(8)        not null
+#  id                      :bigint           not null, primary key
+#  picture_attachable_id   :bigint           not null
 #  picture_attachable_type :string           not null
 #  title                   :text
 #  position                :integer

@@ -14,10 +14,10 @@ end
 #
 # Table name: resource_import_results
 #
-#  id                      :bigint(8)        not null, primary key
-#  resource_import_file_id :bigint(8)
-#  manifestation_id        :bigint(8)
-#  item_id                 :bigint(8)
+#  id                      :bigint           not null, primary key
+#  resource_import_file_id :bigint
+#  manifestation_id        :bigint
+#  item_id                 :bigint
 #  body                    :text
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null

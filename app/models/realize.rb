@@ -22,9 +22,9 @@ end
 #
 # Table name: realizes
 #
-#  id                     :bigint(8)        not null, primary key
-#  agent_id               :bigint(8)        not null
-#  expression_id          :bigint(8)        not null
+#  id                     :bigint           not null, primary key
+#  agent_id               :bigint           not null
+#  expression_id          :bigint           not null
 #  position               :integer          default(1), not null
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null

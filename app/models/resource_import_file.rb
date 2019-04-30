@@ -82,7 +82,7 @@ class ResourceImportFile < ActiveRecord::Base
       unless manifestation
         if row['doi'].present?
           doi = URI.parse(row['doi']).path.gsub(/^\//, "").downcase
-          manifestation = DoiRecord.find_by(body: doi).try(:manifestation)
+          manifestation = DoiRecord.find_by(body: doi.downcase).try(:manifestation)
         end
       end
 
@@ -121,6 +121,12 @@ class ResourceImportFile < ActiveRecord::Base
               import_result.error_message = "line #{row_num}: #{I18n.t('import.isbn_invalid')}"
             end
           end
+        end
+      end
+
+      unless manifestation
+        if row['access_address'].present?
+          manifestation = Manifestation.find_by(access_address: row['access_address'])
         end
       end
 
@@ -191,14 +197,15 @@ class ResourceImportFile < ActiveRecord::Base
 
     Sunspot.commit
     transition_to!(:completed)
-    send_message
+    ResourceImportMailer.completed(self)
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
     num
-  #rescue => e
-  #  self.error_message = "line #{row_num}: #{e.message}"
-  #  save
-  #  transition_to!(:failed)
-  #  raise e
+  rescue => e
+    self.error_message = "line #{row_num}: #{e.message}"
+    save
+    transition_to!(:failed)
+    ResourceImportMailer.failed(self)
+    raise e
   end
 
   def self.import_work(title, agents, options = {edit_mode: 'create'})
@@ -339,6 +346,9 @@ class ResourceImportFile < ActiveRecord::Base
         manifestation = Manifestation.find_by(manifestation_identifier: manifestation_identifier) if manifestation_identifier.present?
         unless manifestation
           manifestation = Manifestation.find_by(id: row['manifestation_id'])
+          if row['doi'].present?
+            manifestation = DoiRecord.find_by(body: row['doi'].downcase).try(:manifestation) unless manifestation
+          end
         end
         if manifestation
           fetch(row, edit_mode: 'update')
@@ -348,10 +358,12 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.save!
     end
     transition_to!(:completed)
+    ResourceImportMailer.completed(self)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
+    ResourceImportMailer.failed(self)
     raise e
   end
 
@@ -369,10 +381,12 @@ class ResourceImportFile < ActiveRecord::Base
       end
     end
     transition_to!(:completed)
+    ResourceImportMailer.completed(self)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
+    ResourceImportMailer.failed(self)
     raise e
   end
 
@@ -564,7 +578,7 @@ class ResourceImportFile < ActiveRecord::Base
     language = Language.find_by(name: row['language'].to_s.strip.camelize)
     language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
     language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
-    
+
     carrier_type = CarrierType.find_by(name: row['carrier_type'].to_s.strip) || CarrierType.find_by(name: 'volume')
     content_type = ContentType.find_by(name: row['content_type'].to_s.strip)
     frequency = Frequency.find_by(name: row['frequency'].to_s.strip)
@@ -743,7 +757,9 @@ class ResourceImportFile < ActiveRecord::Base
         doi_record = DoiRecord.where(body: row['doi'].downcase).first_or_initialize
         doi_record.display_body = row['doi']
         doi_record.manifestation = manifestation
+        doi_record.source = 'self'
         doi_record.save!
+        doi_record.manifestation.carrier_type = CarrierType.find_by(name: 'online_resource')
       end
     end
   end
@@ -753,8 +769,8 @@ end
 #
 # Table name: resource_import_files
 #
-#  id                          :bigint(8)        not null, primary key
-#  user_id                     :bigint(8)
+#  id                          :bigint           not null, primary key
+#  user_id                     :bigint
 #  note                        :text
 #  executed_at                 :datetime
 #  created_at                  :datetime         not null
@@ -763,5 +779,5 @@ end
 #  resource_import_fingerprint :string
 #  error_message               :text
 #  user_encoding               :string
-#  default_shelf_id            :bigint(8)
+#  default_shelf_id            :bigint
 #

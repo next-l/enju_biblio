@@ -17,10 +17,10 @@ end
 #
 # Table name: import_requests
 #
-#  id               :bigint(8)        not null, primary key
+#  id               :bigint           not null, primary key
 #  isbn             :string           not null
-#  manifestation_id :bigint(8)
-#  user_id          :bigint(8)
+#  manifestation_id :bigint
+#  user_id          :bigint
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

@@ -8,12 +8,12 @@ end
 #
 # Table name: doi_records
 #
-#  id               :bigint(8)        not null, primary key
+#  id               :bigint           not null, primary key
 #  body             :string           not null
 #  display_body     :string           not null
 #  source           :string
 #  response         :jsonb            not null
-#  manifestation_id :bigint(8)        not null
+#  manifestation_id :bigint           not null
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

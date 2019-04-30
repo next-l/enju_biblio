@@ -9,11 +9,11 @@ end
 #
 # Table name: import_request_transitions
 #
-#  id                :bigint(8)        not null, primary key
+#  id                :bigint           not null, primary key
 #  to_state          :string
 #  metadata          :jsonb
 #  sort_key          :integer
-#  import_request_id :bigint(8)
+#  import_request_id :bigint
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  most_recent       :boolean          not null
