@@ -133,6 +133,7 @@ describe ResourceImportFile do
       end
 
       it "should send message when import is completed", vcr: true do
+        pending "send notification using Message model #{__FILE__}"
         old_message_count = Message.count
         @file.import_start
         Message.count.should eq old_message_count + 1
