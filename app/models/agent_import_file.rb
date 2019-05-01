@@ -88,10 +88,14 @@ class AgentImportFile < ActiveRecord::Base
     Sunspot.commit
     rows.close
     transition_to!(:completed)
+    mailer = AgentImportMailer.completed(self)
+    send_message(mailer)
     return num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     transition_to!(:failed)
+    mailer = AgentImportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 
@@ -128,9 +132,13 @@ class AgentImportFile < ActiveRecord::Base
       end
     end
     transition_to!(:completed)
+    mailer = AgentImportMailer.completed(self)
+    send_message(mailer)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     transition_to!(:failed)
+    mailer = AgentImportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 
@@ -151,9 +159,13 @@ class AgentImportFile < ActiveRecord::Base
       end
     end
     transition_to!(:completed)
+    mailer = AgentImportMailer.completed(self)
+    send_message(mailer)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     transition_to!(:failed)
+    mailer = AgentImportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 

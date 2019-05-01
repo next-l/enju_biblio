@@ -39,10 +39,12 @@ class ResourceExportFile < ActiveRecord::Base
     self.resource_export = File.new(tempfile.path, "r")
     save!
     transition_to!(:completed)
-    ResourceExportMailer.completed(self).deliver_later
+    mailer = ResourceExportMailer.completed(self)
+    send_message(mailer)
   rescue => e
     transition_to!(:failed)
-    ResourceExportMailer.failed(self).deliver_later
+    mailer = ResourceExportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 
