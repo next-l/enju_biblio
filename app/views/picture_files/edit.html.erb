@@ -6,13 +6,8 @@
   <%= f.error_messages -%>
 
   <div class="field">
-    <%= f.label :picture_attachable_type -%><br />
-    <%= f.text_field :picture_attachable_type -%>
-  </div>
-
-  <div class="field">
-    <%= f.label t('page.attachable') -%><br />
-    <%= f.text_field :picture_attachable_id -%>
+    <%= f.label t('page.file') -%><br />
+    <%= f.file_field :picture -%>
   </div>
 
   <div class="actions">
