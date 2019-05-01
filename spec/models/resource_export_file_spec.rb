@@ -4,14 +4,13 @@ describe ResourceExportFile do
   fixtures :all
   
   it "should export in background" do
-    pending "send notification using Message model #{__FILE__}"
     message_count = Message.count
     file = ResourceExportFile.new
     file.user = users(:admin)
     file.save
     ResourceExportFileJob.perform_later(file).should be_truthy
     Message.count.should eq message_count + 1
-    Message.order(:created_at).last.subject.should eq 'エクスポートが完了しました'
+    Message.order(:created_at).last.subject.should eq "Export completed: #{file.id}"
   end
 
   it "should respect the role of the user" do

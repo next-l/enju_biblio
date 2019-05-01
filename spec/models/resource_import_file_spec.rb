@@ -133,11 +133,10 @@ describe ResourceImportFile do
       end
 
       it "should send message when import is completed", vcr: true do
-        pending "send notification using Message model #{__FILE__}"
         old_message_count = Message.count
         @file.import_start
         Message.count.should eq old_message_count + 1
-        Message.order(:created_at).last.subject.should eq 'インポートが完了しました'
+        Message.order(:created_at).last.subject.should eq "Import completed: #{@file.id}"
       end
 
       it "should be searchable right after the import", solr: true, vcr: true do

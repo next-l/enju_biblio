@@ -197,14 +197,16 @@ class ResourceImportFile < ActiveRecord::Base
 
     Sunspot.commit
     transition_to!(:completed)
-    ResourceImportMailer.completed(self).deliver_later
+    mailer = ResourceImportMailer.completed(self)
+    send_message(mailer)
     Rails.cache.write("manifestation_search_total", Manifestation.search.total)
     num
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
-    ResourceImportMailer.failed(self).deliver_later
+    mailer = ResourceImportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 
@@ -358,12 +360,14 @@ class ResourceImportFile < ActiveRecord::Base
       import_result.save!
     end
     transition_to!(:completed)
-    ResourceImportMailer.completed(self).deliver_later
+    mailer = ResourceImportMailer.completed(self)
+    send_message(mailer)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
-    ResourceImportMailer.failed(self).deliver_later
+    mailer = ResourceImportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 
@@ -381,12 +385,14 @@ class ResourceImportFile < ActiveRecord::Base
       end
     end
     transition_to!(:completed)
-    ResourceImportMailer.completed(self).deliver_later
+    mailer = ResourceImportMailer.completed(self)
+    send_message(mailer)
   rescue => e
     self.error_message = "line #{row_num}: #{e.message}"
     save
     transition_to!(:failed)
-    ResourceImportMailer.failed(self).deliver_later
+    mailer = ResourceImportMailer.failed(self)
+    send_message(mailer)
     raise e
   end
 
@@ -420,6 +426,15 @@ class ResourceImportFile < ActiveRecord::Base
       row_num += 1
     end
     transition_to!(:completed)
+    mailer = ResourceImportMailer.completed(self)
+    send_message(mailer)
+  rescue => e
+    self.error_message = "line #{row_num}: #{e.message}"
+    save
+    transition_to!(:failed)
+    mailer = ResourceImportMailer.failed(self)
+    send_message(mailer)
+    raise e
   end
 
   private
