@@ -13,10 +13,10 @@ end
 # Table name: produce_types
 #
 #  id                        :bigint           not null, primary key
-#  name                      :string
+#  name                      :string           not null
 #  display_name_translations :jsonb            not null
 #  note                      :text
-#  position                  :integer
+#  position                  :integer          default(1), not null
 #  created_at                :datetime         not null
 #  updated_at                :datetime         not null
 #

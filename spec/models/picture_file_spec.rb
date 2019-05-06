@@ -16,8 +16,4 @@ end
 #  position                :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  picture_meta            :text
-#  picture_fingerprint     :string
-#  picture_width           :integer
-#  picture_height          :integer
 #

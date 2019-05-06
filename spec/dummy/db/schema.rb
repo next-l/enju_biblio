@@ -310,8 +310,8 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
 
   create_table "colors", force: :cascade do |t|
     t.bigint "library_group_id"
-    t.string "property"
-    t.string "code"
+    t.string "property", null: false
+    t.string "code", null: false
     t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -342,7 +342,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   end
 
   create_table "create_types", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
     t.integer "position"
@@ -837,10 +837,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "picture_meta"
-    t.string "picture_fingerprint"
-    t.integer "picture_width"
-    t.integer "picture_height"
     t.index ["picture_attachable_id", "picture_attachable_type"], name: "index_picture_files_on_picture_attachable_id_and_type"
     t.index ["picture_attachable_id"], name: "index_picture_files_on_picture_attachable_id"
   end
@@ -858,10 +854,10 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   end
 
   create_table "produce_types", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
     t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -901,7 +897,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.string "name", null: false
     t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
