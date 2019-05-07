@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   create_table "agent_relationships", force: :cascade do |t|
     t.bigint "parent_id", null: false
     t.bigint "child_id", null: false
-    t.bigint "agent_relationship_type_id"
+    t.bigint "agent_relationship_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
@@ -626,7 +626,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   create_table "manifestation_relationships", force: :cascade do |t|
     t.bigint "parent_id", null: false
     t.bigint "child_id", null: false
-    t.bigint "manifestation_relationship_type_id"
+    t.bigint "manifestation_relationship_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
