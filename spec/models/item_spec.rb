@@ -24,7 +24,7 @@ end
 #  item_identifier         :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  shelf_id                :bigint
+#  shelf_id                :bigint           not null
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string

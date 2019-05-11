@@ -490,7 +490,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.string "item_identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "shelf_id"
+    t.bigint "shelf_id", null: false
     t.boolean "include_supplements", default: false, null: false
     t.text "note"
     t.string "url"
