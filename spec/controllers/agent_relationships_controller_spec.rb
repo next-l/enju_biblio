@@ -6,7 +6,7 @@ describe AgentRelationshipsController do
   disconnect_sunspot
 
   def valid_attributes
-    @attrs = FactoryBot.attributes_for(:agent_relationship)
+    @attrs = FactoryBot.attributes_for(:agent_relationship, agent_relationship_type_id: FactoryBot.create(:agent_relationship_type).id)
   end
 
   describe 'GET index' do
