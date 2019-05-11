@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_14_151124) do
+ActiveRecord::Schema.define(version: 2019_05_11_145706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -873,8 +873,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   end
 
   create_table "profiles", force: :cascade do |t|
-    t.bigint "user_group_id", null: false
-    t.bigint "library_id"
     t.string "locale"
     t.string "user_number"
     t.text "full_name"
@@ -887,6 +885,8 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.boolean "share_bookmarks"
     t.text "full_name_transcription"
     t.datetime "date_of_birth"
+    t.bigint "user_group_id", null: false
+    t.bigint "library_id", null: false
     t.index ["library_id"], name: "index_profiles_on_library_id"
     t.index ["user_group_id"], name: "index_profiles_on_user_group_id"
     t.index ["user_number"], name: "index_profiles_on_user_number", unique: true
@@ -1326,6 +1326,8 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
   add_foreign_key "periodicals", "frequencies"
   add_foreign_key "produces", "agents"
   add_foreign_key "produces", "manifestations"
+  add_foreign_key "profiles", "libraries"
+  add_foreign_key "profiles", "user_groups"
   add_foreign_key "realizes", "agents"
   add_foreign_key "realizes", "manifestations", column: "expression_id"
   add_foreign_key "resource_export_files", "users"
