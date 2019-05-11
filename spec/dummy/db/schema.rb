@@ -976,7 +976,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.text "error_message"
     t.string "user_encoding"
     t.bigint "default_shelf_id"
-    t.index ["default_shelf_id"], name: "index_resource_import_files_on_default_shelf_id"
     t.index ["user_id"], name: "index_resource_import_files_on_user_id"
   end
 
