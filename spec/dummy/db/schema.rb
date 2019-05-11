@@ -419,8 +419,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["body"], name: "index_identifiers_on_body"
-    t.index ["identifier_type_id"], name: "index_identifiers_on_identifier_type_id"
+    t.index ["body", "identifier_type_id"], name: "index_identifiers_on_body_and_identifier_type_id"
     t.index ["manifestation_id"], name: "index_identifiers_on_manifestation_id"
   end
 
@@ -838,7 +837,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["picture_attachable_id", "picture_attachable_type"], name: "index_picture_files_on_picture_attachable_id_and_type"
-    t.index ["picture_attachable_id"], name: "index_picture_files_on_picture_attachable_id"
   end
 
   create_table "places", force: :cascade do |t|
@@ -891,6 +889,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.datetime "date_of_birth"
     t.index ["library_id"], name: "index_profiles_on_library_id"
     t.index ["user_group_id"], name: "index_profiles_on_user_group_id"
+    t.index ["user_number"], name: "index_profiles_on_user_number", unique: true
   end
 
   create_table "realize_types", force: :cascade do |t|
@@ -998,7 +997,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.string "name", null: false
     t.jsonb "display_name_translations", default: {}, null: false
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_roles_on_name", unique: true
@@ -1203,9 +1202,7 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.bigint "role_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["role_id"], name: "index_user_has_roles_on_role_id"
     t.index ["user_id", "role_id"], name: "index_user_has_roles_on_user_id_and_role_id", unique: true
-    t.index ["user_id"], name: "index_user_has_roles_on_user_id"
   end
 
   create_table "user_import_file_transitions", force: :cascade do |t|
@@ -1232,8 +1229,6 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.string "user_encoding"
     t.bigint "default_library_id"
     t.bigint "default_user_group_id"
-    t.index ["default_library_id"], name: "index_user_import_files_on_default_library_id"
-    t.index ["default_user_group_id"], name: "index_user_import_files_on_default_user_group_id"
     t.index ["user_id"], name: "index_user_import_files_on_user_id"
   end
 
@@ -1267,9 +1262,9 @@ ActiveRecord::Schema.define(version: 2019_03_14_151124) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.datetime "confirmed_at"
-    t.bigint "profile_id"
+    t.bigint "profile_id", null: false
     t.index ["email"], name: "index_users_on_email"
-    t.index ["profile_id"], name: "index_users_on_profile_id"
+    t.index ["profile_id"], name: "index_users_on_profile_id", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
