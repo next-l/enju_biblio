@@ -508,6 +508,7 @@ ActiveRecord::Schema.define(version: 2019_05_11_145706) do
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id"
     t.index ["item_identifier"], name: "index_items_on_item_identifier", unique: true
     t.index ["manifestation_id"], name: "index_items_on_manifestation_id"
+    t.index ["required_role_id"], name: "index_items_on_required_role_id"
     t.index ["shelf_id"], name: "index_items_on_shelf_id"
   end
 

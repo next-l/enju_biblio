@@ -14,6 +14,7 @@ class CreateLanguages < ActiveRecord::Migration[5.2]
       t.string :iso_639_3,        size: 3
       t.text :note
       t.integer :position
+      t.timestamp
     end
     add_index :languages, :name, unique: true
     add_index :languages, :iso_639_1
