@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 2019_05_11_145706) do
   create_table "agent_relationships", force: :cascade do |t|
     t.bigint "parent_id", null: false
     t.bigint "child_id", null: false
-    t.bigint "agent_relationship_type_id", null: false
+    t.bigint "agent_relationship_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
@@ -625,7 +625,7 @@ ActiveRecord::Schema.define(version: 2019_05_11_145706) do
   create_table "manifestation_relationships", force: :cascade do |t|
     t.bigint "parent_id", null: false
     t.bigint "child_id", null: false
-    t.bigint "manifestation_relationship_type_id", null: false
+    t.bigint "manifestation_relationship_type_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "position"
@@ -976,6 +976,7 @@ ActiveRecord::Schema.define(version: 2019_05_11_145706) do
     t.text "error_message"
     t.string "user_encoding"
     t.bigint "default_shelf_id"
+    t.index ["default_shelf_id"], name: "index_resource_import_files_on_default_shelf_id"
     t.index ["user_id"], name: "index_resource_import_files_on_user_id"
   end
 
@@ -1331,6 +1332,7 @@ ActiveRecord::Schema.define(version: 2019_05_11_145706) do
   add_foreign_key "realizes", "agents"
   add_foreign_key "realizes", "manifestations", column: "expression_id"
   add_foreign_key "resource_export_files", "users"
+  add_foreign_key "resource_import_files", "shelves", column: "default_shelf_id"
   add_foreign_key "resource_import_files", "users"
   add_foreign_key "resource_import_results", "resource_import_files"
   add_foreign_key "series_statement_merges", "series_statement_merge_lists"
