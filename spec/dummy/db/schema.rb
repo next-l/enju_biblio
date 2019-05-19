@@ -680,12 +680,12 @@ ActiveRecord::Schema.define(version: 2019_05_12_152331) do
     t.datetime "acquired_at"
     t.integer "bookstore_id"
     t.integer "budget_type_id"
-    t.integer "circulation_status_id", default: 5, null: false
+    t.bigint "circulation_status_id", default: 5, null: false
     t.integer "checkout_type_id", default: 1, null: false
     t.string "binding_item_identifier"
     t.string "binding_call_number"
     t.datetime "binded_at"
-    t.bigint "manifestation_id", null: false
+    t.integer "manifestation_id", null: false
     t.index ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id"
     t.index ["checkout_type_id"], name: "index_items_on_checkout_type_id"
