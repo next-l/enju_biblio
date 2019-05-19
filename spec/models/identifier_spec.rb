@@ -12,7 +12,7 @@ end
 #  id                 :integer          not null, primary key
 #  body               :string           not null
 #  identifier_type_id :integer          not null
-#  manifestation_id   :integer
+#  manifestation_id   :integer          not null
 #  primary            :boolean
 #  position           :integer
 #  created_at         :datetime

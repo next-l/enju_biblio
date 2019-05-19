@@ -10,8 +10,8 @@ end
 # Table name: manifestation_relationships
 #
 #  id                                 :integer          not null, primary key
-#  parent_id                          :integer
-#  child_id                           :integer
+#  parent_id                          :bigint           not null
+#  child_id                           :integer          not null
 #  manifestation_relationship_type_id :integer
 #  created_at                         :datetime
 #  updated_at                         :datetime

@@ -14,7 +14,7 @@ end
 # Table name: series_statements
 #
 #  id                                 :integer          not null, primary key
-#  original_title                     :text
+#  original_title                     :text             not null
 #  numbering                          :text
 #  title_subseries                    :text
 #  numbering_subseries                :text

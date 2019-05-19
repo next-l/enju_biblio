@@ -10,8 +10,8 @@ end
 # Table name: agent_relationships
 #
 #  id                         :integer          not null, primary key
-#  parent_id                  :integer
-#  child_id                   :integer
+#  parent_id                  :bigint           not null
+#  child_id                   :integer          not null
 #  agent_relationship_type_id :integer
 #  created_at                 :datetime
 #  updated_at                 :datetime

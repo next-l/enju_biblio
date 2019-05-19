@@ -13,10 +13,10 @@ end
 # Table name: create_types
 #
 #  id           :integer          not null, primary key
-#  name         :string
+#  name         :string           not null
 #  display_name :text
 #  note         :text
-#  position     :integer
+#  position     :integer          default(1), not null
 #  created_at   :datetime
 #  updated_at   :datetime
 #

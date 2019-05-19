@@ -10,8 +10,8 @@ end
 # Table name: picture_files
 #
 #  id                      :integer          not null, primary key
-#  picture_attachable_id   :integer
-#  picture_attachable_type :string
+#  picture_attachable_id   :integer          not null
+#  picture_attachable_type :string           not null
 #  content_type            :string
 #  title                   :text
 #  thumbnail               :string

@@ -13,7 +13,7 @@ end
 #
 #  id                  :integer          not null, primary key
 #  agent_id            :integer          not null
-#  agent_merge_list_id :integer          not null
+#  agent_merge_list_id :bigint           not null
 #  created_at          :datetime
 #  updated_at          :datetime
 #
