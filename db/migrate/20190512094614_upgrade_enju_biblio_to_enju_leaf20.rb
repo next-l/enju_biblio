@@ -61,8 +61,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
 
         change_table :items do |t|
           t.change :bookstore_id, :bigint
-          t.change :checkout_type_id, :bigint
-          t.change :circulation_status_id, :bigint
           t.change :manifestation_id, :bigint
         end
 
@@ -238,8 +236,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
 
         change_table :items do |t|
           t.change :bookstore_id, :integer
-          t.change :checkout_type_id, :integer
-          t.change :circulation_status_id, :integer
           t.change :manifestation_id, :integer
         end
 
