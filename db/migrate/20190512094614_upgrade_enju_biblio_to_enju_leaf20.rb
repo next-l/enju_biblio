@@ -30,11 +30,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
           t.change :profile_id, :bigint
         end
 
-        change_table :carrier_type_has_checkout_types do |t|
-          t.change :carrier_type_id, :bigint
-          t.change :checkout_type_id, :bigint
-        end
-
         change_table :creates do |t|
           t.change :agent_id, :bigint
           t.change :work_id, :bigint
@@ -134,7 +129,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
         add_index :resource_export_files, :user_id
         add_index :agent_import_results, :agent_id
         add_index :agent_import_results, :agent_import_file_id
-        rename_index :manifestations, :index_carrier_type_has_checkout_types_on_m_form_id, :index_carrier_type_has_checkout_types_on_carrier_type_id
         remove_index :items, :item_identifier
         add_index :items, :item_identifier, unique: true
         add_index :manifestations, :carrier_type_id
@@ -167,8 +161,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
         add_foreign_key :donates, :items
         add_foreign_key :identifiers, :identifier_types
         add_foreign_key :items, :bookstores
-        add_foreign_key :items, :checkout_types
-        add_foreign_key :items, :circulation_statuses
         add_foreign_key :manifestation_relationships, :manifestations, column: :child_id
         add_foreign_key :manifestation_relationships, :manifestations, column: :parent_id
         add_foreign_key :manifestations, :carrier_types
@@ -208,11 +200,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
         change_table :agent_merges do |t|
           t.change :agent_id, :integer
           t.change :agent_merge_list_id, :integer
-        end
-
-        change_table :carrier_type_has_checkout_types do |t|
-          t.change :carrier_type_id, :integer
-          t.change :checkout_type_id, :integer
         end
 
         change_table :donates do |t|
@@ -301,7 +288,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
           t.change :library_id, :integer
         end
 
-        rename_index :manifestations, :index_carrier_type_has_checkout_types_on_carrier_type_id, :index_carrier_type_has_checkout_types_on_m_form_id
         remove_index :resource_export_files, :user_id
         remove_index :resource_import_files, :default_shelf_id
         remove_index :agent_import_results, :agent_id
@@ -328,8 +314,6 @@ class UpgradeEnjuBiblioToEnjuLeaf20 < ActiveRecord::Migration[5.2]
         remove_foreign_key :donates, :items
         remove_foreign_key :identifiers, :identifier_types
         remove_foreign_key :items, :bookstores
-        remove_foreign_key :items, :checkout_types
-        remove_foreign_key :items, :circulation_statuses
         remove_foreign_key :manifestation_relationships, :manifestations
         remove_foreign_key :manifestation_relationships, :manifestations
         remove_foreign_key :manifestations, :carrier_types
