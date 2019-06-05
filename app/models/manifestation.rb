@@ -182,6 +182,10 @@ class Manifestation < ActiveRecord::Base
         identifier_contents(:issn)
       end
     end
+    text :identifier do
+      other_identifiers = identifiers.joins(:identifier_type).merge(IdentifierType.where.not(name: [:isbn, :issn]))
+      other_identifiers.pluck(:body)
+    end
     string :sort_title
     string :doi, multiple: true do
       identifier_contents(:doi)
