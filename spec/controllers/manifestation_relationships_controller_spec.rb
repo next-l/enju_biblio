@@ -6,7 +6,7 @@ describe ManifestationRelationshipsController do
   disconnect_sunspot
 
   def valid_attributes
-    @attrs = FactoryBot.attributes_for(:manifestation_relationship, manifestation_relationship_type_id: FactoryBot.create(:manifestation_relationship_type).id)
+    @attrs = FactoryBot.attributes_for(:manifestation_relationship)
   end
 
   describe 'GET index' do

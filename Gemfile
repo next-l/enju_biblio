@@ -20,6 +20,8 @@ gem 'enju_library', github: 'next-l/enju_library'
 gem 'enju_manifestation_viewer', github: 'next-l/enju_manifestation_viewer'
 gem 'enju_subject', github: 'next-l/enju_subject'
 gem 'enju_message', github: 'next-l/enju_message'
+gem 'enju_circulation', github: 'next-l/enju_circulation'
+gem 'enju_event', github: 'next-l/enju_event'
 gem 'enju_ndl', github: 'next-l/enju_ndl'
 #gem 'enju_loc', github: 'next-l/enju_loc'
 gem 'enju_oai', github: 'next-l/enju_oai'
@@ -28,3 +30,4 @@ gem 'rails-controller-testing', group: :test
 gem 'rspec_junit_formatter', group: :test
 gem 'webdrivers', group: :test
 gem 'sassc-rails'
+gem 'paper_trail'

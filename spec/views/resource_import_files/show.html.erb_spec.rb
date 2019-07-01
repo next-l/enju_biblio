@@ -4,18 +4,17 @@ describe "resource_import_files/show" do
   fixtures :all
 
   before(:each) do
-    2.times do
-      FactoryBot.create(:resource_import_result)
-    end
-    @resource_import_results = ResourceImportResult.page(1)
-    @resource_import_file = @resource_import_results.first.resource_import_file
+    file = resource_import_files(:resource_import_file_00001)
+    assign(:resource_import_file, file)
+    assign(:resource_import_results, 
+      Kaminari.paginate_array(file.resource_import_results).page(1))
     admin = User.find_by(username: 'enjuadmin')
     view.stub(:current_user).and_return(admin)
   end
 
   it "renders a resource_import_file" do
     render
-    expect(rendered).to match /Showing Resource import file/
+    expect(rendered).to match /MyString/
   end
   it "renders a list of resource_import_results" do
     render

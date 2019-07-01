@@ -6,12 +6,15 @@ describe ManifestationPolicy do
     before(:each) do
       @admin = FactoryBot.create(:admin)
     end
-
     it "grants destroy if it is a simple record." do
       record = FactoryBot.create(:manifestation)
       expect(subject).to permit(@admin, record)
     end
-
+    it "not grants destroy if it is reserved" do
+      record = FactoryBot.create(:manifestation)
+      reserve = FactoryBot.create(:reserve, manifestation_id: record.id)
+      expect(subject).not_to permit(@admin, record)
+    end
     it "grants destroy if it is a simple serial record." do
       record = FactoryBot.create(:manifestation_serial)
       policy = Pundit.policy(@admin, record)

@@ -6,12 +6,6 @@ describe PictureFilesController do
   disconnect_sunspot
 
   describe 'GET index' do
-    before do
-      3.times do
-        FactoryBot.create(:picture_file)
-      end
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
@@ -48,16 +42,13 @@ describe PictureFilesController do
   end
 
   describe 'GET show' do
-    before do
-      @picture_file = FactoryBot.create(:picture_file)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested picture_file as @picture_file' do
-        get :show, params: { id: @picture_file.id }
-        expect(assigns(:picture_file)).to eq(@picture_file)
+        picture_file = PictureFile.find(1)
+        get :show, params: { id: picture_file.id }
+        expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
 
@@ -65,8 +56,9 @@ describe PictureFilesController do
       login_fixture_librarian
 
       it 'assigns the requested picture_file as @picture_file' do
-        get :show, params: { id: @picture_file.id }
-        expect(assigns(:picture_file)).to eq(@picture_file)
+        picture_file = PictureFile.find(1)
+        get :show, params: { id: picture_file.id }
+        expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
 
@@ -74,15 +66,17 @@ describe PictureFilesController do
       login_fixture_user
 
       it 'assigns the requested picture_file as @picture_file' do
-        get :show, params: { id: @picture_file.id }
-        expect(assigns(:picture_file)).to eq(@picture_file)
+        picture_file = PictureFile.find(1)
+        get :show, params: { id: picture_file.id }
+        expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested picture_file as @picture_file' do
-        get :show, params: { id: @picture_file.id }
-        expect(assigns(:picture_file)).to eq(@picture_file)
+        picture_file = PictureFile.find(1)
+        get :show, params: { id: picture_file.id }
+        expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
   end
@@ -128,16 +122,13 @@ describe PictureFilesController do
   end
 
   describe 'GET edit' do
-    before do
-      @picture_file = FactoryBot.create(:picture_file)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested picture_file as @picture_file' do
-        get :edit, params: { id: @picture_file.id }
-        expect(assigns(:picture_file)).to eq(@picture_file)
+        picture_file = PictureFile.find(1)
+        get :edit, params: { id: picture_file.id }
+        expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
 
@@ -145,8 +136,9 @@ describe PictureFilesController do
       login_fixture_librarian
 
       it 'assigns the requested picture_file as @picture_file' do
-        get :edit, params: { id: @picture_file.id }
-        expect(assigns(:picture_file)).to eq(@picture_file)
+        picture_file = PictureFile.find(1)
+        get :edit, params: { id: picture_file.id }
+        expect(assigns(:picture_file)).to eq(picture_file)
       end
     end
 
@@ -154,14 +146,16 @@ describe PictureFilesController do
       login_fixture_user
 
       it 'assigns the requested picture_file as @picture_file' do
-        get :edit, params: { id: @picture_file.id }
+        picture_file = PictureFile.find(1)
+        get :edit, params: { id: picture_file.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not assign the requested picture_file as @picture_file' do
-        get :edit, params: { id: @picture_file.id }
+        picture_file = PictureFile.find(1)
+        get :edit, params: { id: picture_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -169,7 +163,7 @@ describe PictureFilesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: shelves(:shelf_00001).id, picture: fixture_file_upload('/../../examples/spinner.gif', 'image/gif') }
+      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 1, picture: fixture_file_upload('/../../examples/spinner.gif', 'image/gif') }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 
@@ -286,8 +280,8 @@ describe PictureFilesController do
 
   describe 'PUT update' do
     before(:each) do
-      @picture_file = FactoryBot.create(:picture_file, picture_attachable: FactoryBot.create(:shelf))
-      @attrs = { picture_attachable_id: manifestations(:manifestation_00001).id, picture_attachable_type: 'Manifestation' }
+      @picture_file = picture_files(:picture_file_00001)
+      @attrs = { picture_attachable_id: '1', picture_attachable_type: 'Manifestation' }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 
@@ -392,7 +386,7 @@ describe PictureFilesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @picture_file = FactoryBot.create(:picture_file, picture_attachable: FactoryBot.create(:shelf))
+      @picture_file = PictureFile.find(1)
     end
 
     describe 'When logged in as Administrator' do

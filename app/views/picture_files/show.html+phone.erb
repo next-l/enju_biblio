@@ -11,38 +11,38 @@
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_file_size') -%>:</strong>
-  <%= @picture_file.picture.byte_size -%>
+  <%= @picture_file.picture_file_size -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_content_type') -%>:</strong>
-  <%= @picture_file.picture.content_type -%>
+  <%= @picture_file.picture_content_type -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_file_name') -%>:</strong>
-  <%= link_to @picture_file.picture.filename, @picture_file.picture -%><br />
+  <%= link_to @picture_file.picture_file_name, picture_file_path(@picture_file, format: :download, size: 'original') -%><br />
   <%= render 'picture_files/link', picture_file: @picture_file %>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.width') -%>:</strong>
-  <%= @picture_file.picture.metadata['width'] -%>
+  <%= @picture_file.picture_width -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.height') -%>:</strong>
-  <%= @picture_file.picture.metadata['height'] -%>
+  <%= @picture_file.picture_height -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_fingerprint') -%>:</strong>
-  <%= @picture_file.picture.checksum -%>
+  <%= @picture_file.picture_fingerprint -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.picture_file.picture_updated_at') -%>:</strong>
-  <%= l(@picture_file.updated_at) -%>
+  <%= l(@picture_file.picture_updated_at) if @picture_file.picture_updated_at -%>
 </p>
 
 </div>

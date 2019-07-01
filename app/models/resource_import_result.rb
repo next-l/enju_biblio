@@ -1,4 +1,5 @@
 class ResourceImportResult < ActiveRecord::Base
+  default_scope { order('resource_import_results.id') }
   scope :file_id, proc{|file_id| where(resource_import_file_id: file_id)}
   scope :failed, -> { where(manifestation_id: nil) }
   scope :skipped, -> { where('error_message IS NOT NULL') }
@@ -14,12 +15,12 @@ end
 #
 # Table name: resource_import_results
 #
-#  id                      :bigint           not null, primary key
-#  resource_import_file_id :bigint
-#  manifestation_id        :bigint
-#  item_id                 :bigint
+#  id                      :integer          not null, primary key
+#  resource_import_file_id :integer
+#  manifestation_id        :integer
+#  item_id                 :integer
 #  body                    :text
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #  error_message           :text
 #

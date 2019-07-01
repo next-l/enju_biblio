@@ -10,22 +10,22 @@
 
 <p>
   <strong><%= t('activerecord.attributes.agent_import_file.agent_import_file_name') -%>:</strong>
-  <%= link_to @agent_import_file.agent_import.filename, @agent_import_file.agent_import if @agent_import_file.agent_import.attached? %>
+  <%= link_to @agent_import_file.agent_import_file_name, agent_import_file_path(@agent_import_file, format: :download) if @agent_import_file.agent_import_file_name %>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.agent_import_file.agent_import_content_type') -%>:</strong>
-  <%= @agent_import_file.agent_import.content_type -%>
+  <%= @agent_import_file.agent_import_content_type -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.agent_import_file.agent_import_file_size') -%>:</strong>
-  <%= @agent_import_file.agent_import.byte_size -%>
+  <%= @agent_import_file.agent_import_file_size -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.agent_import_file.agent_import_fingerprint') -%>:</strong>
-  <%= @agent_import_file.agent_import.checksum -%>
+  <%= @agent_import_file.agent_import_fingerprint -%>
 </p>
 
 <p>

@@ -4,12 +4,6 @@ describe AgentImportResultsController do
   fixtures :all
 
   describe 'GET index' do
-    before do
-      3.times do
-        FactoryBot.create(:agent_import_result)
-      end
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
@@ -48,16 +42,12 @@ describe AgentImportResultsController do
   end
 
   describe 'GET show' do
-    before do
-      @agent_import_result = FactoryBot.create(:agent_import_result)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested agent_import_result as @agent_import_result' do
-        get :show, params: { id: @agent_import_result.id }
-        expect(assigns(:agent_import_result)).to eq(@agent_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
       end
     end
 
@@ -65,8 +55,8 @@ describe AgentImportResultsController do
       login_fixture_librarian
 
       it 'assigns the requested agent_import_result as @agent_import_result' do
-        get :show, params: { id: @agent_import_result.id }
-        expect(assigns(:agent_import_result)).to eq(@agent_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
       end
     end
 
@@ -74,15 +64,15 @@ describe AgentImportResultsController do
       login_fixture_user
 
       it 'assigns the requested agent_import_result as @agent_import_result' do
-        get :show, params: { id: @agent_import_result.id }
-        expect(assigns(:agent_import_result)).to eq(@agent_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested agent_import_result as @agent_import_result' do
-        get :show, params: { id: @agent_import_result.id }
-        expect(assigns(:agent_import_result)).to eq(@agent_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:agent_import_result)).to eq(AgentImportResult.find(1))
         expect(response).to redirect_to(new_user_session_url)
       end
     end

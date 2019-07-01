@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe "resource_export_files/edit" do
   before(:each) do
-    @resource_export_file = assign(:resource_export_file, FactoryBot.create(:resource_export_file))
+    @resource_export_file = assign(:resource_export_file, stub_model(ResourceExportFile, user_id: 1))
     view.stub(:current_user).and_return(User.find(1))
   end
 

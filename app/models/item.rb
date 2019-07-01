@@ -8,9 +8,9 @@ class Item < ActiveRecord::Base
     end
   }
   delegate :display_name, to: :shelf, prefix: true
-  has_many :owns, dependent: :destroy
+  has_many :owns
   has_many :agents, through: :owns
-  has_many :donates, dependent: :destroy
+  has_many :donates
   has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
@@ -41,13 +41,10 @@ class Item < ActiveRecord::Base
     string :item_identifier, multiple: true do
       [item_identifier, binding_item_identifier]
     end
-    string :library do
-      shelf.library.name
-    end
     integer :required_role_id
-    string :manifestation_id
-    string :shelf_id
-    string :agent_ids, multiple: true
+    integer :manifestation_id
+    integer :shelf_id
+    integer :agent_ids, multiple: true
     time :created_at
     time :updated_at
     time :acquired_at
@@ -83,7 +80,7 @@ class Item < ActiveRecord::Base
   end
 
   def owned(agent)
-    owns.find_by(agent_id: agent.id)
+    owns.where(agent_id: agent.id).first
   end
 
   def manifestation_url
@@ -91,7 +88,13 @@ class Item < ActiveRecord::Base
   end
 
   def removable?
-    true
+    if defined?(EnjuCirculation)
+      return false if circulation_status.name == 'Removed'
+      return false if checkouts.not_returned.exists?
+      true
+    else
+      true
+    end
   end
 end
 
@@ -99,23 +102,27 @@ end
 #
 # Table name: items
 #
-#  id                      :bigint           not null, primary key
+#  id                      :integer          not null, primary key
 #  call_number             :string
 #  item_identifier         :string
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
-#  shelf_id                :bigint           not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  deleted_at              :datetime
+#  shelf_id                :integer          default(1), not null
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string
 #  price                   :integer
 #  lock_version            :integer          default(0), not null
 #  required_role_id        :integer          default(1), not null
+#  required_score          :integer          default(0), not null
 #  acquired_at             :datetime
-#  bookstore_id            :bigint
+#  bookstore_id            :integer
 #  budget_type_id          :integer
+#  circulation_status_id   :integer          default(5), not null
+#  checkout_type_id        :integer          default(1), not null
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime
-#  manifestation_id        :bigint           not null
+#  manifestation_id        :integer          not null
 #

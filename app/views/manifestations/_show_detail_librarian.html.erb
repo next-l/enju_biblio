@@ -21,8 +21,8 @@
             <td style="width: 200px"><%= t('activerecord.models.series_statement') -%>:</td>
             <td style="width: 500px">
               <%= render 'show_series_detail', manifestation: manifestation %>
-              <%- unless manifestation.issn_records.empty? -%>
-                (<%= t('activerecord.attributes.manifestation.issn') -%>: <%= manifestation.issn_records.pluck(:body).join(" ") -%>)
+              <%- unless manifestation.identifier_contents(:issn).empty? -%>
+                (<%= t('activerecord.attributes.manifestation.issn') -%>: <%= manifestation.identifier_contents(:issn).join(" ") -%>)
               <%- end -%>
             </td>
           </tr>
@@ -69,27 +69,11 @@
           <td><%= t('page.identifier') -%>:</td>
           <td>
             <ul>
-              <% manifestation.isbn_records.each do |isbn_record| %>
+              <% manifestation.identifiers.each do |identifier| %>
                 <li>
-                  ISBN:
-                  <%= isbn_record.body %>
+                  <%= identifier.identifier_type.display_name %>:
+                  <%= identifier_link(identifier) %>
                 </li>
-              <% end %>
-              <% manifestation.issn_records.each do |issn_record| %>
-                <li>
-                  ISSN:
-                  <%= issn_record.body %>
-                </li>
-              <% end %>
-              <% if defined?(EnjuNdl) %>
-                <% if manifestation.jpno_record %>
-                  <li>JPNO: <%= manifestation.jpno_record.body %></li>
-                <% end %>
-              <% end %>
-              <% if defined?(EnjuNii) %>
-                <% if manifestation.ncid_record %>
-                  <li>NCID: <%= link_to manifestation.ncid_record.body, "https://ci.nii.ac.jp/ncid/#{manifestation.ncid_record.body}" %></li>
-                <% end %>
               <% end %>
               <% if manifestation.manifestation_identifier %>
                 <li>
@@ -100,7 +84,7 @@
             </ul>
           </td>
         </tr>
-        <%- if manifestation.attachment.attached? -%>
+        <%- unless manifestation.attachment_file_name.blank? -%>
           <%= render 'manifestations/attachment_file', manifestation: manifestation -%>
         <%- end -%>
         <tr>

@@ -311,6 +311,14 @@ class ManifestationsController < ApplicationController
       @questions = @manifestation.questions(user: current_user, page: params[:question_page])
     end
 
+    if @manifestation.attachment.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        data = Faraday.get(@manifestation.attachment.expiring_url).body.force_encoding('UTF-8')
+      else
+        file = @manifestation.attachment.path
+      end
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.html.phone
@@ -327,6 +335,19 @@ class ManifestationsController < ApplicationController
       format.json { render json: @manifestation }
       format.txt
       format.js
+      format.download {
+        if @manifestation.attachment.path
+          if ENV['ENJU_STORAGE'] == 's3'
+            send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
+          else
+            if File.exist?(file) && File.file?(file)
+              send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
+            end
+          end
+        else
+          render template: 'page/404', status: 404
+        end
+      }
     end
   end
 
@@ -377,7 +398,10 @@ class ManifestationsController < ApplicationController
     @manifestation = Manifestation.new(manifestation_params.delete_if{|k, v|
       k == 'creators_attributes'
     })
-    parent = Manifestation.find_by(id: @manifestation.parent_id)
+    parent = Manifestation.where(id: @manifestation.parent_id).first
+    unless @manifestation.original_title?
+      @manifestation.original_title = @manifestation.attachment_file_name
+    end
 
     respond_to do |format|
       if @manifestation.save
@@ -520,12 +544,8 @@ class ManifestationsController < ApplicationController
         :id, :parent_id, :category, :note, :classification_type_id,
         :_destroy
       ]},
-      {isbn_records_attributes: [
-        :id, :body,
-        :_destroy
-      ]},
-      {issn_records_attributes: [
-        :id, :body,
+      {identifiers_attributes: [
+        :id, :body, :identifier_type_id,
         :_destroy
       ]}
     )
@@ -712,11 +732,12 @@ class ManifestationsController < ApplicationController
   end
 
   def prepare_options
-    @carrier_types = CarrierType.select([:id, :display_name_translations, :position])
-    @content_types = ContentType.select([:id, :display_name_translations, :position])
-    @roles = Role.select([:id, :display_name_translations, :position])
+    @carrier_types = CarrierType.select([:id, :display_name, :position])
+    @content_types = ContentType.select([:id, :display_name, :position])
+    @roles = Role.select([:id, :display_name, :position])
     @languages = Language.select([:id, :display_name, :position])
-    @frequencies = Frequency.select([:id, :display_name_translations, :position])
+    @frequencies = Frequency.select([:id, :display_name, :position])
+    @identifier_types = IdentifierType.select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
     if defined?(EnjuSubject)
       @subject_types = SubjectType.select([:id, :display_name, :position])

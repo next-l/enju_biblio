@@ -31,10 +31,25 @@ class PictureFilesController < ApplicationController
       size = 'medium'
     end
 
+    if @picture_file.picture.exists?
+      if ENV['ENJU_STORAGE'] == 's3'
+        file = Faraday.get(@picture_file.picture.expiring_url).body.force_encoding('UTF-8')
+      else
+        file = @picture_file.picture.path(size.to_sym)
+      end
+    end
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @picture_file }
-      format.html.phone
+      format.html.phone {
+        if params[:format] == 'download'
+          render_image(file)
+        end
+      }
+      format.download {
+        render_image(file)
+      }
     end
   end
 
@@ -170,17 +185,33 @@ class PictureFilesController < ApplicationController
       @attachable = @agent
       return
     end
+    get_event
+    if @event
+      @attachable = @event
+      return
+    end
     get_shelf
     if @shelf
       @attachable = @shelf
       return
     end
+  end
 
-    if defined?(EnjuEvent)
-      get_event
-      if @event
-        @attachable = @event
-        return
+  def render_image(file)
+    case params[:mode]
+    when 'download'
+      disposition = 'attachment'
+    else
+      disposition = 'inline'
+    end
+
+    if @picture_file.picture.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        send_data file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
+      else
+        if File.exist?(file) && File.file?(file)
+          send_file file, filename: File.basename(@picture_file.picture_file_name), type: @picture_file.picture_content_type, disposition: disposition
+        end
       end
     end
   end

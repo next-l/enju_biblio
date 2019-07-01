@@ -1882,13 +1882,13 @@ language_00140:
   iso_639_3: srd
   id: 140
   note: 
-  native_name: 
+  native_name:
 
 # == Schema Information
 #
 # Table name: languages
 #
-#  id           :bigint           not null, primary key
+#  id           :integer          not null, primary key
 #  name         :string           not null
 #  native_name  :string
 #  display_name :text

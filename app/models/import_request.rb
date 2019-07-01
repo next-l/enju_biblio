@@ -25,7 +25,9 @@ class ImportRequest < ActiveRecord::Base
 
   def check_imported
     if isbn.present?
-      if IsbnRecord.find_by(body: isbn)
+      identifier_type = IdentifierType.where(name: 'isbn').first
+      identifier_type = IdentifierType.where(name: 'isbn').create! unless identifier_type
+      if Identifier.where(body: isbn, identifier_type_id: identifier_type.id).first.try(:manifestation)
         errors.add(:isbn, I18n.t('import_request.isbn_taken'))
       end
     end
@@ -73,10 +75,10 @@ end
 #
 # Table name: import_requests
 #
-#  id               :bigint           not null, primary key
-#  isbn             :string           not null
-#  manifestation_id :bigint
-#  user_id          :bigint
-#  created_at       :datetime         not null
-#  updated_at       :datetime         not null
+#  id               :integer          not null, primary key
+#  isbn             :string
+#  manifestation_id :integer
+#  user_id          :integer
+#  created_at       :datetime
+#  updated_at       :datetime
 #

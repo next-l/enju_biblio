@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 describe "series_statement_merge_lists/show" do
-  fixtures :series_statement_merge_lists
-
   before(:each) do
-    @series_statement_merge_list = series_statement_merge_lists(:series_statement_merge_list_00001)
+    @series_statement_merge_list = assign(:series_statement_merge_list, stub_model(SeriesStatementMergeList,
+      title: "Title"
+    ))
   end
 
   it "renders attributes in <p>" do

@@ -94,11 +94,6 @@ class MediumOfPerformancesController < ApplicationController
   end
 
   def medium_of_performance_params
-    params.require(:medium_of_performance).permit(
-      :name, :display_name, :note,
-      I18n.available_locales.map{|locale|
-        :"display_name_#{locale.to_s}"
-      }
-    )
+    params.require(:medium_of_performance).permit(:name, :display_name, :note)
   end
 end

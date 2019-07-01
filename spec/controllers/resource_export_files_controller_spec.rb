@@ -4,12 +4,6 @@ describe ResourceExportFilesController do
   fixtures :all
 
   describe 'GET index' do
-    before do
-      3.times do
-        FactoryBot.create(:resource_export_file)
-      end
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
@@ -48,16 +42,12 @@ describe ResourceExportFilesController do
   end
 
   describe 'GET show' do
-    before do
-      @resource_export_file = FactoryBot.create(:resource_export_file)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :show, params: { id: @resource_export_file.id }
-        expect(assigns(:resource_export_file)).to eq(@resource_export_file)
+        get :show, params: { id: resource_export_files(:resource_export_file_00003).id }
+        expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to be_successful
       end
     end
@@ -66,8 +56,8 @@ describe ResourceExportFilesController do
       login_fixture_librarian
 
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :show, params: { id: @resource_export_file.id }
-        expect(assigns(:resource_export_file)).to eq(@resource_export_file)
+        get :show, params: { id: resource_export_files(:resource_export_file_00003).id }
+        expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to be_successful
       end
     end
@@ -76,16 +66,16 @@ describe ResourceExportFilesController do
       login_fixture_user
 
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :show, params: { id: @resource_export_file.id }
-        expect(assigns(:resource_export_file)).to eq(@resource_export_file)
+        get :show, params: { id: resource_export_files(:resource_export_file_00003).id }
+        expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :show, params: { id: @resource_export_file.id }
-        expect(assigns(:resource_export_file)).to eq(@resource_export_file)
+        get :show, params: { id: resource_export_files(:resource_export_file_00003).id }
+        expect(assigns(:resource_export_file)).to eq(resource_export_files(:resource_export_file_00003))
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -163,16 +153,13 @@ describe ResourceExportFilesController do
   end
 
   describe 'GET edit' do
-    before do
-      @resource_export_file = FactoryBot.create(:resource_export_file)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :edit, params: { id: @resource_export_file.id }
-        expect(assigns(:resource_export_file)).to eq(@resource_export_file)
+        resource_export_file = resource_export_files(:resource_export_file_00001)
+        get :edit, params: { id: resource_export_file.id }
+        expect(assigns(:resource_export_file)).to eq(resource_export_file)
       end
     end
 
@@ -180,8 +167,9 @@ describe ResourceExportFilesController do
       login_fixture_librarian
 
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :edit, params: { id: @resource_export_file.id }
-        expect(assigns(:resource_export_file)).to eq(@resource_export_file)
+        resource_export_file = resource_export_files(:resource_export_file_00001)
+        get :edit, params: { id: resource_export_file.id }
+        expect(assigns(:resource_export_file)).to eq(resource_export_file)
       end
     end
 
@@ -189,29 +177,27 @@ describe ResourceExportFilesController do
       login_fixture_user
 
       it 'assigns the requested resource_export_file as @resource_export_file' do
-        get :edit, params: { id: @resource_export_file.id }
+        resource_export_file = resource_export_files(:resource_export_file_00001)
+        get :edit, params: { id: resource_export_file.id }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not assign the requested resource_export_file as @resource_export_file' do
-        get :edit, params: { id: @resource_export_file.id }
+        resource_export_file = resource_export_files(:resource_export_file_00001)
+        get :edit, params: { id: resource_export_file.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end
   end
 
   describe 'PUT update' do
-    before do
-      @resource_export_file = FactoryBot.create(:resource_export_file)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'should update resource_export_file' do
-        put :update, params: { id: @resource_export_file.id, resource_export_file: { mode: 'export' } }
+        put :update, params: { id: resource_export_files(:resource_export_file_00003).id, resource_export_file: { mode: 'export' } }
         expect(response).to redirect_to resource_export_file_url(assigns(:resource_export_file))
       end
     end
@@ -220,7 +206,7 @@ describe ResourceExportFilesController do
       login_fixture_librarian
 
       it 'should update resource_export_file' do
-        put :update, params: { id: @resource_export_file.id, resource_export_file: { mode: 'export' } }
+        put :update, params: { id: resource_export_files(:resource_export_file_00003).id, resource_export_file: { mode: 'export' } }
         expect(response).to redirect_to resource_export_file_url(assigns(:resource_export_file))
       end
     end
@@ -229,14 +215,14 @@ describe ResourceExportFilesController do
       login_fixture_user
 
       it 'should not update resource_export_file' do
-        put :update, params: { id: @resource_export_file.id, resource_export_file: { mode: 'export' } }
+        put :update, params: { id: resource_export_files(:resource_export_file_00003).id, resource_export_file: { mode: 'export' } }
         expect(response).to be_forbidden
       end
     end
 
     describe 'When not logged in' do
       it 'should not update resource_export_file' do
-        put :update, params: { id: @resource_export_file.id, resource_export_file: { mode: 'export' } }
+        put :update, params: { id: resource_export_files(:resource_export_file_00003).id, resource_export_file: { mode: 'export' } }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -244,7 +230,7 @@ describe ResourceExportFilesController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @resource_export_file = FactoryBot.create(:resource_export_file)
+      @resource_export_file = resource_export_files(:resource_export_file_00001)
     end
 
     describe 'When logged in as Administrator' do

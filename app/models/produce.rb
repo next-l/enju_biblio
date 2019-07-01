@@ -11,7 +11,6 @@ class Produce < ActiveRecord::Base
   after_destroy :reindex
 
   acts_as_list scope: :manifestation
-  translates :full_name
 
   def reindex
     agent.try(:index)
@@ -23,12 +22,11 @@ end
 #
 # Table name: produces
 #
-#  id                     :bigint           not null, primary key
-#  agent_id               :bigint           not null
-#  manifestation_id       :bigint           not null
-#  position               :integer          default(1), not null
-#  created_at             :datetime         not null
-#  updated_at             :datetime         not null
-#  produce_type_id        :integer
-#  full_name_translations :jsonb
+#  id               :integer          not null, primary key
+#  agent_id         :integer          not null
+#  manifestation_id :integer          not null
+#  position         :integer
+#  created_at       :datetime
+#  updated_at       :datetime
+#  produce_type_id  :integer
 #

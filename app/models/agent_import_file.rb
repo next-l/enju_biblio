@@ -5,7 +5,28 @@ class AgentImportFile < ActiveRecord::Base
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
-  has_one_attached :agent_import
+  if ENV['ENJU_STORAGE'] == 's3'
+    has_attached_file :agent_import, storage: :s3,
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME'],
+        s3_region: ENV['S3_REGION']
+      },
+      s3_permissions: :private
+  else
+    has_attached_file :agent_import,
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+  end
+  validates_attachment_content_type :agent_import, content_type: [
+    'text/csv',
+    'text/plain',
+    'text/tab-separated-values',
+    'application/octet-stream',
+    'application/vnd.ms-excel'
+  ]
+  validates_attachment_presence :agent_import
   belongs_to :user
   has_many :agent_import_results, dependent: :destroy
 
@@ -42,6 +63,7 @@ class AgentImportFile < ActiveRecord::Base
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
+    #rows.shift
 
     AgentImportResult.create!(agent_import_file_id: id, body: rows.headers.join("\t"))
     rows.each do |row|
@@ -57,12 +79,14 @@ class AgentImportFile < ActiveRecord::Base
         num[:agent_imported] += 1
         if row_num % 50 == 0
           Sunspot.commit
+          GC.start
         end
       end
 
       import_result.save!
     end
     Sunspot.commit
+    rows.close
     transition_to!(:completed)
     mailer = AgentImportMailer.completed(self)
     send_message(mailer)
@@ -86,12 +110,13 @@ class AgentImportFile < ActiveRecord::Base
   def modify
     transition_to!(:started)
     rows = open_import_file
+    rows.shift
     row_num = 1
 
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.find_by(id: row['id'])
+      agent = Agent.where(id: row['id']).first
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
         agent.full_name_transcription = row['full_name_transcription'] if row['full_name_transcription'].to_s.strip.present?
@@ -120,12 +145,13 @@ class AgentImportFile < ActiveRecord::Base
   def remove
     transition_to!(:started)
     rows = open_import_file
+    rows.shift
     row_num = 1
 
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.find_by(id: row['id'].to_s.strip)
+      agent = Agent.where(id: row['id'].to_s.strip).first
       if agent
         agent.picture_files.destroy_all
         agent.reload
@@ -153,14 +179,25 @@ class AgentImportFile < ActiveRecord::Base
   end
 
   def open_import_file
-    byte = ActiveStorage::Blob.service.download(agent_import.key)
-    if defined?(CharlockHolmes)
-      string = CharlockHolmes::Converter.convert(byte, user_encoding || byte.detect_encoding[:encoding], 'utf-8')
+    tempfile = Tempfile.new(self.class.name.underscore)
+    if ENV['ENJU_STORAGE'] == 's3'
+      uploaded_file_path = agent_import.expiring_url(10)
     else
-      string = NKF.nkf("--ic=#{user_encoding || NKF.guess(byte).to_s} --oc=utf-8", byte)
+      uploaded_file_path = agent_import.path
     end
+    open(uploaded_file_path){|f|
+      f.each{|line|
+        tempfile.puts(convert_encoding(line))
+      }
+    }
+    tempfile.close
 
-    CSV.parse(string, col_sep: "\t", encoding: 'utf-8', headers: true)
+    file = CSV.open(tempfile, col_sep: "\t")
+    header = file.first
+    rows = CSV.open(tempfile, headers: header, col_sep: "\t")
+    tempfile.close(true)
+    file.close
+    rows
   end
 
   def set_agent_value(agent, row)
@@ -186,13 +223,17 @@ class AgentImportFile < ActiveRecord::Base
     agent.birth_date = row['birth_date'] if row['birth_date']
     agent.death_date = row['death_date'] if row['death_date']
 
-    agent.email = row['email'].to_s.strip
-    agent.required_role = Role.find_by(name: row['required_role'].to_s.strip.camelize) || Role.find_by(name: 'Guest')
-    language = Language.find_by(name: row['language'].to_s.strip.camelize)
-    language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
-    language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
+    #if row['username'].to_s.strip.blank?
+      agent.email = row['email'].to_s.strip
+      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where(name: 'Guest').first
+    #else
+    #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where('Librarian').first
+    #end
+    language = Language.where(name: row['language'].to_s.strip.camelize).first
+    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
+    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
     agent.language = language if language
-    country = Country.find_by(name: row['country'].to_s.strip)
+    country = Country.where(name: row['country'].to_s.strip).first
     agent.country = country if country
     agent
   end
@@ -202,14 +243,21 @@ end
 #
 # Table name: agent_import_files
 #
-#  id                       :bigint           not null, primary key
-#  user_id                  :bigint
-#  note                     :text
-#  executed_at              :datetime
-#  created_at               :datetime         not null
-#  updated_at               :datetime         not null
-#  agent_import_fingerprint :string
-#  error_message            :text
-#  edit_mode                :string
-#  user_encoding            :string
+#  id                        :integer          not null, primary key
+#  parent_id                 :integer
+#  content_type              :string
+#  size                      :integer
+#  user_id                   :integer
+#  note                      :text
+#  executed_at               :datetime
+#  agent_import_file_name    :string
+#  agent_import_content_type :string
+#  agent_import_file_size    :integer
+#  agent_import_updated_at   :datetime
+#  created_at                :datetime
+#  updated_at                :datetime
+#  agent_import_fingerprint  :string
+#  error_message             :text
+#  edit_mode                 :string
+#  user_encoding             :string
 #

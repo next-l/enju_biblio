@@ -19,13 +19,23 @@ class CarrierTypesController < ApplicationController
   # GET /carrier_types/1.json
   def show
     @carrier_type = CarrierType.find(params[:id])
-    if request.format.html?
+    unless params[:format] == 'download'
       authorize @carrier_type
+    end
+    if @carrier_type.attachment.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        file = Faraday.get(@carrier_type.attachment.expiring_url).body.force_encoding('UTF-8')
+      else
+        file = @carrier_type.attachment.path
+      end
     end
 
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @carrier_type }
+      format.download {
+        render_image(file)
+      }
     end
   end
 
@@ -106,9 +116,6 @@ class CarrierTypesController < ApplicationController
     params.require(:carrier_type).permit(
       :name, :display_name, :note, :position,
       :attachment,
-      I18n.available_locales.map{|locale|
-        :"display_name_#{locale.to_s}"
-      },
       # EnjuCirculation
       {
         carrier_type_has_checkout_types_attributes: [
@@ -121,6 +128,18 @@ class CarrierTypesController < ApplicationController
   def prepare_options
     if defined?(EnjuCirculation)
       @checkout_types = CheckoutType.select([:id, :display_name, :position])
+    end
+  end
+
+  def render_image(file)
+    if @carrier_type.attachment.path
+      if ENV['ENJU_STORAGE'] == 's3'
+        send_data file, filename: File.basename(@carrier_type.attachment_file_name), type: @carrier_type.attachment_content_type, disposition: 'inline'
+      else
+        if File.exist?(file) && File.file?(file)
+          send_file file, filename: File.basename(@carrier_type.attachment_file_name), type: @carrier_type.attachment_content_type, disposition: 'inline'
+        end
+      end
     end
   end
 end

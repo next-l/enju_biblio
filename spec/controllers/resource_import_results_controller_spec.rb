@@ -42,16 +42,12 @@ describe ResourceImportResultsController do
   end
 
   describe 'GET show' do
-    before(:each) do
-      @resource_import_result = FactoryBot.create(:resource_import_result)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested resource_import_result as @resource_import_result' do
-        get :show, params: { id: @resource_import_result.id }
-        expect(assigns(:resource_import_result)).to eq(@resource_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
       end
     end
 
@@ -59,8 +55,8 @@ describe ResourceImportResultsController do
       login_fixture_librarian
 
       it 'assigns the requested resource_import_result as @resource_import_result' do
-        get :show, params: { id: @resource_import_result.id }
-        expect(assigns(:resource_import_result)).to eq(@resource_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
       end
     end
 
@@ -68,15 +64,15 @@ describe ResourceImportResultsController do
       login_fixture_user
 
       it 'assigns the requested resource_import_result as @resource_import_result' do
-        get :show, params: { id: @resource_import_result.id }
-        expect(assigns(:resource_import_result)).to eq(@resource_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
       end
     end
 
     describe 'When not logged in' do
       it 'assigns the requested resource_import_result as @resource_import_result' do
-        get :show, params: { id: @resource_import_result.id }
-        expect(assigns(:resource_import_result)).to eq(@resource_import_result)
+        get :show, params: { id: 1 }
+        expect(assigns(:resource_import_result)).to eq(ResourceImportResult.find(1))
         expect(response).to redirect_to(new_user_session_url)
       end
     end
@@ -84,7 +80,7 @@ describe ResourceImportResultsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @resource_import_result = FactoryBot.create(:resource_import_result)
+      @resource_import_result = resource_import_results(:one)
     end
 
     describe 'When logged in as Administrator' do

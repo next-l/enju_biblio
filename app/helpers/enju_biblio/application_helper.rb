@@ -1,11 +1,9 @@
 module EnjuBiblio
   module ApplicationHelper
     def form_icon(carrier_type)
-      if carrier_type.attachment.attached?
-        image_tag(carrier_type.attachment, size: '16x16', class: 'enju_icon', alt: carrier_type.display_name)
-      else
-        image_tag('icons/help.png', size: '16x16', class: 'enju_icon', alt: t('page.unknown'))
-      end
+      image_tag(carrier_type_path(carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: carrier_type.display_name)
+    rescue NoMethodError
+      image_tag('icons/help.png', size: '16x16', class: 'enju_icon', alt: t('page.unknown'))
     end
 
     def content_type_icon(content_type)
@@ -49,8 +47,16 @@ module EnjuBiblio
 
     def identifier_link(identifier)
       case identifier.identifier_type.name
+      when 'doi'
+        link_to identifier.body, "https://doi.org/#{identifier.body}"
       when 'iss_itemno'
         link_to identifier.body, "https://iss.ndl.go.jp/books/#{identifier.body}"
+      when 'lccn'
+        link_to identifier.body, "https://lccn.loc.gov/#{identifier.body}"
+      when 'ncid'
+        link_to identifier.body, "https://ci.nii.ac.jp/ncid/#{identifier.body}"
+      when 'isbn'
+        Lisbn.new(identifier.body).isbn_with_dash
       else
         identifier.body
       end

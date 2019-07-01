@@ -64,23 +64,23 @@ describe ItemsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: agents(:agent_00001).id }
+        get :index, params: { agent_id: 1 }
         expect(response).to be_successful
-        assigns(:agent).should eq agents(:agent_00001)
+        assigns(:agent).should eq Agent.find(1)
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: manifestations(:manifestation_00001).id }
+        get :index, params: { manifestation_id: 1 }
         expect(response).to be_successful
-        assigns(:manifestation).should eq Manifestation.find(manifestations(:manifestation_00001).id)
+        assigns(:manifestation).should eq Manifestation.find(1)
         assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
       end
 
       it 'should get index with shelf_id' do
-        get :index, params: { shelf_id: shelves(:shelf_00001).id }
+        get :index, params: { shelf_id: 1 }
         expect(response).to be_successful
-        assigns(:shelf).should eq shelves(:shelf_00001)
+        assigns(:shelf).should eq Shelf.find(1)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
       end
     end
@@ -150,6 +150,15 @@ describe ItemsController do
       it 'should not get new without manifestation_id' do
         get :new
         expect(response).to redirect_to(manifestations_url)
+      end
+
+      it 'should work without exception, even if library and shelf is unavailable' do
+        Library.real.each do |library|
+          library.try(:shelves).to_a.each(&:destroy)
+          library.destroy
+        end
+        get :new, params: { manifestation_id: @manifestation.id }
+        expect(response).to redirect_to(libraries_url)
       end
 
       it 'should not get new item for series_master' do
@@ -238,7 +247,7 @@ describe ItemsController do
   describe 'POST create' do
     before(:each) do
       manifestation = FactoryBot.create(:manifestation)
-      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id, shelf_id: shelves(:shelf_00001).id)
+      @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
 
@@ -256,6 +265,12 @@ describe ItemsController do
           assigns(:item).manifestation.should_not be_nil
           expect(response).to redirect_to(item_url(assigns(:item)))
         end
+
+        it 'should create a lending policy' do
+          old_lending_policy_count = LendingPolicy.count
+          post :create, params: { item: @attrs }
+          LendingPolicy.count.should eq old_lending_policy_count
+        end
       end
 
       describe 'with invalid params' do
@@ -272,14 +287,14 @@ describe ItemsController do
 
       it 'should not create item without manifestation_id' do
         lambda do
-          post :create, params: { item: { item_identifier: '00001' } }
+          post :create, params: { item: { circulation_status_id: 1 } }
         end.should raise_error(ActiveRecord::RecordNotFound)
         expect(assigns(:item)).to_not be_valid
         # expect(response).to be_missing
       end
 
       it 'should not create item already created' do
-        post :create, params: { item: { item_identifier: '00001', manifestation_id: manifestations(:manifestation_00001) } }
+        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
         expect(assigns(:item)).to_not be_valid
         expect(response).to be_successful
       end
@@ -310,6 +325,27 @@ describe ItemsController do
           post :create, params: { item: @invalid_attrs }
           expect(response).to render_template('new')
         end
+      end
+
+      it 'should create reserved item' do
+        post :create, params: { item: { circulation_status_id: 1, manifestation_id: 2 } }
+        expect(assigns(:item)).to be_valid
+
+        expect(response).to redirect_to item_url(assigns(:item))
+        flash[:message].should eq I18n.t('item.this_item_is_reserved')
+        assigns(:item).manifestation.should eq Manifestation.find(2)
+        assigns(:item).should be_retained
+      end
+
+      it "should create another item with already retained" do
+        reserve = FactoryBot.create(:reserve)
+        reserve.transition_to!(:requested)
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id) }
+        expect(assigns(:item)).to be_valid
+        expect(response).to redirect_to item_url(assigns(:item))
+        post :create, params: { item: FactoryBot.attributes_for(:item, manifestation_id: reserve.manifestation.id) }
+        expect(assigns(:item)).to be_valid
+        expect(response).to redirect_to item_url(assigns(:item))
       end
     end
 
@@ -475,7 +511,7 @@ describe ItemsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @item = items(:item_00018)
+      @item = items(:item_00006)
     end
 
     describe 'When logged in as Administrator' do
@@ -496,6 +532,16 @@ describe ItemsController do
           delete :destroy, params: { id: 'missing' }
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
+      end
+
+      it 'should not destroy item if not checked in' do
+        delete :destroy, params: { id: 1 }
+        expect(response).to be_forbidden
+      end
+
+      it 'should not destroy a removed item' do
+        delete :destroy, params: { id: 23 }
+        expect(response).to be_forbidden
       end
     end
 

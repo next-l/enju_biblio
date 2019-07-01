@@ -3,7 +3,6 @@ require 'rails_helper'
 describe "import_requests/edit" do
   before(:each) do
     @import_request = assign(:import_request, stub_model(ImportRequest,
-      id: '659f2004-b1a7-48b0-840a-d6e928f1e236',
       isbn: "1111111111",
       created_at: Time.zone.now
     ))

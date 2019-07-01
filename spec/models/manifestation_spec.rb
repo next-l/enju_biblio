@@ -109,13 +109,13 @@ describe Manifestation, solr: true do
     sru = Sru.new({query: 'title ALL "awk sed"'})
     sru.search
     sru.manifestations.size.should eq 2
-    sru.manifestations.collect{|m| m.id}.should eq [manifestations(:manifestation_00184).id, manifestations(:manifestation_00116).id]
+    sru.manifestations.collect{|m| m.id}.should eq [184, 116]
     sru = Sru.new({query: 'title ANY "ruby awk sed"'})
     sru.search
     sru.manifestations.size.should eq 22
     sru = Sru.new({query: 'isbn=9784756137470'})
     sru.search
-    sru.manifestations.first.id.should eq manifestations(:manifestation_00114).id
+    sru.manifestations.first.id.should eq 114
     sru = Sru.new({query: "creator=テスト"})
     sru.search
     sru.manifestations.size.should eq 1
@@ -125,7 +125,7 @@ describe Manifestation, solr: true do
     sru = Sru.new({query: "from = 2000-09 AND until = 2000-11-01"})
     sru.search
     sru.manifestations.size.should eq 1
-    sru.manifestations.first.id.should eq manifestations(:manifestation_00120).id
+    sru.manifestations.first.id.should eq 120
     sru = Sru.new({query: "from = 1993-02-24"})
     sru.search
     sru.manifestations.size.should eq 5
@@ -163,6 +163,14 @@ describe Manifestation, solr: true do
     sru.manifestations.size.should eq 6
   end
 
+  it "should be reserved" do
+    manifestations(:manifestation_00007).is_reserved_by?(users(:admin)).should be_truthy
+  end
+
+  it "should not be reserved" do
+    manifestations(:manifestation_00007).is_reserved_by?(users(:user1)).should be_falsy
+  end
+
   it "should_get_number_of_pages" do
     manifestations(:manifestation_00001).number_of_pages.should eq 100
   end
@@ -181,6 +189,10 @@ describe Manifestation, solr: true do
 
   it "should respond to extract_text" do
     manifestations(:manifestation_00001).extract_text.should be_nil
+  end
+
+  it "should not be reserved it it has no item" do
+    manifestations(:manifestation_00008).is_reservable_by?(users(:admin)).should be_falsy
   end
 
   it "should respond to title" do
@@ -233,43 +245,41 @@ describe Manifestation, solr: true do
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["edition"].compact).not_to be_empty
       expect(csv["edition_string"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["edition"]).to eq "2"
       expect(m["edition_string"]).to eq "Revised Ed."
     end
-
     it "should export title_transcription fields" do
       manifestation = FactoryBot.create(:manifestation, title_transcription: "Transcripted title")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["title_transcription"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["title_transcription"]).to eq "Transcripted title"
     end
-
     it "should export volume fields" do
       manifestation = FactoryBot.create(:manifestation, volume_number: 15, volume_number_string: "Vol.15")
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["volume_number"].compact).not_to be_empty
       expect(csv["volume_number_string"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["volume_number"]).to eq "15"
       expect(m["volume_number_string"]).to eq "Vol.15"
     end
-
     it "should export multiple identifiers" do
       manifestation = FactoryBot.create(:manifestation)
-      manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4043898039")
-      manifestation.isbn_records << FactoryBot.create(:isbn_record, body: "978-4840239219")
+      isbn_type = IdentifierType.where(name: :isbn).first
+      manifestation.identifiers << FactoryBot.create(:identifier, body: "978-4043898039", identifier_type: isbn_type)
+      manifestation.identifiers << FactoryBot.create(:identifier, body: "978-4840239219", identifier_type: isbn_type)
       lines = Manifestation.export()
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["isbn"]).to eq "9784043898039//9784840239219"
     end
 
     it "should respect the role of the user" do
-      FactoryBot.create(:item, bookstore_id: bookstores(:bookstore_00001).id, price: 100, budget_type_id: 1)
+      FactoryBot.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
       lines = Manifestation.export
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).to be_empty
@@ -291,10 +301,23 @@ describe Manifestation, solr: true do
       expect(csv["description"].compact).not_to be_empty
       expect(csv["note"].compact).not_to be_empty
       expect(csv["item_note"].compact).not_to be_empty
-      m = csv.find{|row| row["manifestation_id"].to_s == manifestation.id.to_s }
+      m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["description"]).to eq 'test\ntest'
       expect(m["note"]).to eq 'test\ntest'
       expect(m["item_note"]).to eq 'test\ntest'
+    end
+
+    it "should not export use_restriction for Guest" do
+      manifestation = FactoryBot.create(:manifestation)
+      use_restriction = UseRestriction.find(1)
+      item = FactoryBot.create(:item, manifestation: manifestation, use_restriction: use_restriction)
+      lines = Manifestation.export(format: :txt, role: "Guest")
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["use_restriction"].compact).to be_empty
+
+      lines = Manifestation.export(format: :txt, role: "Administrator")
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv["use_restriction"].compact).not_to be_empty
     end
   end
 
@@ -310,7 +333,7 @@ end
 #
 # Table name: manifestations
 #
-#  id                              :bigint           not null, primary key
+#  id                              :integer          not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
@@ -318,10 +341,12 @@ end
 #  manifestation_identifier        :string
 #  date_of_publication             :datetime
 #  date_copyrighted                :datetime
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  deleted_at                      :datetime
 #  access_address                  :string
 #  language_id                     :integer          default(1), not null
+#  carrier_type_id                 :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -337,10 +362,13 @@ end
 #  repository_content              :boolean          default(FALSE), not null
 #  lock_version                    :integer          default(0), not null
 #  required_role_id                :integer          default(1), not null
+#  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  carrier_type_id                 :bigint           not null
-#  nii_type_id                     :integer
+#  attachment_file_name            :string
+#  attachment_content_type         :string
+#  attachment_file_size            :integer
+#  attachment_updated_at           :datetime
 #  title_alternative_transcription :text
 #  description                     :text
 #  abstract                        :text
@@ -356,6 +384,7 @@ end
 #  serial_number                   :integer
 #  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
+#  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
 #  serial                          :boolean

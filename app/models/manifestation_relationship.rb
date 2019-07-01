@@ -18,11 +18,11 @@ end
 #
 # Table name: manifestation_relationships
 #
-#  id                                 :bigint           not null, primary key
-#  parent_id                          :bigint           not null
-#  child_id                           :bigint           not null
-#  manifestation_relationship_type_id :bigint
-#  created_at                         :datetime         not null
-#  updated_at                         :datetime         not null
+#  id                                 :integer          not null, primary key
+#  parent_id                          :integer
+#  child_id                           :integer
+#  manifestation_relationship_type_id :integer
+#  created_at                         :datetime
+#  updated_at                         :datetime
 #  position                           :integer
 #

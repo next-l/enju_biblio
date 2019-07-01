@@ -15,9 +15,9 @@
 
 <p>
   <strong><%= t('page.file') -%>:</strong>
-  <%= link_to url_for(@carrier_type.attachment) do -%>
-    <%= image_tag(url_for(@carrier_type.attachment)), size: '16x16', class: 'enju_icon', alt: @carrier_type.display_name) %>
-    <%= @carrier_type.attachment.filename %>
+  <%= link_to carrier_type_path(@carrier_type, format: :download) do -%>
+    <%= image_tag(carrier_type_path(@carrier_type, format: :download), size: '16x16', class: 'enju_icon', alt: @carrier_type.display_name) %>
+    <%= @carrier_type.attachment_file_name %>
   <% end %>
 </p>
 

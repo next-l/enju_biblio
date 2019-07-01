@@ -64,11 +64,11 @@ class Agent < ActiveRecord::Base
     time :updated_at
     time :date_of_birth
     time :date_of_death
-    string :work_ids, multiple: true
-    string :expression_ids, multiple: true
-    string :manifestation_ids, multiple: true
+    integer :work_ids, multiple: true
+    integer :expression_ids, multiple: true
+    integer :manifestation_ids, multiple: true
     integer :agent_merge_list_ids, multiple: true
-    string :original_agent_ids, multiple: true
+    integer :original_agent_ids, multiple: true
     integer :required_role_id
     integer :agent_type_id
   end
@@ -76,7 +76,7 @@ class Agent < ActiveRecord::Base
   paginates_per 10
 
   def set_role_and_name
-    self.required_role = Role.find_by(name: 'Librarian') if required_role_id.nil?
+    self.required_role = Role.where(name: 'Librarian').first if required_role_id.nil?
     set_full_name
   end
 
@@ -202,19 +202,19 @@ class Agent < ActiveRecord::Base
   end
 
   def created(work)
-    creates.find_by(work_id: work.id)
+    creates.where(work_id: work.id).first
   end
 
   def realized(expression)
-    realizes.find_by(expression_id: expression.id)
+    realizes.where(expression_id: expression.id).first
   end
 
   def produced(manifestation)
-    produces.find_by(manifestation_id: manifestation.id)
+    produces.where(manifestation_id: manifestation.id).first
   end
 
   def owned(item)
-    owns.find_by(item_id: item.id)
+    owns.where(item_id: item.id)
   end
 
   def self.import_agents(agent_lists)
@@ -222,7 +222,7 @@ class Agent < ActiveRecord::Base
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.find_by(agent_identifier: agent_list[:agent_identifier])
+        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
       else
         agents_matched = Agent.where(full_name: name_and_role[0])
         agents_matched = agents_matched.where(place: agent_list[:place]) if agent_list[:place]
@@ -237,7 +237,7 @@ class Agent < ActiveRecord::Base
           place: agent_list[:place],
           language_id: 1,
         )
-        agent.required_role = Role.find_by(name: 'Guest')
+        agent.required_role = Role.where(name: 'Guest').first
         agent.save
       end
       agents << agent
@@ -275,7 +275,7 @@ end
 #
 # Table name: agents
 #
-#  id                                  :bigint           not null, primary key
+#  id                                  :integer          not null, primary key
 #  last_name                           :string
 #  middle_name                         :string
 #  first_name                          :string
@@ -287,8 +287,9 @@ end
 #  full_name                           :string
 #  full_name_transcription             :text
 #  full_name_alternative               :text
-#  created_at                          :datetime         not null
-#  updated_at                          :datetime         not null
+#  created_at                          :datetime
+#  updated_at                          :datetime
+#  deleted_at                          :datetime
 #  zip_code_1                          :string
 #  zip_code_2                          :string
 #  address_1                           :text
@@ -320,5 +321,5 @@ end
 #  birth_date                          :string
 #  death_date                          :string
 #  agent_identifier                    :string
-#  profile_id                          :bigint
+#  profile_id                          :integer
 #

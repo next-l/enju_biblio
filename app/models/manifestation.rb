@@ -19,23 +19,11 @@ class Manifestation < ActiveRecord::Base
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
-  has_many :isbn_record_and_manifestations, dependent: :destroy
-  has_many :isbn_records, through: :isbn_record_and_manifestations
-  has_many :issn_record_and_manifestations, dependent: :destroy
-  has_many :issn_records, through: :issn_record_and_manifestations
-  has_one :doi_record
-  has_one :periodical_and_manifestation, dependent: :destroy
-  has_one :periodical, through: :periodical_and_manifestation
-  accepts_nested_attributes_for :creates, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :realizes, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :produces, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
@@ -78,10 +66,16 @@ class Manifestation < ActiveRecord::Base
     end
     string :issn, multiple: true do
       if series_statements.exists?
-        [issn_records.pluck(:body), (series_statements.map{|s| s.manifestation.issn_records.pluck(:body)})].flatten.uniq.compact
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
       else
-        issn_records.pluck(:body)
+        identifier_contents(:issn)
       end
+    end
+    string :lccn, multiple: true do
+      identifier_contents(:lccn)
+    end
+    string :jpno, multiple: true do
+      identifier_contents(:jpno)
     end
     string :carrier_type do
       carrier_type.name
@@ -108,6 +102,7 @@ class Manifestation < ActiveRecord::Base
     end
     time :created_at
     time :updated_at
+    time :deleted_at
     time :pub_date, multiple: true do
       if series_master?
         root_series_statement.root_manifestation.pub_dates
@@ -119,12 +114,12 @@ class Manifestation < ActiveRecord::Base
     integer :pub_year do
       date_of_publication.try(:year)
     end
-    string :creator_ids, multiple: true
-    string :contributor_ids, multiple: true
-    string :publisher_ids, multiple: true
-    string :item_ids, multiple: true
-    string :original_manifestation_ids, multiple: true
-    string :parent_ids, multiple: true do
+    integer :creator_ids, multiple: true
+    integer :contributor_ids, multiple: true
+    integer :publisher_ids, multiple: true
+    integer :item_ids, multiple: true
+    integer :original_manifestation_ids, multiple: true
+    integer :parent_ids, multiple: true do
       original_manifestations.pluck(:id)
     end
     integer :required_role_id
@@ -176,14 +171,14 @@ class Manifestation < ActiveRecord::Base
     end
     text :issn do # 前方一致検索のためtext指定を追加
       if series_statements.exists?
-        [issn_records.pluck(:body), (series_statements.map{|s| s.manifestation.issn_records.pluck(:body)})].flatten.uniq.compact
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
       else
-        issn_records.pluck(:body)
+        identifier_contents(:issn)
       end
     end
     string :sort_title
-    string :doi do
-      doi_record.try(:body)
+    string :doi, multiple: true do
+      identifier_contents(:doi)
     end
     boolean :serial do
       serial?
@@ -205,7 +200,21 @@ class Manifestation < ActiveRecord::Base
     time :acquired_at
   end
 
-  has_one_attached :attachment
+  if ENV['ENJU_STORAGE'] == 's3'
+    has_attached_file :attachment, storage: :s3,
+      s3_credentials: {
+        access_key: ENV['AWS_ACCESS_KEY_ID'],
+        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        bucket: ENV['S3_BUCKET_NAME'],
+        s3_host_name: ENV['S3_HOST_NAME'],
+        s3_region: ENV["S3_REGION"]
+      },
+      s3_permissions: :private
+  else
+    has_attached_file :attachment,
+      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
+  end
+  do_not_validate_attachment_file_type :attachment
 
   validates_presence_of :original_title, :carrier_type, :language
   validates_associated :carrier_type, :language
@@ -353,9 +362,13 @@ class Manifestation < ActiveRecord::Base
   end
 
   def extract_text
-    return nil unless attachment.attached?
+    return nil if attachment.path.nil?
     return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
-    body = File.open(attachment).read
+    if ENV['ENJU_STORAGE'] == 's3'
+      body = Faraday.get(attachment.expiring_url(10)).body.force_encoding('UTF-8')
+    else
+      body = File.open(attachment.path).read
+    end
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
@@ -399,6 +412,12 @@ class Manifestation < ActiveRecord::Base
         original_title
       end
     end
+  end
+
+  def self.find_by_isbn(isbn)
+    identifier_type = IdentifierType.find_by(name: 'isbn')
+    return nil unless identifier_type
+    Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
   end
 
   def index_series_statement
@@ -487,13 +506,15 @@ class Manifestation < ActiveRecord::Base
   end
 
   def identifier_contents(name)
-    case name
-    when 'isbn'
-      isbn_records.pluck(:body)
-    when 'issn'
-      issn_records.pluck(:body)
+    if Rails::VERSION::MAJOR > 3
+      identifiers.id_type(name).order(:position).pluck(:body)
     else
-      []
+      identifier_type = IdentifierType.find_by(name: name)
+      if identifier_type
+        identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
+      else
+        []
+      end
     end
   end
 
@@ -524,22 +545,9 @@ class Manifestation < ActiveRecord::Base
       issue_number
       issue_number_string
       serial_number
-      isbn
-      issn
     )
 
-    if defined?(EnjuNdl)
-      header += %w( jpno )
-    end
-
-    if defined?(EnjuNii)
-      header += %w( ncid )
-    end
-
-    if defined?(EnjuLoc)
-      header += %w( lccn )
-    end
-
+    header += IdentifierType.order(:position).pluck(:name)
     if defined?(EnjuSubject)
       header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
       header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
@@ -569,24 +577,17 @@ class Manifestation < ActiveRecord::Base
     end
     header += %w(
       circulation_status
-      use_restriction
       shelf
       library
       item_created_at
       item_updated_at
     )
+    case role.to_sym
+    when :Administrator, :Librarian
+      header << "use_restriction"
+    end
 
     header.to_csv(options)
-  end
-
-  def to_h
-    attributes.merge(
-      creator: creators.map(&:attributes),
-      contributor: contributors.map(&:attributes),
-      publisher: publishers.map(&:attributes),
-      isbn: isbn_records.pluck(:body),
-      issn: issn_records.pluck(:body)
-    )
   end
 
   def to_csv(options = {format: :txt, role: :Guest})
@@ -631,12 +632,15 @@ class Manifestation < ActiveRecord::Base
         item_lines << issue_number
         item_lines << issue_number_string
         item_lines << serial_number
-        item_lines << isbn_records.pluck(:body).join('//')
-        item_lines << issn_records.pluck(:body).join('//')
-        item_lines << jpno_record.try(:body) if defined?(EnjuNdl)
-        item_lines << ncid_record.try(:body) if defined?(EnjuNii)
-        item_lines << lccn_record.try(:body) if defined?(EnjuLoc)
 
+        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+          identifier_list = identifier_contents(identifier_type.to_sym)
+          if identifier_list
+            item_lines << identifier_list.join("//")
+          else
+            item_lines << nil
+          end
+        end
         if defined?(EnjuSubject)
           SubjectHeadingType.order(:position).each do |subject_heading_type|
             if subjects.exists?
@@ -668,23 +672,17 @@ class Manifestation < ActiveRecord::Base
         when :Administrator, :Librarian
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
-          if defined?(EnjuCirculation)
-            item_lines << Checkout.where(item_id: i.id).size
-          else
-            item_lines << nil
-          end
+          item_lines << Checkout.where(item_id: i.id).size
         end
-        if defined?(EnjuCirculation)
-          item_lines << i.circulation_status.try(:name)
-          item_lines << i.use_restriction.try(:name)
-        else
-          item_lines << nil
-          item_lines << nil
-        end
+        item_lines << i.circulation_status.try(:name)
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
         item_lines << i.created_at
         item_lines << i.updated_at
+        case options[:role].to_sym
+        when :Administrator, :Librarian
+          item_lines << i.use_restriction.try(:name)
+        end
         lines << item_lines
       end
     else
@@ -726,12 +724,15 @@ class Manifestation < ActiveRecord::Base
       line << issue_number
       line << issue_number_string
       line << serial_number
-      line << isbn_records.pluck(:body).join('//')
-      line << issn_records.pluck(:body).join('//')
-      line << jpno_record.try(:body) if defined?(EnjuNdl)
-      line << ncid_record.try(:body) if defined?(EnjuNii)
-      line << lccn_record.try(:body) if defined?(EnjuLoc)
 
+      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
+        identifier_list = identifier_contents(identifier_type.to_sym)
+        if identifier_list
+          line << identifier_list.join("//")
+        else
+          line << nil
+        end
+      end
       if defined?(EnjuSubject)
         SubjectHeadingType.order(:position).each do |subject_heading_type|
           if subjects.exists?
@@ -773,7 +774,7 @@ class Manifestation < ActiveRecord::Base
   end
 
   def isbn_characters
-    isbn_records.pluck(:body).map{|i|
+    identifier_contents(:isbn).map{|i|
       isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
       isbn10 = Lisbn.new(i).isbn10
       isbn13 =  Lisbn.new(i).isbn13
@@ -784,19 +785,13 @@ class Manifestation < ActiveRecord::Base
       ]
     }.flatten
   end
-
-  class RecordNotFound < StandardError
-  end
-
-  class InvalidIsbn < StandardError
-  end
 end
 
 # == Schema Information
 #
 # Table name: manifestations
 #
-#  id                              :bigint           not null, primary key
+#  id                              :integer          not null, primary key
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
@@ -804,10 +799,12 @@ end
 #  manifestation_identifier        :string
 #  date_of_publication             :datetime
 #  date_copyrighted                :datetime
-#  created_at                      :datetime         not null
-#  updated_at                      :datetime         not null
+#  created_at                      :datetime
+#  updated_at                      :datetime
+#  deleted_at                      :datetime
 #  access_address                  :string
 #  language_id                     :integer          default(1), not null
+#  carrier_type_id                 :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -823,10 +820,13 @@ end
 #  repository_content              :boolean          default(FALSE), not null
 #  lock_version                    :integer          default(0), not null
 #  required_role_id                :integer          default(1), not null
+#  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  carrier_type_id                 :bigint           not null
-#  nii_type_id                     :integer
+#  attachment_file_name            :string
+#  attachment_content_type         :string
+#  attachment_file_size            :integer
+#  attachment_updated_at           :datetime
 #  title_alternative_transcription :text
 #  description                     :text
 #  abstract                        :text
@@ -842,6 +842,7 @@ end
 #  serial_number                   :integer
 #  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
+#  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
 #  serial                          :boolean
