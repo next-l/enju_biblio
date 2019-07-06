@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_06_30_151446) do
+ActiveRecord::Schema.define(version: 2019_07_06_052525) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "classification_types", id: :serial, force: :cascade do |t|
@@ -462,24 +463,27 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.string "name", null: false
     t.text "display_name"
     t.text "note"
-    t.integer "position"
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "event_export_file_transitions", id: :serial, force: :cascade do |t|
     t.string "to_state"
     t.text "metadata", default: "{}"
     t.integer "sort_key"
-    t.integer "event_export_file_id"
+    t.bigint "event_export_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.index ["event_export_file_id"], name: "index_event_export_file_transitions_on_file_id"
+    t.boolean "most_recent", null: false
+    t.index ["event_export_file_id", "most_recent"], name: "index_event_export_file_transitions_parent_most_recent", unique: true, where: "most_recent"
+    t.index ["event_export_file_id"], name: "index_event_export_file_transitions_on_event_export_file_id"
     t.index ["sort_key", "event_export_file_id"], name: "index_event_export_file_transitions_on_sort_key_and_file_id", unique: true
   end
 
   create_table "event_export_files", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
+    t.bigint "user_id"
     t.string "event_export_file_name"
     t.string "event_export_content_type"
     t.bigint "event_export_file_size"
@@ -487,15 +491,18 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.datetime "executed_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["user_id"], name: "index_event_export_files_on_user_id"
   end
 
   create_table "event_import_file_transitions", id: :serial, force: :cascade do |t|
     t.string "to_state"
     t.text "metadata", default: "{}"
     t.integer "sort_key"
-    t.integer "event_import_file_id"
+    t.bigint "event_import_file_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean "most_recent", null: false
+    t.index ["event_import_file_id", "most_recent"], name: "index_event_import_file_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["event_import_file_id"], name: "index_event_import_file_transitions_on_event_import_file_id"
     t.index ["sort_key", "event_import_file_id"], name: "index_event_import_file_transitions_on_sort_key_and_file_id", unique: true
   end
@@ -504,7 +511,7 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.integer "parent_id"
     t.string "content_type"
     t.integer "size"
-    t.integer "user_id"
+    t.bigint "user_id"
     t.text "note"
     t.datetime "executed_at"
     t.string "event_import_file_name"
@@ -517,24 +524,28 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.string "event_import_fingerprint"
     t.text "error_message"
     t.string "user_encoding"
-    t.integer "default_library_id"
-    t.integer "default_event_category_id"
+    t.bigint "default_library_id"
+    t.bigint "default_event_category_id"
+    t.index ["default_event_category_id"], name: "index_event_import_files_on_default_event_category_id"
+    t.index ["default_library_id"], name: "index_event_import_files_on_default_library_id"
     t.index ["parent_id"], name: "index_event_import_files_on_parent_id"
     t.index ["user_id"], name: "index_event_import_files_on_user_id"
   end
 
   create_table "event_import_results", id: :serial, force: :cascade do |t|
-    t.integer "event_import_file_id"
-    t.integer "event_id"
+    t.bigint "event_import_file_id"
+    t.bigint "event_id"
     t.text "body"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["event_id"], name: "index_event_import_results_on_event_id"
+    t.index ["event_import_file_id"], name: "index_event_import_results_on_event_import_file_id"
   end
 
   create_table "events", id: :serial, force: :cascade do |t|
-    t.integer "library_id", null: false
-    t.integer "event_category_id", null: false
-    t.string "name"
+    t.bigint "library_id", null: false
+    t.bigint "event_category_id", null: false
+    t.string "name", null: false
     t.text "note"
     t.datetime "start_at"
     t.datetime "end_at"
@@ -543,8 +554,11 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.text "display_name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.bigint "place_id"
+    t.jsonb "display_name_translations", default: {}, null: false
     t.index ["event_category_id"], name: "index_events_on_event_category_id"
     t.index ["library_id"], name: "index_events_on_library_id"
+    t.index ["place_id"], name: "index_events_on_place_id"
   end
 
   create_table "form_of_works", id: :serial, force: :cascade do |t|
@@ -689,6 +703,15 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.index ["manifestation_id"], name: "index_items_on_manifestation_id"
     t.index ["required_role_id"], name: "index_items_on_required_role_id"
     t.index ["shelf_id"], name: "index_items_on_shelf_id"
+  end
+
+  create_table "jpno_records", force: :cascade do |t|
+    t.string "body", null: false
+    t.bigint "manifestation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["body"], name: "index_jpno_records_on_body", unique: true
+    t.index ["manifestation_id"], name: "index_jpno_records_on_manifestation_id"
   end
 
   create_table "languages", id: :serial, force: :cascade do |t|
@@ -1003,6 +1026,24 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.index ["sender_id"], name: "index_messages_on_sender_id"
   end
 
+  create_table "ndl_bib_id_records", force: :cascade do |t|
+    t.string "body", null: false
+    t.bigint "manifestation_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["body"], name: "index_ndl_bib_id_records_on_body", unique: true
+    t.index ["manifestation_id"], name: "index_ndl_bib_id_records_on_manifestation_id"
+  end
+
+  create_table "ndla_records", force: :cascade do |t|
+    t.bigint "agent_id"
+    t.string "body", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["agent_id"], name: "index_ndla_records_on_agent_id"
+    t.index ["body"], name: "index_ndla_records_on_body", unique: true
+  end
+
   create_table "owns", id: :serial, force: :cascade do |t|
     t.integer "agent_id", null: false
     t.integer "item_id", null: false
@@ -1014,9 +1055,9 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
   end
 
   create_table "participates", id: :serial, force: :cascade do |t|
-    t.integer "agent_id", null: false
-    t.integer "event_id", null: false
-    t.integer "position"
+    t.bigint "agent_id", null: false
+    t.bigint "event_id", null: false
+    t.integer "position", default: 1, null: false
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["agent_id"], name: "index_participates_on_agent_id"
@@ -1041,6 +1082,18 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.integer "picture_width"
     t.integer "picture_height"
     t.index ["picture_attachable_id", "picture_attachable_type"], name: "index_picture_files_on_picture_attachable_id_and_type"
+  end
+
+  create_table "places", id: :serial, force: :cascade do |t|
+    t.string "term"
+    t.text "city"
+    t.bigint "country_id"
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["country_id"], name: "index_places_on_country_id"
+    t.index ["term"], name: "index_places_on_term"
   end
 
   create_table "produce_types", id: :serial, force: :cascade do |t|
@@ -1254,6 +1307,15 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
     t.index ["item_id"], name: "index_resource_import_results_on_item_id"
     t.index ["manifestation_id"], name: "index_resource_import_results_on_manifestation_id"
     t.index ["resource_import_file_id"], name: "index_resource_import_results_on_resource_import_file_id"
+  end
+
+  create_table "retains", force: :cascade do |t|
+    t.bigint "reserve_id", null: false
+    t.bigint "item_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["item_id"], name: "index_retains_on_item_id"
+    t.index ["reserve_id"], name: "index_retains_on_reserve_id"
   end
 
   create_table "roles", id: :serial, force: :cascade do |t|
@@ -1660,21 +1722,34 @@ ActiveRecord::Schema.define(version: 2019_06_30_151446) do
   add_foreign_key "demands", "items"
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"
+  add_foreign_key "event_export_files", "users"
+  add_foreign_key "event_import_files", "event_categories", column: "default_event_category_id"
+  add_foreign_key "event_import_files", "libraries", column: "default_library_id"
+  add_foreign_key "event_import_files", "users"
+  add_foreign_key "events", "event_categories"
+  add_foreign_key "events", "libraries"
+  add_foreign_key "events", "places"
   add_foreign_key "item_has_use_restrictions", "items"
   add_foreign_key "item_has_use_restrictions", "use_restrictions"
   add_foreign_key "items", "manifestations"
+  add_foreign_key "jpno_records", "manifestations"
   add_foreign_key "lending_policies", "items"
   add_foreign_key "lending_policies", "user_groups"
   add_foreign_key "libraries", "library_groups"
   add_foreign_key "library_groups", "users"
   add_foreign_key "manifestation_checkout_stats", "users"
   add_foreign_key "manifestation_reserve_stats", "users"
+  add_foreign_key "ndl_bib_id_records", "manifestations"
+  add_foreign_key "ndla_records", "agents"
+  add_foreign_key "participates", "events"
   add_foreign_key "profiles", "users"
   add_foreign_key "reserve_stat_has_manifestations", "manifestations"
   add_foreign_key "reserve_stat_has_users", "user_reserve_stats"
   add_foreign_key "reserve_stat_has_users", "users"
   add_foreign_key "reserves", "manifestations"
   add_foreign_key "reserves", "users"
+  add_foreign_key "retains", "items"
+  add_foreign_key "retains", "reserves"
   add_foreign_key "user_checkout_stats", "users"
   add_foreign_key "user_group_has_checkout_types", "checkout_types"
   add_foreign_key "user_group_has_checkout_types", "user_groups"
