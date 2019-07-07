@@ -511,7 +511,7 @@ describe ItemsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @item = items(:item_00006)
+      @item = FactoryBot.create(:item)
     end
 
     describe 'When logged in as Administrator' do

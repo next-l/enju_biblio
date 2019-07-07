@@ -734,7 +734,7 @@ class ManifestationsController < ApplicationController
   def prepare_options
     @carrier_types = CarrierType.select([:id, :display_name, :position])
     @content_types = ContentType.select([:id, :display_name, :position])
-    @roles = Role.select([:id, :display_name, :position])
+    @roles = Role.select([:id, :display_name_translations, :position])
     @languages = Language.select([:id, :display_name, :position])
     @frequencies = Frequency.select([:id, :display_name, :position])
     @identifier_types = IdentifierType.select([:id, :display_name, :position])
