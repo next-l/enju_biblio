@@ -194,6 +194,8 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.integer "bookmark_stat_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean "most_recent", null: false
+    t.index ["bookmark_stat_id", "most_recent"], name: "index_bookmark_stat_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["bookmark_stat_id"], name: "index_bookmark_stat_transitions_on_bookmark_stat_id"
     t.index ["sort_key", "bookmark_stat_id"], name: "index_bookmark_stat_transitions_on_sort_key_and_stat_id", unique: true
   end
@@ -600,19 +602,6 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.index ["manifestation_id"], name: "index_identifiers_on_manifestation_id"
   end
 
-  create_table "identities", id: :serial, force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.string "password_digest"
-    t.integer "profile_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "provider"
-    t.index ["email"], name: "index_identities_on_email"
-    t.index ["name"], name: "index_identities_on_name"
-    t.index ["profile_id"], name: "index_identities_on_profile_id"
-  end
-
   create_table "import_request_transitions", id: :serial, force: :cascade do |t|
     t.string "to_state"
     t.text "metadata", default: "{}"
@@ -637,30 +626,42 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.index ["user_id"], name: "index_import_requests_on_user_id"
   end
 
-  create_table "inventories", id: :serial, force: :cascade do |t|
-    t.integer "item_id"
-    t.integer "inventory_file_id"
-    t.text "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.index ["inventory_file_id"], name: "index_inventories_on_inventory_file_id"
-    t.index ["item_id"], name: "index_inventories_on_item_id"
+  create_table "isbn_record_and_manifestations", force: :cascade do |t|
+    t.bigint "isbn_record_id", null: false
+    t.bigint "manifestation_id", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["isbn_record_id"], name: "index_isbn_record_and_manifestations_on_isbn_record_id"
+    t.index ["manifestation_id"], name: "index_isbn_record_and_manifestations_on_manifestation_id"
   end
 
-  create_table "inventory_files", id: :serial, force: :cascade do |t|
-    t.string "filename"
-    t.string "content_type"
-    t.integer "size"
-    t.integer "user_id"
-    t.text "note"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string "inventory_file_name"
-    t.string "inventory_content_type"
-    t.integer "inventory_file_size"
-    t.datetime "inventory_updated_at"
-    t.string "inventory_fingerprint"
-    t.index ["user_id"], name: "index_inventory_files_on_user_id"
+  create_table "isbn_records", force: :cascade do |t|
+    t.string "body", null: false
+    t.string "isbn_type"
+    t.string "source"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["body"], name: "index_isbn_records_on_body", unique: true
+  end
+
+  create_table "issn_record_and_manifestations", force: :cascade do |t|
+    t.bigint "issn_record_id", null: false
+    t.bigint "manifestation_id", null: false
+    t.integer "position"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["issn_record_id"], name: "index_issn_record_and_manifestations_on_issn_record_id"
+    t.index ["manifestation_id"], name: "index_issn_record_and_manifestations_on_manifestation_id"
+  end
+
+  create_table "issn_records", force: :cascade do |t|
+    t.string "body", null: false
+    t.string "issn_type"
+    t.string "source"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["body"], name: "index_issn_records_on_body", unique: true
   end
 
   create_table "item_has_use_restrictions", id: :serial, force: :cascade do |t|
@@ -968,7 +969,8 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.integer "message_request_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean "most_recent"
+    t.boolean "most_recent", null: false
+    t.index ["message_request_id", "most_recent"], name: "index_message_request_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["message_request_id"], name: "index_message_request_transitions_on_message_request_id"
     t.index ["sort_key", "message_request_id"], name: "index_message_request_transitions_on_sort_key_and_request_id", unique: true
   end
@@ -1002,15 +1004,16 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.integer "message_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean "most_recent"
+    t.boolean "most_recent", null: false
+    t.index ["message_id", "most_recent"], name: "index_message_transitions_parent_most_recent", unique: true, where: "most_recent"
     t.index ["message_id"], name: "index_message_transitions_on_message_id"
     t.index ["sort_key", "message_id"], name: "index_message_transitions_on_sort_key_and_message_id", unique: true
   end
 
   create_table "messages", id: :serial, force: :cascade do |t|
     t.datetime "read_at"
-    t.integer "receiver_id"
     t.integer "sender_id"
+    t.integer "receiver_id"
     t.string "subject", null: false
     t.text "body"
     t.integer "message_request_id"
@@ -1470,17 +1473,25 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.integer "taggable_id"
     t.string "tagger_type"
     t.integer "tagger_id"
-    t.string "context"
+    t.string "context", limit: 128
     t.datetime "created_at"
+    t.index ["context"], name: "index_taggings_on_context"
+    t.index ["tag_id", "taggable_id", "taggable_type", "context", "tagger_id", "tagger_type"], name: "taggings_idx", unique: true
     t.index ["tag_id"], name: "index_taggings_on_tag_id"
     t.index ["taggable_id", "taggable_type", "context"], name: "index_taggings_on_taggable_id_and_taggable_type_and_context"
+    t.index ["taggable_id", "taggable_type", "tagger_id", "context"], name: "taggings_idy"
+    t.index ["taggable_id"], name: "index_taggings_on_taggable_id"
+    t.index ["taggable_type"], name: "index_taggings_on_taggable_type"
+    t.index ["tagger_id", "tagger_type"], name: "index_taggings_on_tagger_id_and_tagger_type"
+    t.index ["tagger_id"], name: "index_taggings_on_tagger_id"
   end
 
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.string "name_transcription"
+    t.integer "taggings_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
   create_table "use_restrictions", id: :serial, force: :cascade do |t|
@@ -1668,8 +1679,6 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.string "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean "save_checkout_history", default: false, null: false
-    t.string "checkout_icalendar_token"
     t.string "username"
     t.datetime "deleted_at"
     t.datetime "expired_at"
@@ -1677,21 +1686,10 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
     t.string "unlock_token"
     t.datetime "locked_at"
     t.datetime "confirmed_at"
-    t.index ["checkout_icalendar_token"], name: "index_users_on_checkout_icalendar_token", unique: true
     t.index ["email"], name: "index_users_on_email"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["unlock_token"], name: "index_users_on_unlock_token", unique: true
     t.index ["username"], name: "index_users_on_username", unique: true
-  end
-
-  create_table "versions", id: :serial, force: :cascade do |t|
-    t.string "item_type", null: false
-    t.integer "item_id", null: false
-    t.string "event", null: false
-    t.string "whodunnit"
-    t.text "object"
-    t.datetime "created_at"
-    t.index ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id"
   end
 
   create_table "withdraws", id: :serial, force: :cascade do |t|
@@ -1729,6 +1727,10 @@ ActiveRecord::Schema.define(version: 2019_07_06_052525) do
   add_foreign_key "events", "event_categories"
   add_foreign_key "events", "libraries"
   add_foreign_key "events", "places"
+  add_foreign_key "isbn_record_and_manifestations", "isbn_records"
+  add_foreign_key "isbn_record_and_manifestations", "manifestations"
+  add_foreign_key "issn_record_and_manifestations", "issn_records"
+  add_foreign_key "issn_record_and_manifestations", "manifestations"
   add_foreign_key "item_has_use_restrictions", "items"
   add_foreign_key "item_has_use_restrictions", "use_restrictions"
   add_foreign_key "items", "manifestations"

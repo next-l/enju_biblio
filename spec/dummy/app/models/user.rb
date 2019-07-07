@@ -9,6 +9,7 @@ class User < ActiveRecord::Base
   include EnjuSeed::EnjuUser
   include EnjuCirculation::EnjuUser
   include EnjuMessage::EnjuUser
+  include EnjuBookmark::EnjuUser
 end
 
 CarrierType.include(EnjuCirculation::EnjuCarrierType)
