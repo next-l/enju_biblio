@@ -26,8 +26,11 @@ gem 'enju_ndl', github: 'next-l/enju_ndl'
 #gem 'enju_loc', github: 'next-l/enju_loc'
 gem 'enju_oai', github: 'next-l/enju_oai'
 gem 'enju_bookmark', github: 'next-l/enju_bookmark'
-gem 'rails-controller-testing', group: :test
-gem 'rspec_junit_formatter', group: :test
-gem 'webdrivers', group: :test
 gem 'sassc-rails'
 gem 'paper_trail'
+gem 'jbuilder'
+group :test do
+  gem 'rails-controller-testing'
+  gem 'rspec_junit_formatter'
+  gem 'webdrivers'
+end
