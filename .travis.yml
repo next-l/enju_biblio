@@ -27,8 +27,8 @@ addons:
     sources:
       - google-chrome
     packages:
-    - postgresql-11
-    - postgresql-client-11
+    - postgresql-10
+    - postgresql-client-10
     - google-chrome-stable
 jdk:
   - openjdk8
