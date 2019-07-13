@@ -1,6 +1,7 @@
 class AgentType < ActiveRecord::Base
   include MasterModel
   default_scope { order('agent_types.position') }
+  translates :display_name
   has_many :agents
 end
 
