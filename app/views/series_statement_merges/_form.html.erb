@@ -1,4 +1,4 @@
-<%= simple_form_for(@series_statement_merge) do |f| %>
+<%= form_with(model: @series_statement_merge, local: true) do |f| %>
   <%= f.error_messages %>
 
   <div class="inputs">
