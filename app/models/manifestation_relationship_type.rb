@@ -1,4 +1,4 @@
-class ManifestationRelationshipType < ActiveRecord::Base
+class ManifestationRelationshipType < ApplicationRecord
   include MasterModel
   default_scope { order('manifestation_relationship_types.position') }
   translates :display_name

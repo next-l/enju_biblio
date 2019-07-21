@@ -1,4 +1,4 @@
-class SeriesStatementMerge < ActiveRecord::Base
+class SeriesStatementMerge < ApplicationRecord
   belongs_to :series_statement
   belongs_to :series_statement_merge_list
   validates_presence_of :series_statement, :series_statement_merge_list

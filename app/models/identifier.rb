@@ -1,4 +1,4 @@
-class Identifier < ActiveRecord::Base
+class Identifier < ApplicationRecord
   belongs_to :identifier_type
   belongs_to :manifestation, touch: true, optional: true
 

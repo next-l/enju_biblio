@@ -1,4 +1,4 @@
-class ImportRequest < ActiveRecord::Base
+class ImportRequest < ApplicationRecord
   include Statesman::Adapters::ActiveRecordQueries
   default_scope { order('import_requests.id DESC') }
   belongs_to :manifestation, optional: true

@@ -6,7 +6,7 @@ describe Agent do
 
   it "should set a default required_role to Guest" do
     agent = FactoryBot.create(:agent)
-    agent.required_role.should eq Role.find_by_name('Guest')
+    agent.required_role.should eq Role.find_by(name: 'Guest')
   end
 
   it "should set birth_date" do

@@ -1,4 +1,4 @@
-class Agent < ActiveRecord::Base
+class Agent < ApplicationRecord
   scope :readable_by, lambda{ |user|
     if user
       where('required_role_id <= ?', user.try(:user_has_role).try(:role_id))
@@ -76,7 +76,7 @@ class Agent < ActiveRecord::Base
   paginates_per 10
 
   def set_role_and_name
-    self.required_role = Role.where(name: 'Librarian').first if required_role_id.nil?
+    self.required_role = Role.find_by(name: 'Librarian') if required_role_id.nil?
     set_full_name
   end
 
@@ -202,15 +202,15 @@ class Agent < ActiveRecord::Base
   end
 
   def created(work)
-    creates.where(work_id: work.id).first
+    creates.find_by(work_id: work.id)
   end
 
   def realized(expression)
-    realizes.where(expression_id: expression.id).first
+    realizes.find_by(expression_id: expression.id)
   end
 
   def produced(manifestation)
-    produces.where(manifestation_id: manifestation.id).first
+    produces.find_by(manifestation_id: manifestation.id)
   end
 
   def owned(item)
@@ -222,7 +222,7 @@ class Agent < ActiveRecord::Base
     agent_lists.each do |agent_list|
       name_and_role = agent_list[:full_name].split('||')
       if agent_list[:agent_identifier].present?
-        agent = Agent.where(agent_identifier: agent_list[:agent_identifier]).first
+        agent = Agent.find_by(agent_identifier: agent_list[:agent_identifier])
       else
         agents_matched = Agent.where(full_name: name_and_role[0])
         agents_matched = agents_matched.where(place: agent_list[:place]) if agent_list[:place]
@@ -237,7 +237,7 @@ class Agent < ActiveRecord::Base
           place: agent_list[:place],
           language_id: 1,
         )
-        agent.required_role = Role.where(name: 'Guest').first
+        agent.required_role = Role.find_by(name: 'Guest')
         agent.save
       end
       agents << agent

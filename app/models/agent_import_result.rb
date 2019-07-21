@@ -1,4 +1,4 @@
-class AgentImportResult < ActiveRecord::Base
+class AgentImportResult < ApplicationRecord
   default_scope { order('agent_import_results.id') }
   scope :file_id, proc{|file_id| where(agent_import_file_id: file_id)}
   scope :failed, -> { where(agent_id: nil) }

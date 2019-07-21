@@ -1,4 +1,4 @@
-class Realize < ActiveRecord::Base
+class Realize < ApplicationRecord
   belongs_to :agent
   belongs_to :expression, class_name: 'Manifestation', foreign_key: 'expression_id', touch: true
   belongs_to :realize_type, optional: true

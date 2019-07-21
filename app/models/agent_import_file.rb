@@ -1,4 +1,4 @@
-class AgentImportFile < ActiveRecord::Base
+class AgentImportFile < ApplicationRecord
   include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   default_scope { order('agent_import_files.id DESC') }
@@ -116,7 +116,7 @@ class AgentImportFile < ActiveRecord::Base
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.where(id: row['id']).first
+      agent = Agent.find_by(id: row['id'])
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
         agent.full_name_transcription = row['full_name_transcription'] if row['full_name_transcription'].to_s.strip.present?
@@ -225,15 +225,15 @@ class AgentImportFile < ActiveRecord::Base
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where(name: 'Guest').first
+      agent.required_role = Role.find_by(name: row['required_role'].to_s.strip.camelize) || Role.find_by(name: 'Guest')
     #else
     #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where('Librarian').first
     #end
-    language = Language.where(name: row['language'].to_s.strip.camelize).first
-    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
+    language = Language.find_by(name: row['language'].to_s.strip.camelize)
+    language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
+    language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
     agent.language = language if language
-    country = Country.where(name: row['country'].to_s.strip).first
+    country = Country.find_by(name: row['country'].to_s.strip)
     agent.country = country if country
     agent
   end

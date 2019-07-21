@@ -1,4 +1,4 @@
-class ResourceImportFileJob < ActiveJob::Base
+class ResourceImportFileJob < ApplicationJob
   queue_as :enju_leaf
 
   def perform(resource_import_file)
