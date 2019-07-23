@@ -1,4 +1,4 @@
-class Create < ActiveRecord::Base
+class Create < ApplicationRecord
   belongs_to :agent
   belongs_to :work, class_name: 'Manifestation', foreign_key: 'work_id', touch: true
   belongs_to :create_type, optional: true

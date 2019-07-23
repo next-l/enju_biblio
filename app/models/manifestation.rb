@@ -1,4 +1,4 @@
-class Manifestation < ActiveRecord::Base
+class Manifestation < ApplicationRecord
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
   has_many :creators, through: :creates, source: :agent #, order: 'creates.position'
   has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'

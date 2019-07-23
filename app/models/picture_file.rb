@@ -1,4 +1,4 @@
-class PictureFile < ActiveRecord::Base
+class PictureFile < ApplicationRecord
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true
   before_save :extract_dimensions

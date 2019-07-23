@@ -1,4 +1,4 @@
-class Donate < ActiveRecord::Base
+class Donate < ApplicationRecord
   belongs_to :agent
   belongs_to :item
   validates_associated :agent, :item

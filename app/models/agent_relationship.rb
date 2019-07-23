@@ -1,4 +1,4 @@
-class AgentRelationship < ActiveRecord::Base
+class AgentRelationship < ApplicationRecord
   belongs_to :parent, foreign_key: 'parent_id', class_name: 'Agent'
   belongs_to :child, foreign_key: 'child_id', class_name: 'Agent'
   belongs_to :agent_relationship_type, optional: true

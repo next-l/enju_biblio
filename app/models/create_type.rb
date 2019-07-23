@@ -1,4 +1,4 @@
-class CreateType < ActiveRecord::Base
+class CreateType < ApplicationRecord
   include MasterModel
   default_scope { order('create_types.position') }
 end

@@ -1,4 +1,4 @@
-class AgentImportFileJob < ActiveJob::Base
+class AgentImportFileJob < ApplicationJob
   queue_as :enju_leaf
 
   def perform(agent_import_file)

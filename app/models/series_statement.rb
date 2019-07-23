@@ -1,4 +1,4 @@
-class SeriesStatement < ActiveRecord::Base
+class SeriesStatement < ApplicationRecord
   has_many :series_statement_merges, dependent: :destroy
   has_many :series_statement_merge_lists, through: :series_statement_merges
   belongs_to :manifestation, touch: true, optional: true
