@@ -19,6 +19,7 @@ class Manifestation < ApplicationRecord
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
+  has_one :doi_record
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
