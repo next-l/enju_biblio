@@ -44,6 +44,4 @@ end
 #  numeric_3    :string
 #  note         :text
 #  position     :integer
-#  created_at   :datetime
-#  updated_at   :datetime
 #

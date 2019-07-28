@@ -12,7 +12,7 @@ end
 #  id             :integer          not null, primary key
 #  agent_id       :integer          not null
 #  work_id        :integer          not null
-#  position       :integer          default(1), not null
+#  position       :integer
 #  created_at     :datetime
 #  updated_at     :datetime
 #  create_type_id :integer

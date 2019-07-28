@@ -247,7 +247,7 @@ end
 #  parent_id                 :integer
 #  content_type              :string
 #  size                      :integer
-#  user_id                   :bigint
+#  user_id                   :integer
 #  note                      :text
 #  executed_at               :datetime
 #  agent_import_file_name    :string

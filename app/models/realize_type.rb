@@ -8,10 +8,10 @@ end
 # Table name: realize_types
 #
 #  id           :integer          not null, primary key
-#  name         :string           not null
+#  name         :string
 #  display_name :text
 #  note         :text
-#  position     :integer          default(1), not null
+#  position     :integer
 #  created_at   :datetime
 #  updated_at   :datetime
 #

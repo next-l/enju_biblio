@@ -63,7 +63,7 @@ end
 # Table name: resource_export_files
 #
 #  id                           :integer          not null, primary key
-#  user_id                      :bigint
+#  user_id                      :integer
 #  resource_export_file_name    :string
 #  resource_export_content_type :string
 #  resource_export_file_size    :integer

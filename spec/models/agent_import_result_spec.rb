@@ -10,7 +10,7 @@ end
 # Table name: agent_import_results
 #
 #  id                   :integer          not null, primary key
-#  agent_import_file_id :integer          not null
+#  agent_import_file_id :integer
 #  agent_id             :integer
 #  body                 :text
 #  created_at           :datetime
