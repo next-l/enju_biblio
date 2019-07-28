@@ -1,4 +1,4 @@
-class Agent < ActiveRecord::Base
+class Agent < ApplicationRecord
   scope :readable_by, lambda{ |user|
     if user
       where('required_role_id <= ?', user.try(:user_has_role).try(:role_id))

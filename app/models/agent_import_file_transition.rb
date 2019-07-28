@@ -1,4 +1,4 @@
-class AgentImportFileTransition < ActiveRecord::Base
+class AgentImportFileTransition < ApplicationRecord
   include Statesman::Adapters::ActiveRecordTransition
 
   

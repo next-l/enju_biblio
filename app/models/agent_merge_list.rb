@@ -1,4 +1,4 @@
-class AgentMergeList < ActiveRecord::Base
+class AgentMergeList < ApplicationRecord
   has_many :agent_merges, dependent: :destroy
   has_many :agents, through: :agent_merges
   validates_presence_of :title

@@ -1,4 +1,4 @@
-class Manifestation < ActiveRecord::Base
+class Manifestation < ApplicationRecord
   enju_manifestation_viewer if defined?(EnjuManifestationViewer)
   enju_ndl_ndl_search if defined?(EnjuNdl)
   enju_loc_search if defined?(EnjuLoc)

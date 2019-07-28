@@ -1,4 +1,4 @@
-class ResourceImportFile < ActiveRecord::Base
+class ResourceImportFile < ApplicationRecord
   include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   default_scope { order('resource_import_files.id DESC') }

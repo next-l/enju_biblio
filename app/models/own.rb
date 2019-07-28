@@ -1,4 +1,4 @@
-class Own < ActiveRecord::Base
+class Own < ApplicationRecord
   belongs_to :agent
   belongs_to :item
 

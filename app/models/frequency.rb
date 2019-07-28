@@ -1,4 +1,4 @@
-class Frequency < ActiveRecord::Base
+class Frequency < ApplicationRecord
   include MasterModel
   default_scope { order('frequencies.position') }
   has_many :manifestations

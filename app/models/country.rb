@@ -1,4 +1,4 @@
-class Country < ActiveRecord::Base
+class Country < ApplicationRecord
   include MasterModel
   default_scope { order('countries.position') }
   has_many :agents

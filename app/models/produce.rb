@@ -1,4 +1,4 @@
-class Produce < ActiveRecord::Base
+class Produce < ApplicationRecord
   belongs_to :agent
   belongs_to :manifestation, touch: true
   belongs_to :produce_type, optional: true

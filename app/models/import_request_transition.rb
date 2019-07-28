@@ -1,4 +1,4 @@
-class ImportRequestTransition < ActiveRecord::Base
+class ImportRequestTransition < ApplicationRecord
   include Statesman::Adapters::ActiveRecordTransition
 
   

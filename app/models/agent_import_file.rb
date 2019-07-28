@@ -1,4 +1,4 @@
-class AgentImportFile < ActiveRecord::Base
+class AgentImportFile < ApplicationRecord
   include Statesman::Adapters::ActiveRecordQueries
   include ImportFile
   default_scope { order('agent_import_files.id DESC') }

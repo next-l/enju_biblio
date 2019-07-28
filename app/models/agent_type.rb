@@ -1,4 +1,4 @@
-class AgentType < ActiveRecord::Base
+class AgentType < ApplicationRecord
   include MasterModel
   default_scope { order('agent_types.position') }
   has_many :agents

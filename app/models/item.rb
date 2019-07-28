@@ -1,4 +1,4 @@
-class Item < ActiveRecord::Base
+class Item < ApplicationRecord
   scope :on_shelf, -> { includes(:shelf).references(:shelf).where('shelves.name != ?', 'web') }
   scope :on_web, -> { includes(:shelf).references(:shelf).where('shelves.name = ?', 'web') }
   scope :available, -> {}

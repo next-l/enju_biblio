@@ -1,4 +1,4 @@
-class IdentifierType < ActiveRecord::Base
+class IdentifierType < ApplicationRecord
   include MasterModel
   default_scope { order('identifier_types.position') }
   has_many :identifiers

@@ -1,4 +1,4 @@
-class ResourceExportFileTransition < ActiveRecord::Base
+class ResourceExportFileTransition < ApplicationRecord
   include Statesman::Adapters::ActiveRecordTransition
 
   
