@@ -1086,6 +1086,25 @@ ActiveRecord::Schema.define(version: 2019_07_12_163038) do
     t.index ["event_id"], name: "index_participates_on_event_id"
   end
 
+  create_table "periodical_and_manifestations", force: :cascade do |t|
+    t.bigint "periodical_id", null: false
+    t.bigint "manifestation_id", null: false
+    t.boolean "periodical_master", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["manifestation_id"], name: "index_periodical_and_manifestations_on_manifestation_id"
+    t.index ["periodical_id"], name: "index_periodical_and_manifestations_on_periodical_id"
+    t.index ["periodical_master"], name: "index_periodical_and_manifestations_on_periodical_master", unique: true, where: "(periodical_master IS TRUE)"
+  end
+
+  create_table "periodicals", force: :cascade do |t|
+    t.text "original_title", null: false
+    t.bigint "frequency_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["frequency_id"], name: "index_periodicals_on_frequency_id"
+  end
+
   create_table "picture_files", id: :serial, force: :cascade do |t|
     t.integer "picture_attachable_id"
     t.string "picture_attachable_type"
@@ -1759,6 +1778,9 @@ ActiveRecord::Schema.define(version: 2019_07_12_163038) do
   add_foreign_key "manifestation_reserve_stats", "users"
   add_foreign_key "ndl_bib_id_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
+  add_foreign_key "periodical_and_manifestations", "manifestations"
+  add_foreign_key "periodical_and_manifestations", "periodicals"
+  add_foreign_key "periodicals", "frequencies"
   add_foreign_key "profiles", "users"
   add_foreign_key "reserve_stat_has_manifestations", "manifestations"
   add_foreign_key "reserve_stat_has_users", "user_reserve_stats"
