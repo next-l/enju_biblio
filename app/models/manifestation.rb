@@ -678,9 +678,17 @@ class Manifestation < ApplicationRecord
         when :Administrator, :Librarian
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
-          item_lines << Checkout.where(item_id: i.id).size
+          if defined?(EnjuCirtulation)
+            item_lines << Checkout.where(item_id: i.id).count
+          else
+            item_lines << ''
+          end
         end
-        item_lines << i.circulation_status.try(:name)
+        if defined?(EnjuCirtulation)
+          item_lines << i.circulation_status.try(:name)
+        else
+          item_lines << ''
+        end
         item_lines << i.shelf.name
         item_lines << i.shelf.library.name
         item_lines << i.created_at
