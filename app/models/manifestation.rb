@@ -695,7 +695,11 @@ class Manifestation < ApplicationRecord
         item_lines << i.updated_at
         case options[:role].to_sym
         when :Administrator, :Librarian
-          item_lines << i.use_restriction.try(:name)
+          if defined?(EnjuCirtulation)
+            item_lines << i.use_restriction.try(:name)
+          else
+            item_lines << ''
+          end
         end
         lines << item_lines
       end
