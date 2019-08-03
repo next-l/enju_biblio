@@ -317,12 +317,16 @@ class ResourceImportFile < ApplicationRecord
         if item.manifestation
           fetch(row, edit_mode: 'update')
         end
+
+        if defined?(EnjuCirculation)
+          circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
+          checkout_type = CheckoutType.find_by(name: row['checkout_type'])
+          use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
+        end
+
         shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
-        circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
-        checkout_type = CheckoutType.find_by(name: row['checkout_type'])
         bookstore = Bookstore.find_by(name: row['bookstore'])
         required_role = Role.find_by(name: row['required_role'])
-        use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
 
         item.shelf = shelf if shelf
         item.circulation_status = circulation_status if circulation_status

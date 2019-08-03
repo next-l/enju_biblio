@@ -396,7 +396,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         edit_mode: 'destroy'
       )
       file.remove
-      Item.count.should eq old_count - 2
+      Item.count.should eq old_count - 10
     end
   end
 
