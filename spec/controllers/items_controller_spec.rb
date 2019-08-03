@@ -506,16 +506,6 @@ describe ItemsController do
         end.should raise_error(ActiveRecord::RecordNotFound)
         # expect(response).to be_missing
       end
-
-      it 'should not destroy item if not checked in' do
-        delete :destroy, params: { id: 1 }
-        expect(response).to be_forbidden
-      end
-
-      it 'should not destroy a removed item' do
-        delete :destroy, params: { id: 23 }
-        expect(response).to be_forbidden
-      end
     end
 
     describe 'When logged in as Librarian' do
