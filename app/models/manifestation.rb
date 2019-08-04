@@ -678,13 +678,13 @@ class Manifestation < ApplicationRecord
         when :Administrator, :Librarian
           item_lines << i.bookstore.try(:name)
           item_lines << i.budget_type.try(:name)
-          if defined?(EnjuCirtulation)
+          if defined?(EnjuCirculation)
             item_lines << Checkout.where(item_id: i.id).count
           else
             item_lines << ''
           end
         end
-        if defined?(EnjuCirtulation)
+        if defined?(EnjuCirculation)
           item_lines << i.circulation_status.try(:name)
         else
           item_lines << ''
@@ -695,7 +695,7 @@ class Manifestation < ApplicationRecord
         item_lines << i.updated_at
         case options[:role].to_sym
         when :Administrator, :Librarian
-          if defined?(EnjuCirtulation)
+          if defined?(EnjuCirculation)
             item_lines << i.use_restriction.try(:name)
           else
             item_lines << ''
