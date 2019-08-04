@@ -46,7 +46,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "resque"
   s.add_development_dependency "coveralls"
-  s.add_development_dependency "capybara", "~> 3.11", "< 3.27"
+  s.add_development_dependency "capybara", "~> 3.11", "< 3.16"
   s.add_development_dependency "selenium-webdriver"
   s.add_development_dependency "puma"
   s.add_development_dependency "annotate"
