@@ -41,15 +41,6 @@
       <%- end -%>
     <%- end -%>
   </p>
-
-  <p>
-    <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
-    <% if @item.use_restriction %>
-      <ul>
-        <li><%= @item.use_restriction.display_name %></li>
-      </ul>
-    <% end %>
-  </p>
 <% end %>
 
 <p>
@@ -58,29 +49,40 @@
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.item.required_role_id') -%>:</strong>
-  <%= @item.required_role.name -%>
-</p>
-
-<p>
   <strong><%= t('activerecord.attributes.item.call_number') -%>:</strong>
   <%= @item.call_number -%>
 </p>
 
-<p>
-  <strong><%= t('activerecord.models.budget_type') -%>:</strong>
-  <%= @item.budget_type.try(:display_name).try(:localize) -%>
-</p>
+<% if current_user.try(:has_role?, 'Librarian') %>
+  <p>
+    <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
+    <% if @item.use_restriction %>
+      <ul>
+        <li><%= @item.use_restriction.display_name %></li>
+      </ul>
+    <% end %>
+  </p>
 
-<p>
-  <strong><%= t('activerecord.models.bookstore') -%>:</strong>
-  <%= @item.bookstore.try(:name) -%>
-</p>
+  <p>
+    <strong><%= t('activerecord.attributes.item.required_role_id') -%>:</strong>
+    <%= @item.required_role.name -%>
+  </p>
 
-<p>
-  <strong><%= t('activerecord.attributes.item.price') -%>:</strong>
-  <%= @item.price -%>
-</p>
+  <p>
+    <strong><%= t('activerecord.models.budget_type') -%>:</strong>
+    <%= @item.budget_type.try(:display_name).try(:localize) -%>
+  </p>
+
+  <p>
+    <strong><%= t('activerecord.models.bookstore') -%>:</strong>
+    <%= @item.bookstore.try(:name) -%>
+  </p>
+
+  <p>
+    <strong><%= t('activerecord.attributes.item.price') -%>:</strong>
+    <%= @item.price -%>
+  </p>
+<% end %>
 
 <p>
   <strong><%= t('activerecord.attributes.item.url') -%>:</strong>
