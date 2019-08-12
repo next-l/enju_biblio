@@ -104,6 +104,11 @@ identifier_00217:
   identifier_type_id: 4
   body: "BN15603730"
 
+identifier_00001a:
+  manifestation_id: 1
+  identifier_type_id: 5
+  body: "custom1111"
+
 # == Schema Information
 #
 # Table name: identifiers

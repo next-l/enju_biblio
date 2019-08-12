@@ -28,6 +28,13 @@ four:
   position: 4
   id: 4
 
+five:
+  name: custom
+  display_name: 独自識別子
+  note: 
+  position: 5
+  id: 5
+
 # == Schema Information
 #
 # Table name: identifier_types
