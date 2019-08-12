@@ -28,15 +28,11 @@ describe "manifestations/show" do
       view.stub(:current_user).and_return(user)
       allow(view).to receive(:policy).and_return double(create?: true, update?: true, destroy?: true)
     end
+
     it "should have an ISBD separator for extent and dimensions" do
       assign(:manifestation, FactoryBot.create(:manifestation, extent: "extent value", dimensions: "dimensions value"))
       render
       expect(rendered).to match /\s+;\s+/
-    end
-    it "should have the total number of checkouts" do
-      assign(:manifestation, manifestations(:manifestation_00001))
-      render
-      expect(rendered).to have_css "div.manifestation_total_checkouts", text: /\A\s*.*?: \d+/
     end
   end
 

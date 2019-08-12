@@ -163,14 +163,6 @@ describe Manifestation, solr: true do
     sru.manifestations.size.should eq 6
   end
 
-  it "should be reserved" do
-    manifestations(:manifestation_00007).is_reserved_by?(users(:admin)).should be_truthy
-  end
-
-  it "should not be reserved" do
-    manifestations(:manifestation_00007).is_reserved_by?(users(:user1)).should be_falsy
-  end
-
   it "should_get_number_of_pages" do
     manifestations(:manifestation_00001).number_of_pages.should eq 100
   end
@@ -189,10 +181,6 @@ describe Manifestation, solr: true do
 
   it "should respond to extract_text" do
     manifestations(:manifestation_00001).extract_text.should be_nil
-  end
-
-  it "should not be reserved it it has no item" do
-    manifestations(:manifestation_00008).is_reservable_by?(users(:admin)).should be_falsy
   end
 
   it "should respond to title" do
@@ -305,26 +293,6 @@ describe Manifestation, solr: true do
       expect(m["description"]).to eq 'test\ntest'
       expect(m["note"]).to eq 'test\ntest'
       expect(m["item_note"]).to eq 'test\ntest'
-    end
-
-    it "should not export use_restriction for Guest" do
-      manifestation = FactoryBot.create(:manifestation)
-      use_restriction = UseRestriction.find(1)
-      item = FactoryBot.create(:item, manifestation: manifestation, use_restriction: use_restriction)
-      lines = Manifestation.export(format: :txt, role: "Guest")
-      csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      expect(csv["use_restriction"].compact).to be_empty
-
-      lines = Manifestation.export(format: :txt, role: "Administrator")
-      csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      expect(csv["use_restriction"].compact).not_to be_empty
-    end
-  end
-
-  if defined?(EnjuCirculation)
-    it "should respond to is_checked_out_by?" do
-      manifestations(:manifestation_00001).is_checked_out_by?(users(:admin)).should be_truthy
-      manifestations(:manifestation_00001).is_checked_out_by?(users(:librarian2)).should be_falsy
     end
   end
 end

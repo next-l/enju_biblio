@@ -7,18 +7,12 @@ class User < ApplicationRecord
   # Setup accessible (or protected) attributes for your model
 
   include EnjuSeed::EnjuUser
-  include EnjuCirculation::EnjuUser
   include EnjuMessage::EnjuUser
   include EnjuBookmark::EnjuUser
 end
 
-CarrierType.include(EnjuCirculation::EnjuCarrierType)
-Manifestation.include(EnjuCirculation::EnjuManifestation)
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuManifestationViewer::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
 Manifestation.include(EnjuBookmark::EnjuManifestation)
-Item.include(EnjuCirculation::EnjuItem)
 Item.include(EnjuLibrary::EnjuItem)
-Profile.include(EnjuCirculation::EnjuProfile)
-UserGroup.include(EnjuCirculation::EnjuUserGroup)
