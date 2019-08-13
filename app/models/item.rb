@@ -12,16 +12,18 @@ class Item < ApplicationRecord
   has_many :agents, through: :owns
   has_many :donates
   has_many :donors, through: :donates, source: :agent
+  has_many :custom_properties, as: :property_attachable, dependent: :destroy
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
   belongs_to :bookstore, optional: true
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :budget_type, optional: true
+  belongs_to :shelf, counter_cache: true
   has_one :accept, dependent: :destroy
   has_one :withdraw, dependent: :destroy
-  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
-  belongs_to :shelf, counter_cache: true
+  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
+  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
   validates_associated :bookstore
   validates :manifestation_id, presence: true

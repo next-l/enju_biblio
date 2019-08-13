@@ -547,6 +547,10 @@ class ManifestationsController < ApplicationController
       {identifiers_attributes: [
         :id, :body, :identifier_type_id,
         :_destroy
+      ]},
+      {custom_properties_attributes: [
+        :id, :name, :value,
+        :_destroy
       ]}
     )
   end

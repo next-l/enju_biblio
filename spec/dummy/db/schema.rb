@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_12_163038) do
+ActiveRecord::Schema.define(version: 2019_08_13_075033) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -444,6 +444,16 @@ ActiveRecord::Schema.define(version: 2019_07_12_163038) do
     t.integer "create_type_id"
     t.index ["agent_id"], name: "index_creates_on_agent_id"
     t.index ["work_id"], name: "index_creates_on_work_id"
+  end
+
+  create_table "custom_properties", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "value"
+    t.integer "property_attachable_id", null: false
+    t.string "property_attachable_type", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name", "property_attachable_id", "property_attachable_type"], name: "index_custom_properties_on_name_and_attachable_id_and_type", unique: true
   end
 
   create_table "demands", id: :serial, force: :cascade do |t|
