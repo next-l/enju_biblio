@@ -185,11 +185,15 @@ class PictureFilesController < ApplicationController
       @attachable = @agent
       return
     end
-    get_event
-    if @event
-      @attachable = @event
-      return
+
+    if defined?(EnjuEvent)
+      get_event
+      if @event
+        @attachable = @event
+        return
+      end
     end
+
     get_shelf
     if @shelf
       @attachable = @shelf
