@@ -13,14 +13,12 @@ gemspec
 
 # To use debugger
 # gem 'debugger'
-gem 'enju_seed', "~> 0.4.0.beta.2"
-gem 'enju_leaf', github: 'next-l/enju_leaf'
-gem 'enju_library', github: 'next-l/enju_library'
-gem 'enju_manifestation_viewer', github: 'next-l/enju_manifestation_viewer'
-gem 'enju_subject', github: 'next-l/enju_subject'
-gem 'enju_message', github: 'next-l/enju_message'
-gem 'enju_event', github: 'next-l/enju_event'
-gem 'enju_ndl', github: 'next-l/enju_ndl'
+gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '2.x'
+gem 'enju_manifestation_viewer', github: 'next-l/enju_manifestation_viewer', branch: '2.x'
+gem 'enju_subject', github: 'next-l/enju_subject', branch: '2.x'
+gem 'enju_message', github: 'next-l/enju_message', branch: '2.x'
+gem 'enju_event', github: 'next-l/enju_event', branch: '2.x'
+gem 'enju_ndl', github: 'next-l/enju_ndl', branch: '2.x'
 #gem 'enju_loc', github: 'next-l/enju_loc'
 gem 'enju_oai', github: 'next-l/enju_oai'
 gem 'enju_bookmark', github: 'next-l/enju_bookmark'
