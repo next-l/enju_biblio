@@ -24,7 +24,7 @@ Gem::Specification.new do |s|
   s.add_dependency "lisbn"
   s.add_dependency "faraday"
 
-  s.add_development_dependency "enju_leaf", "~> 1.4.0.beta.1"
+  s.add_development_dependency "enju_leaf", "~> 2.0.0.beta.1"
   s.add_development_dependency "enju_manifestation_viewer", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_message", "~> 0.4.0.beta.1"
   s.add_development_dependency "enju_subject", "~> 0.4.0.beta.1"
