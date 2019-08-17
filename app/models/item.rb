@@ -12,7 +12,7 @@ class Item < ApplicationRecord
   has_many :agents, through: :owns
   has_many :donates
   has_many :donors, through: :donates, source: :agent
-  has_many :custom_properties, as: :property_attachable, dependent: :destroy
+  has_many :custom_item_properties, dependent: :destroy
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
   belongs_to :bookstore, optional: true
@@ -22,7 +22,7 @@ class Item < ApplicationRecord
   has_one :accept, dependent: :destroy
   has_one :withdraw, dependent: :destroy
 
-  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :custom_item_properties, allow_destroy: true, reject_if: :all_blank
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
   validates_associated :bookstore

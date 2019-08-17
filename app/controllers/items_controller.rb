@@ -273,7 +273,7 @@ class ItemsController < ApplicationController
       :lock_version, :manifestation_id, :library_id, :required_role_id,
       :binding_item_identifier, :binding_call_number, :binded_at,
       :use_restriction_id,
-      {custom_properties_attributes: [
+      {custom_item_properties_attributes: [
         :id, :name, :value,
         :_destroy
       ]},

@@ -11,7 +11,7 @@ class Manifestation < ApplicationRecord
   has_many :derived_manifestations, through: :children, source: :child
   has_many :original_manifestations, through: :parents, source: :parent
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
-  has_many :custom_properties, as: :property_attachable, dependent: :destroy
+  has_many :custom_manifestation_properties, dependent: :destroy
   belongs_to :language
   belongs_to :carrier_type
   belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
@@ -32,7 +32,7 @@ class Manifestation < ApplicationRecord
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :custom_manifestation_properties, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
