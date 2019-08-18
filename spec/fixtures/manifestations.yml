@@ -1890,4 +1890,5 @@ manifestation_00217:
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
+#  memo                            :text
 #
