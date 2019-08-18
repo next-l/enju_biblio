@@ -54,14 +54,16 @@
 </p>
 
 <% if current_user.try(:has_role?, 'Librarian') %>
-  <p>
-    <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
-    <% if @item.use_restriction %>
-      <ul>
-        <li><%= @item.use_restriction.display_name.localize %></li>
-      </ul>
-    <% end %>
-  </p>
+  <% if defined?(EnjuCirculation) %>
+    <p>
+      <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
+      <% if @item.use_restriction %>
+        <ul>
+          <li><%= @item.use_restriction.display_name %></li>
+        </ul>
+      <% end %>
+    </p>
+  <% end %>
 
   <p>
     <strong><%= t('activerecord.attributes.item.required_role_id') -%>:</strong>
