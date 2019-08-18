@@ -201,6 +201,12 @@ describe Manifestation, solr: true do
     manifestation.should_not be_valid
   end
 
+  it "should search custom identifiers" do
+    Manifestation.search do
+      fulltext 'identifier_text:custom1111'
+    end.results.count.should eq 1
+  end
+
   # it "should set series_statement if the manifestation is periodical" do
   #  manifestation = series_statements(:two).manifestations.new
   #  manifestation.set_series_statements([series_statements(:two)])
