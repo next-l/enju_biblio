@@ -489,7 +489,7 @@ class ManifestationsController < ApplicationController
       :valid_until, :date_submitted, :date_accepted, :date_captured,
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
-      :dimensions, :fulltext_content, :extent,
+      :dimensions, :fulltext_content, :extent, :memo,
       :parent_id,
       :serial, :statement_of_responsibility,
       {creators_attributes: [

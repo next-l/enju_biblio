@@ -75,6 +75,7 @@ ja:
         edition: 版（数字）
         edition_string: 版
         note: 注記
+        memo: 業務メモ
         repository_content: リポジトリのコンテンツ
         lock_version: ロックバージョン
         carrier_type: 資料の形態
@@ -110,6 +111,7 @@ ja:
         deleted_at: 削除時刻
         include_supplements: 付録を含む
         note: 注記
+        memo: 業務メモ
         url: URL
         price: 購入価格
         lock_version: ロックバージョン

@@ -109,6 +109,13 @@
   <%= simple_format(@item.note) %>
 </p>
 
+<% if current_user.try(:has_role?, 'Librarian') %>
+  <p>
+    <strong><%= t('activerecord.attributes.item.memo') -%>:</strong>
+    <%= simple_format(@item.memo) %>
+  </p>
+<% end %>
+
 <p>
   <strong><%= t('item.accepted_at') -%>:</strong>
   <%= l(@item.accept.created_at) if @item.accept -%>

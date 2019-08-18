@@ -75,6 +75,7 @@ en:
         edition: Edition (integer)
         edition_string: Edition
         note: Note
+        memo: Memo
         repository_content: Repository content
         lock_version: Lock version
         carrier_type: Manifestation form
@@ -110,6 +111,7 @@ en:
         deleted_at: Deleted at
         include_supplements: Include supplements
         note: Note
+        memo: Memo
         url: URL
         price: Price
         lock_version: Lock version
