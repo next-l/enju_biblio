@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_01_07_162048) do
+ActiveRecord::Schema.define(version: 2019_08_18_075628) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer "basket_id"
@@ -676,6 +676,7 @@ ActiveRecord::Schema.define(version: 2018_01_07_162048) do
     t.string "binding_call_number"
     t.datetime "binded_at"
     t.integer "manifestation_id", null: false
+    t.text "memo"
     t.index ["binding_item_identifier"], name: "index_items_on_binding_item_identifier"
     t.index ["bookstore_id"], name: "index_items_on_bookstore_id"
     t.index ["checkout_type_id"], name: "index_items_on_checkout_type_id"
@@ -925,6 +926,7 @@ ActiveRecord::Schema.define(version: 2018_01_07_162048) do
     t.text "publication_place"
     t.text "extent"
     t.text "dimensions"
+    t.text "memo"
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
     t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier"

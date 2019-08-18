@@ -18,6 +18,12 @@ RSpec.describe 'Manifestations', type: :system do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).to have_content @item.item_identifier
     end
+
+    it 'should show memo' do
+      @item.manifestation.update(memo: 'memo')
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).to have_content @item.manifestation.memo
+    end
   end
 
   describe 'When logged in as User' do
@@ -29,12 +35,24 @@ RSpec.describe 'Manifestations', type: :system do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).to have_content @item.item_identifier
     end
+
+    it 'should not show memo' do
+      @item.manifestation.update(memo: 'memo')
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).not_to have_content @item.manifestation.memo
+    end
   end
 
   describe 'When not logged in' do
     it 'should show default item' do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).to have_content @item.item_identifier
+    end
+
+    it 'should not show memo' do
+      @item.manifestation.update(memo: 'memo')
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).not_to have_content @item.manifestation.memo
     end
   end
 end
