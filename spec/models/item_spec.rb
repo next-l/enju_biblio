@@ -18,7 +18,6 @@ end
 #  item_identifier         :string
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
-#  deleted_at              :datetime
 #  shelf_id                :integer          default(1), not null
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text

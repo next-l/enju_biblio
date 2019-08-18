@@ -289,7 +289,6 @@ end
 #  full_name_alternative               :text
 #  created_at                          :datetime         not null
 #  updated_at                          :datetime         not null
-#  deleted_at                          :datetime
 #  zip_code_1                          :string
 #  zip_code_2                          :string
 #  address_1                           :text
