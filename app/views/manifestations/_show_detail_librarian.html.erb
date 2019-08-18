@@ -107,6 +107,12 @@
             <%= raw simple_format(h(manifestation.note)) -%>
           </td>
         </tr>
+        <tr>
+          <td><%= t('activerecord.attributes.manifestation.memo') -%>:</td>
+          <td>
+            <%= simple_format(manifestation.memo) -%>
+          </td>
+        </tr>
       </table>
     <% end %>
     <% if defined?(EnjuCirculation) %>
