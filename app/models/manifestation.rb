@@ -873,4 +873,5 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
+#  memo                            :text
 #
