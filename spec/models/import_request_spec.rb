@@ -20,7 +20,7 @@ end
 #  id               :bigint           not null, primary key
 #  isbn             :string
 #  manifestation_id :integer
-#  user_id          :integer
+#  user_id          :bigint
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #

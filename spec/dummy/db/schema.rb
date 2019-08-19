@@ -62,23 +62,15 @@ ActiveRecord::Schema.define(version: 2019_08_18_075628) do
   end
 
   create_table "agent_import_files", force: :cascade do |t|
-    t.integer "parent_id"
-    t.string "content_type"
-    t.integer "size"
     t.bigint "user_id"
     t.text "note"
     t.datetime "executed_at"
-    t.string "agent_import_file_name"
-    t.string "agent_import_content_type"
-    t.integer "agent_import_file_size"
-    t.datetime "agent_import_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "agent_import_fingerprint"
     t.text "error_message"
     t.string "edit_mode"
     t.string "user_encoding"
-    t.index ["parent_id"], name: "index_agent_import_files_on_parent_id"
     t.index ["user_id"], name: "index_agent_import_files_on_user_id"
   end
 
@@ -1061,16 +1053,9 @@ ActiveRecord::Schema.define(version: 2019_08_18_075628) do
   end
 
   create_table "resource_import_files", force: :cascade do |t|
-    t.integer "parent_id"
-    t.string "content_type"
-    t.integer "size"
     t.bigint "user_id"
     t.text "note"
     t.datetime "executed_at"
-    t.string "resource_import_file_name"
-    t.string "resource_import_content_type"
-    t.integer "resource_import_file_size"
-    t.datetime "resource_import_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "edit_mode"
@@ -1078,7 +1063,6 @@ ActiveRecord::Schema.define(version: 2019_08_18_075628) do
     t.text "error_message"
     t.string "user_encoding"
     t.integer "default_shelf_id"
-    t.index ["parent_id"], name: "index_resource_import_files_on_parent_id"
     t.index ["user_id"], name: "index_resource_import_files_on_user_id"
   end
 

@@ -11,6 +11,6 @@ describe "resource_import_files/index" do
 
   it "renders a list of resource_import_files" do
     render
-    expect(rendered).to match /MyString/
+    expect(rendered).to match /Pending/
   end
 end

@@ -16,21 +16,11 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files/1
   # GET /agent_import_files/1.json
   def show
-    if @agent_import_file.agent_import.path
-      unless ENV['ENJU_STORAGE'] == 's3'
-        file = @agent_import_file.agent_import.path
-      end
-    end
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @agent_import_file }
       format.download {
-        if ENV['ENJU_STORAGE'] == 's3'
-          redirect_to @agent_import_file.agent_import.expiring_url(10)
-        else
-          send_file file, filename: @agent_import_file.agent_import_file_name, type: 'application/octet-stream'
-        end
+        send_data @agent_import_file.agent_import.download, fileename: @agent_import_file.agent_import.filename.to_s, type: 'application/octet-stream'
       }
     end
   end
