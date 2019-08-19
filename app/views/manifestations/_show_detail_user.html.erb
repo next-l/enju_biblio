@@ -80,9 +80,7 @@
             </ul>
           </td>
         </tr>
-        <%- unless manifestation.attachment_file_name.blank? -%>
-          <%= render 'manifestations/attachment_file', manifestation: manifestation -%>
-        <%- end -%>
+        <%= render 'manifestations/attachment_file', manifestation: manifestation -%>
         <tr>
           <td><%= t('page.created_at') -%>:</td>
           <td><%=l manifestation.created_at if manifestation.created_at -%></td>

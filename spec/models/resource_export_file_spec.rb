@@ -19,7 +19,7 @@ describe ResourceExportFile do
     export_file.save!
     export_file.export!
     file = export_file.resource_export
-    lines = File.open(file.path).readlines.map(&:chomp)
+    lines = file.download.split("\n")
     columns = lines.first.split(/\t/)
     expect(columns).to include "bookstore"
     expect(columns).to include "budget_type"
@@ -36,7 +36,7 @@ describe ResourceExportFile do
     export_file.export!
     file = export_file.resource_export
     expect(file).to be_truthy
-    lines = File.open(file.path).readlines.map(&:chomp)
+    lines = file.download.split("\n")
     expect(lines.first.split(/\t/)).to include "ncid"
     expect(lines.last.split(/\t/)).to include "BA91833159"
   end
@@ -51,7 +51,7 @@ describe ResourceExportFile do
     export_file.export!
     file = export_file.resource_export
     expect(file).to be_truthy
-    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
+    csv = CSV.parse(file.download, {headers: true, col_sep: "\t"})
     csv.each do |row|
       expect(row).to have_key "carrier_type"
       case row["manifestation_id"].to_i
@@ -68,13 +68,9 @@ end
 #
 # Table name: resource_export_files
 #
-#  id                           :bigint           not null, primary key
-#  user_id                      :integer
-#  resource_export_file_name    :string
-#  resource_export_content_type :string
-#  resource_export_file_size    :bigint
-#  resource_export_updated_at   :datetime
-#  executed_at                  :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  id          :bigint           not null, primary key
+#  user_id     :bigint
+#  executed_at :datetime
+#  created_at  :datetime         not null
+#  updated_at  :datetime         not null
 #

@@ -5,28 +5,7 @@ class ResourceImportFile < ApplicationRecord
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  if ENV['ENJU_STORAGE'] == 's3'
-    has_attached_file :resource_import, storage: :s3,
-      s3_credentials: {
-        access_key: ENV['AWS_ACCESS_KEY_ID'],
-        secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        bucket: ENV['S3_BUCKET_NAME'],
-        s3_host_name: ENV['S3_HOST_NAME'],
-        s3_region: ENV['S3_REGION']
-      },
-      s3_permissions: :private
-  else
-    has_attached_file :resource_import,
-      path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
-  end
-  validates_attachment_content_type :resource_import, content_type: [
-    'text/csv',
-    'text/plain',
-    'text/tab-separated-values',
-    'application/octet-stream',
-    'application/vnd.ms-excel'
-  ]
-  validates_attachment_presence :resource_import
+  has_one_attached :resource_import
   validates :resource_import, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user
@@ -254,7 +233,7 @@ class ResourceImportFile < ApplicationRecord
   end
 
   def import_marc(marc_type)
-    file = File.open(resource_import.path)
+    file = resource_import.download
     case marc_type
     when 'marcxml'
       reader = MARC::XMLReader.new(file)

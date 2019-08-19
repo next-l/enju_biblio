@@ -243,6 +243,7 @@ describe Manifestation, solr: true do
       expect(m["edition"]).to eq "2"
       expect(m["edition_string"]).to eq "Revised Ed."
     end
+
     it "should export title_transcription fields" do
       manifestation = FactoryBot.create(:manifestation, title_transcription: "Transcripted title")
       lines = Manifestation.export
@@ -251,6 +252,7 @@ describe Manifestation, solr: true do
       m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
       expect(m["title_transcription"]).to eq "Transcripted title"
     end
+
     it "should export volume fields" do
       manifestation = FactoryBot.create(:manifestation, volume_number: 15, volume_number_string: "Vol.15")
       lines = Manifestation.export
@@ -261,6 +263,7 @@ describe Manifestation, solr: true do
       expect(m["volume_number"]).to eq "15"
       expect(m["volume_number_string"]).to eq "Vol.15"
     end
+
     it "should export multiple identifiers" do
       manifestation = FactoryBot.create(:manifestation)
       isbn_type = IdentifierType.where(name: :isbn).first
@@ -338,10 +341,6 @@ end
 #  required_score                  :integer          default(0), not null
 #  frequency_id                    :integer          default(1), not null
 #  subscription_master             :boolean          default(FALSE), not null
-#  attachment_file_name            :string
-#  attachment_content_type         :string
-#  attachment_file_size            :integer
-#  attachment_updated_at           :datetime
 #  title_alternative_transcription :text
 #  description                     :text
 #  abstract                        :text

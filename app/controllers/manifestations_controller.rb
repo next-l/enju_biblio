@@ -75,7 +75,7 @@ class ManifestationsController < ApplicationController
       @index_agent = agent
       manifestation = @manifestation if @manifestation
       series_statement = @series_statement if @series_statement
-      parent = @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
+      parent = @parent = Manifestation.find_by(id: params[:parent_id]) if params[:parent_id].present?
 
       if defined?(EnjuSubject)
         subject = @subject if @subject
@@ -311,14 +311,6 @@ class ManifestationsController < ApplicationController
       @questions = @manifestation.questions(user: current_user, page: params[:question_page])
     end
 
-    if @manifestation.attachment.path
-      if ENV['ENJU_STORAGE'] == 's3'
-        data = Faraday.get(@manifestation.attachment.expiring_url).body.force_encoding('UTF-8')
-      else
-        file = @manifestation.attachment.path
-      end
-    end
-
     respond_to do |format|
       format.html # show.html.erb
       format.html.phone
@@ -336,16 +328,8 @@ class ManifestationsController < ApplicationController
       format.txt
       format.js
       format.download {
-        if @manifestation.attachment.path
-          if ENV['ENJU_STORAGE'] == 's3'
-            send_data data, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
-          else
-            if File.exist?(file) && File.file?(file)
-              send_file file, filename: File.basename(@manifestation.attachment_file_name), type: 'application/octet-stream'
-            end
-          end
-        else
-          render template: 'page/404', status: 404
+        if @manifestation.attachment.attached?
+          send_data @manifestation.attachment.download, filename: @manifestation.attachment.filename, type: 'application/octet-stream'
         end
       }
     end
@@ -355,8 +339,8 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
-    @manifestation.language = Language.where(iso_639_1: @locale).first
-    @parent = Manifestation.where(id: params[:parent_id]).first if params[:parent_id].present?
+    @manifestation.language = Language.find_by(iso_639_1: @locale)
+    @parent = Manifestation.find_by(id: params[:parent_id]) if params[:parent_id].present?
     if @parent
       @manifestation.parent_id = @parent.id
       [ :original_title, :title_transcription,
@@ -385,7 +369,7 @@ class ManifestationsController < ApplicationController
     end
     if defined?(EnjuBookmark)
       if params[:mode] == 'tag_edit'
-        @bookmark = current_user.bookmarks.where(manifestation_id: @manifestation.id).first if @manifestation rescue nil
+        @bookmark = current_user.bookmarks.find_by(manifestation_id: @manifestation.id) if @manifestation rescue nil
         render partial: 'manifestations/tag_edit', locals: {manifestation: @manifestation}
       end
     end
@@ -398,10 +382,7 @@ class ManifestationsController < ApplicationController
     @manifestation = Manifestation.new(manifestation_params.delete_if{|k, v|
       k == 'creators_attributes'
     })
-    parent = Manifestation.where(id: @manifestation.parent_id).first
-    unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment_file_name
-    end
+    parent = Manifestation.find_by(id: @manifestation.parent_id)
 
     respond_to do |format|
       if @manifestation.save

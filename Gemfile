@@ -25,6 +25,7 @@ gem 'enju_ndl', github: 'next-l/enju_ndl'
 gem 'enju_oai', github: 'next-l/enju_oai'
 gem 'sassc-rails'
 gem 'paper_trail'
+gem 'paperclip'
 gem 'paperclip-meta'
 gem 'jbuilder'
 group :test do
