@@ -416,7 +416,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       )
       file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/item_delete_file.tsv"), filename: 'attachment.txt')
       file.remove
-      Item.count.should eq old_count - 11
+      Item.count.should eq old_count - 8
     end
   end
 

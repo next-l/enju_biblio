@@ -93,6 +93,7 @@ class Item < ApplicationRecord
       return false if checkouts.exists?
       true
     else
+      return false if donates.exists?
       true
     end
   end

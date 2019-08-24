@@ -75,6 +75,11 @@ class Agent < ApplicationRecord
 
   paginates_per 10
 
+  def removable?
+    return true if creates.empty? && produces.empty? && owns.empty? && donates.empty?
+    false
+  end
+
   def set_role_and_name
     self.required_role = Role.find_by(name: 'Librarian') if required_role_id.nil?
     set_full_name

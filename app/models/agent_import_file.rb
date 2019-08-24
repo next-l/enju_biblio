@@ -134,7 +134,7 @@ class AgentImportFile < ApplicationRecord
       if agent
         agent.picture_files.destroy_all
         agent.reload
-        agent.destroy
+        agent.destroy if agent.removable?
       end
     end
     transition_to!(:completed)

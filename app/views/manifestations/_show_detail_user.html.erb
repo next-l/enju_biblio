@@ -3,7 +3,9 @@
     <div id="detail">
     <% cache([manifestation, fragment: 'show_detail_user_html', role: current_user_role_name, locale: @locale]) do %>
       <table class="table table-striped" id="resource_detail">
-        <%= embed_content(manifestation) -%>
+        <% if defined?(EnjuManifestationViewer) %>
+          <%= embed_content(manifestation) -%>
+        <% end %>
         <% if manifestation.title_transcription? %>
           <tr>
             <td style="width: 200px"><%= t('activerecord.attributes.manifestation.title_transcription') -%>:</td>
