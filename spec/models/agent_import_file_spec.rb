@@ -71,7 +71,7 @@ describe AgentImportFile do
       )
       file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv"), filename: 'attachment.txt')
       file.remove
-      Agent.count.should eq old_count - 7
+      Agent.count.should eq old_count - 4
     end
   end
 

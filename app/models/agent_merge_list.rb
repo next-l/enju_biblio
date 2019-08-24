@@ -11,7 +11,10 @@ class AgentMergeList < ApplicationRecord
       Produce.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
       Own.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
       Donate.where(agent_id: selected_agent.id).update_all(agent_id: agent.id)
-      agent.destroy unless agent == selected_agent
+
+      if agent.removable?
+        agent.destroy unless agent == selected_agent
+      end
     end
   end
 end

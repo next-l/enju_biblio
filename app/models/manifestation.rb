@@ -839,7 +839,6 @@ end
 #  serial_number                   :integer
 #  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
-#  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
 #  serial                          :boolean

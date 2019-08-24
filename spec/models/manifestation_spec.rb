@@ -167,14 +167,6 @@ describe Manifestation, solr: true do
     manifestations(:manifestation_00001).number_of_pages.should eq 100
   end
 
-  it "should get youtube_id" do
-    manifestations(:manifestation_00022).youtube_id.should eq 'BSHBzd9ftDE'
-  end
-
-  it "should get nicovideo_id" do
-    manifestations(:manifestation_00023).nicovideo_id.should eq 'sm3015373'
-  end
-
   it "should have parent_of_series" do
     manifestations(:manifestation_00001).parent_of_series.should be_truthy
   end
@@ -356,7 +348,6 @@ end
 #  serial_number                   :integer
 #  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
-#  attachment_meta                 :text
 #  month_of_publication            :integer
 #  fulltext_content                :boolean
 #  serial                          :boolean
