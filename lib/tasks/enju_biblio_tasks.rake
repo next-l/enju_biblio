@@ -50,6 +50,19 @@ namespace :enju_biblio do
         end
       end
     end
+
+    [
+      'agent_import_file_translations',
+      'import_request_translations',
+      'resource_export_file_translations',
+      'resource_import_file_translations'
+    ].each do |table|
+      sql = "ALTER TABLE #{table} ALTER COLUMN metadata DROP DEFAULT;";
+      sql += "ALTER TABLE #{table} ALTER COLUMN metadata TYPE jsonb USING metadata::jsonb";
+      sql += "ALTER TABLE #{table} ALTER COLUMN metadata SET DEFAULT '{}';";
+      ActiveRecord::Base.connection.execute(sql)
+    end
+
     puts 'enju_biblio: The upgrade completed successfully.'
   end
 end
