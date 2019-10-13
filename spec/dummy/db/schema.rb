@@ -921,7 +921,7 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
 
   create_table "resource_import_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.integer "resource_import_file_id"
     t.datetime "created_at", null: false
