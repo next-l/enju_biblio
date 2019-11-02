@@ -2,7 +2,6 @@ class ResourceImportFileTransition < ApplicationRecord
 
   
   belongs_to :resource_import_file, inverse_of: :resource_import_file_transitions
-  #attr_accessible :to_state, :sort_key, :metadata
 end
 
 # == Schema Information
@@ -11,7 +10,7 @@ end
 #
 #  id                      :bigint           not null, primary key
 #  to_state                :string
-#  metadata                :text             default({})
+#  metadata                :jsonb
 #  sort_key                :integer
 #  resource_import_file_id :integer
 #  created_at              :datetime         not null
