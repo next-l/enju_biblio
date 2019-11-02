@@ -1,5 +1,4 @@
 class ResourceExportFileTransition < ApplicationRecord
-  include Statesman::Adapters::ActiveRecordTransition
 
   
   belongs_to :resource_export_file, inverse_of: :resource_export_file_transitions
