@@ -1,5 +1,8 @@
 class ImportRequest < ApplicationRecord
-  include Statesman::Adapters::ActiveRecordQueries
+  include Statesman::Adapters::ActiveRecordQueries[
+    transition_class: ImportRequestTransition,
+    initial_state: :pending
+  ]
   default_scope { order('import_requests.id DESC') }
   belongs_to :manifestation, optional: true
   belongs_to :user
