@@ -25,12 +25,25 @@ namespace :enju_biblio do
   end
 
   desc "upgrade enju_biblio"
-  task upgrade: :environment do
+  task upgrade_to_13: :environment do
     Rake::Task['statesman:backfill_most_recent'].invoke('AgentImportFile')
     Rake::Task['statesman:backfill_most_recent'].invoke('ImportRequest')
     Rake::Task['statesman:backfill_most_recent'].invoke('ResourceExportFile')
     Rake::Task['statesman:backfill_most_recent'].invoke('ResourceImportFile')
     update_carrier_type
+    puts 'enju_biblio: The upgrade completed successfully.'
+  end
+
+  desc "upgrade enju_biblio"
+  task upgrade: :environment do
+    class_names = [AgentType, CarrierType]
+    class_name.each do |klass|
+      klass.find_each do |record|
+        I18n.available_locales.each do |locale|
+          record.update("display_name_#{locale}".to_sym: YAML.safe_load(record[:display_name])
+        end
+      end
+    end
     puts 'enju_biblio: The upgrade completed successfully.'
   end
 end
