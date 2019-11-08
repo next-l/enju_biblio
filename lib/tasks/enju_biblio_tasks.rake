@@ -24,7 +24,7 @@ namespace :enju_biblio do
     AgentImportFile.import
   end
 
-  desc "upgrade enju_biblio"
+  desc "upgrade enju_biblio to 1.3"
   task upgrade_to_13: :environment do
     Rake::Task['statesman:backfill_most_recent'].invoke('AgentImportFile')
     Rake::Task['statesman:backfill_most_recent'].invoke('ImportRequest')
@@ -34,13 +34,19 @@ namespace :enju_biblio do
     puts 'enju_biblio: The upgrade completed successfully.'
   end
 
-  desc "upgrade enju_biblio"
+  desc "upgrade enju_biblio to 2.0"
   task upgrade: :environment do
-    class_names = [AgentType, CarrierType]
-    class_name.each do |klass|
+    class_names = [
+      AgentRelationshipType, AgentType, CarrierType, ContentType,
+      CreateType, FormOfWork, Frequency, Language, License,
+      ManifestationRelationshipType, MediumOfPerformance, ProduceType,
+      RealizeType
+    ]
+    class_names.each do |klass|
       klass.find_each do |record|
         I18n.available_locales.each do |locale|
-          record.update("display_name_#{locale}".to_sym: YAML.safe_load(record[:display_name])
+          next unless record.respond_to?("display_name_#{locale}")
+          record.update("display_name_#{locale}": YAML.safe_load(record[:display_name])[locale.to_s])
         end
       end
     end
