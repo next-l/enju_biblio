@@ -19,6 +19,7 @@ gem 'enju_bookmark', github: 'next-l/enju_bookmark'
 gem 'sassc-rails'
 gem 'paper_trail'
 gem 'jbuilder'
+gem 'sprockets', '~> 3.7'
 group :test do
   gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
