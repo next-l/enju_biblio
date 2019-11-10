@@ -8,11 +8,9 @@ class User < ApplicationRecord
 
   include EnjuSeed::EnjuUser
   include EnjuMessage::EnjuUser
-  include EnjuBookmark::EnjuUser
 end
 
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuManifestationViewer::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
-Manifestation.include(EnjuBookmark::EnjuManifestation)
 Item.include(EnjuLibrary::EnjuItem)
