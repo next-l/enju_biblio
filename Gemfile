@@ -14,8 +14,6 @@ gemspec
 # To use debugger
 # gem 'debugger'
 #gem 'enju_loc', github: 'next-l/enju_loc'
-gem 'enju_oai', github: 'next-l/enju_oai'
-gem 'enju_bookmark', github: 'next-l/enju_bookmark'
 gem 'sassc-rails'
 gem 'paper_trail'
 gem 'jbuilder'
