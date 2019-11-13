@@ -15,7 +15,6 @@ gemspec
 # gem 'debugger'
 #gem 'enju_loc', github: 'next-l/enju_loc'
 gem 'sassc-rails'
-gem 'paper_trail'
 gem 'jbuilder'
 gem 'sprockets', '~> 3.7'
 group :test do
