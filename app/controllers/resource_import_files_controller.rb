@@ -6,7 +6,7 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files
   # GET /resource_import_files.json
   def index
-    @resource_import_files = ResourceImportFile.page(params[:page])
+    @resource_import_files = ResourceImportFile.order(created_at: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
