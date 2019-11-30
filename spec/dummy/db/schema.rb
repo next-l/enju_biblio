@@ -13,7 +13,6 @@
 ActiveRecord::Schema.define(version: 2019_08_18_075628) do
 
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pgcrypto"
   enable_extension "plpgsql"
 
   create_table "accepts", id: :serial, force: :cascade do |t|
@@ -1530,7 +1529,6 @@ ActiveRecord::Schema.define(version: 2019_08_18_075628) do
 
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.integer "taggings_count", default: 0
     t.datetime "created_at"
     t.datetime "updated_at"
     t.index ["name"], name: "index_tags_on_name", unique: true

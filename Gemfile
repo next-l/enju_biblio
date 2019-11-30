@@ -14,11 +14,9 @@ gemspec
 # To use debugger
 # gem 'debugger'
 #gem 'enju_loc', github: 'next-l/enju_loc'
-gem 'enju_oai', github: 'next-l/enju_oai'
-gem 'enju_bookmark', github: 'next-l/enju_bookmark'
 gem 'sassc-rails'
-gem 'paper_trail'
 gem 'jbuilder'
+gem 'sprockets', '~> 3.7'
 group :test do
   gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
