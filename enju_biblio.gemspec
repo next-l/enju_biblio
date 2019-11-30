@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.name        = "enju_biblio"
   s.version     = EnjuBiblio::VERSION
   s.authors     = ["Kosuke Tanabe"]
-  s.email       = ["nabeta@fastmail.fm"]
+  s.email       = ["narc@fastmail.fm"]
   s.homepage    = "https://github.com/next-l/enju_biblio"
   s.summary     = "enju_biblio plugin"
   s.description = "Bibliographic record module for Next-L Enju"
@@ -16,7 +16,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/{log,private,solr,tmp}/**/*"]
 
-  s.add_dependency "enju_library", "~> 0.4.0.beta.2"
+  s.add_dependency "enju_library", "~> 0.4.0.rc.1"
   s.add_dependency "marc"
   s.add_dependency "simple_form"
   s.add_dependency "dynamic_form"
@@ -24,15 +24,15 @@ Gem::Specification.new do |s|
   s.add_dependency "lisbn"
   s.add_dependency "faraday"
 
-  s.add_development_dependency "enju_leaf", "~> 2.0.0.beta.1"
-  s.add_development_dependency "enju_manifestation_viewer", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_message", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_subject", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_bookmark", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_ndl", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_oai", "~> 0.4.0.beta.1"
+  s.add_development_dependency "enju_leaf", "~> 2.0.0.rc.1"
+  s.add_development_dependency "enju_manifestation_viewer", "~> 0.4.0.rc.1"
+  s.add_development_dependency "enju_message", "~> 0.4.0.rc.1"
+  s.add_development_dependency "enju_subject", "~> 0.4.0.rc.1"
+  s.add_development_dependency "enju_bookmark", "~> 0.4.0.rc.1"
+  s.add_development_dependency "enju_ndl", "~> 0.4.0.rc.1"
+  s.add_development_dependency "enju_oai", "~> 0.4.0.rc.1"
   s.add_development_dependency "pg"
-  s.add_development_dependency "rspec-rails", "~> 3.8"
+  s.add_development_dependency "rspec-rails", "~> 3.9"
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "vcr", "~> 5.0"
   s.add_development_dependency "sunspot_solr", "~> 2.5"
@@ -41,7 +41,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "resque"
   s.add_development_dependency "coveralls"
-  s.add_development_dependency "capybara", "~> 3.11"
+  s.add_development_dependency "capybara"
   s.add_development_dependency "selenium-webdriver"
   s.add_development_dependency "puma"
   s.add_development_dependency "annotate"
