@@ -173,13 +173,6 @@ class AgentImportFile < ApplicationRecord
   end
 
   private
-  def self.transition_class
-    AgentImportFileTransition
-  end
-
-  def self.initial_state
-    :pending
-  end
 
   def open_import_file
     tempfile = Tempfile.new(self.class.name.underscore)

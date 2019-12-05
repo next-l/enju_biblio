@@ -50,15 +50,6 @@ class ResourceExportFile < ApplicationRecord
     send_message(mailer)
     raise e
   end
-
-  private
-  def self.transition_class
-    ResourceExportFileTransition
-  end
-
-  def self.initial_state
-    :pending
-  end
 end
 
 # == Schema Information

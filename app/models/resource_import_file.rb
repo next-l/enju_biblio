@@ -769,14 +769,6 @@ class ResourceImportFile < ApplicationRecord
     manifestation
   end
 
-  def self.transition_class
-    ResourceImportFileTransition
-  end
-
-  def self.initial_state
-    :pending
-  end
-
   def set_identifier(row)
     identifiers = []
     %w(isbn issn doi jpno ncid).each do |id_type|
