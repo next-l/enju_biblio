@@ -63,15 +63,6 @@ class ImportRequest < ApplicationRecord
       return :error
     end
   end
-
-  private
-  def self.transition_class
-    ImportRequestTransition
-  end
-
-  def self.initial_state
-    :pending
-  end
 end
 
 # == Schema Information
