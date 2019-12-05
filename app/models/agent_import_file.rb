@@ -1,7 +1,9 @@
 class AgentImportFile < ApplicationRecord
-  include Statesman::Adapters::ActiveRecordQueries
+  include Statesman::Adapters::ActiveRecordQueries[
+    transition_class: AgentImportFileTransition,
+    initial_state: :pending
+  ]
   include ImportFile
-  default_scope { order('agent_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 

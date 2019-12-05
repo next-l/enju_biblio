@@ -1,5 +1,8 @@
 class ResourceExportFile < ApplicationRecord
-  include Statesman::Adapters::ActiveRecordQueries
+  include Statesman::Adapters::ActiveRecordQueries[
+    transition_class: ResourceExportFileTransition,
+    initial_state: :pending
+  ]
   include ExportFile
 
   has_one_attached :resource_export

@@ -5,7 +5,7 @@ class ResourceExportFilesController < ApplicationController
   # GET /resource_export_files
   # GET /resource_export_files.json
   def index
-    @resource_export_files = ResourceExportFile.order('id DESC').page(params[:page])
+    @resource_export_files = ResourceExportFile.order(created_at: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

@@ -5,7 +5,7 @@ class AgentImportFilesController < ApplicationController
   # GET /agent_import_files
   # GET /agent_import_files.json
   def index
-    @agent_import_files = AgentImportFile.page(params[:page])
+    @agent_import_files = AgentImportFile.order(created_at: :desc).page(params[:page])
 
     respond_to do |format|
       format.html # index.html.erb
