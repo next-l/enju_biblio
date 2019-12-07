@@ -12,4 +12,5 @@ end
 
 Manifestation.include(EnjuSubject::EnjuManifestation)
 Manifestation.include(EnjuNdl::EnjuManifestation)
+Profile.include(EnjuLibrary::EnjuProfile)
 Item.include(EnjuLibrary::EnjuItem)
