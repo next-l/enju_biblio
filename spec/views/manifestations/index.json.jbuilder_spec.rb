@@ -1,6 +1,6 @@
 require "rails_helper.rb"
 
-describe "manifestations/index.json.builder" do
+describe "manifestations/index.json.jbuilder" do
   before(:each) do
     manifestation = FactoryBot.create(:manifestation)
     @manifestations = assign(:manifestations, [manifestation] )
