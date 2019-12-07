@@ -712,7 +712,7 @@ describe ManifestationsController do
             publisher_attributes: [FactoryBot.create(:agent)]
           }
           put :update, params: {
-            id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs).merge(publishers_attrs)
+            id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs, publishers_attrs)
           }
           expect(assigns(:manifestation)).to eq @manifestation
         end
@@ -737,7 +737,7 @@ describe ManifestationsController do
             publisher_attributes: [FactoryBot.create(:agent)]
           }
           put :update, params: {
-            id: @manifestation.id, manifestation: @invalid_attrs.merge(identifiers_attrs).merge(publishers_attrs)
+            id: @manifestation.id, manifestation: @invalid_attrs.merge(identifiers_attrs, publishers_attrs)
           }
           expect(assigns(:manifestation)).to_not be_valid
         end
