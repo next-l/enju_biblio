@@ -9,7 +9,7 @@ describe AgentImportFilesController do
 
       it 'assigns all agent_import_files as @agent_import_files' do
         get :index
-        expect(assigns(:agent_import_files)).to eq(AgentImportFile.page(1))
+        expect(assigns(:agent_import_files)).to eq(AgentImportFile.order(created_at: :desc).page(1))
       end
     end
 
@@ -18,7 +18,7 @@ describe AgentImportFilesController do
 
       it 'assigns all agent_import_files as @agent_import_files' do
         get :index
-        expect(assigns(:agent_import_files)).to eq(AgentImportFile.page(1))
+        expect(assigns(:agent_import_files)).to eq(AgentImportFile.order(created_at: :desc).page(1))
       end
     end
 
