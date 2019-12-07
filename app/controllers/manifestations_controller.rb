@@ -430,14 +430,14 @@ class ManifestationsController < ApplicationController
   def update
     creators_params = manifestation_params[:creators_attributes]
     Manifestation.transaction do
-      @manifestation.update(manifestation_params.delete_if{|k, v|
+      @manifestation.assign_attributes(manifestation_params.delete_if{|k, v|
         k == 'creators_attributes'
       })
       @manifestation.creators = Agent.new_agents(creators_params)
     end
 
     respond_to do |format|
-      if @manifestation.valid?
+      if @manifestation.save
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else

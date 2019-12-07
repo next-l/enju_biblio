@@ -649,6 +649,7 @@ describe ManifestationsController do
     before(:each) do
       @manifestation = FactoryBot.create(:manifestation)
       @manifestation.series_statements = [SeriesStatement.find(1)]
+      @manifestation.publishers << FactoryBot.create(:agent)
       @attrs = valid_attributes
       @invalid_attrs = { original_title: '' }
     end
@@ -702,6 +703,19 @@ describe ManifestationsController do
           put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs) }
           expect(assigns(:manifestation)).to eq @manifestation
         end
+
+        it 'assigns identifiers and publishers to @manifestation' do
+          identifiers_attrs = {
+            identifier_attributes: [FactoryBot.create(:identifier)]
+          }
+          publishers_attrs = {
+            publisher_attributes: [FactoryBot.create(:agent)]
+          }
+          put :update, params: {
+            id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs, publishers_attrs)
+          }
+          expect(assigns(:manifestation)).to eq @manifestation
+        end
       end
 
       describe 'with invalid params' do
@@ -713,6 +727,19 @@ describe ManifestationsController do
         it "re-renders the 'edit' template" do
           put :update, params: { id: @manifestation, manifestation: @invalid_attrs }
           expect(response).to render_template('edit')
+        end
+
+        it 'assigns identifiers and publishers to @manifestation' do
+          identifiers_attrs = {
+            identifier_attributes: [FactoryBot.create(:identifier)]
+          }
+          publishers_attrs = {
+            publisher_attributes: [FactoryBot.create(:agent)]
+          }
+          put :update, params: {
+            id: @manifestation.id, manifestation: @invalid_attrs.merge(identifiers_attrs, publishers_attrs)
+          }
+          expect(assigns(:manifestation)).to_not be_valid
         end
       end
     end
