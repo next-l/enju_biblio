@@ -677,7 +677,7 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
 
   create_table "message_request_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.integer "message_request_id"
     t.datetime "created_at", null: false
@@ -693,7 +693,6 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
     t.bigint "receiver_id"
     t.bigint "message_template_id"
     t.datetime "sent_at"
-    t.datetime "deleted_at"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -715,7 +714,7 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
 
   create_table "message_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.integer "message_id"
     t.datetime "created_at", null: false
@@ -1102,7 +1101,7 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
 
   create_table "user_export_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.bigint "user_export_file_id"
     t.datetime "created_at", null: false
@@ -1147,7 +1146,7 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
 
   create_table "user_import_file_transitions", force: :cascade do |t|
     t.string "to_state"
-    t.text "metadata", default: "{}"
+    t.jsonb "metadata", default: {}
     t.integer "sort_key"
     t.bigint "user_import_file_id"
     t.datetime "created_at", null: false
@@ -1247,6 +1246,9 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
   add_foreign_key "library_groups", "users"
   add_foreign_key "manifestation_and_subjects", "manifestations"
   add_foreign_key "manifestation_and_subjects", "subjects"
+  add_foreign_key "messages", "messages", column: "parent_id"
+  add_foreign_key "messages", "users", column: "receiver_id"
+  add_foreign_key "messages", "users", column: "sender_id"
   add_foreign_key "ndl_bib_id_records", "manifestations"
   add_foreign_key "ndla_records", "agents"
   add_foreign_key "periodical_and_manifestations", "manifestations"

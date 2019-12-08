@@ -25,12 +25,12 @@ Gem::Specification.new do |s|
   s.add_dependency "faraday"
 
   s.add_development_dependency "enju_leaf", "~> 3.0.0.beta.1"
-  s.add_development_dependency "enju_message", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_subject", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_ndl", "~> 0.4.0.beta.1"
-  s.add_development_dependency "enju_oai", "~> 0.4.0.beta.1"
+  s.add_development_dependency "enju_message", "~> 0.5.0.beta.1"
+  s.add_development_dependency "enju_subject", "~> 0.5.0.beta.1"
+  s.add_development_dependency "enju_ndl", "~> 0.5.0.beta.1"
+  s.add_development_dependency "enju_oai", "~> 0.5.0.beta.1"
   s.add_development_dependency "pg"
-  s.add_development_dependency "rspec-rails", "~> 3.8"
+  s.add_development_dependency "rspec-rails", "~> 3.9"
   s.add_development_dependency "factory_bot_rails"
   s.add_development_dependency "vcr", "~> 5.0"
   s.add_development_dependency "sunspot_solr", "~> 2.5"
@@ -39,8 +39,8 @@ Gem::Specification.new do |s|
   s.add_development_dependency "rspec-activemodel-mocks"
   s.add_development_dependency "resque"
   s.add_development_dependency "coveralls"
-  s.add_development_dependency "capybara", "~> 3.11"
+  s.add_development_dependency "capybara"
   s.add_development_dependency "selenium-webdriver"
   s.add_development_dependency "puma"
-  s.add_development_dependency "annotate", '~> 2.7'
+  s.add_development_dependency "annotate"
 end
