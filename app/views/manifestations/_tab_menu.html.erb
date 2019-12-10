@@ -1,11 +1,11 @@
-<ul class="hidden">
-  <li class="selected"><a href="#detail"><em><%= t('page.detail') -%></em></a></li>
+<ul class="nav nav-tabs">
+  <li class="nav-item"><a class="nav-link active" href="#detail" data-toggle="tab"><%= t('page.detail') -%></a></li>
   <%- if manifestation.original_manifestations.exists? or manifestation.derived_manifestations.exists? -%>
-    <li><a href="#related_manifestation"><em><%= t('page.related_manifestation') -%> (<%= manifestation.original_manifestations.size + manifestation.derived_manifestations.size -%>)</em></a></li>
+    <li class="nav-item"><a class="nav-link" href="#related_manifestation" data-toggle="tab"><%= t('page.related_manifestation') -%> (<%= manifestation.original_manifestations.size + manifestation.derived_manifestations.size -%>)</a></li>
   <%- end -%>
   <% if defined?(EnjuQuestion) %>
     <%- unless manifestation.questions(user: current_user).empty? -%>
-      <li><a href="#question"><em><%= t('resource.question') -%></em></a></li>
+      <li class="nav-item"><a class="nav-link" href="#question" data-toggle="tab"><%= t('resource.question') -%></a></li>
     <%- end -%>
   <% end %>
 </ul>

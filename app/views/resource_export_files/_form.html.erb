@@ -14,9 +14,9 @@
   -->
   <div class="actions">
     <% if @resource_export_file.new_record? %>
-      <%= f.submit t('page.export') %>
+      <%= f.submit t('page.export'), class: 'btn btn-primary' %>
     <% else %>
-      <%= f.submit %>
+      <%= f.submit class: 'btn btn-primary' %>
     <% end %>
   </div>
 <% end %>

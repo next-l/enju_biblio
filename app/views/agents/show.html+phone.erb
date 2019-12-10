@@ -1,5 +1,5 @@
 <div data-role="header">
-  <h1 class="title"><%= t('page.showing', model: t('activerecord.models.agent')) -%></h1>
+  <h1 class="card-header text-light"><%= t('page.showing', model: t('activerecord.models.agent')) -%></h1>
 </div>
 <div data-role="content">
   <h2 class="resource_title">
@@ -7,7 +7,7 @@
     <%= @agent.full_name -%>
   </h2>
   <div id="detail">
-    <table class="table table-striped index vcard">
+    <table class="table table-striped index vcard bg-info">
       <tr>
         <td><strong><%= t('activerecord.attributes.agent.full_name') -%>:</strong></td>
         <td>

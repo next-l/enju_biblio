@@ -43,6 +43,7 @@ ja:
       series_statement_merge_list: シリーズ情報統合リスト
       series_statement_merge: シリーズ情報の統合
       periodical: 逐次刊行物
+      doi_record: DOI
 
     attributes:
       manifestation:

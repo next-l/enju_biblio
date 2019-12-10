@@ -1,6 +1,7 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.editing', model: t('activerecord.models.series_statement_merge')) -%></h1>
-<div id="content_list">
+<div class="row">
+<div class="col-md-9">
+<h1><%= t('page.editing', model: t('activerecord.models.series_statement_merge')) -%></h1>
+<div class="card-body bg-light">
 
 <%= form_for(@series_statement_merge) do |f| -%>
   <%= f.error_messages -%>
@@ -16,14 +17,14 @@
   </div>
 
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
 <%- end -%>
 
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div class="col">
   <ul>
     <li><%= link_to t('page.show'), @series_statement_merge -%></li>
     <li><%= link_to t('page.back'), series_statement_merges_path -%></li>

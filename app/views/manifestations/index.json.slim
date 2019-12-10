@@ -1,0 +1,9 @@
+| hogehoge({ "response": { "numFound": 100, "start": 10, "docs": [ 
+- @manifestations.each_with_index do |m, i|
+  |  { "title_view": 
+  = m.original_title
+  | , "seeAlso": 
+  = manifestation_url(m)
+  |  }
+  = "," if @manifestations[i + 1].present?
+|  ] } }) 

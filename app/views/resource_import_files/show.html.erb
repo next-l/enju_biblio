@@ -1,6 +1,7 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.showing', model: t('activerecord.models.resource_import_file')) -%></h1>
-<div id="content_list">
+<div class="row">
+<div class="col-md-9">
+<h1><%= t('page.showing', model: t('activerecord.models.resource_import_file')) -%></h1>
+<div class="card-body bg-light">
 <p id="notice"><%= notice %></p>
 
 <p>
@@ -77,7 +78,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div class="col">
   <%= form_for(@resource_import_file) do |f| %>
   <ul>
     <li><%= back_to_index(flash[:page_info]) -%></li>

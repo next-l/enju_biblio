@@ -2,7 +2,8 @@
     <%= render 'manifestations/tab_menu', manifestation: manifestation %>
     <div id="detail">
     <% cache([manifestation, fragment: 'show_detail_librarian_html', role: current_user_role_name, locale: @locale]) do %>
-      <table class="table table-striped" id="resource_detail">
+      <table class="table" id="resource_detail">
+      <tbody>
         <% if defined?(EnjuManifestationViewer) %>
           <%= embed_content(manifestation) -%>
         <% end %>
@@ -101,14 +102,6 @@
             <%= raw simple_format(h(manifestation.description)) -%>
           </td>
         </tr>
-        <% @manifestation.custom_properties.each do |custom_property| %>
-          <tr>
-            <td><%= custom_property.label -%>:</td>
-            <td>
-              <%= custom_property.value -%>
-            </td>
-          </tr>
-        <% end %>
         <tr>
           <td><%= t('activerecord.attributes.manifestation.note') -%>:</td>
           <td>
@@ -121,6 +114,7 @@
             <%= simple_format(manifestation.memo) -%>
           </td>
         </tr>
+      </tbody>
       </table>
     <% end %>
     <% if defined?(EnjuCirculation) %>
