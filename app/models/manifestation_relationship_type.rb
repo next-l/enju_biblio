@@ -1,7 +1,6 @@
 class ManifestationRelationshipType < ApplicationRecord
   include MasterModel
   default_scope { order('manifestation_relationship_types.position') }
-  translates :display_name
   has_many :manifestation_relationships
 end
 
