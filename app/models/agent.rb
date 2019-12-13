@@ -77,6 +77,7 @@ class Agent < ApplicationRecord
 
   def removable?
     return true if creates.empty? && produces.empty? && owns.empty? && donates.empty?
+
     false
   end
 
@@ -101,6 +102,7 @@ class Agent < ApplicationRecord
 
   def set_date_of_birth
     return if birth_date.blank?
+
     begin
       date = Time.zone.parse("#{birth_date}")
     rescue ArgumentError
@@ -119,6 +121,7 @@ class Agent < ApplicationRecord
 
   def set_date_of_death
     return if death_date.blank?
+
     begin
       date = Time.zone.parse("#{death_date}")
     rescue ArgumentError
@@ -257,10 +260,12 @@ class Agent < ApplicationRecord
 
   def self.new_agents(agents_params)
     return [] unless agents_params
+
     agents = []
     Agent.transaction do
       agents_params.each do |k, v|
         next if v['_destroy'] == '1'
+
         if v['agent_id'].present?
           agent = Agent.find(v['agent_id'])
         elsif v['id'].present?

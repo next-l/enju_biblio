@@ -171,10 +171,10 @@ class ItemsController < ApplicationController
           'Claimed Returned Or Never Borrowed',
           'Not Available']
       ).order(:position)
-      @item.circulation_status = CirculationStatus.where(name: 'In Process').first
+      @item.circulation_status = CirculationStatus.find_by(name: 'In Process')
       @item.checkout_type = @manifestation.carrier_type.checkout_types.first
       @item.item_has_use_restriction = ItemHasUseRestriction.new
-      @item.item_has_use_restriction.use_restriction = UseRestriction.where(name: 'Not For Loan').first
+      @item.item_has_use_restriction.use_restriction = UseRestriction.find_by(name: 'Not For Loan')
     end
 
     respond_to do |format|

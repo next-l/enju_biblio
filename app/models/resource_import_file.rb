@@ -663,7 +663,7 @@ class ResourceImportFile < ApplicationRecord
         extent: row['extent'],
         dimensions: row['dimensions'],
         start_page: row['start_page'],
-        end_page: row['end_page'],
+        end_page: row['end_page']
       }.delete_if{|_key, value| value.nil?}
 
       manifestation = self.class.import_manifestation(expression, publisher_agents, attributes,

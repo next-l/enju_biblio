@@ -34,11 +34,6 @@ class PictureFilesController < ApplicationController
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @picture_file }
-      format.html.phone {
-        if params[:format] == 'download'
-          render_image
-        end
-      }
       format.download {
         render_image
       }
