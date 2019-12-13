@@ -800,10 +800,9 @@ end
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
-#  classification_number           :string
 #  manifestation_identifier        :string
-#  date_of_publication             :datetime
 #  date_copyrighted                :datetime
+#  date_of_publication             :datetime
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
 #  access_address                  :string

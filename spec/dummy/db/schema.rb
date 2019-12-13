@@ -452,17 +452,17 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
   end
 
   create_table "items", force: :cascade do |t|
-    t.string "call_number"
-    t.string "item_identifier"
+    t.string "call_number", comment: "請求記号"
+    t.string "item_identifier", comment: "所蔵情報ID"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "shelf_id", default: 1, null: false
-    t.boolean "include_supplements", default: false, null: false
-    t.text "note"
-    t.string "url"
-    t.integer "price"
+    t.integer "shelf_id", default: 1, null: false, comment: "書架ID"
+    t.boolean "include_supplements", default: false, null: false, comment: "付録の有無"
+    t.text "note", comment: "備考"
+    t.string "url", comment: "URL"
+    t.integer "price", comment: "価格"
     t.integer "lock_version", default: 0, null: false
-    t.integer "required_role_id", default: 1, null: false
+    t.integer "required_role_id", default: 1, null: false, comment: "参照に必要な権限ID"
     t.integer "required_score", default: 0, null: false
     t.datetime "acquired_at"
     t.integer "bookstore_id"
@@ -605,21 +605,20 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
     t.index ["parent_id"], name: "index_manifestation_relationships_on_parent_id"
   end
 
-  create_table "manifestations", force: :cascade do |t|
-    t.text "original_title", null: false
+  create_table "manifestations", comment: "書誌", force: :cascade do |t|
+    t.text "original_title", null: false, comment: "タイトル"
     t.text "title_alternative"
     t.text "title_transcription"
-    t.string "classification_number"
     t.string "manifestation_identifier"
-    t.datetime "date_of_publication"
     t.datetime "date_copyrighted"
+    t.datetime "date_of_publication", comment: "出版日"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "access_address"
+    t.string "access_address", comment: "アクセスアドレス"
     t.integer "language_id", default: 1, null: false
     t.integer "carrier_type_id", default: 1, null: false
-    t.integer "start_page"
-    t.integer "end_page"
+    t.integer "start_page", comment: "開始ページ"
+    t.integer "end_page", comment: "終了ページ"
     t.integer "height"
     t.integer "width"
     t.integer "depth"
@@ -629,7 +628,7 @@ ActiveRecord::Schema.define(version: 2019_08_23_161828) do
     t.string "issue_number_string"
     t.string "serial_number_string"
     t.integer "edition"
-    t.text "note"
+    t.text "note", comment: "備考"
     t.boolean "repository_content", default: false, null: false
     t.integer "lock_version", default: 0, null: false
     t.integer "required_role_id", default: 1, null: false
