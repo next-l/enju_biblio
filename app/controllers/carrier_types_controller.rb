@@ -110,4 +110,7 @@ class CarrierTypesController < ApplicationController
       :attachment
     )
   end
+
+  def prepare_options
+  end
 end
