@@ -1,7 +1,6 @@
 class CarrierTypesController < ApplicationController
   before_action :set_carrier_type, only: [:edit, :update, :destroy]
   before_action :check_policy, only: [:index, :new, :create]
-  before_action :prepare_options, only: [:new, :edit]
   skip_after_action :verify_authorized
 
   # GET /carrier_types
@@ -108,19 +107,10 @@ class CarrierTypesController < ApplicationController
   def carrier_type_params
     params.require(:carrier_type).permit(
       :name, :display_name, :note, :position,
-      :attachment,
-      # EnjuCirculation
-      {
-        carrier_type_has_checkout_types_attributes: [
-          :id, :checkout_type_id, :_destroy
-        ]
-      }
+      :attachment
     )
   end
 
   def prepare_options
-    if defined?(EnjuCirculation)
-      @checkout_types = CheckoutType.select([:id, :display_name, :position])
-    end
   end
 end

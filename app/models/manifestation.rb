@@ -258,7 +258,7 @@ class Manifestation < ApplicationRecord
     if pub_date_string.length == 4
       date = Time.zone.parse(Time.utc(pub_date_string).to_s).beginning_of_day
     else
-      while date.nil? do
+      while date.nil?
         pub_date_string += '-01'
         break if pub_date_string =~ /-01-01-01$/
         begin
@@ -473,7 +473,7 @@ class Manifestation < ApplicationRecord
     pub_date_array = pub_date.split(';')
     pub_date_array.map{|pub_date_string|
       date = nil
-      while date.nil? do
+      while date.nil?
         pub_date_string += '-01'
         break if pub_date_string =~ /-01-01-01$/
         begin
@@ -800,10 +800,9 @@ end
 #  original_title                  :text             not null
 #  title_alternative               :text
 #  title_transcription             :text
-#  classification_number           :string
 #  manifestation_identifier        :string
-#  date_of_publication             :datetime
 #  date_copyrighted                :datetime
+#  date_of_publication             :datetime
 #  created_at                      :datetime         not null
 #  updated_at                      :datetime         not null
 #  access_address                  :string

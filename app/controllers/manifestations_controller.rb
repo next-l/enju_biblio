@@ -4,9 +4,6 @@ class ManifestationsController < ApplicationController
   before_action :authenticate_user!, only: :edit
   before_action :get_agent, :get_manifestation, except: [:create, :update, :destroy]
   before_action :get_expression, only: :new
-  if defined?(EnjuSubject)
-    before_action :get_subject, except: [:create, :update, :destroy]
-  end
   before_action :get_series_statement, only: [:index, :new, :edit]
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
@@ -259,7 +256,6 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       format.html
-      format.html.phone
       format.xml  { render xml: @manifestations }
       format.sru  { render layout: false }
       format.rss  { render layout: false }
@@ -313,7 +309,6 @@ class ManifestationsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
-      format.html.phone
       format.xml  {
         case params[:mode]
         when 'related'
@@ -720,11 +715,6 @@ class ManifestationsController < ApplicationController
     @frequencies = Frequency.select([:id, :display_name_translations, :position])
     @identifier_types = IdentifierType.select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
-    if defined?(EnjuSubject)
-      @subject_types = SubjectType.select([:id, :display_name, :position])
-      @subject_heading_types = SubjectHeadingType.select([:id, :display_name, :position])
-      @classification_types = ClassificationType.select([:id, :display_name, :position])
-    end
   end
 
   def get_index_agent

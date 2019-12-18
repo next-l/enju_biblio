@@ -17,10 +17,12 @@ class IssnRecord < ActiveRecord::Base
 
   def self.new_records(issn_records_params)
     return [] unless issn_records_params
+
     issn_records = []
     IssnRecord.transaction do
       issn_records_params.each do |k, v|
         next if v['_destroy'] == '1'
+
         if v['body'].present?
           issn_record = IssnRecord.where(body: v['body'].gsub(/[^0-9x]/i, '')).first_or_create!
         elsif v['id'].present?
