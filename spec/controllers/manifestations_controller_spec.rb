@@ -726,8 +726,8 @@ describe ManifestationsController do
             id: manifestation.id, manifestation: @attrs.merge(custom_properties_attrs)
           }
           expect(assigns(:manifestation)).to eq manifestation
-          expect(assigns(:manifestation).custom_properties.map{|property| property.name}).to eq ['test']
-          expect(assigns(:manifestation).custom_properties.map{|property| property.value}).to eq ['テスト']
+          expect(assigns(:manifestation).custom_properties.map{|property| property.name}).to eq ['custom property 1', 'test']
+          expect(assigns(:manifestation).custom_properties.map{|property| property.value}).to eq ['カスタム項目 1', 'テスト']
         end
       end
 
@@ -763,6 +763,7 @@ describe ManifestationsController do
           put :update, params: {
             id: manifestation.id, manifestation: @invalid_attrs.merge(custom_properties_attrs)
           }
+          expect(assigns(:manifestation).custom_properties.count).to eq 1
           expect(assigns(:manifestation)).to_not be_valid
         end
       end
