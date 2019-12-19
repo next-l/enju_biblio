@@ -1,6 +1,9 @@
 {
   "dependencies": {
+    "@rails/activestorage": "^6.0.2-1",
+    "@rails/ujs": "^6.0.2-1",
     "@rails/webpacker": "^4.0.7",
+    "bootstrap": "4.4",
     "jquery": "3.4",
     "jquery-colorbox": "^1.6.4",
     "jquery-migrate": "^3.1.0",
