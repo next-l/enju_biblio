@@ -716,6 +716,19 @@ describe ManifestationsController do
           }
           expect(assigns(:manifestation)).to eq @manifestation
         end
+
+        it 'assigns custom properties to @manifestation' do
+          manifestation = FactoryBot.create(:manifestation_custom_property).resource
+          custom_properties_attrs = {
+            custom_properties_attributes: [{name: 'test', value: 'テスト'}]
+          }
+          put :update, params: {
+            id: manifestation.id, manifestation: @attrs.merge(custom_properties_attrs)
+          }
+          expect(assigns(:manifestation)).to eq manifestation
+          expect(assigns(:manifestation).custom_properties.map{|property| property.name}).to eq ['test']
+          expect(assigns(:manifestation).custom_properties.map{|property| property.value}).to eq ['テスト']
+        end
       end
 
       describe 'with invalid params' do
@@ -738,6 +751,17 @@ describe ManifestationsController do
           }
           put :update, params: {
             id: @manifestation.id, manifestation: @invalid_attrs.merge(identifiers_attrs, publishers_attrs)
+          }
+          expect(assigns(:manifestation)).to_not be_valid
+        end
+
+        it 'assigns custom properties to @manifestation' do
+          manifestation = FactoryBot.create(:manifestation_custom_property).resource
+          custom_properties_attrs = {
+            custom_properties_attributes: [{name: 'test', value: 'テスト'}]
+          }
+          put :update, params: {
+            id: manifestation.id, manifestation: @invalid_attrs.merge(custom_properties_attrs)
           }
           expect(assigns(:manifestation)).to_not be_valid
         end
