@@ -19,6 +19,8 @@ class Item < ApplicationRecord
   belongs_to :budget_type, optional: true
   has_one :accept, dependent: :destroy
   has_one :withdraw, dependent: :destroy
+  has_many :custom_properties, as: :resource, dependent: :destroy
+  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
   belongs_to :shelf, counter_cache: true
