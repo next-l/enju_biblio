@@ -122,22 +122,6 @@ module ManifestationsHelper
     end
   end
 
-  def title_with_volume_number(manifestation)
-    title = manifestation.original_title
-    if manifestation.volume_number_string?
-      title << " " + manifestation.volume_number_string
-    end
-    if manifestation.serial?
-      if manifestation.issue_number_string?
-        title <<  " (#{manifestation.issue_number_string})"
-      end
-      if manifestation.serial_number?
-        title << " " + manifestation.serial_number.to_s
-      end
-    end
-    title
-  end
-
   def holding_item_sort_criteria( item )
     own_library = 2
     own_library = 1 if signed_in? and current_user.profile.library_id == item.shelf.library_id
