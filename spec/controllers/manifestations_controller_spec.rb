@@ -542,15 +542,6 @@ describe ManifestationsController do
           post :create, params: { manifestation: @attrs }
           expect(response).to redirect_to(manifestation_url(assigns(:manifestation)))
         end
-
-        it 'assigns custom_properties to @manifestation' do
-          custom_manifestation_properties_attrs = {
-            custom_manifestation_properties_attributes: [FactoryBot.attributes_for(:custom_manifestation_property)]
-          }
-          post :create, params: { manifestation: @attrs.merge(custom_manifestation_properties_attrs) }
-          expect(response).to redirect_to(manifestation_url(assigns(:manifestation)))
-          expect(assigns(:manifestation).custom_manifestation_properties.first.value).to eq 'Custom property'
-        end
       end
 
       describe 'with invalid params' do
@@ -724,15 +715,6 @@ describe ManifestationsController do
             id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs, publishers_attrs)
           }
           expect(assigns(:manifestation)).to eq @manifestation
-        end
-
-        it 'assigns custom_properties to @manifestation' do
-          custom_manifestation_properties_attrs = {
-            custom_manifestation_properties_attributes: [FactoryBot.attributes_for(:custom_manifestation_property)]
-          }
-          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(custom_manifestation_properties_attrs) }
-          expect(assigns(:manifestation)).to eq @manifestation
-          expect(assigns(:manifestation).custom_manifestation_properties.first.value).to eq 'Custom property'
         end
       end
 

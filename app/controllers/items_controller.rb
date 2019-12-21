@@ -272,12 +272,8 @@ class ItemsController < ApplicationController
       :acquired_at, :bookstore_id, :missing_since, :budget_type_id,
       :lock_version, :manifestation_id, :library_id, :required_role_id,
       :binding_item_identifier, :binding_call_number, :binded_at,
-      :use_restriction_id,
-      {custom_item_properties_attributes: [
-        :id, :name, :value,
-        :_destroy
-      ]},
-      item_has_use_restriction_attributes: :use_restriction_id, # EnjuCirculation
+      :use_restriction_id, :memo,
+      item_has_use_restriction_attributes: :use_restriction_id # EnjuCirculation
     )
   end
 
