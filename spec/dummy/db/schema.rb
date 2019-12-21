@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2019_12_16_131755) do
-=======
-ActiveRecord::Schema.define(version: 2019_08_17_152804) do
->>>>>>> feature/custom_property
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -320,12 +316,6 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
 
-<<<<<<< HEAD
-  create_table "demands", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "item_id"
-    t.bigint "message_id"
-=======
   create_table "custom_item_properties", force: :cascade do |t|
     t.string "name", null: false
     t.text "value"
@@ -344,11 +334,10 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
     t.index ["manifestation_id"], name: "index_custom_manifestation_properties_on_manifestation_id"
   end
 
-  create_table "demands", id: :serial, force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "item_id"
-    t.integer "message_id"
->>>>>>> feature/custom_property
+  create_table "demands", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "item_id"
+    t.bigint "message_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["item_id"], name: "index_demands_on_item_id"
@@ -864,11 +853,6 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
 
   create_table "profiles", force: :cascade do |t|
     t.bigint "user_id"
-<<<<<<< HEAD
-=======
-    t.bigint "user_group_id"
-    t.bigint "library_id"
->>>>>>> feature/custom_property
     t.string "locale"
     t.string "user_number"
     t.text "full_name"
@@ -877,21 +861,12 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
     t.bigint "required_role_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-<<<<<<< HEAD
-=======
-    t.string "checkout_icalendar_token"
-    t.boolean "save_checkout_history", default: false, null: false
->>>>>>> feature/custom_property
     t.datetime "expired_at"
     t.text "full_name_transcription"
     t.datetime "date_of_birth"
     t.jsonb "full_name_translations", default: {}, null: false
-<<<<<<< HEAD
     t.bigint "user_group_id"
     t.bigint "library_id"
-=======
-    t.index ["checkout_icalendar_token"], name: "index_profiles_on_checkout_icalendar_token", unique: true
->>>>>>> feature/custom_property
     t.index ["library_id"], name: "index_profiles_on_library_id"
     t.index ["user_group_id"], name: "index_profiles_on_user_group_id"
     t.index ["user_id"], name: "index_profiles_on_user_id"
@@ -1000,18 +975,6 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
     t.index ["resource_import_file_id"], name: "index_resource_import_results_on_resource_import_file_id"
   end
 
-<<<<<<< HEAD
-=======
-  create_table "retains", force: :cascade do |t|
-    t.bigint "reserve_id", null: false
-    t.bigint "item_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["item_id"], name: "index_retains_on_item_id"
-    t.index ["reserve_id"], name: "index_retains_on_reserve_id"
-  end
-
->>>>>>> feature/custom_property
   create_table "roles", force: :cascade do |t|
     t.string "name", null: false
     t.string "display_name"
@@ -1277,27 +1240,10 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
     t.index ["librarian_id"], name: "index_withdraws_on_librarian_id"
   end
 
-<<<<<<< HEAD
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agent_import_files", "users"
-=======
-  add_foreign_key "carrier_type_has_checkout_types", "carrier_types"
-  add_foreign_key "carrier_type_has_checkout_types", "checkout_types"
-  add_foreign_key "checked_items", "baskets"
-  add_foreign_key "checked_items", "items"
-  add_foreign_key "checked_items", "users"
-  add_foreign_key "checkins", "items"
-  add_foreign_key "checkout_stat_has_manifestations", "manifestations"
-  add_foreign_key "checkout_stat_has_users", "user_checkout_stats"
-  add_foreign_key "checkout_stat_has_users", "users"
-  add_foreign_key "checkouts", "checkins"
-  add_foreign_key "checkouts", "items"
-  add_foreign_key "checkouts", "libraries"
-  add_foreign_key "checkouts", "shelves"
-  add_foreign_key "checkouts", "users"
   add_foreign_key "custom_item_properties", "items"
   add_foreign_key "custom_manifestation_properties", "manifestations"
->>>>>>> feature/custom_property
   add_foreign_key "demands", "items"
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"
@@ -1333,10 +1279,6 @@ ActiveRecord::Schema.define(version: 2019_08_17_152804) do
   add_foreign_key "user_export_files", "users"
   add_foreign_key "user_has_roles", "roles"
   add_foreign_key "user_has_roles", "users"
-<<<<<<< HEAD
   add_foreign_key "user_import_files", "users"
-=======
-  add_foreign_key "user_reserve_stats", "users"
->>>>>>> feature/custom_property
   add_foreign_key "users", "profiles"
 end
