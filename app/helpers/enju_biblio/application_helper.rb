@@ -61,5 +61,21 @@ module EnjuBiblio
         identifier.body
       end
     end
+
+    def title_with_volume_number(manifestation)
+      title = manifestation.original_title
+      if manifestation.volume_number_string?
+        title << " " + manifestation.volume_number_string
+      end
+      if manifestation.serial?
+        if manifestation.issue_number_string?
+          title <<  " (#{manifestation.issue_number_string})"
+        end
+        if manifestation.serial_number?
+          title << " " + manifestation.serial_number.to_s
+        end
+      end
+      title
+    end
   end
 end
