@@ -1,10 +1,13 @@
 <%= render 'manifestations/title', manifestation: @item.manifestation -%>
-<p>
-  <%= t('activerecord.models.classification') -%>:
-  <%- @item.manifestation.classifications.each do |classification| -%>
-    <%= link_to "#{classification.classification_type.display_name}: #{classification.category}", manifestations_path(query: "classification_sm:#{classification.classification_type.name}_#{classification.category}") -%>
-  <%- end -%>
-</p>
+<% if defined?(EnjuCirculation) %>
+  <p>
+    <%= t('activerecord.models.classification') -%>:
+    <%- @item.manifestation.classifications.each do |classification| -%>
+      <%= link_to "#{classification.classification_type.display_name}: #{classification.category}", manifestations_path(query: "classification_sm:#{classification.classification_type.name}_#{classification.category}") -%>
+    <%- end -%>
+  </p>
+<% end %>
+
 <%= render 'page/required_field' %>
 <%= simple_form_for(@item) do |f| -%>
   <%= f.error_messages -%>
