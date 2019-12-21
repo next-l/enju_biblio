@@ -1,5 +1,5 @@
 <%= render 'manifestations/title', manifestation: @item.manifestation -%>
-<% if defined?(EnjuCirculation) %>
+<% if defined?(EnjuSubject) %>
   <p>
     <%= t('activerecord.models.classification') -%>:
     <%- @item.manifestation.classifications.each do |classification| -%>
