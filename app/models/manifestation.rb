@@ -511,266 +511,79 @@ class Manifestation < ApplicationRecord
     end
   end
 
-  def self.csv_header(role, options = {col_sep: "\t", role: :Guest})
-    header = %w(
-      manifestation_id
-      original_title
-      title_transcription
-      creator
-      contributor
-      publisher
-      pub_date
-      statement_of_responsibility
-      manifestation_price
-      manifestation_created_at
-      manifestation_updated_at
-      manifestation_identifier
-      access_address
-      description
-      note
-      extent
-      dimensions
-      carrier_type
-      edition
-      edition_string
-      volume_number
-      volume_number_string
-      issue_number
-      issue_number_string
-      serial_number
-    )
+  def self.csv_header(role = 'Guest')
+    Manifestation.new.to_hash(role).keys
+  end
 
-    header += IdentifierType.order(:position).pluck(:name)
+  def to_hash(role = 'Guest')
+    record = {
+      title: original_title,
+      title_alternative: title_alternative,
+      title_transcription: title_transcription,
+      manifestation_id: id,
+      manifestation_identifier: manifestation_identifier,
+      creator: creators.pluck(:full_name).join('//'),
+      publisher: publishers.pluck(:full_name).join('//'),
+      date_copyrighted: date_copyrighted,
+      date_of_publication: date_of_publication,
+      manifestation_created_at: created_at,
+      manifestation_updated_at: updated_at,
+      access_address: access_address,
+      language: language.name,
+      carrier_type: carrier_type.name,
+      price: price,
+      #isbn: isbn_records.pluck(:body).join('//'),
+      isbn: identifier_contents(:isbn).join('//'),
+      volume_number: volume_number,
+      volume_number_string: volume_number_string,
+      edition: edition,
+      edition_string: edition_string,
+      issue_number: issue_number,
+      description: description,
+      abstract: abstract,
+      year_of_publication: year_of_publication,
+      serial: serial,
+      extent: extent,
+      dimensions: dimensions,
+      note: note,
+      memo: memo
+    }
+
+    if ['Administrator', 'Librarian'].include?(role)
+      record.merge!({
+      })
+    end
+
     if defined?(EnjuSubject)
-      header += SubjectHeadingType.order(:position).pluck(:name).map{|type| "subject:#{type}"}
-      header += ClassificationType.order(:position).pluck(:name).map{|type| "classification:#{type}"}
+      SubjectHeadingType.find_each do |type|
+        record[:"subject:#{type.name}"] = subjects.where(subject_heading_type: type).pluck(:term).join('//')
+      end
+      ClassificationType.find_each do |type|
+        record[:"classification:#{type.name}"] = classifications.where(classification_type: type).pluck(:category).join('//')
+      end
     end
 
-    header += %w(
-      item_id
-      item_identifier
-      call_number
-      item_note
-    )
-    case role.to_sym
-    when :Administrator, :Librarian
-      header << "item_price"
-    end
-    header += %w(
-      acquired_at
-      accepted_at
-    )
-    case role.to_sym
-    when :Administrator, :Librarian
-      header += %w(
-        bookstore
-        budget_type
-        total_checkouts
-      )
-    end
-    header += %w(
-      circulation_status
-      shelf
-      library
-      item_created_at
-      item_updated_at
-    )
-    case role.to_sym
-    when :Administrator, :Librarian
-      header << "use_restriction"
-    end
-
-    header.to_csv(options)
+    record
   end
 
-  def to_csv(options = {format: :txt, role: :Guest})
-    lines = []
-    if items.exists?
-      items.includes(shelf: :library).each do |i|
-        item_lines = []
-        item_lines << id
-        item_lines << original_title
-        item_lines << title_transcription
-        if creators.exists?
-          item_lines << creators.pluck(:full_name).join("//")
+  def self.export(options = {format: :txt, role: 'Guest'})
+    file = Tempfile.create do |f|
+      f.write (Manifestation.csv_header(options[:role]) + Item.csv_header(options[:role])).to_csv(col_sep: "\t")
+      Manifestation.find_each do |manifestation|
+        if manifestation.items.exists?
+          manifestation.items.each do |item|
+            f.write (manifestation.to_hash(options[:role]).values + item.to_hash(options[:role]).values).to_csv(col_sep: "\t")
+          end
         else
-          item_lines << nil
-        end
-        if contributors.exists?
-          item_lines << contributors.pluck(:full_name).join("//")
-        else
-          item_lines << nil
-        end
-        if publishers.exists?
-          item_lines << publishers.pluck(:full_name).join("//")
-        else
-          item_lines << nil
-        end
-        item_lines << pub_date
-        item_lines << statement_of_responsibility
-        item_lines << price
-        item_lines << created_at
-        item_lines << updated_at
-        item_lines << manifestation_identifier
-        item_lines << access_address
-        item_lines << description.try(:gsub, /\r?\n/, '\n')
-        item_lines << note.try(:gsub, /\r?\n/, '\n')
-        item_lines << extent
-        item_lines << dimensions
-        item_lines << carrier_type.name
-        item_lines << edition
-        item_lines << edition_string
-        item_lines << volume_number
-        item_lines << volume_number_string
-        item_lines << issue_number
-        item_lines << issue_number_string
-        item_lines << serial_number
-
-        IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-          identifier_list = identifier_contents(identifier_type.to_sym)
-          if identifier_list
-            item_lines << identifier_list.join("//")
-          else
-            item_lines << nil
-          end
-        end
-        if defined?(EnjuSubject)
-          SubjectHeadingType.order(:position).each do |subject_heading_type|
-            if subjects.exists?
-              item_lines << subjects.where(subject_heading_type: subject_heading_type).pluck(:term).join('//')
-            else
-              item_lines << nil
-            end
-          end
-          ClassificationType.order(:position).each do |classification_type|
-            if classifications.exists?
-              item_lines << classifications.where(classification_type: classification_type).pluck(:category).join('//')
-            else
-              item_lines << nil
-            end
-          end
-        end
-
-        item_lines << i.id
-        item_lines << i.item_identifier
-        item_lines << i.call_number
-        item_lines << i.note.try(:gsub, /\r?\n/, '\n')
-        case options[:role].to_sym
-        when :Administrator, :Librarian
-          item_lines << i.price
-        end
-        item_lines << i.acquired_at
-        item_lines << i.accept.try(:created_at)
-        case options[:role].to_sym
-        when :Administrator, :Librarian
-          item_lines << i.bookstore.try(:name)
-          item_lines << i.budget_type.try(:name)
-          if defined?(EnjuCirculation)
-            item_lines << Checkout.where(item_id: i.id).count
-          else
-            item_lines << ''
-          end
-        end
-        if defined?(EnjuCirculation)
-          item_lines << i.circulation_status.try(:name)
-        else
-          item_lines << ''
-        end
-        item_lines << i.shelf.name
-        item_lines << i.shelf.library.name
-        item_lines << i.created_at
-        item_lines << i.updated_at
-        case options[:role].to_sym
-        when :Administrator, :Librarian
-          if defined?(EnjuCirculation)
-            item_lines << i.use_restriction.try(:name)
-          else
-            item_lines << ''
-          end
-        end
-        lines << item_lines
-      end
-    else
-      line = []
-      line << id
-      line << original_title
-      line << title_transcription
-      if creators.exists?
-        line << creators.pluck(:full_name).join("//")
-      else
-        line << nil
-      end
-      if contributors.exists?
-        line << contributors.pluck(:full_name).join("//")
-      else
-        line << nil
-      end
-      if publishers.exists?
-        line << publishers.pluck(:full_name).join("//")
-      else
-        line << nil
-      end
-      line << pub_date
-      line << statement_of_responsibility
-      line << price
-      line << created_at
-      line << updated_at
-      line << manifestation_identifier
-      line << access_address
-      line << description.try(:gsub, /\r?\n/, '\n')
-      line << note.try(:gsub, /\r?\n/, '\n')
-      line << extent
-      line << dimensions
-      line << carrier_type.name
-      line << edition
-      line << edition_string
-      line << volume_number
-      line << volume_number_string
-      line << issue_number
-      line << issue_number_string
-      line << serial_number
-
-      IdentifierType.order(:position).pluck(:name).each do |identifier_type|
-        identifier_list = identifier_contents(identifier_type.to_sym)
-        if identifier_list
-          line << identifier_list.join("//")
-        else
-          line << nil
-        end
-      end
-      if defined?(EnjuSubject)
-        SubjectHeadingType.order(:position).each do |subject_heading_type|
-          if subjects.exists?
-            line << subjects.where(subject_heading_type: subject_heading_type).pluck(:term).join('//')
-          else
-            line << nil
-          end
-        end
-        ClassificationType.order(:position).each do |classification_type|
-          if classifications.exists?
-            line << classifications.where(classification_type: classification_type).pluck(:category).join('//')
-          else
-            line << nil
-          end
+          f.write manifestation.to_hash(options[:role]).values.to_csv(col_sep: "\t")
         end
       end
 
-      lines << line
+      f.rewind
+      f.read
     end
 
-    if options[:format] == :txt
-      lines.map{|i| i.to_csv(col_sep: "\t")}.join
-    else
-      lines
-    end
-  end
-
-  def self.export(options = {format: :txt, role: :Guest})
-    file = ''
-    file += Manifestation.csv_header(options[:role], col_sep: "\t") if options[:format].to_sym == :txt
-    Manifestation.find_each do |manifestation|
-      file += manifestation.to_csv(options)
-    end
+    puts file
     file
   end
 

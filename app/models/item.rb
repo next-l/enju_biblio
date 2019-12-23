@@ -97,6 +97,40 @@ class Item < ApplicationRecord
       true
     end
   end
+
+  def self.csv_header(role = 'Guest')
+    Item.new.to_hash(role).keys
+  end
+
+  def to_hash(role = 'Guest')
+    record = {
+      item_id: id,
+      item_identifier: item_identifier,
+      call_number: call_number,
+      shelf: shelf.name,
+      item_note: note,
+      accepted_at: accept.try(:created_at),
+      acquired_at: acquired_at,
+      item_created_at: created_at,
+      item_updated_at: updated_at
+    }
+
+    if ['Administrator', 'Librarian'].include?(role)
+      record.merge!({
+        bookstore: bookstore.try(:name),
+        budget_type: budget_type.try(:name),
+        item_price: price
+      })
+
+      if defined?(EnjuCirculation)
+        record.merge!({
+          use_restriction: use_restriction.try(:name)
+        })
+      end
+    end
+
+    record
+  end
 end
 
 # == Schema Information

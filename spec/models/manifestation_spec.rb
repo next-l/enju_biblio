@@ -219,8 +219,8 @@ describe Manifestation, solr: true do
       csv["item_id"].compact.should_not be_empty
       csv["item_created_at"].compact.should_not be_empty
       csv["item_updated_at"].compact.should_not be_empty
-      csv["subject:unknown"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"next-l"}
-      csv["classification:ndc9"].compact.should eq manifestations(:manifestation_00001).items.count.times.map{"400"}
+      csv["subject:unknown"].compact.inject(0){|count, a| count += 1 if a == 'next-l'; count}.should eq manifestations(:manifestation_00001).items.count
+      csv["classification:ndc9"].compact.inject(0){|count, a| count += 1 if a == '400'; count}.should eq manifestations(:manifestation_00001).items.count
       csv["extent"].compact.should_not be_empty
       csv["dimensions"].compact.should_not be_empty
     end
@@ -269,13 +269,13 @@ describe Manifestation, solr: true do
 
     it "should respect the role of the user" do
       FactoryBot.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
-      lines = Manifestation.export
+      lines = Manifestation.export({role: 'Guest'})
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).to be_empty
       expect(csv["item_price"].compact).to be_empty
       expect(csv["budget_type"].compact).to be_empty
 
-      lines = Manifestation.export(format: :txt, role: :Librarian)
+      lines = Manifestation.export({format: :txt, role: 'Librarian'})
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).not_to be_empty
       expect(csv["item_price"].compact).not_to be_empty
@@ -291,9 +291,9 @@ describe Manifestation, solr: true do
       expect(csv["note"].compact).not_to be_empty
       expect(csv["item_note"].compact).not_to be_empty
       m = csv.find{|row| row["manifestation_id"].to_i == manifestation.id }
-      expect(m["description"]).to eq 'test\ntest'
-      expect(m["note"]).to eq 'test\ntest'
-      expect(m["item_note"]).to eq 'test\ntest'
+      expect(m["description"]).to eq "test\ntest"
+      expect(m["note"]).to eq "test\ntest"
+      expect(m["item_note"]).to eq "test\ntest"
     end
   end
 end
