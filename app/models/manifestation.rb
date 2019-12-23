@@ -517,40 +517,73 @@ class Manifestation < ApplicationRecord
 
   def to_hash(role = 'Guest')
     record = {
+      manifestation_id: id,
       title: original_title,
       title_alternative: title_alternative,
       title_transcription: title_transcription,
-      manifestation_id: id,
+      statement_of_responsibility: statement_of_responsibility,
+      serial: serial,
       manifestation_identifier: manifestation_identifier,
       creator: creators.pluck(:full_name).join('//'),
+      contributor: contributors.pluck(:full_name).join('//'),
       publisher: publishers.pluck(:full_name).join('//'),
-      date_copyrighted: date_copyrighted,
       date_of_publication: date_of_publication,
+      year_of_publication: year_of_publication,
+      publication_place: publication_place,
       manifestation_created_at: created_at,
       manifestation_updated_at: updated_at,
-      access_address: access_address,
-      language: language.name,
       carrier_type: carrier_type.name,
-      price: price,
-      #isbn: isbn_records.pluck(:body).join('//'),
+      content_type: manifestation_content_type.name,
+      frequency: frequency.name,
+      language: language.name,
       isbn: identifier_contents(:isbn).join('//'),
+      issn: identifier_contents(:issn).join('//'),
       volume_number: volume_number,
       volume_number_string: volume_number_string,
       edition: edition,
       edition_string: edition_string,
       issue_number: issue_number,
-      description: description,
-      abstract: abstract,
-      year_of_publication: year_of_publication,
-      serial: serial,
+      issue_number_string: issue_number_string,
+      serial_number: serial_number,
       extent: extent,
+      start_page: start_page,
+      end_page: end_page,
       dimensions: dimensions,
-      note: note,
-      memo: memo
+      height: height,
+      width: width,
+      depth: depth,
+      price: price,
+      access_address: access_address,
+      required_role: required_role.name,
+      description: description,
+      note: note
     }
+
+    IdentifierType.find_each do |type|
+      record[type.name.to_sym] = identifiers.where(identifier_type: type).pluck(:body).join('//')
+    end
+
+    series = series_statements.order(:position)
+    record.merge!(
+      series_statement_id: series.pluck(:id).join('//'),
+      series_statement_original_title: series.pluck(:original_title).join('.//'),
+      series_statement_title_subseries: series.pluck(:title_subseries).join('//'),
+      series_statement_title_subseries_transcription: series.pluck(:title_subseries_transcription).join('//'),
+      series_statement_title_transcription: series.pluck(:title_transcription).join('//'),
+      series_statement_creator: series.pluck(:creator_string).join('//'),
+      series_statement_volume_number: series.pluck(:volume_number_string).join('//'),
+      series_statement_series_master: series.pluck(:series_master).join('//'),
+      series_statement_root_manifestation_id: series.pluck(:root_manifestation_id).join('//'),
+      series_statement_manifestation_id: series.pluck(:manifestation_id).join('//'),
+      series_statement_position: series.pluck(:position).join('//'),
+      series_statement_note: series.pluck(:note).join('//'),
+      series_statement_created_at: series.pluck(:created_at).join('//'),
+      series_statement_updated_at: series.pluck(:updated_at).join('//')
+    )
 
     if ['Administrator', 'Librarian'].include?(role)
       record.merge!({
+        memo: memo
       })
     end
 
@@ -583,7 +616,6 @@ class Manifestation < ApplicationRecord
       f.read
     end
 
-    puts file
     file
   end
 

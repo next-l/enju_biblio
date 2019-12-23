@@ -18,13 +18,8 @@ class ResourceExportFile < ApplicationRecord
   def export!
     transition_to!(:started)
     role_name = user.try(:role).try(:name)
-    tempfile = Tempfile.new(['resource_export_file_', '.txt'])
-    tempfile.puts(Manifestation.csv_header(role_name, col_sep: "\t"))
-    Manifestation.find_each do |manifestation|
-      tempfile.puts(manifestation.to_csv(format: :txt, role: role_name))
-    end
-    tempfile.close
-    self.resource_export.attach(io: File.new(tempfile.path, "r"), filename: File.basename(tempfile))
+    tsv = Manifestation.export(role: role_name)
+    resource_export.attach(io: StringIO.new(tsv), filename: "resource_export.txt")
     save!
     transition_to!(:completed)
     mailer = ResourceExportMailer.completed(self)
