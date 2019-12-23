@@ -24,8 +24,16 @@
       </td>
     </tr>
     <tr>
+      <td><%= t('activerecord.attributes.series_statement.volume_number_string') -%></td>
+      <td><%= @series_statement.volume_number_string %></td>
+    </tr>
+    <tr>
       <td><%= t('activerecord.attributes.series_statement.creator_string') -%></td>
       <td><%= @series_statement.creator_string %></td>
+    </tr>
+    <tr>
+      <td><%= t('activerecord.attributes.series_statement.series_master') -%></td>
+      <td><%= localized_boolean(@series_statement.series_master) %></td>
     </tr>
     <tr>
       <td><%= t('activerecord.attributes.series_statement.note') -%></td>
