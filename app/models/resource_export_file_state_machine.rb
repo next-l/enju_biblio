@@ -6,7 +6,7 @@ class ResourceExportFileStateMachine
   state :completed
   state :failed
 
-  transition from: :pending, to: :started
+  transition from: :pending, to: [:started, :failed]
   transition from: :started, to: [:completed, :failed]
 
   after_transition(from: :pending, to: :started) do |resource_export_file|
