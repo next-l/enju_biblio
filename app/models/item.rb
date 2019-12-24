@@ -126,6 +126,7 @@ class Item < ApplicationRecord
       if defined?(EnjuCirculation)
         record.merge!({
           use_restriction: use_restriction.try(:name)
+          total_checkouts: checkouts.count
         })
       end
     end
