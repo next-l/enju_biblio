@@ -98,11 +98,11 @@ class Item < ApplicationRecord
     end
   end
 
-  def self.csv_header(role = 'Guest')
-    Item.new.to_hash(role).keys
+  def self.csv_header(role: 'Guest')
+    Item.new.to_hash(role: role).keys
   end
 
-  def to_hash(role = 'Guest')
+  def to_hash(role: 'Guest')
     record = {
       item_id: id,
       item_identifier: item_identifier,

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "manifestations/show.txt.erb" do
+describe "manifestations/show.txt.ruby" do
   fixtures :all
 
   before(:each) do

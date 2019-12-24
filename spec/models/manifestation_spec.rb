@@ -269,13 +269,13 @@ describe Manifestation, solr: true do
 
     it "should respect the role of the user" do
       FactoryBot.create(:item, bookstore_id: 1, price: 100, budget_type_id: 1)
-      lines = Manifestation.export({role: 'Guest'})
+      lines = Manifestation.export(role: 'Guest')
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).to be_empty
       expect(csv["item_price"].compact).to be_empty
       expect(csv["budget_type"].compact).to be_empty
 
-      lines = Manifestation.export({format: :txt, role: 'Librarian'})
+      lines = Manifestation.export(role: 'Librarian')
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv["bookstore"].compact).not_to be_empty
       expect(csv["item_price"].compact).not_to be_empty
