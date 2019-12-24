@@ -16,7 +16,7 @@ require 'spec_helper'
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'vcr'
-require 'factory_bot'
+require 'factory_bot_rails'
 require 'rspec/active_model/mocks'
 require 'pundit/rspec'
 require "capybara/rspec"
@@ -74,5 +74,5 @@ RSpec.configure do |config|
   end
 end
 
-FactoryBot.definition_file_paths << "#{::Rails.root}/../../spec/factories"
-FactoryBot.find_definitions
+#FactoryBot.definition_file_paths << "#{::Rails.root}/../../spec/factories"
+#FactoryBot.find_definitions

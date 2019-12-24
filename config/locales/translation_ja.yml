@@ -99,6 +99,7 @@ ja:
         extent: ページ数
         dimensions: 大きさ
         fulltext_content: 全文あり
+        custom_property: カスタム項目
       manifestation/subjects:
           term: 件名
       manifestation/classifications:

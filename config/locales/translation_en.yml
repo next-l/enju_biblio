@@ -99,6 +99,7 @@ en:
         extent: Extent
         dimensions: Dimensions
         fulltext_content: Fulltext content
+        custom_property: Custom property
       manifestation/subjects:
           term: Subject
       manifestation/classifications:
