@@ -300,6 +300,33 @@ describe Manifestation, solr: true do
       expect(m["note"]).to eq "test\ntest"
       expect(m["item_note"]).to eq "test\ntest"
     end
+
+    it 'should export custom properties with Librarian role' do
+      item = FactoryBot.create(:item)
+      item.manifestation.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目1', value: 'テスト')
+      2.times do
+        item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
+      end
+
+      lines = Manifestation.export(role: 'Librarian')
+      p lines
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      m = csv.find{|row| row["manifestation_id"].to_i == item.manifestation_id }
+      expect(m['manifestation_custom_property_1']).to eq 'テスト項目1: テスト'
+      expect(m['item_custom_property_2']).to eq 'テスト項目2: test'
+    end
+
+    it 'should not export custom properties with User role' do
+      item = FactoryBot.create(:item)
+      item.manifestation.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目1', value: 'テスト')
+      item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
+
+      lines = Manifestation.export(role: 'User')
+      p lines
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      expect(csv['manifestation_custom_property_1'].compact).to be_empty
+      expect(csv['item_custom_property_2'].compact).to be_empty
+    end
   end
 end
 
@@ -366,4 +393,5 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
+#  memo                            :text
 #

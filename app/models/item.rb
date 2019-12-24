@@ -17,8 +17,10 @@ class Item < ApplicationRecord
   belongs_to :bookstore, optional: true
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :budget_type, optional: true
-  has_one :accept
-  has_one :withdraw
+  has_one :accept, dependent: :destroy
+  has_one :withdraw, dependent: :destroy
+  has_many :custom_properties, as: :resource, dependent: :destroy
+  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
   belongs_to :shelf, counter_cache: true
@@ -122,9 +124,20 @@ class Item < ApplicationRecord
         memo: memo
       })
 
+      # 最もカスタム項目の多い資料について、カスタム項目の個数を取得する
+      ActiveRecord::Base.connection.execute('SELECT max(count) FROM (SELECT count(*), resource_id, resource_type FROM custom_properties GROUP BY resource_id, resource_type) AS type_count ;').first['max'].to_i.times do |i|
+        property = custom_properties[i]
+        if property
+          record[:"item_custom_property_#{i + 1}"] = "#{property.label}: #{property.value}"
+        else
+          record[:"item_custom_property_#{i + 1}"] = nil
+        end
+      end
+
       if defined?(EnjuCirculation)
         record.merge!({
-          use_restriction: use_restriction.try(:name)
+          use_restriction: use_restriction.try(:name),
+          total_checkouts: checkouts.count
         })
       end
     end
@@ -160,4 +173,5 @@ end
 #  binding_call_number     :string
 #  binded_at               :datetime
 #  manifestation_id        :integer          not null
+#  memo                    :text
 #

@@ -25,11 +25,13 @@ class Manifestation < ApplicationRecord
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
+  has_many :custom_properties, as: :resource, dependent: :destroy
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
@@ -606,6 +608,16 @@ class Manifestation < ApplicationRecord
       record.merge!({
         memo: memo
       })
+
+      # 最もカスタム項目の多い資料について、カスタム項目の個数を取得する
+      ActiveRecord::Base.connection.execute('SELECT max(count) FROM (SELECT count(*), resource_id, resource_type FROM custom_properties GROUP BY resource_id, resource_type) AS type_count ;').first['max'].to_i.times do |i|
+        property = custom_properties[i]
+        if property
+          record[:"manifestation_custom_property_#{i + 1}"] = "#{property.label}: #{property.value}"
+        else
+          record[:"manifestation_custom_property_#{i + 1}"] = nil
+        end
+      end
     end
 
     if defined?(EnjuSubject)
@@ -724,4 +736,5 @@ end
 #  publication_place               :text
 #  extent                          :text
 #  dimensions                      :text
+#  memo                            :text
 #

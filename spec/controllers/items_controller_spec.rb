@@ -265,6 +265,19 @@ describe ItemsController do
           assigns(:item).manifestation.should_not be_nil
           expect(response).to redirect_to(item_url(assigns(:item)))
         end
+
+        it 'assigns custom properties to @item' do
+          item = FactoryBot.create(:item_custom_property).resource
+          custom_properties_attrs = {
+            custom_properties_attributes: [{label: 'test', value: 'テスト'}]
+          }
+          put :update, params: {
+            id: item.id, item: @attrs.merge(custom_properties_attrs)
+          }
+          expect(assigns(:item)).to eq item
+          expect(assigns(:item).custom_properties.map{|property| property.label}).to eq ['custom property 1', 'test']
+          expect(assigns(:item).custom_properties.map{|property| property.value}).to eq ['カスタム項目 1', 'テスト']
+        end
       end
 
       describe 'with invalid params' do
@@ -434,6 +447,18 @@ describe ItemsController do
         it "re-renders the 'edit' template" do
           put :update, params: { id: @item, item: @invalid_attrs }
           expect(response).to render_template('edit')
+        end
+
+        it 'assigns custom properties to @item' do
+          item = FactoryBot.create(:item_custom_property).resource
+          custom_properties_attrs = {
+            custom_properties_attributes: [{name: 'test', value: 'テスト'}]
+          }
+          put :update, params: {
+            id: item.id, item: @invalid_attrs.merge(custom_properties_attrs)
+          }
+          expect(assigns(:item).custom_properties.count).to eq 1
+          expect(assigns(:item)).to_not be_valid
         end
       end
     end

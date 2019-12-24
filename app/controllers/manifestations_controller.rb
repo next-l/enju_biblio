@@ -429,15 +429,17 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1.json
   def update
     creators_params = manifestation_params[:creators_attributes]
-    Manifestation.transaction do
-      @manifestation.assign_attributes(manifestation_params.delete_if{|k, v|
-        k == 'creators_attributes'
-      })
-      @manifestation.creators = Agent.new_agents(creators_params)
-    end
+    @manifestation.assign_attributes(manifestation_params.delete_if{|k, v|
+      k == 'creators_attributes'
+    })
 
     respond_to do |format|
-      if @manifestation.save
+      if @manifestation.valid?
+        Manifestation.transaction do
+          @manifestation.creators = Agent.new_agents(creators_params)
+          @manifestation.save!
+        end
+        
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
       else
@@ -546,6 +548,10 @@ class ManifestationsController < ApplicationController
       ]},
       {identifiers_attributes: [
         :id, :body, :identifier_type_id,
+        :_destroy
+      ]},
+      {custom_properties_attributes: [
+        :id, :label, :value,
         :_destroy
       ]}
     )
