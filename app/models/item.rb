@@ -125,6 +125,16 @@ class Item < ApplicationRecord
         memo: memo
       })
 
+      # 最もカスタム項目の多い資料について、カスタム項目の個数を取得する
+      ActiveRecord::Base.connection.execute('SELECT max(count) FROM (SELECT count(*), resource_id, resource_type FROM custom_properties GROUP BY resource_id, resource_type) AS type_count ;').first['max'].times do |i|
+        property = custom_properties[i]
+        if property
+          record[:"item_custom_property_#{i + 1}"] = "#{property.label}: #{property.value}"
+        else
+          record[:"item_custom_property_#{i + 1}"] = nil
+        end
+      end
+
       if defined?(EnjuCirculation)
         record.merge!({
           use_restriction: use_restriction.try(:name)

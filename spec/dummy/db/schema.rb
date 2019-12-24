@@ -319,7 +319,7 @@ ActiveRecord::Schema.define(version: 2019_12_19_122214) do
   create_table "custom_properties", force: :cascade do |t|
     t.integer "resource_id", null: false
     t.string "resource_type", null: false
-    t.text "name", null: false
+    t.text "label", null: false
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

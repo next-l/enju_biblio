@@ -1,6 +1,6 @@
 class CustomProperty < ApplicationRecord
   belongs_to :resource, polymorphic: true
-  validates :name, presence: true
+  validates :label, presence: true
 end
 
 # == Schema Information
@@ -10,7 +10,7 @@ end
 #  id            :bigint           not null, primary key
 #  resource_id   :integer          not null
 #  resource_type :string           not null
-#  name          :text             not null
+#  label         :text             not null
 #  value         :text
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
