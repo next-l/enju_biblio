@@ -16,12 +16,15 @@ class ResourceExportFile < ApplicationRecord
     to: :state_machine
 
   def export!
-    transition_to!(:started)
     role_name = user.try(:role).try(:name)
     tsv = Manifestation.export(role: role_name)
-    resource_export.attach(io: StringIO.new(tsv), filename: "resource_export.txt")
-    save!
-    transition_to!(:completed)
+
+    Manifestation.transaction do
+      transition_to!(:started)
+      resource_export.attach(io: StringIO.new(tsv), filename: "resource_export.txt")
+      save!
+      transition_to!(:completed)
+    end
     mailer = ResourceExportMailer.completed(self)
     send_message(mailer)
   rescue => e
