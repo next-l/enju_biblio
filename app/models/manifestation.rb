@@ -528,11 +528,15 @@ class Manifestation < ApplicationRecord
     end
   end
 
-  def self.csv_header(role = 'Guest')
-    Manifestation.new.to_hash(role).keys
+  # CSVのヘッダ
+  # @param [String] role 権限
+  def self.csv_header(role: 'Guest')
+    Manifestation.new.to_hash(role: role).keys
   end
 
-  def to_hash(role = 'Guest')
+  # CSV出力用のハッシュ
+  # @param [String] role 権限
+  def to_hash(role: 'Guest')
     record = {
       manifestation_id: id,
       title: original_title,
@@ -616,16 +620,19 @@ class Manifestation < ApplicationRecord
     record
   end
 
-  def self.export(options = {format: :txt, role: 'Guest'})
+  # TSVでのエクスポート
+  # @param [String] role 権限
+  # @param [String] col_sep 区切り文字
+  def self.export(role: 'Guest', col_sep: "\t")
     file = Tempfile.create do |f|
-      f.write (Manifestation.csv_header(options[:role]) + Item.csv_header(options[:role])).to_csv(col_sep: "\t")
+      f.write (Manifestation.csv_header(role: role) + Item.csv_header(role: role)).to_csv(col_sep: col_sep)
       Manifestation.find_each do |manifestation|
         if manifestation.items.exists?
           manifestation.items.each do |item|
-            f.write (manifestation.to_hash(options[:role]).values + item.to_hash(options[:role]).values).to_csv(col_sep: "\t")
+            f.write (manifestation.to_hash(role: role).values + item.to_hash(role: role).values).to_csv(col_sep: col_sep)
           end
         else
-          f.write manifestation.to_hash(options[:role]).values.to_csv(col_sep: "\t")
+          f.write manifestation.to_hash(role: role).values.to_csv(col_sep: col_sep)
         end
       end
 
