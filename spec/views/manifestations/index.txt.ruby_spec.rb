@@ -1,6 +1,6 @@
 require "rails_helper.rb"
 
-describe "manifestations/index.txt.erb" do
+describe "manifestations/index.txt.ruby" do
   before(:each) do
     manifestation = FactoryBot.create(:manifestation)
     manifestation.items << FactoryBot.create(:item, bookstore_id: 1, budget_type_id: 1, price: 100)
