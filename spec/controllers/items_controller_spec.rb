@@ -260,7 +260,7 @@ describe ItemsController do
         it 'assigns custom properties to @item' do
           item = FactoryBot.create(:item_custom_property).resource
           custom_properties_attrs = {
-            custom_properties_attributes: [{name: 'test', value: 'テスト'}]
+            custom_properties_attributes: [{label: 'test', value: 'テスト'}]
           }
           put :update, params: {
             id: item.id, item: @attrs.merge(custom_properties_attrs)

@@ -720,7 +720,7 @@ describe ManifestationsController do
         it 'assigns custom properties to @manifestation' do
           manifestation = FactoryBot.create(:manifestation_custom_property).resource
           custom_properties_attrs = {
-            custom_properties_attributes: [{name: 'test', value: 'テスト'}]
+            custom_properties_attributes: [{label: 'test', value: 'テスト'}]
           }
           put :update, params: {
             id: manifestation.id, manifestation: @attrs.merge(custom_properties_attrs)
