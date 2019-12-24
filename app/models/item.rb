@@ -118,7 +118,8 @@ class Item < ApplicationRecord
       record.merge!({
         bookstore: bookstore.try(:name),
         budget_type: budget_type.try(:name),
-        item_price: price
+        item_price: price,
+        memo: memo
       })
 
       if defined?(EnjuCirculation)
