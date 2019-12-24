@@ -103,7 +103,7 @@
         </tr>
         <% @manifestation.custom_properties.each do |custom_property| %>
           <tr>
-            <td><%= custom_property.name -%>:</td>
+            <td><%= custom_property.label -%>:</td>
             <td>
               <%= custom_property.value -%>
             </td>
