@@ -624,7 +624,7 @@ class Manifestation < ApplicationRecord
   # @param [String] role 権限
   # @param [String] col_sep 区切り文字
   def self.export(role: 'Guest', col_sep: "\t")
-    file = Tempfile.create do |f|
+    file = Tempfile.create('manifestation_export') do |f|
       f.write (Manifestation.csv_header(role: role) + Item.csv_header(role: role)).to_csv(col_sep: col_sep)
       Manifestation.find_each do |manifestation|
         if manifestation.items.exists?
