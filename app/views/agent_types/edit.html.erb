@@ -5,9 +5,11 @@
   </div>
 
   <div class="col">
-    <ul>
-      <li><%= link_to t('page.show'), @agent_type -%></li>
-      <li><%= link_to t('page.back'), agent_types_path -%></li>
-    </ul>
+    <div class="card card-body">
+      <ul>
+        <li><%= link_to t('page.show'), @agent_type -%></li>
+        <li><%= link_to t('page.back'), agent_types_path -%></li>
+      </ul>
+    </div>
   </div>
 </div>

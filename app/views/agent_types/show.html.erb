@@ -21,11 +21,13 @@
   </div>
 
   <div class="col">
-    <ul>
-      <%- if policy(@agent_type).update? -%>
-        <li><%= link_to t('page.edit'), edit_agent_type_path(@agent_type) -%></li>
-      <%- end -%>
-      <li><%= back_to_index(flash[:page_info]) -%></li>
-    </ul>
+    <div class="card card-body">
+      <ul>
+        <%- if policy(@agent_type).update? -%>
+          <li><%= link_to t('page.edit'), edit_agent_type_path(@agent_type) -%></li>
+        <%- end -%>
+        <li><%= back_to_index(flash[:page_info]) -%></li>
+      </ul>
+    </div>
   </div>
 </div>
