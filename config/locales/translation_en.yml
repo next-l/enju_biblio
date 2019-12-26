@@ -128,6 +128,10 @@ en:
         budget_type_id: Budget type
         bookstore_id: Bookstore
         required_role_id: Required role
+        custom_property: Custom property
+      item/custom_properties:
+        label: Label
+        value: Value
       agent:
         last_name: Last name
         middle_name: Middle name
