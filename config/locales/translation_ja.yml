@@ -127,6 +127,10 @@ ja:
         budget_type_id: 予算種別
         bookstore_id: 書店
         required_role_id: 閲覧に必要な権限
+        custom_property: カスタム項目
+      item/custom_properties:
+        label: 項目名
+        value: 値
       agent:
         last_name: 姓
         middle_name: ミドルネーム
