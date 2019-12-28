@@ -101,11 +101,14 @@ ja:
         fulltext_content: 全文あり
         custom_property: カスタム項目
       manifestation/subjects:
-          term: 件名
+        term: 件名
       manifestation/classifications:
-          category: 分類
+        category: 分類
       manifestation/identifiers:
-          body: 識別子
+        body: 識別子
+      manifestation/custom_properties:
+        label: 項目名
+        value: 値
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID
@@ -338,6 +341,9 @@ ja:
       series_statement_merge_list:
         title: タイトル
       series_statement_merge:
+      custom_property:
+        label: 項目名
+        value: 値
 
   resource_import_file:
     update_relationship: 関連を更新
