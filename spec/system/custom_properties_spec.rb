@@ -46,7 +46,7 @@ RSpec.describe 'CustomProperties', type: :system do
   describe 'Item' do
     before do
       @item = FactoryBot.create(:item_custom_property).resource
-      CarrierType.find_by(name: 'volume').attachment.attach(io: File.open("#{Rails.root.to_s}/../../app/assets/images/icons/book.png"), filename: 'attachment.png')
+      CarrierType.find_by(name: 'volume').update(attachment: File.open("#{Rails.root.to_s}/../../app/assets/images/icons/book.png"))
     end
 
     describe 'When logged in as Librarian' do
