@@ -101,11 +101,14 @@ ja:
         fulltext_content: 全文あり
         custom_property: カスタム項目
       manifestation/subjects:
-          term: 件名
+        term: 件名
       manifestation/classifications:
-          category: 分類
+        category: 分類
       manifestation/identifiers:
-          body: 識別子
+        body: 識別子
+      manifestation/custom_properties:
+        label: 項目名
+        value: 値
       item:
         call_number: 請求記号
         item_identifier: 所蔵情報ID
@@ -124,6 +127,10 @@ ja:
         budget_type_id: 予算種別
         bookstore_id: 書店
         required_role_id: 閲覧に必要な権限
+        custom_property: カスタム項目
+      item/custom_properties:
+        label: 項目名
+        value: 値
       agent:
         last_name: 姓
         middle_name: ミドルネーム
@@ -338,6 +345,9 @@ ja:
       series_statement_merge_list:
         title: タイトル
       series_statement_merge:
+      custom_property:
+        label: 項目名
+        value: 値
 
   resource_import_file:
     update_relationship: 関連を更新

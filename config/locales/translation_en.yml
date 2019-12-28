@@ -78,7 +78,7 @@ en:
         memo: Memo
         repository_content: Repository content
         lock_version: Lock version
-        carrier_type: Manifestation form
+        carrier_type: Carrier type
         language: Language
         lccn: LCCN
         issn: ISSN
@@ -106,6 +106,9 @@ en:
           category: Classification
       manifestation/identifiers:
           body: Identifier
+      manifestation/custom_properties:
+        label: Label
+        value: Value
       item:
         call_number: Call number
         item_identifier: Item identifier
@@ -124,6 +127,10 @@ en:
         budget_type_id: Budget type
         bookstore_id: Bookstore
         required_role_id: Required role
+        custom_property: Custom property
+      item/custom_properties:
+        label: Label
+        value: Value
       agent:
         last_name: Last name
         middle_name: Middle name
@@ -334,6 +341,9 @@ en:
       series_statement_merge_list:
         title: Title
       series_statement_merge:
+      custom_property:
+        label: Label
+        value: Value
 
   resource_import_file:
     update_relationship: Update relationship
