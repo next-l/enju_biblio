@@ -107,6 +107,9 @@ en:
           category: Classification
       manifestation/identifiers:
           body: Identifier
+      manifestation/custom_properties:
+        label: Label
+        value: Value
       item:
         call_number: Call number
         item_identifier: Item identifier
@@ -335,6 +338,9 @@ en:
       series_statement_merge_list:
         title: Title
       series_statement_merge:
+      custom_property:
+        label: Label
+        value: Value
 
   resource_import_file:
     update_relationship: Update relationship
