@@ -309,7 +309,6 @@ describe Manifestation, solr: true do
       end
 
       lines = Manifestation.export(role: 'Librarian')
-      p lines
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       m = csv.find{|row| row["manifestation_id"].to_i == item.manifestation_id }
       expect(m['manifestation_custom_property_1']).to eq 'テスト項目1: テスト'
@@ -322,7 +321,6 @@ describe Manifestation, solr: true do
       item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
 
       lines = Manifestation.export(role: 'User')
-      p lines
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       expect(csv['manifestation_custom_property_1'].compact).to be_empty
       expect(csv['item_custom_property_2'].compact).to be_empty
