@@ -59,7 +59,7 @@
       <strong><%= t('activerecord.models.use_restriction') -%>:</strong>
       <% if @item.use_restriction %>
         <ul>
-          <li><%= @item.use_restriction.display_name %></li>
+          <li><%= @item.use_restriction.display_name.localize %></li>
         </ul>
       <% end %>
     </p>
