@@ -6,7 +6,6 @@ Bundler.require(*Rails.groups)
 require "enju_biblio"
 require "enju_event"
 require "enju_leaf"
-require "enju_manifestation_viewer"
 require "enju_message"
 require "enju_ndl"
 require 'resque/server'

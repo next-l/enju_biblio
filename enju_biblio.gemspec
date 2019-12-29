@@ -26,7 +26,6 @@ Gem::Specification.new do |s|
   s.add_dependency "responders", "~> 2.4"
 
   s.add_development_dependency "enju_leaf", "~> 1.3.3"
-  s.add_development_dependency "enju_manifestation_viewer", "~> 0.3.3"
   s.add_development_dependency "enju_subject", "~> 0.3.1"
   s.add_development_dependency "enju_inventory", "~> 0.3.0"
   s.add_development_dependency "enju_bookmark", "~> 0.3.0"
