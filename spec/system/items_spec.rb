@@ -19,6 +19,26 @@ RSpec.describe 'Manifestations', type: :system do
       visit item_path(@item.id, locale: :ja)
       expect(page).to have_content @item.memo
     end
+
+    it 'should show price' do
+      @item.update(price: '1500')
+      visit item_path(@item.id, locale: :ja)
+      expect(page).to have_content @item.price
+    end
+
+    it 'should show budget_type' do
+      budget_type = BudgetType.find(1)
+      @item.update(budget_type: budget_type)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).to have_content budget_type.display_name
+    end
+
+    it 'should show bookstore' do
+      bookstore = Bookstore.find(2)
+      @item.update(bookstore: bookstore)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).to have_content bookstore.name
+    end
   end
 
   describe 'When logged in as User' do
@@ -31,6 +51,26 @@ RSpec.describe 'Manifestations', type: :system do
       visit item_path(@item.id, locale: :ja)
       expect(page).not_to have_content @item.memo
     end
+
+    it 'should not show price' do
+      @item.update(price: '1500')
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content @item.price
+    end
+
+    it 'should not show budget_type' do
+      budget_type = BudgetType.find(1)
+      @item.update(budget_type: budget_type)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content budget_type.display_name
+    end
+
+    it 'should not show bookstore' do
+      bookstore = Bookstore.find(2)
+      @item.update(bookstore: bookstore)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content bookstore.name
+    end
   end
 
   describe 'When not logged in' do
@@ -38,6 +78,26 @@ RSpec.describe 'Manifestations', type: :system do
       @item.update(memo: 'memo')
       visit item_path(@item.id, locale: :ja)
       expect(page).not_to have_content @item.memo
+    end
+
+    it 'should not show budget_type' do
+      budget_type = BudgetType.find(1)
+      @item.update(budget_type: budget_type)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content budget_type.display_name
+    end
+
+    it 'should not show bookstore' do
+      bookstore = Bookstore.find(2)
+      @item.update(bookstore: bookstore)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content bookstore.name
+    end
+
+    it 'should not show price' do
+      @item.update(price: '1500')
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content @item.price
     end
   end
 end
