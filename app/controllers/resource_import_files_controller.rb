@@ -17,6 +17,8 @@ class ResourceImportFilesController < ApplicationController
   # GET /resource_import_files/1
   # GET /resource_import_files/1.json
   def show
+    @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
+
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @resource_import_file }
