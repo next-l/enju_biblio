@@ -225,15 +225,15 @@ class AgentImportFile < ApplicationRecord
 
     #if row['username'].to_s.strip.blank?
       agent.email = row['email'].to_s.strip
-      agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where(name: 'Guest').first
+      agent.required_role = Role.find_by(name: row['required_role'].to_s.strip.camelize) || Role.find_by(name: 'Guest')
     #else
     #  agent.required_role = Role.where(name: row['required_role'].to_s.strip.camelize).first || Role.where('Librarian').first
     #end
-    language = Language.where(name: row['language'].to_s.strip.camelize).first
-    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
+    language = Language.find_by(name: row['language'].to_s.strip.camelize)
+    language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
+    language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
     agent.language = language if language
-    country = Country.where(name: row['country'].to_s.strip).first
+    country = Country.find_by(name: row['country'].to_s.strip)
     agent.country = country if country
     agent
   end

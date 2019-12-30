@@ -608,13 +608,13 @@ class ResourceImportFile < ApplicationRecord
     end
 
     # TODO: 小数点以下の表現
-    language = Language.where(name: row['language'].to_s.strip.camelize).first
-    language = Language.where(iso_639_2: row['language'].to_s.strip.downcase).first unless language
-    language = Language.where(iso_639_1: row['language'].to_s.strip.downcase).first unless language
+    language = Language.find_by(name: row['language'].to_s.strip.camelize)
+    language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
+    language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
     
-    carrier_type = CarrierType.where(name: row['carrier_type'].to_s.strip).first
-    content_type = ContentType.where(name: row['content_type'].to_s.strip).first
-    frequency = Frequency.where(name: row['frequency'].to_s.strip).first
+    carrier_type = CarrierType.find_by(name: row['carrier_type'].to_s.strip)
+    content_type = ContentType.find_by(name: row['content_type'].to_s.strip)
+    frequency = Frequency.find_by(name: row['frequency'].to_s.strip)
 
     fulltext_content = serial = nil
     if %w(t true).include?(row['fulltext_content'].to_s.downcase.strip)
