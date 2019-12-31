@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <%= render 'page/include' %>
   <title><%= title(controller.controller_name) %></title>
-  <% if %w(index show new edit).include?(controller.action_name) %>
+  <% if %w(show edit index).include?(controller.action_name) && defined?(EnjuManifestationViewer) %>
     <%= book_jacket_header(@library_group.book_jacket_source) %>
   <% end %>
 </head>
