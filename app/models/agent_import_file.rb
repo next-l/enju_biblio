@@ -116,7 +116,7 @@ class AgentImportFile < ApplicationRecord
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.where(id: row['id']).first
+      agent = Agent.find_by(id: row['id'])
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
         agent.full_name_transcription = row['full_name_transcription'] if row['full_name_transcription'].to_s.strip.present?
@@ -151,7 +151,7 @@ class AgentImportFile < ApplicationRecord
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-      agent = Agent.where(id: row['id'].to_s.strip).first
+      agent = Agent.find_by(id: row['id'].to_s.strip)
       if agent
         agent.picture_files.destroy_all
         agent.reload
