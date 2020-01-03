@@ -10,7 +10,7 @@ class Item < ApplicationRecord
   delegate :display_name, to: :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns
-  has_many :donates
+  has_many :donates, dependent: :destroy
   has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
   belongs_to :manifestation, touch: true

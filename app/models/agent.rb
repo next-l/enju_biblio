@@ -97,7 +97,7 @@ class Agent < ApplicationRecord
   def set_date_of_birth
     return if birth_date.blank?
     begin
-      date = Time.zone.parse("#{birth_date}")
+      date = Time.zone.parse(birth_date.to_s)
     rescue ArgumentError
       begin
         date = Time.zone.parse("#{birth_date}-01")
@@ -115,7 +115,7 @@ class Agent < ApplicationRecord
   def set_date_of_death
     return if death_date.blank?
     begin
-      date = Time.zone.parse("#{death_date}")
+      date = Time.zone.parse(death_date.to_s)
     rescue ArgumentError
       begin
         date = Time.zone.parse("#{death_date}-01")

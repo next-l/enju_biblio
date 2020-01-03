@@ -772,7 +772,7 @@ class ResourceImportFile < ApplicationRecord
   def set_identifier(row)
     identifiers = []
     %w(isbn issn doi jpno ncid).each do |id_type|
-      if row["#{id_type}"].present?
+      if row[id_type.to_s].present?
         row[id_type].split(/\/\//).each do |identifier_s|
           import_id = Identifier.new(body: identifier_s)
           identifier_type = IdentifierType.find_by(name: id_type)
