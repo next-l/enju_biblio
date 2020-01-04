@@ -3,12 +3,10 @@ class ImportRequest < ApplicationRecord
   default_scope { order('import_requests.id DESC') }
   belongs_to :manifestation, optional: true
   belongs_to :user
-  validates_presence_of :isbn
+  validates :isbn, presence: true
   validate :check_isbn
   #validate :check_imported, on: :create
   #validates_uniqueness_of :isbn, if: Proc.new{|request| ImportRequest.where("created_at > ?", 1.day.ago).collect(&:isbn).include?(request.isbn)}
-  enju_ndl_ndl_search if defined?(EnjuNdl)
-  enju_nii_cinii_books if defined?(EnjuNii)
 
   has_many :import_request_transitions, autosave: false
 
