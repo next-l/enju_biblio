@@ -1,4 +1,4 @@
-class IsbnRecord < ActiveRecord::Base
+class IsbnRecord < ApplicationRecord
   has_many :isbn_record_and_manifestations, dependent: :destroy
   has_many :manifestations, through: :isbn_record_and_manifestations
   before_save :normalize_isbn
