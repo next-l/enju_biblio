@@ -1,6 +1,7 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.showing', model: t('activerecord.models.series_statement_merge_list')) -%></h1>
-<div id="content_list">
+<div class="row">
+<div class="col-md-9">
+<h1><%= t('page.showing', model: t('activerecord.models.series_statement_merge_list')) -%></h1>
+<div class="card-body bg-light">
 <p id="notice"><%= notice %></p>
 
 <%= form_for(:series_statement_merge_list, url: series_statement_merge_list_path(@series_statement_merge_list, mode: 'merge'), html: { method: :put }) do |f| -%>
@@ -15,14 +16,14 @@
     <%- end -%>
   </ul>
   <%- if @series_statement_merge_list.series_statements.size > 1 -%>
-    <%= f.submit t('page.merge'), data: {confirm: t('page.are_you_sure')} -%>
+    <%= f.submit t('page.merge'), class: 'btn btn-primary', data: {confirm: t('page.are_you_sure')} -%>
   <%- end -%>
 <%- end -%>
 
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div class="col">
   <ul>
     <li><%= link_to t('page.listing', model: t('activerecord.models.series_statement')), series_statement_merge_list_series_statements_path(@series_statement_merge_list) -%></li>
     <li><%= link_to t('page.edit'), edit_series_statement_merge_list_path(@series_statement_merge_list) -%></li>

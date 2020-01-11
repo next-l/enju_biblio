@@ -16,50 +16,65 @@
     </ul>
   <% end %>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :original_title -%><br />
-    <%= f.text_field :original_title, class: 'resource_title' -%>
+    <%= f.text_field :original_title, class: 'form-control' -%>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :title_transcription -%><br />
-    <%= f.text_field :title_transcription, class: 'resource_title' -%>
+    <%= f.text_field :title_transcription, class: 'form-control' -%>
   </div>
-  <div class="field">
+  <div class="form-group">
     <%= f.label :title_alternative -%><br />
-    <%= f.text_field :title_alternative, class: 'resource_title' -%>
+    <%= f.text_field :title_alternative, class: 'form-control' -%>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :statement_of_responsibility %><br />
-    <%= f.text_field :statement_of_responsibility, class: 'resource_title' -%>
+    <%= f.text_field :statement_of_responsibility, class: 'form-control' -%>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :serial %>
     <%= f.check_box :serial %>
   </div>
 
-  <div class="field">
-    <%= f.label :edition_string -%>
-    <%= f.text_field :edition_string %>
-    <%= f.label :edition -%>
-    <%= f.text_field :edition, class: 'resource_integer' -%>
-    <br />
-    <%= f.label :volume_number_string -%>
-    <%= f.text_field :volume_number_string %>
-    <%= f.label :volume_number -%>
-    <%= f.text_field :volume_number, class: 'resource_integer' -%>
-    <br />
-    <%= f.label :issue_number_string -%>
-    <%= f.text_field :issue_number_string %>
-    <%= f.label :issue_number -%>
-    <%= f.text_field :issue_number, class: 'resource_integer' -%>
-    <br />
-    <%= f.label :serial_number -%>
-    <%= f.text_field :serial_number, class: 'resource_integer' -%>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= f.label :edition_string -%>
+      <%= f.text_field :edition_string, class: 'form-control' %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :edition -%>
+      <%= f.text_field :edition, class: 'form-control' -%>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= f.label :volume_number_string -%>
+      <%= f.text_field :volume_number_string, class: 'form-control' %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :volume_number -%>
+      <%= f.text_field :volume_number, class: 'form-control' -%>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <%= f.label :issue_number_string -%>
+      <%= f.text_field :issue_number_string, class: 'form-control' %>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :issue_number -%>
+      <%= f.text_field :issue_number, class: 'form-control' -%>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :serial_number -%>
+      <%= f.text_field :serial_number, class: 'form-control' -%>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :series_statement_string -%><br />
     <%= f.fields_for :series_statements do |series_form| %>
       <%= render 'series_statement_fields', f: series_form %>
@@ -69,7 +84,7 @@
     </div>
   </div>
 
-  <div class="field" id="creator_form">
+  <div class="form-group" id="creator_form">
     <%= f.label :creator_string -%><br />
     <%= f.fields_for :creators do |creator_form| %>
       <%= render 'creator_fields', f: creator_form %>
@@ -79,7 +94,7 @@
     </div>
   </div>
 
-  <div class="field" id="contributor_form">
+  <div class="form-group" id="contributor_form">
     <%= f.label :contributor_string -%><br />
     <%= f.fields_for :contributors do |contributor_form| %>
       <%= render 'contributor_fields', f: contributor_form %>
@@ -89,7 +104,7 @@
     </div>
   </div>
 
-  <div class="field" id="publisher_form">
+  <div class="form-group" id="publisher_form">
     <%= f.label :publisher_string -%><br />
     <%= f.fields_for :publishers do |publisher_form| %>
       <%= render 'publisher_fields', f: publisher_form %>
@@ -99,39 +114,54 @@
     </div>
   </div>
 
-  <div class="field">
-    <%= f.label :publication_place -%>
-      <%= f.text_field :publication_place, class: 'resource_title' %>
+  <div class="form-row">
+    <div class="form-group col-md-8">
+      <%= f.label :publication_place -%>
+      <%= f.text_field :publication_place, class: 'form-control' %>
+    </div>
+
+    <div class="form-group col-md-2">
+      <%= f.label :pub_date -%>
+      <%= f.text_field :pub_date, class: 'form-control', placeholder: "#{t('page.example')}: 2011, 2011-04-12"-%>
+    </div>
+
+    <div class="form-group col-md-2">
+      <%= f.label :price -%>
+      <%= f.text_field :price, class: 'form-control' -%>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :pub_date -%>
-    <%= f.text_field :pub_date, class: 'date_field', placeholder: "#{t('page.example')}: 2011, 2011-04-12"-%>
-  </div>
-
-  <div class="field">
+  <div class="form-group">
     <%= f.label t('page.file') -%>
     <%= f.file_field :attachment -%>
   </div>
 
-  <div class="field">
-    <%= f.label t('activerecord.models.content_type') -%>
-    <%= f.select(:content_type_id, @content_types.collect{|c| [c.display_name, c.id]}) -%>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= f.label t('activerecord.models.content_type') -%>
+      <%= f.select(:content_type_id, @content_types.collect{|c| [c.display_name, c.id]}, {}, {class: 'form-control'}) -%>
 
-    <%= f.label t('activerecord.models.carrier_type') -%>
-    <%= f.select(:carrier_type_id, @carrier_types.collect{|c| [c.display_name, c.id]}) -%>
-    <!-- TODO: Formの切り替え時に入力項目をAjaxで書き換える -->
+    </div>
+    <div class="form-group col-md-6">
+      <%= f.label t('activerecord.models.carrier_type') -%>
+      <%= f.select(:carrier_type_id, @carrier_types.collect{|c| [c.display_name, c.id]}, {}, {class: 'form-control'}) -%>
+      <!-- TODO: Formの切り替え時に入力項目をAjaxで書き換える -->
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label t('activerecord.models.frequency') -%>
-    <%= f.select(:frequency_id, @frequencies.collect{|frequency| [frequency.display_name, frequency.id]}) -%>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= f.label t('activerecord.models.frequency') -%>
+      <%= f.select(:frequency_id, @frequencies.collect{|frequency| [frequency.display_name, frequency.id]}, {}, {class: 'form-control'}) -%>
+    </div>
 
-    <%= f.label t('activerecord.models.language') -%>
-    <%= f.select(:language_id, @languages.collect{|language| [language.display_name, language.id]}) -%>
+    <div class="form-group col-md-6">
+      <%= f.label t('activerecord.models.language') -%>
+      <%= f.select(:language_id, @languages.collect{|language| [language.display_name, language.id]}, {}, {class: 'form-control'}) -%>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :isbn_records -%><br />
     <%= f.fields_for :isbn_records do |isbn_record_form| %>
       <%= render 'isbn_record_fields', f: isbn_record_form %>
@@ -141,14 +171,19 @@
     </div>
   </div>
 
-  <div class="field">
-    <%= f.label :doi_record -%><br />
+  <div class="form-group">
+    <%= f.label :doi_record -%>
     <%= f.fields_for :doi_record do |doi_record_form| %>
-      <%= doi_record_form.text_field :body %>
+      <div class="input-group md-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">https://doi.org/</span>
+        </div>
+        <%= doi_record_form.text_field :body, class: 'form-control' %>
+      </div>
     <% end %>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :identifier -%><br />
     <%= f.fields_for :identifiers do |identifier_form| %>
       <%= render 'identifier_fields', f: identifier_form %>
@@ -158,81 +193,78 @@
     </div>
   </div>
 
-  <div class="field">
+  <div class="form-group">
     <%= f.label :manifestation_identifier -%><br />
-    <%= f.text_field :manifestation_identifier, class: 'resource_identifier_body', style: 'ime-mode: disabled' -%>
+    <%= f.text_field :manifestation_identifier, class: 'form-control', style: 'ime-mode: disabled' -%>
   </div>
 
   <% if defined?(EnjuSubject) %>
     <%= render 'manifestations/subject_form', f: f %>
   <% end %>
 
-  <div class="field">
-    <%= f.label :extent -%>
-    <%= f.text_field :extent, class: 'resource_subject' -%>
-    <br />
-    <%= f.label :start_page -%>
-    <%= f.text_field :start_page, class: 'resource_integer' -%>
-    <%= f.label :end_page -%>
-    <%= f.text_field :end_page, class: 'resource_integer' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :dimensions -%>
-    <%= f.text_field :dimensions, class: 'resource_subject' -%>
-    <br />
-    <%= f.label :height -%>(cm)
-    <%= f.text_field :height, class: 'resource_integer' -%>
-    <%= f.label :width -%>(cm)
-    <%= f.text_field :width, class: 'resource_integer' -%>
-    <%= f.label :depth -%>(cm)
-    <%= f.text_field :depth, class: 'resource_integer' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :price -%>
-    <%= f.text_field :price, class: 'resource_integer' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :access_address -%><br />
-    <%= f.url_field :access_address, class: 'resource_url' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label t('role.required_role') -%>
-    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}) -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :description -%><br />
-    <%= f.text_area :description, class: 'resource_textarea' -%>
-  </div>
-
-  <div class="field">
-    <%= f.label :custom_property -%><br />
-    <%= f.fields_for :custom_properties do |custom_property_form| %>
-      <%= render 'custom_property_fields', f: custom_property_form %>
-    <% end %>
-    <div class="links">
-      <p><%= link_to_add_association t('page.add'), f, :custom_properties %></p>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= f.label :extent -%>
+      <%= f.text_field :extent, class: 'form-control' -%>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.label :start_page -%>
+      <%= f.text_field :start_page, class: 'form-control' -%>
+    </div>
+    <div class="form-group col-md-3">
+      <%= f.label :end_page -%>
+      <%= f.text_field :end_page, class: 'form-control' -%>
     </div>
   </div>
 
-  <div class="field">
-    <%= f.label :note -%><br />
-    <%= f.text_area :note, class: 'resource_textarea' -%>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= f.label :dimensions -%>
+      <%= f.text_field :dimensions, class: 'form-control' -%>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :height -%>(cm)
+      <%= f.text_field :height, class: 'form-control' -%>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :width -%>(cm)
+      <%= f.text_field :width, class: 'form-control' -%>
+    </div>
+    <div class="form-group col-md-2">
+      <%= f.label :depth -%>(cm)
+      <%= f.text_field :depth, class: 'form-control' -%>
+    </div>
   </div>
 
-  <div class="field">
+  <div class="form-group">
+    <%= f.label :access_address -%><br />
+    <%= f.url_field :access_address, class: 'form-control' -%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label t('role.required_role') -%>
+    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}, {}, {class: 'form-control'}) -%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :description -%><br />
+    <%= f.text_area :description, class: 'form-control' -%>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :note -%><br />
+    <%= f.text_area :note, class: 'form-control' -%>
+  </div>
+
+  <div class="form-group">
     <%= f.label :memo -%><br />
-    <%= f.text_area :memo, class: 'resource_textarea' -%>
+    <%= f.text_area :memo, class: 'form-control' -%>
   </div>
 
   <div class="actions">
     <%= f.hidden_field :parent_id %>
     <%= f.hidden_field :lock_version %>
-    <%= f.submit data: {disable_with: t('page.saving')} -%>
+    <%= f.submit class: 'btn btn-primary', data: {disable_with: t('page.saving')}, class: 'btn btn-primary' -%>
   </div>
   <%= javascript_tag("$(function(){$('#query').focus()})") %>
 <%- end -%>

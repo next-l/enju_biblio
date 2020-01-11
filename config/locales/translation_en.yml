@@ -43,6 +43,7 @@ en:
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
       periodical: Periodical
+      doi_record: DOI
 
     attributes:
       manifestation:

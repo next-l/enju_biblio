@@ -26,6 +26,6 @@
     <%= f.select(:agent_relationship_type_id, @agent_relationship_types.collect{|r| [r.display_name, r.id]}) -%>
   </div>
   <div class="actions">
-    <%= f.submit %>
+    <%= f.submit class: 'btn btn-primary' %>
   </div>
 <% end %>
