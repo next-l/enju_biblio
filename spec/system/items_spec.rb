@@ -62,7 +62,7 @@ RSpec.describe 'Manifestations', type: :system do
       budget_type = BudgetType.find(1)
       @item.update(budget_type: budget_type)
       visit item_path(@item.id, locale: :ja)
-      expect(page).not_to have_content budget_type.display_name
+      expect(page).not_to have_content budget_type.display_name_ja
     end
 
     it 'should not show bookstore' do
@@ -84,7 +84,7 @@ RSpec.describe 'Manifestations', type: :system do
       budget_type = BudgetType.find(1)
       @item.update(budget_type: budget_type)
       visit item_path(@item.id, locale: :ja)
-      expect(page).not_to have_content budget_type.display_name
+      expect(page).not_to have_content budget_type.display_name_ja
     end
 
     it 'should not show bookstore' do
