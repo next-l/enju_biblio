@@ -1,6 +1,7 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-  <h1 class="title"><%= t('page.listing', model: t('activerecord.models.picture_file')) -%></h1>
-<div id="content_list">
+<div class="row">
+<div class="col-md-9">
+  <h1><%= t('page.listing', model: t('activerecord.models.picture_file')) -%></h1>
+<div class="card-body bg-light">
 <p id="notice"><%= notice %></p>
 
 <h2 class="resource_title">
@@ -26,9 +27,9 @@
       <td>
         <%= link_to "#{h(picture_file.picture_attachable_type)}/#{h(picture_file.picture_attachable_id)}", picture_file.picture_attachable if picture_file.picture_attachable -%>
       </td>
-      <td><%= picture_file.picture_file_size -%></td>
-      <td><%= picture_file.picture_content_type -%></td>
-      <td><%= link_to picture_file.picture_file_name, picture_file_path(picture_file, format: :download, size: 'original') -%></td>
+      <td><%= picture_file.picture.byte_size -%></td>
+      <td><%= picture_file.picture.content_type -%></td>
+      <td><%= link_to picture_file.picture_file_name, picture_file_path(picture_file, format: :download, size: 'original') if picture_file.picture -%></td>
       <td>
         <%= link_to t('page.show'), picture_file -%>
         <%- if policy(picture_file).update? -%>
@@ -46,7 +47,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div class="col">
   <%- if policy(PictureFile).create? -%>
     <ul>
       <li><%= link_to t('page.new', model: t('activerecord.models.picture_file')), new_picture_file_path(manifestation_id: manifestation) -%></li>

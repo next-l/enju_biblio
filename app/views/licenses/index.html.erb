@@ -1,6 +1,7 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.listing', model: t('activerecord.models.license')) -%></h1>
-<div id="content_list">
+<div class="row">
+<div class="col-md-9">
+<h1><%= t('page.listing', model: t('activerecord.models.license')) -%></h1>
+<div class="card-body bg-light">
 <p id="notice"><%= notice %></p>
 
 <table class="table table-striped index">
@@ -43,7 +44,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div class="col">
   <ul>
     <%- if policy(License).create? -%>
       <li><%= link_to t('page.new', model: t('activerecord.models.license')), new_license_path -%></li>

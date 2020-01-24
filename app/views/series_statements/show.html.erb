@@ -1,6 +1,7 @@
-<div id="content_detail" class="ui-corner-all ui-widget-content">
-<h1 class="title"><%= t('page.showing', model: t('activerecord.models.series_statement')) -%></h1>
-<div id="content_list">
+<div class="row">
+<div class="col-md-9">
+<h1><%= t('page.showing', model: t('activerecord.models.series_statement')) -%></h1>
+<div class="card-body bg-light">
   <p id="notice"><%= notice %></p>
   <% if @series_statement.root_manifestation and @manifestation_ids %>
     <%= render 'manifestations/paginate_id_link', manifestation: @series_statement.root_manifestation , manifestation_ids: @manifestation_ids %>
@@ -24,18 +25,6 @@
       </td>
     </tr>
     <tr>
-      <td><%= t('activerecord.attributes.series_statement.volume_number_string') -%></td>
-      <td><%= @series_statement.volume_number_string %></td>
-    </tr>
-    <tr>
-      <td><%= t('activerecord.attributes.series_statement.creator_string') -%></td>
-      <td><%= @series_statement.creator_string %></td>
-    </tr>
-    <tr>
-      <td><%= t('activerecord.attributes.series_statement.series_master') -%></td>
-      <td><%= localized_boolean(@series_statement.series_master) %></td>
-    </tr>
-    <tr>
       <td><%= t('activerecord.attributes.series_statement.note') -%></td>
       <td><%= @series_statement.note %></td>
     </tr>
@@ -43,7 +32,7 @@
 </div>
 </div>
 
-<div id="submenu" class="ui-corner-all ui-widget-content">
+<div class="col">
   <ul>
     <% if policy(@series_statement).update? %>
       <li><%= link_to t('page.edit'), edit_series_statement_path(@series_statement) %></li>

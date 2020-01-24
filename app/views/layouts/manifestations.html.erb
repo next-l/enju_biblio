@@ -1,30 +1,26 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<%= @locale.to_s -%>" lang="<%= @locale.to_s -%>">
-<head>
-  <meta charset="UTF-8" />
-  <title><%= resource_title(@manifestation, controller.action_name) %></title>
-  <%= render 'page/include' %>
-  <%- if controller.action_name == 'index' -%>
-    <%= auto_discovery_link_tag(:rss, url_for(filtered_params.merge(format: :rss, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name) + " (RSS)")) %>
-    <%= auto_discovery_link_tag(:atom, url_for(filtered_params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name) + " (Atom)")) %>
-  <%- end -%>
-  <% if %w(show edit index).include?(controller.action_name) && defined?(EnjuManifestationViewer) %>
-    <%= book_jacket_header(@library_group.book_jacket_source) %>
-  <% end %>
-  <link rel="search" type="application/opensearchdescription+xml" title="<%= LibraryGroup.site_config.display_name %>" href="<%= page_opensearch_url(format: :xml) %>" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= resource_title(@manifestation, controller.action_name) %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= render 'page/include' %>
+    <%- if controller.action_name == 'index' -%>
+      <%= auto_discovery_link_tag(:rss, url_for(filtered_params.merge(format: :rss, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name) + " (RSS)")) %>
+      <%= auto_discovery_link_tag(:atom, url_for(filtered_params.merge(format: :atom, page: nil, commit: nil, only_path: true)), title: (t('manifestation.library_group_manifestation', library_group_name: @library_group.display_name) + " (Atom)")) %>
+    <%- end -%>
+    <% if defined?(EnjuMnaifestationViewer) && %w(show edit index).include?(controller.action_name) %>
+      <%= book_jacket_header(@library_group.book_jacket_source) %>
+    <% end %>
+    <link rel="search" type="application/opensearchdescription+xml" title="<%= LibraryGroup.site_config.display_name %>" href="<%= page_opensearch_url(format: :xml) %>" />
+  </head>
+  <body>
+    <%= render 'page/menu' %>
 
-<%= render 'page/header' %>
-<%= render 'page/menu' %>
+    <div class="container">
+      <%= yield %>
+    </div>
 
-<div id="content">
-
-<%= yield %>
-
-</div>
-
-<%= render 'page/footer' %>
-
-</body>
+    <%= render 'page/footer' %>
+  </body>
 </html>

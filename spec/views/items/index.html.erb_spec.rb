@@ -18,7 +18,7 @@ describe "items/index" do
     it "should render index" do
       view.stub(:filtered_params).and_return(ActionController::Parameters.new().permit)
       render
-      expect(rendered).to have_selector "div#submenu ul"
+      expect(rendered).to have_selector "div.col"
     end
   end
 end

@@ -31,6 +31,8 @@ class Manifestation < ApplicationRecord
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
 
