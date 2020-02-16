@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_19_122214) do
+ActiveRecord::Schema.define(version: 2020_02_16_052639) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -351,6 +351,24 @@ ActiveRecord::Schema.define(version: 2019_12_19_122214) do
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "default_item_custom_labels", force: :cascade do |t|
+    t.bigint "library_group_id", null: false
+    t.string "label", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["label"], name: "index_default_item_custom_labels_on_label", unique: true
+    t.index ["library_group_id"], name: "index_default_item_custom_labels_on_library_group_id"
+  end
+
+  create_table "default_manifestaton_custom_labels", force: :cascade do |t|
+    t.bigint "library_group_id", null: false
+    t.string "label", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["label"], name: "index_default_manifestaton_custom_labels_on_label", unique: true
+    t.index ["library_group_id"], name: "index_default_manifestaton_custom_labels_on_library_group_id"
   end
 
   create_table "demands", id: :serial, force: :cascade do |t|
@@ -1442,6 +1460,8 @@ ActiveRecord::Schema.define(version: 2019_12_19_122214) do
     t.index ["librarian_id"], name: "index_withdraws_on_librarian_id"
   end
 
+  add_foreign_key "default_item_custom_labels", "library_groups"
+  add_foreign_key "default_manifestaton_custom_labels", "library_groups"
   add_foreign_key "demands", "items"
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"
