@@ -4,4 +4,5 @@
 //= link icons/arrow_up.png
 //= link icons/arrow_down.png
 //= link icons/feed.png
+//= link icons/picture.png
 //= link unknown_resource.png
