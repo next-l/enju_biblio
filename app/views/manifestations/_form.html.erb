@@ -264,7 +264,7 @@
   <div class="actions">
     <%= f.hidden_field :parent_id %>
     <%= f.hidden_field :lock_version %>
-    <%= f.submit class: 'btn btn-primary', data: {disable_with: t('page.saving')}, class: 'btn btn-primary' -%>
+    <%= f.submit class: 'btn btn-primary', data: {disable_with: t('page.saving')} -%>
   </div>
   <%= javascript_tag("$(function(){$('#query').focus()})") %>
 <%- end -%>
