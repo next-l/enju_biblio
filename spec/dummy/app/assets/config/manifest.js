@@ -6,4 +6,5 @@
 //= link icons/feed.png
 //= link icons/picture.png
 //= link icons/page_white_text.png
+//= link icons/page_white_excel.png
 //= link unknown_resource.png
