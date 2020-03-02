@@ -5,4 +5,5 @@
 //= link icons/arrow_down.png
 //= link icons/feed.png
 //= link icons/picture.png
+//= link icons/page_white_text.png
 //= link unknown_resource.png
