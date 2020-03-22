@@ -553,7 +553,7 @@ class ManifestationsController < ApplicationController
         :_destroy
       ]},
       {custom_properties_attributes: [
-        :id, :label, :value,
+        :id, :value,
         :_destroy
       ]}
     )
@@ -756,7 +756,7 @@ class ManifestationsController < ApplicationController
 
   def prepare_custom_properties
     if @manifestation.custom_properties.empty?
-      @manifestation.custom_properties.new(@library_group.default_custom_manifestation_label.to_s.split.map{|label| {label: label}})
+      @manifestation.custom_properties.new
     end
   end
 
