@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_22_053443) do
+ActiveRecord::Schema.define(version: 2020_03_22_083458) do
 
   create_table "accepts", force: :cascade do |t|
     t.integer "basket_id"
@@ -433,13 +433,22 @@ ActiveRecord::Schema.define(version: 2020_03_22_053443) do
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
 
+  create_table "custom_labels", force: :cascade do |t|
+    t.integer "library_group_id"
+    t.string "label"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["library_group_id"], name: "index_custom_labels_on_library_group_id"
+  end
+
   create_table "custom_properties", force: :cascade do |t|
     t.integer "resource_id", null: false
     t.string "resource_type", null: false
-    t.text "label", null: false
+    t.integer "custom_label_id", null: false
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["custom_label_id"], name: "index_custom_properties_on_custom_label_id"
   end
 
   create_table "demands", force: :cascade do |t|
