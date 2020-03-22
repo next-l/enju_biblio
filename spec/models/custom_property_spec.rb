@@ -8,11 +8,11 @@ end
 #
 # Table name: custom_properties
 #
-#  id            :integer          not null, primary key
-#  resource_id   :integer          not null
-#  resource_type :string           not null
-#  label         :text             not null
-#  value         :text
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
+#  id              :integer          not null, primary key
+#  resource_id     :integer          not null
+#  resource_type   :string           not null
+#  custom_label_id :integer          not null
+#  value           :text
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
 #

@@ -382,6 +382,11 @@ describe ManifestationsController do
         get :new, params: { expression_id: 1 }
         expect(response).to be_successful
       end
+
+      it 'should contain default custom properties' do
+        get :new
+        expect(assigns(:manifestation).custom_properties.size).to eq 3
+      end
     end
 
     describe 'When logged in as Librarian' do
