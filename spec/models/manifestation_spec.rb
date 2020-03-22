@@ -303,9 +303,9 @@ describe Manifestation, solr: true do
 
     it 'should export custom properties with Librarian role' do
       item = FactoryBot.create(:item)
-      item.manifestation.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目1', value: 'テスト')
+      item.manifestation.custom_properties << FactoryBot.build(:custom_property, value: 'テスト')
       2.times do
-        item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
+        item.custom_properties << FactoryBot.build(:custom_property, value: 'test')
       end
 
       lines = Manifestation.export(role: 'Librarian')
@@ -317,8 +317,8 @@ describe Manifestation, solr: true do
 
     it 'should not export custom properties with User role' do
       item = FactoryBot.create(:item)
-      item.manifestation.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目1', value: 'テスト')
-      item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
+      item.manifestation.custom_properties << FactoryBot.build(:custom_property, value: 'テスト')
+      item.custom_properties << FactoryBot.build(:custom_property, value: 'test')
 
       lines = Manifestation.export(role: 'User')
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
@@ -357,12 +357,12 @@ end
 #  serial_number_string            :string
 #  edition                         :integer
 #  note                            :text
-#  repository_content              :boolean          default("0"), not null
+#  repository_content              :boolean          default("false"), not null
 #  lock_version                    :integer          default("0"), not null
 #  required_role_id                :integer          default("1"), not null
 #  required_score                  :integer          default("0"), not null
 #  frequency_id                    :integer          default("1"), not null
-#  subscription_master             :boolean          default("0"), not null
+#  subscription_master             :boolean          default("false"), not null
 #  attachment_file_name            :string
 #  attachment_content_type         :string
 #  attachment_file_size            :integer

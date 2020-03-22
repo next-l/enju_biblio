@@ -1,0 +1,2 @@
+module CustomManifestationLabelsHelper
+end

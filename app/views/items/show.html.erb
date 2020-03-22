@@ -114,7 +114,7 @@
     <% if current_user.try(:has_role?, 'Librarian') %>
       <% @item.custom_properties.each do |custom_property| %>
         <p>
-          <strong><%= custom_property.label -%>:</strong>
+          <strong><%= custom_property.custom_label.label -%>:</strong>
           <%= custom_property.value -%>
         </p>
       <% end %>

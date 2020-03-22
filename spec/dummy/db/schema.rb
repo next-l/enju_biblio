@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_22_083458) do
+ActiveRecord::Schema.define(version: 2020_03_22_096458) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -344,22 +344,32 @@ ActiveRecord::Schema.define(version: 2020_03_22_083458) do
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
 
-  create_table "custom_labels", force: :cascade do |t|
+  create_table "custom_item_labels", force: :cascade do |t|
     t.bigint "library_group_id", null: false
-    t.string "label"
+    t.string "label", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["library_group_id"], name: "index_custom_labels_on_library_group_id"
+    t.index ["library_group_id"], name: "index_custom_item_labels_on_library_group_id"
+  end
+
+  create_table "custom_manifestation_labels", force: :cascade do |t|
+    t.bigint "library_group_id", null: false
+    t.string "label", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["library_group_id"], name: "index_custom_manifestation_labels_on_library_group_id"
   end
 
   create_table "custom_properties", force: :cascade do |t|
-    t.integer "resource_id", null: false
-    t.string "resource_type", null: false
+    t.string "custom_label_type", null: false
     t.bigint "custom_label_id", null: false
-    t.text "value"
+    t.string "resource_type", null: false
+    t.bigint "resource_id", null: false
+    t.text "value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["custom_label_id"], name: "index_custom_properties_on_custom_label_id"
+    t.index ["custom_label_type", "custom_label_id"], name: "index_custom_properties_on_custom_label_type_and_id"
+    t.index ["resource_type", "resource_id"], name: "index_custom_properties_on_resource_type_and_resource_id"
   end
 
   create_table "demands", id: :serial, force: :cascade do |t|
@@ -725,8 +735,6 @@ ActiveRecord::Schema.define(version: 2020_03_22_083458) do
     t.jsonb "login_banner_translations", default: {}, null: false
     t.jsonb "footer_banner_translations", default: {}, null: false
     t.string "email"
-    t.text "default_custom_manifestation_label"
-    t.text "default_custom_item_label"
     t.index ["email"], name: "index_library_groups_on_email"
     t.index ["short_name"], name: "index_library_groups_on_short_name"
     t.index ["user_id"], name: "index_library_groups_on_user_id"
@@ -1453,8 +1461,8 @@ ActiveRecord::Schema.define(version: 2020_03_22_083458) do
     t.index ["librarian_id"], name: "index_withdraws_on_librarian_id"
   end
 
-  add_foreign_key "custom_labels", "library_groups"
-  add_foreign_key "custom_properties", "custom_labels"
+  add_foreign_key "custom_item_labels", "library_groups"
+  add_foreign_key "custom_manifestation_labels", "library_groups"
   add_foreign_key "demands", "items"
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"

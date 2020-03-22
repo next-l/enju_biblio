@@ -17,8 +17,6 @@ one:
     ::/0"
   email: library@example.jp
   pub_year_facet_range_interval: 10
-  default_custom_manifestation_label: "custom1\r\ncustom2\r\ncustom3"
-  default_custom_item_label: "custom1\r\ncustom2\r\ncustom3"
 
 # == Schema Information
 #

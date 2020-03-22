@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Custom Item Labels</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Library group</th>
+      <th>Label</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @custom_item_labels.each do |custom_item_label| %>
+      <tr>
+        <td><%= custom_item_label.library_group.name %></td>
+        <td><%= custom_item_label.label %></td>
+        <td><%= link_to 'Show', custom_item_label %></td>
+        <td><%= link_to 'Edit', edit_custom_item_label_path(custom_item_label) %></td>
+        <td><%= link_to 'Destroy', custom_item_label, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Custom Item Label', new_custom_item_label_path %>

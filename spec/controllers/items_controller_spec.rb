@@ -269,13 +269,13 @@ describe ItemsController do
         it 'assigns custom properties to @item' do
           item = FactoryBot.create(:item_custom_property).resource
           custom_properties_attrs = {
-            custom_properties_attributes: [{label: 'test', value: 'テスト'}]
+            custom_properties_attributes: [{value: 'テスト'}]
           }
           put :update, params: {
             id: item.id, item: @attrs.merge(custom_properties_attrs)
           }
           expect(assigns(:item)).to eq item
-          expect(assigns(:item).custom_properties.map{|property| property.label}).to eq ['custom property 1', 'test']
+          expect(assigns(:item).custom_properties.map{|property| property.custom_label.label}).to eq ['custom property 1', 'test']
           expect(assigns(:item).custom_properties.map{|property| property.value}).to eq ['カスタム項目 1', 'テスト']
         end
       end

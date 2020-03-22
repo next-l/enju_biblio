@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :custom_item_labels
+  resources :custom_manifestation_labels
   resources :resource_export_files
 
   resources :identifier_types

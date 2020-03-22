@@ -275,7 +275,7 @@ class ItemsController < ApplicationController
       :use_restriction_id, :memo,
       {item_has_use_restriction_attributes: :use_restriction_id}, # EnjuCirculation
       {custom_properties_attributes: [
-        :id, :label, :value,
+        :id, :value,
         :_destroy
       ]}
     )
