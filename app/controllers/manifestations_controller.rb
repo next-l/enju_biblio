@@ -7,6 +7,7 @@ class ManifestationsController < ApplicationController
   before_action :get_series_statement, only: [:index, :new, :edit]
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
+  before_action :prepare_custom_properties, only: [:edit]
   before_action :get_version, only: [:show]
   after_action :convert_charset, only: :index
 
@@ -334,6 +335,7 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
+    prepare_custom_properties
     @manifestation.language = Language.find_by(iso_639_1: @locale)
     @parent = Manifestation.find_by(id: params[:parent_id]) if params[:parent_id].present?
     if @parent
@@ -723,6 +725,12 @@ class ManifestationsController < ApplicationController
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
   end
 
+  def prepare_custom_properties
+    if @manifestation.custom_properties.empty?
+      @manifestation.custom_properties.new(@library_group.default_custom_manifestation_label.to_s.split.map{|label| {label: label}})
+    end
+  end
+
   def get_index_agent
     agent = {}
     case
@@ -754,7 +762,7 @@ class ManifestationsController < ApplicationController
     if options[:pub_date_from].blank?
       pub_date[:from] = "*"
     else
-      year = options[:pub_date_from].rjust(4, "0")
+      year = options[:pub_date_from].to_s.gsub(/\D/, '').rjust(4, "0")
       if year.length == 4
         pub_date[:from] = Time.zone.parse(Time.utc(year).to_s).beginning_of_year.utc.iso8601
       else
@@ -768,7 +776,7 @@ class ManifestationsController < ApplicationController
     if options[:pub_date_until].blank?
       pub_date[:until] = "*"
     else
-      year = options[:pub_date_until].rjust(4, "0")
+      year = options[:pub_date_until].to_s.gsub(/\D/, '').rjust(4, "0")
       if year.length == 4
         pub_date[:until] = Time.zone.parse(Time.utc(year).to_s).end_of_year.utc.iso8601
       else
@@ -783,8 +791,6 @@ class ManifestationsController < ApplicationController
 
   def set_pub_date(query, options)
     unless options[:pub_date_from].blank? && options[:pub_date_until].blank?
-      options[:pub_date_from].to_s.gsub!(/\D/, '')
-      options[:pub_date_until].to_s.gsub!(/\D/, '')
       pub_date = parse_pub_date(options)
       query = "#{query} date_of_publication_d:[#{pub_date[:from]} TO #{pub_date[:until]}]"
     end
