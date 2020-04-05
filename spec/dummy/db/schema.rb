@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_22_053443) do
+ActiveRecord::Schema.define(version: 2019_12_16_131755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -316,15 +316,6 @@ ActiveRecord::Schema.define(version: 2020_03_22_053443) do
     t.index ["work_id"], name: "index_creates_on_work_id"
   end
 
-  create_table "custom_properties", force: :cascade do |t|
-    t.integer "resource_id", null: false
-    t.string "resource_type", null: false
-    t.text "label", null: false
-    t.text "value"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "demands", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "item_id"
@@ -570,8 +561,6 @@ ActiveRecord::Schema.define(version: 2020_03_22_053443) do
     t.jsonb "login_banner_translations", default: {}, null: false
     t.jsonb "footer_banner_translations", default: {}, null: false
     t.string "email"
-    t.text "default_custom_manifestation_label"
-    t.text "default_custom_item_label"
     t.index ["email"], name: "index_library_groups_on_email"
     t.index ["short_name"], name: "index_library_groups_on_short_name"
   end

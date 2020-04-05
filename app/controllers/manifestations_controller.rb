@@ -7,7 +7,6 @@ class ManifestationsController < ApplicationController
   before_action :get_series_statement, only: [:index, :new, :edit]
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
-  before_action :prepare_custom_properties, only: [:edit]
   before_action :get_version, only: [:show]
   after_action :convert_charset, only: :index
 
@@ -335,7 +334,6 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
-    prepare_custom_properties
     @manifestation.language = Language.find_by(iso_639_1: @locale)
     @parent = Manifestation.find_by(id: params[:parent_id]) if params[:parent_id].present?
     if @parent
@@ -526,10 +524,6 @@ class ManifestationsController < ApplicationController
       ]},
       {identifiers_attributes: [
         :id, :body, :identifier_type_id,
-        :_destroy
-      ]},
-      {custom_properties_attributes: [
-        :id, :label, :value,
         :_destroy
       ]}
     )
@@ -723,12 +717,6 @@ class ManifestationsController < ApplicationController
     @frequencies = Frequency.select([:id, :display_name_translations, :position])
     @identifier_types = IdentifierType.select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
-  end
-
-  def prepare_custom_properties
-    if @manifestation.custom_properties.empty?
-      @manifestation.custom_properties.new(@library_group.default_custom_manifestation_label.to_s.split.map{|label| {label: label}})
-    end
   end
 
   def get_index_agent

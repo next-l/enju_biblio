@@ -26,7 +26,6 @@ class Manifestation < ApplicationRecord
   has_one :doi_record
   has_one :periodical_and_manifestation, dependent: :destroy
   has_one :periodical, through: :periodical_and_manifestation
-  has_many :custom_properties, as: :resource, dependent: :destroy
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
@@ -35,7 +34,6 @@ class Manifestation < ApplicationRecord
   accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :periodical, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
@@ -591,16 +589,6 @@ class Manifestation < ApplicationRecord
       record.merge!({
         memo: memo
       })
-
-      # 最もカスタム項目の多い資料について、カスタム項目の個数を取得する
-      ActiveRecord::Base.connection.execute('SELECT max(record_count) FROM (SELECT count(*) AS record_count, resource_id, resource_type FROM custom_properties GROUP BY resource_id, resource_type) AS type_count ;').first.values[0].to_i.times do |i|
-        property = custom_properties[i]
-        if property
-          record[:"manifestation_custom_property_#{i + 1}"] = "#{property.label}: #{property.value}"
-        else
-          record[:"manifestation_custom_property_#{i + 1}"] = nil
-        end
-      end
     end
 
     if defined?(EnjuSubject)
