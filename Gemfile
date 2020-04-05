@@ -24,7 +24,6 @@ gem 'enju_oai', github: 'next-l/enju_oai'
 gem 'sassc-rails'
 gem 'jbuilder'
 gem 'webpacker'
-gem 'rails', '~> 5.2'
 group :test do
   gem 'rails-controller-testing'
   gem 'rspec_junit_formatter'
