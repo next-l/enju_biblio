@@ -5,7 +5,7 @@ RSpec.describe 'Manifestations', type: :system do
   fixtures :all
   before do
     @item = FactoryBot.create(:item, shelf: shelves(:shelf_00002))
-    CarrierType.find_by(name: 'volume').attachment.attach(io: File.open("#{Rails.root.to_s}/../../app/assets/images/icons/book.png"), filename: 'attachment.png')
+    CarrierType.find_by(name: 'volume').attachment.attach(io: File.open("#{Rails.root.to_s}/../../examples/spinner.gif"), filename: 'attachment.gif')
     FactoryBot.create(:withdraw, item: @item)
   end
 
