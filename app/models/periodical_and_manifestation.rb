@@ -10,7 +10,7 @@ end
 #  id                :bigint           not null, primary key
 #  periodical_id     :bigint           not null
 #  manifestation_id  :bigint           not null
-#  periodical_master :boolean          default("false"), not null
+#  periodical_master :boolean          default(FALSE), not null
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #

@@ -12,7 +12,7 @@ end
 #
 #  id                      :bigint           not null, primary key
 #  to_state                :string
-#  metadata                :text             default("{}")
+#  metadata                :text             default({})
 #  sort_key                :integer
 #  resource_export_file_id :integer
 #  created_at              :datetime         not null

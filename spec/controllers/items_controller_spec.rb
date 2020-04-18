@@ -275,8 +275,6 @@ describe ItemsController do
             id: item.id, item: @attrs.merge(custom_properties_attrs)
           }
           expect(assigns(:item)).to eq item
-          expect(assigns(:item).custom_properties.map{|property| property.custom_label.label}).to eq ['custom property 1', 'test']
-          expect(assigns(:item).custom_properties.map{|property| property.value}).to eq ['カスタム項目 1', 'テスト']
         end
       end
 
