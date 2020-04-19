@@ -19,6 +19,6 @@ describe "resource_import_results/show" do
     @resource_import_result.resource_import_file.delete
     @resource_import_result.resource_import_file = nil
     render
-    expect(rendered).to match /MyText/
+    expect(rendered).to match /original_title/
   end
 end
