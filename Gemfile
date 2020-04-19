@@ -15,7 +15,6 @@ gemspec
 # gem 'debugger'
 #gem 'enju_loc', github: 'next-l/enju_loc'
 gem 'sassc-rails'
-gem 'jquery-rails'
 gem 'jbuilder'
 gem 'webpacker'
 group :test do
