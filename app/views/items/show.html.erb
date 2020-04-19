@@ -112,13 +112,6 @@
     </p>
 
     <% if current_user.try(:has_role?, 'Librarian') %>
-      <% @item.custom_properties.each do |custom_property| %>
-        <p>
-          <strong><%= custom_property.custom_label.label -%>:</strong>
-          <%= custom_property.value -%>
-        </p>
-      <% end %>
-
       <p>
         <strong><%= t('activerecord.attributes.item.memo') -%>:</strong>
         <%= simple_format(@item.memo) %>

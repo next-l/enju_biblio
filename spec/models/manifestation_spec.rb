@@ -201,12 +201,6 @@ describe Manifestation, solr: true do
     manifestation.should_not be_valid
   end
 
-  it "should search custom identifiers" do
-    Manifestation.search do
-      fulltext 'identifier_text:custom1111'
-    end.results.count.should eq 1
-  end
-
   # it "should set series_statement if the manifestation is periodical" do
   #  manifestation = series_statements(:two).manifestations.new
   #  manifestation.set_series_statements([series_statements(:two)])
@@ -299,31 +293,6 @@ describe Manifestation, solr: true do
       expect(m["description"]).to eq "test\ntest"
       expect(m["note"]).to eq "test\ntest"
       expect(m["item_note"]).to eq "test\ntest"
-    end
-
-    it 'should export custom properties with Librarian role' do
-      item = FactoryBot.create(:item)
-      item.manifestation.custom_properties << FactoryBot.build(:custom_property, value: 'テスト')
-      2.times do
-        item.custom_properties << FactoryBot.build(:custom_property, value: 'test')
-      end
-
-      lines = Manifestation.export(role: 'Librarian')
-      csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      m = csv.find{|row| row["manifestation_id"].to_i == item.manifestation_id }
-      expect(m['manifestation_custom_property_1']).to eq 'テスト項目1: テスト'
-      expect(m['item_custom_property_2']).to eq 'テスト項目2: test'
-    end
-
-    it 'should not export custom properties with User role' do
-      item = FactoryBot.create(:item)
-      item.manifestation.custom_properties << FactoryBot.build(:custom_property, value: 'テスト')
-      item.custom_properties << FactoryBot.build(:custom_property, value: 'test')
-
-      lines = Manifestation.export(role: 'User')
-      csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      expect(csv['manifestation_custom_property_1'].compact).to be_empty
-      expect(csv['item_custom_property_2'].compact).to be_empty
     end
   end
 end
