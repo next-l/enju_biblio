@@ -15,7 +15,7 @@ describe "resource_import_results/index.txt.ruby" do
     assign(:resource_import_results, ResourceImportFile.find(file.id).resource_import_results)
   end
 
-  it "renders a list of resource_import_results" do
+  it "renders a list of resource_import_results", vcr: true do
     render
     expect(CSV.parse(rendered, headers: true, col_sep: "\t").first['original_title']).to eq 'タイトル'
     expect(CSV.parse(rendered, headers: true, col_sep: "\t")[10]['original_title']).to eq 'test8'
