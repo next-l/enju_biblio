@@ -11,7 +11,7 @@ describe "agent_import_results/index" do
 
   it "renders a list of agent_import_results" do
     render
-    expect(rendered).to match /MyString/
+    expect(rendered).to match /Administrator/
   end
 
   context "with @agent_import_file" do
@@ -21,9 +21,7 @@ describe "agent_import_results/index" do
     end
     it "renders a list of agent_import_results for the agent_import_file" do
       render
-      expect(view).to render_template "agent_import_results/_list_lines"
-      expect(rendered).to match /MyString/
-      expect(rendered).to match /<td>1<\/td>/
+      expect(rendered).to match /Administrator/
     end
   end
 end

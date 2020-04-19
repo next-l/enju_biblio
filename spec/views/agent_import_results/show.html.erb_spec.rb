@@ -11,14 +11,6 @@ describe "agent_import_results/show" do
 
   it "renders a agent_import_result" do
     render
-    expect(rendered).to match /MyString/
-  end
-
-  it "renders even if a agent_import_file is deleted" do
-    #@agent_import_result.agent_import_file = nil
-    @agent_import_result.agent_import_file.delete
-    @agent_import_result.agent_import_file = nil
-    render
-    expect(rendered).to match /MyString/
+    expect(rendered).to match /MyText/
   end
 end
