@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "enju_library", "~> 0.4.0.rc.1"
   s.add_dependency "marc"
-  s.add_dependency "simple_form"
+  s.add_dependency "simple_form", '~> 5.0'
   s.add_dependency "dynamic_form"
   s.add_dependency "library_stdnums"
   s.add_dependency "lisbn"
