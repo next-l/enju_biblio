@@ -17,7 +17,6 @@ describe "resource_import_results/index.txt.ruby" do
 
   it "renders a list of resource_import_results" do
     render
-    puts rendered
     expect(CSV.parse(rendered, headers: true, col_sep: "\t").first['original_title']).to eq 'タイトル'
     expect(CSV.parse(rendered, headers: true, col_sep: "\t")[10]['original_title']).to eq 'test8'
   end
