@@ -25,13 +25,11 @@ class Manifestation < ApplicationRecord
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
-  has_many :custom_properties, as: :resource, dependent: :destroy
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do
@@ -608,16 +606,6 @@ class Manifestation < ApplicationRecord
       record.merge!({
         memo: memo
       })
-
-      # 最もカスタム項目の多い資料について、カスタム項目の個数を取得する
-      ActiveRecord::Base.connection.execute('SELECT max(record_count) FROM (SELECT count(*) AS record_count, resource_id, resource_type FROM custom_properties GROUP BY resource_id, resource_type) AS type_count ;').first.values[0].to_i.times do |i|
-        property = custom_properties[i]
-        if property
-          record[:"manifestation_custom_property_#{i + 1}"] = "#{property.label}: #{property.value}"
-        else
-          record[:"manifestation_custom_property_#{i + 1}"] = nil
-        end
-      end
     end
 
     if defined?(EnjuSubject)
@@ -689,8 +677,8 @@ end
 #  updated_at                      :datetime
 #  deleted_at                      :datetime
 #  access_address                  :string
-#  language_id                     :integer          default("1"), not null
-#  carrier_type_id                 :integer          default("1"), not null
+#  language_id                     :integer          default(1), not null
+#  carrier_type_id                 :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -703,12 +691,12 @@ end
 #  serial_number_string            :string
 #  edition                         :integer
 #  note                            :text
-#  repository_content              :boolean          default("0"), not null
-#  lock_version                    :integer          default("0"), not null
-#  required_role_id                :integer          default("1"), not null
-#  required_score                  :integer          default("0"), not null
-#  frequency_id                    :integer          default("1"), not null
-#  subscription_master             :boolean          default("0"), not null
+#  repository_content              :boolean          default(FALSE), not null
+#  lock_version                    :integer          default(0), not null
+#  required_role_id                :integer          default(1), not null
+#  required_score                  :integer          default(0), not null
+#  frequency_id                    :integer          default(1), not null
+#  subscription_master             :boolean          default(FALSE), not null
 #  attachment_file_name            :string
 #  attachment_content_type         :string
 #  attachment_file_size            :integer
@@ -726,7 +714,7 @@ end
 #  volume_number                   :integer
 #  issue_number                    :integer
 #  serial_number                   :integer
-#  content_type_id                 :integer          default("1")
+#  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer

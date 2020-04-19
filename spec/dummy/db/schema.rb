@@ -434,7 +434,7 @@ ActiveRecord::Schema.define(version: 2020_03_22_083458) do
   end
 
   create_table "custom_labels", force: :cascade do |t|
-    t.integer "library_group_id"
+    t.integer "library_group_id", null: false
     t.string "label"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

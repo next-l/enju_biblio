@@ -292,31 +292,6 @@ describe Manifestation, solr: true do
       expect(m["note"]).to eq "test\ntest"
       expect(m["item_note"]).to eq "test\ntest"
     end
-
-    it 'should export custom properties with Librarian role' do
-      item = FactoryBot.create(:item)
-      item.manifestation.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目1', value: 'テスト')
-      2.times do
-        item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
-      end
-
-      lines = Manifestation.export(role: 'Librarian')
-      csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      m = csv.find{|row| row["manifestation_id"].to_i == item.manifestation_id }
-      expect(m['manifestation_custom_property_1']).to eq 'テスト項目1: テスト'
-      expect(m['item_custom_property_2']).to eq 'テスト項目2: test'
-    end
-
-    it 'should not export custom properties with User role' do
-      item = FactoryBot.create(:item)
-      item.manifestation.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目1', value: 'テスト')
-      item.custom_properties << FactoryBot.build(:custom_property, label: 'テスト項目2', value: 'test')
-
-      lines = Manifestation.export(role: 'User')
-      csv = CSV.parse(lines, headers: true, col_sep: "\t")
-      expect(csv['manifestation_custom_property_1'].compact).to be_empty
-      expect(csv['item_custom_property_2'].compact).to be_empty
-    end
   end
 end
 
@@ -336,8 +311,8 @@ end
 #  updated_at                      :datetime
 #  deleted_at                      :datetime
 #  access_address                  :string
-#  language_id                     :integer          default("1"), not null
-#  carrier_type_id                 :integer          default("1"), not null
+#  language_id                     :integer          default(1), not null
+#  carrier_type_id                 :integer          default(1), not null
 #  start_page                      :integer
 #  end_page                        :integer
 #  height                          :integer
@@ -350,12 +325,12 @@ end
 #  serial_number_string            :string
 #  edition                         :integer
 #  note                            :text
-#  repository_content              :boolean          default("0"), not null
-#  lock_version                    :integer          default("0"), not null
-#  required_role_id                :integer          default("1"), not null
-#  required_score                  :integer          default("0"), not null
-#  frequency_id                    :integer          default("1"), not null
-#  subscription_master             :boolean          default("0"), not null
+#  repository_content              :boolean          default(FALSE), not null
+#  lock_version                    :integer          default(0), not null
+#  required_role_id                :integer          default(1), not null
+#  required_score                  :integer          default(0), not null
+#  frequency_id                    :integer          default(1), not null
+#  subscription_master             :boolean          default(FALSE), not null
 #  attachment_file_name            :string
 #  attachment_content_type         :string
 #  attachment_file_size            :integer
@@ -373,7 +348,7 @@ end
 #  volume_number                   :integer
 #  issue_number                    :integer
 #  serial_number                   :integer
-#  content_type_id                 :integer          default("1")
+#  content_type_id                 :integer          default(1)
 #  year_of_publication             :integer
 #  attachment_meta                 :text
 #  month_of_publication            :integer

@@ -10,7 +10,6 @@ class ManifestationsController < ApplicationController
   before_action :get_series_statement, only: [:index, :new, :edit]
   before_action :get_item, :get_libraries, only: :index
   before_action :prepare_options, only: [:new, :edit]
-  before_action :prepare_custom_properties, only: [:edit]
   before_action :get_version, only: [:show]
   after_action :convert_charset, only: :index
 
@@ -356,7 +355,6 @@ class ManifestationsController < ApplicationController
   # GET /manifestations/new.json
   def new
     @manifestation = Manifestation.new
-    prepare_custom_properties
     @manifestation.language = Language.find_by(iso_639_1: @locale)
     @parent = Manifestation.find_by(id: params[:parent_id]) if params[:parent_id].present?
     if @parent
@@ -550,10 +548,6 @@ class ManifestationsController < ApplicationController
       ]},
       {identifiers_attributes: [
         :id, :body, :identifier_type_id,
-        :_destroy
-      ]},
-      {custom_properties_attributes: [
-        :id, :value,
         :_destroy
       ]}
     )
@@ -751,12 +745,6 @@ class ManifestationsController < ApplicationController
       @subject_types = SubjectType.select([:id, :display_name, :position])
       @subject_heading_types = SubjectHeadingType.select([:id, :display_name, :position])
       @classification_types = ClassificationType.select([:id, :display_name, :position])
-    end
-  end
-
-  def prepare_custom_properties
-    if @manifestation.custom_properties.empty?
-      @manifestation.custom_properties.new
     end
   end
 

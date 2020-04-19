@@ -19,8 +19,6 @@ class Item < ApplicationRecord
   belongs_to :budget_type, optional: true
   has_one :accept, dependent: :destroy
   has_one :withdraw, dependent: :destroy
-  has_many :custom_properties, as: :resource, dependent: :destroy
-  accepts_nested_attributes_for :custom_properties, allow_destroy: true, reject_if: :all_blank
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
 
   belongs_to :shelf, counter_cache: true
@@ -124,16 +122,6 @@ class Item < ApplicationRecord
         memo: memo
       })
 
-      # 最もカスタム項目の多い資料について、カスタム項目の個数を取得する
-      ActiveRecord::Base.connection.execute('SELECT max(record_count) FROM (SELECT count(*) AS record_count, resource_id, resource_type FROM custom_properties GROUP BY resource_id, resource_type) AS type_count ;').first.values[0].to_i.times do |i|
-        property = custom_properties[i]
-        if property
-          record[:"item_custom_property_#{i + 1}"] = "#{property.label}: #{property.value}"
-        else
-          record[:"item_custom_property_#{i + 1}"] = nil
-        end
-      end
-
       if defined?(EnjuCirculation)
         record.merge!({
           use_restriction: use_restriction.try(:name),
@@ -156,19 +144,19 @@ end
 #  created_at              :datetime
 #  updated_at              :datetime
 #  deleted_at              :datetime
-#  shelf_id                :integer          default("1"), not null
-#  include_supplements     :boolean          default("0"), not null
+#  shelf_id                :integer          default(1), not null
+#  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
 #  url                     :string
 #  price                   :integer
-#  lock_version            :integer          default("0"), not null
-#  required_role_id        :integer          default("1"), not null
-#  required_score          :integer          default("0"), not null
+#  lock_version            :integer          default(0), not null
+#  required_role_id        :integer          default(1), not null
+#  required_score          :integer          default(0), not null
 #  acquired_at             :datetime
 #  bookstore_id            :integer
 #  budget_type_id          :integer
-#  circulation_status_id   :integer          default("5"), not null
-#  checkout_type_id        :integer          default("1"), not null
+#  circulation_status_id   :integer          default(5), not null
+#  checkout_type_id        :integer          default(1), not null
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime
