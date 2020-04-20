@@ -30,7 +30,7 @@ describe ResourceImportFile do
         Manifestation.count.should eq old_manifestations_count + 10
         Item.count.should eq old_items_count + 10
         Agent.count.should eq old_agents_count + 9
-        @file.resource_import_results.order(:id).first.body.split("\t").first.should eq 'manifestation_identifier'
+        @file.resource_import_results.order(:id).first.body.split("\t").first.should eq 'imported_manifestation_id'
         ResourceImportResult.count.should eq old_import_results_count + 23
 
         manifestation_101 = Manifestation.find_by(manifestation_identifier: '101')
