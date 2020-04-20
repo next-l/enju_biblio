@@ -5,9 +5,13 @@ class ResourceImportResultsController < ApplicationController
   # GET /resource_import_results
   # GET /resource_import_results.json
   def index
-    @resource_import_file = ResourceImportFile.where(id: params[:resource_import_file_id]).first
+    @resource_import_file = ResourceImportFile.find_by(id: params[:resource_import_file_id])
     if @resource_import_file
-      @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
+      if params[:format].to_s.downcase == 'txt'
+        @resource_import_results = @resource_import_file.resource_import_results
+      else
+        @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
+      end
     else
       @resource_import_results = ResourceImportResult.page(params[:page])
     end
