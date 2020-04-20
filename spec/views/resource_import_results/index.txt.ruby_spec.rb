@@ -11,13 +11,13 @@ describe "resource_import_results/index.txt.ruby" do
     file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
     file.save
     file.import_start
-    assign(:resource_import_file_id, file.id)
-    assign(:resource_import_results, ResourceImportFile.find(file.id).resource_import_results)
+    assign(:resource_import_file, file)
+    assign(:resource_import_results, file.resource_import_results)
   end
 
   it "renders a list of resource_import_results", vcr: true do
     render
     expect(CSV.parse(rendered, headers: true, col_sep: "\t").first['original_title']).to eq 'タイトル'
-    expect(CSV.parse(rendered, headers: true, col_sep: "\t")[10]['original_title']).to eq 'test8'
+    expect(CSV.parse(rendered, headers: true, col_sep: "\t")[12]['imported_manifestation_id']).to be_present
   end
 end

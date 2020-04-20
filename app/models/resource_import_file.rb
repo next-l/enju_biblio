@@ -57,12 +57,13 @@ class ResourceImportFile < ApplicationRecord
     #end
     row_num = 1
 
-    ResourceImportResult.create!(resource_import_file_id: id, body: rows.headers.join("\t"))
+    ResourceImportResult.create!(resource_import_file_id: id, body: (%w( imported_manifestation_id imported_item_id ) + rows.headers).join("\t"))
     rows.each do |row|
       row_num += 1
-      import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
+      import_result = ResourceImportResult.new(resource_import_file_id: id)
       if row['dummy'].to_s.strip.present?
         import_result.error_message = "line #{row_num}: #{I18n.t('import.dummy')}"
+        import_result.body = ([nil, nil] + row.fields).join("\t")
         import_result.save!
         next
       end
@@ -73,6 +74,7 @@ class ResourceImportFile < ApplicationRecord
         import_result.item = item
         import_result.manifestation = item.manifestation
         import_result.error_message = "line #{row_num}: #{I18n.t('import.item_found')}"
+        import_result.body = ([item.manifestation.id, item.id] + row.fields).join("\t")
         import_result.save!
         num[:item_found] += 1
         next
@@ -185,13 +187,9 @@ class ResourceImportFile < ApplicationRecord
         num[:failed] += 1
       end
 
+      import_result.body = ([manifestation.try(:id), item.try(:id)] + row.fields).join("\t")
       import_result.save!
-      num[:item_imported] +=1 if import_result.item
-
-      if row_num % 50 == 0
-        Sunspot.commit
-        GC.start
-      end
+      num[:item_imported] += 1 if import_result.item
     end
 
     Sunspot.commit
