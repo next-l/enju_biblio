@@ -14,8 +14,8 @@
 
   <div class="form-group">
     <%= f.label "#{t('activerecord.models.library')} / #{t('activerecord.models.shelf')}" -%>
-    <%= f.select :library_id, @libraries.map{|l| [l.display_name, l.id]} %>
-    <%= f.select :shelf_id, @shelves.map{|s| [s.display_name, s.id]} %>
+    <%= f.select :library_id, @libraries.map{|l| [l.display_name, l.id]}, {}, {class: 'form-control col-sm-3'} %>
+    <%= f.select :shelf_id, @shelves.map{|s| [s.display_name, s.id]}, {}, {class: 'form-control col-sm-3'} %>
     <%= render 'observe_field' %>
   </div>
 
@@ -50,15 +50,15 @@
 
   <div class="form-group">
     <%= f.label t('activerecord.models.budget_type') -%>
-    <%= f.select(:budget_type_id, @budget_types.collect{|b| [b.display_name, b.id]}, include_blank: true) -%>
+    <%= f.select(:budget_type_id, @budget_types.collect{|b| [b.display_name, b.id]}, include_blank: true, {}, {class: 'form-control col-sm-4'}) -%>
 
     <%= f.label t('activerecord.models.bookstore') -%>
-    <%= f.select(:bookstore_id, @bookstores.collect{|b| [b.name, b.id]}, include_blank: true) -%>
+    <%= f.select(:bookstore_id, @bookstores.collect{|b| [b.name, b.id]}, include_blank: true, {}, {class: 'form-control col-sm-4'}) -%>
   </div>
 
   <div class="form-group">
     <%= f.label :price -%>
-    <%= f.text_field :price -%>
+    <%= f.text_field :price, class: 'form-control col-sm-4' -%>
   </div>
 
   <div class="form-group">
@@ -68,12 +68,12 @@
 
   <div class="form-group">
     <%= f.label t('role.required_role') -%>
-    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}, {}, {class: 'form-control'}) -%>
+    <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name, r.id]}, {}, {class: 'form-control col-sm-4'}) -%>
   </div>
 
   <div class="form-group">
     <%= f.label :acquired_at -%>
-    <%= f.text_field :acquired_at, value: @item.acquired_at.try(:strftime, "%Y-%m-%d"), class: 'date_text_field', placeholder: "#{t('page.example')}: 2011-04-12"-%>
+    <%= f.text_field :acquired_at, value: @item.acquired_at.try(:strftime, "%Y-%m-%d"), class: 'form-control col-sm-3', placeholder: "#{t('page.example')}: 2011-04-12" -%>
   </div>
 
   <div class="form-group">
@@ -81,12 +81,12 @@
     <%= f.text_field :binding_call_number -%>
 
     <%= f.label :binded_at -%>
-    <%= f.text_field :binded_at, value: @item.binded_at.try(:strftime, "%Y-%m-%d"), class: 'date_text_field', placeholder: "#{t('page.example')}: 2014-07-20"-%>
+    <%= f.text_field :binded_at, value: @item.binded_at.try(:strftime, "%Y-%m-%d"), class: 'form-control col-sm-3', placeholder: "#{t('page.example')}: 2014-07-20"-%>
   </div>
 
   <div class="form-group">
     <%= f.label :binding_item_identifier -%>
-    <%= f.text_field :binding_item_identifier, class: 'resource_identifier' -%>
+    <%= f.text_field :binding_item_identifier, class: 'form-control col-sm-4' -%>
   </div>
 
   <div class="form-group">
@@ -101,7 +101,7 @@
 
   <div class="form-group">
     <%= f.label :item_identifier -%>
-    <%= f.text_field :item_identifier, class: 'resource_identifier' -%>
+    <%= f.text_field :item_identifier, class: 'form-control col-sm-4' -%>
   </div>
 
   <div class="actions">
