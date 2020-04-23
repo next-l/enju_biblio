@@ -16,9 +16,9 @@
       <%- end -%>
     </span>
     <%= f.label :full_name -%><br />
-    <%= f.text_field :full_name, class: 'resource_title' -%><br />
+    <%= f.text_field :full_name, class: 'form-control' -%><br />
     <%= f.label :full_name_transcription -%><br />
-    <%= f.text_field :full_name_transcription, class: 'resource_title' -%><br />
+    <%= f.text_field :full_name_transcription, class: 'form-control' -%><br />
     <%= link_to "#", { onclick: "$('#full_name_alternative').toggle(); return false;"} do t('activerecord.attributes.agent.full_name_alternative') end %>
     <span id="full_name_alternative" style="display: none">
       <br />
@@ -40,13 +40,13 @@
 
   <div class="form-group">
     <%= f.label :date_of_birth -%><br />
-    <%= f.text_field :birth_date, class: 'date_field' -%>
+    <%= f.text_field :birth_date, class: 'form-control col-sm-3' -%>
   </div>
 
   <% unless @user %>
     <div class="form-group">
       <%= f.label :date_of_death -%><br />
-      <%= f.text_field :death_date, class: 'date_field' -%>
+      <%= f.text_field :death_date, class: 'form-control col-sm-3' -%>
     </div>
   <% end %>
 
@@ -62,7 +62,7 @@
 
   <div class="form-group">
     <%= f.label :email -%><br />
-    <%= f.email_field :email, class: 'resource_email'  -%>
+    <%= f.email_field :email, class: 'form-control col-sm-6'  -%>
   </div>
 
   <div class="form-group">
