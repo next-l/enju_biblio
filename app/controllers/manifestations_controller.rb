@@ -332,7 +332,7 @@ class ManifestationsController < ApplicationController
       }
       format.rdf
       format.mods
-      format.json { render json: @manifestation }
+      format.json
       format.txt
       format.js
       format.download {
