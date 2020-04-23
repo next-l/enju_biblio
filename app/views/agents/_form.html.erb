@@ -57,7 +57,7 @@
 
   <div class="form-group">
     <%= f.label t('activerecord.models.country') -%>
-    <%= f.select(:country_id, @countries.collect{|c| [c.display_name, c.id], {}, {class: 'form-control col-sm-4'}}) -%>
+    <%= f.select(:country_id, @countries.collect{|c| [c.display_name, c.id]}, {}, {class: 'form-control col-sm-4'}}) -%>
   </div>
 
   <div class="form-group">
