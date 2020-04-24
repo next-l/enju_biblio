@@ -265,7 +265,6 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json
       format.js
-      format.ttl
     end
   end
 
@@ -323,6 +322,7 @@ class ManifestationsController < ApplicationController
       format.json { render json: @manifestation }
       format.txt
       format.js
+      format.ttl
       format.download {
         if @manifestation.attachment.attached?
           send_data @manifestation.attachment.download, filename: @manifestation.attachment.filename, type: 'application/octet-stream'
