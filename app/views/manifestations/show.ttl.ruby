@@ -10,7 +10,7 @@ graph << RDF::Statement.new(
   graph << RDF::Statement.new(
     RDF::URI.new(manifestation_url(@manifestation)),
     RDF::Vocab::DC.creator,
-    profile_url(creator)
+    RDF::URI.new(profile_url(creator))
   )
 end
 
@@ -18,7 +18,7 @@ end
   graph << RDF::Statement.new(
     RDF::URI.new(manifestation_url(@manifestation)),
     RDF::Vocab::DC.publisher,
-    profile_url(publisher)
+    RDF::URI.new(profile_url(publisher))
   )
 end
 
