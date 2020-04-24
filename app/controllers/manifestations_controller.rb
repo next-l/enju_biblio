@@ -265,6 +265,7 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json
       format.js
+      format.ttl
     end
   end
 
