@@ -10,7 +10,7 @@ graph << RDF::Statement.new(
   graph << RDF::Statement.new(
     RDF::URI.new(manifestation_url(@manifestation)),
     RDF::Vocab::DC.creator,
-    creator
+    profile_url(creator)
   )
 end
 
@@ -18,7 +18,15 @@ end
   graph << RDF::Statement.new(
     RDF::URI.new(manifestation_url(@manifestation)),
     RDF::Vocab::DC.publisher,
-    publisher
+    profile_url(publisher)
+  )
+end
+
+@manifestation.isbn_records.each do |isbn_record|
+  graph << RDF::Statement.new(
+    RDF::URI.new(manifestation_url(@manifestation)),
+    RDF::Vocab::BIBO.isbn,
+    isbn_record.body
   )
 end
 
