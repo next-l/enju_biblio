@@ -322,6 +322,7 @@ class ManifestationsController < ApplicationController
       format.json
       format.txt
       format.js
+      format.ttl
       format.download {
         if @manifestation.attachment.attached?
           send_data @manifestation.attachment.download, filename: @manifestation.attachment.filename, type: 'application/octet-stream'
