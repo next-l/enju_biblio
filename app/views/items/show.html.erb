@@ -112,6 +112,13 @@
     </p>
 
     <% if current_user.try(:has_role?, 'Librarian') %>
+      <% @item.item_custom_values.each do |value| %>
+        <p>
+          <strong><%= value.item_custom_property.display_name -%>:</strong>
+          <%= value.value -%>
+        </p>
+      <% end %>
+
       <p>
         <strong><%= t('activerecord.attributes.item.memo') -%>:</strong>
         <%= simple_format(@item.memo) %>

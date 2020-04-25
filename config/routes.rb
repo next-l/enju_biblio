@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  resources :item_custom_properties
+  resources :manifestation_custom_properties
   resources :resource_export_files
 
   resources :identifier_types
