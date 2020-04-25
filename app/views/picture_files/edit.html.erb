@@ -10,6 +10,10 @@
     <%= f.file_field :picture -%>
   </div>
 
+  <div class="field">
+    <%= render 'picture_files/link', picture_file: @picture_file %>
+  </div>
+
   <div class="actions">
     <%= f.submit %>
   </div>
