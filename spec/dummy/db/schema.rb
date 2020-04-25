@@ -61,8 +61,8 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["sort_key", "agent_import_file_id"], name: "index_agent_import_file_transitions_on_sort_key_and_file_id", unique: true
   end
 
-  create_table "agent_import_files", force: :cascade do |t|
-    t.bigint "user_id"
+  create_table "agent_import_files", comment: "人物情報インポートファイル", force: :cascade do |t|
+    t.bigint "user_id", comment: "アップロードユーザ"
     t.text "note", comment: "備考"
     t.datetime "executed_at"
     t.datetime "created_at", null: false
@@ -281,7 +281,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.jsonb "display_name_translations", default: {}, null: false
   end
 
-  create_table "countries", force: :cascade do |t|
+  create_table "countries", comment: "国・地域", force: :cascade do |t|
     t.string "name", null: false
     t.text "display_name"
     t.string "alpha_2"
@@ -305,7 +305,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.jsonb "display_name_translations", default: {}, null: false
   end
 
-  create_table "creates", force: :cascade do |t|
+  create_table "creates", comment: "著者と書誌の関係", force: :cascade do |t|
     t.bigint "agent_id", null: false
     t.bigint "work_id", null: false
     t.integer "position"
@@ -358,7 +358,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.jsonb "display_name_translations", default: {}, null: false
   end
 
-  create_table "frequencies", force: :cascade do |t|
+  create_table "frequencies", comment: "発行頻度", force: :cascade do |t|
     t.string "name", null: false
     t.text "display_name"
     t.text "note", comment: "備考"
@@ -413,7 +413,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["user_id"], name: "index_import_requests_on_user_id"
   end
 
-  create_table "isbn_record_and_manifestations", force: :cascade do |t|
+  create_table "isbn_record_and_manifestations", comment: "書誌とISBNの関係", force: :cascade do |t|
     t.bigint "isbn_record_id", null: false
     t.bigint "manifestation_id", null: false
     t.integer "position"
@@ -423,16 +423,16 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["manifestation_id"], name: "index_isbn_record_and_manifestations_on_manifestation_id"
   end
 
-  create_table "isbn_records", force: :cascade do |t|
-    t.string "body", null: false
-    t.string "isbn_type"
-    t.string "source"
+  create_table "isbn_records", comment: "ISBN", force: :cascade do |t|
+    t.string "body", null: false, comment: "ISBN"
+    t.string "isbn_type", comment: "ISBNの種類"
+    t.string "source", comment: "情報源"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["body"], name: "index_isbn_records_on_body", unique: true
   end
 
-  create_table "issn_record_and_manifestations", force: :cascade do |t|
+  create_table "issn_record_and_manifestations", comment: "書誌とISSNの関係", force: :cascade do |t|
     t.bigint "issn_record_id", null: false
     t.bigint "manifestation_id", null: false
     t.integer "position"
@@ -442,16 +442,16 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["manifestation_id"], name: "index_issn_record_and_manifestations_on_manifestation_id"
   end
 
-  create_table "issn_records", force: :cascade do |t|
-    t.string "body", null: false
-    t.string "issn_type"
-    t.string "source"
+  create_table "issn_records", comment: "ISSN", force: :cascade do |t|
+    t.string "body", null: false, comment: "ISSN"
+    t.string "issn_type", comment: "ISSNの種類"
+    t.string "source", comment: "情報源"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["body"], name: "index_issn_records_on_body", unique: true
   end
 
-  create_table "items", force: :cascade do |t|
+  create_table "items", comment: "所蔵", force: :cascade do |t|
     t.string "call_number", comment: "請求記号"
     t.string "item_identifier", comment: "所蔵情報ID"
     t.datetime "created_at", null: false
@@ -493,7 +493,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["manifestation_id"], name: "index_jpno_records_on_manifestation_id"
   end
 
-  create_table "languages", force: :cascade do |t|
+  create_table "languages", comment: "言語", force: :cascade do |t|
     t.string "name", null: false
     t.string "native_name"
     t.text "display_name"
@@ -822,7 +822,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.jsonb "display_name_translations", default: {}, null: false
   end
 
-  create_table "produces", force: :cascade do |t|
+  create_table "produces", comment: "出版者と書誌の関係", force: :cascade do |t|
     t.bigint "agent_id", null: false
     t.bigint "manifestation_id", null: false
     t.integer "position"
@@ -865,7 +865,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.jsonb "display_name_translations", default: {}, null: false
   end
 
-  create_table "realizes", force: :cascade do |t|
+  create_table "realizes", comment: "編者と書誌の関係", force: :cascade do |t|
     t.bigint "agent_id", null: false
     t.bigint "expression_id", null: false
     t.integer "position"
@@ -930,8 +930,8 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["sort_key", "resource_import_file_id"], name: "index_resource_import_file_transitions_on_sort_key_and_file_id", unique: true
   end
 
-  create_table "resource_import_files", force: :cascade do |t|
-    t.bigint "user_id"
+  create_table "resource_import_files", comment: "書誌情報インポートファイル", force: :cascade do |t|
+    t.bigint "user_id", comment: "アップロードユーザ"
     t.text "note", comment: "備考"
     t.datetime "executed_at"
     t.datetime "created_at", null: false
