@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "manifestation_custom_properties/edit", type: :view do
   before(:each) do
     @manifestation_custom_property = assign(:manifestation_custom_property, ManifestationCustomProperty.create!(
-      name: "MyString",
+      name: "my_string",
       note: "MyText"
     ))
   end
