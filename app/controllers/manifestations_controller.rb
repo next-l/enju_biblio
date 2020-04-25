@@ -528,7 +528,7 @@ class ManifestationsController < ApplicationController
         :_destroy
       ]},
       {manifestation_custom_values_attributes: [
-        :id, :manifestation_custom_property_id, :value,:_destroy
+        :id, :manifestation_custom_property_id, :manifestation_id, :value,:_destroy
       ]}
     )
   end

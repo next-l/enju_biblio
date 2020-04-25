@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe "item_custom_properties/edit", type: :view do
   before(:each) do
     @item_custom_property = assign(:item_custom_property, ItemCustomProperty.create!(
-      name: "MyString",
+      name: "my_string",
       note: "MyText"
     ))
   end

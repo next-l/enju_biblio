@@ -1,4 +1,5 @@
 class ItemCustomProperty < ApplicationRecord
+  include MasterModel
   validates :name, presence: true, uniqueness: true
   translates :display_name
   acts_as_list
