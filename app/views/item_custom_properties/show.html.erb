@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @item_custom_property.name %>
+</p>
+
+<p>
+  <strong>Display name:</strong>
+  <%= @item_custom_property.display_name %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @item_custom_property.note %>
+</p>
+
+<%= link_to 'Edit', edit_item_custom_property_path(@item_custom_property) %> |
+<%= link_to 'Back', item_custom_properties_path %>

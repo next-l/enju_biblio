@@ -187,6 +187,19 @@
     <%= f.select(:required_role_id, @roles.collect{|r| [r.display_name.localize, r.id]}) -%>
   </div>
 
+  <% if ManifestationCustomProperty.first %>
+    <div class="field">
+      <% ManifestationCustomProperty.order(:position).each do |c| %>
+        <% @manifestation.manifestation_custom_values.new(manifestation_custom_property: c) unless @manifestation.manifestation_custom_values.map{|value| value.manifestation_custom_property_id}.include?(c.id) %>
+      <% end %>
+      <%= f.fields_for :manifestation_custom_values do |custom_form| %>
+        <%= custom_form.label custom_form.object.manifestation_custom_property.name.to_sym, custom_form.object.manifestation_custom_property.display_name %>
+        <%= custom_form.hidden_field :manifestation_custom_property_id %>
+        <%= custom_form.text_field :value, class: 'form-control' %>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="field">
     <%= f.label :description -%><br />
     <%= f.text_area :description, class: 'resource_textarea' -%>

@@ -101,6 +101,14 @@
             <%= raw simple_format(h(manifestation.description)) -%>
           </td>
         </tr>
+        <% @manifestation.manifestation_custom_values.each do |value| %>
+          <tr>
+            <td><%= value.manifestation_custom_property.display_name -%>:</td>
+            <td>
+              <%= value.value -%>
+            </td>
+          </tr>
+        <% end %>
         <tr>
           <td><%= t('activerecord.attributes.manifestation.note') -%>:</td>
           <td>

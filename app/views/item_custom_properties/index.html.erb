@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Item Custom Properties</h1>
+
+<table class='table'>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Display name</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @item_custom_properties.each do |item_custom_property| %>
+      <tr>
+        <td><%= item_custom_property.name %></td>
+        <td><%= item_custom_property.display_name %></td>
+        <td><%= item_custom_property.note %></td>
+        <td><%= link_to 'Show', item_custom_property %></td>
+        <td><%= link_to 'Edit', edit_item_custom_property_path(item_custom_property) %></td>
+        <td><%= link_to 'Destroy', item_custom_property, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Item Custom Property', new_item_custom_property_path %>
