@@ -274,6 +274,9 @@ class ItemsController < ApplicationController
       :binding_item_identifier, :binding_call_number, :binded_at,
       :use_restriction_id, :memo,
       {item_has_use_restriction_attributes: :use_restriction_id}, # EnjuCirculation
+      {item_custom_values_attributes: [
+        :id, :item_custom_property_id, :value,:_destroy
+      ]}
     )
   end
 

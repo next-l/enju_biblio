@@ -19,10 +19,12 @@ class Item < ApplicationRecord
   belongs_to :budget_type, optional: true
   has_one :accept, dependent: :destroy
   has_one :withdraw, dependent: :destroy
-  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
+  has_many :item_custom_values, -> { joins(:item_custom_property).order(:position) }
 
   belongs_to :shelf, counter_cache: true
+  accepts_nested_attributes_for :item_custom_values, reject_if: :all_blank
 
+  scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
   validates_associated :bookstore
   validates :manifestation_id, presence: true
   validates :item_identifier, allow_blank: true, uniqueness: true,
