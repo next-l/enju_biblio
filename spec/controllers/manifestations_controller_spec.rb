@@ -575,6 +575,12 @@ describe ManifestationsController do
           post :create, params: { manifestation: @attrs.merge(attachment: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv')) }
           expect(assigns(:manifestation)).to be_valid
         end
+
+        it 'accepts custom values' do
+          post :create, params: { manifestation: @attrs.merge(manifestation_custom_values_attributes: Array.new(3){FactoryBot.attributes_for(:manifestation_custom_value, manifestation_custom_property_id: FactoryBot.create(:manifestation_custom_property).id)}) }
+          expect(assigns(:manifestation)).to be_valid
+          expect(assigns(:manifestation).manifestation_custom_values.count).to eq 3
+        end
       end
 
       describe 'with invalid params' do
@@ -715,6 +721,22 @@ describe ManifestationsController do
             id: @manifestation.id, manifestation: @attrs.merge(identifiers_attrs).merge(publishers_attrs)
           }
           expect(assigns(:manifestation)).to eq @manifestation
+        end
+
+        it 'accepts custom values' do
+          @manifestation.manifestation_custom_values << FactoryBot.build(:manifestation_custom_value)
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(manifestation_custom_values_attributes: [{id: @manifestation.manifestation_custom_values.first.id, value: 'test'}]) }
+          expect(assigns(:manifestation)).to be_valid
+          expect(assigns(:manifestation).manifestation_custom_values.count).to eq 1
+          expect(assigns(:manifestation).manifestation_custom_values.first.value).to eq 'test'
+        end
+
+        it 'accepts custom values when the value is empty' do
+          @manifestation.manifestation_custom_values << FactoryBot.build(:manifestation_custom_value)
+          put :update, params: { id: @manifestation.id, manifestation: @attrs.merge(manifestation_custom_values_attributes: [{id: @manifestation.manifestation_custom_values.first.id, value: ''}]) }
+          expect(assigns(:manifestation)).to be_valid
+          expect(assigns(:manifestation).manifestation_custom_values.count).to eq 1
+          expect(assigns(:manifestation).manifestation_custom_values.first.value).to eq ''
         end
       end
 
