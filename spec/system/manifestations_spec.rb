@@ -24,6 +24,12 @@ RSpec.describe 'Manifestations', type: :system do
       visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).to have_content @item.manifestation.memo
     end
+
+    it 'should show custom properties' do
+      @item.manifestation.manifestation_custom_values << FactoryBot.build(:manifestation_custom_value)
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).to have_content @item.manifestation.manifestation_custom_values.first.value
+    end
   end
 
   describe 'When logged in as User' do
@@ -40,6 +46,12 @@ RSpec.describe 'Manifestations', type: :system do
       @item.manifestation.update(memo: 'memo')
       visit manifestation_path(@item.manifestation.id, locale: :ja)
       expect(page).not_to have_content @item.manifestation.memo
+    end
+
+    it 'should not show custom properties' do
+      @item.manifestation.manifestation_custom_values << FactoryBot.build(:manifestation_custom_value)
+      visit manifestation_path(@item.manifestation.id, locale: :ja)
+      expect(page).not_to have_content @item.manifestation.manifestation_custom_values.first.value
     end
   end
 

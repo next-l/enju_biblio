@@ -1,0 +1,21 @@
+<h1><%= t('page.showing', model: t('activerecord.models.item_custom_property')) -%></h1>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item_custom_property.name') %>:</strong>
+  <%= @item_custom_property.name %>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item_custom_property.display_name') %>:</strong>
+  <%= @item_custom_property.display_name %>
+</p>
+
+<p>
+  <strong><%= t('activerecord.attributes.item_custom_property.note') %>:</strong>
+  <%= @item_custom_property.note %>
+</p>
+
+<%= link_to t('page.edit'), edit_item_custom_property_path(@item_custom_property) %> |
+<%= link_to t('page.back'), item_custom_properties_path %>

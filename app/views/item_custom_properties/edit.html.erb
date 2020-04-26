@@ -1,0 +1,6 @@
+<h1><%= t('page.editing', model: t('activerecord.models.item_custom_property')) -%></h1>
+
+<%= render 'form', item_custom_property: @item_custom_property %>
+
+<%= link_to t('page.show'), @item_custom_property %> |
+<%= link_to t('page.back'), item_custom_properties_path %>

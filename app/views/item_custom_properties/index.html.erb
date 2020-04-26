@@ -1,0 +1,36 @@
+<div class="row">
+  <div class="col-md-9">
+    <p id="notice"><%= notice %></p>
+
+    <h1><%= t('page.listing', model: t('activerecord.models.item_custom_property')) -%></h1>
+
+    <table class='table table-striped index'>
+      <thead>
+        <tr>
+          <th><%= t('activerecord.attributes.item_custom_property.name') %></th>
+          <th><%= t('activerecord.attributes.item_custom_property.display_name') %></th>
+          <th><%= t('activerecord.attributes.item_custom_property.note') %></th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <% @item_custom_properties.each do |item_custom_property| %>
+          <tr>
+            <td><%= link_to item_custom_property.name, item_custom_property %></td>
+            <td><%= item_custom_property.display_name %></td>
+            <td><%= item_custom_property.note %></td>
+            <td><%= link_to t('page.edit'), edit_item_custom_property_path(item_custom_property) %></td>
+            <td><%= link_to t('page.destroy'), item_custom_property, method: :delete, data: { confirm: t('page.are_you_sure') } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="col">
+    <div class="card card-body">
+      <%= link_to t('page.new', model: t('activerecord.models.item_custom_property')), new_item_custom_property_path -%>
+    </div>
+  </div>
+</div>

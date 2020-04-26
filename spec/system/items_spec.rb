@@ -39,6 +39,12 @@ RSpec.describe 'Manifestations', type: :system do
       visit item_path(@item.id, locale: :ja)
       expect(page).to have_content bookstore.name
     end
+
+    it 'should show custom properties' do
+      @item.item_custom_values << FactoryBot.build(:item_custom_value)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).to have_content @item.item_custom_values.first.value
+    end
   end
 
   describe 'When logged in as User' do
@@ -70,6 +76,12 @@ RSpec.describe 'Manifestations', type: :system do
       @item.update(bookstore: bookstore)
       visit item_path(@item.id, locale: :ja)
       expect(page).not_to have_content bookstore.name
+    end
+
+    it 'should not show custom properties' do
+      @item.item_custom_values << FactoryBot.build(:item_custom_value)
+      visit item_path(@item.id, locale: :ja)
+      expect(page).not_to have_content @item.item_custom_values.first.value
     end
   end
 

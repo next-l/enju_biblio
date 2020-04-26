@@ -44,6 +44,10 @@ ja:
       series_statement_merge: シリーズ情報の統合
       periodical: 逐次刊行物
       doi_record: DOI
+      manifestation_custom_property: 書誌カスタム項目
+      manifestation_custom_value: 書誌カスタム項目の値
+      item_custom_property: 所蔵カスタム項目
+      item_custom_value: 所蔵カスタム項目の値
 
     attributes:
       manifestation:
@@ -100,15 +104,14 @@ ja:
         extent: ページ数
         dimensions: 大きさ
         fulltext_content: 全文あり
-        custom_property: カスタム項目
       manifestation/subjects:
         term: 件名
       manifestation/classifications:
         category: 分類
       manifestation/identifiers:
         body: 識別子
-      manifestation/custom_properties:
-        label: 項目名
+      manifestation/manifesetation_custom_properties:
+        name: 項目名
         value: 値
       item:
         call_number: 請求記号
@@ -128,9 +131,8 @@ ja:
         budget_type_id: 予算種別
         bookstore_id: 書店
         required_role_id: 閲覧に必要な権限
-        custom_property: カスタム項目
-      item/custom_properties:
-        label: 項目名
+      item/item_custom_properties:
+        name: 項目名
         value: 値
       agent:
         last_name: 姓
@@ -346,8 +348,17 @@ ja:
       series_statement_merge_list:
         title: タイトル
       series_statement_merge:
-      custom_property:
-        label: 項目名
+      manifestation_custom_property:
+        name: 項目コード
+        display_name: 項目表示名
+        note: 注記
+      manifestation_custom_value:
+        value: 値
+      item_custom_property:
+        name: 項目コード
+        display_name: 項目表示名
+        note: 注記
+      item_custom_value:
         value: 値
 
   resource_import_file:

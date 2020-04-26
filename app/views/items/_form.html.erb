@@ -94,6 +94,19 @@
     <%= f.text_area :note, class: 'form-control' -%>
   </div>
 
+  <% if ItemCustomProperty.first %>
+    <div class="form-group">
+      <% ItemCustomProperty.order(:position).each do |c| %>
+        <% @item.item_custom_values.new(item_custom_property: c) unless @item.item_custom_values.map{|value| value.item_custom_property_id}.include?(c.id) %>
+      <% end %>
+      <%= f.fields_for :item_custom_values do |custom_form| %>
+        <%= custom_form.label custom_form.object.item_custom_property.name.to_sym, custom_form.object.item_custom_property.display_name %>
+        <%= custom_form.hidden_field :item_custom_property_id %>
+        <%= custom_form.text_field :value, class: 'form-control' %>
+      <% end %>
+    </div>
+  <% end %>
+
   <div class="form-group">
     <%= f.label :memo -%><br />
     <%= f.text_area :memo, class: 'form-control' -%>
