@@ -292,6 +292,21 @@ describe Manifestation, solr: true do
       expect(m["note"]).to eq "test\ntest"
       expect(m["item_note"]).to eq "test\ntest"
     end
+
+    it 'should export custom properties"' do
+      item = FactoryBot.create(:item)
+      item.item_custom_values << FactoryBot.build(:item_custom_value)
+      item.manifestation.manifestation_custom_values << FactoryBot.build(:manifestation_custom_value)
+      lines = Manifestation.export(role: 'Librarian')
+      csv = CSV.parse(lines, headers: true, col_sep: "\t")
+      m = csv.find{|row| row["manifestation_id"].to_i == item.manifestation.id }
+      item.item_custom_values.each do |custom_value|
+        expect(m["item_#{custom_value.item_custom_property.name}"]).to eq custom_value.value
+      end
+      item.manifestation.manifestation_custom_values.each do |custom_value|
+        expect(m["manifestation_#{custom_value.manifestation_custom_property.name}"]).to eq custom_value.value
+      end
+    end
   end
 end
 
