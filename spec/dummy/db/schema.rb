@@ -75,15 +75,16 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
   end
 
   create_table "agent_import_results", force: :cascade do |t|
-    t.integer "agent_import_file_id"
+    t.bigint "agent_import_file_id"
     t.integer "agent_id"
     t.text "body"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["agent_import_file_id"], name: "index_agent_import_results_on_agent_import_file_id"
   end
 
   create_table "agent_merge_lists", force: :cascade do |t|
-    t.string "title"
+    t.string "title", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -120,7 +121,6 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
 
   create_table "agent_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -216,7 +216,6 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
 
   create_table "carrier_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -273,7 +272,6 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
 
   create_table "content_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -1224,6 +1222,7 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agent_import_files", "users"
+  add_foreign_key "agent_import_results", "agent_import_files"
   add_foreign_key "demands", "items"
   add_foreign_key "demands", "messages"
   add_foreign_key "demands", "users"
