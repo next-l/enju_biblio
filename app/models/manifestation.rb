@@ -26,6 +26,7 @@ class Manifestation < ApplicationRecord
   has_one :doi_record
   has_one :periodical_and_manifestation, dependent: :destroy
   has_one :periodical, through: :periodical_and_manifestation
+  has_many :manifestation_custom_values, -> { joins(:manifestation_custom_property).order(:position) }
   accepts_nested_attributes_for :creators, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
@@ -34,6 +35,7 @@ class Manifestation < ApplicationRecord
   accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :periodical, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :manifestation_custom_values, reject_if: :all_blank
 
   searchable do
     text :title, default_boost: 2 do

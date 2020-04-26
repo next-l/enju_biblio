@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_16_131755) do
+ActiveRecord::Schema.define(version: 2020_04_25_074822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -449,6 +449,27 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.index ["body"], name: "index_issn_records_on_body", unique: true
   end
 
+  create_table "item_custom_properties", force: :cascade do |t|
+    t.string "name", null: false, comment: "ラベル名"
+    t.jsonb "display_name_translations", default: {}, null: false, comment: "表示名"
+    t.text "note", comment: "備考"
+    t.integer "position", default: 1, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_item_custom_properties_on_name", unique: true
+  end
+
+  create_table "item_custom_values", force: :cascade do |t|
+    t.bigint "item_custom_property_id", null: false
+    t.bigint "item_id", null: false
+    t.text "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_custom_property_id", "item_id"], name: "index_item_custom_values_on_custom_item_property_and_item_id", unique: true
+    t.index ["item_custom_property_id"], name: "index_item_custom_values_on_custom_property_id"
+    t.index ["item_id"], name: "index_item_custom_values_on_item_id"
+  end
+
   create_table "items", comment: "所蔵", force: :cascade do |t|
     t.string "call_number", comment: "請求記号"
     t.string "item_identifier", comment: "所蔵情報ID"
@@ -580,6 +601,27 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
     t.datetime "updated_at", null: false
     t.index ["manifestation_id"], name: "index_manifestation_and_subjects_on_manifestation_id"
     t.index ["subject_id"], name: "index_manifestation_and_subjects_on_subject_id"
+  end
+
+  create_table "manifestation_custom_properties", force: :cascade do |t|
+    t.string "name", null: false, comment: "ラベル名"
+    t.jsonb "display_name_translations", default: {}, null: false, comment: "表示名"
+    t.text "note", comment: "備考"
+    t.integer "position", default: 1, null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["name"], name: "index_manifestation_custom_properties_on_name", unique: true
+  end
+
+  create_table "manifestation_custom_values", force: :cascade do |t|
+    t.bigint "manifestation_custom_property_id", null: false
+    t.bigint "manifestation_id", null: false
+    t.text "value"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["manifestation_custom_property_id", "manifestation_id"], name: "index_manifestation_custom_values_on_property_and_manifestation", unique: true
+    t.index ["manifestation_custom_property_id"], name: "index_manifestation_custom_values_on_custom_property_id"
+    t.index ["manifestation_id"], name: "index_manifestation_custom_values_on_manifestation_id"
   end
 
   create_table "manifestation_relationship_types", force: :cascade do |t|
@@ -1237,11 +1279,15 @@ ActiveRecord::Schema.define(version: 2019_12_16_131755) do
   add_foreign_key "isbn_record_and_manifestations", "manifestations"
   add_foreign_key "issn_record_and_manifestations", "issn_records"
   add_foreign_key "issn_record_and_manifestations", "manifestations"
+  add_foreign_key "item_custom_values", "item_custom_properties"
+  add_foreign_key "item_custom_values", "items"
   add_foreign_key "items", "manifestations"
   add_foreign_key "jpno_records", "manifestations"
   add_foreign_key "libraries", "library_groups"
   add_foreign_key "manifestation_and_subjects", "manifestations"
   add_foreign_key "manifestation_and_subjects", "subjects"
+  add_foreign_key "manifestation_custom_values", "manifestation_custom_properties"
+  add_foreign_key "manifestation_custom_values", "manifestations"
   add_foreign_key "messages", "messages", column: "parent_id"
   add_foreign_key "messages", "users", column: "receiver_id"
   add_foreign_key "messages", "users", column: "sender_id"
