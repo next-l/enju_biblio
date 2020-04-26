@@ -1,6 +1,5 @@
 class CarrierType < ApplicationRecord
   include MasterModel
-  default_scope { order("carrier_types.position") }
   has_many :manifestations
   if ENV['ENJU_STORAGE'] == 's3'
     has_attached_file :attachment, storage: :s3,

@@ -1,6 +1,5 @@
 class License < ApplicationRecord
   include MasterModel
-  default_scope { order('licenses.position') }
 end
 
 # == Schema Information

@@ -1,7 +1,6 @@
 class FormOfWork < ApplicationRecord
   include MasterModel
-  default_scope { order('form_of_works.position') }
-  has_many :works
+  has_many :works, class_name: 'Manifestation'
 end
 
 # == Schema Information

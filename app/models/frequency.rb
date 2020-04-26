@@ -1,6 +1,5 @@
 class Frequency < ApplicationRecord
   include MasterModel
-  default_scope { order('frequencies.position') }
   has_many :manifestations
 end
 

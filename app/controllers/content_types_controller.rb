@@ -5,7 +5,7 @@ class ContentTypesController < ApplicationController
   # GET /content_types
   # GET /content_types.json
   def index
-    @content_types = ContentType.all
+    @content_types = ContentType.order(:position)
 
     respond_to do |format|
       format.html # index.html.erb
