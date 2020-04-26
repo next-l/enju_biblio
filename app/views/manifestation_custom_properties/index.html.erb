@@ -1,31 +1,36 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="col-md-9">
+    <p id="notice"><%= notice %></p>
 
-<h1>Manifestation Custom Properties</h1>
+    <h1><%= t('page.listing', model: t('activerecord.models.manifestation_custom_property')) -%></h1>
 
-<table class='table'>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Display name</th>
-      <th>Note</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <table class='table table-striped index'>
+      <thead>
+        <tr>
+          <th><%= t('activerecord.attributes.manifestation_custom_property.name') %></th>
+          <th><%= t('activerecord.attributes.manifestation_custom_property.display_name') %></th>
+          <th><%= t('activerecord.attributes.manifestation_custom_property.note') %></th>
+          <th colspan="2"></th>
+        </tr>
+      </thead>
 
-  <tbody>
-    <% @manifestation_custom_properties.each do |manifestation_custom_property| %>
-      <tr>
-        <td><%= manifestation_custom_property.name %></td>
-        <td><%= manifestation_custom_property.display_name %></td>
-        <td><%= manifestation_custom_property.note %></td>
-        <td><%= link_to 'Show', manifestation_custom_property %></td>
-        <td><%= link_to 'Edit', edit_manifestation_custom_property_path(manifestation_custom_property) %></td>
-        <td><%= link_to 'Destroy', manifestation_custom_property, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      <tbody>
+        <% @manifestation_custom_properties.each do |manifestation_custom_property| %>
+          <tr>
+            <td><%= link_to manifestation_custom_property.name, manifestation_custom_property %></td>
+            <td><%= manifestation_custom_property.display_name %></td>
+            <td><%= manifestation_custom_property.note %></td>
+            <td><%= link_to t('page.edit'), edit_manifestation_custom_property_path(manifestation_custom_property) %></td>
+            <td><%= link_to t('page.destroy'), manifestation_custom_property, method: :delete, data: { confirm: t('page.are_you_sure') } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
 
-<br>
-
-<%= link_to 'New Manifestation Custom Property', new_manifestation_custom_property_path %>
+  <div class="col">
+    <div class="card card-body">
+      <%= link_to t('page.new', model: t('activerecord.models.manifestation_custom_property')), new_manifestation_custom_property_path -%>
+    </div>
+  </div>
+</div>

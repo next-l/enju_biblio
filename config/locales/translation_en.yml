@@ -45,7 +45,9 @@ en:
       periodical: Periodical
       doi_record: DOI
       manifestation_custom_property: Manifestation custom property
+      manifestation_custom_value: Manifestation custom value
       item_custom_property: Item custom property
+      item_custom_value: Item custom value
 
     attributes:
       manifestation:
@@ -102,15 +104,14 @@ en:
         extent: Extent
         dimensions: Dimensions
         fulltext_content: Fulltext content
-        custom_property: Custom property
       manifestation/subjects:
           term: Subject
       manifestation/classifications:
           category: Classification
       manifestation/identifiers:
           body: Identifier
-      manifestation/custom_properties:
-        label: Label
+      manifestation/manifestation_custom_properties:
+        name: Name
         value: Value
       item:
         call_number: Call number
@@ -130,9 +131,8 @@ en:
         budget_type_id: Budget type
         bookstore_id: Bookstore
         required_role_id: Required role
-        custom_property: Custom property
-      item/custom_properties:
-        label: Label
+      item/item_custom_properties:
+        name: Name
         value: Value
       agent:
         last_name: Last name
@@ -344,8 +344,17 @@ en:
       series_statement_merge_list:
         title: Title
       series_statement_merge:
-      custom_property:
-        label: Label
+      manifestation_custom_property:
+        name: Property name
+        display_name: Display name
+        note: Note
+      manifestation_custom_value:
+        value: Value
+      item_custom_property:
+        name: Property name
+        display_name: Display name
+        note: Note
+      item_custom_value:
         value: Value
 
   resource_import_file:

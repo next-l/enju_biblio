@@ -125,6 +125,11 @@ class Item < ApplicationRecord
         memo: memo
       })
 
+      ItemCustomProperty.order(:position).each do |custom_property|
+        custom_value = item_custom_values.find_by(item_custom_property: custom_property)
+        record[:"item_#{custom_property.name}"] = custom_value.try(:value)
+      end
+
       if defined?(EnjuCirculation)
         record.merge!({
           use_restriction: use_restriction.try(:name),
