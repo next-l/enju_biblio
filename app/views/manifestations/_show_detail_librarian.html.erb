@@ -103,7 +103,7 @@
         </tr>
         <% @manifestation.manifestation_custom_values.each do |value| %>
           <tr>
-            <td><%= value.manifestation_custom_property.display_name -%>:</td>
+            <td><%= value.manifestation_custom_property.display_name.localize -%>:</td>
             <td>
               <%= value.value -%>
             </td>

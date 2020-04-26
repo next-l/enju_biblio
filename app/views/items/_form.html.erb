@@ -100,7 +100,7 @@
         <% @item.item_custom_values.new(item_custom_property: c) unless @item.item_custom_values.map{|value| value.item_custom_property_id}.include?(c.id) %>
       <% end %>
       <%= f.fields_for :item_custom_values do |custom_form| %>
-        <%= custom_form.label custom_form.object.item_custom_property.name.to_sym, custom_form.object.item_custom_property.display_name %>
+        <%= custom_form.label custom_form.object.item_custom_property.name.to_sym, custom_form.object.item_custom_property.display_name.localize %>
         <%= custom_form.hidden_field :item_custom_property_id %>
         <%= custom_form.text_field :value, class: 'form-control' %>
       <% end %>
