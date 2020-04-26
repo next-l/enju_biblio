@@ -307,6 +307,12 @@ describe ItemsController do
           post :create, params: { item: @attrs }
           expect(response).to redirect_to(item_url(assigns(:item)))
         end
+
+        it 'accepts custom values' do
+          post :create, params: { item: @attrs.merge(item_custom_values_attributes: Array.new(3){FactoryBot.attributes_for(:item_custom_value, item_custom_property_id: FactoryBot.create(:item_custom_property).id)}) }
+          expect(assigns(:item)).to be_valid
+          expect(assigns(:item).item_custom_values.count).to eq 3
+        end
       end
 
       describe 'with invalid params' do
@@ -422,6 +428,22 @@ describe ItemsController do
           put :update, params: { id: @item.id, item: @attrs }
           expect(assigns(:item)).to eq(@item)
           expect(response).to redirect_to(@item)
+        end
+
+        it 'accepts custom values' do
+          @item.item_custom_values << FactoryBot.build(:item_custom_value)
+          put :update, params: { id: @item.id, item: @attrs.merge(item_custom_values_attributes: [{id: @item.item_custom_values.first.id, value: 'test'}]) }
+          expect(assigns(:item)).to be_valid
+          expect(assigns(:item).item_custom_values.count).to eq 1
+          expect(assigns(:item).item_custom_values.first.value).to eq 'test'
+        end
+
+        it 'accepts custom values when the value is empty' do
+          @item.item_custom_values << FactoryBot.build(:item_custom_value)
+          put :update, params: { id: @item.id, item: @attrs.merge(item_custom_values_attributes: [{id: @item.item_custom_values.first.id, value: ''}]) }
+          expect(assigns(:item)).to be_valid
+          expect(assigns(:item).item_custom_values.count).to eq 1
+          expect(assigns(:item).item_custom_values.first.value).to eq ''
         end
       end
 
