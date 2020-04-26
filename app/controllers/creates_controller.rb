@@ -127,6 +127,6 @@ class CreatesController < ApplicationController
   end
 
   def prepare_options
-    @create_types = CreateType.all
+    @create_types = CreateType.order(:position)
   end
 end
