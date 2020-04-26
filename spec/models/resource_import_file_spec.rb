@@ -335,6 +335,11 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         expect(manifestation.items.first.note).to eq "test\ntest"
       end
     end
+
+    describe "when it contains custom properties" do
+      xit "should be imported" do
+      end
+    end
   end
 
   describe "when its mode is 'update'" do
