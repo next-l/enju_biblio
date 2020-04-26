@@ -43,6 +43,9 @@ ja:
       series_statement_merge_list: シリーズ情報統合リスト
       series_statement_merge: シリーズ情報の統合
       periodical: 逐次刊行物
+      doi_record: DOI
+      manifestation_custom_property: 書誌カスタム項目
+      item_custom_property: 所蔵カスタム項目
 
     attributes:
       manifestation:

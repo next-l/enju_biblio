@@ -43,6 +43,9 @@ en:
       series_statement_merge: Series statement merge
       series_statement_merge_list: Series statement merge list
       periodical: Periodical
+      doi_record: DOI
+      manifestation_custom_property: Manifestation custom property
+      item_custom_property: Item custom property
 
     attributes:
       manifestation:
