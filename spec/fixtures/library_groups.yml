@@ -14,8 +14,6 @@ one:
     ::/0"
   user_id: 1
   pub_year_facet_range_interval: 10
-  default_custom_manifestation_label: "custom1\r\ncustom2\r\ncustom3"
-  default_custom_item_label: "custom1\r\ncustom2\r\ncustom3"
 
 # == Schema Information
 #
