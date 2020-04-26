@@ -711,12 +711,12 @@ class ManifestationsController < ApplicationController
   end
 
   def prepare_options
-    @carrier_types = CarrierType.select([:id, :display_name_translations, :position])
-    @content_types = ContentType.select([:id, :display_name_translations, :position])
+    @carrier_types = CarrierType.order(:position).select([:id, :display_name_translations, :position])
+    @content_types = ContentType.order(:position).select([:id, :display_name_translations, :position])
     @roles = Role.select([:id, :display_name_translations, :position])
-    @languages = Language.select([:id, :display_name, :position])
-    @frequencies = Frequency.select([:id, :display_name_translations, :position])
-    @identifier_types = IdentifierType.select([:id, :display_name, :position])
+    @languages = Language.order(:position).select([:id, :display_name, :position])
+    @frequencies = Frequency.order(:position).select([:id, :display_name_translations, :position])
+    @identifier_types = IdentifierType.order(:position).select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)
   end
 

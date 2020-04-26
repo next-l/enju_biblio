@@ -1,6 +1,5 @@
 class CarrierType < ApplicationRecord
   include MasterModel
-  default_scope { order("carrier_types.position") }
   translates :display_name
   has_many :manifestations
 

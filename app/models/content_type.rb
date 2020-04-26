@@ -1,6 +1,5 @@
 class ContentType < ApplicationRecord
   include MasterModel
-  default_scope { order('content_types.position') }
   translates :display_name
   has_many :manifestations
 end
