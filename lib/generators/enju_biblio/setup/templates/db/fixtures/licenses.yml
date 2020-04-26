@@ -24,7 +24,7 @@ cc-by:
   url: https://creativecommons.org/licenses/by/4.0/
   position: 3
 
-cc0
+cc0:
   id: 4
   name: cc0
   display_name_translations: {"en": "Public Domain (CC0)", "ja": "パブリックドメイン (CC0)"}
@@ -32,7 +32,7 @@ cc0
   url: https://creativecommons.org/publicdomain/zero/1.0/
   position: 4
 
-three:
+mit:
   id: 5
   name: mit
   display_name_translations: {"en": "MIT License", "ja": "MITライセンス"}
