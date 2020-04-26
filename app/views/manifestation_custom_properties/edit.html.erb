@@ -1,6 +1,6 @@
-<h1>Editing Manifestation Custom Property</h1>
+<h1><%= t('page.editing', model: t('activerecord.models.manifestation_custom_property')) -%></h1>
 
 <%= render 'form', manifestation_custom_property: @manifestation_custom_property %>
 
-<%= link_to 'Show', @manifestation_custom_property %> |
-<%= link_to 'Back', manifestation_custom_properties_path %>
+<%= link_to t('page.show'), @manifestation_custom_property %> |
+<%= link_to t('page.back'), manifestation_custom_properties_path %>
