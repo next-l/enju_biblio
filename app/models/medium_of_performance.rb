@@ -1,6 +1,5 @@
 class MediumOfPerformance < ApplicationRecord
   include MasterModel
-  default_scope { order('medium_of_performances.position') }
   translates :display_name
   has_many :works
 end

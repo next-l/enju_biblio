@@ -1,6 +1,5 @@
 class FormOfWork < ApplicationRecord
   include MasterModel
-  default_scope { order('form_of_works.position') }
   translates :display_name
   has_many :works
 end
