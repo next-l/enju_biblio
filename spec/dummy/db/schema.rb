@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_25_074822) do
+ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pgcrypto"
@@ -592,6 +592,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_074822) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.jsonb "display_name_translations", default: {}, null: false
+    t.string "url"
   end
 
   create_table "manifestation_and_subjects", force: :cascade do |t|
@@ -698,8 +699,10 @@ ActiveRecord::Schema.define(version: 2020_04_25_074822) do
     t.text "extent"
     t.text "dimensions"
     t.text "memo"
+    t.bigint "license_id", null: false
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
+    t.index ["license_id"], name: "index_manifestations_on_license_id"
     t.index ["manifestation_identifier"], name: "index_manifestations_on_manifestation_identifier"
     t.index ["updated_at"], name: "index_manifestations_on_updated_at"
   end
@@ -1288,6 +1291,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_074822) do
   add_foreign_key "manifestation_and_subjects", "subjects"
   add_foreign_key "manifestation_custom_values", "manifestation_custom_properties"
   add_foreign_key "manifestation_custom_values", "manifestations"
+  add_foreign_key "manifestations", "licenses"
   add_foreign_key "messages", "messages", column: "parent_id"
   add_foreign_key "messages", "users", column: "receiver_id"
   add_foreign_key "messages", "users", column: "sender_id"

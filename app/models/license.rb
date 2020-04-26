@@ -1,5 +1,6 @@
 class License < ApplicationRecord
   include MasterModel
+  has_many :manifestations
 end
 
 # == Schema Information
