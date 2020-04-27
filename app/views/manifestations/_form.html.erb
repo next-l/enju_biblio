@@ -134,7 +134,7 @@
   <div class="form-row">
     <div class="form-group col-md-8">
       <%= f.label t('activerecord.models.license') -%>
-      <%= f.select(:license_id, @licenses.collect{|;| [l.display_name, l.id]}, {}, {class: 'form-control'}) -%>
+      <%= f.select(:license_id, @licenses.collect{|l| [l.display_name, l.id]}, {}, {class: 'form-control'}) -%>
     </div>
 
     <div class="form-group col-md-2">
