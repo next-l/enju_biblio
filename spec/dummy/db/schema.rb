@@ -699,7 +699,7 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
     t.text "extent"
     t.text "dimensions"
     t.text "memo"
-    t.bigint "license_id", null: false
+    t.bigint "license_id", default: 1, null: false
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
     t.index ["license_id"], name: "index_manifestations_on_license_id"
