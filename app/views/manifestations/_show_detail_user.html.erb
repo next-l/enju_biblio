@@ -89,6 +89,14 @@
           <td><%= t('page.updated_at') -%>:</td>
           <td><%=l manifestation.updated_at if manifestation.updated_at -%></td>
         </tr>
+        <% if manifestation.abstract.present? %>
+          <tr>
+            <td><%= t('activerecord.attributes.manifestation.abstract') -%>:</td>
+            <td>
+              <%= raw simple_format(h(manifestation.abstract)) -%>
+            </td>
+          </tr>
+        <% end %>
         <% if manifestation.description.present? %>
           <tr>
             <td><%= t('activerecord.attributes.manifestation.description') -%>:</td>

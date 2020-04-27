@@ -88,6 +88,7 @@ en:
         lccn: LCCN
         issn: ISSN
         subscription_master: Subscription master
+        abstract: Abstract
         description: Description
         creator_string: Creator
         contributor_string: Contributor
