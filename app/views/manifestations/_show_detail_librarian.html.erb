@@ -53,6 +53,10 @@
           <td><%= t('activerecord.attributes.manifestation.price') -%>:</td>
           <td><%= manifestation.price -%></td>
         </tr>
+        <tr>
+          <td><%= t('activerecord.models.license') -%>:</td>
+          <td><%= manifestation.license&.display_name -%></td>
+        </tr>
         <% if defined?(EnjuSubject) %>
           <%= render 'manifestations/subject_detail', manifestation: manifestation %>
           <%= render 'manifestations/classification_detail', manifestation: manifestation %>

@@ -128,6 +128,7 @@ class ManifestationsController < ApplicationController
         :serial_number_string,
         :date_of_publication,
         :pub_date,
+        :license_id,
         :language_id,
         :created_at,
         :updated_at,
@@ -469,7 +470,7 @@ class ManifestationsController < ApplicationController
       :ndl_bib_id, :pub_date, :edition_string, :volume_number, :issue_number,
       :serial_number, :content_type_id, :attachment, :lock_version,
       :dimensions, :fulltext_content, :extent, :memo,
-      :parent_id,
+      :parent_id, :license_id,
       :serial, :statement_of_responsibility,
       {creators_attributes: [
         :id, :last_name, :middle_name, :first_name,
@@ -718,6 +719,7 @@ class ManifestationsController < ApplicationController
     @content_types = ContentType.order(:position).select([:id, :display_name_translations, :position])
     @roles = Role.select([:id, :display_name_translations, :position])
     @languages = Language.order(:position).select([:id, :display_name, :position])
+    @licenses = License.order(:position).select([:id, :display_name_translations, :position])
     @frequencies = Frequency.order(:position).select([:id, :display_name_translations, :position])
     @identifier_types = IdentifierType.order(:position).select([:id, :display_name, :position])
     @nii_types = NiiType.select([:id, :display_name, :position]) if defined?(EnjuNii)

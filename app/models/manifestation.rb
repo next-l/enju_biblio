@@ -1,4 +1,10 @@
 class Manifestation < ApplicationRecord
+  belongs_to :language
+  belongs_to :carrier_type
+  belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
+  belongs_to :frequency
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
+  belongs_to :license, required: false
   has_many :creates, dependent: :destroy, foreign_key: 'work_id'
   has_many :creators, through: :creates, source: :agent #, order: 'creates.position'
   has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'
@@ -11,12 +17,7 @@ class Manifestation < ApplicationRecord
   has_many :derived_manifestations, through: :children, source: :child
   has_many :original_manifestations, through: :parents, source: :parent
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
-  belongs_to :language
-  belongs_to :carrier_type
-  belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
   has_many :series_statements
-  belongs_to :frequency
-  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   has_many :isbn_record_and_manifestations, dependent: :destroy
