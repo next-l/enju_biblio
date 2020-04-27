@@ -1,4 +1,4 @@
-class CreateItemCustomProperties < ActiveRecord::Migration[5.2]
+class CreateItemCustomProperties < ActiveRecord::Migration[6.0]
   def change
     create_table :item_custom_properties do |t|
       t.string :name, null: false, comment: 'ラベル名', index: {unique: true}
