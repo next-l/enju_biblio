@@ -88,6 +88,7 @@ ja:
         lccn: LCCN
         issn: ISSN
         subscription_master: 購読マスタ
+        abstract: 内容細目
         description: 説明
         creator_string: 著者
         contributor_string: 協力者・編者
