@@ -454,8 +454,8 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
     t.jsonb "display_name_translations", default: {}, null: false, comment: "表示名"
     t.text "note", comment: "備考"
     t.integer "position", default: 1, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_item_custom_properties_on_name", unique: true
   end
 
@@ -463,8 +463,8 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
     t.bigint "item_custom_property_id", null: false
     t.bigint "item_id", null: false
     t.text "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["item_custom_property_id", "item_id"], name: "index_item_custom_values_on_custom_item_property_and_item_id", unique: true
     t.index ["item_custom_property_id"], name: "index_item_custom_values_on_custom_property_id"
     t.index ["item_id"], name: "index_item_custom_values_on_item_id"
@@ -609,8 +609,8 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
     t.jsonb "display_name_translations", default: {}, null: false, comment: "表示名"
     t.text "note", comment: "備考"
     t.integer "position", default: 1, null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["name"], name: "index_manifestation_custom_properties_on_name", unique: true
   end
 
@@ -618,8 +618,8 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
     t.bigint "manifestation_custom_property_id", null: false
     t.bigint "manifestation_id", null: false
     t.text "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["manifestation_custom_property_id", "manifestation_id"], name: "index_manifestation_custom_values_on_property_and_manifestation", unique: true
     t.index ["manifestation_custom_property_id"], name: "index_manifestation_custom_values_on_custom_property_id"
     t.index ["manifestation_id"], name: "index_manifestation_custom_values_on_manifestation_id"
@@ -699,7 +699,7 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
     t.text "extent"
     t.text "dimensions"
     t.text "memo"
-    t.bigint "license_id", null: false
+    t.bigint "license_id"
     t.index ["access_address"], name: "index_manifestations_on_access_address"
     t.index ["date_of_publication"], name: "index_manifestations_on_date_of_publication"
     t.index ["license_id"], name: "index_manifestations_on_license_id"
