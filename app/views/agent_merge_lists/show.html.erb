@@ -16,7 +16,7 @@
     <%- end -%>
   </ul>
   <%- if @agent_merge_list.agents.size > 1 -%>
-    <%= f.submit class: 'btn btn-primary' t('page.merge'), data: {confirm: t('page.are_you_sure')} -%>
+    <%= f.submit t('page.merge'), class: 'btn btn-primary', data: {confirm: t('page.are_you_sure')} -%>
   <%- end -%>
 <%- end -%>
 
