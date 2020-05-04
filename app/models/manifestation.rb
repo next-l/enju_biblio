@@ -411,9 +411,7 @@ class Manifestation < ApplicationRecord
   end
 
   def self.find_by_isbn(isbn)
-    identifier_type = IdentifierType.find_by(name: 'isbn')
-    return nil unless identifier_type
-    Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
+    Manifestation.includes(:isbn_records).where("isbn_records.body": isbn)
   end
 
   def index_series_statement
@@ -421,7 +419,7 @@ class Manifestation < ApplicationRecord
   end
 
   def acquired_at
-    items.order(:acquired_at).first.try(:acquired_at)
+    items.order(:acquired_at).first&.acquired_at
   end
 
   def series_master?

@@ -1,0 +1,11 @@
+one:
+  id: 1
+  name: custom_1
+  display_name_translations: {"en": "Custom property 1", "ja": "カスタム項目1"}
+  position: 1
+
+two:
+  id: 2
+  name: custom_2
+  display_name_translations: {"en": "Custom property 1", "ja": "カスタム項目1"}
+  position: 2

@@ -19,15 +19,15 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 31 Mar 2019 13:01:53 GMT
+      - Fri, 01 May 2020 15:35:45 GMT
       X-Ua-Compatible:
       - IE=Edge,chrome=1
       Cache-Control:
       - max-age=0, private, must-revalidate
-      Etag:
-      - '"bfcfa4c9f7a0dc0274b3a50f2ddf53ca"'
       X-Runtime:
-      - '0.024746'
+      - '0.087932'
+      Etag:
+      - '"f208aef245d3a723a36a3182d29917c0"'
       Content-Length:
       - '1014'
       Status:
@@ -37,16 +37,16 @@ http_interactions:
       Set-Cookie:
       - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
         00:00:00 GMT
-      - ROUTEID=.ps06; path=/
-      - TS0162cc8a=011338590aac1d2d65be8fe83712b6fee1bfd186d0124fefe2475e6247c01bf90efdba4b03095a96b4a51474b84e98e3336e9e86a37dbe3fee5aeed017ac84697a18691c337559060a3d12f6f18da88de5a5e65afd;
+      - ROUTEID=.ps21; path=/
+      - TS0162cc8a=011338590ab152255f3983eb42122c211ca5df265d5d7acafa119240227c794932c04ad04ff291a079d1bd007db8ca8e20950f7fb94158739bed0da27855b26c811e52078ced418db57e2d9c82fa997e652b805bf1;
         path=/; domain=.ndl.go.jp
-      - TS01f3cfdf=011338590ae2b448f6f6490deeede292410f98de5e466be6e23866d679fa49da8a0e8f51ccf47b866c07ad0a80b1aa895b0240e17a292b6f39520cf2e60961eb29554385335bee7619abd5bc67fd0868c187160e49a0bbc9265a259080fc8dce558dc08109;
+      - TS01f3cfdf=011338590ab42fbe1dd8988caa2de5beba1021d511e6c3147c4509812da546e92ac702a31a79fca6a3845fcb34f7868eaee11a9f8d6005fdf8f30c1038a599f4e4ef675668ae3e88fc9fdd6a89fea30bb8cb1fcfe6101e372dc479f100c4b6604154e84303;
         Path=/
-      - _front_session_id=27d53349cfb4849124fbae519fb3461e;Secure; path=/; expires=Sun,
-        31-Mar-2019 14:01:53 GMT; HttpOnly
+      - _front_session_id=15c40abe397f6723c4231e649923d38b;Secure; path=/; expires=Fri,
+        01-May-2020 16:35:45 GMT; HttpOnly
       - cookieId=;secure; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00
         GMT
-      - ndl.go.jp=rd2o00000000000000000000ffff0a024f75o80; path=/
+      - ndl.go.jp=rd2o00000000000000000000ffff0a024f77o80; path=/
       - serverid=1103; path=/
       - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
       X-Content-Type-Options:
@@ -56,9 +56,9 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVjL29wZW5zZWFyY2hyc3MvMS4wLyIgeG1sbnM6ZGNtaXR5cGU9Imh0dHA6Ly9wdXJsLm9yZy9kYy9kY21pdHlwZS8iIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgdmVyc2lvbj0iMi4wIiB4bWxuczpkY25kbD0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4MDAwNzI2NDU1MSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwczovL2lzcy5uZGwuZ28uanAvYXBpL29wZW5zZWFyY2g/Y250PTEwJmFtcDtpc2JuPTk3ODAwMDcyNjQ1NTEmYW1wO21lZGlhdHlwZT0xJmFtcDtpZHg9MSZhbXA7ZHBpZD1pc3MtbmRsLW9wYWM8L2xpbms+CiAgICA8ZGVzY3JpcHRpb24+U2VhcmNoIHJlc3VsdHMgZm9yIGlzYm49OTc4MDAwNzI2NDU1MSBjbnQ9MTAgZHBpZD1pc3MtbmRsLW9wYWMgbWVkaWF0eXBlPTEgPC9kZXNjcmlwdGlvbj4KICAgIDxsYW5ndWFnZT5qYTwvbGFuZ3VhZ2U+CiAgICA8b3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+MDwvb3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+CiAgICA8b3BlblNlYXJjaDpzdGFydEluZGV4PjE8L29wZW5TZWFyY2g6c3RhcnRJbmRleD4KICAgIDxvcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4xMDwvb3BlblNlYXJjaDppdGVtc1BlclBhZ2U+CiAgPC9jaGFubmVsPgo8L3Jzcz4K
-    http_version: 
-  recorded_at: Sun, 31 Mar 2019 13:01:53 GMT
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4bWxuczp4c2k9Imh0dHA6Ly93d3cudzMub3JnLzIwMDEvWE1MU2NoZW1hLWluc3RhbmNlIiB4bWxuczpyZGZzPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwLzAxL3JkZi1zY2hlbWEjIiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVjL29wZW5zZWFyY2hyc3MvMS4wLyIgdmVyc2lvbj0iMi4wIiB4bWxuczpkY25kbD0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy8iIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOmRjbWl0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjEgOTc4MDAwNzI2NDU1MSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwczovL2lzcy5uZGwuZ28uanAvYXBpL29wZW5zZWFyY2g/aWR4PTEmYW1wO21lZGlhdHlwZT0xJmFtcDtpc2JuPTk3ODAwMDcyNjQ1NTEmYW1wO2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTA8L2xpbms+CiAgICA8ZGVzY3JpcHRpb24+U2VhcmNoIHJlc3VsdHMgZm9yIGRwaWQ9aXNzLW5kbC1vcGFjIGNudD0xMCBpc2JuPTk3ODAwMDcyNjQ1NTEgbWVkaWF0eXBlPTEgPC9kZXNjcmlwdGlvbj4KICAgIDxsYW5ndWFnZT5qYTwvbGFuZ3VhZ2U+CiAgICA8b3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+MDwvb3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+CiAgICA8b3BlblNlYXJjaDpzdGFydEluZGV4PjE8L29wZW5TZWFyY2g6c3RhcnRJbmRleD4KICAgIDxvcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4xMDwvb3BlblNlYXJjaDppdGVtc1BlclBhZ2U+CiAgPC9jaGFubmVsPgo8L3Jzcz4K
+    http_version: null
+  recorded_at: Fri, 01 May 2020 15:35:45 GMT
 - request:
     method: get
     uri: https://iss.ndl.go.jp/api/opensearch?cnt=10&dpid=iss-ndl-opac&idx=1&isbn=0007264550&mediatype=1
@@ -78,15 +78,15 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Sun, 31 Mar 2019 13:01:53 GMT
+      - Fri, 01 May 2020 15:35:45 GMT
       Cache-Control:
       - max-age=0, private, must-revalidate
-      Etag:
-      - '"897784796bf6281a8d2b0efa745e529d"'
       X-Ua-Compatible:
       - IE=Edge,chrome=1
       X-Runtime:
-      - '0.030242'
+      - '0.025270'
+      Etag:
+      - '"5705ebbce6f97ef27704383ea5e217ad"'
       Content-Length:
       - '1005'
       Status:
@@ -96,16 +96,16 @@ http_interactions:
       Set-Cookie:
       - HTTP_Z308_KEY_DATA_01=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970
         00:00:00 GMT
-      - ROUTEID=.ps23; path=/
-      - TS0162cc8a=011338590ab6a93776a8fbfebfb12fa8d0e58c844c430754e9992948c4bafb42705242bf08a308ea8c61f476dcb1ecee4483369fa35e935ee46655cc5862dd872583e43e91b23084e15f08a6a3c6b5b238a0dcd016;
+      - ROUTEID=.ps22; path=/
+      - TS0162cc8a=011338590a38ff0997f0ac378be1432b11353b240196722469f5fd3c1626abaffea46897c031011c8803c4319c859be6c4f3bb242dfe3e4fd4857917207aa5b5321fa5393b2e9a7967c7a3af8dc0f58f745762301d;
         path=/; domain=.ndl.go.jp
-      - TS01f3cfdf=011338590a5c4a3c76a779abf3ee3e8825c4c8fd368c8f18d0d059f6d532834fb50e271a360c08bb7f782f289a977a27f91e3ef3f836d001341f0cbc2c7453296f26b2cfb7e6ee54de4b3a37b7fa43d260efcd1d5780c2715e07387bc6ab015d5a01b26fd0;
+      - TS01f3cfdf=011338590ae01ae74ce921516b2d33d4ef056024051d5f2ab04579c6d16c97ab9c0ad1c005da4a2f2e2228b54bbe6ec6f3790fa9789e1b81ddb9566b8bad14fb679559897814c806d582c5afeb8756c740e8dd7d4d9e589fcc0e88c2da9592f22671f953a3;
         Path=/
-      - _front_session_id=31c05b025e2cd09581ec648c314b5837;Secure; path=/; expires=Sun,
-        31-Mar-2019 14:01:53 GMT; HttpOnly
+      - _front_session_id=58b3d4d10ff9181315cba847ae9b6849;Secure; path=/; expires=Fri,
+        01-May-2020 16:35:45 GMT; HttpOnly
       - cookieId=;secure; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00
         GMT
-      - ndl.go.jp=rd2o00000000000000000000ffff0a024f76o80; path=/
+      - ndl.go.jp=rd2o00000000000000000000ffff0a024f77o80; path=/
       - serverid=1103; path=/
       - sessionId=; domain=.ndl.go.jp; path=/; expires=Thu, 01-Jan-1970 00:00:00 GMT
       X-Content-Type-Options:
@@ -115,7 +115,7 @@ http_interactions:
     body:
       encoding: ASCII-8BIT
       string: !binary |-
-        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB2ZXJzaW9uPSIyLjAiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyIgeG1sbnM6ZGM9Imh0dHA6Ly9wdXJsLm9yZy9kYy9lbGVtZW50cy8xLjEvIiB4bWxuczpkY25kbD0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy8iIHhtbG5zOmRjbWl0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvIiB4bWxuczpvcGVuU2VhcmNoPSJodHRwOi8vYTkuY29tLy0vc3BlYy9vcGVuc2VhcmNocnNzLzEuMC8iIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjAwMDcyNjQ1NTAgMSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwczovL2lzcy5uZGwuZ28uanAvYXBpL29wZW5zZWFyY2g/Y250PTEwJmFtcDttZWRpYXR5cGU9MSZhbXA7aXNibj0wMDA3MjY0NTUwJmFtcDtpZHg9MSZhbXA7ZHBpZD1pc3MtbmRsLW9wYWM8L2xpbms+CiAgICA8ZGVzY3JpcHRpb24+U2VhcmNoIHJlc3VsdHMgZm9yIG1lZGlhdHlwZT0xIGNudD0xMCBpc2JuPTAwMDcyNjQ1NTAgZHBpZD1pc3MtbmRsLW9wYWMgPC9kZXNjcmlwdGlvbj4KICAgIDxsYW5ndWFnZT5qYTwvbGFuZ3VhZ2U+CiAgICA8b3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+MDwvb3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+CiAgICA8b3BlblNlYXJjaDpzdGFydEluZGV4PjE8L29wZW5TZWFyY2g6c3RhcnRJbmRleD4KICAgIDxvcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4xMDwvb3BlblNlYXJjaDppdGVtc1BlclBhZ2U+CiAgPC9jaGFubmVsPgo8L3Jzcz4K
-    http_version: 
-  recorded_at: Sun, 31 Mar 2019 13:01:53 GMT
-recorded_with: VCR 4.0.0
+        PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHJzcyB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOmRjbWl0eXBlPSJodHRwOi8vcHVybC5vcmcvZGMvZGNtaXR5cGUvIiB4bWxuczpkY25kbD0iaHR0cDovL25kbC5nby5qcC9kY25kbC90ZXJtcy8iIHhtbG5zOnJkZnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvMDEvcmRmLXNjaGVtYSMiIHhtbG5zOnhzaT0iaHR0cDovL3d3dy53My5vcmcvMjAwMS9YTUxTY2hlbWEtaW5zdGFuY2UiIHhtbG5zOmRjdGVybXM9Imh0dHA6Ly9wdXJsLm9yZy9kYy90ZXJtcy8iIHhtbG5zOm9wZW5TZWFyY2g9Imh0dHA6Ly9hOS5jb20vLS9zcGVjL29wZW5zZWFyY2hyc3MvMS4wLyIgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIiB2ZXJzaW9uPSIyLjAiPgogIDxjaGFubmVsPgogICAgPHRpdGxlPjAwMDcyNjQ1NTAgMSBpc3MtbmRsLW9wYWMgLSDlm73nq4vlm73kvJrlm7Pmm7jppKjjgrXjg7zjg4EgT3BlblNlYXJjaDwvdGl0bGU+CiAgICA8bGluaz5odHRwczovL2lzcy5uZGwuZ28uanAvYXBpL29wZW5zZWFyY2g/aWR4PTEmYW1wO21lZGlhdHlwZT0xJmFtcDtpc2JuPTAwMDcyNjQ1NTAmYW1wO2RwaWQ9aXNzLW5kbC1vcGFjJmFtcDtjbnQ9MTA8L2xpbms+CiAgICA8ZGVzY3JpcHRpb24+U2VhcmNoIHJlc3VsdHMgZm9yIGRwaWQ9aXNzLW5kbC1vcGFjIGNudD0xMCBtZWRpYXR5cGU9MSBpc2JuPTAwMDcyNjQ1NTAgPC9kZXNjcmlwdGlvbj4KICAgIDxsYW5ndWFnZT5qYTwvbGFuZ3VhZ2U+CiAgICA8b3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+MDwvb3BlblNlYXJjaDp0b3RhbFJlc3VsdHM+CiAgICA8b3BlblNlYXJjaDpzdGFydEluZGV4PjE8L29wZW5TZWFyY2g6c3RhcnRJbmRleD4KICAgIDxvcGVuU2VhcmNoOml0ZW1zUGVyUGFnZT4xMDwvb3BlblNlYXJjaDppdGVtc1BlclBhZ2U+CiAgPC9jaGFubmVsPgo8L3Jzcz4K
+    http_version: null
+  recorded_at: Fri, 01 May 2020 15:35:45 GMT
+recorded_with: VCR 5.1.0

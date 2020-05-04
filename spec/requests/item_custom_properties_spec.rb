@@ -16,11 +16,11 @@ RSpec.describe "/item_custom_properties", type: :request do
   # ItemCustomProperty. As you add validations to ItemCustomProperty, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryBot.attributes_for(:item_custom_property)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    FactoryBot.attributes_for(:item_custom_property, name: nil)
   }
 
   describe "GET /index" do
@@ -59,12 +59,12 @@ RSpec.describe "/item_custom_properties", type: :request do
       it "creates a new ItemCustomProperty" do
         expect {
           post item_custom_properties_url, params: { item_custom_property: valid_attributes }
-        }.to change(ItemCustomProperty, :count).by(1)
+        }.to change(ItemCustomProperty, :count).by(0)
       end
 
       it "redirects to the created item_custom_property" do
         post item_custom_properties_url, params: { item_custom_property: valid_attributes }
-        expect(response).to redirect_to(item_custom_property_url(ItemCustomProperty.last))
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
 
@@ -117,13 +117,13 @@ RSpec.describe "/item_custom_properties", type: :request do
       item_custom_property = ItemCustomProperty.create! valid_attributes
       expect {
         delete item_custom_property_url(item_custom_property)
-      }.to change(ItemCustomProperty, :count).by(-1)
+      }.to change(ItemCustomProperty, :count).by(0)
     end
 
     it "redirects to the item_custom_properties list" do
       item_custom_property = ItemCustomProperty.create! valid_attributes
       delete item_custom_property_url(item_custom_property)
-      expect(response).to redirect_to(item_custom_properties_url)
+      expect(response).to redirect_to(new_user_session_url)
     end
   end
 end
