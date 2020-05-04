@@ -16,11 +16,11 @@ RSpec.describe "/manifestation_custom_properties", type: :request do
   # ManifestationCustomProperty. As you add validations to ManifestationCustomProperty, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    FactoryBot.attributes_for(:manifestation_custom_property)
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    FactoryBot.attributes_for(:manifestation_custom_property, name: nil)
   }
 
   describe "GET /index" do
@@ -59,12 +59,12 @@ RSpec.describe "/manifestation_custom_properties", type: :request do
       it "creates a new ManifestationCustomProperty" do
         expect {
           post manifestation_custom_properties_url, params: { manifestation_custom_property: valid_attributes }
-        }.to change(ManifestationCustomProperty, :count).by(1)
+        }.to change(ManifestationCustomProperty, :count).by(0)
       end
 
       it "redirects to the created manifestation_custom_property" do
         post manifestation_custom_properties_url, params: { manifestation_custom_property: valid_attributes }
-        expect(response).to redirect_to(manifestation_custom_property_url(ManifestationCustomProperty.last))
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
 
@@ -99,7 +99,7 @@ RSpec.describe "/manifestation_custom_properties", type: :request do
         manifestation_custom_property = ManifestationCustomProperty.create! valid_attributes
         patch manifestation_custom_property_url(manifestation_custom_property), params: { manifestation_custom_property: new_attributes }
         manifestation_custom_property.reload
-        expect(response).to redirect_to(manifestation_custom_property_url(manifestation_custom_property))
+        expect(response).to redirect_to(new_user_session_url)
       end
     end
 
@@ -117,13 +117,13 @@ RSpec.describe "/manifestation_custom_properties", type: :request do
       manifestation_custom_property = ManifestationCustomProperty.create! valid_attributes
       expect {
         delete manifestation_custom_property_url(manifestation_custom_property)
-      }.to change(ManifestationCustomProperty, :count).by(-1)
+      }.to change(ManifestationCustomProperty, :count).by(0)
     end
 
     it "redirects to the manifestation_custom_properties list" do
       manifestation_custom_property = ManifestationCustomProperty.create! valid_attributes
       delete manifestation_custom_property_url(manifestation_custom_property)
-      expect(response).to redirect_to(manifestation_custom_properties_url)
+      expect(response).to redirect_to(new_user_session_url)
     end
   end
 end
