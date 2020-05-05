@@ -100,7 +100,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "agent_relationship_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -295,7 +294,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "create_types", force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -348,7 +346,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "form_of_works", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -358,7 +355,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "frequencies", comment: "発行頻度", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -586,7 +582,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "licenses", comment: "ライセンス", force: :cascade do |t|
     t.string "name", null: false
-    t.string "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -627,7 +622,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "manifestation_relationship_types", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -709,7 +703,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "medium_of_performances", force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -857,7 +850,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "produce_types", force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
@@ -900,7 +892,6 @@ ActiveRecord::Schema.define(version: 2020_04_26_165544) do
 
   create_table "realize_types", force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
     t.text "note", comment: "備考"
     t.integer "position"
     t.datetime "created_at", null: false
