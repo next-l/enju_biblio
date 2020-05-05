@@ -610,7 +610,7 @@ class Manifestation < ApplicationRecord
       })
       ManifestationCustomProperty.order(:position).each do |custom_property|
         custom_value = manifestation_custom_values.find_by(manifestation_custom_property: custom_property)
-        record[:"manifestation_#{custom_property.name}"] = custom_value.try(:value)
+        record[:"manifestation:#{custom_property.name}"] = custom_value.try(:value)
       end
     end
 
