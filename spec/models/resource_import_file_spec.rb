@@ -423,6 +423,9 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       )
       @file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/item_update_file.tsv"), filename: 'attachment.txt')
       @file.save
+
+      item_00001 = Item.find_by(item_identifier: '00001')
+      item_00001.item_custom_values << FactoryBot.build(:item_custom_value)
     end
 
     it "should update items", vcr: true do
@@ -437,7 +440,8 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       expect(item_00001.manifestation.subjects.order(:id).map{|subject| {subject.subject_heading_type.name => subject.term}}).to eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
       expect(item_00001.manifestation.isbn_records.pluck(:body)).to eq ["4798002062"]
       expect(item_00001.manifestation.manifestation_custom_values.pluck(:manifestation_custom_property_id, :value)).to eq [[2, "カスタム項目5"]]
-      expect(item_00001.item_custom_values.pluck(:item_custom_property_id, :value)).to eq [[1, "カスタム項目6"]]
+      expect(item_00001.item_custom_values.count).to eq 2
+      expect(item_00001.item_custom_values.order(:item_custom_property_id).first.value).to eq "カスタム項目6"
       expect(Item.find_by(item_identifier: '00002').manifestation.publishers.pluck(:full_name)).to eq ['test2']
 
       item_00003 = Item.find_by(item_identifier: '00003')
@@ -458,6 +462,10 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       manifestation = Manifestation.find(10)
       file.import_start
       expect(manifestation.series_statements.first.original_title).to eq 'シリーズのタイトル'
+    end
+
+    it "should update custom values", vcr: true do
+      
     end
   end
 
