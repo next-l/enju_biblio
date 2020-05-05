@@ -85,6 +85,7 @@ describe ResourceImportFile do
         expect(item_10101.manifestation.extent).to eq 'xv, 213 pages'
         expect(item_10101.manifestation.dimensions).to eq '20cm'
         expect(item_10101.manifestation.required_role.name).to eq 'Administrator'
+        expect(item_10101.manifestation.access_address).to eq 'https://example.com'
         #ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
       end
 
