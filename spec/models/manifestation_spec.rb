@@ -298,10 +298,10 @@ describe Manifestation, solr: true do
       csv = CSV.parse(lines, headers: true, col_sep: "\t")
       m = csv.find{|row| row["manifestation_id"].to_i == item.manifestation.id }
       item.item_custom_values.each do |custom_value|
-        expect(m["item_#{custom_value.item_custom_property.name}"]).to eq custom_value.value
+        expect(m["item:#{custom_value.item_custom_property.name}"]).to eq custom_value.value
       end
       item.manifestation.manifestation_custom_values.each do |custom_value|
-        expect(m["manifestation_#{custom_value.manifestation_custom_property.name}"]).to eq custom_value.value
+        expect(m["manifestation:#{custom_value.manifestation_custom_property.name}"]).to eq custom_value.value
       end
     end
   end
