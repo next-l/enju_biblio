@@ -8,22 +8,22 @@ describe Manifestation, solr: true do
 
   it "should set year_of_publication" do
     manifestation = FactoryBot.create(:manifestation, pub_date: '2000')
-    manifestation.year_of_publication.should eq 2000
-    manifestation.date_of_publication.should eq Time.zone.parse('2000-01-01')
+    expect(manifestation.year_of_publication).to eq 2000
+    expect(manifestation.date_of_publication).to eq Time.zone.parse('2000-01-01')
   end
 
   it "should set date_of_publication" do
     manifestation = FactoryBot.create(:manifestation, pub_date: '2000-01')
-    manifestation.year_of_publication.should eq 2000
-    manifestation.month_of_publication.should eq 1
-    manifestation.date_of_publication.should eq Time.zone.parse('2000-01-01')
+    expect(manifestation.year_of_publication).to eq 2000
+    expect(manifestation.month_of_publication).to eq 1
+    expect(manifestation.date_of_publication).to eq Time.zone.parse('2000-01-01')
   end
 
   it "should set volume_number" do
     manifestation = FactoryBot.create(:manifestation, volume_number_string: '第1巻', issue_number_string: '20号分冊1', edition_string: '第3版')
-    manifestation.volume_number.should eq 1
-    manifestation.issue_number.should eq 20
-    manifestation.edition.should eq 3
+    expect(manifestation.volume_number).to eq 1
+    expect(manifestation.issue_number).to eq 20
+    expect(manifestation.edition).to eq 3
   end
 
   it "should search title in openurl" do
@@ -164,19 +164,19 @@ describe Manifestation, solr: true do
   end
 
   it "should_get_number_of_pages" do
-    manifestations(:manifestation_00001).number_of_pages.should eq 100
+    expect(manifestations(:manifestation_00001).number_of_pages).to eq 100
   end
 
   it "should have parent_of_series" do
-    manifestations(:manifestation_00001).parent_of_series.should be_truthy
+    expect(manifestations(:manifestation_00001).parent_of_series).to be_truthy
   end
 
   it "should respond to extract_text" do
-    manifestations(:manifestation_00001).extract_text.should be_nil
+    expect(manifestations(:manifestation_00001).extract_text).to be_nil
   end
 
   it "should respond to title" do
-    manifestations(:manifestation_00001).title.should be_truthy
+    expect(manifestations(:manifestation_00001).title).to be_truthy
   end
 
   it "should respond to pickup" do
@@ -184,7 +184,7 @@ describe Manifestation, solr: true do
   end
 
   it "should be periodical if its series_statement is periodical" do
-    manifestations(:manifestation_00202).serial?.should be_truthy
+    expect(manifestations(:manifestation_00202).serial?).to be_truthy
   end
 
   it "should validate access_address" do

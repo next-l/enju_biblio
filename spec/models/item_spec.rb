@@ -5,7 +5,7 @@ describe Item do
   fixtures :all
 
   it "should have library_url" do
-    items(:item_00001).library_url.should eq "#{LibraryGroup.site_config.url}libraries/web"
+    expect(items(:item_00001).library_url).to eq "#{LibraryGroup.site_config.url}libraries/web"
   end
 end
 

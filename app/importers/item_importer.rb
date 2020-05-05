@@ -2,7 +2,7 @@ class ItemImporter
   include ActiveModel::Model
 
   attr_accessor :item_identifier, :binding_item_identifier,
-    :shelf, :default_shelf,
+    :shelf, :default_shelf, :required_role,
     :call_number, :binding_call_number, :acquired_at,
     :price, :budget_type, :bookstore, :binded_at, :note, :include_supplements, :url,
     :dummy,
@@ -46,6 +46,7 @@ class ItemImporter
       price: price,
       budget_type: BudgetType.find_by(name: budget_type),
       bookstore: Bookstore.find_by(name: bookstore),
+      required_role: Role.find_by(name: required_role) || Role.find_by(name: 'Librarian'),
       note: note,
       include_supplements: include_supplements,
       url: url
@@ -78,6 +79,7 @@ class ItemImporter
       price: price,
       budget_type: BudgetType.find_by(name: budget_type),
       bookstore: Bookstore.find_by(name: bookstore),
+      required_role: Role.find_by(name: required_role) || Role.find_by(name: 'Librarian'),
       note: note,
       include_supplements: include_supplements,
       url: url

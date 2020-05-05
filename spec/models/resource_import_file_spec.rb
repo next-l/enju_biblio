@@ -24,7 +24,8 @@ describe ResourceImportFile do
       it "should be imported", vcr: true do
         expect(@result).to eq({
           manifestation_created: 9, manifestation_found: 10, manifestation_updated: 0, manifestation_failed: 1, manifestation_skipped: 2,
-          item_created: 16, item_found: 3, item_updated: 0, item_failed: 1, item_skipped: 2
+          item_created: 16, item_found: 3, item_updated: 0, item_failed: 1, item_skipped: 2,
+          circulation_imported: 0, circulation_skipped: 0
         })
         expect(Manifestation.count).to eq @old_manifestations_count + 9
         expect(Item.count).to eq @old_items_count + 16
@@ -73,6 +74,7 @@ describe ResourceImportFile do
         expect(item_10101.binding_item_identifier).to eq '9001'
         expect(item_10101.binding_call_number).to eq '330|A'
         expect(item_10101.binded_at).to eq Time.zone.parse('2014-08-16')
+        expect(item_10101.acquired_at).to eq Time.zone.parse('2020-05-05')
         expect(item_10101.manifestation.publication_place).to eq '東京'
         expect(item_10101.include_supplements).to eq true
         expect(item_10101.note).to eq 'カバーなし'
@@ -82,6 +84,7 @@ describe ResourceImportFile do
         expect(item_10101.manifestation.frequency.name).to eq 'monthly'
         expect(item_10101.manifestation.extent).to eq 'xv, 213 pages'
         expect(item_10101.manifestation.dimensions).to eq '20cm'
+        expect(item_10101.manifestation.required_role.name).to eq 'Administrator'
         #ResourceImportResult.where(item_id: item_10101.id).order(:id).last.error_message.should eq "line 9: #{I18n.t('import.item_found')}"
       end
 
@@ -94,6 +97,8 @@ describe ResourceImportFile do
         expect(item_10102.manifestation.depth).to eq 12
         expect(item_10102.manifestation.start_page).to eq 1
         expect(item_10102.manifestation.end_page).to eq 200
+        expect(item_10102.manifestation.required_role.name).to eq 'Librarian'
+        expect(item_10102.required_role.name).to eq 'User'
         expect(item_10102.manifestation.series_statements.first.creator_string).to eq 'シリーズの著者'
         expect(item_10102.manifestation.series_statements.first.volume_number_string).to eq 'シリーズ1号'
       end
@@ -275,16 +280,17 @@ describe ResourceImportFile do
       it "should be imported", vcr: true do
         expect(@file.import_start).to eq({
           manifestation_created: 9, manifestation_found: 10, manifestation_updated: 0, manifestation_failed: 1, manifestation_skipped: 2,
-          item_created: 16, item_found: 3, item_updated: 0, item_failed: 1, item_skipped: 2
+          item_created: 16, item_found: 3, item_updated: 0, item_failed: 1, item_skipped: 2,
+          circulation_imported: 0, circulation_skipped: 0
         })
         manifestation = Item.find_by(item_identifier: '11111').manifestation
         expect(manifestation.publishers.first.full_name).to eq 'test4'
         expect(manifestation.publishers.first.full_name_transcription).to eq 'てすと4'
         expect(manifestation.publishers.second.full_name_transcription).to eq 'てすと5'
-        #Manifestation.count.should eq old_manifestations_count + 10
-        #expect(Item.count).to eq @old_items_count + 12
-        #Agent.count.should eq old_agents_count + 9
-        #ResourceImportResult.count.should eq old_import_results_count + 21
+        expect(Manifestation.count).to eq @old_manifestations_count + 9
+        expect(Item.count).to eq @old_items_count + 16
+        expect(Agent.count).to eq @old_agents_count + 8
+        expect(ResourceImportResult.count).to eq @old_import_results_count + 22
         expect(Item.find_by(item_identifier: '10101').manifestation.creators.count).to eq 2
         expect(Item.find_by(item_identifier: '10101').manifestation.date_of_publication).to eq Time.zone.parse('2001-01-01')
         expect(Item.find_by(item_identifier: '10102').manifestation.date_of_publication).to eq Time.zone.parse('2001-01-01')
@@ -401,14 +407,9 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         result = file.import_start
         expect(Manifestation.count).to eq old_manifestations_count + 1
         manifestation = Manifestation.all.find{|m| m.original_title == "resource_import_file_test_description" }
-        expect(manifestation.description).to eq "test\\ntest"
-        expect(manifestation.note).to eq "test\\ntest"
-        expect(manifestation.items.first.note).to eq "test\\ntest"
-      end
-    end
-
-    describe "when it contains custom properties" do
-      xit "should be imported" do
+        expect(manifestation.description).to eq "test\ntest"
+        expect(manifestation.note).to eq "test\ntest"
+        expect(manifestation.items.first.note).to eq "test\ntest"
       end
     end
   end

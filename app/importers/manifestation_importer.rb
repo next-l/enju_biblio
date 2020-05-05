@@ -6,7 +6,7 @@ class ManifestationImporter
     :title_transcription,
     :abstract, :description,
     :serial,
-    :carrier_type, :content_type, :language, :frequency,
+    :carrier_type, :content_type, :language, :frequency, :manifestation_required_role, :item_required_role,
     :volume_number, :volume_number_string,
     :issue_number, :issue_number_string,
     :edition, :edition_string, :serial_number,
@@ -44,6 +44,8 @@ class ManifestationImporter
       content_type: row['content_type'],
       language: row['language'],
       frequency: row['frequency'],
+      manifestation_required_role: row['manifestation_required_role'],
+      item_required_role: row['item_required_role'],
       volume_number: row['volume_number'],
       volume_number_string: row['volume_number_string'],
       issue_number: row['issue_number'],
@@ -67,11 +69,11 @@ class ManifestationImporter
       issn: row['issn'],
       ndl_bib_id: row['ndl_bib_id'],
       doi: row['doi'],
-      abstract: row['abstract'],
-      description: row['description'],
-      note: row['note'],
-      item_note: row['item_note'],
-      memo: row['memo'],
+      abstract: row['abstract'].try(:gsub, /\\n/, "\n"),
+      description: row['description'].try(:gsub, /\\n/, "\n"),
+      note: row['note'].try(:gsub, /\\n/, "\n"),
+      item_note: row['item_note'].try(:gsub, /\\n/, "\n"),
+      memo: row['memo'].try(:gsub, /\\n/, "\n"),
       access_address: row['access_address'],
       creator: row['creator'],
       creator_transcription: row['creator_transcription'],
@@ -189,14 +191,15 @@ class ManifestationImporter
         manifestation: manifestation_record,
         shelf: shelf || default_shelf,
         item_identifier: item_identifier,
-        acquired_at: acquired_at,
         binding_item_identifier: binding_item_identifier,
         call_number: call_number,
         binding_call_number: binding_call_number,
         binded_at: binded_at,
+        acquired_at: acquired_at,
         price: item_price,
         budget_type: budget_type,
         bookstore: bookstore,
+        required_role: item_required_role,
         note: item_note,
         include_supplements: include_supplements,
         url: item_url,
@@ -233,14 +236,18 @@ class ManifestationImporter
         manifestation: manifestation_record,
         shelf: shelf || default_shelf,
         item_identifier: item_identifier,
-        acquired_at: acquired_at,
         binding_item_identifier: binding_item_identifier,
         call_number: call_number,
         binding_call_number: binding_call_number,
         binded_at: binded_at,
+        acquired_at: acquired_at,
         price: item_price,
+        budget_type: budget_type,
+        bookstore: bookstore,
+        required_role: item_required_role,
         note: item_note,
         include_supplements: include_supplements,
+        url: item_url,
         action: action
       )
 
@@ -441,6 +448,7 @@ class ManifestationImporter
       manifestation_content_type: ContentType.find_by(name: content_type) || ContentType.order(:position).first,
       language: Language.find_by(name: language) || Language.order(:position).first,
       frequency: Frequency.find_by(name: frequency) || Frequency.find_by(name: 'unknown'),
+      required_role: Role.find_by(name: manifestation_required_role) || Role.find_by(name: 'Librarian'),
       note: note,
       memo: memo
     )
@@ -484,6 +492,7 @@ class ManifestationImporter
     manifestation_record.update(manifestation_content_type: ContentType.find_by(name: content_type)) if content_type
     manifestation_record.update(language: Language.find_by(name: language)) if language
     manifestation_record.update(frequency: Frequency.find_by(name: frequency)) if frequency
+    manifestation_record.update(required_role: Role.find_by(name: manifestation_required_role)) if manifestation_required_role
   end
 
   def self.import_subject(row)

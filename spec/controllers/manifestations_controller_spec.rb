@@ -127,7 +127,7 @@ describe ManifestationsController do
         get :index, params: { manifestation_id: 1 }
         expect(response).to be_successful
         expect(assigns(:manifestation)).to eq Manifestation.find(1)
-        assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
+        expect(assigns(:manifestations).pluck(:id)).to eq assigns(:manifestation).derived_manifestations.pluck(:id)
       end
 
       it 'should get index with query' do

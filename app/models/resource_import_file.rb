@@ -40,7 +40,8 @@ class ResourceImportFile < ApplicationRecord
     row_num = 1
     result = {
       manifestation_created: 0, manifestation_updated: 0, manifestation_failed: 0, manifestation_found: 0, manifestation_skipped: 0,
-      item_created: 0, item_updated: 0, item_failed: 0, item_found: 0, item_skipped: 0
+      item_created: 0, item_updated: 0, item_failed: 0, item_found: 0, item_skipped: 0,
+      circulation_imported: 0, circulation_skipped: 0
     }
 
     entries = ManifestationImporter.import(create_import_temp_file(resource_import), default_shelf: default_shelf&.name, action: edit_mode)
@@ -76,6 +77,17 @@ class ResourceImportFile < ApplicationRecord
         result[:item_failed] += 1
       when :skipped
         result[:item_skipped] += 1
+      end
+    end
+
+    if defined?(EnjuCirculation)
+      CirculationImporter.import(create_import_temp_file(resource_import), action: edit_mode).each do |circulation_entry|
+        case circulation_entry.result
+        when :imported
+          result[:circulation_imported] += 1
+        when :skipped
+          result[:circulation_skipped] += 1
+        end
       end
     end
 
