@@ -118,11 +118,15 @@ class ManifestationImporter
             entry.manifestation_record.classifications = classifications unless classifications.empty?
             entry.manifestation_record.reload
 
-            entry.manifestation_record.manifestation_custom_values = import_manifestation_custom_value(row)
+            import_manifestation_custom_value(row).each do |value|
+              value.update!(manifestation: entry.manifestation_record)
+            end
           end
 
-          if entry.item_result == :created
-            entry.item_record.item_custom_values = import_item_custom_value(row)
+          if [:created, :updated].include?(entry.item_result)
+            import_item_custom_value(row).each do |value|
+              value.update!(item: entry.item_record)
+            end
           end
         end
       end
