@@ -718,4 +718,5 @@ end
 #  extent                          :text
 #  dimensions                      :text
 #  memo                            :text
+#  license_id                      :bigint           default(1), not null
 #

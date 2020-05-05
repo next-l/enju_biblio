@@ -1,5 +1,6 @@
 class CreateType < ApplicationRecord
   include MasterModel
+  translates :display_name
 end
 
 # == Schema Information
@@ -8,7 +9,6 @@ end
 #
 #  id                        :bigint           not null, primary key
 #  name                      :string
-#  display_name              :text
 #  note                      :text
 #  position                  :integer
 #  created_at                :datetime         not null
