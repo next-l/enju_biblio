@@ -6,17 +6,17 @@ describe Agent do
 
   it "should set a default required_role to Guest" do
     agent = FactoryBot.create(:agent)
-    agent.required_role.should eq Role.find_by(name: 'Guest')
+    expect(agent.required_role).to eq Role.find_by(name: 'Guest')
   end
 
   it "should set birth_date" do
     agent = FactoryBot.create(:agent, birth_date: '2000')
-    agent.date_of_birth.should eq Time.zone.parse('2000-01-01')
+    expect(agent.date_of_birth).to eq Time.zone.parse('2000-01-01')
   end
 
   it "should set death_date" do
     agent = FactoryBot.create(:agent, death_date: '2000')
-    agent.date_of_death.should eq Time.zone.parse('2000-01-01')
+    expect(agent.date_of_death).to eq Time.zone.parse('2000-01-01')
   end
 
   it "should not set death_date earlier than birth_date" do
