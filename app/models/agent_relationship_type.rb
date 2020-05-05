@@ -1,7 +1,7 @@
 class AgentRelationshipType < ApplicationRecord
   include MasterModel
-  default_scope { order('agent_relationship_types.position') }
   has_many :agent_relationships
+  translates :display_name
 end
 
 # == Schema Information

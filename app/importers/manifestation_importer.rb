@@ -75,7 +75,6 @@ class ManifestationImporter
       note: row['note'].try(:gsub, /\\n/, "\n"),
       item_note: row['item_note'].try(:gsub, /\\n/, "\n"),
       memo: row['memo'].try(:gsub, /\\n/, "\n"),
-      access_address: row['access_address'],
       creator: row['creator'],
       creator_transcription: row['creator_transcription'],
       contributor: row['contributor'],
@@ -119,13 +118,13 @@ class ManifestationImporter
             entry.manifestation_record.classifications = classifications unless classifications.empty?
             entry.manifestation_record.reload
 
-            import_manifestation_custom_value(row).each do |value|
+            import_manifestation_custom_value(row, entry.manifestation_record).each do |value|
               value.update!(manifestation: entry.manifestation_record)
             end
           end
 
           if [:created, :updated].include?(entry.item_result)
-            import_item_custom_value(row).each do |value|
+            import_item_custom_value(row, entry.item_record).each do |value|
               value.update!(item: entry.item_record)
             end
           end
@@ -558,29 +557,47 @@ class ManifestationImporter
     series_statements
   end
 
-  def self.import_manifestation_custom_value(row)
+  def self.import_manifestation_custom_value(row, manifestation)
     values = []
     ManifestationCustomProperty.order(:position).pluck(:name).map{|c| "manifestation:#{c}"}.each do |column_name|
+      value = nil
       property = column_name.split(':').last
       next if row[column_name].blank?
-      value = ManifestationCustomValue.new(
-        manifestation_custom_property: ManifestationCustomProperty.find_by(name: property),
-        value: row[column_name]
-      )
+      if manifestation
+        value = manifestation.manifestation_custom_values.find_by(manifestation_custom_property: property)
+      end
+
+      if value
+        value.value = row[column_name]
+      else
+        value = ManifestationCustomValue.new(
+          manifestation_custom_property: ManifestationCustomProperty.find_by(name: property),
+          value: row[column_name]
+        )
+      end
       values << value
     end
     values
   end
 
-  def self.import_item_custom_value(row)
+  def self.import_item_custom_value(row, item)
     values = []
     ItemCustomProperty.order(:position).pluck(:name).map{|c| "item:#{c}"}.each do |column_name|
+      value = nil
       property = column_name.split(':').last
       next if row[column_name].blank?
-      value = ItemCustomValue.new(
-        item_custom_property: ItemCustomProperty.find_by(name: property),
-        value: row[column_name]
-      )
+      if item
+        value = item.item_custom_values.find_by(item_custom_property: property)
+      end
+
+      if value
+        value.value = row[column_name]
+      else
+        value = ItemCustomValue.new(
+          item_custom_property: ItemCustomProperty.find_by(name: property),
+          value: row[column_name]
+        )
+      end
       values << value
     end
     values
