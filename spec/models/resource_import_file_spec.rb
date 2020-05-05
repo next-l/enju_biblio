@@ -415,15 +415,18 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
   end
 
   describe "when its mode is 'update'" do
-    it "should update items", vcr: true do
-      file = ResourceImportFile.new(
+    before(:each) do
+      @file = ResourceImportFile.new(
         user: users(:admin),
         edit_mode: 'update'
       )
-      file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/item_update_file.tsv"), filename: 'attachment.txt')
-      file.save
-      file.import_start
-      expect(file.resource_import_results.first).to be_truthy
+      @file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/item_update_file.tsv"), filename: 'attachment.txt')
+      @file.save
+    end
+
+    it "should update items", vcr: true do
+      @file.import_start
+      expect(@file.resource_import_results.first).to be_truthy
       #expect(file.resource_import_results.first.body).to match /item_identifier/
       item_00001 = Item.find_by(item_identifier: '00001')
       expect(item_00001.manifestation.creators.order('agents.id').pluck(:full_name)).to eq ['たなべ', 'こうすけ']
@@ -432,6 +435,8 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       expect(item_00001.binded_at).to eq Time.zone.parse('2014-08-16')
       expect(item_00001.manifestation.subjects.order(:id).map{|subject| {subject.subject_heading_type.name => subject.term}}).to eq [{"ndlsh" => "test1"}, {"ndlsh" => "test2"}]
       expect(item_00001.manifestation.isbn_records.pluck(:body)).to eq ["4798002062"]
+      expect(item_00001.manifestation.manifestation_custom_values.pluck(:manifestation_custom_property_id, :value)).to eq [[2, "カスタム項目5"]]
+      expect(item_00001.item_custom_values.pluck(:item_custom_property_id, :value)).to eq [[1, "カスタム項目6"]]
       expect(Item.find_by(item_identifier: '00002').manifestation.publishers.pluck(:full_name)).to eq ['test2']
 
       item_00003 = Item.find_by(item_identifier: '00003')
@@ -442,13 +447,17 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       expect(Item.find_by(item_identifier: '00025').call_number).to eq "547|ヤ"
     end
 
-    # it "should update series_statement", vcr: true do
-    #  manifestation = Manifestation.find(10)
-    #  file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
-    #  file.modify
-    #  manifestation.reload
-    #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
-    # end
+    it "should update series_statement", vcr: true do
+      file = ResourceImportFile.new(
+        user: users(:admin),
+        edit_mode: 'update'
+      )
+      file.resource_import.attach(io: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), filename: 'attachment.txt')
+      file.save
+      manifestation = Manifestation.find(10)
+      file.import_start
+      expect(manifestation.series_statements.first.original_title).to eq 'シリーズのタイトル'
+    end
   end
 
   describe "when its mode is 'destroy'" do
