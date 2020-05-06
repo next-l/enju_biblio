@@ -80,10 +80,6 @@ class ResourceImportFile < ApplicationRecord
       end
     end
 
-    if defined?(EnjuNii)
-      NiiImporter.import(create_import_temp_file(resource_import), action: edit_mode)
-    end
-
     if defined?(EnjuCirculation)
       CirculationImporter.import(create_import_temp_file(resource_import), action: edit_mode).each do |circulation_entry|
         case circulation_entry.result
