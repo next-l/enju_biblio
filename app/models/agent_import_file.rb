@@ -7,7 +7,7 @@ class AgentImportFile < ApplicationRecord
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
-  has_one_attached :agent_import
+  has_one_attached :attachment
   belongs_to :user
   has_many :agent_import_results, dependent: :destroy
 
@@ -157,7 +157,7 @@ class AgentImportFile < ApplicationRecord
 
   def open_import_file
     tempfile = Tempfile.new(self.class.name.underscore)
-    tempfile.puts(convert_encoding(agent_import.download))
+    tempfile.puts(convert_encoding(attachment.download))
     tempfile.close
 
     file = CSV.open(tempfile, col_sep: "\t")

@@ -1,5 +1,5 @@
 <ul>
-  <li><%= t('activerecord.models.resource_import_file') %>: <%= link_to @resource_import_file.resource_import.filename.to_s, @resource_import_file if @resource_import_file.resource_import.attached? %>
+  <li><%= t('activerecord.models.resource_import_file') %>: <%= link_to @resource_import_file.attachment.filename.to_s, @resource_import_file if @resource_import_file.attachment.attached? %>
   <li><%= t('page.created_at') %>: <%= l(@resource_import_file.created_at) %>
 </h2>
 <table class="table table-striped index">

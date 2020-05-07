@@ -1,9 +1,9 @@
 <div class="row">
 <div class="col-md-9">
-<h1><%= t('page.editing', model: t('activerecord.models.resource_import_file')) -%></h1>
+<h1><%= t('page.editing', model: t('activerecord.models.attachment.file')) -%></h1>
 <div class="card-body bg-light">
 
-<%= form_for(@resource_import_file) do |f| -%>
+<%= form_for(@attachment.file) do |f| -%>
   <%= f.error_messages -%>
 
   <div class="actions">
@@ -16,7 +16,7 @@
 
 <div class="col">
   <ul>
-    <li><%= link_to t('page.show'), @resource_import_file -%></li>
-    <li><%= link_to t('page.back'), resource_import_files_path -%></li>
+    <li><%= link_to t('page.show'), @attachment.file -%></li>
+    <li><%= link_to t('page.back'), attachment.files_path -%></li>
   </ul>
 </div>

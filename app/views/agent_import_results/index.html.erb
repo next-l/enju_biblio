@@ -3,7 +3,7 @@
     <h1><%= t('page.listing', model: t('activerecord.models.agent_import_result')) -%></h1>
     <% if @agent_import_file %>
       <h2 class="agent_title">
-        <%= link_to @agent_import_file.agent_import.filename.to_s, @agent_import_file if @agent_import_file.agent_import.attached? %>
+        <%= link_to @agent_import_file.attachment.filename.to_s, @agent_import_file if @agent_import_file.attachment.attached? %>
       </h2>
     <% end %>
 
@@ -17,7 +17,7 @@
       <% @agent_import_results.each do |agent_import_result| %>
         <tr class="line<%= cycle("0", "1") -%>">
           <td>
-            <%= link_to agent_import_result.agent_import_file.agent_import.filename.to_s, agent_import_result.agent_import_file if agent_import_result.agent_import_file.agent_import.attached? %>
+            <%= link_to agent_import_result.agent_import_file.attachment.filename.to_s, agent_import_result.agent_import_file if agent_import_result.agent_import_file.attachment.attached? %>
             <br />
             <%=l agent_import_result.created_at %>
           </td>

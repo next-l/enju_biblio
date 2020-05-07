@@ -9,7 +9,7 @@
 <% @resource_import_results.each do |resource_import_result| %>
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
-      <%= link_to resource_import_result.resource_import_file.resource_import.filename.to_s, resource_import_result.resource_import_file if resource_import_result.resource_import_file.resource_import.attached? %>
+      <%= link_to resource_import_result.resource_import_file.attachment.filename.to_s, resource_import_result.resource_import_file if resource_import_result.resource_import_file.attachment.attached? %>
       <br />
       <%=l resource_import_result.created_at %>
       <br />

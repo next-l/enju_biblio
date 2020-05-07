@@ -1,76 +1,76 @@
 <div class="row">
 <div class="col-md-9">
-<h1><%= t('page.showing', model: t('activerecord.models.agent_import_file')) -%></h1>
+<h1><%= t('page.showing', model: t('activerecord.models.attachment.file')) -%></h1>
 <div class="card-body bg-light">
 <p id="notice"><%= notice %></p>
 
 <p>
   <strong>Id:</strong>
-  <%= @agent_import_file.id -%>
+  <%= @attachment.file.id -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.agent_import_file_name') -%>:</strong>
-  <%= link_to @agent_import_file.agent_import.filename.to_s, agent_import_file_path(@agent_import_file, format: :download) if @agent_import_file.agent_import.attached? %>
+  <strong><%= t('activerecord.attributes.attachment.file.attachment.file_name') -%>:</strong>
+  <%= link_to @attachment.file.attachment.filename.to_s, attachment.file_path(@attachment.file, format: :download) if @attachment.file.attachment.attached? %>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.agent_import_content_type') -%>:</strong>
-  <%= @agent_import_file.agent_import.content_type -%>
+  <strong><%= t('activerecord.attributes.attachment.file.attachment.content_type') -%>:</strong>
+  <%= @attachment.file.attachment.content_type -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.agent_import_file_size') -%>:</strong>
-  <%= @agent_import_file.agent_import.byte_size -%>
+  <strong><%= t('activerecord.attributes.attachment.file.attachment.file_size') -%>:</strong>
+  <%= @attachment.file.attachment.byte_size -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.agent_import_fingerprint') -%>:</strong>
-  <%= @agent_import_file.agent_import_fingerprint -%>
+  <strong><%= t('activerecord.attributes.attachment.file.attachment.fingerprint') -%>:</strong>
+  <%= @attachment.file.attachment.fingerprint -%>
 </p>
 
 <p>
   <strong><%= t('page.created_at') -%>:</strong>
-  <%=l @agent_import_file.created_at -%>
+  <%=l @attachment.file.created_at -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.executed_at') -%>:</strong>
-  <%= l(@agent_import_file.executed_at) if @agent_import_file.executed_at -%>
+  <strong><%= t('activerecord.attributes.attachment.file.executed_at') -%>:</strong>
+  <%= l(@attachment.file.executed_at) if @attachment.file.executed_at -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.edit_mode') -%>:</strong>
-  <%= @agent_import_file.edit_mode -%>
+  <strong><%= t('activerecord.attributes.attachment.file.edit_mode') -%>:</strong>
+  <%= @attachment.file.edit_mode -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.user_encoding') -%>:</strong>
-  <%= @agent_import_file.user_encoding -%>
+  <strong><%= t('activerecord.attributes.attachment.file.user_encoding') -%>:</strong>
+  <%= @attachment.file.user_encoding -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.attributes.manifestation_import_file.state') -%>:</strong>
-  <%= localized_state(@agent_import_file.current_state) -%>
+  <%= localized_state(@attachment.file.current_state) -%>
 </p>
 
 <p>
-  <strong><%= t('activerecord.attributes.agent_import_file.error_message') -%>:</strong>
-  <%= @agent_import_file.error_message -%>
+  <strong><%= t('activerecord.attributes.attachment.file.error_message') -%>:</strong>
+  <%= @attachment.file.error_message -%>
 </p>
 
 <p>
   <strong><%= t('activerecord.models.user') -%>:</strong>
-  <%= link_to @agent_import_file.user.username, @agent_import_file.user.profile if @agent_import_file.user.try(:profile) -%>
+  <%= link_to @attachment.file.user.username, @attachment.file.user.profile if @attachment.file.user.try(:profile) -%>
 </p>
 
 </div>
 </div>
 
 <div class="col">
-  <%= form_for(@agent_import_file) do |f| %>
+  <%= form_for(@attachment.file) do |f| %>
   <ul>
-    <li><%= link_to t('activerecord.models.agent_import_result'), agent_import_results_path(agent_import_file_id: @agent_import_file.id) -%></li>
+    <li><%= link_to t('activerecord.models.attachment.result'), attachment.results_path(attachment.file_id: @attachment.file.id) -%></li>
     <li><%= back_to_index(flash[:page_info]) -%></li>
     <% if current_user.has_role?('Administrator') %>
       <li><%= link_to 'Resque', resque_path %></li>

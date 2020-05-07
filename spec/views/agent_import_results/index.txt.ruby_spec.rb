@@ -5,7 +5,7 @@ describe "agent_import_results/index.txt.ruby" do
 
   before(:each) do
     file = AgentImportFile.create!(user: users(:admin))
-    file.agent_import.attach(io: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"), filename: 'attachment.txt')
+    file.attachment.attach(io: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"), filename: 'attachment.txt')
     file.import_start
     assign(:agent_import_file_id, file.id)
     assign(:agent_import_results, AgentImportFile.find(file.id).agent_import_results)

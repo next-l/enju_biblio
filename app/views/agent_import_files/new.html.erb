@@ -1,14 +1,14 @@
 <div class="row">
 <div class="col-md-9">
-  <h1><%= t('page.new', model: t('activerecord.models.agent_import_file')) -%></h1>
+  <h1><%= t('page.new', model: t('activerecord.models.attachment.file')) -%></h1>
 <div class="card-body bg-light">
 
-<%= form_for(@agent_import_file, html: { multipart: true }) do |f| -%>
+<%= form_for(@attachment.file, html: { multipart: true }) do |f| -%>
   <%= f.error_messages -%>
 
   <div class="field">
     <%= f.label t('page.file') -%><br />
-    <%= f.file_field :agent_import -%>
+    <%= f.file_field :attachment.-%>
   </div>
 
   <div class="field">

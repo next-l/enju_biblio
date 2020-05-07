@@ -7,8 +7,8 @@ class ResourceImportFile < ApplicationRecord
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('resource_import_files.created_at < ?', 1.hour.ago) }
 
-  has_one_attached :resource_import
-  validates :resource_import, presence: true, on: :create
+  has_one_attached :attachment
+  validates :attachment, presence: true, on: :create
   validates :default_shelf_id, presence: true, if: Proc.new{|model| model.edit_mode == 'create'}
   belongs_to :user
   belongs_to :default_shelf, class_name: 'Shelf', optional: true
@@ -44,7 +44,7 @@ class ResourceImportFile < ApplicationRecord
       circulation_imported: 0, circulation_skipped: 0
     }
 
-    entries = ManifestationImporter.import(create_import_temp_file(resource_import), default_shelf: default_shelf&.name, action: edit_mode)
+    entries = ManifestationImporter.import(create_import_temp_file(attachment), default_shelf: default_shelf&.name, action: edit_mode)
     entries.each do |entry|
       ResourceImportResult.create!(
         resource_import_file: self,
@@ -107,7 +107,7 @@ class ResourceImportFile < ApplicationRecord
   end
 
   def import_marc(marc_type)
-    file = resource_import.download
+    file = attachment.download
     case marc_type
     when 'marcxml'
       reader = MARC::XMLReader.new(file)

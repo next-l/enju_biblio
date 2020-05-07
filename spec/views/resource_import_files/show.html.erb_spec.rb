@@ -5,7 +5,7 @@ describe "resource_import_files/show" do
 
   before(:each) do
     file = resource_import_files(:resource_import_file_00001)
-    file.resource_import.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
+    file.attachment.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
     assign(:resource_import_file, file)
     assign(:resource_import_results, 
       Kaminari.paginate_array(file.resource_import_results).page(1))

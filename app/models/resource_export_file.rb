@@ -5,7 +5,7 @@ class ResourceExportFile < ApplicationRecord
   ]
   include ExportFile
 
-  has_one_attached :resource_export
+  has_one_attached :attachment
   has_many :resource_export_file_transitions, autosave: false, dependent: :destroy
 
   def state_machine

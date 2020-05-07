@@ -6,7 +6,7 @@
 
 <p>
   <b><%= t('activerecord.models.agent_import_file') %></b>
-  <%= @agent_import_result.agent_import_file.agent_import.filename.to_s if @agent_import_result.agent_import_file.agent_import.attached? %>
+  <%= @agent_import_result.agent_import_file.attachment.filename.to_s if @agent_import_result.agent_import_file.attachment.attached? %>
 </p>
 
 <p>
