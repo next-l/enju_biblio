@@ -18,7 +18,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    file = export_file.resource_export
+    file = export_file.attachment
     lines = file.download.split("\n")
     columns = lines.first.split(/\t/)
     expect(columns).to include "bookstore"
@@ -34,7 +34,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    file = export_file.resource_export
+    file = export_file.attachment
     expect(file).to be_truthy
     lines = file.download.split("\n")
     expect(lines.first.split(/\t/)).to include "ncid"
@@ -49,7 +49,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    file = export_file.resource_export
+    file = export_file.attachment
     expect(file).to be_truthy
     csv = CSV.parse(file.download, {headers: true, col_sep: "\t"})
     csv.each do |row|

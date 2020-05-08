@@ -21,7 +21,7 @@ class ResourceExportFile < ApplicationRecord
 
     Manifestation.transaction do
       transition_to!(:started)
-      resource_export.attach(io: StringIO.new(tsv), filename: "resource_export.txt")
+      attachment.attach(io: StringIO.new(tsv), filename: "resource_export.txt")
       save!
       transition_to!(:completed)
     end

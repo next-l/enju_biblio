@@ -10,17 +10,17 @@
 
     <p>
       <strong><%= t('activerecord.attributes.picture_file.picture_file_size') -%>:</strong>
-      <%= @picture_file.picture.byte_size -%>
+      <%= @picture_file.attachment.byte_size -%>
     </p>
 
     <p>
       <strong><%= t('activerecord.attributes.picture_file.picture_content_type') -%>:</strong>
-      <%= @picture_file.picture.content_type -%>
+      <%= @picture_file.attachment.content_type -%>
     </p>
 
     <p>
       <strong><%= t('activerecord.attributes.picture_file.picture_file_name') -%>:</strong>
-      <%= link_to @picture_file.picture.filename, picture_file_path(@picture_file, format: :download, size: 'original') -%><br />
+      <%= link_to @picture_file.attachment.filename, picture_file_path(@picture_file, format: :download, size: 'original') -%><br />
       <%= render 'picture_files/link', picture_file: @picture_file %>
     </p>
 

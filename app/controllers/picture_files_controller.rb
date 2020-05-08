@@ -157,7 +157,7 @@ class PictureFilesController < ApplicationController
 
   def picture_file_params
     params.require(:picture_file).permit(
-      :picture, :picture_attachable_id, :picture_attachable_type
+      :attachment, :picture_attachable_id, :picture_attachable_type
     )
   end
 
@@ -196,6 +196,6 @@ class PictureFilesController < ApplicationController
       disposition = 'inline'
     end
 
-    send_data @picture_file.picture.download, filename: @picture_file.picture.filename.to_s, type: @picture_file.picture.content_type, disposition: disposition
+    send_data @picture_file.attachment.download, filename: @picture_file.attachment.filename.to_s, type: @picture_file.attachment.content_type, disposition: disposition
   end
 end

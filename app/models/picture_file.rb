@@ -2,7 +2,7 @@ class PictureFile < ApplicationRecord
   scope :attached, -> { where('picture_attachable_id IS NOT NULL') }
   belongs_to :picture_attachable, polymorphic: true
 
-  has_one_attached :picture
+  has_one_attached :attachment
 
   validates :picture_attachable_type, presence: true, inclusion: { in: ['Event', 'Manifestation', 'Agent', 'Shelf'] }
   validates_associated :picture_attachable
