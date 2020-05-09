@@ -859,7 +859,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_074822) do
     t.text "value"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["manifestation_custom_property_id", "manifestation_id"], name: "index_manifestation_custom_values_on_property_manifestation_id", unique: true
+    t.index ["manifestation_custom_property_id", "manifestation_id"], name: "index_manifestation_custom_values_on_property_manifestation", unique: true
     t.index ["manifestation_custom_property_id"], name: "index_manifestation_custom_values_on_custom_property_id"
     t.index ["manifestation_id"], name: "index_manifestation_custom_values_on_manifestation_id"
   end

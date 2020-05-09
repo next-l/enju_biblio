@@ -18,7 +18,7 @@
         <% @item_custom_properties.each do |item_custom_property| %>
           <tr>
             <td><%= link_to item_custom_property.name, item_custom_property %></td>
-            <td><%= item_custom_property.display_name %></td>
+            <td><%= item_custom_property.display_name.localize %></td>
             <td><%= item_custom_property.note %></td>
             <td><%= link_to t('page.edit'), edit_item_custom_property_path(item_custom_property) %></td>
             <td><%= link_to t('page.destroy'), item_custom_property, method: :delete, data: { confirm: t('page.are_you_sure') } %></td>

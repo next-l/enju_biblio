@@ -189,8 +189,13 @@ class ResourceImportFile < ApplicationRecord
       import_result.manifestation = manifestation
 
       if manifestation
+        ResourceImportFile.import_manifestation_custom_value(row, manifestation).each do |value|
+          value.update!(manifestation: manifestation)
+        end
+
+        item = nil
         if item_identifier.present? || row['shelf'].present? || row['call_number'].present?
-          import_result.item = create_item(row, manifestation)
+          item = create_item(row, manifestation)
         else
           if manifestation.fulltext_content?
             item = create_item(row, manifestation)
@@ -201,6 +206,14 @@ class ResourceImportFile < ApplicationRecord
             end
           end
           num[:failed] += 1
+        end
+
+        if item
+          ResourceImportFile.import_item_custom_value(row, item).each do |value|
+            value.update!(item: item)
+          end
+
+          import_result.item = item
         end
       else
         num[:failed] += 1
@@ -359,6 +372,14 @@ class ResourceImportFile < ApplicationRecord
             item.include_supplements = false if item.include_supplements
           end
         end
+
+        ResourceImportFile.import_item_custom_value(row, item).each do |value|
+          value.update!(item: item)
+        end
+        ResourceImportFile.import_manifestation_custom_value(row, item.manifestation).each do |value|
+          value.update!(manifestation: item.manifestation)
+        end
+
         item.manifestation.reload
         item.save!
         import_result.item = item
@@ -370,6 +391,9 @@ class ResourceImportFile < ApplicationRecord
         end
         if manifestation
           fetch(row, edit_mode: 'update')
+          ResourceImportFile.import_manifestation_custom_value(row, manifestation).each do |value|
+            value.update!(manifestation: manifestation)
+          end
           import_result.manifestation = manifestation
         end
       end
@@ -480,6 +504,9 @@ class ResourceImportFile < ApplicationRecord
       use_restriction include_supplements item_note item_url
       dummy
     )
+    header_columns += ManifestationCustomProperty.order(:position).pluck(:name).map{|c| "manifestation:#{c}"}
+    header_columns += ItemCustomProperty.order(:position).pluck(:name).map{|c| "item:#{c}"}
+
     if defined?(EnjuSubject)
       header_columns += ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}
       header_columns += SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}
@@ -762,6 +789,7 @@ class ResourceImportFile < ApplicationRecord
         manifestation.set_agent_role_type(publishers_list, scope: :publisher)
       end
     end
+
     manifestation
   end
 
@@ -787,6 +815,52 @@ class ResourceImportFile < ApplicationRecord
       end
     end
     identifiers
+  end
+
+  def self.import_manifestation_custom_value(row, manifestation)
+    values = []
+    ManifestationCustomProperty.order(:position).pluck(:name).map{|c| "manifestation:#{c}"}.each do |column_name|
+      value = nil
+      property = column_name.split(':').last
+      next if row[column_name].blank?
+      if manifestation
+        value = manifestation.manifestation_custom_values.find_by(manifestation_custom_property: property)
+      end
+
+      if value
+        value.value = row[column_name]
+      else
+        value = ManifestationCustomValue.new(
+          manifestation_custom_property: ManifestationCustomProperty.find_by(name: property),
+          value: row[column_name]
+        )
+      end
+      values << value
+    end
+    values
+  end
+
+  def self.import_item_custom_value(row, item)
+    values = []
+    ItemCustomProperty.order(:position).pluck(:name).map{|c| "item:#{c}"}.each do |column_name|
+      value = nil
+      property = column_name.split(':').last
+      next if row[column_name].blank?
+      if item
+        value = item.item_custom_values.find_by(item_custom_property: property)
+      end
+
+      if value
+        value.value = row[column_name]
+      else
+        value = ItemCustomValue.new(
+          item_custom_property: ItemCustomProperty.find_by(name: property),
+          value: row[column_name]
+        )
+      end
+      values << value
+    end
+    values
   end
 end
 
