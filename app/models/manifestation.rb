@@ -647,18 +647,6 @@ class Manifestation < ApplicationRecord
       ]
     }.flatten
   end
-
-  def set_custom_property(row)
-    ManifestationCustomProperty.all.each do |property|
-      if row[property]
-        custom_value = ManifestationCustomValue.new(
-          manifestation: self,
-          manifestation_custom_property: property,
-          value: row[property]
-        )
-      end
-    end
-  end
 end
 
 # == Schema Information
