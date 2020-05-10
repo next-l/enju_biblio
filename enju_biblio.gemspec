@@ -15,6 +15,13 @@ Gem::Specification.new do |s|
 
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["spec/**/*"] - Dir["spec/dummy/{log,private,solr,tmp}/**/*"] - Dir["spec/dummy/db/*.sqlite3"]
+  s.post_install_message = <<-END
+New migration file(s) are included in enju_biblio-0.3.10. Please run the following command after the installation:
+enju_biblio-0.3.10では新しいマイグレーションファイルが含まれています。インストール後に以下のコマンドを実行してください:
+
+$ bundle exec rake enju_biblio:engine:install:migrations
+
+END
 
   s.add_dependency "enju_library", "~> 0.3.7"
   s.add_dependency "marc"
@@ -25,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_dependency "faraday"
   s.add_dependency "responders"
 
-  s.add_development_dependency "enju_leaf", "~> 1.3.3"
+  s.add_development_dependency "enju_leaf", "~> 1.3.4.rc.1"
   s.add_development_dependency "enju_subject", "~> 0.3.1"
   s.add_development_dependency "enju_inventory", "~> 0.3.0"
   s.add_development_dependency "enju_bookmark", "~> 0.3.0"
