@@ -5,10 +5,12 @@ RSpec.describe "manifestation_custom_properties/index", type: :view do
     assign(:manifestation_custom_properties, [
       ManifestationCustomProperty.create!(
         name: "name1",
+        display_name: "カスタム項目1",
         note: "MyText"
       ),
       ManifestationCustomProperty.create!(
         name: "name2",
+        display_name: "カスタム項目2",
         note: "MyText"
       )
     ])

@@ -5,10 +5,12 @@ RSpec.describe "item_custom_properties/index", type: :view do
     assign(:item_custom_properties, [
       ItemCustomProperty.create!(
         name: "name1",
+        display_name: "カスタム項目1",
         note: "MyText"
       ),
       ItemCustomProperty.create!(
         name: "name2",
+        display_name: "カスタム項目2",
         note: "MyText"
       )
     ])
