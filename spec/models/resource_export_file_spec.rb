@@ -36,7 +36,7 @@ describe ResourceExportFile do
     export_file.export!
     file = export_file.resource_export
     expect(file).to be_truthy
-    lines = file.download.split("\n")
+    lines = File.open(file.path).readlines.map(&:chomp)
     expect(lines.first.split(/\t/)).to include "identifier:custom"
     expect(lines.last.split(/\t/)).to include "a11223344"
   end
