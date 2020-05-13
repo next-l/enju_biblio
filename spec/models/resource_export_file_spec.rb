@@ -26,10 +26,10 @@ describe ResourceExportFile do
     expect(columns).to include "item_price"
   end
 
-  it "should export NCID value" do
+  it "should export custom identifier's value" do
     manifestation = FactoryBot.create(:manifestation)
-    ncid = IdentifierType.find_by(name: "ncid")
-    identifier = FactoryBot.create(:identifier, identifier_type: ncid, body: "BA91833159")
+    custom = IdentifierType.find_by(name: "custom")
+    identifier = FactoryBot.create(:identifier, identifier_type: custom, body: "a11223344")
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
     export_file.save!
@@ -37,8 +37,8 @@ describe ResourceExportFile do
     file = export_file.attachment
     expect(file).to be_truthy
     lines = file.download.split("\n")
-    expect(lines.first.split(/\t/)).to include "ncid"
-    expect(lines.last.split(/\t/)).to include "BA91833159"
+    expect(lines.first.split(/\t/)).to include "identifier:custom"
+    expect(lines.last.split(/\t/)).to include "a11223344"
   end
 
   it "should export carrier_type" do

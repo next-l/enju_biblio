@@ -101,7 +101,7 @@ class Manifestation < ApplicationRecord
       end
     end
     string :language do
-      language.try(:name)
+      language&.name
     end
     string :item_identifier, multiple: true do
       if series_master?
@@ -124,7 +124,7 @@ class Manifestation < ApplicationRecord
     end
     time :date_of_publication
     integer :pub_year do
-      date_of_publication.try(:year)
+      date_of_publication&.year
     end
     integer :creator_ids, multiple: true
     integer :contributor_ids, multiple: true
@@ -346,7 +346,7 @@ class Manifestation < ApplicationRecord
   # TODO: よりよい推薦方法
   def self.pickup(keyword = nil, current_user = nil)
     return nil if self.cached_numdocs < 5
-    if current_user.try(:role)
+    if current_user&.role
       current_role_id = current_user.role.id
     else
       current_role_id = 1
@@ -415,7 +415,7 @@ class Manifestation < ApplicationRecord
   end
 
   def index_series_statement
-    series_statements.map{|s| s.index; s.root_manifestation.try(:index)}
+    series_statements.map{|s| s.index; s.root_manifestation&.index}
   end
 
   def acquired_at
@@ -523,7 +523,7 @@ class Manifestation < ApplicationRecord
   def to_hash(role: 'Guest')
     record = {
       manifestation_id: id,
-      title: original_title,
+      original_title: original_title,
       title_alternative: title_alternative,
       title_transcription: title_transcription,
       statement_of_responsibility: statement_of_responsibility,
@@ -532,7 +532,7 @@ class Manifestation < ApplicationRecord
       creator: creators.pluck(:full_name).join('//'),
       contributor: contributors.pluck(:full_name).join('//'),
       publisher: publishers.pluck(:full_name).join('//'),
-      date_of_publication: date_of_publication,
+      pub_date: date_of_publication,
       year_of_publication: year_of_publication,
       publication_place: publication_place,
       manifestation_created_at: created_at,
@@ -541,8 +541,8 @@ class Manifestation < ApplicationRecord
       content_type: manifestation_content_type.name,
       frequency: frequency.name,
       language: language.name,
-      isbn: identifier_contents(:isbn).join('//'),
-      issn: identifier_contents(:issn).join('//'),
+      isbn: isbn_records.pluck(:body).join('//'),
+      issn: issn_records.pluck(:body).join('//'),
       volume_number: volume_number,
       volume_number_string: volume_number_string,
       edition: edition,
@@ -559,13 +559,13 @@ class Manifestation < ApplicationRecord
       depth: depth,
       price: price,
       access_address: access_address,
-      required_role: required_role.name,
+      manifestation_required_role: required_role.name,
       description: description,
       note: note
     }
 
     IdentifierType.find_each do |type|
-      record[type.name.to_sym] = identifiers.where(identifier_type: type).pluck(:body).join('//')
+      record[:"identifier:#{type.name.to_sym}"] = identifiers.where(identifier_type: type).pluck(:body).join('//')
     end
 
     series = series_statements.order(:position)
@@ -592,7 +592,7 @@ class Manifestation < ApplicationRecord
       })
       ManifestationCustomProperty.order(:position).each do |custom_property|
         custom_value = manifestation_custom_values.find_by(manifestation_custom_property: custom_property)
-        record[:"manifestation:#{custom_property.name}"] = custom_value.try(:value)
+        record[:"manifestation:#{custom_property.name}"] = custom_value&.value
       end
     end
 
@@ -603,6 +603,14 @@ class Manifestation < ApplicationRecord
       ClassificationType.find_each do |type|
         record[:"classification:#{type.name}"] = classifications.where(classification_type: type).pluck(:category).join('//')
       end
+    end
+
+    if defined?(EnjuNdl)
+      record["jpno"] = jpno_record&.body
+    end
+
+    if defined?(EnjuNii)
+      record["ncid"] = ncid_record&.body
     end
 
     record
