@@ -624,7 +624,7 @@ class Manifestation < ApplicationRecord
     end
 
     if defined?(EnjuNdl)
-      record["jpno"] = jpno_record&.body
+      record["jpno"] = identifier_contents(:jpno).first
     end
 
     if defined?(EnjuNii)
