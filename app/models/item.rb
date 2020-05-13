@@ -107,10 +107,11 @@ class Item < ApplicationRecord
     record = {
       item_id: id,
       item_identifier: item_identifier,
+      binding_item_identifier: binding_item_identifier,
       call_number: call_number,
       shelf: shelf.name,
       item_note: note,
-      accepted_at: accept.try(:created_at),
+      accepted_at: accept&.created_at,
       acquired_at: acquired_at,
       item_created_at: created_at,
       item_updated_at: updated_at
@@ -118,8 +119,9 @@ class Item < ApplicationRecord
 
     if ['Administrator', 'Librarian'].include?(role)
       record.merge!({
-        bookstore: bookstore.try(:name),
-        budget_type: budget_type.try(:name),
+        bookstore: bookstore&.name,
+        budget_type: budget_type&.name,
+        item_required_role: required_role.name,
         item_price: price,
         memo: memo
       })
@@ -131,7 +133,9 @@ class Item < ApplicationRecord
 
       if defined?(EnjuCirculation)
         record.merge!({
-          use_restriction: use_restriction.try(:name),
+          use_restriction: use_restriction&.name,
+          circulation_status: circulation_status&.name,
+          checkout_type: checkout_type&.name,
           total_checkouts: checkouts.count
         })
       end
