@@ -62,6 +62,35 @@ describe ResourceExportFile do
       end
     end
   end
+
+  it "should export custom properties" do
+    item = FactoryBot.create(:item)
+    3.times do
+      item.manifestation.manifestation_custom_values << FactoryBot.build(:manifestation_custom_value)
+    end
+    3.times do
+      item.item_custom_values << FactoryBot.build(:item_custom_value)
+    end
+    export_file = ResourceExportFile.new
+    export_file.user = users(:admin)
+    export_file.save!
+    export_file.export!
+    file = export_file.resource_export
+    expect(file).to be_truthy
+    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
+    csv.each do |row|
+      if row['manifestation_id'] == item.manifestation.id
+        item.manifestation_custom_values.each do |value|
+          expect(row).to have_key "manifestation:#{value.manifestation_custom_property.name}"
+          expect(row["manifestation:#{value.manifestation_custom_property.name}"]).to eq value
+        end
+        item.item_custom_values.each do |value|
+          expect(row).to have_key "item:#{value.item_custom_property.name}"
+          expect(row["item:#{value.item_custom_property.name}"]).to eq value
+        end
+      end
+    end
+  end
 end
 
 # == Schema Information
