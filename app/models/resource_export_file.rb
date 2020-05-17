@@ -31,8 +31,10 @@ class ResourceExportFile < ApplicationRecord
     transition_to!(:started)
     role_name = user.try(:role).try(:name)
     tsv = Manifestation.export(role: role_name)
-    self.resource_export = StringIO.new(tsv)
-    self.resource_export.instance_write(:filename, "resource_export.txt")
+    file = StringIO.new(tsv)
+    file.class.class_eval { attr_accessor :original_filename, :content_type }
+    file.original_filename =  'resource_export.txt'
+    self.resource_export = file
     save!
     transition_to!(:completed)
     mailer = ResourceExportMailer.completed(self)
