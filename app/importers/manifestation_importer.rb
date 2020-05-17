@@ -21,7 +21,7 @@ class ManifestationImporter
     :contributor, :contributor_transcription,
     :publisher, :publisher_transcription, :pub_date,
     :subjects, :classifications,
-    :item_identifier, :binding_item_identifier, :call_number, :binding_call_number, :binded_at,
+    :item_identifier, :item_id, :binding_item_identifier, :call_number, :binding_call_number, :binded_at,
     :shelf, :default_shelf, :item_price, :item_note, :include_supplements, :item_url, :acquired_at,
     :dummy,
     :action, :manifestation_record, :item_record, :manifestation_result, :item_result, :error_message, :row
@@ -31,6 +31,7 @@ class ManifestationImporter
       manifestation_identifier: row['manifestation_identifier'],
       manifestation_id: row['manifestation_id'],
       item_identifier: row['item_identifier'],
+      item_id: row['item_id'],
       binding_item_identifier: row['binding_item_identifier'],
       call_number: row['call_number'],
       binding_call_number: row['binding_call_number'],
@@ -155,7 +156,7 @@ class ManifestationImporter
 
   def create
     imported = false
-    self.manifestation_record = find_by_manifestation_identifier || find_by_item_identifier
+    self.manifestation_record = find_by_manifestation_identifier || find_by_item_identifier || find_by_item_id
     self.manifestation_record = find_by_jpno || find_by_doi || find_by_isbn unless manifestation_record
     
     if manifestation_record
@@ -223,7 +224,7 @@ class ManifestationImporter
   end
 
   def update
-    self.manifestation_record = find_by_manifestation_identifier || find_by_item_identifier || find_by_jpno || find_by_doi || find_by_isbn
+    self.manifestation_record = find_by_manifestation_identifier || find_by_item_identifier || find_by_item_id || find_by_jpno || find_by_doi || find_by_isbn
 
     manifestation_record.original_title = original_title if original_title.present?
     update_manifestation
@@ -302,6 +303,10 @@ class ManifestationImporter
 
   def find_by_item_identifier
     Item.find_by(item_identifier: item_identifier.strip)&.manifestation if item_identifier
+  end
+
+  def find_by_item_id
+    Item.find_by(id: item_id.strip)&.manifestation if item_id
   end
 
   def find_by_isbn

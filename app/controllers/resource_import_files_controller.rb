@@ -23,7 +23,7 @@ class ResourceImportFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @resource_import_file }
       format.download {
-        send_data @resource_import_file.resource_import.download, fileename: @resource_import_file.resource_import.filename.to_s, type: 'application/octet-stream'
+        send_data @resource_import_file.attachment.download, fileename: @resource_import_file.attachment.filename.to_s, type: 'application/octet-stream'
       }
     end
   end
