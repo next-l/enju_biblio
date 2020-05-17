@@ -322,55 +322,15 @@ class ResourceImportFile < ApplicationRecord
     rows.each do |row|
       row_num += 1
       import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
-      item_identifier = row['item_identifier'].to_s.strip
-      item = Item.find_by(item_identifier: item_identifier) if item_identifier.present?
+      item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip) if row['item_identifier'].to_s.strip.present?
+      unless item
+        item = Item.find_by(id: row['item_id'].to_s.strip) if row['item_id'].to_s.strip.present?
+      end
+
       if item
         if item.manifestation
           fetch(row, edit_mode: 'update')
-        end
-
-        shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
-        bookstore = Bookstore.find_by(name: row['bookstore'])
-        required_role = Role.find_by(name: row['required_role'])
-
-        item.shelf = shelf if shelf
-        item.bookstore = bookstore if bookstore
-        item.required_role = required_role if required_role
-
-        acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
-        binded_at = Time.zone.parse(row['binded_at']) rescue nil
-        item.acquired_at = acquired_at if acquired_at
-        item.binded_at = binded_at if binded_at
-
-        if defined?(EnjuCirculation)
-          circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
-          checkout_type = CheckoutType.find_by(name: row['checkout_type'])
-          use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
-          item.circulation_status = circulation_status if circulation_status
-          item.checkout_type = checkout_type if checkout_type
-          item.use_restriction = use_restriction if use_restriction
-        end
-
-        item_columns = %w(
-          call_number
-          binding_item_identifier binding_call_number binded_at
-        )
-        item_columns.each do |column|
-          if row[column].present?
-            item.assign_attributes(:"#{column}" => row[column])
-          end
-        end
-
-        item.price = row['item_price'] if row['item_price'].present?
-        item.note = row['item_note'].try(:gsub, /\\n/, "\n") if row['item_note'].present?
-        item.url = row['item_url'] if row['item_url'].present?
-
-        if row['include_supplements']
-          if %w(t true).include?(row['include_supplements'].downcase.strip)
-            item.include_supplements = true
-          else
-            item.include_supplements = false if item.include_supplements
-          end
+          item = update_item(item, row)
         end
 
         ResourceImportFile.import_item_custom_value(row, item).each do |value|
@@ -419,8 +379,11 @@ class ResourceImportFile < ApplicationRecord
 
     rows.each do |row|
       row_num += 1
-      item_identifier = row['item_identifier'].to_s.strip
-      item = Item.find_by(item_identifier: item_identifier)
+      item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip) if row['item_identifier'].to_s.strip.present?
+      unless item
+        item = Item.find_by(id: row['item_id'].to_s.strip) if row['item_id'].to_s.strip.present?
+      end
+
       if item
         item.destroy if item.removable?
       end
@@ -444,10 +407,9 @@ class ResourceImportFile < ApplicationRecord
     row_num = 1
 
     rows.each do |row|
-      item_identifier = row['item_identifier'].to_s.strip
-      item = Item.find_by(item_identifier: item_identifier)
+      item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip) if row['item_identifier'].to_s.strip.present?
       unless item
-        item = Item.find_by(id: row['item_id'].to_s.strip)
+        item = Item.find_by(id: row['item_id'].to_s.strip) if row['item_id'].to_s.strip.present?
       end
 
       manifestation_identifier = row['manifestation_identifier'].to_s.strip
@@ -603,12 +565,68 @@ class ResourceImportFile < ApplicationRecord
     item
   end
 
+  def update_item(item, row)
+    shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
+    bookstore = Bookstore.find_by(name: row['bookstore'])
+    required_role = Role.find_by(name: row['required_role'])
+
+    item.shelf = shelf if shelf
+    item.bookstore = bookstore if bookstore
+    item.required_role = required_role if required_role
+
+    acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
+    binded_at = Time.zone.parse(row['binded_at']) rescue nil
+    item.acquired_at = acquired_at if acquired_at
+    item.binded_at = binded_at if binded_at
+
+    if defined?(EnjuCirculation)
+      circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
+      checkout_type = CheckoutType.find_by(name: row['checkout_type'])
+      use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
+      item.circulation_status = circulation_status if circulation_status
+      item.checkout_type = checkout_type if checkout_type
+      item.use_restriction = use_restriction if use_restriction
+    end
+
+    item_columns = %w(
+      call_number
+      binding_item_identifier binding_call_number binded_at
+    )
+    item_columns.each do |column|
+      if row[column].present?
+        item.assign_attributes(:"#{column}" => row[column])
+      end
+    end
+
+    item.price = row['item_price'] if row['item_price'].present?
+    item.note = row['item_note'].try(:gsub, /\\n/, "\n") if row['item_note'].present?
+    item.url = row['item_url'] if row['item_url'].present?
+
+    if row['include_supplements']
+      if %w(t true).include?(row['include_supplements'].downcase.strip)
+        item.include_supplements = true
+      else
+        item.include_supplements = false if item.include_supplements
+      end
+    end
+
+    item
+  end
+
   def fetch(row, options = {edit_mode: 'create'})
-    case options[:edit_mode]
-    when 'create'
-      manifestation = nil
-    when 'update'
-      manifestation = Item.find_by(item_identifier: row['item_identifier'].to_s.strip).try(:manifestation)
+    manifestation = nil
+    item = nil
+
+    if options[:edit_mode] == 'update'
+      if row['item_identifier'].to_s.strip.present?
+        item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip)
+      end
+      if row['item_id'].to_s.strip.present?
+        item = Item.find_by(id: row['item_id'].to_s.strip)
+      end
+
+      manifestation = item.manifestation if item
+
       unless manifestation
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.find_by(manifestation_identifier: manifestation_identifier) if manifestation_identifier

@@ -380,7 +380,11 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       item_00003.include_supplements.should be_truthy
 
       Item.find_by(item_identifier: '00004').include_supplements.should be_falsy
-      Item.find_by(item_identifier: '00025').call_number.should eq "547|ヤ"
+
+      item_00025 = Item.find_by(item_identifier: '00025')
+      expect(item_00025.manifestation.original_title).to eq "テスト4"
+      expect(item_00025.manifestation.subjects.pluck(:term)).to eq ['test2', 'test3']
+      expect(item_00025.call_number).to eq "547|ヤ"
     end
 
     it "should update custom values", vcr: true do
