@@ -1,7 +1,7 @@
 class ItemImporter
   include ActiveModel::Model
 
-  attr_accessor :item_identifier, :binding_item_identifier,
+  attr_accessor :item_identifier, :item_id, :binding_item_identifier,
     :shelf, :default_shelf, :required_role,
     :call_number, :binding_call_number, :acquired_at,
     :price, :budget_type, :bookstore, :binded_at, :note, :include_supplements, :url,
@@ -27,8 +27,13 @@ class ItemImporter
     Item.find_by(item_identifier: item_identifier.strip) if item_identifier
   end
 
+  def find_by_item_id
+    Item.find_by(id: item_id.strip) if item_id
+  end
+
   def create
-    self.record = find_by_item_identifier
+    self.record = find_by_item_identifier || find_by_item_id
+
     if record
       self.result = :found
       return self
@@ -65,7 +70,7 @@ class ItemImporter
   end
 
   def update
-    self.record = find_by_item_identifier
+    self.record = find_by_item_identifier || find_by_item_id
     return unless record
 
     attributes = {
@@ -93,8 +98,5 @@ class ItemImporter
     end
 
     self
-  end
-
-  def import_custom_item_property
   end
 end

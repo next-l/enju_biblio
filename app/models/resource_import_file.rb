@@ -81,7 +81,7 @@ class ResourceImportFile < ApplicationRecord
     end
 
     if defined?(EnjuCirculation)
-      CirculationImporter.import(create_import_temp_file(resource_import), action: edit_mode).each do |circulation_entry|
+      CirculationImporter.import(create_import_temp_file(attachment), action: edit_mode).each do |circulation_entry|
         case circulation_entry.result
         when :imported
           result[:circulation_imported] += 1
@@ -156,7 +156,7 @@ class ResourceImportFile < ApplicationRecord
 
   def update_relationship
     transition_to!(:started)
-    rows = open_import_file(create_import_temp_file(resource_import))
+    rows = open_import_file(create_import_temp_file(attachment))
     rows.shift
     row_num = 1
 
