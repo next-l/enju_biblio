@@ -983,9 +983,7 @@ ActiveRecord::Schema.define(version: 2020_04_25_074822) do
   create_table "picture_files", force: :cascade do |t|
     t.integer "picture_attachable_id"
     t.string "picture_attachable_type"
-    t.string "content_type"
     t.text "title"
-    t.string "thumbnail"
     t.integer "position"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

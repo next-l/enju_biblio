@@ -45,9 +45,7 @@ end
 #  id                      :bigint           not null, primary key
 #  picture_attachable_id   :integer
 #  picture_attachable_type :string
-#  content_type            :string
 #  title                   :text
-#  thumbnail               :string
 #  position                :integer
 #  created_at              :datetime         not null
 #  updated_at              :datetime         not null
