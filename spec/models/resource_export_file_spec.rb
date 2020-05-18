@@ -63,6 +63,21 @@ describe ResourceExportFile do
     end
   end
 
+  it "should export create_type" do
+    export_file = ResourceExportFile.new
+    export_file.user = users(:admin)
+    export_file.save!
+    export_file.export!
+    CSV.parse(export_file.attachment.download, {headers: true, col_sep: "\t"}).each do |row|
+      manifestation = Manifestation.find(row['manifestation_id'])
+      manifestation.creates.each do |create|
+        if create.create_type
+          expect(row['creator']).to eq "#{create.agent.full_nane}||#{create.create_type.name}"
+        end
+      end
+    end
+  end
+
   it "should export custom properties" do
     item = FactoryBot.create(:item)
     3.times do
