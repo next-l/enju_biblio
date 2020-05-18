@@ -547,9 +547,27 @@ class Manifestation < ApplicationRecord
       statement_of_responsibility: statement_of_responsibility,
       serial: serial,
       manifestation_identifier: manifestation_identifier,
-      creator: creators.pluck(:full_name).join('//'),
-      contributor: contributors.pluck(:full_name).join('//'),
-      publisher: publishers.pluck(:full_name).join('//'),
+      creator: creates.map{|create|
+        if create.create_type
+          "#{create.agent.full_name}||#{create.creator_type.name}"
+        else
+          "#{create.agent.full_name}"
+        end
+      }.join('//'),
+      contributor: realizes.map{|realize|
+        if realize.realize_type
+          "#{realize.agent.full_name}||#{realize.realize_type.name}"
+        else
+          "#{realize.agent.full_name}"
+        end
+      }.join('//'),
+      publisher: produces.map{|produce|
+        if produce.produce_type
+          "#{produce.agent.full_name}||#{produce.realize_type.name}"
+        else
+          "#{produce.agent.full_name}"
+        end
+      }.join('//'),
       pub_date: date_of_publication,
       year_of_publication: year_of_publication,
       publication_place: publication_place,

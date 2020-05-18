@@ -75,9 +75,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    file = export_file.resource_export
-    expect(file).to be_truthy
-    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
+    csv = CSV.parse(export_file.attachment.download, {headers: true, col_sep: "\t"})
     csv.each do |row|
       if row['manifestation_id'] == item.manifestation.id
         item.manifestation_custom_values.each do |value|
