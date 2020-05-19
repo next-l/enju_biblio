@@ -33,6 +33,11 @@ class ItemCustomPropertiesController < ApplicationController
 
   # PATCH/PUT /item_custom_properties/1
   def update
+    if params[:move]
+      move_position(@item_custom_property, params[:move])
+      return
+    end
+
     if @item_custom_property.update(item_custom_property_params)
       redirect_to @item_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.item_custom_property'))
     else
