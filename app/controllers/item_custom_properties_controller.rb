@@ -25,7 +25,7 @@ class ItemCustomPropertiesController < ApplicationController
     @item_custom_property = ItemCustomProperty.new(item_custom_property_params)
 
     if @item_custom_property.save
-      redirect_to @manifestation_custom_property, notice: t('controller.successfully_created', model: t('activerecord.models.item_custom_property')) }
+      redirect_to @manifestation_custom_property, notice: t('controller.successfully_created', model: t('activerecord.models.item_custom_property'))
     else
       render :new
     end
@@ -34,7 +34,7 @@ class ItemCustomPropertiesController < ApplicationController
   # PATCH/PUT /item_custom_properties/1
   def update
     if @item_custom_property.update(item_custom_property_params)
-      redirect_to @manifestation_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.item_custom_property')) }
+      redirect_to @manifestation_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.item_custom_property'))
     else
       render :edit
     end
@@ -43,7 +43,7 @@ class ItemCustomPropertiesController < ApplicationController
   # DELETE /item_custom_properties/1
   def destroy
     @item_custom_property.destroy
-    redirect_to item_custom_properties_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.item_custom_property')) }
+    redirect_to item_custom_properties_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.item_custom_property'))
   end
 
   private
