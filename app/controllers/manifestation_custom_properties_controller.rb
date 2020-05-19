@@ -25,7 +25,7 @@ class ManifestationCustomPropertiesController < ApplicationController
     @manifestation_custom_property = ManifestationCustomProperty.new(manifestation_custom_property_params)
 
     if @manifestation_custom_property.save
-      redirect_to @manifestation_custom_property, notice: 'Manifestation custom property was successfully created.'
+      redirect_to @manifestation_custom_property, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation_custom_property')) }
     else
       render :new
     end
@@ -34,7 +34,7 @@ class ManifestationCustomPropertiesController < ApplicationController
   # PATCH/PUT /manifestation_custom_properties/1
   def update
     if @manifestation_custom_property.update(manifestation_custom_property_params)
-      redirect_to @manifestation_custom_property, notice: 'Manifestation custom property was successfully updated.'
+      redirect_to @manifestation_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_custom_property')) }
     else
       render :edit
     end
@@ -43,7 +43,7 @@ class ManifestationCustomPropertiesController < ApplicationController
   # DELETE /manifestation_custom_properties/1
   def destroy
     @manifestation_custom_property.destroy
-    redirect_to manifestation_custom_properties_url, notice: 'Manifestation custom property was successfully destroyed.'
+    redirect_to manifestation_custom_properties_url, notice: t('controller.successfully_deleted', model: t('activerecord.models.manifestation_custom_property')) }
   end
 
   private
