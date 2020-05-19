@@ -23,7 +23,7 @@ $ bundle exec rake enju_biblio:engine:install:migrations
 
 END
 
-  s.add_dependency "enju_library", "~> 0.3.8.rc.1"
+  s.add_dependency "enju_library", "~> 0.3.8.rc.2"
   s.add_dependency "marc"
   s.add_dependency "simple_form", '~> 5.0'
   s.add_dependency "dynamic_form"
