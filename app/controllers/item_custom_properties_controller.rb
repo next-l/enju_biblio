@@ -25,7 +25,7 @@ class ItemCustomPropertiesController < ApplicationController
     @item_custom_property = ItemCustomProperty.new(item_custom_property_params)
 
     if @item_custom_property.save
-      redirect_to @manifestation_custom_property, notice: t('controller.successfully_created', model: t('activerecord.models.item_custom_property'))
+      redirect_to @item_custom_property, notice: t('controller.successfully_created', model: t('activerecord.models.item_custom_property'))
     else
       render :new
     end
@@ -39,7 +39,7 @@ class ItemCustomPropertiesController < ApplicationController
     end
 
     if @item_custom_property.update(item_custom_property_params)
-      redirect_to @manifestation_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.item_custom_property'))
+      redirect_to @item_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.item_custom_property'))
     else
       render :edit
     end
