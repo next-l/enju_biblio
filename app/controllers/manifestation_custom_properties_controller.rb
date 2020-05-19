@@ -33,6 +33,11 @@ class ManifestationCustomPropertiesController < ApplicationController
 
   # PATCH/PUT /manifestation_custom_properties/1
   def update
+    if params[:move]
+      move_position(@manifestation_custom_property, params[:move])
+      return
+    end
+
     if @manifestation_custom_property.update(manifestation_custom_property_params)
       redirect_to @manifestation_custom_property, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation_custom_property'))
     else

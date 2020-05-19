@@ -8,6 +8,7 @@
     <table class='table table-striped index'>
       <thead>
         <tr>
+          <th id="position"></th>
           <th><%= t('activerecord.attributes.manifestation_custom_property.name') %></th>
           <th><%= t('activerecord.attributes.manifestation_custom_property.display_name') %></th>
           <th><%= t('activerecord.attributes.manifestation_custom_property.note') %></th>
@@ -18,6 +19,11 @@
       <tbody>
         <% @manifestation_custom_properties.each do |manifestation_custom_property| %>
           <tr>
+            <td>
+              <%- if policy(item_custom_property).update? -%>
+                <%= move_position(item_custom_property) -%>
+              <%- end -%>
+            </td>
             <td><%= link_to manifestation_custom_property.name, manifestation_custom_property %></td>
             <td><%= manifestation_custom_property.display_name.localize %></td>
             <td><%= manifestation_custom_property.note %></td>

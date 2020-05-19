@@ -314,6 +314,14 @@ describe ManifestationCustomPropertiesController do
           expect(response).to render_template('edit')
         end
       end
+
+      it 'moves its position when specified' do
+        manifestation_custom_property = ManifestationCustomProperty.create! valid_attributes
+        position = manifestation_custom_property.position
+        put :update, params: { id: manifestation_custom_property.id, move: 'higher' }
+        expect(response).to redirect_to manifestation_custom_properties_url
+        assigns(:manifestation_custom_property).reload.position.should eq position - 1
+      end
     end
 
     describe 'When logged in as Librarian' do
