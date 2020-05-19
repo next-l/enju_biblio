@@ -68,7 +68,7 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    CSV.parse(open(export_file.resource_export.file).read, {headers: true, col_sep: "\t"}).each do |row|
+    CSV.parse(open(export_file.resource_export.path).read, {headers: true, col_sep: "\t"}).each do |row|
       manifestation = Manifestation.find(row['manifestation_id'])
       manifestation.creates.each do |create|
         if create.create_type
