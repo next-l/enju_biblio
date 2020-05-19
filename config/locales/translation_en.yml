@@ -104,6 +104,7 @@ en:
         extent: Extent
         dimensions: Dimensions
         fulltext_content: Fulltext content
+        date_copyrighted: Date copyrighted
       manifestation/subjects:
           term: Subject
       manifestation/classifications:

@@ -104,6 +104,7 @@ ja:
         extent: ページ数
         dimensions: 大きさ
         fulltext_content: 全文あり
+        date_copyrighted: 著作権発行日
       manifestation/subjects:
         term: 件名
       manifestation/classifications:
