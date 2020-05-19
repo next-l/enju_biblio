@@ -50,9 +50,7 @@ describe ResourceExportFile do
     export_file.save!
     export_file.export!
     file = export_file.resource_export
-    expect(file).to be_truthy
-    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
-    csv.each do |row|
+    CSV.open(file.path, {headers: true, col_sep: "\t"}).each do |row|
       expect(row).to have_key "carrier_type"
       case row["manifestation_id"].to_i
       when 1
@@ -68,7 +66,8 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    CSV.parse(open(export_file.resource_export.path).read, {headers: true, col_sep: "\t"}).each do |row|
+    file = export_file.resource_export
+    CSV.open(file.path, {headers: true, col_sep: "\t"}).each do |row|
       manifestation = Manifestation.find(row['manifestation_id'])
       manifestation.creates.each do |create|
         if create.create_type
@@ -90,7 +89,8 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    csv = CSV.parse(export_file.resource_export.download, {headers: true, col_sep: "\t"})
+    file = export_file.resource_export
+    CSV.open(file.path, {headers: true, col_sep: "\t"}).each do |row|
     csv.each do |row|
       if row['manifestation_id'] == item.manifestation.id
         item.manifestation_custom_values.each do |value|
