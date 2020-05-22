@@ -108,7 +108,7 @@ class Item < ApplicationRecord
       item_id: id,
       item_identifier: item_identifier,
       call_number: call_number,
-      shelf: shelf.name,
+      shelf: shelf&.name,
       item_note: note,
       accepted_at: accept.try(:created_at),
       acquired_at: acquired_at,
