@@ -646,7 +646,7 @@ class Manifestation < ApplicationRecord
     end
 
     if defined?(EnjuNii)
-      record["ncid"] = ncid_record&.body
+      record["ncid"] = identifier_contents(:ncid).first
     end
 
     record
