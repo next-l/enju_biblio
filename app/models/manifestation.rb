@@ -545,7 +545,7 @@ class Manifestation < ApplicationRecord
       }.join('//'),
       publisher: produces.map{|produce|
         if produce.produce_type
-          "#{produce.agent.full_name}||#{produce.realize_type.name}"
+          "#{produce.agent.full_name}||#{produce.produce_type.name}"
         else
           "#{produce.agent.full_name}"
         end
