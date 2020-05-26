@@ -531,7 +531,7 @@ class Manifestation < ApplicationRecord
       manifestation_identifier: manifestation_identifier,
       creator: creates.map{|create|
         if create.create_type
-          "#{create.agent.full_name}||#{create.creator_type.name}"
+          "#{create.agent.full_name}||#{create.create_type.name}"
         else
           "#{create.agent.full_name}"
         end

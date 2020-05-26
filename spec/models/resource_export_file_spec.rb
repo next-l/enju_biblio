@@ -63,7 +63,7 @@ describe ResourceExportFile do
     end
   end
 
-  it "should export create_type" do
+  it "should export create_type, realize_type and produce_type" do
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
     export_file.save!
@@ -73,6 +73,18 @@ describe ResourceExportFile do
       manifestation.creates.each do |create|
         if create.create_type
           expect(row['creator']).to eq "#{create.agent.full_nane}||#{create.create_type.name}"
+        end
+      end
+
+      manifestation.realizes.each do |realize|
+        if realize.realize_type
+          expect(row['contributor']).to eq "#{realize.agent.full_nane}||#{realize.realize_type.name}"
+        end
+      end
+
+      manifestation.produces.each do |produce|
+        if produce.produce_type
+          expect(row['publisher']).to eq "#{produce.agent.full_nane}||#{produce.produce_type.name}"
         end
       end
     end
