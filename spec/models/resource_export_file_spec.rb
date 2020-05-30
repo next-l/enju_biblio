@@ -72,19 +72,19 @@ describe ResourceExportFile do
       manifestation = Manifestation.find(row['manifestation_id'])
       manifestation.creates.each do |create|
         if create.create_type
-          expect(row['creator']).to eq "#{create.agent.full_name}||#{create.create_type.name}"
+          expect(row['creator']).to match "#{create.agent.full_name}||#{create.create_type.name}"
         end
       end
 
       manifestation.realizes.each do |realize|
         if realize.realize_type
-          expect(row['contributor']).to eq "#{realize.agent.full_name}||#{realize.realize_type.name}"
+          expect(row['contributor']).to match "#{realize.agent.full_name}||#{realize.realize_type.name}"
         end
       end
 
       manifestation.produces.each do |produce|
         if produce.produce_type
-          expect(row['publisher']).to eq "#{produce.agent.full_name}||#{produce.produce_type.name}"
+          expect(row['publisher']).to match "#{produce.agent.full_name}||#{produce.produce_type.name}"
         end
       end
     end
