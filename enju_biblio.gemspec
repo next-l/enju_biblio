@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 New migration file(s) are included in enju_biblio-0.3.10. Please run the following command after the installation:
 enju_biblio-0.3.10では新しいマイグレーションファイルが含まれています。インストール後に以下のコマンドを実行してください:
 
-$ bundle exec rake enju_biblio:engine:install:migrations
+$ bundle exec rake enju_biblio_engine:install:migrations
 
 END
 
