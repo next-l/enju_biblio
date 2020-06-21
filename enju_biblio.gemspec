@@ -23,7 +23,7 @@ $ bundle exec rake enju_biblio_engine:install:migrations
 
 END
 
-  s.add_dependency "enju_library", "~> 0.3.8.rc.2"
+  s.add_dependency "enju_library", "~> 0.3.8"
   s.add_dependency "marc"
   s.add_dependency "simple_form", '~> 5.0'
   s.add_dependency "dynamic_form"
@@ -32,7 +32,7 @@ END
   s.add_dependency "faraday"
   s.add_dependency "responders"
 
-  s.add_development_dependency "enju_leaf", "~> 1.3.4.rc.2"
+  s.add_development_dependency "enju_leaf", "~> 1.3.4"
   s.add_development_dependency "enju_subject", "~> 0.3.1"
   s.add_development_dependency "enju_inventory", "~> 0.3.0"
   s.add_development_dependency "enju_bookmark", "~> 0.3.0"
