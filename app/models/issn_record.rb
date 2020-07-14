@@ -1,8 +1,6 @@
 class IssnRecord < ActiveRecord::Base
   has_many :issn_record_and_manifestations, dependent: :destroy
   has_many :manifestations, through: :issn_record_and_manifestations
-  has_many :issn_record_and_periodicals, dependent: :destroy
-  has_many :periodicals, through: :issn_record_and_periodicals
   validates :body, presence: true, uniqueness: {scope: :issn_type}
   before_save :normalize_issn
   strip_attributes
