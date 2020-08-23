@@ -1,4 +1,4 @@
-class CreateManifestationCustomProperties < ActiveRecord::Migration[6.0]
+class CreateManifestationCustomProperties < ActiveRecord::Migration[5.2]
   def change
     create_table :manifestation_custom_properties do |t|
       t.string :name, null: false, comment: 'ラベル名', index: {unique: true}
