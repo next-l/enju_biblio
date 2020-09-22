@@ -4,8 +4,7 @@ class Create < ApplicationRecord
   belongs_to :create_type, optional: true
 
   validates_associated :agent, :work
-  validates_presence_of :agent_id, :work_id
-  validates_uniqueness_of :work_id, scope: :agent_id
+  validates :work_id, uniqueness: { scope: :agent_id }
   after_save :reindex
   after_destroy :reindex
 

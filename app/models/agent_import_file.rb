@@ -135,7 +135,7 @@ class AgentImportFile < ApplicationRecord
       row_num += 1
       next if row['dummy'].to_s.strip.present?
 
-      agent = Agent.where(id: row['id'].to_s.strip).first
+      agent = Agent.find_by(id: row['id'].to_s.strip)
       if agent
         agent.picture_files.destroy_all
         agent.reload

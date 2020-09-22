@@ -2,7 +2,7 @@ class Donate < ApplicationRecord
   belongs_to :agent
   belongs_to :item
   validates_associated :agent, :item
-  validates_presence_of :agent, :item
+  validates :agent, :item, presence: true
 end
 
 # == Schema Information

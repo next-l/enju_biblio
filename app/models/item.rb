@@ -26,11 +26,10 @@ class Item < ApplicationRecord
 
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
   validates_associated :bookstore
-  validates :manifestation_id, presence: true
   validates :item_identifier, allow_blank: true, uniqueness: true,
-    format: {with: /\A[0-9A-Za-z_]+\Z/}
+                              format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :binding_item_identifier, allow_blank: true,
-    format: {with: /\A[0-9A-Za-z_]+\Z/}
+                                      format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :url, url: true, allow_blank: true, length: { maximum: 255 }
   validates_date :acquired_at, allow_blank: true
 
@@ -82,7 +81,7 @@ class Item < ApplicationRecord
   end
 
   def owned(agent)
-    owns.where(agent_id: agent.id).first
+    owns.find_by(agent_id: agent.id)
   end
 
   def manifestation_url

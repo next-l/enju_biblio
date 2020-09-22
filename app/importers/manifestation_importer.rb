@@ -511,7 +511,7 @@ class ManifestationImporter
     SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}.each do |column_name|
       type = column_name.split(':').last
       subject_list = row[column_name].to_s.split('//')
-      subject_list.map{|value|
+      subject_list.map do |value|
         subject_heading_type = SubjectHeadingType.find_by(name: type)
         next unless subject_heading_type
         subject = Subject.new(term: value)
@@ -520,7 +520,7 @@ class ManifestationImporter
         subject.subject_type = SubjectType.find_by(name: 'concept')
         subject.save!
         subjects << subject
-      }
+      end
     end
 
     subjects
@@ -531,14 +531,14 @@ class ManifestationImporter
     ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}.each do |column_name|
       type = column_name.split(':').last
       classification_list = row[column_name].to_s.split('//')
-      classification_list.map{|value|
+      classification_list.map do |value|
         classification_type = ClassificationType.find_by(name: type)
         next unless classification_type
         classification = Classification.new(category: value)
         classification.classification_type = classification_type
         classification.save!
         classifications << classification
-      }
+      end
     end
 
     classifications

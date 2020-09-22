@@ -9,12 +9,12 @@ class Periodical < ApplicationRecord
     string :original_title
     text :original_title
     text :publisher do
-      periodical_and_manifestations.where(periodical_master: true).each do |a|
+      periodical_and_manifestations.where(periodical_master: true).find_each do |a|
         a.manifestation.publishers.pluck(:full_name)
       end
     end
     text :issn do
-      periodical_and_manifestations.where(periodical_master: true).each do |a|
+      periodical_and_manifestations.where(periodical_master: true).find_each do |a|
         a.manifestation.issn_records.pluck(:body)
       end
     end

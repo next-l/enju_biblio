@@ -66,7 +66,7 @@ class Manifestation < ApplicationRecord
     #できなかったので。 downcase することにした。
     #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
     string :connect_title do
-      title.join('').gsub(/\s/, '').downcase
+      titles.join('').gsub(/\s/, '').downcase
     end
     string :connect_creator do
       creator.join('').gsub(/\s/, '').downcase
@@ -218,7 +218,7 @@ class Manifestation < ApplicationRecord
 
   has_one_attached :attachment
 
-  validates_presence_of :original_title, :carrier_type, :language
+  validates :original_title, :carrier_type, :language, presence: true
   validates :start_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :end_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :height, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
@@ -365,6 +365,7 @@ class Manifestation < ApplicationRecord
   def extract_text
     return nil unless attachment.attached?
     return nil unless ENV['ENJU_EXTRACT_TEXT'] == 'true'
+
     client = Faraday.new(url: ENV['SOLR_URL'] || Sunspot.config.solr.url) do |conn|
       conn.request :multipart
       conn.adapter :net_http
@@ -472,7 +473,7 @@ class Manifestation < ApplicationRecord
   def pub_dates
     return [] unless pub_date
     pub_date_array = pub_date.split(';')
-    pub_date_array.map{|pub_date_string|
+    pub_date_array.map do |pub_date_string|
       date = nil
       while date.nil?
         pub_date_string += '-01'
@@ -484,7 +485,7 @@ class Manifestation < ApplicationRecord
         end
       end
       date
-    }.compact
+    end.compact
   end
 
   def latest_issue
@@ -529,27 +530,27 @@ class Manifestation < ApplicationRecord
       statement_of_responsibility: statement_of_responsibility,
       serial: serial,
       manifestation_identifier: manifestation_identifier,
-      creator: creates.map{|create|
+      creator: creates.map do |create|
         if create.create_type
           "#{create.agent.full_name}||#{create.create_type.name}"
         else
           "#{create.agent.full_name}"
         end
-      }.join('//'),
-      contributor: realizes.map{|realize|
+      end.join('//'),
+      contributor: realizes.map do |realize|
         if realize.realize_type
           "#{realize.agent.full_name}||#{realize.realize_type.name}"
         else
           "#{realize.agent.full_name}"
         end
-      }.join('//'),
-      publisher: produces.map{|produce|
+      end.join('//'),
+      publisher: produces.map do |produce|
         if produce.produce_type
           "#{produce.agent.full_name}||#{produce.produce_type.name}"
         else
           "#{produce.agent.full_name}"
         end
-      }.join('//'),
+      end.join('//'),
       pub_date: date_of_publication,
       year_of_publication: year_of_publication,
       publication_place: publication_place,
@@ -662,7 +663,7 @@ class Manifestation < ApplicationRecord
   end
 
   def isbn_characters
-    identifier_contents(:isbn).map{|i|
+    identifier_contents(:isbn).map do |i|
       isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
       isbn10 = Lisbn.new(i).isbn10
       isbn13 =  Lisbn.new(i).isbn13
@@ -671,7 +672,7 @@ class Manifestation < ApplicationRecord
       [
         isbn10, isbn13, isbn10_dash, isbn13_dash
       ]
-    }.flatten
+    end.flatten
   end
 end
 

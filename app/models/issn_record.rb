@@ -1,4 +1,4 @@
-class IssnRecord < ActiveRecord::Base
+class IssnRecord < ApplicationRecord
   has_many :issn_record_and_manifestations, dependent: :destroy
   has_many :manifestations, through: :issn_record_and_manifestations
   validates :body, presence: true, uniqueness: {scope: :issn_type}

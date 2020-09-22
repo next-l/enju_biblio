@@ -5,8 +5,7 @@ class Produce < ApplicationRecord
   delegate :original_title, to: :manifestation, prefix: true
 
   validates_associated :agent, :manifestation
-  validates_presence_of :agent, :manifestation
-  validates_uniqueness_of :manifestation_id, scope: :agent_id
+  validates :manifestation_id, uniqueness: { scope: :agent_id }
   after_save :reindex
   after_destroy :reindex
 

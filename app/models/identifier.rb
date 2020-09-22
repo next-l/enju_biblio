@@ -2,13 +2,13 @@ class Identifier < ApplicationRecord
   belongs_to :identifier_type
   belongs_to :manifestation, touch: true, optional: true
 
-  validates_presence_of :body
-  validates_uniqueness_of :body, scope: [:identifier_type_id, :manifestation_id]
+  validates :body, presence: true
+  validates :body, uniqueness: { scope: [:identifier_type_id, :manifestation_id] }
   validate :check_identifier
   before_validation :normalize
   before_save :convert_isbn
   scope :id_type, -> type {
-    where(identifier_type: IdentifierType.where(name: type).first)
+    where(identifier_type: IdentifierType.find_by(name: type))
   }
 
   acts_as_list scope: :manifestation_id
