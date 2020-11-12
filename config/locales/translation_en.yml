@@ -58,7 +58,6 @@ en:
         manifestation_identifier: Local manifestation identifier
         date_of_publication: Date of publication
         pub_date: Date of publication
-        deleted_at: Deleted at
         access_address: Access address
         number_of_page_string: Number of page (string)
         start_page: Start page
@@ -110,15 +109,14 @@ en:
           term: Subject
       manifestation/classifications:
           category: Classification
-      manifestation/identifiers:
-          body: Identifier
+      manifestation/isbn_records:
+          body: ISBN
       manifestation/manifestation_custom_properties:
         name: Name
         value: Value
       item:
         call_number: Call number
         item_identifier: Item identifier
-        deleted_at: Deleted at
         include_supplements: Include supplements
         note: Note
         memo: Memo
@@ -148,7 +146,6 @@ en:
         full_name: Full name
         full_name_transcription: Full name transcription
         full_name_alternative: Full name alternative
-        deleted_at: Deleted at
         zip_code_1: Zip code 1
         zip_code_2: Zip code 2
         address_1: Address 1
