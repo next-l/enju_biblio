@@ -6,7 +6,7 @@
       <%= form_for(:accept, html: {method: :get}) do |f| %>
         <p>
           <%= label_tag :item_identifier, t('activerecord.attributes.item.item_identifier') -%>:
-          <%= f.search_field :item_identifier, value: @query, class: 'resource_item_identifier' -%>
+          <%= f.search_field :item_identifier, value: @query, class: 'form-control' -%>
           <%= f.submit t('page.search') -%>
         </p>
       <%- end -%>
