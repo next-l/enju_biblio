@@ -6,7 +6,7 @@ plugins:
     #  Rubocop/Metrics/ClassLength:
     #    enabled: false
   brakeman:
-    enabled: true
+    enabled: false
   eslint:
     enabled: true
   csslint:
