@@ -2,7 +2,6 @@ class Own < ApplicationRecord
   belongs_to :agent
   belongs_to :item
 
-  validates_associated :agent, :item
   validates :item_id, uniqueness: { scope: :agent_id }
   after_save :reindex
   after_destroy :reindex
@@ -12,8 +11,8 @@ class Own < ApplicationRecord
   attr_accessor :item_identifier
 
   def reindex
-    agent.try(:index)
-    item.try(:index)
+    agent&.index
+    item&.index
   end
 end
 

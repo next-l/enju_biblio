@@ -1,13 +1,9 @@
 require 'rails_helper'
 
 describe "create_types/show" do
+  fixtures :all
   before(:each) do
-    @create_type = assign(:create_type, stub_model(CreateType,
-      name: "Name",
-      display_name: "MyText",
-      note: "MyText",
-      position: 1
-    ))
+    @create_type = create_types(:author)
   end
 
   it "renders attributes in <p>" do

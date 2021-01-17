@@ -278,7 +278,7 @@ describe RealizesController do
 
   describe 'PUT update' do
     before(:each) do
-      @realize = realizes(:realize_00001)
+      @realize = FactoryBot.create(:realize)
       @attrs = FactoryBot.attributes_for(:realize)
       @invalid_attrs = { expression_id: '' }
     end
@@ -326,6 +326,7 @@ describe RealizesController do
 
         it 'moves its position when specified' do
           position = @realize.position
+          FactoryBot.create(:realize, expression_id: @realize.expression_id)
           put :update, params: { id: @realize.id, expression_id: @realize.expression.id, move: 'lower' }
           expect(response).to redirect_to realizes_url(expression_id: @realize.expression_id)
           assigns(:realize).reload.position.should eq position + 1

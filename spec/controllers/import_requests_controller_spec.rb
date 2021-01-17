@@ -194,7 +194,7 @@ describe ImportRequestsController do
 
       describe 'with isbn which is already imported', vcr: true do
         it 'assigns a newly created import_request as @import_request' do
-          post :create, params: { import_request: { isbn: manifestations(:manifestation_00001).identifier_contents(:isbn).first } }
+          post :create, params: { import_request: { isbn: isbn_records(:isbn_record_00001).body } }
           expect(assigns(:import_request)).to be_valid
         end
 

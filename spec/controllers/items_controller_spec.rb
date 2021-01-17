@@ -9,6 +9,7 @@ describe ItemsController do
 
   describe 'GET index', solr: true do
     before do
+      FactoryBot.create(:item, :with_agent)
       Item.reindex
     end
 
@@ -29,22 +30,30 @@ describe ItemsController do
         expect(assigns(:items)).to_not be_nil
       end
 
-      it 'assigns items as @items with acquired_from and acquired_until' do
-        get :index, params: { acquired_from: '2015-09-20', acquired_until: '2015-09-26' }
-        expect(assigns(:items)).to_not be_nil
-        expect(assigns(:items).count).to eq 1
-      end
+      context 'acquired_at' do
+        before(:each) do
+          FactoryBot.create(:item, acquired_at: '2015-09-20')
+        end
 
-      it 'assigns items as @items with acquired_from' do
-        get :index, params: { acquired_from: '2015-09-20' }
-        expect(assigns(:items)).to_not be_nil
-        expect(assigns(:items).count).to eq 1
-      end
+        it 'assigns items as @items with acquired_from and acquired_until' do
+          get :index, params: { acquired_from: '2015-09-20', acquired_until: '2015-09-26' }
+          expect(assigns(:items)).to_not be_nil
+          expect(assigns(:items).count).to eq 1
+        end
 
-      it 'assigns items as @items with acquired_until' do
-        get :index, params: { acquired_until: '2015-09-20' }
-        expect(assigns(:items)).to_not be_nil
-        expect(assigns(:items).count).to eq 1
+        it 'assigns items as @items with acquired_from' do
+          FactoryBot.create(:item, acquired_at: '2015-09-27')
+          get :index, params: { acquired_from: '2015-09-20' }
+          expect(assigns(:items)).to_not be_nil
+          expect(assigns(:items).count).to eq 2
+        end
+
+        it 'assigns items as @items with acquired_until' do
+          FactoryBot.create(:item, acquired_at: '2015-09-27')
+          get :index, params: { acquired_until: '2015-09-20' }
+          expect(assigns(:items)).to_not be_nil
+          expect(assigns(:items).count).to eq 1
+        end
       end
     end
 
@@ -64,17 +73,19 @@ describe ItemsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        agent = Own.first.agent
+        get :index, params: { agent_id: agent.id }
         expect(response).to be_successful
-        assigns(:agent).should eq Agent.find(1)
+        assigns(:agent).should eq agent
         expect(assigns(:items)).to eq assigns(:agent).items.order('created_at DESC').page(1)
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
+        item = FactoryBot.create(:item)
+        get :index, params: { manifestation_id: item.manifestation_id }
         expect(response).to be_successful
-        assigns(:manifestation).should eq Manifestation.find(1)
-        assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).collect(&:id)
+        assigns(:manifestation).should eq item.manifestation
+        assigns(:items).collect(&:id).should eq assigns(:manifestation).items.order('items.created_at DESC').page(1).pluck(:id)
       end
 
       it 'should get index with shelf_id' do
@@ -238,6 +249,7 @@ describe ItemsController do
   describe 'POST create' do
     before(:each) do
       manifestation = FactoryBot.create(:manifestation)
+      FactoryBot.create(:own)
       @attrs = FactoryBot.attributes_for(:item, manifestation_id: manifestation.id)
       @invalid_attrs = { item_identifier: '無効なID', manifestation_id: manifestation.id }
     end
@@ -279,7 +291,8 @@ describe ItemsController do
       end
 
       it 'should not create item already created' do
-        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
+        own = Own.first
+        post :create, params: { item: { circulation_status_id: 1, item_identifier: own.item.item_identifier, manifestation_id: own.item.manifestation_id } }
         expect(assigns(:item)).to_not be_valid
         expect(response).to be_successful
       end

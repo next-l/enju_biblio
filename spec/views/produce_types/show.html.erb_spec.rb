@@ -1,13 +1,9 @@
 require 'rails_helper'
 
 describe "produce_types/show" do
+  fixtures :all
   before(:each) do
-    @produce_type = assign(:produce_type, stub_model(ProduceType,
-      name: "Name",
-      display_name: "MyText",
-      note: "MyText",
-      position: 1
-    ))
+    @produce_type = produce_types(:publisher)
   end
 
   it "renders attributes in <p>" do

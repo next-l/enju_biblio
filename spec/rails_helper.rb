@@ -73,6 +73,3 @@ RSpec.configure do |config|
     end
   end
 end
-
-#FactoryBot.definition_file_paths << "#{::Rails.root}/../../spec/factories"
-#FactoryBot.find_definitions

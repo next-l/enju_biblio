@@ -9,6 +9,7 @@ describe AgentsController do
 
   describe 'GET index', solr: true do
     before do
+      FactoryBot.create(:manifestation, :with_publisher)
       Agent.reindex
     end
 
@@ -69,15 +70,18 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        manifestation = FactoryBot.create(:manifestation, :with_publisher)
+        publisher = manifestation.publishers.first
+        get :index, params: { agent_id: publisher.id }
         expect(response).to be_successful
-        expect(assigns(:agent)).to eq Agent.find(1)
+        expect(assigns(:agent)).to eq publisher
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where(required_role_id: 1).page(1)
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
-        assigns(:manifestation).should eq Manifestation.find(1)
+        manifestation = Produce.first.manifestation
+        get :index, params: { manifestation_id: manifestation.id }
+        assigns(:manifestation).should eq manifestation
         expect(assigns(:agents)).to eq assigns(:manifestation).publishers.where(required_role_id: 1).page(1)
       end
 
@@ -172,17 +176,29 @@ describe AgentsController do
       end
 
       it 'should show agent with work' do
-        get :show, params: { id: 1, work_id: 1 }
+        work = FactoryBot.create(:manifestation)
+        @agent.works << work
+        get :show, params: { id: @agent.id, work_id: work.id }
         expect(assigns(:agent)).to eq assigns(:work).creators.first
       end
 
+      it 'should show agent with expression' do
+        expression = FactoryBot.create(:manifestation)
+        @agent.expressions << expression
+        get :show, params: { id: @agent.id, expression_id: expression.id }
+        expect(assigns(:agent)).to eq assigns(:expression).contributors.first
+      end
+
       it 'should show agent with manifestation' do
-        get :show, params: { id: 1, manifestation_id: 1 }
+        manifestation = FactoryBot.create(:manifestation)
+        @agent.manifestations << manifestation
+        get :show, params: { id: @agent.id, manifestation_id: manifestation.id }
         expect(assigns(:agent)).to eq assigns(:manifestation).publishers.first
       end
 
       it "should not show agent when required_role is 'User'" do
-        get :show, params: { id: 5 }
+        agent = FactoryBot.create(:agent, required_role_id: Role.find_by(name: 'User'))
+        get :show, params: { id: agent.id }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -340,21 +356,31 @@ describe AgentsController do
         end
 
         it 'should create a relationship if work_id is set' do
-          post :create, params: { agent: @attrs, work_id: 1 }
+          work = FactoryBot.create(:manifestation)
+          post :create, params: { agent: @attrs, work_id: work.id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).works.should eq [Manifestation.find(1)]
+          assigns(:agent).works.should eq [work]
+        end
+
+        it 'should create a relationship if expression_id is set' do
+          expression = FactoryBot.create(:manifestation)
+          post :create, params: { agent: @attrs, expression_id: expression.id }
+          expect(response).to redirect_to(agent_url(assigns(:agent)))
+          assigns(:agent).expressions.should eq [expression]
         end
 
         it 'should create a relationship if manifestation_id is set' do
-          post :create, params: { agent: @attrs, manifestation_id: 1 }
+          manifestation = FactoryBot.create(:manifestation)
+          post :create, params: { agent: @attrs, manifestation_id: manifestation.id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).manifestations.should eq [Manifestation.find(1)]
+          assigns(:agent).manifestations.should eq [manifestation]
         end
 
         it 'should create a relationship if item_id is set' do
-          post :create, params: { agent: @attrs, item_id: 1 }
+          item = FactoryBot.create(:item)
+          post :create, params: { agent: @attrs, item_id: item.id }
           expect(response).to redirect_to(agent_url(assigns(:agent)))
-          assigns(:agent).items.should eq [Item.find(1)]
+          assigns(:agent).items.should eq [item]
         end
       end
 

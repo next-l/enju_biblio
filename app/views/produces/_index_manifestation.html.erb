@@ -18,8 +18,8 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
       <%- if policy(produce).update? -%>
-        <%= produce.first? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_up.png', size: '16x16', class: 'enju_icon', alt: t('page.asc')), manifestation_produce_path(produce.manifestation, produce, move: 'higher'), method: :put) -%>
-        <%= produce.last? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_down.png', size: '16x16', class: 'enju_icon', alt: t('page.desc')), manifestation_produce_path(produce.manifestation, produce, move: 'lower'), method: :put) -%>
+        <%= produce.first? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_up.png', size: '16x16', class: 'enju_icon', alt: t('page.asc')), produce_path(produce, manifestation_id: produce.manifestation_id, move: 'higher'), method: :put) -%>
+        <%= produce.last? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_down.png', size: '16x16', class: 'enju_icon', alt: t('page.desc')), produce_path(produce, manifestation_id: produce.manifestation_id, move: 'lower'), method: :put) -%>
       <%- end -%>
     </td>
     <td><%= link_to produce.agent.try(:full_name), produce.agent -%></td>

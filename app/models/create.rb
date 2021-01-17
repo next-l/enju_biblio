@@ -3,7 +3,6 @@ class Create < ApplicationRecord
   belongs_to :work, class_name: 'Manifestation', foreign_key: 'work_id', touch: true
   belongs_to :create_type, optional: true
 
-  validates_associated :agent, :work
   validates :work_id, uniqueness: { scope: :agent_id }
   after_save :reindex
   after_destroy :reindex
@@ -11,8 +10,8 @@ class Create < ApplicationRecord
   acts_as_list scope: :work
 
   def reindex
-    agent.try(:index)
-    work.try(:index)
+    agent&.index
+    work&.index
   end
 end
 

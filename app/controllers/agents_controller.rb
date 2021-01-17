@@ -154,6 +154,8 @@ class AgentsController < ApplicationController
         case
         when @work
           @agent.works << @work
+        when @expression
+          @agent.expressions << @expression
         when @manifestation
           @agent.manifestations << @manifestation
         when @item

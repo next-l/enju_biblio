@@ -286,7 +286,7 @@ describe CreatesController do
 
   describe 'PUT update' do
     before(:each) do
-      @create = creates(:create_00001)
+      @create = FactoryBot.create(:create)
       @attrs = valid_attributes
       @invalid_attrs = { work_id: '' }
     end
@@ -329,6 +329,7 @@ describe CreatesController do
 
         it 'moves its position when specified' do
           position = @create.position
+          FactoryBot.create(:create, work_id: @create.work_id)
           put :update, params: { id: @create.id, work_id: @create.work.id, move: 'lower' }
           expect(response).to redirect_to creates_url(work_id: @create.work_id)
           assigns(:create).reload.position.should eq position + 1

@@ -9,7 +9,7 @@ describe "resource_import_results/index.txt.ruby" do
       user: users(:admin),
       edit_mode: 'create'
     )
-    file.attachment.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
+    file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
     file.save
     file.import_start
     assign(:resource_import_file, file)

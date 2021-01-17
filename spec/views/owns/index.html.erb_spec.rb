@@ -2,22 +2,16 @@ require 'rails_helper'
 
 describe "owns/index" do
   before(:each) do
-    assign(:owns, Kaminari.paginate_array([
-      stub_model(Own,
-        item_id: 1,
-        agent_id: 1
-      ),
-      stub_model(Own,
-        item_id: 1,
-        agent_id: 2
-      )
-    ]).page(1))
+    2.times do
+      FactoryBot.create(:own)
+    end
+    assign(:owns, Own.page(1))
   end
 
   it "renders a list of owns" do
     allow(view).to receive(:policy).and_return double(create?: true, destroy?: true)
     render
     # Run the generator again with the --webrat flag if you want to use webrat matchers
-    assert_select "tr>td", text: Item.find(1).item_identifier, count: 2
+    assert_select "tr>td", text: "item_", count: 2
   end
 end

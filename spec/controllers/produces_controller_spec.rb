@@ -282,7 +282,7 @@ describe ProducesController do
 
   describe 'PUT update' do
     before(:each) do
-      @produce = produces(:produce_00001)
+      @produce = FactoryBot.create(:produce)
       @attrs = valid_attributes
       @invalid_attrs = { manifestation_id: '' }
     end
@@ -325,6 +325,7 @@ describe ProducesController do
 
         it 'moves its position when specified' do
           position = @produce.position
+          FactoryBot.create(:produce, manifestation_id: @produce.manifestation_id)
           put :update, params: { id: @produce.id, manifestation_id: @produce.manifestation.id, move: 'lower' }
           expect(response).to redirect_to produces_url(manifestation_id: @produce.manifestation_id)
           assigns(:produce).reload.position.should eq position + 1

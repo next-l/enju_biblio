@@ -5,16 +5,16 @@ describe "accepts/new" do
 
   before(:each) do
     assign(:accept, stub_model(Accept,
-      item_id: 1
+      item_id: FactoryBot.create(:item).id
     ).as_new_record)
     assign(:basket, FactoryBot.create(:basket))
     assign(:accepts, Kaminari::paginate_array([
       stub_model(Accept,
-        item_id: 1,
+        item_id: FactoryBot.create(:item).id,
         created_at: Time.zone.now
       ),
       stub_model(Accept,
-        item_id: 1,
+        item_id: FactoryBot.create(:item).id,
         created_at: Time.zone.now
       )
     ]).page(1))

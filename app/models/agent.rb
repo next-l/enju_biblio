@@ -6,11 +6,11 @@ class Agent < ApplicationRecord
       where('required_role_id <= 1')
     end
   }
-  has_many :creates, dependent: :destroy
+  has_many :creates, dependent: :destroy, inverse_of: :agent
   has_many :works, through: :creates
-  has_many :realizes, dependent: :destroy
+  has_many :realizes, dependent: :destroy, inverse_of: :agent
   has_many :expressions, through: :realizes
-  has_many :produces, dependent: :destroy
+  has_many :produces, dependent: :destroy, inverse_of: :agent
   has_many :manifestations, through: :produces
   has_many :children, foreign_key: 'parent_id', class_name: 'AgentRelationship', dependent: :destroy
   has_many :parents, foreign_key: 'child_id', class_name: 'AgentRelationship', dependent: :destroy
@@ -19,7 +19,7 @@ class Agent < ApplicationRecord
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
   has_many :donates
   has_many :donated_items, through: :donates, source: :item
-  has_many :owns, dependent: :destroy
+  has_many :owns, dependent: :destroy, inverse_of: :agent
   has_many :items, through: :owns
   has_many :agent_merges, dependent: :destroy
   has_many :agent_merge_lists, through: :agent_merges
@@ -30,8 +30,6 @@ class Agent < ApplicationRecord
   has_one :agent_import_result
   belongs_to :profile, optional: true
 
-  validates :language, :agent_type, :country, presence: true
-  validates_associated :language, :agent_type, :country
   validates :full_name, presence: true, length: { maximum: 255 }
   validates :birth_date, format: { with: /\A\d+(-\d{0,2}){0,2}\z/ }, allow_blank: true
   validates :death_date, format: { with: /\A\d+(-\d{0,2}){0,2}\z/ }, allow_blank: true

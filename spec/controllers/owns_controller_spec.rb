@@ -308,8 +308,11 @@ describe OwnsController do
         end
 
         it 'moves its position when specified' do
+          position = @own.position
+          FactoryBot.create(:own, item_id: @own.item_id)
           put :update, params: { id: @own.id, own: @attrs, item_id: @own.item.id, move: 'lower' }
           expect(response).to redirect_to(owns_url(item_id: @own.item_id))
+          assigns(:own).reload.position.should eq position + 1
         end
       end
 

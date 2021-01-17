@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :produce_type do
-    name { "mystring" }
+    sequence(:name){|n| "mystring_#{n}" }
     display_name { "MyText" }
     note { "MyText" }
   end

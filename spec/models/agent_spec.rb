@@ -21,23 +21,27 @@ describe Agent do
 
   it "should not set death_date earlier than birth_date" do
     agent = FactoryBot.create(:agent, birth_date: '2010', death_date: '2000')
-    agent.should_not be_valid
+    expect(agent).not_to be_valid
   end
 
   it "should be creator" do
-    agents(:agent_00001).creator?(manifestations(:manifestation_00001)).should be_truthy
+    create = FactoryBot.create(:create)
+    expect(create.agent.creator?(create.work)).to be_truthy
   end
 
   it "should not be creator" do
-    agents(:agent_00010).creator?(manifestations(:manifestation_00001)).should be_falsy
+    produce = FactoryBot.create(:produce)
+    expect(produce.agent.creator?(produce.manifestation)).to be_falsy
   end
 
   it "should be publisher" do
-    agents(:agent_00001).publisher?(manifestations(:manifestation_00001)).should be_truthy
+    produce = FactoryBot.create(:produce)
+    expect(produce.agent.publisher?(produce.manifestation)).to be_truthy
   end
 
   it "should not be publisher" do
-    agents(:agent_00010).publisher?(manifestations(:manifestation_00001)).should be_falsy
+    create = FactoryBot.create(:create)
+    expect(create.agent.publisher?(create.work)).to be_falsy
   end
 
   describe ".import_agents" do

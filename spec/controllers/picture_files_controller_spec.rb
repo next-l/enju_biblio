@@ -163,7 +163,7 @@ describe PictureFilesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 1, attachment: fixture_file_upload('/../../examples/spinner.gif', 'image/gif') }
+      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 1, attachment: fixture_file_upload('spinner.gif', 'image/gif') }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 
@@ -280,8 +280,9 @@ describe PictureFilesController do
 
   describe 'PUT update' do
     before(:each) do
+      manifestation = FactoryBot.create(:manifestation)
       @picture_file = picture_files(:picture_file_00001)
-      @attrs = { picture_attachable_id: '1', picture_attachable_type: 'Manifestation' }
+      @attrs = { picture_attachable_id: manifestation.id, picture_attachable_type: 'Manifestation' }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 

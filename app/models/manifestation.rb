@@ -5,11 +5,11 @@ class Manifestation < ApplicationRecord
   belongs_to :frequency
   belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
   belongs_to :license, required: false
-  has_many :creates, dependent: :destroy, foreign_key: 'work_id'
+  has_many :creates, dependent: :destroy, foreign_key: 'work_id', inverse_of: :work
   has_many :creators, through: :creates, source: :agent #, order: 'creates.position'
-  has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'
+  has_many :realizes, dependent: :destroy, foreign_key: 'expression_id', inverse_of: :expression
   has_many :contributors, through: :realizes, source: :agent #, order: 'realizes.position'
-  has_many :produces, dependent: :destroy, foreign_key: 'manifestation_id'
+  has_many :produces, dependent: :destroy, foreign_key: 'manifestation_id', inverse_of: :manifestation
   has_many :publishers, through: :produces, source: :agent #, order: 'produces.position'
   has_many :items, dependent: :destroy
   has_many :children, foreign_key: 'parent_id', class_name: 'ManifestationRelationship', dependent: :destroy
@@ -663,7 +663,7 @@ class Manifestation < ApplicationRecord
   end
 
   def isbn_characters
-    identifier_contents(:isbn).map do |i|
+    isbn_records.pluck(:body).map do |i|
       isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
       isbn10 = Lisbn.new(i).isbn10
       isbn13 =  Lisbn.new(i).isbn13

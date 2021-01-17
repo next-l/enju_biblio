@@ -5,4 +5,10 @@ FactoryBot.define do
     association :bookstore
     association :budget_type
   end
+
+  trait :with_agent do
+    after(:build) do |item|
+      item.agents << FactoryBot.build(:agent)
+    end
+  end
 end

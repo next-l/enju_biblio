@@ -11,7 +11,7 @@ describe ResourceImportFile do
           default_shelf_id: 3,
           edit_mode: 'create'
         )
-        @file.attachment.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
+        @file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
         @file.save
         @old_message_count = Message.count
         @old_manifestations_count = Manifestation.count
@@ -270,7 +270,7 @@ describe ResourceImportFile do
           default_shelf_id: 3,
           edit_mode: 'create'
         )
-        @file.attachment.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv"), filename: 'attachment.txt')
+        @file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample2.tsv"), filename: 'attachment.txt')
         @file.save
         @old_manifestations_count = Manifestation.count
         @old_items_count = Item.count
@@ -310,7 +310,7 @@ describe ResourceImportFile do
           default_shelf_id: 3,
           edit_mode: 'create'
         )
-        @file.attachment.attach(io: File.new("#{Rails.root}/../../examples/isbn_sample.txt"), filename: 'attachment.txt')
+        @file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/isbn_sample.txt"), filename: 'attachment.txt')
         @file.save
       end
 
@@ -421,7 +421,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         user: users(:admin),
         edit_mode: 'update'
       )
-      @file.attachment.attach(io: File.new("#{Rails.root}/../../examples/item_update_file.tsv"), filename: 'attachment.txt')
+      @file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/item_update_file.tsv"), filename: 'attachment.txt')
       @file.save
 
       item_00001 = Item.find_by(item_identifier: '00001')
@@ -462,7 +462,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         user: users(:admin),
         edit_mode: 'update'
       )
-      file.attachment.attach(io: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), filename: 'attachment.txt')
+      file.attachment.attach(io: File.new("#{Rails.root.to_s}/../fixtures/files/update_series_statement.tsv"), filename: 'attachment.txt')
       file.save
       manifestation = Manifestation.find(10)
       file.import_start
@@ -478,7 +478,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
         default_shelf_id: 3,
         edit_mode: 'destroy'
       )
-      file.attachment.attach(io: File.new("#{Rails.root}/../../examples/item_delete_file.tsv"), filename: 'attachment.txt')
+      file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/item_delete_file.tsv"), filename: 'attachment.txt')
       file.save
       file.import
       expect(Item.count).to eq old_count - 8
@@ -491,7 +491,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       default_shelf_id: 3,
       edit_mode: 'create'
     )
-    file.attachment.attach(io: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
+    file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"), filename: 'attachment.txt')
     file.save
     expect(ResourceImportFileJob.perform_later(file)).to be_truthy
   end

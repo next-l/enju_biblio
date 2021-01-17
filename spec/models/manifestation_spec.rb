@@ -3,6 +3,9 @@ require 'rails_helper'
 describe Manifestation, solr: true do
   fixtures :all
   before do
+    5.times do
+      FactoryBot.create(:manifestation, :with_item, :with_subject)
+    end
     Manifestation.reindex
   end
 
@@ -64,6 +67,8 @@ describe Manifestation, solr: true do
   end
 
   it "should search isbn in openurl" do
+    FactoryBot.create(:manifestation, isbn_records: [IsbnRecord.find_by(body: '4798002062')])
+    FactoryBot.create(:manifestation, isbn_records: [IsbnRecord.find_by(body: '4798101028')])
     openurl = Openurl.new({api: "openurl", isbn: "4798"})
     results = openurl.search
     openurl.query_text.should eq "isbn_sm:4798*"
@@ -71,6 +76,7 @@ describe Manifestation, solr: true do
   end
 
   it "should search issn in openurl" do
+    FactoryBot.create(:manifestation, issn_records: [IssnRecord.find_by(body: '09130000')])
     openurl = Openurl.new({api: "openurl", issn: "0913"})
     results = openurl.search
     openurl.query_text.should eq "issn_sm:0913*"
@@ -163,34 +169,47 @@ describe Manifestation, solr: true do
     sru.manifestations.size.should eq 6
   end
 
-  it "should_get_number_of_pages" do
-    expect(manifestations(:manifestation_00001).number_of_pages).to eq 100
-  end
+  describe "Default manifestation" do
+    subject(:manifestation) { FactoryBot.create(:manifestation, start_page: 101, end_page: 200) }
 
-  it "should have parent_of_series" do
-    expect(manifestations(:manifestation_00001).parent_of_series).to be_truthy
-  end
+    it "should_get_number_of_pages" do
+      expect(manifestation.number_of_pages).to eq 100
+    end
 
-  it "should respond to extract_text" do
-    expect(manifestations(:manifestation_00001).extract_text).to be_nil
-  end
+    it "should have parent_of_series" do
+      expect(manifestation.parent_of_series).to be_truthy
+    end
 
-  it "should respond to title" do
-    expect(manifestations(:manifestation_00001).title).to be_truthy
+    it "should respond to extract_text" do
+      expect(manifestation.extract_text).to be_nil
+    end
+
+    it "should respond to title" do
+      expect(manifestation.title).to be_truthy
+    end
   end
 
   it "should respond to pickup" do
     lambda{Manifestation.pickup}.should_not raise_error # (ActiveRecord::RecordNotFound)
   end
 
-  it "should be periodical if its series_statement is periodical" do
-    expect(manifestations(:manifestation_00202).serial?).to be_truthy
-  end
+  describe "Periodocal manifestation" do
+    subject(:manifestation) { 
+      FactoryBot.create(
+        :manifestation,
+        serial: true,
+        series_statements: [FactoryBot.create(:series_statement)]
+      )
+    }
 
-  it "should validate access_address" do
-    manifestation = manifestations(:manifestation_00202)
-    manifestation.access_address = 'http:/www.example.jp'
-    manifestation.should_not be_valid
+    it "should be periodical if its series_statement is periodical" do
+      expect(manifestation.serial?).to be_truthy
+    end
+
+    it "should validate access_address" do
+      manifestation.access_address = 'http:/www.example.jp'
+      manifestation.should_not be_valid
+    end
   end
 
   # it "should set series_statement if the manifestation is periodical" do

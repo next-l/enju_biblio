@@ -4,7 +4,6 @@ class Produce < ApplicationRecord
   belongs_to :produce_type, optional: true
   delegate :original_title, to: :manifestation, prefix: true
 
-  validates_associated :agent, :manifestation
   validates :manifestation_id, uniqueness: { scope: :agent_id }
   after_save :reindex
   after_destroy :reindex
@@ -12,8 +11,8 @@ class Produce < ApplicationRecord
   acts_as_list scope: :manifestation
 
   def reindex
-    agent.try(:index)
-    manifestation.try(:index)
+    agent&.index
+    manifestation&.index
   end
 end
 

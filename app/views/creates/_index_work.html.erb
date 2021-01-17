@@ -18,11 +18,11 @@
   <tr class="line<%= cycle("0", "1") -%>">
     <td>
       <%- if policy(create).destroy? -%>
-        <%= create.first? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_up.png', size: '16x16', class: 'enju_icon', alt: t('page.asc')), work_create_path(create.work, create, move: 'higher'), method: :put) -%>
-        <%= create.last? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_down.png', size: '16x16', class: 'enju_icon', alt: t('page.desc')), work_create_path(create.work, create, move: 'lower'), method: :put) -%>
+        <%= create.first? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_up.png', size: '16x16', class: 'enju_icon', alt: t('page.asc')), create_path(create, work_id: create.work_id, move: 'higher'), method: :put) -%>
+        <%= create.last? ? image_tag('icons/stop.png', size: '16x16', class: 'enju_icon') : link_to(image_tag('icons/arrow_down.png', size: '16x16', class: 'enju_icon', alt: t('page.desc')), create_path(create, work_id: create.work_id, move: 'lower'), method: :put) -%>
       <%- end-%>
     </td>
-    <td><%= link_to create.agent.try(:full_name), create.agent -%></td>
+    <td><%= link_to create.agent&.full_name, create.agent -%></td>
     <td><%= l(create.created_at) -%></td>
     <td><%= l(create.updated_at) -%></td>
   </tr>
@@ -36,7 +36,7 @@
 <div class="col">
   <ul>
     <%- if policy(Create).create? -%>
-      <li><%= link_to t('page.new', model: t('activerecord.models.create')), new_work_create_path(work) -%></li>
+      <li><%= link_to t('page.new', model: t('activerecord.models.create')), new_create_path(work_id: work.id) -%></li>
     <%- end -%>
   </ul>
 </div>

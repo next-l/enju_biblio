@@ -1,8 +1,6 @@
 class AgentMerge < ApplicationRecord
   belongs_to :agent
   belongs_to :agent_merge_list
-  validates :agent, :agent_merge_list, presence: true
-  validates_associated :agent, :agent_merge_list
 
   paginates_per 10
 end

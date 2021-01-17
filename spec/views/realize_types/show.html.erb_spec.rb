@@ -1,13 +1,9 @@
 require 'rails_helper'
 
 describe "realize_types/show" do
+  fixtures :all
   before(:each) do
-    @realize_type = assign(:realize_type, stub_model(RealizeType,
-      name: "Name",
-      display_name: "MyText",
-      note: "MyText",
-      position: 1
-    ))
+    @realize_type = realize_types(:editor)
   end
 
   it "renders attributes in <p>" do

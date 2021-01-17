@@ -5,7 +5,7 @@ describe Item do
   fixtures :all
 
   it "should have library_url" do
-    expect(items(:item_00001).library_url).to eq "#{LibraryGroup.site_config.url}libraries/web"
+    expect(FactoryBot.create(:item, shelf: Shelf.find_by(name: 'web')).library_url).to eq "#{LibraryGroup.site_config.url}libraries/web"
   end
 end
 
