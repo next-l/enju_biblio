@@ -20,7 +20,7 @@ class AgentImportFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @agent_import_file }
       format.download {
-        send_data @agent_import_file.agent_import.download, fileename: @agent_import_file.agent_import.filename.to_s, type: 'application/octet-stream'
+        send_data @agent_import_file.attachment.download, filename: @agent_import_file.attachment.filename.to_s, type: @agent_import_file.attachment.content_type
       }
     end
   end
