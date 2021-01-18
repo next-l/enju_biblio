@@ -20,7 +20,7 @@ class ResourceExportFilesController < ApplicationController
       format.html # show.html.erb
       format.json { render json: @resource_export_file }
       format.download {
-        send_data @resource_export_file.resource_export.download, fileename: @resource_export_file.resource_export.filename.to_s, type: 'application/octet-stream'
+        send_data @resource_export_file.attachment.download, filename: @resource_export_file.attachment.filename.to_s, type: @resource_export_file.attachment.content_type
       }
     end
   end
