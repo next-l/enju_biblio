@@ -4,16 +4,10 @@ describe "series_statement_merges/index" do
   fixtures :all
 
   before(:each) do
-    assign(:series_statement_merges, Kaminari.paginate_array([
-      stub_model(SeriesStatementMerge,
-        series_statement_id: 1,
-        series_statement_merge_list_id: 1
-      ),
-      stub_model(SeriesStatementMerge,
-        series_statement_id: 1,
-        series_statement_merge_list_id: 2
-      )
-    ]).page(1))
+    2.times do
+      FactoryBot.create(:series_statement_merge)
+    end
+    assign(:series_statement_merges, SeriesStatementMerge.page(1))
   end
 
   it "renders a list of series_statement_merges" do
