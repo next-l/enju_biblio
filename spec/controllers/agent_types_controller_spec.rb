@@ -164,7 +164,9 @@ describe AgentTypesController do
     end
 
     it 'should not destroy agent_type that contains agents' do
-      delete :destroy, params: { id: agent_types(:agent_type_00001) }
+      agent_type = agent_types(:agent_type_00001)
+      agent_type.agents << FactoryBot.create(:agent)
+      delete :destroy, params: { id: agent_type.id }
       expect(response).to be_forbidden
     end
   end

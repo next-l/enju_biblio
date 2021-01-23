@@ -8,8 +8,9 @@ describe AgentsController do
   end
 
   describe 'GET index', solr: true do
-    before do
+    before(:each) do
       FactoryBot.create(:manifestation, :with_publisher)
+      FactoryBot.create(:agent, :with_librarian_required, full_name: 'Librarian1')
       Agent.reindex
     end
 
@@ -22,9 +23,10 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: 1 }
+        agent = FactoryBot.create(:agent)
+        get :index, params: { agent_id: agent.id }
         expect(response).to be_successful
-        expect(assigns(:agent)).to eq Agent.find(1)
+        expect(assigns(:agent)).to eq agent
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where('required_role_id >= 1').page(1)
       end
 
@@ -247,7 +249,7 @@ describe AgentsController do
       login_fixture_admin
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = FactoryBot.create(:agent)
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
@@ -257,7 +259,7 @@ describe AgentsController do
       login_fixture_librarian
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = FactoryBot.create(:agent)
         get :edit, params: { id: agent.id }
         expect(assigns(:agent)).to eq(agent)
       end
@@ -282,7 +284,7 @@ describe AgentsController do
       login_fixture_user
 
       it 'assigns the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = FactoryBot.create(:agent)
         get :edit, params: { id: agent.id }
         expect(response).to be_forbidden
       end
@@ -300,7 +302,7 @@ describe AgentsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested agent as @agent' do
-        agent = Agent.find(1)
+        agent = FactoryBot.create(:agent)
         get :edit, params: { id: agent.id }
         expect(response).to redirect_to(new_user_session_url)
       end

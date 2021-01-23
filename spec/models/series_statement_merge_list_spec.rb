@@ -1,10 +1,9 @@
 require 'rails_helper'
 
 describe SeriesStatementMergeList do
-  fixtures :all
-
   it "should merge series_statement" do
-    series_statement_merge_list = series_statement_merge_lists(:series_statement_merge_list_00001)
+    series_statement_merge_list = FactoryBot.create(:series_statement_merge_list)
+    expect(series_statement_merge_list).to be_valid
   end
 end
 

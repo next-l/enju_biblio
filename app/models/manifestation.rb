@@ -78,11 +78,7 @@ class Manifestation < ApplicationRecord
       isbn_characters
     end
     string :issn, multiple: true do
-      if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
-      else
-        identifier_contents(:issn)
-      end
+      issn_records.pluck(:body)
     end
     string :lccn, multiple: true do
       identifier_contents(:lccn)
@@ -182,11 +178,7 @@ class Manifestation < ApplicationRecord
       isbn_characters
     end
     text :issn do # 前方一致検索のためtext指定を追加
-      if series_statements.exists?
-        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
-      else
-        identifier_contents(:issn)
-      end
+      issn_records.pluck(:body)
     end
     text :identifier do
       other_identifiers = identifiers.joins(:identifier_type).merge(IdentifierType.where.not(name: [:isbn, :issn]))
@@ -501,16 +493,7 @@ class Manifestation < ApplicationRecord
   end
 
   def identifier_contents(name)
-    if Rails::VERSION::MAJOR > 3
-      identifiers.id_type(name).order(:position).pluck(:body)
-    else
-      identifier_type = IdentifierType.find_by(name: name)
-      if identifier_type
-        identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
-      else
-        []
-      end
-    end
+    identifiers.id_type(name).order(:position).pluck(:body)
   end
 
   # CSVのヘッダ

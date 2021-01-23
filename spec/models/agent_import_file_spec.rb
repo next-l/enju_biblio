@@ -54,12 +54,11 @@ describe AgentImportFile do
       )
       file.attachment.attach(io: File.new("#{Rails.root}/../fixtures/files/agent_update_file.tsv"), filename: 'attachment.txt')
       file.modify
-      agent_1 = Agent.find(1)
-      agent_1.full_name.should eq 'たなべこうすけ'
-      agent_1.address_1.should eq '東京都'
-      agent_2 = Agent.find(2)
-      agent_2.full_name.should eq '田辺浩介'
-      agent_2.address_1.should eq '岡山県'
+      agents = Agent.order(:created_at)
+      agents[0].full_name.should eq 'たなべこうすけ'
+      agents[0].address_1.should eq '東京都'
+      agents[1].full_name.should eq '田辺浩介'
+      agents[1].address_1.should eq '岡山県'
     end
   end
 
