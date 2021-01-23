@@ -13,4 +13,8 @@ module AgentsHelper
     end
     link.html_safe
   end
+
+  def filtered_params
+    params.permit([:view, :format, :page, :language, :sort_by, :per_page])
+  end
 end

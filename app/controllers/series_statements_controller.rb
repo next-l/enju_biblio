@@ -133,10 +133,4 @@ class SeriesStatementsController < ApplicationController
       :series_master
     )
   end
-
-  def filtered_params
-    params.permit([:locale, :format, :page, :per_page])
-  end
-
-  helper_method :filtered_params
 end

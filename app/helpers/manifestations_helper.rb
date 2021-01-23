@@ -128,7 +128,11 @@ module ManifestationsHelper
     [ own_library, Library.find(item.shelf.library_id).position, item.shelf.position, item.id ]
   end
 
-  if defined?(EnjuBookmark)
+  def filtered_params
+    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page, :query])
+  end
+
+ if defined?(EnjuBookmark)
     def link_to_bookmark(manifestation)
       if manifestation.bookmarked?(current_user)
         link_to t('bookmark.remove_from_my_bookmark'), bookmark_path(Bookmark.where(user_id: current_user.id, manifestation_id: manifestation.id).first), confirm: t('page.are_you_sure'), method: :delete
