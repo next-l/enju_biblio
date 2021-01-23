@@ -21,8 +21,9 @@ describe AcceptsController do
 
       describe 'When basket_id is specified' do
         it 'assigns all accepts as @accepts' do
-          get :index, params: { basket_id: 10 }
-          assigns(:accepts).should eq baskets(:basket_00010).accepts.order('accepts.created_at DESC').page(1)
+          accept = FactoryBot.create(:accept, basket: FactoryBot.create(:basket, user: users(:admin)))
+          get :index, params: { basket_id: accept.basket_id }
+          assigns(:accepts).should eq accept.basket.accepts.order('accepts.created_at DESC').page(1)
           response.should be_successful
         end
       end
@@ -39,8 +40,9 @@ describe AcceptsController do
 
       describe 'When basket_id is specified' do
         it 'assigns all accepts as @accepts' do
-          get :index, params: { basket_id: 9 }
-          assigns(:accepts).should eq baskets(:basket_00009).accepts.order('accepts.created_at DESC').page(1)
+          accept = FactoryBot.create(:accept, basket: FactoryBot.create(:basket, user: users(:librarian1)))
+          get :index, params: { basket_id: accept.basket_id }
+          assigns(:accepts).should eq accept.basket.accepts.order('accepts.created_at DESC').page(1)
           response.should be_successful
         end
       end
@@ -171,7 +173,8 @@ describe AcceptsController do
       end
 
       it 'should not create accept without item_id' do
-        post :create, params: { accept: { item_identifier: nil }, basket_id: 9 }
+        basket = FactoryBot.create(:basket, user: users(:admin))
+        post :create, params: { accept: { item_identifier: nil }, basket_id: basket.id }
         assigns(:accept).should_not be_valid
         response.should be_successful
       end
