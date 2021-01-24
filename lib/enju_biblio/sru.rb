@@ -54,8 +54,10 @@ class Sru
   def search
     sunspot_query = @cql.to_sunspot
     search = Sunspot.new_search(Manifestation)
+    role = user.try(:role) || Role.default_role
     search.build do
       fulltext sunspot_query
+      with(:required_role_id).less_than_or_equal_to role.id
       paginate page: 1, per_page: 10000
     end
     @manifestations = search.execute!.results
