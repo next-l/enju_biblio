@@ -54,9 +54,13 @@ class Openurl
   # 検索
   def search
     search = Sunspot.new_search(Manifestation)
+    role = Role.default_role
     @query_text = build_query
     query = @query_text
-    search.build{ fulltext query }
+    search.build do
+      fulltext query
+      with(:required_role_id).less_than_or_equal_to role.id
+    end
     search.execute!.results
   end
 
