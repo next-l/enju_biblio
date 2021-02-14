@@ -54,7 +54,7 @@ class Sru
   def search
     sunspot_query = @cql.to_sunspot
     search = Sunspot.new_search(Manifestation)
-    role = Role.default_role
+    role = Role.default
     search.build do
       fulltext sunspot_query
       with(:required_role_id).less_than_or_equal_to role.id

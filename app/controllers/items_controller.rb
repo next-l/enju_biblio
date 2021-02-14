@@ -77,7 +77,7 @@ class ItemsController < ApplicationController
         order_by(:created_at, :desc)
       end
 
-      role = current_user.try(:role) || Role.default_role
+      role = current_user.try(:role) || Role.default
       search.build do
         with(:required_role_id).less_than_or_equal_to role.id
       end
