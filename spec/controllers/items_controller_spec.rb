@@ -61,10 +61,10 @@ describe ItemsController do
         it 'should not assign unnecessary attributes' do
           get :index, format: :json
           expect(response.body).to match /manifestation_id/
-          expect(response.body).to match /price/
-          expect(response.body).to match /memo/
-          expect(response.body).to match /bookstore_id/
-          expect(response.body).to match /budget_type_id/
+          expect(response.body).not_to match /price/
+          expect(response.body).not_to match /memo/
+          expect(response.body).not_to match /bookstore_id/
+          expect(response.body).not_to match /budget_type_id/
         end
       end
     end
