@@ -210,7 +210,7 @@ class ManifestationsController < ApplicationController
         facet :subject_ids if defined?(EnjuSubject)
         paginate page: page.to_i, per_page: per_page
       end
-      end
+
       search_result = search.execute
       if @count[:query_result] > @max_number_of_results
         max_count = @max_number_of_results
