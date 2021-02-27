@@ -51,6 +51,17 @@ class ItemsController < ApplicationController
 
     unless @inventory_file
       search = Sunspot.new_search(Item)
+      selected_attributes = [
+        :id, :item_identifier, :call_number, :manifestation_id, :acquired_at,
+        :binding_item_identifier, :binding_call_number, :binded_at,
+        :include_supplements, :url, :note,
+        :circulation_status_id, :shelf_id,
+        :created_at, :updated_at
+      ]
+      selected_attributes += [
+        :memo, :required_role_id, :budget_type_id, :bookstore_id, :price
+      ] if current_user.try(:has_role?, 'Librarian')
+      search.data_accessor_for(Item).select = selected_attributes
       set_role_query(current_user, search)
 
       @query = query.dup
