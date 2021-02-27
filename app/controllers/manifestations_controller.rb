@@ -33,25 +33,14 @@ class ManifestationsController < ApplicationController
         per_page = 65534
       end
 
-      if params[:format] == 'sru'
-        if params[:operation] == 'searchRetrieve'
-          sru = Sru.new(params)
-          query = sru.cql.to_sunspot
-          sort = sru.sort_by
-        else
-          render template: 'manifestations/explain', layout: false
-          return
-        end
+      if params[:api] == 'openurl'
+        openurl = Openurl.new(params)
+        @manifestations = openurl.search
+        query = openurl.query_text
+        sort = set_search_result_order(params[:sort_by], params[:order])
       else
-        if params[:api] == 'openurl'
-          openurl = Openurl.new(params)
-          @manifestations = openurl.search
-          query = openurl.query_text
-          sort = set_search_result_order(params[:sort_by], params[:order])
-        else
-          query = make_query(params[:query], params)
-          sort = set_search_result_order(params[:sort_by], params[:order])
-        end
+        query = make_query(params[:query], params)
+        sort = set_search_result_order(params[:sort_by], params[:order])
       end
 
       # 絞り込みを行わない状態のクエリ
@@ -191,36 +180,36 @@ class ManifestationsController < ApplicationController
       else
         per_page = Manifestation.default_per_page
       end
-      if params[:format] == 'sru'
-        #search.query.start_record(params[:startRecord] || 1, params[:maximumRecords] || 200)
-      else
-        pub_dates = parse_pub_date(params)
-        pub_date_range = {}
-        if pub_dates[:from] == '*'
-          pub_date_range[:from] = 0
-        else
-          pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
-        end
-        if pub_dates[:until] == '*'
-          pub_date_range[:until] = 10000
-        else
-          pub_date_range[:until] = Time.zone.parse(pub_dates[:until]).year
-        end
-        if params[:pub_year_range_interval]
-          pub_year_range_interval = params[:pub_year_range_interval].to_i
-        else
-          pub_year_range_interval = @library_group.pub_year_facet_range_interval || 10
-        end
 
-        search.build do
-          facet :reservable if defined?(EnjuCirculation)
-          facet :carrier_type
-          facet :library
-          facet :language
-          facet :pub_year, range: pub_date_range[:from]..pub_date_range[:until], range_interval: pub_year_range_interval
-          facet :subject_ids if defined?(EnjuSubject)
-          paginate page: page.to_i, per_page: per_page
-        end
+      pub_dates = parse_pub_date(params)
+      pub_date_range = {}
+
+      if pub_dates[:from] == '*'
+        pub_date_range[:from] = 0
+      else
+        pub_date_range[:from] = Time.zone.parse(pub_dates[:from]).year
+      end
+      if pub_dates[:until] == '*'
+        pub_date_range[:until] = 10000
+      else
+        pub_date_range[:until] = Time.zone.parse(pub_dates[:until]).year
+      end
+
+      if params[:pub_year_range_interval]
+        pub_year_range_interval = params[:pub_year_range_interval].to_i
+      else
+        pub_year_range_interval = @library_group.pub_year_facet_range_interval || 10
+      end
+
+      search.build do
+        facet :reservable if defined?(EnjuCirculation)
+        facet :carrier_type
+        facet :library
+        facet :language
+        facet :pub_year, range: pub_date_range[:from]..pub_date_range[:until], range_interval: pub_year_range_interval
+        facet :subject_ids if defined?(EnjuSubject)
+        paginate page: page.to_i, per_page: per_page
+      end
       end
       search_result = search.execute
       if @count[:query_result] > @max_number_of_results
@@ -261,7 +250,6 @@ class ManifestationsController < ApplicationController
       format.html
       format.html.phone
       format.xml  { render xml: @manifestations }
-      format.sru  { render layout: false }
       format.rss  { render layout: false }
       format.txt  { render layout: false }
       format.rdf  { render layout: false }
