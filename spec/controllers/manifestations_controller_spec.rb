@@ -67,25 +67,6 @@ describe ManifestationsController do
         expect(response).to render_template('manifestations/index')
       end
 
-      it 'assigns all manifestations as @manifestations in sru format without operation' do
-        get :index, format: 'sru'
-        assert_response :success
-        expect(assigns(:manifestations)).to be_nil
-        expect(response).to render_template('manifestations/explain')
-      end
-
-      it 'assigns all manifestations as @manifestations in sru format with operation' do
-        get :index, params: { format: 'sru', operation: 'searchRetrieve', query: 'ruby' }
-        expect(assigns(:manifestations)).to_not be_nil
-        expect(response).to render_template('manifestations/index')
-      end
-
-      it 'assigns all manifestations as @manifestations in sru format with operation and title' do
-        get :index, params: { format: 'sru', query: 'title=ruby', operation: 'searchRetrieve' }
-        expect(assigns(:manifestations)).to_not be_nil
-        expect(response).to render_template('manifestations/index')
-      end
-
       it 'assigns all manifestations as @manifestations in openurl' do
         get :index, params: { api: 'openurl', title: 'ruby' }
         expect(assigns(:manifestations)).to_not be_nil

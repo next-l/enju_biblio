@@ -79,6 +79,9 @@ describe Manifestation, solr: true do
     #  #manifestation.issue_number.should eq 3
     #  #manifestation.volume_number.should eq 1
     # end
+    it "should_get_number_of_pages" do
+      manifestations(:manifestation_00001).number_of_pages.should eq 100
+    end
   end
 
   describe 'OpenURL' do
@@ -183,88 +186,6 @@ describe Manifestation, solr: true do
       lambda{Openurl.new({isbn: "12345678901234"})}.should raise_error(OpenurlQuerySyntaxError)
       lambda{Openurl.new({issn: "1234abcd"})}.should raise_error(OpenurlQuerySyntaxError)
       lambda{Openurl.new({aufirst: "テスト 名称"})}.should raise_error(OpenurlQuerySyntaxError)
-    end
-  end
-
-  describe 'SRU' do
-    before(:each) do
-      5.times do |i|
-        FactoryBot.create(:manifestation, original_title: "Rubyプログラミング", pub_date: "#{i + 1998}-#{i + 5}-01")
-      end
-      3.times do |i|
-        FactoryBot.create(:manifestation, original_title: "Awkプログラミング", pub_date: "#{i + 2004}-#{i + 5}-01")
-      end
-      2.times do |i|
-        FactoryBot.create(:manifestation, original_title: "Sedプログラミング", pub_date: "#{i + 2007}-#{i + 5}-01")
-      end
-      FactoryBot.create(:manifestation, original_title: "awk sed").creators << FactoryBot.create(:agent, full_name: 'テスト用出版社')
-
-      Manifestation.reindex
-    end
-
-    it "should search in sru" do
-      sru = Sru.new({query: "title=Ruby"})
-      sru.search
-      sru.manifestations.size.should eq 5
-      sru.manifestations.first.titles.first.should eq 'Rubyプログラミング'
-      sru = Sru.new({query: "title=^ruby"})
-      sru.search
-      sru.manifestations.size.should eq 5
-      sru = Sru.new({query: 'title ALL "awk sed"'})
-      sru.search
-      sru.manifestations.size.should eq 1
-      # sru.manifestations.collect{|m| m.id}.should eq [184, 116]
-      sru = Sru.new({query: 'title ANY "ruby awk sed"'})
-      sru.search
-      sru.manifestations.size.should eq 11
-      sru = Sru.new({query: 'isbn=9784756137470'})
-      sru.search
-      # sru.manifestations.first.id.should eq 114
-      sru = Sru.new({query: "creator=テスト用出版社"})
-      sru.search
-      sru.manifestations.size.should eq 1
-    end
-
-    it "should search date in sru" do
-      sru = Sru.new({query: "from = 1999-09 AND until = 2000-11-01"})
-      sru.search
-      sru.manifestations.size.should eq 1
-      # sru.manifestations.first.manifestation_identifier.should eq 120
-      sru = Sru.new({query: "from = 1993-02-24"})
-      sru.search
-      sru.manifestations.size.should eq 10
-      sru = Sru.new({query: "until = 2004-08-06"})
-      sru.search
-      sru.manifestations.size.should eq 6
-    end
-
-    it "should accept sort_by in sru" do
-      sru = Sru.new({query: "title=Ruby"})
-      sru.sort_by.should eq({sort_by: 'created_at', order: 'desc'})
-      sru = Sru.new({query: 'title=Ruby AND sortBy="title/sort.ascending"', sortKeys: 'creator,0', version: '1.2'})
-      sru.sort_by.should eq({sort_by: 'sort_title', order: 'asc'})
-      sru = Sru.new({query: 'title=Ruby AND sortBy="title/sort.ascending"', sortKeys: 'creator,0', version: '1.1'})
-      sru.sort_by.should eq({sort_by: 'creator', order: 'desc'})
-      sru = Sru.new({query: 'title=Ruby AND sortBy="title/sort.ascending"', sortKeys: 'creator,1', version: '1.1'})
-      sru.sort_by.should eq({sort_by: 'creator', order: 'asc'})
-      sru = Sru.new({query: 'title=Ruby AND sortBy="title'})
-      sru.sort_by.should eq({sort_by: 'sort_title', order: 'asc'})
-      # TODO ソート基準が入手しやすさの場合の処理
-    end
-
-    it "should accept ranges in sru" do
-      sru = Sru.new({query: "from = 2002-02-24 AND until = 2003-08-06 AND title=プログラミング"})
-      sru.search
-      sru.manifestations.size.should eq 1
-      sru = Sru.new({query: "until = 2000 AND title=プログラミング"})
-      sru.search
-      sru.manifestations.size.should eq 2
-      sru = Sru.new({query: "from = 2006 AND title=プログラミング"})
-      sru.search
-      sru.manifestations.size.should eq 3
-      sru = Sru.new({query: "from = 2007 OR title=awk"})
-      sru.search
-      sru.manifestations.size.should eq 6
     end
   end
 
