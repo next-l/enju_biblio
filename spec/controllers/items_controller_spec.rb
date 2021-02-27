@@ -46,6 +46,18 @@ describe ItemsController do
         expect(assigns(:items)).to_not be_nil
         expect(assigns(:items).count).to eq 1
       end
+
+      describe 'in JSON response' do
+        render_views
+        it 'should not assign unnecessary attributes' do
+          get :index, format: :json
+          expect(response.body).to match /manifestation_id/
+          expect(response.body).to match /price/
+          expect(response.body).to match /memo/
+          expect(response.body).to match /bookstore_id/
+          expect(response.body).to match /budget_type_id/
+        end
+      end
     end
 
     describe 'When logged in as User' do
@@ -54,6 +66,18 @@ describe ItemsController do
       it 'assigns all items as @items' do
         get :index
         expect(assigns(:items)).to_not be_nil
+      end
+
+      describe 'in JSON response' do
+        render_views
+        it 'should not assign unnecessary attributes' do
+          get :index, format: :json
+          expect(response.body).to match /manifestation_id/
+          expect(response.body).not_to match /price/
+          expect(response.body).not_to match /memo/
+          expect(response.body).not_to match /bookstore_id/
+          expect(response.body).not_to match /budget_type_id/
+        end
       end
     end
 
@@ -82,6 +106,18 @@ describe ItemsController do
         expect(response).to be_successful
         assigns(:shelf).should eq Shelf.find(1)
         expect(assigns(:items)).to eq assigns(:shelf).items.order('created_at DESC').page(1)
+      end
+
+      describe 'in JSON response' do
+        render_views
+        it 'should not assign unnecessary attributes' do
+          get :index, format: :json
+          expect(response.body).to match /manifestation_id/
+          expect(response.body).not_to match /price/
+          expect(response.body).not_to match /memo/
+          expect(response.body).not_to match /bookstore_id/
+          expect(response.body).not_to match /budget_type_id/
+        end
       end
     end
   end
