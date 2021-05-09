@@ -62,7 +62,7 @@ class AgentsController < ApplicationController
       end
     end
 
-    role = current_user.try(:role) || Role.default_role
+    role = current_user.try(:role) || Role.default
     search.build do
       with(:required_role_id).less_than_or_equal_to role.id
     end
@@ -101,7 +101,7 @@ class AgentsController < ApplicationController
     end
 
     agent = @agent
-    role = current_user.try(:role) || Role.default_role
+    role = current_user.try(:role) || Role.default
     @works = Manifestation.search do
       with(:creator_ids).equal_to agent.id
       with(:required_role_id).less_than_or_equal_to role.id
