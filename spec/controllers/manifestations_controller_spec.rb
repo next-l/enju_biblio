@@ -254,12 +254,16 @@ describe ManifestationsController do
   end
 
   describe 'GET show' do
+    before(:each) do
+      manifestation_1 = FactoryBot.create(:manifestation)
+    end
+
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: 1 }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        get :show, params: { id: manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
       end
     end
 
@@ -267,8 +271,8 @@ describe ManifestationsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: 1 }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        get :show, params: { id: manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
       end
 
       it 'should show manifestation with agent who does not produce it' do
@@ -288,8 +292,8 @@ describe ManifestationsController do
       login_fixture_user
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: 1 }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        get :show, params: { id: manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
       end
 
       it 'should send manifestation detail email' do
@@ -305,8 +309,8 @@ describe ManifestationsController do
 
     describe 'When not logged in' do
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: 1 }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(1))
+        get :show, params: { id: manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
       end
 
       it 'guest should show manifestation mods template' do
@@ -553,7 +557,7 @@ describe ManifestationsController do
         end
 
         it 'accepts an attachment file' do
-          post :create, params: { manifestation: @attrs.merge(attachment: fixture_file_upload('/../../examples/resource_import_file_sample1.tsv', 'text/csv')) }
+          post :create, params: { manifestation: @attrs.merge(attachment: fixture_file_upload('resource_import_file_sample1.tsv', 'text/csv')) }
           expect(assigns(:manifestation)).to be_valid
         end
 
