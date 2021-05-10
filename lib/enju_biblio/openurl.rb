@@ -54,7 +54,7 @@ class Openurl
   # 検索
   def search
     search = Sunspot.new_search(Manifestation)
-    role = Role.default_role
+    role = Role.default
     @query_text = build_query
     query = @query_text
     search.build do

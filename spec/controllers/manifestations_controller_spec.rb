@@ -255,15 +255,15 @@ describe ManifestationsController do
 
   describe 'GET show' do
     before(:each) do
-      manifestation_1 = FactoryBot.create(:manifestation)
+      @manifestation_1 = FactoryBot.create(:manifestation)
     end
 
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestation_1.id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
+        get :show, params: { id: @manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(@manifestation_1.id))
       end
     end
 
@@ -271,8 +271,8 @@ describe ManifestationsController do
       login_fixture_librarian
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestation_1.id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
+        get :show, params: { id: @manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(@manifestation_1.id))
       end
 
       it 'should show manifestation with agent who does not produce it' do
@@ -292,8 +292,8 @@ describe ManifestationsController do
       login_fixture_user
 
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestation_1.id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
+        get :show, params: { id: @manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(@manifestation_1.id))
       end
 
       it 'should send manifestation detail email' do
@@ -309,8 +309,8 @@ describe ManifestationsController do
 
     describe 'When not logged in' do
       it 'assigns the requested manifestation as @manifestation' do
-        get :show, params: { id: manifestation_1.id }
-        expect(assigns(:manifestation)).to eq(Manifestation.find(manifestation_1.id))
+        get :show, params: { id: @manifestation_1.id }
+        expect(assigns(:manifestation)).to eq(Manifestation.find(@manifestation_1.id))
       end
 
       it 'guest should show manifestation mods template' do
