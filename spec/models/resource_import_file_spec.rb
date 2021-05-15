@@ -206,7 +206,7 @@ describe ResourceImportFile do
     describe "when it is written in shift_jis" do
       before(:each) do
         @file = ResourceImportFile.create!(
-          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv"),
+          resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample2.tsv"),
           user: users(:admin)
         )
       end

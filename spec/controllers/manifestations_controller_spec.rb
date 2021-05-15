@@ -105,7 +105,7 @@ describe ManifestationsController do
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: 1 }
+        get :index, params: { manifestation_id: @manifestation_1.id }
         expect(response).to be_successful
         expect(assigns(:manifestation)).to eq Manifestation.find(1)
         assigns(:manifestations).collect(&:id).should eq assigns(:manifestation).derived_manifestations.collect(&:id)
@@ -178,7 +178,7 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with NDC', solr: true do
-        classification = FactoryBot.create(:classification, category: '007.3', classification_type_id: 1)
+        classification = FactoryBot.create(:classification, category: '007.3', classification_type_id: @manifestation_1.id)
         Manifestation.first.classifications << classification
         get :index, params: { classification: '007', classification_type: 1 }
         expect(response).to be_successful
@@ -297,7 +297,7 @@ describe ManifestationsController do
       end
 
       it 'should send manifestation detail email' do
-        get :show, params: { id: 1, mode: 'send_email' }
+        get :show, params: { id: @manifestation_1.id, mode: 'send_email' }
         expect(response).to redirect_to manifestation_url(assigns(:manifestation))
       end
 
@@ -326,24 +326,24 @@ describe ManifestationsController do
       end
 
       it 'should show manifestation with holding' do
-        get :show, params: { id: 1, mode: 'holding' }
+        get :show, params: { id: @manifestation_1.id, mode: 'holding' }
         expect(response).to be_successful
       end
 
       it 'should show manifestation with show_creators' do
-        get :show, params: { id: 1, mode: 'show_creators' }
+        get :show, params: { id: @manifestation_1.id, mode: 'show_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_successful
       end
 
       it 'should show manifestation with show_all_creators' do
-        get :show, params: { id: 1, mode: 'show_all_creators' }
+        get :show, params: { id: @manifestation_1.id, mode: 'show_all_creators' }
         expect(response).to render_template('manifestations/_show_creators')
         expect(response).to be_successful
       end
 
       it "should not send manifestation's detail email" do
-        get :show, params: { id: 1, mode: 'send_email' }
+        get :show, params: { id: @manifestation_1.id, mode: 'send_email' }
         expect(response).to redirect_to new_user_session_url
       end
     end
@@ -364,7 +364,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with expression_id' do
-        get :new, params: { expression_id: 1 }
+        get :new, params: { expression_id: @manifestation_1.id }
         expect(response).to be_successful
       end
     end
@@ -383,7 +383,7 @@ describe ManifestationsController do
       end
 
       it 'should get new template with expression_id' do
-        get :new, params: { expression_id: 1 }
+        get :new, params: { expression_id: @manifestation_1.id }
         expect(response).to be_successful
       end
 
@@ -818,7 +818,7 @@ describe ManifestationsController do
       end
 
       it 'should not destroy manifestation contains items' do
-        delete :destroy, params: { id: 1 }
+        delete :destroy, params: { id: @manifestation.id }
         expect(response).to be_forbidden
       end
 

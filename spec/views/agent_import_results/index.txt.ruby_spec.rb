@@ -5,7 +5,7 @@ describe "agent_import_results/index.txt.ruby" do
 
   before(:each) do
     file = AgentImportFile.create(
-      agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"),
+      agent_import: File.new("#{Rails.root}/../fixtures/files/agent_import_file_sample1.tsv"),
       user: users(:admin)
     )
     file.import_start
