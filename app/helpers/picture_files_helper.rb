@@ -10,6 +10,6 @@ module PictureFilesHelper
         return image_tag picture_file_path(picture_file, format: :download, size: :thumb), alt: "*", width: 100
       end
     end
-    image_tag picture_file_path(picture_file, format: :download, size: :original), alt: "*", width: picture_file.picture_width, height: picture_file.picture_height
+    image_tag picture_file_path(picture_file, format: :download, size: :original), alt: "*"
   end
 end
