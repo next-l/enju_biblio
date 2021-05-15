@@ -3,7 +3,7 @@ class OpenurlController < ApplicationController
 
   def index
     if params['rft.isbn']
-      redirect_to manifestations(query: "isbn_sm:#{params['rft.isbn']}")
+      redirect_to manifestations_url(query: "isbn_sm:#{params['rft.isbn']}")
     end
   end
 end
