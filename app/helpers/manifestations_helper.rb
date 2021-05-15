@@ -71,10 +71,10 @@ module ManifestationsHelper
     current = true if languages.include?(language.name)
     if current
       content_tag :strong do
-        link_to("#{language.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, language: language.name, view: nil, only_path: true)))
+        link_to("#{language.display_name} (" + facet.count.to_s + ")", url_for(request.params.merge(page: nil, language: language.name, view: nil, only_path: true)))
       end
     else
-      link_to("#{language.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, language: language.name, view: nil, only_path: true)))
+      link_to("#{language.display_name} (" + facet.count.to_s + ")", url_for(request.params.merge(page: nil, language: language.name, view: nil, only_path: true)))
     end
   end
 
@@ -86,10 +86,10 @@ module ManifestationsHelper
     content_tag :li do
       if current
         content_tag :strong do
-          link_to("#{library.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
+          link_to("#{library.display_name} (" + facet.count.to_s + ")", url_for(request.params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
         end
       else
-        link_to("#{library.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
+        link_to("#{library.display_name} (" + facet.count.to_s + ")", url_for(request.params.merge(page: nil, library: (current_libraries << library.name).uniq.join(' '), view: nil, only_path: true)))
       end
     end
   end
@@ -102,10 +102,10 @@ module ManifestationsHelper
       current = true if params[:carrier_type] == carrier_type.name
       if current
         content_tag :strong do
-          link_to("#{carrier_type.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
+          link_to("#{carrier_type.display_name} (" + facet.count.to_s + ")", url_for(request.params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
         end
       else
-        link_to("#{carrier_type.display_name} (" + facet.count.to_s + ")", url_for(filtered_params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
+        link_to("#{carrier_type.display_name} (" + facet.count.to_s + ")", url_for(request.params.merge(carrier_type: carrier_type.name, page: nil, view: nil, only_path: true)))
       end
     end
   end
@@ -115,10 +115,10 @@ module ManifestationsHelper
     current = true if facet.value.first.to_i == pub_date_from.to_i and facet.value.last.to_i - 1 == pub_date_until.to_i
     if current
       content_tag :strong do
-        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(filtered_params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
+        link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(request.params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
       end
     else
-      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(filtered_params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
+      link_to("#{facet.value.first.to_i} - #{facet.value.last.to_i - 1} (" + facet.count.to_s + ")", url_for(request.params.merge(pub_date_from: facet.value.first.to_i, pub_date_until: facet.value.last.to_i - 1, page: nil, view: nil, only_path: true)))
     end
   end
 
@@ -126,10 +126,6 @@ module ManifestationsHelper
     own_library = 2
     own_library = 1 if signed_in? and current_user.profile.library_id == item.shelf.library_id
     [ own_library, Library.find(item.shelf.library_id).position, item.shelf.position, item.id ]
-  end
-
-  def filtered_params
-    params.permit([:view, :format, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page, :query])
   end
 
  if defined?(EnjuBookmark)
