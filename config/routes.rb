@@ -71,4 +71,6 @@ Rails.application.routes.draw do
 
   get '/isbn/:isbn_id' => 'manifestations#index'
   get '/page/advanced_search' => 'page#advanced_search'
+
+  get '/openurl' => 'openurl#index'
 end
