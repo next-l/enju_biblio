@@ -9,7 +9,6 @@ describe AgentsController do
 
   describe 'GET index', solr: true do
     before do
-      @produce = FactoryBot.create(:produce)
       Agent.reindex
     end
 
@@ -22,9 +21,9 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: @produce.agent.id }
+        get :index, params: { agent_id: 1 }
         expect(response).to be_successful
-        expect(assigns(:agent)).to eq @produce.agent
+        expect(assigns(:agent)).to eq Agent.find(1)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where('required_role_id >= 1').page(1)
       end
 
@@ -70,15 +69,15 @@ describe AgentsController do
       end
 
       it 'should get index with agent_id' do
-        get :index, params: { agent_id: @produce.agent.id }
+        get :index, params: { agent_id: 1 }
         expect(response).to be_successful
-        expect(assigns(:agent)).to eq @produce.agent
+        expect(assigns(:agent)).to eq Agent.find(1)
         expect(assigns(:agents)).to eq assigns(:agent).derived_agents.where(required_role_id: 1).page(1)
       end
 
       it 'should get index with manifestation_id' do
-        get :index, params: { manifestation_id: @produce.manifestation.id }
-        assigns(:manifestation).should eq @produce.manifestation
+        get :index, params: { manifestation_id: 1 }
+        assigns(:manifestation).should eq Manifestation.find(1)
         expect(assigns(:agents)).to eq assigns(:manifestation).publishers.where(required_role_id: 1).page(1)
       end
 
@@ -228,16 +227,13 @@ describe AgentsController do
   end
 
   describe 'GET edit' do
-    before(:each) do
-      @agent = FactoryBot.create(:agent)
-    end
-
     describe 'When logged in as Administrator' do
       login_fixture_admin
 
       it 'assigns the requested agent as @agent' do
-        get :edit, params: { id: @agent.id }
-        expect(assigns(:agent)).to eq(@agent)
+        agent = Agent.find(1)
+        get :edit, params: { id: agent.id }
+        expect(assigns(:agent)).to eq(agent)
       end
     end
 
@@ -245,8 +241,9 @@ describe AgentsController do
       login_fixture_librarian
 
       it 'assigns the requested agent as @agent' do
-        get :edit, params: { id: @agent.id }
-        expect(assigns(:agent)).to eq(@agent)
+        agent = Agent.find(1)
+        get :edit, params: { id: agent.id }
+        expect(assigns(:agent)).to eq(agent)
       end
 
       # it "should edit agent when its required_role is 'User'" do
@@ -269,7 +266,8 @@ describe AgentsController do
       login_fixture_user
 
       it 'assigns the requested agent as @agent' do
-        get :edit, params: { id: @agent.id }
+        agent = Agent.find(1)
+        get :edit, params: { id: agent.id }
         expect(response).to be_forbidden
       end
 
@@ -286,7 +284,8 @@ describe AgentsController do
 
     describe 'When not logged in' do
       it 'should not assign the requested agent as @agent' do
-        get :edit, params: { id: @agent.id }
+        agent = Agent.find(1)
+        get :edit, params: { id: agent.id }
         expect(response).to redirect_to(new_user_session_url)
       end
     end

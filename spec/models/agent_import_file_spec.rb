@@ -5,7 +5,7 @@ describe AgentImportFile do
 
   describe "when its mode is 'create'" do
     before(:each) do
-      @file = AgentImportFile.create! agent_import: File.new("#{Rails.root}/../fixtures/files/agent_import_file_sample1.tsv"), user: users(:admin)
+      @file = AgentImportFile.create! agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv"), user: users(:admin)
     end
 
     it "should be imported" do
@@ -28,7 +28,7 @@ describe AgentImportFile do
   describe "when it is written in shift_jis" do
     before(:each) do
       @file = AgentImportFile.create!(
-        agent_import: File.new("#{Rails.root}/../fixtures/files/agent_import_file_sample3.tsv"),
+        agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample3.tsv"),
         user: users(:admin)
       )
     end
@@ -51,7 +51,7 @@ describe AgentImportFile do
   describe "when its mode is 'update'" do
     it "should update users" do
       file = AgentImportFile.create!(
-        agent_import: File.new("#{Rails.root}/../fixtures/files/agent_update_file.tsv"),
+        agent_import: File.new("#{Rails.root}/../../examples/agent_update_file.tsv"),
         user: users(:admin)
       )
       file.modify
@@ -68,7 +68,7 @@ describe AgentImportFile do
     it "should remove users" do
       old_count = Agent.count
       file = AgentImportFile.create!(
-        agent_import: File.new("#{Rails.root}/../fixtures/files/agent_delete_file.tsv"),
+        agent_import: File.new("#{Rails.root}/../../examples/agent_delete_file.tsv"),
         user: users(:admin)
       )
       file.remove
@@ -77,7 +77,7 @@ describe AgentImportFile do
   end
 
   it "should import in background" do
-    file = AgentImportFile.create agent_import: File.new("#{Rails.root}/../fixtures/files/agent_import_file_sample1.tsv")
+    file = AgentImportFile.create agent_import: File.new("#{Rails.root}/../../examples/agent_import_file_sample1.tsv")
     file.user = users(:admin)
     file.save
     AgentImportFileJob.perform_later(file).should be_truthy
@@ -88,7 +88,7 @@ end
 #
 # Table name: agent_import_files
 #
-#  id                        :bigint           not null, primary key
+#  id                        :integer          not null, primary key
 #  parent_id                 :integer
 #  content_type              :string
 #  size                      :integer
@@ -99,8 +99,8 @@ end
 #  agent_import_content_type :string
 #  agent_import_file_size    :integer
 #  agent_import_updated_at   :datetime
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  created_at                :datetime
+#  updated_at                :datetime
 #  agent_import_fingerprint  :string
 #  error_message             :text
 #  edit_mode                 :string

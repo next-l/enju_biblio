@@ -1,6 +1,5 @@
 class CarrierType < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :manifestations
   if ENV['ENJU_STORAGE'] == 's3'
     has_attached_file :attachment, storage: :s3,

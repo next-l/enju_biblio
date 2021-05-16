@@ -7,9 +7,10 @@ describe ResourceImportFile do
     describe "when it is written in utf-8" do
       before(:each) do
         @file = ResourceImportFile.create(
-          resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"),
+          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
           default_shelf_id: 3,
-          user: users(:admin)
+          user: users(:admin),
+          edit_mode: 'create'
         )
       end
 
@@ -156,6 +157,16 @@ describe ResourceImportFile do
         expect(manifestation.identifier_contents(:isbn)).to include("9784840239219")
         expect(manifestation.identifier_contents(:isbn)).to include("9784043898039")
       end
+
+      it "should import custom values", vcr: true do
+        @file.import_start
+        item_10102 = Item.find_by(item_identifier: '10102')
+        expect(item_10102.manifestation.manifestation_custom_values.pluck(:value)).to eq ['カスタム項目テスト1', 'カスタム項目テスト2']
+        expect(item_10102.item_custom_values.pluck(:value)).to eq []
+        item_10103 = Item.find_by(item_identifier: '10103')
+        expect(item_10103.manifestation.manifestation_custom_values.pluck(:value)).to eq ["カスタム項目テスト1", "カスタム項目テスト2"]
+        expect(item_10103.item_custom_values.pluck(:value)).to eq ['カスタム項目テスト3', 'カスタム項目テスト4']
+      end
     end
 
     describe "ISBN import" do
@@ -206,7 +217,7 @@ describe ResourceImportFile do
     describe "when it is written in shift_jis" do
       before(:each) do
         @file = ResourceImportFile.create!(
-          resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample2.tsv"),
+          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv"),
           user: users(:admin)
         )
       end
@@ -216,15 +227,15 @@ describe ResourceImportFile do
         old_items_count = Item.count
         old_agents_count = Agent.count
         old_import_results_count = ResourceImportResult.count
-        @file.import_start.should eq({manifestation_imported: 9, item_imported: 8, manifestation_found: 5, item_found: 3, failed: 7})
+        @file.import_start.should eq({manifestation_imported: 10, item_imported: 10, manifestation_found: 6, item_found: 3, failed: 7})
         manifestation = Item.find_by(item_identifier: '11111').manifestation
         manifestation.publishers.first.full_name.should eq 'test4'
         manifestation.publishers.first.full_name_transcription.should eq 'てすと4'
         manifestation.publishers.second.full_name_transcription.should eq 'てすと5'
-        Manifestation.count.should eq old_manifestations_count + 9
-        Item.count.should eq old_items_count + 8
+        Manifestation.count.should eq old_manifestations_count + 10
+        Item.count.should eq old_items_count + 10
         Agent.count.should eq old_agents_count + 9
-        ResourceImportResult.count.should eq old_import_results_count + 21
+        ResourceImportResult.count.should eq old_import_results_count + 23
         Item.find_by(item_identifier: '10101').manifestation.creators.size.should eq 2
         Item.find_by(item_identifier: '10101').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
         Item.find_by(item_identifier: '10102').manifestation.date_of_publication.should eq Time.zone.parse('2001-01-01')
@@ -244,7 +255,7 @@ describe ResourceImportFile do
     describe "when it has only isbn" do
       before(:each) do
         @file = ResourceImportFile.create!(
-          resource_import: File.new("#{Rails.root}/../fixtures/files/isbn_sample.txt"),
+          resource_import: File.new("#{Rails.root}/../../examples/isbn_sample.txt"),
           user: users(:admin)
         )
       end
@@ -343,17 +354,20 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
   end
 
   describe "when its mode is 'update'" do
-    it "should update items", vcr: true do
-      file = ResourceImportFile.create!(
-        resource_import: File.new("#{Rails.root}/../fixtures/files/item_update_file.tsv"),
+    before(:each) do
+      @file = ResourceImportFile.create!(
+        resource_import: File.new("#{Rails.root}/../../examples/item_update_file.tsv"),
         user: users(:admin),
         edit_mode: 'update'
       )
-      file.modify
-      expect(file.resource_import_results.first).to be_truthy
-      expect(file.resource_import_results.first.body).to match /item_identifier/
+    end
+
+    it "should update items", vcr: true do
+      @file.modify
+      expect(@file.resource_import_results.first).to be_truthy
+      expect(@file.resource_import_results.first.body).to match /item_identifier/
       item_00001 = Item.find_by(item_identifier: '00001')
-      item_00001.manifestation.creators.order('agents.id').collect(&:full_name).should eq ['たなべ', 'こうすけ']
+      item_00001.manifestation.creators.order('agents.id').pluck(:full_name).should eq ['たなべ', 'こうすけ']
       item_00001.binding_item_identifier.should eq '900001'
       item_00001.binding_call_number.should eq '336|A'
       item_00001.binded_at.should eq Time.zone.parse('2014-08-16')
@@ -366,7 +380,18 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
       item_00003.include_supplements.should be_truthy
 
       Item.find_by(item_identifier: '00004').include_supplements.should be_falsy
-      Item.find_by(item_identifier: '00025').call_number.should eq "547|ヤ"
+
+      item_00025 = Item.find_by(item_identifier: '00025')
+      expect(item_00025.manifestation.original_title).to eq "テスト4"
+      expect(item_00025.manifestation.subjects.pluck(:term)).to eq ['test2', 'test3']
+      expect(item_00025.call_number).to eq "547|ヤ"
+    end
+
+    it "should update custom values", vcr: true do
+      @file.import_start
+      item_00001 = Item.find_by(item_identifier: '00001')
+      expect(item_00001.manifestation.manifestation_custom_values.pluck(:manifestation_custom_property_id, :value)).to eq [[2, "カスタム項目5"]]
+      expect(item_00001.item_custom_values.order(:item_custom_property_id).first.value).to eq "カスタム項目6"
     end
 
     # it "should update series_statement", vcr: true do
@@ -396,18 +421,18 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
     it "should remove items", vcr: true do
       old_count = Item.count
       file = ResourceImportFile.create!(
-        resource_import: File.new("#{Rails.root}/../fixtures/files/item_delete_file.tsv"),
+        resource_import: File.new("#{Rails.root}/../../examples/item_delete_file.tsv"),
         user: users(:admin),
         edit_mode: 'destroy'
       )
       file.remove
-      Item.count.should eq old_count - 11
+      Item.count.should eq old_count - 10
     end
   end
 
   it "should import in background", vcr: true do
     file = ResourceImportFile.create!(
-      resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"),
+      resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
       user: users(:admin)
     )
     ResourceImportFileJob.perform_later(file).should be_truthy
@@ -418,7 +443,7 @@ end
 #
 # Table name: resource_import_files
 #
-#  id                           :bigint           not null, primary key
+#  id                           :integer          not null, primary key
 #  parent_id                    :integer
 #  content_type                 :string
 #  size                         :integer
@@ -429,8 +454,8 @@ end
 #  resource_import_content_type :string
 #  resource_import_file_size    :integer
 #  resource_import_updated_at   :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #  edit_mode                    :string
 #  resource_import_fingerprint  :string
 #  error_message                :text

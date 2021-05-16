@@ -8,9 +8,9 @@ end
 #
 # Table name: series_statement_merges
 #
-#  id                             :bigint           not null, primary key
+#  id                             :integer          not null, primary key
 #  series_statement_id            :integer          not null
 #  series_statement_merge_list_id :integer          not null
-#  created_at                     :datetime         not null
-#  updated_at                     :datetime         not null
+#  created_at                     :datetime
+#  updated_at                     :datetime
 #

@@ -1,6 +1,5 @@
 class FormOfWork < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :works
 end
 

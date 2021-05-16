@@ -1333,7 +1333,9 @@ language_00104:
 language_00132: 
   position: 132
   name: Pali
-  display_name: Pali
+  display_name: !binary |
+    UMSBbGk=
+
   iso_639_1: pi
   iso_639_2: pli
   iso_639_3: pli
@@ -1880,20 +1882,19 @@ language_00140:
   iso_639_3: srd
   id: 140
   note: 
-  native_name: 
+  native_name:
 
 # == Schema Information
 #
 # Table name: languages
 #
-#  id           :integer         not null, primary key
-#  name         :string(255)     not null
-#  native_name  :string(255)
+#  id           :integer          not null, primary key
+#  name         :string           not null
+#  native_name  :string
 #  display_name :text
-#  iso_639_1    :string(255)
-#  iso_639_2    :string(255)
-#  iso_639_3    :string(255)
+#  iso_639_1    :string
+#  iso_639_2    :string
+#  iso_639_3    :string
 #  note         :text
 #  position     :integer
 #
-

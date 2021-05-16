@@ -314,6 +314,20 @@ describe ItemsController do
           expect(response).to render_template('new')
         end
       end
+
+      it 'should not create item without manifestation_id' do
+        lambda do
+          post :create, params: { item: { circulation_status_id: 1 } }
+        end.should raise_error(ActiveRecord::RecordNotFound)
+        expect(assigns(:item)).to_not be_valid
+        # expect(response).to be_missing
+      end
+
+      it 'should not create item already created' do
+        post :create, params: { item: { circulation_status_id: 1, item_identifier: '00001', manifestation_id: 1 } }
+        expect(assigns(:item)).to_not be_valid
+        expect(response).to be_successful
+      end
     end
 
     describe 'When logged in as Librarian' do
@@ -528,7 +542,7 @@ describe ItemsController do
 
   describe 'DELETE destroy' do
     before(:each) do
-      @item = FactoryBot.create(:item)
+      @item = items(:item_00006)
     end
 
     describe 'When logged in as Administrator' do

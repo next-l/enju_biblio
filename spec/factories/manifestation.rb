@@ -11,10 +11,4 @@ FactoryBot.define do
     f.serial{true}
     f.series_statements{[FactoryBot.create(:series_statement_serial)]}
   end
-
-  trait :with_subject do
-    after(:build) do |manifestation|
-      manifestation.subjects << FactoryBot.build(:subject)
-    end
-  end
 end

@@ -8,18 +8,19 @@ describe "items/index" do
         FactoryBot.create(:item),
       ], total_count: 1).page(1)
     )
+    facet1 = double("Facet for available on shelf")
+    allow(facet1).to receive(:count).and_return(1)
+    allow(facet1).to receive(:value).and_return("Available On Shelf")
+    @circulation_status_facet = assign(:circulation_status_facet, [facet1])
     user = FactoryBot.create(:librarian)
     allow(view).to receive(:policy) do |record|
       Pundit.policy(user, record)
     end
   end
 
-  describe "item index" do
-    it "should render index" do
-      view.stub(:filtered_params).and_return(ActionController::Parameters.new().permit)
-      render
-      expect(rendered).to have_selector "div.col"
-    end
+  it "renders a list of realizes" do
+    allow(view).to receive(:policy).and_return double(create?: true, destroy?: true)
+    render
   end
 end
 

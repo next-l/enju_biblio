@@ -13,6 +13,6 @@ class CreateEventImportFileTransitions < ActiveRecord::Migration[4.2]
     end
 
     add_index :event_import_file_transitions, :event_import_file_id
-    add_index :event_import_file_transitions, [:sort_key, :event_import_file_id], unique: true, name: "index_event_import_file_transitions_on_sort_key_and_file_id"
+    add_index :event_import_file_transitions, %i[sort_key event_import_file_id], unique: true, name: "index_event_import_file_transitions_on_sort_key_and_file_id"
   end
 end

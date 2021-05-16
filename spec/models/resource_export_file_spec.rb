@@ -26,10 +26,10 @@ describe ResourceExportFile do
     expect(columns).to include "item_price"
   end
 
-  it "should export NCID value" do
+  it "should export custom identifier's value" do
     manifestation = FactoryBot.create(:manifestation)
-    ncid = IdentifierType.find_by(name: "ncid")
-    identifier = FactoryBot.create(:identifier, identifier_type: ncid, body: "BA91833159")
+    custom = IdentifierType.find_by(name: "custom")
+    identifier = FactoryBot.create(:identifier, identifier_type: custom, body: "a11223344")
     export_file = ResourceExportFile.new
     export_file.user = users(:admin)
     export_file.save!
@@ -37,8 +37,8 @@ describe ResourceExportFile do
     file = export_file.resource_export
     expect(file).to be_truthy
     lines = File.open(file.path).readlines.map(&:chomp)
-    expect(lines.first.split(/\t/)).to include "ncid"
-    expect(lines.last.split(/\t/)).to include "BA91833159"
+    expect(lines.first.split(/\t/)).to include "identifier:custom"
+    expect(lines.last.split(/\t/)).to include "a11223344"
   end
 
   it "should export carrier_type" do
@@ -50,9 +50,7 @@ describe ResourceExportFile do
     export_file.save!
     export_file.export!
     file = export_file.resource_export
-    expect(file).to be_truthy
-    csv = CSV.open(file.path, {headers: true, col_sep: "\t"})
-    csv.each do |row|
+    CSV.open(file.path, {headers: true, col_sep: "\t"}).each do |row|
       expect(row).to have_key "carrier_type"
       case row["manifestation_id"].to_i
       when 1
@@ -68,7 +66,8 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    CSV.open(export_file.resource_export.path, {headers: true, col_sep: "\t"}).each do |row|
+    file = export_file.resource_export
+    CSV.open(file.path, {headers: true, col_sep: "\t"}).each do |row|
       manifestation = Manifestation.find(row['manifestation_id'])
       manifestation.creates.each do |create|
         if create.create_type
@@ -102,7 +101,8 @@ describe ResourceExportFile do
     export_file.user = users(:admin)
     export_file.save!
     export_file.export!
-    CSV.open(export_file.resource_export.path, {headers: true, col_sep: "\t"}).each do |row|
+    file = export_file.resource_export
+    CSV.open(file.path, {headers: true, col_sep: "\t"}).each do |row|
       if row['manifestation_id'] == item.manifestation.id
         item.manifestation_custom_values.each do |value|
           expect(row).to have_key "manifestation:#{value.manifestation_custom_property.name}"
@@ -121,13 +121,13 @@ end
 #
 # Table name: resource_export_files
 #
-#  id                           :bigint           not null, primary key
+#  id                           :integer          not null, primary key
 #  user_id                      :integer
 #  resource_export_file_name    :string
 #  resource_export_content_type :string
-#  resource_export_file_size    :bigint
+#  resource_export_file_size    :integer
 #  resource_export_updated_at   :datetime
 #  executed_at                  :datetime
-#  created_at                   :datetime         not null
-#  updated_at                   :datetime         not null
+#  created_at                   :datetime
+#  updated_at                   :datetime
 #

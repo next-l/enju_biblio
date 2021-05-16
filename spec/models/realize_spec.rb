@@ -9,11 +9,11 @@ end
 #
 # Table name: realizes
 #
-#  id              :bigint           not null, primary key
-#  agent_id        :bigint           not null
-#  expression_id   :bigint           not null
+#  id              :integer          not null, primary key
+#  agent_id        :integer          not null
+#  expression_id   :integer          not null
 #  position        :integer
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  created_at      :datetime
+#  updated_at      :datetime
 #  realize_type_id :integer
 #

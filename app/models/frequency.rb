@@ -1,6 +1,5 @@
 class Frequency < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :manifestations
 end
 

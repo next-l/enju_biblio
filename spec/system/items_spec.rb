@@ -30,7 +30,7 @@ RSpec.describe 'Manifestations', type: :system do
       budget_type = BudgetType.find(1)
       @item.update(budget_type: budget_type)
       visit item_path(@item.id, locale: :ja)
-      expect(page).to have_content budget_type.display_name_ja
+      expect(page).to have_content budget_type.display_name
     end
 
     it 'should show bookstore' do
