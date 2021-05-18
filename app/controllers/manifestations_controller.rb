@@ -382,11 +382,8 @@ class ManifestationsController < ApplicationController
   # POST /manifestations
   # POST /manifestations.json
   def create
-    creators_params = manifestation_params[:creators_attributes]
-    @manifestation = Manifestation.new(manifestation_params.delete_if{|k, v|
-      k == 'creators_attributes'
-    })
-    parent = Manifestation.where(id: @manifestation.parent_id).first
+    @manifestation = Manifestation.new(manifestation_params)
+    parent = Manifestation.find_by(id: @manifestation.parent_id)
     unless @manifestation.original_title?
       @manifestation.original_title = @manifestation.attachment_file_name
     end
@@ -394,14 +391,16 @@ class ManifestationsController < ApplicationController
     respond_to do |format|
       if @manifestation.save
         Manifestation.transaction do
-          @manifestation.creators = Agent.new_agents(creators_params)
-          parent.derived_manifestations << @manifestation if parent
+          set_creators
+
+          if parent
+            parent.derived_manifestations << @manifestation
+            parent.index
+            @manifestation.index
+          end
+
+          Sunspot.commit
         end
-        if parent
-          parent.index
-          @manifestation.index
-        end
-        Sunspot.commit
 
         format.html { redirect_to @manifestation, notice: t('controller.successfully_created', model: t('activerecord.models.manifestation')) }
         format.json { render json: @manifestation, status: :created, location: @manifestation }
@@ -416,17 +415,11 @@ class ManifestationsController < ApplicationController
   # PUT /manifestations/1
   # PUT /manifestations/1.json
   def update
-    creators_params = manifestation_params[:creators_attributes]
-    @manifestation.assign_attributes(manifestation_params.delete_if{|k, v|
-      k == 'creators_attributes'
-    })
+    @manifestation.assign_attributes(manifestation_params)
 
     respond_to do |format|
-      if @manifestation.valid?
-        Manifestation.transaction do
-          @manifestation.creators = Agent.new_agents(creators_params)
-          @manifestation.save!
-        end
+      if @manifestation.save
+        set_creators
         
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
         format.json { head :no_content }
@@ -842,6 +835,23 @@ class ManifestationsController < ApplicationController
       query = "#{query} acquired_at_d:[#{acquisition_date[:from]} TO #{acquisition_date[:until]}]"
     end
     query
+  end
+
+  def set_creators
+    creators_params = manifestation_params[:creators_attributes]
+    contributors_params = manifestation_params[:contributors_attributes]
+    publishers_params = manifestation_params[:publishers_attributes]
+
+    Manifestation.transaction do
+      @manifestation.creates.destroy_all
+      @manifestation.realizes.destroy_all
+      @manifestation.produces.destroy_all
+      @manifestation.reload
+
+      @manifestation.creators = Agent.new_agents(creators_params)
+      @manifestation.contributors = Agent.new_agents(creators_params)
+      @manifestation.publishers = Agent.new_agents(creators_params)
+    end
   end
 
   def filtered_params

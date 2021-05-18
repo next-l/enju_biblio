@@ -71,7 +71,7 @@
 
   <div class="field" id="creator_form">
     <%= f.label :creator_string -%><br />
-    <%= f.fields_for :creators do |creator_form| %>
+    <%= f.fields_for :creators, @manifestation.creators.order(Create.arel_table[:position].asc) do |creator_form| %>
       <%= render 'creator_fields', f: creator_form %>
     <% end %>
     <div class="links">
@@ -81,7 +81,7 @@
 
   <div class="field" id="contributor_form">
     <%= f.label :contributor_string -%><br />
-    <%= f.fields_for :contributors do |contributor_form| %>
+    <%= f.fields_for :contributors, @manifestation.contributors.order(Realize.arel_table[:position].asc) do |contributor_form| %>
       <%= render 'contributor_fields', f: contributor_form %>
     <% end %>
     <div class="links">
@@ -91,7 +91,7 @@
 
   <div class="field" id="publisher_form">
     <%= f.label :publisher_string -%><br />
-    <%= f.fields_for :publishers do |publisher_form| %>
+    <%= f.fields_for :publishers, @manifestation.publishers.order(Produce.arel_table[:position].asc) do |publisher_form| %>
       <%= render 'publisher_fields', f: publisher_form %>
     <% end %>
     <div class="links">

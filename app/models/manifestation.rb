@@ -5,12 +5,12 @@ class Manifestation < ApplicationRecord
   enju_nii_cinii_books if defined?(EnjuNii)
   enju_bookmark_manifestation_model if defined?(EnjuBookmark)
 
-  has_many :creates, dependent: :destroy, foreign_key: 'work_id'
-  has_many :creators, through: :creates, source: :agent #, order: 'creates.position'
-  has_many :realizes, dependent: :destroy, foreign_key: 'expression_id'
-  has_many :contributors, through: :realizes, source: :agent #, order: 'realizes.position'
-  has_many :produces, dependent: :destroy, foreign_key: 'manifestation_id'
-  has_many :publishers, through: :produces, source: :agent #, order: 'produces.position'
+  has_many :creates, -> { order('creates.position') }, dependent: :destroy, foreign_key: 'work_id'
+  has_many :creators, through: :creates, source: :agent
+  has_many :realizes, -> { order('realizes.position') }, dependent: :destroy, foreign_key: 'expression_id'
+  has_many :contributors, through: :realizes, source: :agent
+  has_many :produces, -> { order('produces.position') }, dependent: :destroy, foreign_key: 'manifestation_id'
+  has_many :publishers, through: :produces, source: :agent
   has_many :items, dependent: :destroy
   has_many :children, foreign_key: 'parent_id', class_name: 'ManifestationRelationship', dependent: :destroy
   has_many :parents, foreign_key: 'child_id', class_name: 'ManifestationRelationship', dependent: :destroy

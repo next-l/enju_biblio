@@ -256,14 +256,22 @@ class Agent < ApplicationRecord
     Agent.transaction do
       agents_params.each do |k, v|
         next if v['_destroy'] == '1'
+
+	agent = nil
+
         if v['agent_id'].present?
           agent = Agent.find(v['agent_id'])
         elsif v['id'].present?
           agent = Agent.find(v['id'])
-        else
+	end
+
+	if !agent or agent.full_name != v['full_name']
+          v.delete('id')
+          v.delete('agent_id')
           v.delete('_destroy')
           agent = Agent.create(v)
         end
+
         agents << agent
       end
     end
