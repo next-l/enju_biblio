@@ -395,6 +395,8 @@ class ManifestationsController < ApplicationController
       if @manifestation.save
         Manifestation.transaction do
           @manifestation.creators = Agent.new_agents(creators_params)
+          @manifestation.contributors = Agent.new_agents(contributors_params)
+          @manifestation.publishers = Agent.new_agents(publishers_params)
           parent.derived_manifestations << @manifestation if parent
         end
         if parent
@@ -421,11 +423,27 @@ class ManifestationsController < ApplicationController
       k == 'creators_attributes'
     })
 
+    contributors_params = manifestation_params[:contributors_attributes]
+    @manifestation.assign_attributes(manifestation_params.delete_if{|k, v|
+      k == 'contributors_attributes'
+    })
+
+    publishers_params = manifestation_params[:publishers_attributes]
+    @manifestation.assign_attributes(manifestation_params.delete_if{|k, v|
+      k == 'publishers_attributes'
+    })
+
     respond_to do |format|
       if @manifestation.valid?
         Manifestation.transaction do
-          @manifestation.creators = Agent.new_agents(creators_params)
+	  @manifestation.creates.destroy_all
+	  @manifestation.realizes.destroy_all
+	  @manifestation.produces.destroy_all
           @manifestation.save!
+	  @manifestation.reload
+          @manifestation.creators = Agent.new_agents(creators_params)
+          @manifestation.contributors = Agent.new_agents(contributors_params)
+          @manifestation.publishers = Agent.new_agents(publishers_params)
         end
         
         format.html { redirect_to @manifestation, notice: t('controller.successfully_updated', model: t('activerecord.models.manifestation')) }
