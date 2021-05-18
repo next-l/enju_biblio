@@ -32,7 +32,7 @@ END
   s.add_dependency "faraday"
   s.add_dependency "responders"
 
-  s.add_development_dependency "enju_leaf", "~> 1.3.4"
+  s.add_development_dependency "enju_leaf", "~> 1.3.5"
   s.add_development_dependency "enju_subject", "~> 0.3.1"
   s.add_development_dependency "enju_inventory", "~> 0.3.0"
   s.add_development_dependency "enju_bookmark", "~> 0.3.0"
