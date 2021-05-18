@@ -1,6 +1,6 @@
 class FormOfWork < ApplicationRecord
   include MasterModel
-  has_many :works
+  has_many :works, class_name: 'Manifestation', dependent: :restrict_with_exception
 end
 
 # == Schema Information
