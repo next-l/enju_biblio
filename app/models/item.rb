@@ -64,19 +64,19 @@ class Item < ApplicationRecord
   paginates_per 10
 
   def title
-    manifestation.try(:original_title)
+    manifestation&.original_title
   end
 
   def creator
-    manifestation.try(:creator)
+    manifestation&.creator
   end
 
   def contributor
-    manifestation.try(:contributor)
+    manifestation&.contributor
   end
 
   def publisher
-    manifestation.try(:publisher)
+    manifestation&.publisher
   end
 
   def owned(agent)
