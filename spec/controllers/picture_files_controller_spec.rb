@@ -163,7 +163,7 @@ describe PictureFilesController do
 
   describe 'POST create' do
     before(:each) do
-      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 1, picture: fixture_file_upload('spinner.gif', 'image/gif') }
+      @attrs = { picture_attachable_type: 'Shelf', picture_attachable_id: 1, picture: fixture_file_upload('files/spinner.gif', 'image/gif') }
       @invalid_attrs = { picture_attachable_id: 'invalid', picture_attachable_type: 'Library' }
     end
 

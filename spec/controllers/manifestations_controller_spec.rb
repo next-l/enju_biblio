@@ -553,7 +553,7 @@ describe ManifestationsController do
         end
 
         it 'accepts an attachment file' do
-          post :create, params: { manifestation: @attrs.merge(attachment: fixture_file_upload('resource_import_file_sample1.tsv', 'text/csv')) }
+          post :create, params: { manifestation: @attrs.merge(attachment: fixture_file_upload('files/resource_import_file_sample1.tsv', 'text/csv')) }
           expect(assigns(:manifestation)).to be_valid
         end
 
