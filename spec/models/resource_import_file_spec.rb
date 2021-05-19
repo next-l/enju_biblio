@@ -7,7 +7,7 @@ describe ResourceImportFile do
     describe "when it is written in utf-8" do
       before(:each) do
         @file = ResourceImportFile.create(
-          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
+          resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"),
           default_shelf_id: 3,
           user: users(:admin),
           edit_mode: 'create'
@@ -61,7 +61,7 @@ describe ResourceImportFile do
         item_10101.manifestation.publication_place.should eq '東京'
         item_10101.include_supplements.should eq true
         item_10101.note.should eq 'カバーなし'
-        item_10101.url.should eq 'http://example.jp/item/1'
+        item_10101.url.should eq 'httpfixtures/file.jp/item/1'
         item_10101.manifestation.carrier_type.name.should eq 'volume'
         item_10101.manifestation.manifestation_content_type.name.should eq 'text'
         item_10101.manifestation.frequency.name.should eq 'monthly'
@@ -217,7 +217,7 @@ describe ResourceImportFile do
     describe "when it is written in shift_jis" do
       before(:each) do
         @file = ResourceImportFile.create!(
-          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample2.tsv"),
+          resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample2.tsv"),
           user: users(:admin)
         )
       end
@@ -255,7 +255,7 @@ describe ResourceImportFile do
     describe "when it has only isbn" do
       before(:each) do
         @file = ResourceImportFile.create!(
-          resource_import: File.new("#{Rails.root}/../../examples/isbn_sample.txt"),
+          resource_import: File.new("#{Rails.root}/../fixtures/files/isbn_sample.txt"),
           user: users(:admin)
         )
       end
@@ -356,7 +356,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
   describe "when its mode is 'update'" do
     before(:each) do
       @file = ResourceImportFile.create!(
-        resource_import: File.new("#{Rails.root}/../../examples/item_update_file.tsv"),
+        resource_import: File.new("#{Rails.root}/../fixtures/files/item_update_file.tsv"),
         user: users(:admin),
         edit_mode: 'update'
       )
@@ -396,7 +396,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
 
     # it "should update series_statement", vcr: true do
     #  manifestation = Manifestation.find(10)
-    #  file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../../examples/update_series_statement.tsv"), edit_mode: 'update'
+    #  file = ResourceImportFile.create resource_import: File.new("#{Rails.root.to_s}/../fixtures/files/update_series_statement.tsv"), edit_mode: 'update'
     #  file.modify
     #  manifestation.reload
     #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
@@ -421,7 +421,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
     it "should remove items", vcr: true do
       old_count = Item.count
       file = ResourceImportFile.create!(
-        resource_import: File.new("#{Rails.root}/../../examples/item_delete_file.tsv"),
+        resource_import: File.new("#{Rails.root}/../fixtures/files/item_delete_file.tsv"),
         user: users(:admin),
         edit_mode: 'destroy'
       )
@@ -432,7 +432,7 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
 
   it "should import in background", vcr: true do
     file = ResourceImportFile.create!(
-      resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
+      resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"),
       user: users(:admin)
     )
     ResourceImportFileJob.perform_later(file).should be_truthy
