@@ -50,14 +50,14 @@ end
 #
 # Table name: series_statements
 #
-#  id                                 :bigint           not null, primary key
+#  id                                 :integer          not null, primary key
 #  original_title                     :text
 #  numbering                          :text
 #  title_subseries                    :text
 #  numbering_subseries                :text
 #  position                           :integer
-#  created_at                         :datetime         not null
-#  updated_at                         :datetime         not null
+#  created_at                         :datetime
+#  updated_at                         :datetime
 #  title_transcription                :text
 #  title_alternative                  :text
 #  series_statement_identifier        :string

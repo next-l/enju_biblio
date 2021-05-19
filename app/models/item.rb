@@ -145,11 +145,12 @@ end
 #
 # Table name: items
 #
-#  id                      :bigint           not null, primary key
+#  id                      :integer          not null, primary key
 #  call_number             :string
 #  item_identifier         :string
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
+#  deleted_at              :datetime
 #  shelf_id                :integer          default(1), not null
 #  include_supplements     :boolean          default(FALSE), not null
 #  note                    :text
@@ -161,6 +162,8 @@ end
 #  acquired_at             :datetime
 #  bookstore_id            :integer
 #  budget_type_id          :integer
+#  circulation_status_id   :integer          default(5), not null
+#  checkout_type_id        :integer          default(1), not null
 #  binding_item_identifier :string
 #  binding_call_number     :string
 #  binded_at               :datetime

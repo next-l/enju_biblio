@@ -8,9 +8,9 @@ end
 #
 # Table name: manifestation_custom_values
 #
-#  id                               :integer          not null, primary key
-#  manifestation_custom_property_id :integer          not null
-#  manifestation_id                 :integer          not null
+#  id                               :bigint           not null, primary key
+#  manifestation_custom_property_id :bigint           not null
+#  manifestation_id                 :bigint           not null
 #  value                            :text
 #  created_at                       :datetime         not null
 #  updated_at                       :datetime         not null

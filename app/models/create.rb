@@ -21,11 +21,11 @@ end
 #
 # Table name: creates
 #
-#  id             :bigint           not null, primary key
-#  agent_id       :bigint           not null
-#  work_id        :bigint           not null
+#  id             :integer          not null, primary key
+#  agent_id       :integer          not null
+#  work_id        :integer          not null
 #  position       :integer
-#  created_at     :datetime         not null
-#  updated_at     :datetime         not null
+#  created_at     :datetime
+#  updated_at     :datetime
 #  create_type_id :integer
 #

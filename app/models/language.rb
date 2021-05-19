@@ -24,7 +24,7 @@ end
 #
 # Table name: languages
 #
-#  id                        :bigint           not null, primary key
+#  id                        :integer          not null, primary key
 #  name                      :string           not null
 #  native_name               :string
 #  display_name              :text

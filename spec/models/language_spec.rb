@@ -9,13 +9,14 @@ end
 #
 # Table name: languages
 #
-#  id           :integer          not null, primary key
-#  name         :string           not null
-#  native_name  :string
-#  display_name :text
-#  iso_639_1    :string
-#  iso_639_2    :string
-#  iso_639_3    :string
-#  note         :text
-#  position     :integer
+#  id                        :integer          not null, primary key
+#  name                      :string           not null
+#  native_name               :string
+#  display_name              :text
+#  iso_639_1                 :string
+#  iso_639_2                 :string
+#  iso_639_3                 :string
+#  note                      :text
+#  position                  :integer
+#  display_name_translations :jsonb            not null
 #

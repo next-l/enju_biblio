@@ -42,13 +42,13 @@ end
 #
 # Table name: picture_files
 #
-#  id                      :bigint           not null, primary key
+#  id                      :integer          not null, primary key
 #  picture_attachable_id   :integer
 #  picture_attachable_type :string
 #  title                   :text
 #  position                :integer
-#  created_at              :datetime         not null
-#  updated_at              :datetime         not null
+#  created_at              :datetime
+#  updated_at              :datetime
 #  picture_file_name       :string
 #  picture_content_type    :string
 #  picture_file_size       :integer
