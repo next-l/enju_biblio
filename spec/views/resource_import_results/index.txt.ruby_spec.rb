@@ -5,7 +5,7 @@ describe "resource_import_results/index.txt.ruby" do
 
   before(:each) do
     file = ResourceImportFile.create(
-      resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample1.tsv"),
+      resource_import: File.new("#{Rails.root}/../fixtures/files/resource_import_file_sample1.tsv"),
       default_shelf_id: 3,
       user: users(:admin)
     )
