@@ -192,8 +192,13 @@ class ResourceImportFile < ApplicationRecord
       import_result.manifestation = manifestation
 
       if manifestation
+        ResourceImportFile.import_manifestation_custom_value(row, manifestation).each do |value|
+          value.update!(manifestation: manifestation)
+        end
+
+        item = nil
         if item_identifier.present? || row['shelf'].present? || row['call_number'].present?
-          import_result.item = create_item(row, manifestation)
+          item = create_item(row, manifestation)
         else
           if manifestation.fulltext_content?
             item = create_item(row, manifestation)
@@ -204,6 +209,14 @@ class ResourceImportFile < ApplicationRecord
             end
           end
           num[:failed] += 1
+        end
+
+        if item
+          ResourceImportFile.import_item_custom_value(row, item).each do |value|
+            value.update!(item: item)
+          end
+
+          import_result.item = item
         end
       else
         num[:failed] += 1
@@ -312,55 +325,24 @@ class ResourceImportFile < ApplicationRecord
     rows.each do |row|
       row_num += 1
       import_result = ResourceImportResult.create!(resource_import_file_id: id, body: row.fields.join("\t"))
-      item_identifier = row['item_identifier'].to_s.strip
-      item = Item.find_by(item_identifier: item_identifier) if item_identifier.present?
+      item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip) if row['item_identifier'].to_s.strip.present?
+      unless item
+        item = Item.find_by(id: row['item_id'].to_s.strip) if row['item_id'].to_s.strip.present?
+      end
+
       if item
         if item.manifestation
           fetch(row, edit_mode: 'update')
-        end
-        shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
-        bookstore = Bookstore.find_by(name: row['bookstore'])
-        required_role = Role.find_by(name: row['required_role'])
-
-        item.shelf = shelf if shelf
-        item.bookstore = bookstore if bookstore
-        item.required_role = required_role if required_role
-
-        acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
-        binded_at = Time.zone.parse(row['binded_at']) rescue nil
-        item.acquired_at = acquired_at if acquired_at
-        item.binded_at = binded_at if binded_at
-
-        if defined?(EnjuCirculation)
-          circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
-          checkout_type = CheckoutType.find_by(name: row['checkout_type'])
-          use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
-          item.circulation_status = circulation_status if circulation_status
-          item.checkout_type = checkout_type if checkout_type
-          item.use_restriction = use_restriction if use_restriction
+          item = update_item(item, row)
         end
 
-        item_columns = %w(
-          call_number
-          binding_item_identifier binding_call_number binded_at
-        )
-        item_columns.each do |column|
-          if row[column].present?
-            item.assign_attributes(:"#{column}" => row[column])
-          end
+        ResourceImportFile.import_item_custom_value(row, item).each do |value|
+          value.update!(item: item)
+        end
+        ResourceImportFile.import_manifestation_custom_value(row, item.manifestation).each do |value|
+          value.update!(manifestation: item.manifestation)
         end
 
-        item.price = row['item_price'] if row['item_price'].present?
-        item.note = row['item_note'].try(:gsub, /\\n/, "\n") if row['item_note'].present?
-        item.url = row['item_url'] if row['item_url'].present?
-
-        if row['include_supplements']
-          if %w(t true).include?(row['include_supplements'].downcase.strip)
-            item.include_supplements = true
-          else
-            item.include_supplements = false if item.include_supplements
-          end
-        end
         item.manifestation.reload
         item.save!
         import_result.item = item
@@ -372,6 +354,9 @@ class ResourceImportFile < ApplicationRecord
         end
         if manifestation
           fetch(row, edit_mode: 'update')
+          ResourceImportFile.import_manifestation_custom_value(row, manifestation).each do |value|
+            value.update!(manifestation: manifestation)
+          end
           import_result.manifestation = manifestation
         end
       end
@@ -397,8 +382,11 @@ class ResourceImportFile < ApplicationRecord
 
     rows.each do |row|
       row_num += 1
-      item_identifier = row['item_identifier'].to_s.strip
-      item = Item.find_by(item_identifier: item_identifier)
+      item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip) if row['item_identifier'].to_s.strip.present?
+      unless item
+        item = Item.find_by(id: row['item_id'].to_s.strip) if row['item_id'].to_s.strip.present?
+      end
+
       if item
         item.destroy if item.removable?
       end
@@ -422,10 +410,9 @@ class ResourceImportFile < ApplicationRecord
     row_num = 1
 
     rows.each do |row|
-      item_identifier = row['item_identifier'].to_s.strip
-      item = Item.find_by(item_identifier: item_identifier)
+      item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip) if row['item_identifier'].to_s.strip.present?
       unless item
-        item = Item.find_by(id: row['item_id'].to_s.strip)
+        item = Item.find_by(id: row['item_id'].to_s.strip) if row['item_id'].to_s.strip.present?
       end
 
       manifestation_identifier = row['manifestation_identifier'].to_s.strip
@@ -482,6 +469,9 @@ class ResourceImportFile < ApplicationRecord
       use_restriction include_supplements item_note item_url
       dummy
     )
+    header_columns += ManifestationCustomProperty.order(:position).pluck(:name).map{|c| "manifestation:#{c}"}
+    header_columns += ItemCustomProperty.order(:position).pluck(:name).map{|c| "item:#{c}"}
+
     if defined?(EnjuSubject)
       header_columns += ClassificationType.order(:position).pluck(:name).map{|c| "classification:#{c}"}
       header_columns += SubjectHeadingType.order(:position).pluck(:name).map{|s| "subject:#{s}"}
@@ -578,12 +568,68 @@ class ResourceImportFile < ApplicationRecord
     item
   end
 
+  def update_item(item, row)
+    shelf = Shelf.find_by(name: row['shelf'].to_s.strip)
+    bookstore = Bookstore.find_by(name: row['bookstore'])
+    required_role = Role.find_by(name: row['required_role'])
+
+    item.shelf = shelf if shelf
+    item.bookstore = bookstore if bookstore
+    item.required_role = required_role if required_role
+
+    acquired_at = Time.zone.parse(row['acquired_at']) rescue nil
+    binded_at = Time.zone.parse(row['binded_at']) rescue nil
+    item.acquired_at = acquired_at if acquired_at
+    item.binded_at = binded_at if binded_at
+
+    if defined?(EnjuCirculation)
+      circulation_status = CirculationStatus.find_by(name: row['circulation_status'])
+      checkout_type = CheckoutType.find_by(name: row['checkout_type'])
+      use_restriction = UseRestriction.find_by(name: row['use_restriction'].to_s.strip)
+      item.circulation_status = circulation_status if circulation_status
+      item.checkout_type = checkout_type if checkout_type
+      item.use_restriction = use_restriction if use_restriction
+    end
+
+    item_columns = %w(
+      call_number
+      binding_item_identifier binding_call_number binded_at
+    )
+    item_columns.each do |column|
+      if row[column].present?
+        item.assign_attributes(:"#{column}" => row[column])
+      end
+    end
+
+    item.price = row['item_price'] if row['item_price'].present?
+    item.note = row['item_note'].try(:gsub, /\\n/, "\n") if row['item_note'].present?
+    item.url = row['item_url'] if row['item_url'].present?
+
+    if row['include_supplements']
+      if %w(t true).include?(row['include_supplements'].downcase.strip)
+        item.include_supplements = true
+      else
+        item.include_supplements = false if item.include_supplements
+      end
+    end
+
+    item
+  end
+
   def fetch(row, options = {edit_mode: 'create'})
-    case options[:edit_mode]
-    when 'create'
-      manifestation = nil
-    when 'update'
-      manifestation = Item.find_by(item_identifier: row['item_identifier'].to_s.strip).try(:manifestation)
+    manifestation = nil
+    item = nil
+
+    if options[:edit_mode] == 'update'
+      if row['item_identifier'].to_s.strip.present?
+        item = Item.find_by(item_identifier: row['item_identifier'].to_s.strip)
+      end
+      if row['item_id'].to_s.strip.present?
+        item = Item.find_by(id: row['item_id'].to_s.strip)
+      end
+
+      manifestation = item.manifestation if item
+
       unless manifestation
         manifestation_identifier = row['manifestation_identifier'].to_s.strip
         manifestation = Manifestation.find_by(manifestation_identifier: manifestation_identifier) if manifestation_identifier
@@ -764,7 +810,16 @@ class ResourceImportFile < ApplicationRecord
         manifestation.set_agent_role_type(publishers_list, scope: :publisher)
       end
     end
+
     manifestation
+  end
+
+  def self.transition_class
+    ResourceImportFileTransition
+  end
+
+  def self.initial_state
+    :pending
   end
 
   def set_identifier(row)
@@ -781,6 +836,52 @@ class ResourceImportFile < ApplicationRecord
       end
     end
     identifiers
+  end
+
+  def self.import_manifestation_custom_value(row, manifestation)
+    values = []
+    ManifestationCustomProperty.order(:position).pluck(:name).map{|c| "manifestation:#{c}"}.each do |column_name|
+      value = nil
+      property = column_name.split(':').last
+      next if row[column_name].blank?
+      if manifestation
+        value = manifestation.manifestation_custom_values.find_by(manifestation_custom_property: property)
+      end
+
+      if value
+        value.value = row[column_name]
+      else
+        value = ManifestationCustomValue.new(
+          manifestation_custom_property: ManifestationCustomProperty.find_by(name: property),
+          value: row[column_name]
+        )
+      end
+      values << value
+    end
+    values
+  end
+
+  def self.import_item_custom_value(row, item)
+    values = []
+    ItemCustomProperty.order(:position).pluck(:name).map{|c| "item:#{c}"}.each do |column_name|
+      value = nil
+      property = column_name.split(':').last
+      next if row[column_name].blank?
+      if item
+        value = item.item_custom_values.find_by(item_custom_property: property)
+      end
+
+      if value
+        value.value = row[column_name]
+      else
+        value = ItemCustomValue.new(
+          item_custom_property: ItemCustomProperty.find_by(name: property),
+          value: row[column_name]
+        )
+      end
+      values << value
+    end
+    values
   end
 end
 

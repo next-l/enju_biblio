@@ -61,7 +61,7 @@ describe ResourceImportFile do
         item_10101.manifestation.publication_place.should eq '東京'
         item_10101.include_supplements.should eq true
         item_10101.note.should eq 'カバーなし'
-        item_10101.url.should eq 'httpfixtures/file.jp/item/1'
+        item_10101.url.should eq 'http://example.jp/item/1'
         item_10101.manifestation.carrier_type.name.should eq 'volume'
         item_10101.manifestation.manifestation_content_type.name.should eq 'text'
         item_10101.manifestation.frequency.name.should eq 'monthly'

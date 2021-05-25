@@ -240,8 +240,8 @@ describe ManifestationsController do
       describe "with render_views" do
         render_views
         it "should accept query & language parameters" do
-          get :index, params: { query: "test" }
-          expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&query=test"
+          get :index, params: { query: "test", language: "unknown" }
+          expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&amp;query=test"
         end
 
         it "should accept facets and query parameters in sort_by menu" do

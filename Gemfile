@@ -26,6 +26,6 @@ end
 gem 'enju_seed', github: 'next-l/enju_seed', branch: '2.x'
 gem 'enju_leaf', github: 'next-l/enju_leaf', branch: '2.x'
 gem 'enju_library', github: 'next-l/enju_library', branch: '2.x'
-gem 'enju_manifestation_viewer', github: 'next-l/enju_manifestation_viewer', branch: '2.x'
 gem 'enju_subject', github: 'next-l/enju_subject', branch: '2.x'
+gem 'enju_ndl', github: 'next-l/enju_ndl', branch: '2.x'
 gem 'rails', '~> 6.0.3'

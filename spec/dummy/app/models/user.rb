@@ -11,4 +11,5 @@ class User < ApplicationRecord
 end
 
 Manifestation.include(EnjuSubject::EnjuManifestation)
+Manifestation.include(EnjuNdl::EnjuManifestation)
 Item.include(EnjuLibrary::EnjuItem)
