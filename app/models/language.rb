@@ -27,7 +27,7 @@ end
 #  id                        :integer          not null, primary key
 #  name                      :string           not null
 #  native_name               :string
-#  display_name              :text
+#  old_display_name          :text
 #  iso_639_1                 :string
 #  iso_639_2                 :string
 #  iso_639_3                 :string

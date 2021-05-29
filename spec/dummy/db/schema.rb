@@ -114,11 +114,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "agent_relationship_types", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "agent_relationships", id: :serial, force: :cascade do |t|
@@ -134,11 +135,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "agent_types", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "agents", id: :serial, force: :cascade do |t|
@@ -287,7 +289,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "carrier_types", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
@@ -296,6 +298,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
     t.string "attachment_content_type"
     t.bigint "attachment_file_size"
     t.datetime "attachment_updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "checked_items", id: :serial, force: :cascade do |t|
@@ -425,11 +428,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "content_types", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "countries", id: :serial, force: :cascade do |t|
@@ -448,11 +452,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "create_types", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "creates", id: :serial, force: :cascade do |t|
@@ -589,20 +594,22 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "form_of_works", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "frequencies", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "identifier_types", id: :serial, force: :cascade do |t|
@@ -859,17 +866,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
     t.index ["name"], name: "index_libraries_on_name"
   end
 
-  create_table "library_group_translations", force: :cascade do |t|
-    t.integer "library_group_id", null: false
-    t.string "locale", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
-    t.text "login_banner"
-    t.text "footer_banner"
-    t.index ["library_group_id"], name: "index_library_group_translations_on_library_group_id"
-    t.index ["locale"], name: "index_library_group_translations_on_locale"
-  end
-
   create_table "library_groups", id: :serial, force: :cascade do |t|
     t.string "name", null: false
     t.text "display_name"
@@ -909,11 +905,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "licenses", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.string "display_name"
+    t.string "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "manifestation_checkout_stat_transitions", id: :serial, force: :cascade do |t|
@@ -964,11 +961,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "manifestation_relationship_types", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "manifestation_relationships", id: :serial, force: :cascade do |t|
@@ -1075,11 +1073,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "medium_of_performances", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "message_request_transitions", id: :serial, force: :cascade do |t|
@@ -1224,11 +1223,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "produce_types", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "produces", id: :serial, force: :cascade do |t|
@@ -1269,11 +1269,12 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "realize_types", id: :serial, force: :cascade do |t|
     t.string "name"
-    t.text "display_name"
+    t.text "old_display_name"
     t.text "note"
     t.integer "position"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "realizes", id: :serial, force: :cascade do |t|

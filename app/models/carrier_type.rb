@@ -18,6 +18,7 @@ class CarrierType < ApplicationRecord
       path: ":rails_root/private/system/:class/:attachment/:id_partition/:style/:filename"
   end
   validates_attachment_content_type :attachment, content_type: /\Aimage\/.*\Z/
+  translates :display_name
 
   def mods_type
     case name
@@ -36,7 +37,7 @@ end
 #
 #  id                        :integer          not null, primary key
 #  name                      :string           not null
-#  display_name              :text
+#  old_display_name          :text
 #  note                      :text
 #  position                  :integer
 #  created_at                :datetime

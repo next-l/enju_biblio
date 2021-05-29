@@ -11,7 +11,7 @@ end
 #
 #  id                        :integer          not null, primary key
 #  name                      :string           not null
-#  display_name              :string
+#  old_display_name          :string
 #  note                      :text
 #  position                  :integer
 #  created_at                :datetime

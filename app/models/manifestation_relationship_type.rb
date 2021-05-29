@@ -2,6 +2,7 @@ class ManifestationRelationshipType < ApplicationRecord
   include MasterModel
   default_scope { order('manifestation_relationship_types.position') }
   has_many :manifestation_relationships
+  translates :display_name
 end
 
 # == Schema Information
@@ -10,7 +11,7 @@ end
 #
 #  id                        :integer          not null, primary key
 #  name                      :string           not null
-#  display_name              :text
+#  old_display_name          :text
 #  note                      :text
 #  position                  :integer
 #  created_at                :datetime

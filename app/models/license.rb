@@ -1,5 +1,6 @@
 class License < ApplicationRecord
   include MasterModel
+  translates :display_name
 end
 
 # == Schema Information
@@ -8,7 +9,7 @@ end
 #
 #  id                        :integer          not null, primary key
 #  name                      :string           not null
-#  display_name              :string
+#  old_display_name          :string
 #  note                      :text
 #  position                  :integer
 #  created_at                :datetime

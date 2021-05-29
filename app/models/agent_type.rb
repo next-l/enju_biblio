@@ -1,6 +1,7 @@
 class AgentType < ApplicationRecord
   include MasterModel
   has_many :agents
+  translates :display_name
 end
 
 # == Schema Information

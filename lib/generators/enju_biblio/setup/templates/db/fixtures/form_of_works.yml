@@ -1,6 +1,6 @@
 --- 
 form_of_work_00001: 
-  name: unknown  
+  name: unknown
   display_name_translations: {"en": "(not specified)", "ja": "不明"}
   id: 1
   position: 1
