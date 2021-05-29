@@ -1,14 +1,14 @@
 --- 
 agent_type_00001:
   id: 1
-  name: person  
+  name: person
   display_name_translations: {"en": "Person", "ja": "個人"}
   note: 
   position: 1
 
 agent_type_00002:
   id: 2
-  name: corporate_body  
+  name: corporate_body
   display_name_translations: {"en": "CorporateBody", "ja": "団体"}
   note: 
   position: 2
