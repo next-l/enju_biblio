@@ -1260,6 +1260,7 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
     t.boolean "share_bookmarks"
     t.text "full_name_transcription"
     t.datetime "date_of_birth"
+    t.jsonb "full_name_translations", default: {}, null: false
     t.index ["checkout_icalendar_token"], name: "index_profiles_on_checkout_icalendar_token", unique: true
     t.index ["library_id"], name: "index_profiles_on_library_id"
     t.index ["user_group_id"], name: "index_profiles_on_user_group_id"
@@ -1438,12 +1439,13 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
 
   create_table "roles", id: :serial, force: :cascade do |t|
     t.string "name", null: false
-    t.string "display_name"
+    t.string "old_display_name"
     t.text "note"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer "score", default: 0, null: false
     t.integer "position"
+    t.jsonb "display_name_translations", default: {}, null: false
   end
 
   create_table "search_engines", id: :serial, force: :cascade do |t|
