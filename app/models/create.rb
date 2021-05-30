@@ -11,7 +11,7 @@ class Create < ApplicationRecord
 
   def reindex
     agent&.index
-    work.&.index
+    work&.index
   end
 end
 
