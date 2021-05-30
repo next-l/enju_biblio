@@ -236,20 +236,6 @@ describe ManifestationsController do
         expect(manifestations).not_to be_blank
         expect(manifestations.map{|e| e.id }).to include periodical.id
       end
-
-      describe "with render_views" do
-        render_views
-        it "should accept query & language parameters" do
-          get :index, params: { query: "test", language: "unknown" }
-          expect(response.body).to have_link "unknown (1)", href: "/manifestations?language=unknown&amp;query=test"
-        end
-
-        it "should accept facets and query parameters in sort_by menu" do
-          get :index, params: { query: "test", carrier_type: "volume" }
-          expect(response.body).to have_selector "div.right input[type=hidden][name=query][value=test]", visible: false
-          expect(response.body).to have_selector "div.right input[type=hidden][name=carrier_type][value=volume]", visible: false
-        end
-      end
     end
   end
 

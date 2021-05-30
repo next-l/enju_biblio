@@ -5,3 +5,17 @@ form_of_work_00001:
   id: 1
   position: 1
   note: ""
+
+# == Schema Information
+#
+# Table name: form_of_works
+#
+#  id                        :integer          not null, primary key
+#  name                      :string           not null
+#  old_display_name          :text
+#  note                      :text
+#  position                  :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  display_name_translations :jsonb            not null
+#

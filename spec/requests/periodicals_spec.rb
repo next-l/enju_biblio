@@ -13,6 +13,7 @@
 # sticking to rails and rspec-rails APIs to keep things simple and stable.
 
 RSpec.describe "/periodicals", type: :request do
+  
   # Periodical. As you add validations to Periodical, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
@@ -27,7 +28,7 @@ RSpec.describe "/periodicals", type: :request do
     it "renders a successful response" do
       Periodical.create! valid_attributes
       get periodicals_url
-      expect(response).to be_successful
+      expect(response).to redirect_to new_user_session_url
     end
   end
 
@@ -42,7 +43,7 @@ RSpec.describe "/periodicals", type: :request do
   describe "GET /new" do
     it "renders a successful response" do
       get new_periodical_url
-      expect(response).to be_successful
+      expect(response).to redirect_to new_user_session_url
     end
   end
 

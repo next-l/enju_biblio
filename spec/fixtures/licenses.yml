@@ -13,3 +13,17 @@ two:
   display_name_translations: {"en": "MIT", "ja": "MIT"}
   note: MIT
   position: 2
+
+# == Schema Information
+#
+# Table name: licenses
+#
+#  id                        :integer          not null, primary key
+#  name                      :string           not null
+#  old_display_name          :string
+#  note                      :text
+#  position                  :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  display_name_translations :jsonb            not null
+#

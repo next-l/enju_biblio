@@ -10,3 +10,17 @@ manifestation_relationship_type_00002:
   name: alternate
   id: 2
   display_name_translations: {"en": "Alternate", "ja": "代替"}
+
+# == Schema Information
+#
+# Table name: manifestation_relationship_types
+#
+#  id                        :integer          not null, primary key
+#  name                      :string           not null
+#  old_display_name          :text
+#  note                      :text
+#  position                  :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  display_name_translations :jsonb            not null
+#

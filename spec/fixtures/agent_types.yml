@@ -12,3 +12,17 @@ agent_type_00002:
   display_name_translations: {"en": "CorporateBody", "ja": "団体"}
   note: 
   position: 2
+
+# == Schema Information
+#
+# Table name: agent_types
+#
+#  id                        :integer          not null, primary key
+#  name                      :string           not null
+#  old_display_name          :text
+#  note                      :text
+#  position                  :integer
+#  created_at                :datetime
+#  updated_at                :datetime
+#  display_name_translations :jsonb            not null
+#

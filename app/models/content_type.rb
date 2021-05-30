@@ -10,7 +10,7 @@ end
 #
 #  id                        :integer          not null, primary key
 #  name                      :string           not null
-#  display_name              :text
+#  old_display_name          :text
 #  note                      :text
 #  position                  :integer
 #  created_at                :datetime

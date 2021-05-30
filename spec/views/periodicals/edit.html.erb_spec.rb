@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "periodicals/edit", type: :view do
   before(:each) do
-    @periodical = assign(:periodical, Periodical.create!())
+    @periodical = assign(:periodical, FactoryBot.create(:periodical))
   end
 
   it "renders the edit periodical form" do
