@@ -365,8 +365,8 @@ class ManifestationsController < ApplicationController
   def create
     @manifestation = Manifestation.new(manifestation_params)
     parent = Manifestation.find_by(id: @manifestation.parent_id)
-    unless @manifestation.original_title?
-      @manifestation.original_title = @manifestation.attachment_file_name
+    if @manifestation.original_title.blank? && @manifestation.attachment.attached?
+      @manifestation.original_title = @manifestation.attachment.filename
     end
 
     respond_to do |format|

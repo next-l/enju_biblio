@@ -1,7 +1,7 @@
 class FormOfWork < ApplicationRecord
   include MasterModel
   translates :display_name
-  has_many :works, class_name: 'Manifestation', dependent: :restrict_with_exception
+  has_many :works, class_name: 'Manifestation' # , dependent: :restrict_with_exception
 end
 
 # == Schema Information
