@@ -157,7 +157,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
     t.text "full_name_alternative"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.string "zip_code_1"
     t.string "zip_code_2"
     t.text "address_1"
@@ -768,7 +767,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
     t.string "item_identifier"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.integer "shelf_id", default: 1, null: false
     t.boolean "include_supplements", default: false, null: false
     t.text "note"
@@ -1015,7 +1013,6 @@ ActiveRecord::Schema.define(version: 2021_01_11_033454) do
     t.datetime "date_copyrighted"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.datetime "deleted_at"
     t.string "access_address"
     t.integer "language_id", default: 1, null: false
     t.integer "carrier_type_id", default: 1, null: false
