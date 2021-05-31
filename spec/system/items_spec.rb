@@ -111,5 +111,11 @@ RSpec.describe 'Manifestations', type: :system do
       visit item_path(@item.id, locale: :ja)
       expect(page).not_to have_content @item.price
     end
+
+    it 'should add a link to url' do
+      @item.update(url: 'http://example.jp')
+      visit item_path(@item.id)
+      expect(page).to have_link 'http://example.jp'
+    end
   end
 end
