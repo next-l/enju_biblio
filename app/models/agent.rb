@@ -10,7 +10,7 @@ class Agent < ApplicationRecord
   has_many :works, through: :creates
   has_many :realizes, dependent: :destroy, inverse_of: :agent
   has_many :expressions, through: :realizes
-  has_many :produces, dependent: :destroy, inverse_of: :agen, inverse_of: :agentt
+  has_many :produces, dependent: :destroy, inverse_of: :agent
   has_many :manifestations, through: :produces
   has_many :children, foreign_key: 'parent_id', class_name: 'AgentRelationship', dependent: :destroy
   has_many :parents, foreign_key: 'child_id', class_name: 'AgentRelationship', dependent: :destroy
