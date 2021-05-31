@@ -657,7 +657,6 @@ class ResourceImportFile < ApplicationRecord
     language = Language.find_by(name: row['language'].to_s.strip.camelize)
     language = Language.find_by(iso_639_2: row['language'].to_s.strip.downcase) unless language
     language = Language.find_by(iso_639_1: row['language'].to_s.strip.downcase) unless language
-    
     carrier_type = CarrierType.find_by(name: row['carrier_type'].to_s.strip)
     content_type = ContentType.find_by(name: row['content_type'].to_s.strip)
     frequency = Frequency.find_by(name: row['frequency'].to_s.strip)

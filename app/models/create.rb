@@ -3,7 +3,7 @@ class Create < ApplicationRecord
   belongs_to :work, class_name: 'Manifestation', foreign_key: 'work_id', touch: true
   belongs_to :create_type, optional: true
 
-  validates_uniqueness_of :work_id, scope: :agent_id
+  validates :work_id, uniqueness: { scope: :agent_id }
   after_save :reindex
   after_destroy :reindex
 

@@ -520,16 +520,7 @@ class Manifestation < ApplicationRecord
   end
 
   def identifier_contents(name)
-    if Rails::VERSION::MAJOR > 3
-      identifiers.id_type(name).order(:position).pluck(:body)
-    else
-      identifier_type = IdentifierType.find_by(name: name)
-      if identifier_type
-        identifiers.where(identifier_type_id: identifier_type.id).order(:position).pluck(:body)
-      else
-        []
-      end
-    end
+    identifiers.id_type(name).order(:position).pluck(:body)
   end
 
   # CSVのヘッダ

@@ -1,6 +1,6 @@
 class MediumOfPerformance < ApplicationRecord
   include MasterModel
-  has_many :works
+  has_many :works, class_name: 'Manifestation'
   translates :display_name
 end
 
