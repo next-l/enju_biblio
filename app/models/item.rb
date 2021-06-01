@@ -10,7 +10,7 @@ class Item < ApplicationRecord
   delegate :display_name, to: :shelf, prefix: true
   has_many :owns
   has_many :agents, through: :owns
-  has_many :donates
+  has_many :donates, dependent: :destroy
   has_many :donors, through: :donates, source: :agent
   has_one :resource_import_result
   belongs_to :manifestation, touch: true
@@ -26,9 +26,9 @@ class Item < ApplicationRecord
 
   scope :accepted_between, lambda{|from, to| includes(:accept).where('items.created_at BETWEEN ? AND ?', Time.zone.parse(from).beginning_of_day, Time.zone.parse(to).end_of_day)}
   validates :item_identifier, allow_blank: true, uniqueness: true,
-                              format: {with: /\A[0-9A-Za-z_]+\Z/}
+    format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :binding_item_identifier, allow_blank: true,
-                                      format: {with: /\A[0-9A-Za-z_]+\Z/}
+    format: {with: /\A[0-9A-Za-z_]+\Z/}
   validates :url, url: true, allow_blank: true, length: { maximum: 255 }
   validates_date :acquired_at, allow_blank: true
 

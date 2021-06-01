@@ -4,6 +4,7 @@ class AgentImportFile < ApplicationRecord
     initial_state: :pending
   ]
   include ImportFile
+  default_scope { order('agent_import_files.id DESC') }
   scope :not_imported, -> { in_state(:pending) }
   scope :stucked, -> { in_state(:pending).where('agent_import_files.created_at < ?', 1.hour.ago) }
 
@@ -44,7 +45,6 @@ class AgentImportFile < ApplicationRecord
     if [field['first_name'], field['last_name'], field['full_name']].reject{|field| field.to_s.strip == ""}.empty?
       raise "You should specify first_name, last_name or full_name in the first line"
     end
-
     #rows.shift
 
     AgentImportResult.create!(agent_import_file_id: id, body: rows.headers.join("\t"))
@@ -98,7 +98,6 @@ class AgentImportFile < ApplicationRecord
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-
       agent = Agent.find_by(id: row['id'])
       if agent
         agent.full_name = row['full_name'] if row['full_name'].to_s.strip.present?
@@ -134,7 +133,6 @@ class AgentImportFile < ApplicationRecord
     rows.each do |row|
       row_num += 1
       next if row['dummy'].to_s.strip.present?
-
       agent = Agent.find_by(id: row['id'].to_s.strip)
       if agent
         agent.picture_files.destroy_all

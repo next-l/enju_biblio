@@ -1,7 +1,7 @@
 class ContentType < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :manifestations
+  translates :display_name
 end
 
 # == Schema Information

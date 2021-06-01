@@ -17,7 +17,7 @@ class Agent < ApplicationRecord
   has_many :derived_agents, through: :children, source: :child
   has_many :original_agents, through: :parents, source: :parent
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
-  has_many :donates
+  has_many :donates, dependent: :destroy
   has_many :donated_items, through: :donates, source: :item
   has_many :owns, dependent: :destroy, inverse_of: :agent
   has_many :items, through: :owns
@@ -100,9 +100,8 @@ class Agent < ApplicationRecord
 
   def set_date_of_birth
     return if birth_date.blank?
-
     begin
-      date = Time.zone.parse("#{birth_date}")
+      date = Time.zone.parse(birth_date.to_s)
     rescue ArgumentError
       begin
         date = Time.zone.parse("#{birth_date}-01")
@@ -119,9 +118,8 @@ class Agent < ApplicationRecord
 
   def set_date_of_death
     return if death_date.blank?
-
     begin
-      date = Time.zone.parse("#{death_date}")
+      date = Time.zone.parse(death_date.to_s)
     rescue ArgumentError
       begin
         date = Time.zone.parse("#{death_date}-01")
@@ -258,7 +256,6 @@ class Agent < ApplicationRecord
 
   def self.new_agents(agents_params)
     return [] unless agents_params
-
     agents = []
     Agent.transaction do
       agents_params.each do |k, v|

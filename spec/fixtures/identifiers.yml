@@ -94,6 +94,11 @@ identifier_00196:
   identifier_type_id: 1
   body: "9784797336610"
 
+identifier_00201:
+  manifestation_id: 201
+  identifier_type_id: 2
+  body: "09130000"
+
 identifier_00217:
   manifestation_id: 217
   identifier_type_id: 4
@@ -108,12 +113,12 @@ identifier_00001a:
 #
 # Table name: identifiers
 #
-#  id                 :bigint           not null, primary key
+#  id                 :integer          not null, primary key
 #  body               :string           not null
-#  identifier_type_id :bigint           not null
-#  manifestation_id   :bigint           not null
+#  identifier_type_id :integer          not null
+#  manifestation_id   :integer
 #  primary            :boolean
 #  position           :integer
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
+#  created_at         :datetime
+#  updated_at         :datetime
 #

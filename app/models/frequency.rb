@@ -1,7 +1,7 @@
 class Frequency < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :manifestations, dependent: :restrict_with_exception
+  translates :display_name
 end
 
 # == Schema Information

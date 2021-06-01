@@ -1,4 +1,4 @@
-class IsbnRecord < ActiveRecord::Base
+class IsbnRecord < ApplicationRecord
   has_many :isbn_record_and_manifestations, dependent: :destroy
   has_many :manifestations, through: :isbn_record_and_manifestations
   before_save :normalize_isbn
@@ -7,12 +7,10 @@ class IsbnRecord < ActiveRecord::Base
 
   def self.new_records(isbn_records_params)
     return [] unless isbn_records_params
-
     isbn_records = []
     IsbnRecord.transaction do
       isbn_records_params.each do |k, v|
         next if v['_destroy'] == '1'
-
         if v['body'].present?
           isbn_record = IsbnRecord.where(body: Lisbn.new(v['body'].gsub(/[^0-9x]/i, '')).isbn13).first_or_create!
         elsif v['id'].present?

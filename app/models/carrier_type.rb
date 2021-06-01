@@ -1,9 +1,8 @@
 class CarrierType < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :manifestations
-
   has_one_attached :attachment
+  translates :display_name
 
   def mods_type
     case name

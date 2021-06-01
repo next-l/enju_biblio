@@ -18,7 +18,6 @@ class SeriesStatement < ApplicationRecord
     integer :manifestation_id
     integer :position
     integer :series_statement_merge_list_ids, multiple: true
-    time :created_at, :updated_at
   end
 
   attr_accessor :selected

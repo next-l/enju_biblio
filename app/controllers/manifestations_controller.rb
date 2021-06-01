@@ -702,7 +702,7 @@ class ManifestationsController < ApplicationController
     @carrier_types = CarrierType.order(:position).select([:id, :display_name_translations, :position])
     @content_types = ContentType.order(:position).select([:id, :display_name_translations, :position])
     @roles = Role.select([:id, :display_name_translations, :position])
-    @languages = Language.order(:position).select([:id, :display_name, :position])
+    @languages = Language.order(:position).select([:id, :display_name_translations, :position])
     @licenses = License.order(:position).select([:id, :display_name_translations, :position])
     @frequencies = Frequency.order(:position).select([:id, :display_name_translations, :position])
     @identifier_types = IdentifierType.order(:position).select([:id, :display_name, :position])

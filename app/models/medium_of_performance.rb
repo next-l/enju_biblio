@@ -1,7 +1,7 @@
 class MediumOfPerformance < ApplicationRecord
   include MasterModel
-  translates :display_name
   has_many :works, class_name: 'Manifestation'
+  translates :display_name
 end
 
 # == Schema Information

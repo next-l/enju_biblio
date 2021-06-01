@@ -1,10 +1,4 @@
 class Manifestation < ApplicationRecord
-  belongs_to :language
-  belongs_to :carrier_type
-  belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
-  belongs_to :frequency
-  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
-  belongs_to :license, required: false
   has_many :creates, -> { order('creates.position') }, dependent: :destroy, foreign_key: 'work_id', inverse_of: :work
   has_many :creators, through: :creates, source: :agent
   has_many :realizes, -> { order('realizes.position') }, dependent: :destroy, foreign_key: 'expression_id', inverse_of: :expression
@@ -18,6 +12,12 @@ class Manifestation < ApplicationRecord
   has_many :original_manifestations, through: :parents, source: :parent
   has_many :picture_files, as: :picture_attachable, dependent: :destroy
   has_many :series_statements
+  belongs_to :language
+  belongs_to :carrier_type
+  belongs_to :manifestation_content_type, class_name: 'ContentType', foreign_key: 'content_type_id'
+  belongs_to :frequency
+  belongs_to :required_role, class_name: 'Role', foreign_key: 'required_role_id'
+  belongs_to :license, required: false
   has_one :resource_import_result
   has_many :identifiers, dependent: :destroy
   has_many :isbn_record_and_manifestations, dependent: :destroy
@@ -32,10 +32,9 @@ class Manifestation < ApplicationRecord
   accepts_nested_attributes_for :contributors, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :publishers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :series_statements, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :isbn_records, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :issn_records, allow_destroy: true, reject_if: :all_blank
-  accepts_nested_attributes_for :periodical, allow_destroy: true, reject_if: :all_blank
+  accepts_nested_attributes_for :identifiers, allow_destroy: true, reject_if: :all_blank
   accepts_nested_attributes_for :manifestation_custom_values, reject_if: :all_blank
 
   searchable do
@@ -66,7 +65,7 @@ class Manifestation < ApplicationRecord
     #できなかったので。 downcase することにした。
     #他の string 項目も同様の問題があるので、必要な項目は同様の処置が必要。
     string :connect_title do
-      titles.join('').gsub(/\s/, '').downcase
+      title.join('').gsub(/\s/, '').downcase
     end
     string :connect_creator do
       creator.join('').gsub(/\s/, '').downcase
@@ -78,7 +77,11 @@ class Manifestation < ApplicationRecord
       isbn_characters
     end
     string :issn, multiple: true do
-      issn_records.pluck(:body)
+      if series_statements.exists?
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+      else
+        identifier_contents(:issn)
+      end
     end
     string :lccn, multiple: true do
       identifier_contents(:lccn)
@@ -178,7 +181,11 @@ class Manifestation < ApplicationRecord
       isbn_characters
     end
     text :issn do # 前方一致検索のためtext指定を追加
-      issn_records.pluck(:body)
+      if series_statements.exists?
+        [identifier_contents(:issn), (series_statements.map{|s| s.manifestation.identifier_contents(:issn)})].flatten.uniq.compact
+      else
+        identifier_contents(:issn)
+      end
     end
     text :identifier do
       other_identifiers = identifiers.joins(:identifier_type).merge(IdentifierType.where.not(name: [:isbn, :issn]))
@@ -210,7 +217,7 @@ class Manifestation < ApplicationRecord
 
   has_one_attached :attachment
 
-  validates :original_title, :carrier_type, :language, presence: true
+  validates :original_title, presence: true
   validates :start_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :end_page, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
   validates :height, numericality: {greater_than_or_equal_to: 0}, allow_blank: true
@@ -253,7 +260,7 @@ class Manifestation < ApplicationRecord
     if pub_date_string.length == 4
       date = Time.zone.parse(Time.utc(pub_date_string).to_s).beginning_of_day
     else
-      while date.nil?
+      while date.nil? do
         pub_date_string += '-01'
         break if pub_date_string =~ /-01-01-01$/
         begin
@@ -404,7 +411,9 @@ class Manifestation < ApplicationRecord
   end
 
   def self.find_by_isbn(isbn)
-    Manifestation.includes(:isbn_records).where("isbn_records.body": isbn)
+    identifier_type = IdentifierType.find_by(name: 'isbn')
+    return nil unless identifier_type
+    Manifestation.includes(identifiers: :identifier_type).where("identifiers.body": isbn, "identifier_types.name": 'isbn')
   end
 
   def index_series_statement
@@ -412,7 +421,7 @@ class Manifestation < ApplicationRecord
   end
 
   def acquired_at
-    items.order(:acquired_at).first&.acquired_at
+    items.order(:acquired_at).first.try(:acquired_at)
   end
 
   def series_master?
@@ -465,9 +474,9 @@ class Manifestation < ApplicationRecord
   def pub_dates
     return [] unless pub_date
     pub_date_array = pub_date.split(';')
-    pub_date_array.map do |pub_date_string|
+    pub_date_array.map{|pub_date_string|
       date = nil
-      while date.nil?
+      while date.nil? do
         pub_date_string += '-01'
         break if pub_date_string =~ /-01-01-01$/
         begin
@@ -477,7 +486,7 @@ class Manifestation < ApplicationRecord
         end
       end
       date
-    end.compact
+    }.compact
   end
 
   def latest_issue
@@ -513,27 +522,27 @@ class Manifestation < ApplicationRecord
       statement_of_responsibility: statement_of_responsibility,
       serial: serial,
       manifestation_identifier: manifestation_identifier,
-      creator: creates.map do |create|
+      creator: creates.map{|create|
         if create.create_type
           "#{create.agent.full_name}||#{create.create_type.name}"
         else
           "#{create.agent.full_name}"
         end
-      end.join('//'),
-      contributor: realizes.map do |realize|
+      }.join('//'),
+      contributor: realizes.map{|realize|
         if realize.realize_type
           "#{realize.agent.full_name}||#{realize.realize_type.name}"
         else
           "#{realize.agent.full_name}"
         end
-      end.join('//'),
-      publisher: produces.map do |produce|
+      }.join('//'),
+      publisher: produces.map{|produce|
         if produce.produce_type
           "#{produce.agent.full_name}||#{produce.produce_type.name}"
         else
           "#{produce.agent.full_name}"
         end
-      end.join('//'),
+      }.join('//'),
       pub_date: date_of_publication,
       year_of_publication: year_of_publication,
       publication_place: publication_place,
@@ -543,8 +552,8 @@ class Manifestation < ApplicationRecord
       content_type: manifestation_content_type.name,
       frequency: frequency.name,
       language: language.name,
-      isbn: isbn_records.pluck(:body).join('//'),
-      issn: issn_records.pluck(:body).join('//'),
+      isbn: identifier_contents(:isbn).join('//'),
+      issn: identifier_contents(:issn).join('//'),
       volume_number: volume_number,
       volume_number_string: volume_number_string,
       edition: edition,
@@ -608,11 +617,11 @@ class Manifestation < ApplicationRecord
     end
 
     if defined?(EnjuNdl)
-      record["jpno"] = jpno_record&.body
+      record["jpno"] = identifier_contents(:jpno).first
     end
 
     if defined?(EnjuNii)
-      record["ncid"] = ncid_record&.body
+      record["ncid"] = identifier_contents(:ncid).first
     end
 
     record
@@ -646,7 +655,7 @@ class Manifestation < ApplicationRecord
   end
 
   def isbn_characters
-    isbn_records.pluck(:body).map do |i|
+    identifier_contents(:isbn).map{|i|
       isbn10 = isbn13 = isbn10_dash = isbn13_dash = nil
       isbn10 = Lisbn.new(i).isbn10
       isbn13 =  Lisbn.new(i).isbn13
@@ -655,7 +664,19 @@ class Manifestation < ApplicationRecord
       [
         isbn10, isbn13, isbn10_dash, isbn13_dash
       ]
-    end.flatten
+    }.flatten
+  end
+
+  def set_custom_property(row)
+    ManifestationCustomProperty.all.each do |property|
+      if row[property]
+        custom_value = ManifestationCustomValue.new(
+          manifestation: self,
+          manifestation_custom_property: property,
+          value: row[property]
+        )
+      end
+    end
   end
 end
 

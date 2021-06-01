@@ -1,5 +1,6 @@
 class ProduceType < ApplicationRecord
   include MasterModel
+  default_scope { order('produce_types.position') }
   translates :display_name
 end
 

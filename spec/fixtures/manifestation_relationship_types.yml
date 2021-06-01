@@ -1,28 +1,26 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
-one:
-  name: reproduction
-  display_name_translations: {"en": "Reproduction", "ja": "複製"}
-  note: 
+--- 
+manifestation_relationship_type_00001: 
   position: 1
+  name: reproduction
   id: 1
+  display_name_translations: {"en": "Reproduction", "ja": "複製"}
 
-two:
-  name: alternate
-  display_name_translations: {"en": "Alternate", "ja": "代替"}
-  note: 
+manifestation_relationship_type_00002: 
   position: 2
+  name: alternate
   id: 2
+  display_name_translations: {"en": "Alternate", "ja": "代替"}
 
 # == Schema Information
 #
 # Table name: manifestation_relationship_types
 #
-#  id                        :bigint           not null, primary key
+#  id                        :integer          not null, primary key
 #  name                      :string           not null
+#  old_display_name          :text
 #  note                      :text
 #  position                  :integer
-#  created_at                :datetime         not null
-#  updated_at                :datetime         not null
+#  created_at                :datetime
+#  updated_at                :datetime
 #  display_name_translations :jsonb            not null
 #

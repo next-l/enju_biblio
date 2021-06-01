@@ -15,7 +15,7 @@ class Identifier < ApplicationRecord
   strip_attributes only: :body
 
   def check_identifier
-    case identifier_type.try(:name)
+    case identifier_type&.name
     when 'isbn'
       unless StdNum::ISBN.valid?(body)
         errors.add(:body)
@@ -57,7 +57,7 @@ class Identifier < ApplicationRecord
   end
 
   def normalize
-    case identifier_type.try(:name)
+    case identifier_type&.name
     when 'isbn'
       self.body = StdNum::ISBN.normalize(body)
     when 'issn'

@@ -1,5 +1,6 @@
 class CreateType < ApplicationRecord
   include MasterModel
+  default_scope { order('create_types.position') }
   translates :display_name
 end
 
