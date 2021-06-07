@@ -13,6 +13,10 @@
 
   <table id="resource_detail">
     <tr>
+      <td><%= t('activerecord.attributes.series_statement.creator_string') -%></td>
+      <td><%= @series_statement.creator_string %></td>
+    </tr>
+    <tr>
       <td style="width: 200px"><%= t('activerecord.attributes.series_statement.title_transcription') -%></td>
       <td style="width: 490px"><%= @series_statement.title_transcription %></td>
     </tr>

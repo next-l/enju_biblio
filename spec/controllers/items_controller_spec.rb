@@ -31,10 +31,6 @@ describe ItemsController do
       end
 
       context 'acquired_at' do
-        before(:each) do
-          FactoryBot.create(:item, acquired_at: '2015-09-20')
-        end
-
         it 'assigns items as @items with acquired_from and acquired_until' do
           get :index, params: { acquired_from: '2015-09-20', acquired_until: '2015-09-26' }
           expect(assigns(:items)).to_not be_nil

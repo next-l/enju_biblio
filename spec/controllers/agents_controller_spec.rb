@@ -181,7 +181,7 @@ describe AgentsController do
         work = FactoryBot.create(:manifestation)
         @agent.works << work
         get :show, params: { id: @agent.id, work_id: work.id }
-        expect(assigns(:agent)).to eq assigns(:work).creators.first
+        expect(assigns(:agent)).to eq assigns(:work).creators.last
       end
 
       it 'should show agent with expression' do

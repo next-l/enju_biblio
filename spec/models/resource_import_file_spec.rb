@@ -181,6 +181,7 @@ describe ResourceImportFile do
           expect(resource_import_result.error_message).not_to be_empty
         end
       end
+
       context "with ISBN invalid" do
         it "should record an error message", vcr: true do
           file = ResourceImportFile.create(user: users(:admin))
@@ -190,20 +191,6 @@ describe ResourceImportFile do
           resource_import_result = file.resource_import_results.last
           expect(resource_import_result.error_message).not_to be_empty
         end
-      end
-    end
-
-    describe "NCID import" do
-      it "should import ncid value" do
-        file = ResourceImportFile.create(user: users(:admin))
-        file.attachment.attach(io: StringIO.new("original_title\tncid\noriginal_title_ncid\tBA67656964\n"), filename: 'attachment.txt')
-        result = file.import_start
-        expect(result[:manifestation_imported]).to eq 1
-        resource_import_result = file.resource_import_results.last
-        expect(resource_import_result.error_message).to be_blank
-        expect(resource_import_result.manifestation).not_to be_blank
-        manifestation = resource_import_result.manifestation
-        expect(manifestation.identifier_contents(:ncid).first).to eq "BA67656964"
       end
     end
 
@@ -396,21 +383,6 @@ resource_import_file_test_description	test\\ntest	test\\ntest	test_description	t
     #  manifestation.reload
     #  manifestation.series_statements.should eq [SeriesStatement.find(2)]
     # end
-
-    describe "NCID import" do
-      it "should import ncid value" do
-        file = ResourceImportFile.create(user: users(:admin), edit_mode: 'update')
-        file.attachment.attach(io: StringIO.new("manifestation_id\tncid\n1\tBA67656964\n"), filename: 'attachment.txt')
-        result = file.import_start
-        # expect(result[:manifestation_found]).to eq 1
-        expect(file.error_message).to be_nil
-        resource_import_result = file.resource_import_results.last
-        expect(resource_import_result.error_message).to be_blank
-        expect(resource_import_result.manifestation).not_to be_blank
-        manifestation = resource_import_result.manifestation
-        expect(manifestation.identifier_contents(:ncid).first).to eq "BA67656964"
-      end
-    end
   end
 
   describe "when its mode is 'destroy'" do
