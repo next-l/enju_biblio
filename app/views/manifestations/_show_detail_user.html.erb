@@ -4,22 +4,26 @@
     <% cache([manifestation, fragment: 'show_detail_user_html', role: current_user_role_name, locale: @locale]) do %>
       <table class="table table-striped" id="resource_detail">
         <%= embed_content(manifestation) if defined?(EnjuManifestationViewer) -%>
+        <tr>
+          <td style="width: 200px"><%= t('activerecord.attributes.manifestation.original_title') -%>:</td>
+          <td style="width: 500px"><%= manifestation.original_title -%></td>
+        </tr>
         <% if manifestation.title_transcription? %>
           <tr>
-            <td style="width: 200px"><%= t('activerecord.attributes.manifestation.title_transcription') -%>:</td>
-            <td style="width: 500px"><%= manifestation.title_transcription -%></td>
+            <td><%= t('activerecord.attributes.manifestation.title_transcription') -%>:</td>
+            <td><%= manifestation.title_transcription -%></td>
           </tr>
         <% end %>
         <% if manifestation.title_alternative? %>
           <tr>
-            <td style="width: 200px"><%= t('activerecord.attributes.manifestation.title_alternative') -%>:</td>
-            <td style="width: 500px"><%= manifestation.title_alternative -%></td>
+            <td><%= t('activerecord.attributes.manifestation.title_alternative') -%>:</td>
+            <td><%= manifestation.title_alternative -%></td>
           </tr>
         <% end %>
         <%- if manifestation.series_statements.exists? -%>
           <tr>
-            <td style="width: 200px"><%= t('activerecord.models.series_statement') -%>:</td>
-            <td style="width: 500px">
+            <td><%= t('activerecord.models.series_statement') -%>:</td>
+            <td>
               <%= render 'show_series_detail', manifestation: manifestation %>
               <%- unless manifestation.identifier_contents(:issn).empty? -%>
                 (<%= t('activerecord.attributes.manifestation.issn') -%>: <%= manifestation.identifier_contents(:issn).join(" ") -%>)
@@ -29,8 +33,8 @@
         <% end %>
         <%= render 'edition_and_number', manifestation: manifestation %>
         <tr>
-          <td style="width: 200px"><%= t('page.form') -%>:</td>
-          <td style="width: 500px">
+          <td><%= t('page.form') -%>:</td>
+          <td>
             <%= form_icon(manifestation.carrier_type) -%> <%= manifestation.carrier_type.display_name -%> /
             <%= content_type_icon(manifestation.manifestation_content_type) -%> <%= manifestation.manifestation_content_type.display_name if manifestation.manifestation_content_type -%>
           </td>
