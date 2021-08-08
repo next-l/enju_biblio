@@ -43,7 +43,7 @@
             t('page.per_page', num: 20) => 20,
             t('page.per_page', num: 50) => 50,
             t('page.per_page', num: 100) => 100,
-          }, selected: filtered_params[:per_page]) %>
+          }, selected: request.params[:per_page]) %>
           <%= select_tag 'sort_by', options_for_select({
             [t('page.sort_criteria.created_at'),
               t('page.sort_criteria.date_desc')].join(" : ") => 'created_at:desc',
@@ -59,10 +59,10 @@
               t('page.sort_criteria.title_asc')].join(" : ") => 'title:asc',
             [t('page.title'),
               t('page.sort_criteria.title_desc')].join(" : ") => 'title:desc',
-          }, selected: filtered_params[:sort_by] || 'created_at:desc') -%>
+          }, selected: request.params[:sort_by] || 'created_at:desc') -%>
           <%= hidden_field_tag 'query', @query -%>
           <% [ :reservable, :carrier_type, :library, :language, :pub_year ].each do |p| -%>
-            <%= hidden_field_tag p, filtered_params[p] if filtered_params[p] -%>
+            <%= hidden_field_tag p, request.params[p] if request.params[p] -%>
           <% end -%>
           <%= submit_tag t('page.show') -%><br />
         </p>
@@ -103,15 +103,15 @@
   <% if @parent and policy(@parent).update? %>
     <%= render 'submenu_parent' %>
   <% end %>
-  <h3><%= link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(filtered_params.merge(action: 'index', view: nil, carrier_type: nil, library: nil, language: nil, subject: nil, only_path: true))  -%></h3>
+  <h3><%= link_to h("#{t('page.total')}: #{@count[:query_result]}"), url_for(request.params.merge(action: 'index', view: nil, carrier_type: nil, library: nil, language: nil, subject: nil, only_path: true))  -%></h3>
     <%- if @manifestations.total_count > 0 -%>
       <%= render 'manifestations/all_facet' -%>
     <%- end -%>
   <div>
     <%- if params[:library_id].blank? -%>
-      <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'enju_icon'), url_for(filtered_params.merge(format: :rss, page: nil, library_id: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(filtered_params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true)) -%>
+      <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'enju_icon'), url_for(request.params.merge(format: :rss, page: nil, library_id: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(request.params.merge(format: :rss, page: nil, library_id: nil, commit: nil, only_path: true)) -%>
     <%- else -%>
-      <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'enju_icon'), url_for(filtered_params.merge(format: :rss, page: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(filtered_params.merge(format: :rss, page: nil, commit: nil, only_path: true)) -%>
+      <%= link_to((image_tag 'icons/feed.png', size: '16x16', alt: t('page.feed'), class: 'enju_icon'), url_for(request.params.merge(format: :rss, page: nil, only_path: true))) -%> <%= link_to t('page.search_result_feed'), url_for(request.params.merge(format: :rss, page: nil, commit: nil, only_path: true)) -%>
     <%- end -%>
   </div>
   <%= render 'manifestations/export_list' %>
@@ -120,7 +120,7 @@
 <% if defined?(EnjuBookmark) %>
   <script type="text/javascript">
     window.onload = function() {
-      $("#tag_cloud_list").load('<%= url_for(filtered_params.merge(view: "tag_cloud", only_path: true)) -%>', hideTagCloudSpinner);
+      $("#tag_cloud_list").load('<%= url_for(request.params.merge(view: "tag_cloud", only_path: true)) -%>', hideTagCloudSpinner);
     }
 
     function hideTagCloudSpinner(){

@@ -312,10 +312,4 @@ class ItemsController < ApplicationController
       end
     end
   end
-
-  def filtered_params
-    params.permit([:view, :format, :page, :library, :carrier_type, :reservable, :pub_date_from, :pub_date_until, :language, :sort_by, :per_page])
-  end
-
-  helper_method :filtered_params
 end
