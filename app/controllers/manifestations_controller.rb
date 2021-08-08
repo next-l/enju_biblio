@@ -849,8 +849,8 @@ class ManifestationsController < ApplicationController
       @manifestation.reload
 
       @manifestation.creators = Agent.new_agents(creators_params)
-      @manifestation.contributors = Agent.new_agents(creators_params)
-      @manifestation.publishers = Agent.new_agents(creators_params)
+      @manifestation.contributors = Agent.new_agents(contributors_params)
+      @manifestation.publishers = Agent.new_agents(publishers_params)
     end
   end
 
