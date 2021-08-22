@@ -783,7 +783,7 @@ class ResourceImportFile < ApplicationRecord
             unless identifiers.empty?
               identifiers.each do |v|
                 v.manifestation = manifestation
-                v.save!
+                v.save
               end
             end
           else
