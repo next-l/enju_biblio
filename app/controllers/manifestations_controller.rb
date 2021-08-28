@@ -248,7 +248,7 @@ class ManifestationsController < ApplicationController
       format.html
       format.xml  { render xml: @manifestations }
       format.rss  { render layout: false }
-      format.txt  { render layout: false }
+      format.text  { render layout: false }
       format.rdf  { render layout: false }
       format.atom
       format.mods
@@ -309,7 +309,7 @@ class ManifestationsController < ApplicationController
       format.rdf
       format.mods
       format.json
-      format.txt
+      format.text
       format.js
       format.ttl
       format.download {
