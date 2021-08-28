@@ -251,7 +251,7 @@ class ManifestationsController < ApplicationController
       format.html.phone
       format.xml  { render xml: @manifestations }
       format.rss  { render layout: false }
-      format.txt  { render layout: false }
+      format.text  { render layout: false }
       format.rdf  { render layout: false }
       format.atom
       format.mods
@@ -320,8 +320,8 @@ class ManifestationsController < ApplicationController
       }
       format.rdf
       format.mods
-      format.json { render json: @manifestation }
-      format.txt
+      format.json
+      format.text
       format.js
       format.download {
         if @manifestation.attachment.path
