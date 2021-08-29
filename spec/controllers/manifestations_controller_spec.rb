@@ -60,8 +60,8 @@ describe ManifestationsController do
         expect(assigns(:manifestations)).to_not be_nil
       end
 
-      it 'assigns all manifestations as @manifestations in txt format without operation' do
-        get :index, format: 'txt'
+      it 'assigns all manifestations as @manifestations in text format without operation' do
+        get :index, format: :text
         expect(response).to be_successful
         expect(assigns(:manifestations)).to_not be_nil
         expect(response).to render_template('manifestations/index')
