@@ -32,7 +32,7 @@
       <%- if policy(agent_relationship_type).update? -%>
         <%= link_to t('page.edit'), edit_agent_relationship_type_path(agent_relationship_type) -%>
       <% end %>
-      <%- if policy(agent).destroy?_relationship_type -%>
+      <%- if policy(agent_relationship_type).destroy? -%>
         <%= link_to t('page.destroy'), agent_relationship_type_path(agent_relationship_type), data: {confirm: t('page.are_you_sure')}, method: :delete -%>
       <%- end -%>
     </td>
