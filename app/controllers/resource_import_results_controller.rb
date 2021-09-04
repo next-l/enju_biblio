@@ -7,7 +7,7 @@ class ResourceImportResultsController < ApplicationController
   def index
     @resource_import_file = ResourceImportFile.find_by(id: params[:resource_import_file_id])
     if @resource_import_file
-      if params[:format].to_s.downcase == 'txt'
+      if params[:format].to_s.downcase == 'text'
         @resource_import_results = @resource_import_file.resource_import_results
       else
         @resource_import_results = @resource_import_file.resource_import_results.page(params[:page])
@@ -19,7 +19,7 @@ class ResourceImportResultsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @resource_import_results }
-      format.txt
+      format.text
     end
   end
 

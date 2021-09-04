@@ -47,6 +47,11 @@ describe ItemsController do
         expect(assigns(:items).count).to eq 1
       end
 
+      it 'accepts text format' do
+        get :index, format: :text
+        expect(assigns(:items)).to_not be_nil
+      end
+
       describe 'in JSON response' do
         render_views
         it 'should not assign unnecessary attributes' do
