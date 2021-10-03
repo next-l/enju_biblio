@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "agent_import_results/index.txt.ruby" do
+describe "agent_import_results/index.text.ruby" do
   fixtures :all
 
   before(:each) do

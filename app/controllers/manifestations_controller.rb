@@ -29,7 +29,7 @@ class ManifestationsController < ApplicationController
       sort, @count = {}, {}
       query = ""
 
-      if params[:format] == 'txt'
+      if request.format.text?
         per_page = 65534
       end
 
