@@ -158,6 +158,8 @@ describe Manifestation, solr: true do
       csv["classification:ndc9"].compact.inject(0){|count, a| count += 1 if a == '400'; count}.should eq manifestations(:manifestation_00001).items.count
       csv["extent"].compact.should_not be_empty
       csv["dimensions"].compact.should_not be_empty
+      csv["manifestation_memo"].compact.should_not be_empty
+      csv["item_memo"].compact.should_not be_empty
     end
 
     it "should export edition fields" do
