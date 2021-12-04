@@ -599,7 +599,7 @@ class Manifestation < ApplicationRecord
 
     if ['Administrator', 'Librarian'].include?(role)
       record.merge!({
-        memo: memo
+        manifestation_memo: memo
       })
       ManifestationCustomProperty.order(:position).each do |custom_property|
         custom_value = manifestation_custom_values.find_by(manifestation_custom_property: custom_property)

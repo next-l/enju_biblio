@@ -122,7 +122,7 @@ class Item < ApplicationRecord
         budget_type: budget_type&.name,
         item_required_role: required_role.name,
         item_price: price,
-        memo: memo
+        item_memo: memo
       })
 
       ItemCustomProperty.order(:position).each do |custom_property|

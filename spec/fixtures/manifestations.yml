@@ -18,6 +18,7 @@ manifestation_00001:
   repository_content: true
   extent: "123p"
   dimensions: "25cm"
+  memo: 確認用の書誌情報
 manifestation_00002: 
   carrier_type_id: 1
   language_id: 1
