@@ -204,8 +204,8 @@ describe Manifestation, solr: true do
       csv["classification:ndc9"].compact.inject(0){|count, a| count += 1 if a == '400'; count}.should eq manifestations(:manifestation_00001).items.count
       csv["extent"].compact.should_not be_empty
       csv["dimensions"].compact.should_not be_empty
-      csv["manifestation_memo"].compact.should_not be_empty
-      csv["item_memo"].compact.should_not be_empty
+      csv["manifestation_memo"].compact.should be_empty
+      csv["item_memo"].compact.should be_empty
     end
 
     it "should export edition fields" do
@@ -263,6 +263,8 @@ describe Manifestation, solr: true do
       expect(csv["bookstore"].compact).not_to be_empty
       expect(csv["item_price"].compact).not_to be_empty
       expect(csv["budget_type"].compact).not_to be_empty
+      expect(csv["manifestation_memo"].compact).not_to be_empty
+      expect(csv["item_memo"].compact).not_to be_empty
     end
 
     it 'should escape LF/CR to "\n"' do
