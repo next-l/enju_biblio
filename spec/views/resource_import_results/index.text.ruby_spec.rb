@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe "resource_import_results/index.txt.ruby" do
+describe "resource_import_results/index.text.ruby" do
   fixtures :all
 
   before(:each) do
