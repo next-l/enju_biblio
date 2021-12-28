@@ -19,7 +19,7 @@ class ResourceImportResultsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json { render json: @resource_import_results }
-      format.txt
+      format.text
     end
   end
 

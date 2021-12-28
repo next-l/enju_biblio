@@ -134,7 +134,7 @@ class ItemsController < ApplicationController
     respond_to do |format|
       format.html # index.html.erb
       format.json
-      format.txt  { render layout: false }
+      format.text  { render layout: false }
       format.atom
     end
   end
