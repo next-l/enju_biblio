@@ -458,7 +458,7 @@ class ResourceImportFile < ApplicationRecord
       edition edition_string serial_number isbn issn manifestation_price
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
-      extent start_page end_page dimensions
+      extent start_page end_page dimensions abstract
       ncid
       ndl_bib_id
       statement_of_responsibility acquired_at call_number circulation_status
@@ -716,6 +716,7 @@ class ResourceImportFile < ApplicationRecord
         depth: row['depth'],
         height: row['height'],
         price: row['manifestation_price'],
+        abstract: row['abstract'].try(:gsub, /\\n/, "\n"),
         description: row['description'].try(:gsub, /\\n/, "\n"),
         #:description_transcription => row['description_transcription'],
         note: row['note'].try(:gsub, /\\n/, "\n"),
