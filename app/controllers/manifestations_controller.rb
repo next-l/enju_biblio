@@ -322,7 +322,7 @@ class ManifestationsController < ApplicationController
       format.mods
       format.json
       format.text
-      format.js
+      format.js { render template: 'manifestations/show.js' }
       format.download {
         if @manifestation.attachment.path
           if ENV['ENJU_STORAGE'] == 's3'
