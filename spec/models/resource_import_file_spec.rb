@@ -169,6 +169,22 @@ describe ResourceImportFile do
         expect(item_10103.manifestation.manifestation_custom_values.pluck(:value)).to eq ["カスタム項目テスト1", "カスタム項目テスト2"]
         expect(item_10103.item_custom_values.pluck(:value)).to eq ['カスタム項目テスト3', 'カスタム項目テスト4']
       end
+
+      it "should import multiple rows in a cell" do
+        file = ResourceImportFile.create(
+          resource_import: File.new("#{Rails.root}/../../examples/resource_import_file_sample5.tsv"),
+          default_shelf_id: 3,
+          user: users(:admin),
+          edit_mode: 'create'
+        )
+        file.import_start
+
+        manifestation = Manifestation.find_by(manifestation_identifier: 10201)
+        expect(manifestation.original_title).to eq "改行を含む\nタイトル"
+        expect(manifestation.abstract).to eq "改行を含む\n目次の\n情報"
+        expect(manifestation.note).to eq "改行を\n含む\n注記の\n情報"
+        expect(manifestation.description).to eq "改行を\n含む\n説明の情報"
+      end
     end
 
     describe "ISBN import" do
