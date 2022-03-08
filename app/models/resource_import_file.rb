@@ -601,6 +601,7 @@ class ResourceImportFile < ApplicationRecord
 
     item.price = row['item_price'] if row['item_price'].present?
     item.note = row['item_note'].try(:gsub, /\\n/, "\n") if row['item_note'].present?
+    item.memo = row['item_memo'].try(:gsub, /\\n/, "\n") if row['item_memo'].present?
     item.url = row['item_url'] if row['item_url'].present?
 
     if row['include_supplements']
