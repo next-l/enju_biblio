@@ -541,7 +541,8 @@ class ResourceImportFile < ApplicationRecord
       binding_call_number: row['binding_call_number'],
       binded_at: binded_at,
       url: row['item_url'],
-      note: row['item_note'].try(:gsub, /\\n/, "\n")
+      note: row['item_note'].try(:gsub, /\\n/, "\n"),
+      memo: row['item_memo'].try(:gsub, /\\n/, "\n")
     )
     manifestation.items << item
     if defined?(EnjuCirculation)
