@@ -67,7 +67,7 @@ describe ResourceImportFile do
         item_10101.manifestation.frequency.name.should eq 'monthly'
         item_10101.manifestation.extent.should eq 'xv, 213 pages'
         item_10101.manifestation.dimensions.should eq '20cm'
-        expect(item_10101.item_note).to eq '個別資料メモ1'
+        expect(item_10101.note).to eq '個別資料メモ1'
         expect(item_10101.manifestation.note).to eq '書誌メモ1'
 
         item_10102 = Item.find_by(item_identifier: '10102')
