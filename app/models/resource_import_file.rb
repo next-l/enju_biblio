@@ -458,12 +458,12 @@ class ResourceImportFile < ApplicationRecord
       edition edition_string serial_number isbn issn manifestation_price
       width height depth number_of_pages jpno lccn budget_type bookstore
       language fulltext_content required_role doi content_type frequency
-      extent start_page end_page dimensions
+      extent start_page end_page dimensions manifestation_memo
       ncid
       ndl_bib_id
       statement_of_responsibility acquired_at call_number circulation_status
       binding_item_identifier binding_call_number binded_at item_price
-      use_restriction include_supplements item_note item_url
+      use_restriction include_supplements item_note item_url item_memo
       dummy
     )
     header_columns += ManifestationCustomProperty.order(:position).pluck(:name).map{|c| "manifestation:#{c}"}
@@ -719,6 +719,7 @@ class ResourceImportFile < ApplicationRecord
         description: row['description'].try(:gsub, /\\n/, "\n"),
         #:description_transcription => row['description_transcription'],
         note: row['note'].try(:gsub, /\\n/, "\n"),
+        memo: row['manifestation_memo'].try(:gsub, /\\n/, "\n"),
         statement_of_responsibility: row['statement_of_responsibility'],
         access_address: row['access_address'],
         manifestation_identifier: row['manifestation_identifier'],
