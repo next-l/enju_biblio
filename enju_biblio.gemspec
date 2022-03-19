@@ -36,7 +36,7 @@ END
   s.add_development_dependency "enju_subject", "~> 0.3.2"
   s.add_development_dependency "enju_inventory", "~> 0.3.0"
   s.add_development_dependency "enju_bookmark", "~> 0.3.1"
-  s.add_development_dependency "enju_message", "~> 0.3.2"
+  s.add_development_dependency "enju_message", "~> 0.3.4"
   s.add_development_dependency "enju_event", "~> 0.3.5"
   s.add_development_dependency "enju_ndl", "~> 0.3.2"
   s.add_development_dependency "enju_oai", "~> 0.3.0"
