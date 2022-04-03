@@ -160,8 +160,8 @@ describe Manifestation, solr: true do
       csv["dimensions"].compact.should_not be_empty
       csv["manifestation_memo"].compact.should be_empty
       csv["item_memo"].compact.should be_empty
-      expect(csv["manifestation_price"].compact.first).to eq "web"
-      expect(csv["item_price"].compact.first).to eq "web"
+      expect(csv["manifestation_price"].compact.first).to eq "1980"
+      expect(csv["item_price"].compact.first).to eq nil
       expect(csv["library"].compact.first).to eq "web"
       expect(csv["shelf"].compact.first).to eq "web"
     end
