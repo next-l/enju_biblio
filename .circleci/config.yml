@@ -7,18 +7,18 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-       - image: cimg/ruby:2.7.6-browsers
-         environment:
-           PGHOST: 127.0.0.1
-           PGUSER: postgres
+      - image: cimg/ruby:2.7.6-browsers
+        environment:
+          PGHOST: 127.0.0.1
+          PGUSER: postgres
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
-       - image: cimg/postgres:13.6
-         environment:
-           POSTGRES_USER: postgres
-           POSTGRES_DB: enju_biblio_dummy_test
+      - image: cimg/postgres:13.6
+        environment:
+          POSTGRES_USER: postgres
+          POSTGRES_DB: enju_biblio_dummy_test
 
     working_directory: ~/repo
 
